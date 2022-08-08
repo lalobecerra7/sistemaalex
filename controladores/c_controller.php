@@ -2,12 +2,11 @@
 date_default_timezone_set('America/Mexico_City');
 include 'modelo/m_modelo.php';
 include "controladores/c_login.php";
-include "controladores/c_principal.php";
-include "controladores/c_pedidos.php";
-include "controladores/c_pedidosAceptados.php";
-include "controladores/c_negocios.php";
-include "controladores/c_historialPedidos.php";
-
+include "controladores/c_sucursales.php";
+include "controladores/c_clientes.php";
+include "controladores/c_proveedores.php";
+include "controladores/c_areas.php";
+include "controladores/c_personal.php";
 
 class controller {
 
@@ -72,64 +71,9 @@ class controller {
 		extract($_POST);
 		$fecha = date('Y-m-d');
 
-		if($nombre == "v_pedidos"){
-
-			$query = "SELECT ID_Repartidor, CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) AS Nombre FROM usuarios_repartidor";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-			if ($row == "si") {
-				echo "Error: " . mysqli_error($omodelo->link);
-			} else {
-				$opciones = "<option value='' selected> - Seleccione una opción - </option>";
-				if ($numerofilas > 0) {
-					for ($i = 0; $i < $numerofilas; $i++) {
-						$opciones .= "<option value='".$row[$i]['ID_Repartidor']."'> ".$row[$i]['Nombre']." </option>";
-					}
-				}
-			}
-
-			$pagina = str_replace('#RepartidoresSelect#',$opciones,$pagina);
-			
-		}else if($nombre == "v_pedidosAceptados"){
-			
-			$query = "SELECT ID_Repartidor, CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) AS Nombre FROM usuarios_repartidor";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-			if ($row == "si") {
-				echo "Error: " . mysqli_error($omodelo->link);
-			} else {
-				$opciones = "<option value='' selected> - Seleccione una opción - </option>";
-				if ($numerofilas > 0) {
-					for ($i = 0; $i < $numerofilas; $i++) {
-						$opciones .= "<option value='".$row[$i]['ID_Repartidor']."'> ".$row[$i]['Nombre']." </option>";
-					}
-				}
-			}
-
-			$pagina = str_replace('#RepartidoresSelect#',$opciones,$pagina);
-			
-		}else if($nombre == "v_negocios"){
-			
-			$query = "SELECT ID_Clasificacion, Nombre FROM clasificaciones";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-
-			if ($row == "si") {
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				$listaClasificaciones = '';
-				if($numerofilas > 0){
-					for ($i=0; $i < $numerofilas; $i++) {
-						$listaClasificaciones .= '<option value="'.$row[$i]['ID_Clasificacion'].'">'.$row[$i]['Nombre'].'</option>';
-					}
-				}
-			}
-			$pagina = str_replace('#listaClasificaciones#',$listaClasificaciones,$pagina);
-			$pagina = str_replace('#listaClasificacionesModificar#',$listaClasificaciones,$pagina);
-
+		if($nombre == "v_inicio"){
 
 		}
-
 		
 		return $pagina;
 	}

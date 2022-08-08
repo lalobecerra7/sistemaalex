@@ -27,12 +27,9 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Iniciar sesión | Spidi</title>
+    <title>Iniciar sesión</title>
 
     <meta name="description" content="" />
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="vistas/assets/img/favicon/favicon.ico" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -41,6 +38,9 @@
       href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="vistas/assets/img/favicon/favicon.ico" />
 
     <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="vistas/assets/vendor/fonts/boxicons.css" />
@@ -69,9 +69,9 @@
             <div class="card-body">
               <!-- Logo -->
               <div class="app-brand justify-content-center" style="margin: auto;">
-                <a href="https://smartpoint.com.mx/Admin_spidi">
-	              <img src="vistas/assets/img/logos/icon.png" style="width:50%; margin: 25px 90px;">
-	            </a>
+                <a href="javascript:void(0)">
+                  <img src="vistas/assets/img/logos/icon.png" style="width:100%;">
+                </a>
               </div>
               <br>
               <!-- /Logo -->
@@ -109,7 +109,7 @@
                   </div>
                 </div>
                 <div class="text-center">
-                  <button type="submit" id="IniciarSesion" class="btn btn-lg w-100" style="background-color: #ce0041; color: #FFF">Iniciar sesión</button>
+                  <button type="submit" id="IniciarSesion" class="btn btn-lg w-100 btn-primary">Iniciar sesión</button>
                 </div>
               </form>
 

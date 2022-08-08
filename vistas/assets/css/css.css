@@ -564,6 +564,42 @@ footer .breadcrumb .breadcrumb-item a:hover{
 	box-shadow: inset 0px -5px 0px #ce0041;
 }
 
+.fileinput {
+  display: inline-block;
+  margin-bottom: 9px;
+}
+.fileinput .uneditable-input {
+  cursor: text;
+  display: inline-block;
+  margin-bottom: 0px;
+  vertical-align: middle;
+}
+.fileinput .thumbnail {
+  display: inline-block;
+  margin-bottom: 5px;
+  overflow: hidden;
+  text-align: center;
+  vertical-align: middle;
+}
+.fileinput .thumbnail > img {
+  max-height: 100%;
+}
+.fileinput .btn {
+  vertical-align: middle;
+}
+
+.fileinput-exists .fileinput-new, .fileinput-new .fileinput-exists {
+  display: none;
+}
+
+.fileinput-inline .fileinput-controls {
+  display: inline;
+}
+
+.fileinput .uneditable-input {
+  white-space: normal;
+}
+
 
 
 /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/

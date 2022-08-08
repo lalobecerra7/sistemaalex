@@ -1,0 +1,101 @@
+﻿
+<div class="modal fade" id="ModalSucursal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-inverse bd-inverse-darken">
+        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;"><span id="TituloModalSucursal"></span> sucursal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="FormSucursalNueva">
+	      <div class="modal-body">
+	       	<div class="row">
+	       		<div class="col-md-12 col-sm-12 mb-3">
+		            	<div class="form-floating">
+		                	<input type="text" class="form-control" id="NombreSucursal" name="NombreSucursal" placeholder="Ingresa el nombre de la sucursal">
+		                    <label for="NombreSucursal">Nombre de la sucursal</label>
+		                </div>
+		            </div>
+		            <div class="col-md-12 col-sm-12 mb-3">
+		                <div class="form-floating">
+		                    <input type="text" class="form-control" id="DireccionSucursal" name="DireccionSucursal" placeholder="Ingresa la direccion de la sucursal">
+		                	<label for="DireccionSucursal">Dirección de la sucursal</label>
+		                </div>
+		            </div>
+		            <div class="col-md-12 col-sm-12 mb-3">
+		                <div class="form-floating">
+		                    <input type="text" class="form-control" id="TelefonoSucursal" name="TelefonoSucursal" placeholder="Ingresa el telefono de la sucursal" maxlength="30">
+		                	<label for="TelefonoSucursal">Telefono de la sucursal</label>
+		            	</div>
+		            </div>
+		            <div class="col-md-12 col-sm-12 mb-3">
+		            	<div class="form-floating">
+		                	<input type="text" class="form-control" id="RFCSucursal" name="RFCSucursal" placeholder="Ingresa el RFC de la sucursal" maxlength="50">
+		                    <label for="RFCSucursal">RFC de la sucursal</label>
+		               </div>
+		            </div>
+		            <div class="col-md-12 col-sm-12 mb-3">
+		                <div class="form-floating">
+		                    <input type="text" class="form-control" id="NombreSucursalGerente" name="NombreSucursalGerente" placeholder="Ingresa el nombre del negocio" maxlength="200">
+		                    <label for="NombreSucursalGerente">Gerente de la sucursal</label>
+		                </div>
+		            </div>
+	       	</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="submit" class="btn btn-primary" id="bGuardarSucu" attrid="" tipo="insertar"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+	      </div>
+  		</form>
+    </div>
+  </div>
+</div>
+
+<div class="mb-3 mt-2">
+	<div class="row">
+		<div class="col-12">
+			<nav aria-label="breadcrumb">
+			  <ol class="breadcrumb">
+			    <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
+			    <li class="breadcrumb-item active" aria-current="page">Sucursales</li>
+			  </ol>
+			</nav>
+		</div>
+	</div>
+	<br>
+	<div id="content" class="card">
+		<div class="card-body">
+			<div class="row">
+				<div class="col-12">
+					<h1 style="font-weight: bold;" id="vistaTitulo"></h1>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-12 text-end">
+					<button type="button" class="btn btn-success" id="bontonNuevoSu" data-bs-toggle="modal" data-bs-target="#ModalSucursal"><i class="fa fa-file"></i> Nueva</button>
+					<a href="javascript:void(0)" class="btn btn-light btn-reload" onclick="$('#cargarSucursales').trigger('click')"><i class="fa fa-retweet"></i></a>
+				</div>
+			</div>
+			<br>
+			<div class="Principal">
+		        <div class="row mb-5">
+		            <div class="col-12">
+		                <table class="table table table-hover table-bordered text-center myDataTable" id="TablaSucursales" width="100%" style="font-size: 12px;">
+		                    <thead>
+		                        <th style="width: 20%;">Nombre</th>
+		                        <th style="width: 20%;" orden="No">Direccion</th>
+		                        <th style="width: 20%;" orden="No">Telefono</th>
+		                        <th style="width: 15%;" orden="No">RFC</th>
+		                        <th style="width: 15%;" orden="No">NombreGerente</th>
+		                        <th style="width: 10%;" orden="No">Acciones</th>
+		                    </thead>
+		                    <tbody>
+		                           
+		                    </tbody>
+		                </table>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</div>
+</div>

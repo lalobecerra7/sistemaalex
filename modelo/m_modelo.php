@@ -71,8 +71,8 @@ class m_modelo extends conexion{
 
 	public function movimiento($sql, $id){
 		$sql = $this->link->real_escape_string($sql);
-
-		$query="INSERT INTO movimientos SET Descripcion = 'Admin: $sql', FK_Usuario = '$id'";
+		$fecha = date ('Y-m-d H:i:s');
+		$query="INSERT INTO movimientos SET Descripcion = 'Admin: $sql', FK_Usuario = '$id', Fecha = '$fecha'";
 		//$query="INSERT INTO movimientos SET Descripcion = '$sql', '$dataArray->geoplugin_request', '$dataArray->geoplugin_countryName', '$dataArray->geoplugin_regionName', '$user_browser', '$os_platform', '$fecha', '$_SERVER[HTTP_USER_AGENT]', '$id')";
 		$error = $this->_insertar($query);
 

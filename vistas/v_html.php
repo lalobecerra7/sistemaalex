@@ -14,20 +14,19 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
-    <title>Admin | Spidi</title>
+    <title>SmartPoint</title>
     <meta name="description" content="" />
-    <link rel="shortcut icon" href="vistas/assets/img/favicon/favicon.ico" />
+    <link rel="shortcut icon" href="vistas/assets/img/favicon/favicon.ico" /> 
     <link rel="stylesheet" href="vistas/assets/vendor/fonts/boxicons.css" />
     <link rel="stylesheet" href="vistas/assets/vendor/css/core.css" class="template-customizer-core-css" />
     <link rel="stylesheet" href="vistas/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="vistas/assets/css/demo.css" />
     <link rel="stylesheet" href="vistas/assets/css/css.css" />
-    <link href="vistas/assets/plugins/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
-    <link href="vistas/assets/plugins/datatables/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
     <link  href="vistas/assets/plugins/fancybox/dist/jquery.fancybox.min.css" rel="stylesheet">
     <link href="vistas/assets/plugins/fontawesome/css/all.css" rel="stylesheet">
     <link href="vistas/assets/plugins/sweetalert/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="vistas/assets/vendor/js/helpers.js"></script>
+    <link rel="stylesheet" href="vistas/assets/plugins/myDataTable/css/myDataTable.css">
   </head>
 
   <body>
@@ -38,11 +37,11 @@
 
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
-            <a href="https://spidi.smartpoint.com.mx/">
-              <img src="vistas/assets/img/logos/icon.png" style="width:25%; margin: 30px 70px;">
+            <a href="index.php">
+              <img src="vistas/assets/img/logos/icon.png" style="width:100%;">
             </a>
 
-            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <a href="index.php;" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
               <i class="bx bx-chevron-left bx-sm align-middle"></i>
             </a>
           </div>
@@ -51,21 +50,85 @@
 
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
-            <li class="menu-item active nvpagina" aria-current="page" carga="v_inicio" titulo="Pedidos" id="cargarInicio">
+            <li class="menu-item active cargarVista" aria-current="page" carga="v_inicio" titulo="Inicio" id="cargarInicio">
               <a class="menu-link" href="javascript:void(0)">
-                <i class="menu-icon tf-icons bx bx-menu"></i>
-                <div data-i18n="Pendientes">Pendientes </div>
+                <i class="menu-icon fas fa-home"></i>
+                <div data-i18n="Inicio">Inicio </div>
               </a>
             </li>
 
-            <li class="menu-item nvpagina" carga="v_pedidosAceptados" titulo="Pedidos aceptados" id="cargaPedidosAceptados">
+            <li class="menu-item cargarVista" carga="v_sucursales" titulo="Sucursales" id="cargarSucursales">
               <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon tf-icons bx bx-check"></i>
-                <div data-i18n="Aceptados">Aceptados</div>
+                <i class="menu-icon fas fa-map-marker"></i>
+                <div data-i18n="Sucursales">Sucursales</div>
               </a>
             </li>
 
-            <li class="menu-item nvpagina" carga="v_pedidos" titulo="Pedidos en curso" id="cargaPedidos">
+            <li class="menu-item cargarVista" carga="v_proveedores" titulo="Proveedores" id="cargarProveedores">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-suitcase"></i>
+                <div data-i18n="Proveedores">Proveedores</div>
+              </a>
+            </li>
+
+            <li class="menu-item cargarVista" carga="v_clientes" titulo="Clientes" id="cargarClientes">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-face-grin"></i>
+                <div data-i18n="Clientes">Clientes</div>
+              </a>
+            </li>
+
+            <li class="menu-item cargarVista" carga="v_areas" titulo="Áreas" id="cargarAreas">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-building-user"></i>
+                <div data-i18n="Áreas">Áreas</div>
+              </a>
+            </li>
+
+            <li class="menu-item cargarVista" carga="v_personal" titulo="Personal" id="cargarPersonal">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-users"></i>
+                <div data-i18n="Personal">Personal</div>
+              </a>
+            </li>
+
+            <!-- Layouts -->
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div data-i18n="Layouts">Layouts</div>
+              </a>
+
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="layouts-without-menu.html" class="menu-link">
+                    <div data-i18n="Without menu">Without menu</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="layouts-without-navbar.html" class="menu-link">
+                    <div data-i18n="Without navbar">Without navbar</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="layouts-container.html" class="menu-link">
+                    <div data-i18n="Container">Container</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="layouts-fluid.html" class="menu-link">
+                    <div data-i18n="Fluid">Fluid</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="layouts-blank.html" class="menu-link">
+                    <div data-i18n="Blank">Blank</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- <li class="menu-item cargarVista" carga="v_pedidos" titulo="Pedidos en curso" id="cargaPedidos">
               <a href="javascript:void(0)" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-stopwatch"></i>
                 <div data-i18n="En curso">En curso</div>
@@ -75,7 +138,7 @@
             <li class="menu-header small text-uppercase">
               <span class="menu-header-text">Repartidores</span>
             </li>
-            <li class="menu-item nvpagina" carga="v_mapa" titulo="Mapa de repartidores" id="cargaMapa">
+            <li class="menu-item cargarVista" carga="v_mapa" titulo="Mapa de repartidores" id="cargaMapa">
               <a href="javascript:void(0);" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-dock-top"></i>
                 <div data-i18n="Mapa">Mapa</div>
@@ -85,7 +148,7 @@
             <li class="menu-header small text-uppercase">
               <span class="menu-header-text">Negocios</span>
             </li>
-            <li class="menu-item nvpagina" href="javascript:void(0)" carga="v_negocios" titulo="Negocios" id="cargaNegocios">
+            <li class="menu-item cargarVista" href="javascript:void(0)" carga="v_negocios" titulo="Negocios" id="cargaNegocios">
               <a href="javascript:void(0);" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-dock-top"></i>
                 <div data-i18n="Ver negocios">Ver negocios</div>
@@ -95,12 +158,12 @@
             <li class="menu-header small text-uppercase">
               <span class="menu-header-text">Pedidos</span>
             </li>
-            <li class="menu-item nvpagina" carga="v_historialPedidos" titulo="Historial de pedidos" id="cargaPedidos">
+            <li class="menu-item cargarVista" carga="v_historialPedidos" titulo="Historial de pedidos" id="cargaPedidos">
               <a href="javascript:void(0)" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-dock-top"></i>
                 <div data-i18n="Historial de pedidos">Historial de pedidos</div>
               </a>
-            </li>
+            </li> -->
           </ul>
         </aside>
         <!-- / Menu -->
@@ -147,6 +210,12 @@
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
+                      <a class="dropdown-item" href="javascript:void(0)" id="CambiarContra">
+                        <i class="fas fa-key me-2"></i>
+                        <span class="align-middle">Cambiar contraseña</span>
+                      </a>
+                    </li>
+                    <li>
                       <a class="dropdown-item" href="javascript:void(0)" id="CerrarSesion">
                         <i class="bx bx-power-off me-2"></i>
                         <span class="align-middle">Cerrar sesión</span>
@@ -168,13 +237,8 @@
 
 
             <div class="container-fluid" >
-              <div class="row row-cols-auto" style="margin: 18px 0px;">
-                <div class="col">
-                  <h6 id="titleVista" class="gris">Pedidos</h6>
-                </div>
-              </div>
               <div class="row">
-                <div class="col-12" id="main">
+                <div class="col-12" id="verVista">
                   
                 </div>
               </div>
@@ -202,27 +266,17 @@
     <script type="text/javascript" src="vistas/assets/plugins/jquery-validation/jquery.validate.js"></script>
     <script type="text/javascript" src="vistas/assets/plugins/jquery-validation/additional-methods.js" ></script>
     <script src="vistas/assets/plugins/jquery-validation/jquery-validation.init.js" type="text/javascript"></script>
-    <script type="text/javascript" src="vistas/assets/plugins/datatables/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="vistas/assets/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
-    <script type="text/javascript" src="vistas/assets/plugins/datatables/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" src="vistas/assets/plugins/datatables/js/buttons.flash.min.js"></script>
-    <script type="text/javascript" src="vistas/assets/plugins/datatables/js/jszip.min.js"></script>
-    <script type="text/javascript" src="vistas/assets/plugins/datatables/js/pdfmake.min.js"></script>
-    <script type="text/javascript" src="vistas/assets/plugins/datatables/js/vfs_fonts.js"></script>
-    <script type="text/javascript" src="vistas/assets/plugins/datatables/js/buttons.html5.min.js"></script>
     <script type="text/javascript" src="vistas/assets/plugins/fancybox/dist/jquery.fancybox.min.js"></script>
     <script type="text/javascript" src="vistas/assets/plugins/sweetalert/dist/sweetalert2.min.js"></script>
-    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="vistas/assets/js/script.js"></script>
-    <script type="text/javascript" src="vistas/assets/js/pedidosAceptados.js"></script>
-    <script type="text/javascript" src="vistas/assets/js/pedidosEnCurso.js"></script>
-    <script type="text/javascript" src="vistas/assets/js/historialPedidos.js"></script>
-    <script type="text/javascript" src="vistas/assets/js/negocios.js"></script>
-    <script type="text/javascript" src="vistas/assets/js/mapa.js"></script>
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC3V5UxT22-Yzc-Z47OOeWcl7b7OLrqn0&v=weekly" defer>
-    </script>
-    <!-- Place this tag in your head or just before your close body tag. -->
+    <!-- <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script> -->
     <script async defer src="vistas/assets/vendor/js/buttons.js"></script>
+    <script src="vistas/assets/plugins/myDataTable/js/myDataTable.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/script.js"></script>
+    <script type="text/javascript" src="vistas/assets/plugins/general.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/sucursales.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/clientes.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/proveedores.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/areas.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/personal.js"></script>
   </body>
 </html>

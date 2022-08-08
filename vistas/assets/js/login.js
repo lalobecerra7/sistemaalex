@@ -33,8 +33,7 @@ jQuery(document).ready(function () {
 			.done(function(res) {
 				setTimeout(function () {
 					if($.trim(res) == "Correcto"){
-						$("#mostrarMensaje").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><h6 class="alert-heading">Ingreso correcto <b>¡Bienvenido a SPIDI!</b></h6><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
-								
+						$("#mostrarMensaje").html('<div class="alert alert-primary alert-dismissible fade show" role="alert"><h6 class="alert-heading"><b>Acceso correcto</b></h6><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 						setTimeout(function () {
 							window.location.reload();
 						}, 500);

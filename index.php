@@ -3,7 +3,7 @@
 	session_start();
 	require "controladores/c_controller.php";
 	$controller = new controller();
-
+	//print_r($_SESSION['user_admin']);
 	if(isset($_SESSION['user_admin'])){
 		extract($_POST);
 		if (isset($metodo)) {			
