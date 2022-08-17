@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-08-2022 a las 23:01:57
+-- Tiempo de generación: 17-08-2022 a las 22:16:41
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.3
 
@@ -72938,7 +72938,7 @@ ALTER TABLE `abonos`
 -- AUTO_INCREMENT de la tabla `areas`
 --
 ALTER TABLE `areas`
-  MODIFY `ID_Area` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `ID_Area` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `caja`
