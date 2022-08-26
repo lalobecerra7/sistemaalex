@@ -31,6 +31,22 @@
 
   <body>
     <!-- Layout wrapper -->
+    <div id="caja">
+      <div class="container-fluid" style="height: 100vh; overflow-y: auto; ">
+        <div class="row" style="height: 100vh;">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-12 text-end">
+                <button type="button" class="btn" id="bCerrarVenCaja"><i class="fas fa-times"></i></button>
+              </div>     
+            </div>
+            <div class="row" id="verCaja">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
         <!-- Menu -->
@@ -45,6 +61,8 @@
               <i class="bx bx-chevron-left bx-sm align-middle"></i>
             </a>
           </div>
+
+
 
           <div class="menu-inner-shadow"></div>
 
@@ -127,43 +145,6 @@
                 </li>
               </ul>
             </li>
-
-            <!-- <li class="menu-item cargarVista" carga="v_pedidos" titulo="Pedidos en curso" id="cargaPedidos">
-              <a href="javascript:void(0)" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-stopwatch"></i>
-                <div data-i18n="En curso">En curso</div>
-              </a>
-            </li>
-
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Repartidores</span>
-            </li>
-            <li class="menu-item cargarVista" carga="v_mapa" titulo="Mapa de repartidores" id="cargaMapa">
-              <a href="javascript:void(0);" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Mapa">Mapa</div>
-              </a>
-            </li>
-
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Negocios</span>
-            </li>
-            <li class="menu-item cargarVista" href="javascript:void(0)" carga="v_negocios" titulo="Negocios" id="cargaNegocios">
-              <a href="javascript:void(0);" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Ver negocios">Ver negocios</div>
-              </a>
-            </li>
-
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Pedidos</span>
-            </li>
-            <li class="menu-item cargarVista" carga="v_historialPedidos" titulo="Historial de pedidos" id="cargaPedidos">
-              <a href="javascript:void(0)" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Historial de pedidos">Historial de pedidos</div>
-              </a>
-            </li> -->
           </ul>
         </aside>
         <!-- / Menu -->
@@ -182,7 +163,9 @@
               </a>
             </div>
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-              <div id="DivPedidosPendientes"></div>
+              <div id="DivPedidosPendientes">
+                <a href="javascript:void(0)" id="cargarVenta" ><i class="fas fa-shopping-cart"></i></a>
+              </div>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -234,8 +217,6 @@
           <!-- Content wrapper -->
           <div class="content-wrapper">
             <!-- Cargar las vistas -->
-
-
             <div class="container-fluid" >
               <div class="row">
                 <div class="col-12" id="verVista">
@@ -261,6 +242,7 @@
     <script src="vistas/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="vistas/assets/vendor/libs/popper/popper.js"></script>
     <script src="vistas/assets/vendor/js/bootstrap.js"></script>
+    <script src="vistas/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="vistas/assets/vendor/js/menu.js"></script>
     <script src="vistas/assets/js/main.js"></script>
     <script type="text/javascript" src="vistas/assets/plugins/jquery-validation/jquery.validate.js"></script>
@@ -278,5 +260,6 @@
     <script type="text/javascript" src="vistas/assets/js/proveedores.js"></script>
     <script type="text/javascript" src="vistas/assets/js/areas.js"></script>
     <script type="text/javascript" src="vistas/assets/js/personal.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/hacerventa.js"></script>
   </body>
 </html>

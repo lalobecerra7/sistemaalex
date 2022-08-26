@@ -7,6 +7,7 @@ include "controladores/c_clientes.php";
 include "controladores/c_proveedores.php";
 include "controladores/c_areas.php";
 include "controladores/c_personal.php";
+include "controladores/c_hacerventa.php";
 
 class controller {
 
