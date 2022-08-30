@@ -84,8 +84,8 @@ class clientes {
 						$datosbancarios .= "CLABE o número de cuenta: ".$row[$i]['No_Cuenta']."<br>";
 					}
 
-					$foto = '<a href="vistas/assets/archivos/fotosClientes/default.jpg" data-fancybox="images">
-									<div style="background-image: url('."'".'vistas/assets/archivos/fotosClientes/default.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
+					$foto = '<a href="vistas/assets/archivos/default.jpg" data-fancybox="images">
+									<div style="background-image: url('."'".'vistas/assets/archivos/default.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
 									</div>
 								</a><br>';
 					if ($row[$i]["Foto"] != "") {
@@ -128,7 +128,7 @@ class clientes {
 		}else{
 			$IDCliente = mysqli_insert_id($omodelo->link);
 			echo "Correcto";
-			$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 
 			$status = 1;
 			if ($_FILES['FotoCliente']['size'] > 0 && $_FILES['FotoCliente']['error'] == 0) {
@@ -174,7 +174,7 @@ class clientes {
 			echo "ErrorModificar: ".mysqli_error($omodelo->link);
 		}else{
 			echo "Correcto~";
-			$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 
 			$status = 1;
 			if ($_FILES['FotoCliente']['size'] > 0 && $_FILES['FotoCliente']['error'] == 0) {
@@ -249,7 +249,7 @@ class clientes {
 			echo "Error: ".mysqli_error($omodelo->link);
 		}else{
 			echo "Correcto";
-		    $omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+		    $omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
@@ -313,7 +313,7 @@ class clientes {
 	      		$Estatus = 1;
 	    	}else{
 	    		$NombreArchivo = LimpiarArchivo($nombreImg);
-	    		$nombreImg = $_SESSION['user_smart']['cliente']['id_cliente']."_".rand()."_".$NombreArchivo;
+	    		$nombreImg = $_SESSION['user_admin']['cliente']['id_cliente']."_".rand()."_".$NombreArchivo;
 	    		$ruta = $carpeta.$nombreImg;
 	    	}
 		}
@@ -330,7 +330,7 @@ class clientes {
 		       		unlink("$ruta");
 		    	}
 				move_uploaded_file($ruta_provisional,  $ruta);
-				$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 			}
 		}
 	}
@@ -376,7 +376,7 @@ class clientes {
 	      		$Estatus = 1;
 	    	}else{
 	    		$NombreArchivo = LimpiarArchivo($nombreImg);
-	    		$nombreImg = $_SESSION['user_smart']['cliente']['id_cliente']."_".rand()."_".$NombreArchivo;
+	    		$nombreImg = $_SESSION['user_admin']['cliente']['id_cliente']."_".rand()."_".$NombreArchivo;
 	    		$ruta = $carpeta.$nombreImg;
 	    	}
 	    	$queryfoto = ", foto = '$nombreImg'";
@@ -400,7 +400,7 @@ class clientes {
 		       		unlink("$rutaantigua");
 		    	}
 				move_uploaded_file($ruta_provisional,  $ruta);
-				$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 			}
 		}
 	}
@@ -419,7 +419,7 @@ class clientes {
 			if($foto != "" && file_exists("vistas/assets/archivos/fotosClientes/$foto")){
 		       	unlink("vistas/assets/archivos/fotosClientes/$foto");
 		    }
-		    $omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+		    $omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
@@ -472,8 +472,8 @@ class clientes {
 
 		$permisosMo = null;
 
-		if(isset($_SESSION['user_smart'])){
-			$query = "SELECT permisos FROM usuarios WHERE id_usuario = '".$_SESSION['user_smart']['usuario']['id_usuario']."'";
+		if(isset($_SESSION['user_admin'])){
+			$query = "SELECT permisos FROM usuarios WHERE id_usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
 			$row = $omodelo->_consultar($query); 
 			$numerofilas = $omodelo->numerofilas;
 

@@ -18,14 +18,14 @@ class personal {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Empleado, Nombre, Direccion, Colonia, Telefono, Celular, Ciudad, Correo, Fecha_Nacimiento, Fecha_Entrada, Puesto, Sueldo, Horario, Sexo, Foto, Lugar_Nacimiento, Estado_Civil, Pais, Estado, RFC, Numero_Seguro, CURP, FK_Area, Forma_Pago, Bonos, SDI, Tipo_Sangre, Alergias, Contacto_Emergencias, Numero_Emergencias, Estado_Empleado, Turno, Fecha_Baja, Motivo_Baja, Fecha_Termino_Contrato, Fecha_Reingreso, Usuario, Codigo_Postal, Fecha_Registro) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Empleado, Nombre, Direccion, Colonia, Telefono, Celular, Ciudad, Correo, Fecha_Nacimiento, Fecha_Entrada, FK_Puesto, Sueldo, SDI, SPH, Tipo_Sueldo, Horario_Entrada, Horario_Salida, Horario_Entrada_Sabado, Horario_Salida_Sabado, Sexo, Lugar_Nacimiento, Estado_Civil, Pais, Estado, RFC, Numero_Seguro, CURP, FK_Area, Bonos, Tipo_Sangre, Alergias, Contacto_Emergencias, Numero_Emergencias, Estado_Empleado, Foto, Fecha_Baja, Motivo_Baja, Fecha_Termino_Contrato, Fecha_Reingreso, Codigo_Postal, Fecha_Registro) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Empleado, Nombre, Direccion, Colonia, Telefono, Celular, Ciudad, Correo, Fecha_Nacimiento, Fecha_Entrada, Puesto, Sueldo, Horario, Sexo, Foto, Lugar_Nacimiento, Estado_Civil, Pais, Estado, RFC, Numero_Seguro, CURP, FK_Area, Forma_Pago, Bonos, SDI, Tipo_Sangre, Alergias, Contacto_Emergencias, Numero_Emergencias, Estado_Empleado, Turno, Fecha_Baja, Motivo_Baja, Fecha_Termino_Contrato, Fecha_Reingreso, Usuario, Codigo_Postal, Fecha_Registro AS Fecha, (SELECT COUNT(*) FROM empleados $busqueda) AS Num FROM empleados $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Empleado, Nombre, Direccion, Colonia, Telefono, Celular, Ciudad, Correo, Fecha_Nacimiento, Fecha_Entrada, FK_Puesto, Sueldo, SDI, SPH, Tipo_Sueldo, Horario_Entrada, Horario_Salida, Horario_Entrada_Sabado, Horario_Salida_Sabado, Sexo, Lugar_Nacimiento, Estado_Civil, Pais, Estado, RFC, Foto, Numero_Seguro, CURP, FK_Area, Bonos, Tipo_Sangre, Alergias, Contacto_Emergencias, Numero_Emergencias, Estado_Empleado , Fecha_Baja, Motivo_Baja, Fecha_Termino_Contrato, Fecha_Reingreso, Codigo_Postal, Fecha_Registro AS Fecha, (SELECT COUNT(*) FROM empleados $busqueda) AS Num FROM empleados $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -72,8 +72,8 @@ class personal {
 						$contacto .= "Correo electrónico: ".$row[$i]['Correo']."<br>";
 					}
 
-					$foto = '<a href="vistas/assets/archivos/fotosEmpleados/default.jpg" data-fancybox="images">
-									<div style="background-image: url('."'".'vistas/assets/archivos/fotosEmpleados/default.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
+					$foto = '<a href="vistas/assets/archivos/default.jpg" data-fancybox="images">
+									<div style="background-image: url('."'".'vistas/assets/archivos/default.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
 									</div>
 								</a><br>';
 					if ($row[$i]["Foto"] != "") {
@@ -84,14 +84,18 @@ class personal {
 								</a><br>';
 						}	
 					}
+
+					if ($direccion == "") {
+						$direccion = "No hay datos ingresados";
+					}
 					
 					$arreglo['data'][$i] = array(
-						'ID' => $row[$i]['ID_Cliente'],
+						'ID' => $row[$i]['ID_Empleado'],
 						'Fecha' => $row[$i]['Fecha'],
 						'Empleado' => $foto.$row[$i]['Nombre'],
 						'Direccion' => $direccion,
 						'Contacto' => $contacto,
-						'Acciones' => '<button class="btn btn-primary btn-sm" id="ModificarCliente" attrid="'.$row[$i]['ID_Cliente'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" id="EliminarCliente" attrid="'.$row[$i]['ID_Cliente'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>',
+						'Acciones' => '<button class="btn btn-primary btn-sm" id="ModificarEmpleado" attrid="'.$row[$i]['ID_Empleado'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" id="EliminarEmpleado" attrid="'.$row[$i]['ID_Empleado'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>',
 						
 					);
 					
@@ -108,19 +112,20 @@ class personal {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
-		$query = "INSERT INTO clientes SET Nombre = '$NombreCliente', Direccion = '$DireccionCliente', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Ciudad = '$CiudadCliente', Colonia = '$ColoniaCliente', Codigo_Postal = '$CPCliente', Tipo_Descuento = '$TipoDescuentoCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', Fecha_Registro = '$fecha', RFC = '$RFCCliente', Empresa = '$NombreEmpresaCliente', No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', Pais = '$PaisCliente', Estado = '$EstadoCliente'";
+		$query = "INSERT INTO empleados SET Nombre = '$NombreEmpleado', Direccion = '$DireccionEmpleado', Colonia = '$ColoniaEmpleado', Telefono = '$TelefonoEmpleado', Celular = '$CelularEmpleado', Ciudad = '$CiudadEmpleado', Correo = '$CorreoEmpleado', Fecha_Nacimiento = '$FechaNacimientoEmpleado', Fecha_Entrada = '$FechaIngreso', FK_Puesto = '$PuestoEmpleado', Sueldo = '$SueldoEmpleado', SDI = '$SDIEmpleado', SPH = '$SPHEmpleado', Tipo_Sueldo = '$TipoSueldo', Horario_Entrada = '$HoraEntrada', Horario_Salida = '$HorarioSalida', Horario_Entrada_Sabado = '$HoraEntradaSabado', Horario_Salida_Sabado = '$HorarioSalidaSabado', Sexo = '$SexoEmpleado', Lugar_Nacimiento = '$LugarNacimientoEmpleado', Estado_Civil = '$EstadoCivilEmpleado', Pais = '$PaisEmpleado', Estado = '$EstadoEmpleado', RFC = '$RFCEmpleado', Numero_Seguro = '$NoSeguroSocialEmpleado', CURP = '$CURPEmpleado', FK_Area = '$AreasEmpleado', Tipo_Sangre = '$TipoSangreEmpleado', Alergias = '$AlergiasEmpleado', Contacto_Emergencias = '$ContactoEmergencia', Numero_Emergencias = '$TelefonoEmergencia', Estado_Empleado  = '$EstatusEmpleado', Fecha_Baja = '$FechaBajaEmpleado', Motivo_Baja = '$MotivoBajaEmpleado', Fecha_Termino_Contrato = '$FechaTerminoContrato', Fecha_Reingreso = '$FechaReingresoEmpleado', Codigo_Postal = '$CPEmpleado', Fecha_Registro = '$fecha'
+		";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
 			echo "ErrorInsertar: ".mysqli_error($omodelo->link);
 		}else{
-			$IDCliente = mysqli_insert_id($omodelo->link);
+			$IDEmpleado = mysqli_insert_id($omodelo->link);
 			echo "Correcto";
-			$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 
 			$status = 1;
-			if ($_FILES['FotoCliente']['size'] > 0 && $_FILES['FotoCliente']['error'] == 0) {
-				$file = $_FILES["FotoCliente"];
+			if ($_FILES['FotoEmpleado']['size'] > 0 && $_FILES['FotoEmpleado']['error'] == 0) {
+				$file = $_FILES["FotoEmpleado"];
 				$nombreDoc = $file["name"];
 				$tipo = $file["type"];
 				$ruta_provisional = $file["tmp_name"];
@@ -139,13 +144,13 @@ class personal {
 			//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 			if($status == 0){
-				$query2 = "UPDATE clientes SET Foto = '".$IDCliente.'_'.$nombreDoc."' WHERE ID_Cliente = '$IDCliente'";
+				$query2 = "UPDATE empleados SET Foto = '".$IDEmpleado.'_'.$nombreDoc."' WHERE ID_Empleado = '$IDEmpleado'";
 				$error3 = $omodelo->_insertar($query2);	
 
 				if ($error3 == "si") {
 					echo "Error 4: ".mysqli_error($omodelo->link); 
 				}else{
-					move_uploaded_file($ruta_provisional,  $ruta.''.$IDCliente.'_'.$nombreDoc);
+					move_uploaded_file($ruta_provisional,  $ruta.''.$IDEmpleado.'_'.$nombreDoc);
 				}
 			}
 		}
@@ -155,18 +160,20 @@ class personal {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
-		$query = "UPDATE clientes SET Nombre = '$NombreCliente', Direccion = '$DireccionCliente', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Ciudad = '$CiudadCliente', Colonia = '$ColoniaCliente', Codigo_Postal = '$CPCliente', Tipo_Descuento = '$TipoDescuentoCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', RFC = '$RFCCliente', Empresa = '$NombreEmpresaCliente', No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', Pais = '$PaisCliente', Estado = '$EstadoCliente' WHERE ID_Cliente = '$IDCliente'";
+		$query = "UPDATE empleados SET Nombre = '$NombreEmpleado', Direccion = '$DireccionEmpleado', Colonia = '$ColoniaEmpleado', Telefono = '$TelefonoEmpleado', Celular = '$CelularEmpleado', Ciudad = '$CiudadEmpleado', Correo = '$CorreoEmpleado', Fecha_Nacimiento = '$FechaNacimientoEmpleado', Fecha_Entrada = '$FechaIngreso', FK_Puesto = '$PuestoEmpleado', Sueldo = '$SueldoEmpleado', SDI = '$SDIEmpleado', SPH = '$SPHEmpleado', Tipo_Sueldo = '$TipoSueldo', Horario_Entrada = '$HoraEntrada', Horario_Salida = '$HorarioSalida', Horario_Entrada_Sabado = '$HoraEntradaSabado', Horario_Salida_Sabado = '$HorarioSalidaSabado', Sexo = '$SexoEmpleado', Lugar_Nacimiento = '$LugarNacimientoEmpleado', Estado_Civil = '$EstadoCivilEmpleado', Pais = '$PaisEmpleado', Estado = '$EstadoEmpleado', RFC = '$RFCEmpleado', Numero_Seguro = '$NoSeguroSocialEmpleado', CURP = '$CURPEmpleado', FK_Area = '$AreasEmpleado', Tipo_Sangre = '$TipoSangreEmpleado', Alergias = '$AlergiasEmpleado', Contacto_Emergencias = '$ContactoEmergencia', Numero_Emergencias = '$TelefonoEmergencia', Estado_Empleado  = '$EstatusEmpleado', Fecha_Baja = '$FechaBajaEmpleado', Motivo_Baja = '$MotivoBajaEmpleado', Fecha_Termino_Contrato = '$FechaTerminoContrato', Fecha_Reingreso = '$FechaReingresoEmpleado', Codigo_Postal = '$CPEmpleado' WHERE ID_Empleado = '$idEmpleado'
+		";
+
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
 			echo "ErrorModificar: ".mysqli_error($omodelo->link);
 		}else{
 			echo "Correcto~";
-			$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 
 			$status = 1;
-			if ($_FILES['FotoCliente']['size'] > 0 && $_FILES['FotoCliente']['error'] == 0) {
-				$file = $_FILES["FotoCliente"];
+			if ($_FILES['FotoEmpleado']['size'] > 0 && $_FILES['FotoEmpleado']['error'] == 0) {
+				$file = $_FILES["FotoEmpleado"];
 				$nombreDoc = $file["name"];
 				$tipo = $file["type"];
 				$ruta_provisional = $file["tmp_name"];
@@ -186,7 +193,7 @@ class personal {
 
 			if($status == 0){
 
-				$query = "SELECT Foto FROM clientes WHERE ID_Cliente = '$IDCliente'";
+				$query = "SELECT Foto FROM empleados WHERE ID_Empleado = '$idEmpleado'";
 				$row = $omodelo->_consultar($query);
 				$numerofilas = $omodelo->numerofilas;
 				$nombreFoto = "";
@@ -200,13 +207,13 @@ class personal {
 					}
 				}
 
-				$query2 = "UPDATE clientes SET Foto = '".$IDCliente.'_'.$nombreDoc."' WHERE ID_Cliente = '$IDCliente'";
+				$query2 = "UPDATE empleados SET Foto = '".$idEmpleado.'_'.$nombreDoc."' WHERE ID_Empleado = '$idEmpleado'";
 				$error3 = $omodelo->_insertar($query2);	
 
 				if ($error3 == "si") {
 					echo "Error 4: ".mysqli_error($omodelo->link); 
 				}else{
-					move_uploaded_file($ruta_provisional,  $ruta.''.$IDCliente.'_'.$nombreDoc);
+					move_uploaded_file($ruta_provisional,  $ruta.''.$idEmpleado.'_'.$nombreDoc);
 				}
 			}
 		}
@@ -215,9 +222,9 @@ class personal {
 	public function _eliminar(){
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$IDCliente =  $omodelo->link->real_escape_string($IDCliente);
+		$idEmpleado =  $omodelo->link->real_escape_string($idEmpleado);
 
-		$query = "SELECT Foto FROM clientes WHERE ID_Cliente = '$IDCliente'";
+		$query = "SELECT Foto FROM empleados WHERE ID_Empleado = '$idEmpleado'";
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 		$nombreFoto = "";
@@ -231,30 +238,50 @@ class personal {
 			}
 		}
 
-		$query = "DELETE FROM clientes WHERE ID_Cliente = '$IDCliente'";
+		$query = "DELETE FROM empleados WHERE ID_Empleado = '$idEmpleado'";
 		$error = $omodelo->_insertar($query);
 		if ($error == "si") {
 			echo "Error: ".mysqli_error($omodelo->link);
 		}else{
 			echo "Correcto";
-		    $omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+		    $omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
 	public function _detalles(){
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$IDCliente =  $omodelo->link->real_escape_string($IDCliente);
+		if ($tipo == "ConsultarPuestos") {
+			$opciones = "<option value=''> Seleccione una opción </option>";
+			$query = "SELECT ID_Puesto, Nombre, FK_Departamento FROM puestos";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
 
-		$query = "SELECT ID_Cliente, Nombre, Direccion, Telefono, Celular, Ciudad, Colonia, Codigo_Postal, Tipo_Descuento, Descuento, Lim_Credito, Correo, Fecha_Nacimiento, Sexo, Fecha_Registro, Foto, RFC, Empresa, No_Cuenta, Banco, Titular, Pais, Estado FROM clientes WHERE ID_Cliente = '$IDCliente'";
-		$row = $omodelo->_consultar($query);
-		$numerofilas = $omodelo->numerofilas;
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for ($i=0; $i < $numerofilas; $i++) { 
+						$opciones .= '<option value="'.$row[$i]["ID_Puesto"].'">'.$row[$i]["Nombre"].'</option>';
+					}
+				}
+				echo $opciones;
+			}
+		}else if ($tipo == "ConsultarAreas") {
+			$opciones = "<option value=''> Seleccione una opción </option>";
+			$query = "SELECT ID_Area, Nombre FROM areas";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
 
-		if($row == 'si'){
-			echo "Error: ".mysqli_error($omodelo->link);
-		}else{
-			if($numerofilas > 0){
-				echo json_encode($row[0]);
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for ($i=0; $i < $numerofilas; $i++) { 
+						$opciones .= '<option value="'.$row[$i]["ID_Area"].'">'.$row[$i]["Nombre"].'</option>';
+					}
+				}
+				echo $opciones;
 			}
 		}
 	}

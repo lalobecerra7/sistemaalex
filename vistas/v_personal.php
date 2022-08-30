@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header bg-inverse bd-inverse-darken">
-        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;"><span id="TituloModalCliente"></span> empleado</h5>
+        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;"><span id="TituloModalEmpleados"></span> empleado</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form id="FormEmpleados">
@@ -72,26 +72,6 @@
 		            </div>
 		        </div>
 		        <hr>
-		        <b class="mb-3">Datos laborales</b>
-		        <div class="col-md-4 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		           	<input type="text" class="form-control" id="RFCEmpleado" name="RFCEmpleado" placeholder="Ingresa el RFC del empleado">
-		            <label for="RFCEmpleado">RFC del empleado</label>
-		          </div>
-		        </div>
-		        <div class="col-md-4 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		           	<input type="text" class="form-control" id="NoSeguroSocialEmpleado" name="NoSeguroSocialEmpleado" placeholder="Ingresa el NSS del empleado">
-		            <label for="NoSeguroSocialEmpleado">NSS del empleado</label>
-		          </div>
-		        </div>
-		        <div class="col-md-4 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		           	<input type="text" class="form-control" id="CURPEmpleado" name="CURPEmpleado" placeholder="Ingresa la CURP del empleado">
-		            <label for="CURPEmpleado">CURP del empleado</label>
-		          </div>
-		        </div>
-		        <hr>
 		        <b class="mb-3">Datos de ubicación</b>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
@@ -130,46 +110,158 @@
 		          </div>
 		        </div>
 		        <hr>
-		        <b class="mb-3">Datos adicionales</b>
-		        <div class="col-md-4 col-sm-12 mb-3">
-              <div class="form-floating">
-              	<select class="form-select" id="TipoDescuentoEmpleado" name="TipoDescuentoEmpleado">
-                	<option value="" selected> - Seleccione una opción - </option>
-                  <option value="Porcentaje">Descuento por porcentaje</option>
-                  <option value="Cantidad">Descuento por cantidad</option>
-                </select>
-                <label for="TipoDescuentoEmpleado">Tipo de descuento</label>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-12 mb-3">
-            	<div class="form-floating">
-              	<input type="number" disabled="true" min="0" step="any" class="form-control" id="DescuentoEmpleado" name="DescuentoEmpleado" placeholder="Ingresa el valor del descuento">
-                <label for="DescuentoEmpleado"><span id="TituloTipoDescuento"></span></label>
-              </div>
-            </div>
-            <div class="col-md-4 text-center col-sm-12 mb-3">
-            	<h6>Descuento</h6>
-              <h4 id="LabelDescuentoEmpleado"><b class="cantidad">0</b></h4>
-            </div>
-            <hr>
-		        <b class="mb-3">Datos bancarios</b>   
-		        <br>
+		        <b class="mb-3">Datos laborales</b>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		            <input type="text" class="form-control" id="TitularBancoEmpleado" name="TitularBancoEmpleado" placeholder="Ingresa el nombre del titular">
-		            <label for="TitularBancoEmpleado">Titular</label>
+		           	<input type="text" class="form-control" id="RFCEmpleado" name="RFCEmpleado" placeholder="Ingresa el RFC del empleado">
+		            <label for="RFCEmpleado">RFC del empleado</label>
 		          </div>
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		            <input type="text" class="form-control" id="BancoEmpleado" name="BancoEmpleado" placeholder="Ingresa el nombre del banco">
-		            <label for="BancoEmpleado">Banco</label>
+		           	<input type="text" class="form-control" id="NoSeguroSocialEmpleado" name="NoSeguroSocialEmpleado" placeholder="Ingresa el NSS del empleado">
+		            <label for="NoSeguroSocialEmpleado">NSS del empleado</label>
 		          </div>
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		            <input type="text" class="form-control" id="CuentaBancoEmpleado" name="CuentaBancoEmpleado" placeholder="Ingresa el número de cuenta o clabe">
-		            <label for="CuentaBancoEmpleado">No. Cuenta / CLABE</label>
+		           	<input type="text" class="form-control" id="CURPEmpleado" name="CURPEmpleado" placeholder="Ingresa la CURP del empleado">
+		            <label for="CURPEmpleado">CURP del empleado</label>
+		          </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<input type="date" class="form-control" id="FechaIngreso" name="FechaIngreso" placeholder="Ingresa la fecha de ingreso del empleado">
+		            <label for="FechaIngreso">Fecha de ingreso</label>
+		          </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<select class="form-control" id="PuestoEmpleado" name="PuestoEmpleado" placeholder="Selecciona el puesto del empleado">
+		           	</select>
+		            <label for="PuestoEmpleado">Puesto</label>
+		          </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<select class="form-control" id="AreasEmpleado" name="AreasEmpleado" placeholder="Selecciona el área del empleado">
+		           	</select>
+		            <label for="AreasEmpleado">Área</label>
+		          </div>
+		        </div>
+		        <label class="text-center mb-3">Horarios</label>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<input type="time" class="form-control" id="HoraEntrada" name="HoraEntrada" placeholder="Ingresa la hora de entrada del empleado">
+		            <label for="HoraEntrada">Hora de entrada (Lunes - Viernes)</label>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<input type="time" class="form-control" id="HorarioSalida" name="HorarioSalida" placeholder="Ingresa la hora de salida del empleado">
+		            <label for="HorarioSalida">Hora de salida (Lunes - Viernes)</label>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<input type="time" class="form-control" id="HoraEntradaSabado" name="HoraEntradaSabado" placeholder="Ingresa la hora de entrada del empleado">
+		            <label for="HoraEntradaSabado">Hora de entrada (Sabado)</label>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<input type="time" class="form-control" id="HorarioSalidaSabado" name="HorarioSalidaSabado" placeholder="Ingresa la hora de salida del empleado">
+		            <label for="HorarioSalidaSabado">Hora de salida (Sabado)</label>
+		          </div>
+		        </div>
+		        <label class="text-center mb-3">Sueldo</label>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<select class="form-control" id="TipoSueldo" name="TipoSueldo" placeholder="Selecciona el tipo de sueldo del empleado">
+		           		<option value=""> Seleccione una opción </option>
+		           		<option value="Semanal"> Semanal </option>
+		           		<option value="Quincenal"> Quincenal </option>
+		           	</select>
+		            <label for="TipoSueldo">Tipo de sueldo</label>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<input type="number" min="0" step="any" class="form-control" id="SueldoEmpleado" name="SueldoEmpleado" placeholder="Ingresa el sueldo del empleado">
+		            <label for="SueldoEmpleado">Sueldo</label>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<input type="number" class="form-control" id="SDIEmpleado" name="SDIEmpleado" placeholder="Ingresa el SDI del empleado" readonly>
+		            <label for="SDIEmpleado">Salario diario integro</label>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<input type="number" class="form-control" id="SPHEmpleado" name="SPHEmpleado" placeholder="Ingresa el SPH del empleado" readonly>
+		            <label for="SPHEmpleado">Sueldo por hora</label>
+		          </div>
+		        </div>
+		        <hr>
+		        <b class="mb-3">Datos de contacto por emergencias</b>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <input type="text" class="form-control" id="ContactoEmergencia" name="ContactoEmergencia" placeholder="Ingresa el nombre del contacto de emergencias del empleado">
+		            <label for="ContactoEmergencia">Nombre del contacto</label>
+		          </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <input type="text" class="form-control" id="TelefonoEmergencia" name="TelefonoEmergencia" placeholder="Ingresa el telefono del contacto de emergencias del empleado">
+		            <label for="TelefonoEmergencia">Teléfono del contacto</label>
+		          </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <input type="text" class="form-control" id="TipoSangreEmpleado" name="TipoSangreEmpleado" placeholder="Ingresa el tipo de sangre del empleado">
+		            <label for="TipoSangreEmpleado">Tipo de sangre</label>
+		          </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <input type="text" class="form-control" id="AlergiasEmpleado" name="AlergiasEmpleado" placeholder="Ingresa las alergias del empleado">
+		            <label for="AlergiasEmpleado">Alergias</label>
+		          </div>
+		        </div>
+		        <hr>
+		        <b class="mb-3">Estatus del empleado</b>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <select type="text" class="form-control" id="EstatusEmpleado" name="EstatusEmpleado" placeholder="Ingresa el nombre del contacto de emergencias del empleado">
+		            	<option value="Activo" selected>Activo</option>
+		            	<option value="Inactivo">Inactivo</option>
+		            </select>
+		            <label for="EstatusEmpleado">Estatus actual del empleado</label>
+		          </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <input type="date" class="form-control" id="FechaTerminoContrato" name="FechaTerminoContrato" placeholder="Ingresa la fecha de termino del contrato del empleado">
+		            <label for="FechaTerminoContrato">Fecha de termino del contrato</label>
+		          </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <input type="date" class="form-control" id="FechaBajaEmpleado" name="FechaBajaEmpleado" placeholder="Ingresa la fecha de baja del empleado">
+		            <label for="FechaBajaEmpleado">Fecha de baja</label>
+		          </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <input type="text" class="form-control" id="MotivoBajaEmpleado" name="MotivoBajaEmpleado" placeholder="Ingresa el motivo de baja del emplead">
+		            <label for="MotivoBajaEmpleado">Motivo de baja del empleado</label>
+		          </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <input type="date" class="form-control" id="FechaReingresoEmpleado" name="FechaReingresoEmpleado" placeholder="Ingresa la fecha de reingreso del empleado">
+		            <label for="FechaReingresoEmpleado">Fecha de reingreso</label>
 		          </div>
 		        </div>
 	       	</div>

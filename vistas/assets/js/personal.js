@@ -1,100 +1,78 @@
 function v_personal() {
     TablaPersonal();
 
-    $('#FormClientes').validate({
+    $('#FormEmpleados').validate({
         rules: {
-            NombreCliente: {
+            NombreEmpleado: {
                 required: true
             },
-            TelefonoCliente:{
-                required: true
-            },
-            DireccionCliente:{
+            CelularEmpleado:{
                 required: true
             },
         },
         messages: {
-            NombreCliente: {
-                required: "El nombre del cliente es obligatorio"
+            NombreEmpleado: {
+                required: "El nombre del empleado es obligatorio"
             },
-            TelefonoCliente:{
-                required: "El teléfono del cliente es obligatorio"
-            },
-            DireccionCliente:{
-                required: "La dirección del cliente es obligatoria"
+            CelularEmpleado:{
+                required: "El celular del empleado es obligatorio"
             },
         },
         submitHandler: function(form) { 
-            var descuentoCliente = 0;
-            if ($("#TipoDescuentoCliente").val() != "" && ($("#DescuentoCliente").val() == "" || $("#DescuentoCliente").val() < 0)) {
-                Swal.fire({
-                    icon: 'warning',
-                    text: 'Ingresa la cantidad del descuento'
-                });
-                $("#DescuentoCliente").focus();
-            }else{
-                if ($("#DescuentoCliente").val() == "" || $("#DescuentoCliente").val() < 0) {
-                    descuentoCliente = 0;
-                }else{
-                    descuentoCliente = $("#DescuentoCliente").val();
+            var data = new FormData(document.getElementById("FormEmpleados"));
+            data.append("metodo", $("#GuardarEmpleado").attr("tipo"));
+            data.append("accion", "personal");
+            data.append("idEmpleado", $("#GuardarEmpleado").attr("attrid"));
+
+            var btn = $('#GuardarEmpleado');
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    progressBoton(btn);
                 }
-                var data = new FormData(document.getElementById("FormClientes"));
-                data.append("metodo", $("#GuardarEmpleado").attr("tipo"));
-                data.append("accion", "clientes");
-                data.append("DescuentoCliente", descuentoCliente);
-                data.append("IDCliente", $("#GuardarEmpleado").attr("attrid"));
-
-                var btn = $('#GuardarEmpleado');
-                $.ajax({
-                    url: 'index.php',
-                    type: 'POST',
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    beforeSend: function() {
-                        progressBoton(btn);
-                    }
-                })
-                .done(function(res) {
-                    var datos = $.trim(res).split("~");
-                    if ($.trim(datos[0]) == "Correcto") {
-                        $("#ModalCliente").modal("hide");
-                        var footer = "";
-                        if ($("#GuardarEmpleado").attr("tipo") == "modificar") {
-                            var tipoAlerta = "modificado";
-                        }else{
-                            var tipoAlerta = "guardado";
-                        }
-
-                        if ($.trim(datos[1]) == "Error 2 Formato") {
-                            footer = "El formato de la imagen es incorrecto";
-                        }else if ($.trim(datos[1]) == "Error 3 Peso") {
-                            footer = "La imagen debe de pesar menos de 10MB";
-                        }
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Cliente '+tipoAlerta+' correctamente',
-                            footer: footer
-                        });
-                        TablaPersonal();
+            })
+            .done(function(res) {
+                var datos = $.trim(res).split("~");
+                if ($.trim(datos[0]) == "Correcto") {
+                    $("#ModalEmpleados").modal("hide");
+                    var footer = "";
+                    if ($("#GuardarEmpleado").attr("tipo") == "modificar") {
+                        var tipoAlerta = "modificado";
                     }else{
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Error inesperado al '+$("#GuardarEmpleado").attr("tipo")+' cliente.'
-                        });
-
-                        console.log($.trim(res));
+                        var tipoAlerta = "guardado";
                     }
-                })
-                .fail(function() {
-                    console.log("Error ajax");
-                })
-                .always(function() {
-                    unprogressBoton(btn);
-                }); 
-            }           
+
+                    if ($.trim(datos[1]) == "Error 2 Formato") {
+                        footer = "El formato de la imagen es incorrecto";
+                    }else if ($.trim(datos[1]) == "Error 3 Peso") {
+                        footer = "La imagen debe de pesar menos de 10MB";
+                    }
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Empleado '+tipoAlerta+' correctamente',
+                        footer: footer
+                    });
+                    TablaPersonal();
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Error inesperado al '+$("#GuardarEmpleado").attr("tipo")+' empleado.'
+                    });
+                    console.log($.trim(res));
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            })
+            .always(function() {
+                unprogressBoton(btn);
+            });            
         }
     });    
 }
@@ -102,47 +80,21 @@ function v_personal() {
 jQuery(document).ready(function($) {
 
     $(document).on('click', '#botonNuevoEmpleado', function() {
+        ConsultarPuestos();
+        ConsultarAreas();
         $("#GuardarEmpleado").attr('tipo', "insertar");
         $("#GuardarEmpleado").attr('attrid', "");
-        $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/fotosClientes/default.jpg');
-        $("#FormClientes").trigger('reset');
-        $("#TituloModalCliente").text("Agregar nuevo");
-        $("#TipoDescuentoCliente").trigger("change");
-        $("#DescuentoCliente").val("");
+        $("#verfotoEmpleado img").attr('src', 'vistas/assets/archivos/fotosClientes/default.jpg');
+        $("#FormEmpleados").trigger('reset');
+        $("#TituloModalEmpleados").text("Agregar nuevo");
     });
 
-
-    $(document).on('change', '#TipoDescuentoCliente', function() {
-        var tipo = $(this).val();
-        if (tipo != "") {
-            $("#TituloTipoDescuento").text(tipo);
-            $("#DescuentoCliente").attr("disabled", false);
-            $("#DescuentoCliente").val("");
-        }else{
-            $("#TituloTipoDescuento").text("No aplica descuento");
-            $("#DescuentoCliente").attr("disabled", true);
-            $("#DescuentoCliente").val("");
-        }
-        $("#DescuentoCliente").trigger("keyup");
+    $(document).on('click', '#verfotoEmpleado', function() {
+        $("#FotoEmpleado").trigger("click");
     });
 
-    $(document).on('keyup', '#DescuentoCliente', function() {
-        var tipo = $('#TipoDescuentoCliente').val();
-        if (tipo == "Porcentaje") {
-            $("#LabelDescuentoCliente").text($(this).val()+" %");
-        }else if (tipo == "Cantidad") {
-            $("#LabelDescuentoCliente").text("$"+$(this).val());
-        }else{
-            $("#LabelDescuentoCliente").text("No aplica");
-        }
-    });
-
-    $(document).on('click', '#verfotoCliente', function() {
-        $("#FotoCliente").trigger("click");
-    });
-
-    $(document).on('change', '#FotoCliente', function() {
-        readURL(this, $("#verfotoCliente"));
+    $(document).on('change', '#FotoEmpleado', function() {
+        readURL(this, $("#verfotoEmpleado"));
     });
 
     $(document).on('click', '.bVerDetallesCliente', function() {
@@ -243,11 +195,11 @@ jQuery(document).ready(function($) {
             $("#CuentaBancoCliente").val(datos.No_Cuenta);
 
             if (datos.Foto != "") {
-                $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/fotosClientes/'+datos.Foto);
+                $("#verfotoEmpleado img").attr('src', 'vistas/assets/archivos/fotosClientes/'+datos.Foto);
             }else{
-                $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/fotosClientes/default.jpg');
+                $("#verfotoEmpleado img").attr('src', 'vistas/assets/archivos/fotosClientes/default.jpg');
             }
-            $("#ModalCliente").modal("show");
+            $("#ModalEmpleados").modal("show");
         })
         .fail(function() {
             console.log("Error ajax");
@@ -275,5 +227,35 @@ function TablaPersonal(){
             "metodo": "consultar",
             "accion": "personal"
         }
+    });
+}
+
+function ConsultarPuestos(){
+    var data = "metodo=detalles&accion=personal&tipo=ConsultarPuestos";
+    $.ajax({
+        url: 'index.php',
+        type: 'POST',
+        data: data
+    })
+    .done(function(res) {
+        $("#PuestoEmpleado").html(res);
+    })
+    .fail(function() {
+        console.log("Error ajax");
+    });
+}
+
+function ConsultarAreas(){
+    var data = "metodo=detalles&accion=personal&tipo=ConsultarAreas";
+    $.ajax({
+        url: 'index.php',
+        type: 'POST',
+        data: data
+    })
+    .done(function(res) {
+        $("#AreasEmpleado").html(res);
+    })
+    .fail(function() {
+        console.log("Error ajax");
     });
 }

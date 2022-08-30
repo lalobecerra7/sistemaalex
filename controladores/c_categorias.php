@@ -1,6 +1,6 @@
 
 <?php
-class areas {
+class categorias {
 
 	public function _consultar(){
 		$omodelo = new m_modelo();
@@ -18,14 +18,14 @@ class areas {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Area, Nombre, Descripcion) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Categoria, Nombre, Descripcion) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Area, Nombre, Descripcion, (SELECT COUNT(*) FROM areas $busqueda) AS Num FROM areas $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Categoria, Nombre, Descripcion, (SELECT COUNT(*) FROM categorias $busqueda) AS Num FROM categorias $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -41,10 +41,10 @@ class areas {
 					}
 					
 					$arreglo['data'][$i] = array(
-						'ID' => $row[$i]['ID_Area'],
+						'ID' => $row[$i]['ID_Categoria'],
 						'Nombre' => $row[$i]['Nombre'],
 						'Descripcion' => $row[$i]['Descripcion'],
-						'Acciones' => '<button class="btn btn-primary btn-sm" id="ModificarArea" attrid="'.$row[$i]['ID_Area'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" id="EliminarArea" attrid="'.$row[$i]['ID_Area'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>',
+						'Acciones' => '<button class="btn btn-primary btn-sm" id="ModificarCategoria" attrid="'.$row[$i]['ID_Categoria'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" id="EliminarCategoria" attrid="'.$row[$i]['ID_Categoria'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>',
 					);
 					
 				}
@@ -63,14 +63,14 @@ class areas {
 		$Nombre =  $omodelo->link->real_escape_string($Nombre);
 		$Descripcion =  $omodelo->link->real_escape_string($Descripcion);
 
-		$query = "INSERT INTO areas SET Nombre = '$Nombre', Descripcion = '$Descripcion'";
+		$query = "INSERT INTO categorias SET Nombre = '$Nombre', Descripcion = '$Descripcion'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
 			echo "Error: ".mysqli_error($omodelo->link);
 		}else{
 			echo "Correcto";
-			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			//$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
@@ -79,18 +79,18 @@ class areas {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
-		$IDArea =  $omodelo->link->real_escape_string($IDArea);
+		$IDCategoria =  $omodelo->link->real_escape_string($IDCategoria);
 		$Nombre =  $omodelo->link->real_escape_string($Nombre);
 		$Descripcion =  $omodelo->link->real_escape_string($Descripcion);
 
-		$query = "UPDATE areas SET Nombre = '$Nombre', Descripcion = '$Descripcion' WHERE ID_Area = '$IDArea'";
+		$query = "UPDATE categorias SET Nombre = '$Nombre', Descripcion = '$Descripcion' WHERE ID_categoria = '$IDCategoria'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
 			echo "Error: ".mysqli_error($omodelo->link);
 		}else{
 			echo "Correcto";
-			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			//$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
@@ -98,16 +98,16 @@ class areas {
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$IDArea =  $omodelo->link->real_escape_string($IDArea);
+		$IDCategoria =  $omodelo->link->real_escape_string($IDCategoria);
 
-		$query = "DELETE FROM areas WHERE ID_Area='$IDArea'";
+		$query = "DELETE FROM categorias WHERE ID_Categoria='$IDCategoria'";
 		$error = $omodelo->_insertar($query);
 			
 		if ($error == "si") {
 			echo "Error: ".mysqli_error($omodelo->link);
 		}else{
 			echo "Correcto";
-			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			//$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
@@ -115,9 +115,9 @@ class areas {
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$IDArea =  $omodelo->link->real_escape_string($IDArea);
+		$IDCategoria =  $omodelo->link->real_escape_string($IDCategoria);
 
-		$query = "SELECT ID_Area, Nombre, Descripcion FROM areas WHERE ID_Area = '$IDArea'";
+		$query = "SELECT ID_Categoria, Nombre, Descripcion FROM categorias WHERE ID_categoria = '$IDCategoria'";
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 

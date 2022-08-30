@@ -128,7 +128,7 @@ class hacerventa {
 		}else{
 			$IDCliente = mysqli_insert_id($omodelo->link);
 			echo "Correcto";
-			$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 
 			$status = 1;
 			if ($_FILES['FotoCliente']['size'] > 0 && $_FILES['FotoCliente']['error'] == 0) {
@@ -174,7 +174,7 @@ class hacerventa {
 			echo "ErrorModificar: ".mysqli_error($omodelo->link);
 		}else{
 			echo "Correcto~";
-			$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 
 			$status = 1;
 			if ($_FILES['FotoCliente']['size'] > 0 && $_FILES['FotoCliente']['error'] == 0) {
@@ -249,7 +249,7 @@ class hacerventa {
 			echo "Error: ".mysqli_error($omodelo->link);
 		}else{
 			echo "Correcto";
-		    $omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+		    $omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
@@ -313,7 +313,7 @@ class hacerventa {
 	      		$Estatus = 1;
 	    	}else{
 	    		$NombreArchivo = LimpiarArchivo($nombreImg);
-	    		$nombreImg = $_SESSION['user_smart']['cliente']['id_cliente']."_".rand()."_".$NombreArchivo;
+	    		$nombreImg = $_SESSION['user_admin']['cliente']['id_cliente']."_".rand()."_".$NombreArchivo;
 	    		$ruta = $carpeta.$nombreImg;
 	    	}
 		}
@@ -330,7 +330,7 @@ class hacerventa {
 		       		unlink("$ruta");
 		    	}
 				move_uploaded_file($ruta_provisional,  $ruta);
-				$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 			}
 		}
 	}
@@ -376,7 +376,7 @@ class hacerventa {
 	      		$Estatus = 1;
 	    	}else{
 	    		$NombreArchivo = LimpiarArchivo($nombreImg);
-	    		$nombreImg = $_SESSION['user_smart']['cliente']['id_cliente']."_".rand()."_".$NombreArchivo;
+	    		$nombreImg = $_SESSION['user_admin']['cliente']['id_cliente']."_".rand()."_".$NombreArchivo;
 	    		$ruta = $carpeta.$nombreImg;
 	    	}
 	    	$queryfoto = ", foto = '$nombreImg'";
@@ -400,7 +400,7 @@ class hacerventa {
 		       		unlink("$rutaantigua");
 		    	}
 				move_uploaded_file($ruta_provisional,  $ruta);
-				$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 			}
 		}
 	}
@@ -419,7 +419,7 @@ class hacerventa {
 			if($foto != "" && file_exists("vistas/assets/archivos/fotosClientes/$foto")){
 		       	unlink("vistas/assets/archivos/fotosClientes/$foto");
 		    }
-		    $omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+		    $omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
@@ -472,8 +472,8 @@ class hacerventa {
 
 		$permisosMo = null;
 
-		if(isset($_SESSION['user_smart'])){
-			$query = "SELECT permisos FROM usuarios WHERE id_usuario = '".$_SESSION['user_smart']['usuario']['id_usuario']."'";
+		if(isset($_SESSION['user_admin'])){
+			$query = "SELECT permisos FROM usuarios WHERE id_usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
 			$row = $omodelo->_consultar($query); 
 			$numerofilas = $omodelo->numerofilas;
 

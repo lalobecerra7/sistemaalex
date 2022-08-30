@@ -66,6 +66,7 @@ function ajaxMyDatatable(data) {
 		}
 	})
 	.done(function(res) {
+		console.log(res);
 		try {
 			var resA = JSON.parse(res);
 		  	if(resA.data != undefined && resA.data.length > 0){

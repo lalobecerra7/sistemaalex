@@ -104,7 +104,7 @@ jQuery(document).ready(function($) {
     $(document).on('click', '#botonNuevoCliente', function() {
         $("#GuardarCliente").attr('tipo', "insertar");
         $("#GuardarCliente").attr('attrid', "");
-        $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/fotosClientes/default.jpg');
+        $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/default.jpg');
         $("#FormClientes").trigger('reset');
         $("#TituloModalCliente").text("Agregar nuevo");
         $("#TipoDescuentoCliente").trigger("change");
@@ -246,7 +246,7 @@ jQuery(document).ready(function($) {
             if (datos.Foto != "") {
                 $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/fotosClientes/'+datos.Foto);
             }else{
-                $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/fotosClientes/default.jpg');
+                $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/default.jpg');
             }
             $("#ModalCliente").modal("show");
         })

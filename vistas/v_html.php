@@ -103,6 +103,20 @@
               </a>
             </li>
 
+            <li class="menu-item cargarVista" carga="v_categorias" titulo="Categorias / familias" id="cargarCategorias">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-project-diagram"></i>
+                <div data-i18n="Categorias">Categorias / familias</div>
+              </a>
+            </li>
+
+            <li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-copy"></i>
+                <div data-i18n="Impuestos">Impuestos</div>
+              </a>
+            </li>
+
             <li class="menu-item cargarVista" carga="v_personal" titulo="Personal" id="cargarPersonal">
               <a href="javascript:void(0)"  class="menu-link">
                 <i class="menu-icon fas fa-users"></i>
@@ -261,5 +275,7 @@
     <script type="text/javascript" src="vistas/assets/js/areas.js"></script>
     <script type="text/javascript" src="vistas/assets/js/personal.js"></script>
     <script type="text/javascript" src="vistas/assets/js/hacerventa.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/categorias.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/impuestos.js"></script>
   </body>
 </html>
