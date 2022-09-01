@@ -24,7 +24,7 @@ class sucursales {
 			}
 		}
 
-		$query = "SELECT ID_Sucursal, Nombre, Direccion, Telefono, RFC, NombreGerente, (SELECT COUNT(*) FROM sucursales $busqueda) AS Num, ((SELECT COUNT(*) FROM ventas WHERE sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM caja WHERE sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM lotes WHERE sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM pedidos WHERE FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM detalle_productos WHERE sucursal = ID_Sucursal)) AS numSucu FROM sucursales $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Sucursal, Nombre, Direccion, Telefono, RFC, NombreGerente, (SELECT COUNT(*) FROM sucursales $busqueda) AS Num, ((SELECT COUNT(*) FROM ventas INNER JOIN cajas ON FK_Caja = ID_Caja WHERE cajas.FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM cajas WHERE FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM pedidos WHERE FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM detalles_productos WHERE FK_Sucursal = ID_Sucursal)) AS numSucu FROM sucursales $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -151,7 +151,7 @@ class sucursales {
 		$fecha = date ('Y-m-d H:i:s');
 
 		if($tipoDetalle == '1'){
-			$query = "SELECT *, ((SELECT COUNT(*) FROM ventas WHERE sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM caja WHERE sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM lotes WHERE sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM pedidos WHERE FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM detalle_productos WHERE sucursal = ID_Sucursal)) AS numSucu FROM sucursales WHERE ID_Sucursal = '$id'";
+			$query = "SELECT *, ((SELECT COUNT(*) FROM ventas INNER JOIN cajas ON FK_Caja = ID_Caja WHERE cajas.FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM cajas WHERE FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM pedidos WHERE FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM detalles_productos WHERE FK_Sucursal = ID_Sucursal)) AS numSucu  FROM sucursales WHERE ID_Sucursal = '$id'";
 			$row = $omodelo->_consultar($query);
 				
 			if ($row == "si") {

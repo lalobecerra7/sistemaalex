@@ -5,35 +5,36 @@ class login {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
+		$opciones = ['cost' => 12];
+
 		$usuario = $omodelo->link->real_escape_string($usuario);
 		$contrasena = $omodelo->link->real_escape_string($contrasena);
 
-		//ID_Usuario, Nombre, Usuario, Contrasena, Estatus, Permisos, Intentos, Ultimo_Intento, Foto, Tiempo_Inicio, Tiempo_Final, Tipo_Comision, Cantidad_Comision, Ultima_Vista
-		$query4 = "SELECT Ultimo_Intento, Intentos FROM usuarios WHERE Usuario = '$usuario' AND Estatus='Desbloqueado'";
-		$row1 = $omodelo->_consultar($query4);
+		$query4 = "SELECT ID_Usuario, Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta FROM usuarios WHERE Correo = '$usuario' AND Estatus='0'";
+		$row = $omodelo->_consultar($query4);
 		$numerofilas = $omodelo->numerofilas;
 		
-		if ($row1 == "si") {
+		if ($row == "si") {
 			echo "Error 1: ".mysqli_error($omodelo->link);
 		}else{
 			if($numerofilas > 0){
-				if($row1[0]['Intentos'] == '5'){
-					$nuevafecha = strtotime('+15 minute', strtotime($row1[0]['Ultimo_Intento']));
+				if($row[0]['Intentos'] == '5'){
+					$nuevafecha = strtotime('+15 minute', strtotime($row[0]['Ultimo_Intento']));
 					if(strtotime($fecha) >= $nuevafecha){
-						$query5 = "UPDATE usuarios SET Intentos = 0 WHERE Usuario = '$usuario'";
+						$query5 = "UPDATE usuarios SET Intentos = 0 WHERE Correo = '$usuario'";
 						$resultado = $omodelo->_insertar($query5);
 
 						if ($resultado == "si") {
 							echo "Error 2: ".mysqli_error($omodelo->link);
 						}else{
-							$row1[0]['Intentos'] = '0';
+							$row[0]['Intentos'] = '0';
 						}
 					}else{
 						echo "Supero Intentos";
 					}
 				}
-				if($row1[0]['Intentos'] < 5){
-					$query1 = "UPDATE usuarios SET Ultimo_Intento = '$fecha', Intentos = Intentos + 1 WHERE Usuario = '$usuario'";
+				if($row[0]['Intentos'] < 5){
+					$query1 = "UPDATE usuarios SET Ultimo_Intento = '$fecha', Intentos = Intentos+1 WHERE Correo = '$usuario'";
 					$resultado = $omodelo->_insertar($query1);
 					$afectadas = $omodelo->numerofilas;
 
@@ -41,7 +42,34 @@ class login {
 						echo "Error 3: ".mysqli_error($omodelo->link);
 					}else{
 						if($afectadas > 0){
-							$query = "SELECT ID_Usuario, Nombre, Usuario, Contrasena, Estatus, Permisos, Intentos, Ultimo_Intento, Foto, Tiempo_Inicio, Tiempo_Final, Tipo_Comision, Cantidad_Comision, Ultima_Vista FROM usuarios WHERE Usuario = '$usuario' AND Contrasena = MD5('$contrasena') AND Contrasena != ''"; 
+
+							if($numerofilas > 0 && password_verify($contrasena, $row[0]['Contrasena'])){
+								$query2 = "UPDATE usuarios SET Tiempo_Inicio = '$fecha', Intentos = 0 WHERE Correo = '$usuario'";
+								$resultado = $omodelo->_insertar($query2);
+						
+								if ($resultado == "si") {
+								    echo "Error 5: ".mysqli_error($omodelo->link);
+								}else{
+									$_SESSION['user_admin'] = $row[0];
+									echo "Correcto";
+								}
+							}else{
+								$query3 = "SELECT Intentos FROM usuarios WHERE Correo = '$usuario' AND Intentos = 5";
+								$resultado = $omodelo->_consultar($query3);
+								$numerofilas = $omodelo->numerofilas;
+
+								if ($resultado == "si") {
+								    echo "Error 6: ".mysqli_error($omodelo->link);
+								}else{
+									echo "0";
+									if($numerofilas > 0){
+										echo "Superaste el numero de intentos";
+									}
+								}
+							}
+
+
+							/*$query = "SELECT ID_Usuario, Nombre, Correo, Foto, Tipo, Permisos FROM usuarios WHERE Correo = '$usuario' AND Contrasena = MD5('$contrasena') AND Contrasena != '' AND usuarios.Tipo = 'Administrador'"; 
 							$row = $omodelo->_consultar($query);
 							$numerofilas = $omodelo->numerofilas;
 
@@ -49,17 +77,9 @@ class login {
 								echo "Error 4: ".mysqli_error($omodelo->link);
 							}else{
 								if($numerofilas > 0){
-									$query2 = "UPDATE usuarios SET Tiempo_Inicio = '$fecha', Intentos = 0 WHERE Usuario = '$usuario'";
-									$resultado = $omodelo->_insertar($query2);
-						
-									if ($resultado == "si") {
-									    echo "Error 5: ".mysqli_error($omodelo->link);
-									}else{
-										$_SESSION['user_admin'] = $row[0];
-										echo "Correcto";
-									}
+									
 								}else{
-									$query3 = "SELECT Intentos FROM usuarios WHERE Usuario = '$usuario' AND Intentos = 5";
+									$query3 = "SELECT Intentos FROM usuarios WHERE Correo = '$usuario' AND Intentos = 5";
 									$resultado = $omodelo->_consultar($query3);
 									$numerofilas = $omodelo->numerofilas;
 
@@ -72,7 +92,7 @@ class login {
 										}
 									}
 								}
-							}
+							}*/
 						}	
 					}
 				}
@@ -89,7 +109,7 @@ class login {
 		extract($_POST);
 		$usuario = $omodelo->link->real_escape_string($usuario);
 
-		$query = "SELECT ID_Usuario, Foto FROM usuarios WHERE Usuario = '$usuario'";
+		$query = "SELECT ID_Usuario, Foto FROM usuarios WHERE Correo = '$usuario'";
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 		
@@ -126,36 +146,5 @@ class login {
 		unset($_SESSION["user_admin"]);
 	}
 
-	public function _modificar(){
-		$omodelo = new m_modelo();
-		extract($_POST);
-		$correo = $omodelo->link->real_escape_string($email);
-
-		$query1 = "SELECT * FROM usuarios WHERE Usuario = '$email'";
-		$row = $omodelo->_consultar($query1);
-		$numerofilas = $omodelo->numerofilas;
-		if ($numerofilas == 0) {
-			echo "Error 1 Usuario";
-		}else{
-			//Generar contraseña temporal
-			$cadena = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-			$newcontra = "";
-			for($i=0;$i<8;$i++) {
-				$newcontra .= substr($cadena,rand(0,62),1);
-			}
-			
-			$query = "UPDATE usuarios SET Temporal = '1', Contrasena = MD5('$newcontra') WHERE Usuario = '$email'";
-			$resultado = $omodelo->_insertar($query);
-			
-			if ($resultado == "si") {
-				echo "Error 2: ".mysqli_error($omodelo->link);
-			}else{
-				echo "Correcto";
-
-				$omodelo->movimiento($email.' Temporal', "");
-			}
-		}
-
-	}
 }
 ?>

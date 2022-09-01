@@ -82,7 +82,7 @@
               </a>
             </li>
 
-            <li class="menu-item cargarVista" carga="v_proveedores" titulo="Proveedores" id="cargarProveedores">
+            <!-- <li class="menu-item cargarVista" carga="v_proveedores" titulo="Proveedores" id="cargarProveedores">
               <a href="javascript:void(0)"  class="menu-link">
                 <i class="menu-icon fas fa-suitcase"></i>
                 <div data-i18n="Proveedores">Proveedores</div>
@@ -103,62 +103,66 @@
               </a>
             </li>
 
-            <li class="menu-item cargarVista" carga="v_categorias" titulo="Categorias / familias" id="cargarCategorias">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-project-diagram"></i>
-                <div data-i18n="Categorias">Categorias / familias</div>
-              </a>
-            </li>
-
-            <li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-copy"></i>
-                <div data-i18n="Impuestos">Impuestos</div>
-              </a>
-            </li>
-
             <li class="menu-item cargarVista" carga="v_personal" titulo="Personal" id="cargarPersonal">
               <a href="javascript:void(0)"  class="menu-link">
                 <i class="menu-icon fas fa-users"></i>
                 <div data-i18n="Personal">Personal</div>
               </a>
-            </li>
+            </li> -->
 
             <!-- Layouts -->
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Layouts</div>
+                <i class="menu-icon fas fa-boxes-stacked"></i>
+                <div data-i18n="Layouts">Productos a la venta</div>
               </a>
 
               <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="layouts-without-menu.html" class="menu-link">
-                    <div data-i18n="Without menu">Without menu</div>
+                <li class="menu-item cargarVista" carga="v_productos" titulo="Productos" id="cargarProductos">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Productos">Productos</div>
                   </a>
                 </li>
-                <li class="menu-item">
-                  <a href="layouts-without-navbar.html" class="menu-link">
-                    <div data-i18n="Without navbar">Without navbar</div>
+                <li class="menu-item cargarVista" carga="v_categorias" titulo="Categorias / familias" id="cargarCategorias">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Categorias">Categorias(familias)</div>
                   </a>
                 </li>
-                <li class="menu-item">
-                  <a href="layouts-container.html" class="menu-link">
-                    <div data-i18n="Container">Container</div>
+                <li class="menu-item cargarVista" carga="v_inventario" titulo="Inventario" id="cargarInventario">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Inventario">Inventario</div>
                   </a>
                 </li>
-                <li class="menu-item">
-                  <a href="layouts-fluid.html" class="menu-link">
-                    <div data-i18n="Fluid">Fluid</div>
+                <!-- <li class="menu-item cargarVista" carga="v_compras" titulo="Compras" id="cargarCompras">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Compras">Compras</div>
                   </a>
                 </li>
-                <li class="menu-item">
-                  <a href="layouts-blank.html" class="menu-link">
-                    <div data-i18n="Blank">Blank</div>
+                <li class="menu-item cargarVista" carga="v_ventas" titulo="Ventas" id="cargarVentas">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Ventas">Ventas</div>
                   </a>
                 </li>
+                <li class="menu-item cargarVista" carga="v_cajas" titulo="Cajas" id="cargarCajas">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Cajas">Cajas</div>
+                  </a>
+                </li>
+                 <li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Impuestos">Impuestos</div>
+                  </a>
+                </li> -->
               </ul>
             </li>
+
+            <li class="menu-item cargarVista" carga="v_usuarios" titulo="Usuarios" id="cargarUsuarios">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-user"></i>
+                <div data-i18n="Usuarios">Usuarios</div>
+              </a>
+            </li>
+
           </ul>
         </aside>
         <!-- / Menu -->
@@ -277,5 +281,6 @@
     <script type="text/javascript" src="vistas/assets/js/hacerventa.js"></script>
     <script type="text/javascript" src="vistas/assets/js/categorias.js"></script>
     <script type="text/javascript" src="vistas/assets/js/impuestos.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/usuarios.js"></script>
   </body>
 </html>

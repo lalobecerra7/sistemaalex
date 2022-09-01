@@ -84,7 +84,7 @@ jQuery(document).ready(function($) {
         ConsultarAreas();
         $("#GuardarEmpleado").attr('tipo', "insertar");
         $("#GuardarEmpleado").attr('attrid', "");
-        $("#verfotoEmpleado img").attr('src', 'vistas/assets/archivos/fotosClientes/default.jpg');
+        $("#verfotoEmpleado img").attr('src', 'vistas/assets/archivos/default.jpg');
         $("#FormEmpleados").trigger('reset');
         $("#TituloModalEmpleados").text("Agregar nuevo");
     });
@@ -97,31 +97,12 @@ jQuery(document).ready(function($) {
         readURL(this, $("#verfotoEmpleado"));
     });
 
-    $(document).on('click', '.bVerDetallesCliente', function() {
-        var nombre = $(this).attr('nombre');
-        var data = "metodo=consultar&accion=clientes&id="+$(this).attr('attrid')+"&tipo=DetallesCliente";
-        $.ajax({
-            url: 'index.php',
-            type: 'POST',
-            data: data
-        })
-        .done(function(res) {
-            Swal.fire({
-                title: 'Detalles del cliente '+nombre,
-                html: $.trim(res)
-            });
-        })
-        .fail(function() {
-            console.log("Error ajax");
-        });
-    });
-
-    $(document).on('click', '#EliminarCliente', function() {
+    $(document).on('click', '#EliminarEmpleado', function() {
         var boton = $(this);
         var id = $(this).attr("attrid");
         var nombre = $(this).attr("nombre");
         Swal.fire({
-          title: '¿Estás a punto de eliminar al cliente '+nombre+'?',
+          title: '¿Estás a punto de eliminar al empleado '+nombre+'?',
           text: "Una vez eliminado ya no podrá ser recuperado",
           icon: 'warning',
           showCancelButton: true,
@@ -131,7 +112,7 @@ jQuery(document).ready(function($) {
           confirmButtonText: 'Si, eliminar'
         }).then((result) => {
           if (result.value) {
-            var data = "metodo=eliminar&accion=clientes&IDCliente="+id;
+            var data = "metodo=eliminar&accion=personal&idEmpleado="+id;
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
@@ -142,13 +123,13 @@ jQuery(document).ready(function($) {
                     TablaPersonal();
                     Swal.fire({
                         icon: 'success',
-                        title: 'Cliente eliminado correctamente'
+                        title: 'Empleado eliminado correctamente'
                     });
                 }else{
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Error inesperado al eliminar cliente.'
+                        text: 'Error inesperado al eliminar empleado.'
                     });
                 }
             })
@@ -159,45 +140,62 @@ jQuery(document).ready(function($) {
         });
     });
 
-    $(document).on('click', '#ModificarCliente', function() {
+    $(document).on('click', '#ModificarEmpleado', function() {
+        ConsultarAreas();
+        ConsultarPuestos();
         var id = $(this).attr('attrid');
-        var data = "metodo=detalles&accion=clientes&IDCliente="+id;
+        var data = "metodo=detalles&accion=personal&idEmpleado="+id+"&tipo=ConsultarEmpleado";
         $.ajax({
             url: 'index.php',
             type: 'POST',
             data: data
         })
         .done(function(res) {
-            //console.log(res);
             $("#GuardarEmpleado").attr('tipo', 'modificar');
             $("#GuardarEmpleado").attr('attrid', id);
             var datos = JSON.parse($.trim(res));
-            $("#NombreCliente").val(datos.Nombre);
-            $("#TelefonoCliente").val(datos.Telefono);
-            $("#CelularCliente").val(datos.Celular);
-            $("#CorreoCliente").val(datos.Correo);
-            $("#FechaNacimientoCliente").val(datos.Fecha_Nacimiento);
-            $("#SexoCliente").val(datos.Sexo);
-            $("#DireccionCliente").val(datos.Direccion);
-            $("#CPCliente").val(datos.Codigo_Postal);
-            $("#ColoniaCliente").val(datos.Colonia);
-            $("#CiudadCliente").val(datos.Ciudad);
-            $("#EstadoCliente").val(datos.Estado);
-            $("#PaisCliente").val(datos.Pais);
-            $("#TipoDescuentoCliente").val(datos.Tipo_Descuento);
-            $("#TipoDescuentoCliente").trigger("change");
-            $("#DescuentoCliente").val(datos.Descuento);
-            $("#DescuentoCliente").trigger("keyup");
-            $("#RFCCliente").val(datos.RFC);
-            $("#NombreEmpresaCliente").val(datos.Empresa);
-            $("#TitularBancoCliente").val(datos.Titular);
-            $("#BancoCliente").val(datos.Banco);
-            $("#CuentaBancoCliente").val(datos.No_Cuenta);
-
+            $("#NombreEmpleado").val(datos.Nombre);
+            $("#DireccionEmpleado").val(datos.Direccion);
+            $("#ColoniaEmpleado").val(datos.Colonia);
+            $("#TelefonoEmpleado").val(datos.Telefono);
+            $("#CelularEmpleado").val(datos.Celular);
+            $("#CiudadEmpleado").val(datos.Ciudad);
+            $("#CorreoEmpleado").val(datos.Correo);
+            $("#FechaNacimientoEmpleado").val(datos.Fecha_Nacimiento);
+            $("#FechaIngreso").val(datos.Fecha_Entrada);
+            $("#SueldoEmpleado").val(datos.Sueldo);
+            $("#SDIEmpleado").val(datos.SDI);
+            $("#SPHEmpleado").val(datos.SPH);
+            $("#TipoSueldo").val(datos.Tipo_Sueldo);
+            $("#HoraEntrada").val(datos.Horario_Entrada);
+            $("#HorarioSalida").val(datos.Horario_Salida);
+            $("#HoraEntradaSabado").val(datos.Horario_Entrada_Sabado);
+            $("#HorarioSalidaSabado").val(datos.Horario_Salida_Sabado);
+            $("#SexoEmpleado").val(datos.Sexo);
+            $("#LugarNacimientoEmpleado").val(datos.Lugar_Nacimiento);
+            $("#EstadoCivilEmpleado").val(datos.Estado_Civil);
+            $("#PaisEmpleado").val(datos.Pais);
+            $("#EstadoEmpleado").val(datos.Estado);
+            $("#RFCEmpleado").val(datos.RFC);
+            $("#NoSeguroSocialEmpleado").val(datos.Numero_Seguro);
+            $("#CURPEmpleado").val(datos.CURP);
+            $("#TipoSangreEmpleado").val(datos.Tipo_Sangre);
+            $("#AlergiasEmpleado").val(datos.Alergias);
+            $("#ContactoEmergencia").val(datos.Contacto_Emergencias);
+            $("#TelefonoEmergencia").val(datos.Numero_Emergencias);
+            $("#EstatusEmpleado").val(datos.Estado_Empleado );
+            $("#FechaBajaEmpleado").val(datos.Fecha_Baja);
+            $("#MotivoBajaEmpleado").val(datos.Motivo_Baja);
+            $("#FechaTerminoContrato").val(datos.Fecha_Termino_Contrato);
+            $("#FechaReingresoEmpleado").val(datos.Fecha_Reingreso);
+            $("#CPEmpleado").val(datos.Codigo_Postal);
+            $("#PuestoEmpleado").val(datos.FK_Puesto);
+            $("#AreasEmpleado").val(datos.FK_Area);
+            
             if (datos.Foto != "") {
-                $("#verfotoEmpleado img").attr('src', 'vistas/assets/archivos/fotosClientes/'+datos.Foto);
+                $("#verfotoEmpleado img").attr('src', 'vistas/assets/archivos/fotosEmpleados/'+datos.Foto);
             }else{
-                $("#verfotoEmpleado img").attr('src', 'vistas/assets/archivos/fotosClientes/default.jpg');
+                $("#verfotoEmpleado img").attr('src', 'vistas/assets/archivos/default.jpg');
             }
             $("#ModalEmpleados").modal("show");
         })

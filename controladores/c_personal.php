@@ -252,7 +252,7 @@ class personal {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		if ($tipo == "ConsultarPuestos") {
-			$opciones = "<option value=''> Seleccione una opción </option>";
+			$opciones = "<option value='0'> Seleccione una opción </option>";
 			$query = "SELECT ID_Puesto, Nombre, FK_Departamento FROM puestos";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
@@ -268,7 +268,7 @@ class personal {
 				echo $opciones;
 			}
 		}else if ($tipo == "ConsultarAreas") {
-			$opciones = "<option value=''> Seleccione una opción </option>";
+			$opciones = "<option value='0'> Seleccione una opción </option>";
 			$query = "SELECT ID_Area, Nombre FROM areas";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
@@ -282,6 +282,18 @@ class personal {
 					}
 				}
 				echo $opciones;
+			}
+		}else if ($tipo == "ConsultarEmpleado") {
+			$query = "SELECT * FROM empleados WHERE ID_Empleado = '$idEmpleado'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					echo json_encode($row[0]);
+				}
 			}
 		}
 	}

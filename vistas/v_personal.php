@@ -234,8 +234,8 @@
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		            <select type="text" class="form-control" id="EstatusEmpleado" name="EstatusEmpleado" placeholder="Ingresa el nombre del contacto de emergencias del empleado">
-		            	<option value="Activo" selected>Activo</option>
-		            	<option value="Inactivo">Inactivo</option>
+		            	<option value="1" selected>Activo</option>
+		            	<option value="0">Inactivo</option>
 		            </select>
 		            <label for="EstatusEmpleado">Estatus actual del empleado</label>
 		          </div>
@@ -274,8 +274,6 @@
     </div>
   </div>
 </div>
-
-
 
 
 <br>

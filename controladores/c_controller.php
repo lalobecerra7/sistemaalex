@@ -9,6 +9,7 @@ include "controladores/c_areas.php";
 include "controladores/c_personal.php";
 include "controladores/c_hacerventa.php";
 include "controladores/c_categorias.php";
+include "controladores/c_usuarios.php";
 
 class controller {
 

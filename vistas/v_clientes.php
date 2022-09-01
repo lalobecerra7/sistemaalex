@@ -61,7 +61,7 @@
 	      	<div class="row">
 	      	 	<div class="offset-md-4 col-md-4 col-sm-12 text-center">
 	      	 		<div class="fileinput fileinput-new" data-provides="fileinput">
-									<div class="fileinput-new thumbnail" id="verfotoCliente" style="width: 250px; height: 170px;cursor:pointer;border-radius:4px;border:2px solid grey;"><img src="vistas/assets/archivos/fotosClientes/default.jpg"></div>	
+									<div class="fileinput-new thumbnail" id="verfotoCliente" style="width: 250px; height: 170px;cursor:pointer;border-radius:4px;border:2px solid grey;"><img src="vistas/assets/archivos/default.jpg"></div>	
 								</div>
 								<br>
 								<input class="form-control" type="file" id="FotoCliente" name="FotoCliente">
