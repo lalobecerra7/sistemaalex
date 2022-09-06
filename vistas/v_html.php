@@ -87,15 +87,28 @@
 
             <li class="menu-item cargarVista" carga="v_categorias" titulo="Categorias / familias" id="cargarCategorias">
               <a href="javascript:void(0)"  class="menu-link">
-                <i class="fas fa-project-diagram"></i>
+                <i class="menu-icon fas fa-project-diagram"></i>
                 <div data-i18n="Categorias">Categorias / familias</div>
               </a>
             </li>
 
             <li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
               <a href="javascript:void(0)"  class="menu-link">
-                <i class="fas fa-copy"></i>
+                <i class="menu-icon fas fa-copy"></i>
                 <div data-i18n="Impuestos">Impuestos</div>
+              </a>
+            </li>
+
+            <li class="menu-item cargarVista" carga="v_productos" titulo="Productos" id="cargarProductos">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fa-solid fa-tags"></i>
+                <div data-i18n="Productos">Productos</div>
+              </a>
+            </li>
+
+            <li class="menu-item cargarVista" carga="v_inventario" titulo="Inventario" id="cargarInventario">
+              <a href="javascript:void(0)"  class="menu-link">
+                <div data-i18n="Inventario">Inventario</div>
               </a>
             </li>
 
@@ -103,6 +116,13 @@
               <a href="javascript:void(0)"  class="menu-link">
                 <i class="menu-icon fas fa-users"></i>
                 <div data-i18n="Personal">Personal</div>
+              </a>
+            </li>
+
+            <li class="menu-item cargarVista" carga="v_usuarios" titulo="Usuarios" id="cargarUsuarios">
+              <a href="javascript:void(0)"  class="menu-link">
+              <i class="menu-icon fas fa-user-plus"></i>
+                <div data-i18n="Usuarios">Usuarios</div>
               </a>
             </li>
 
@@ -294,5 +314,9 @@
     <script type="text/javascript" src="vistas/assets/js/personal.js"></script>
     <script type="text/javascript" src="vistas/assets/js/categorias.js"></script>
     <script type="text/javascript" src="vistas/assets/js/impuestos.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/usuarios.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/productos.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/inventario.js"></script>
+    <script type="text/javascript" src="vistas/assets/plugins/JsBarcode.all.min.js"></script>
   </body>
 </html>

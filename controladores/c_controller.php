@@ -8,6 +8,9 @@ include "controladores/c_proveedores.php";
 include "controladores/c_areas.php";
 include "controladores/c_personal.php";
 include "controladores/c_categorias.php";
+include "controladores/c_usuarios.php";
+include "controladores/c_productos.php";
+include "controladores/c_inventario.php";
 
 class controller {
 
@@ -74,6 +77,57 @@ class controller {
 
 		if($nombre == "v_inicio"){
 
+		}else if($nombre == "v_productos"){
+			$query = "SELECT ID_Categoria, Nombre FROM categorias";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Categoria'] . '">' . $row[$i]['Nombre'] . '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#categorias#', $opciones, $pagina);
+
+			$query = "SELECT ID_Area, Nombre FROM areas";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Area'] . '">' . $row[$i]['Nombre']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#areas#', $opciones, $pagina);
+
+			$query = "SELECT ID_Sucursal, Nombre FROM sucursales";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Sucursal'] . '" >' . $row[$i]['Nombre']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#sucursales#', $opciones, $pagina);
 		}
 		
 		return $pagina;
