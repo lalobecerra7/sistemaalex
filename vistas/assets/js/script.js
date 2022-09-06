@@ -66,13 +66,11 @@ function cerrarSesion(){
 }
 
 function readURL(input,ima) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            $(ima).html("<img src="+e.target.result+">");
-        }
-
-        reader.readAsDataURL(input.files[0]);
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $(ima).html("<img src='"+e.target.result+"' style='width: 250px; height: 170px; cursor:pointer;border-radius:4px;border:2px solid grey;' class='img-thumbnail'><br>");
     }
+    reader.readAsDataURL(input.files[0]);
+  }
 }

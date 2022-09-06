@@ -7,6 +7,7 @@ include "controladores/c_clientes.php";
 include "controladores/c_proveedores.php";
 include "controladores/c_areas.php";
 include "controladores/c_personal.php";
+include "controladores/c_hacerventa.php";
 include "controladores/c_categorias.php";
 include "controladores/c_usuarios.php";
 include "controladores/c_productos.php";
@@ -19,7 +20,6 @@ class controller {
 		$omodelo = new m_modelo();
 		$_SESSION['user_admin']['FechaFin'] = date('Y-m-d');
 		$_SESSION['user_admin']['FechaIni'] = date("Y-m-d", strtotime($_SESSION['user_admin']['FechaFin']."- 30 days")); 
-
 
 		$fechahoy = date('Y-m-d H:i:s');
 		$pagina = file_get_contents('vistas/v_html.php');

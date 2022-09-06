@@ -31,6 +31,22 @@
 
   <body>
     <!-- Layout wrapper -->
+    <div id="caja">
+      <div class="container-fluid" style="height: 100vh; overflow-y: auto; ">
+        <div class="row" style="height: 100vh;">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-12 text-end">
+                <button type="button" class="btn" id="bCerrarVenCaja"><i class="fas fa-times"></i></button>
+              </div>     
+            </div>
+            <div class="row" id="verCaja">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
         <!-- Menu -->
@@ -45,6 +61,8 @@
               <i class="bx bx-chevron-left bx-sm align-middle"></i>
             </a>
           </div>
+
+
 
           <div class="menu-inner-shadow"></div>
 
@@ -64,7 +82,7 @@
               </a>
             </li>
 
-            <li class="menu-item cargarVista" carga="v_proveedores" titulo="Proveedores" id="cargarProveedores">
+            <!-- <li class="menu-item cargarVista" carga="v_proveedores" titulo="Proveedores" id="cargarProveedores">
               <a href="javascript:void(0)"  class="menu-link">
                 <i class="menu-icon fas fa-suitcase"></i>
                 <div data-i18n="Proveedores">Proveedores</div>
@@ -84,6 +102,7 @@
                 <div data-i18n="Áreas">Áreas</div>
               </a>
             </li>
+
 
             <li class="menu-item cargarVista" carga="v_categorias" titulo="Categorias / familias" id="cargarCategorias">
               <a href="javascript:void(0)"  class="menu-link">
@@ -112,12 +131,13 @@
               </a>
             </li>
 
+
             <li class="menu-item cargarVista" carga="v_personal" titulo="Personal" id="cargarPersonal">
               <a href="javascript:void(0)"  class="menu-link">
                 <i class="menu-icon fas fa-users"></i>
                 <div data-i18n="Personal">Personal</div>
               </a>
-            </li>
+            </li> -->
 
             <li class="menu-item cargarVista" carga="v_usuarios" titulo="Usuarios" id="cargarUsuarios">
               <a href="javascript:void(0)"  class="menu-link">
@@ -129,75 +149,56 @@
             <!-- Layouts -->
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Layouts</div>
+                <i class="menu-icon fas fa-boxes-stacked"></i>
+                <div data-i18n="Layouts">Productos a la venta</div>
               </a>
 
               <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="layouts-without-menu.html" class="menu-link">
-                    <div data-i18n="Without menu">Without menu</div>
+                <li class="menu-item cargarVista" carga="v_productos" titulo="Productos" id="cargarProductos">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Productos">Productos</div>
                   </a>
                 </li>
-                <li class="menu-item">
-                  <a href="layouts-without-navbar.html" class="menu-link">
-                    <div data-i18n="Without navbar">Without navbar</div>
+                <li class="menu-item cargarVista" carga="v_categorias" titulo="Categorias / familias" id="cargarCategorias">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Categorias">Categorias(familias)</div>
                   </a>
                 </li>
-                <li class="menu-item">
-                  <a href="layouts-container.html" class="menu-link">
-                    <div data-i18n="Container">Container</div>
+                <li class="menu-item cargarVista" carga="v_inventario" titulo="Inventario" id="cargarInventario">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Inventario">Inventario</div>
                   </a>
                 </li>
-                <li class="menu-item">
-                  <a href="layouts-fluid.html" class="menu-link">
-                    <div data-i18n="Fluid">Fluid</div>
+                <!-- <li class="menu-item cargarVista" carga="v_compras" titulo="Compras" id="cargarCompras">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Compras">Compras</div>
                   </a>
                 </li>
-                <li class="menu-item">
-                  <a href="layouts-blank.html" class="menu-link">
-                    <div data-i18n="Blank">Blank</div>
+                <li class="menu-item cargarVista" carga="v_ventas" titulo="Ventas" id="cargarVentas">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Ventas">Ventas</div>
                   </a>
                 </li>
+                <li class="menu-item cargarVista" carga="v_cajas" titulo="Cajas" id="cargarCajas">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Cajas">Cajas</div>
+                  </a>
+                </li>
+                 <li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Impuestos">Impuestos</div>
+                  </a>
+                </li> -->
               </ul>
             </li>
 
-            <!-- <li class="menu-item cargarVista" carga="v_pedidos" titulo="Pedidos en curso" id="cargaPedidos">
-              <a href="javascript:void(0)" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-stopwatch"></i>
-                <div data-i18n="En curso">En curso</div>
+            <li class="menu-item cargarVista" carga="v_usuarios" titulo="Usuarios" id="cargarUsuarios">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-user"></i>
+                <div data-i18n="Usuarios">Usuarios</div>
               </a>
             </li>
 
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Repartidores</span>
-            </li>
-            <li class="menu-item cargarVista" carga="v_mapa" titulo="Mapa de repartidores" id="cargaMapa">
-              <a href="javascript:void(0);" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Mapa">Mapa</div>
-              </a>
-            </li>
-
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Negocios</span>
-            </li>
-            <li class="menu-item cargarVista" href="javascript:void(0)" carga="v_negocios" titulo="Negocios" id="cargaNegocios">
-              <a href="javascript:void(0);" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Ver negocios">Ver negocios</div>
-              </a>
-            </li>
-
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Pedidos</span>
-            </li>
-            <li class="menu-item cargarVista" carga="v_historialPedidos" titulo="Historial de pedidos" id="cargaPedidos">
-              <a href="javascript:void(0)" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Historial de pedidos">Historial de pedidos</div>
-              </a>
-            </li> -->
           </ul>
         </aside>
         <!-- / Menu -->
@@ -216,7 +217,9 @@
               </a>
             </div>
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-              <div id="DivPedidosPendientes"></div>
+              <div id="DivPedidosPendientes">
+                <a href="javascript:void(0)" id="cargarVenta" ><i class="fas fa-shopping-cart"></i></a>
+              </div>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -268,8 +271,6 @@
           <!-- Content wrapper -->
           <div class="content-wrapper">
             <!-- Cargar las vistas -->
-
-
             <div class="container-fluid" >
               <div class="row">
                 <div class="col-12" id="verVista">
@@ -295,6 +296,7 @@
     <script src="vistas/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="vistas/assets/vendor/libs/popper/popper.js"></script>
     <script src="vistas/assets/vendor/js/bootstrap.js"></script>
+    <script src="vistas/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="vistas/assets/vendor/js/menu.js"></script>
     <script src="vistas/assets/js/main.js"></script>
     <script type="text/javascript" src="vistas/assets/plugins/jquery-validation/jquery.validate.js"></script>
@@ -312,6 +314,7 @@
     <script type="text/javascript" src="vistas/assets/js/proveedores.js"></script>
     <script type="text/javascript" src="vistas/assets/js/areas.js"></script>
     <script type="text/javascript" src="vistas/assets/js/personal.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/hacerventa.js"></script>
     <script type="text/javascript" src="vistas/assets/js/categorias.js"></script>
     <script type="text/javascript" src="vistas/assets/js/impuestos.js"></script>
     <script type="text/javascript" src="vistas/assets/js/usuarios.js"></script>

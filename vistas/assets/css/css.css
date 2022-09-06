@@ -175,6 +175,15 @@ html, body{
 	box-sizing: border-box;
 	width: 400px;
 }
+	
+#caja{
+	  position: fixed;
+    min-width: 100%;
+    min-height: 100vh;
+    z-index: 2000;
+    background: #FFF;
+    display: none;
+}
 
 #headTextNoti{
 	background: #374fb3;

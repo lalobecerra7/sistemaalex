@@ -1,6 +1,6 @@
 
 <?php
-class clientes {
+class hacerventa {
 
 	public function _consultar(){
 		$omodelo = new m_modelo();
@@ -84,8 +84,8 @@ class clientes {
 						$datosbancarios .= "CLABE o número de cuenta: ".$row[$i]['No_Cuenta']."<br>";
 					}
 
-					$foto = '<a href="vistas/assets/archivos/default.jpg" data-fancybox="images">
-									<div style="background-image: url('."'".'vistas/assets/archivos/default.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
+					$foto = '<a href="vistas/assets/archivos/fotosClientes/default.jpg" data-fancybox="images">
+									<div style="background-image: url('."'".'vistas/assets/archivos/fotosClientes/default.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
 									</div>
 								</a><br>';
 					if ($row[$i]["Foto"] != "") {
