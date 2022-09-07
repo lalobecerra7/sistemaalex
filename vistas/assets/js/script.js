@@ -1,8 +1,39 @@
-﻿
+﻿//formato de modeda a la clase .dinero
+function moneda() {
+    $(".dinero").each(function(index, el) {
+        if(parseFloat($(this).html().replace('$', '').replace(/,/g, '')) < 0){
+            $(this).html(parseFloat($(this).html().replace('$', '').replace(/,/g, '')) * -1);
+            $(this).html('$'+new Intl.NumberFormat('en-US').format(Math.round(parseFloat($(this).html().replace('$', '').replace(/,/g, '')) * 100) / 100));
+            $(this).html('-'+$(this).html());
+            $(this).css('color', 'red');
+        }else{
+            $(this).css('color', '#000');
+            $(this).html('$'+new Intl.NumberFormat('en-US').format(Math.round(parseFloat($(this).html().replace('$', '').replace(/,/g, '')) * 100) / 100));
+        }
+    });
+
+    $(".porcentaje").each(function(index, el) {
+        if(parseFloat($(this).html().replace('%', '').replace(/,/g, '')) < 0){
+            $(this).html(parseFloat($(this).html().replace('%', '').replace(/,/g, '')) * -1);
+            $(this).html(new Intl.NumberFormat('en-US').format(Math.round(parseFloat($(this).html().replace('%', '').replace(/,/g, '')) * 100) / 100)+'%');
+            $(this).html('-'+$(this).html());
+            $(this).css('color', 'red');
+        }else{
+            $(this).css('color', '#000');
+            $(this).html(new Intl.NumberFormat('en-US').format(Math.round(parseFloat($(this).html().replace('%', '').replace(/,/g, '')) * 100) / 100)+'%');
+        }
+    });
+
+    $(".cantidad").each(function(index, el) {
+        $(this).html(new Intl.NumberFormat('en-US').format(Math.round(parseFloat($(this).html().replace('$', '').replace(/,/g, '')) * 100) / 100));
+    });
+}
 
 jQuery(document).ready(function($) {
-
     var idVista = "cargarInicio";
+    setTimeout(function(){
+      $("#cargarInicio").trigger("click");
+    },100);
 
     $(document).on('click', '.cargarVista', function() {
 
@@ -23,13 +54,13 @@ jQuery(document).ready(function($) {
           $("#vistaTitulo").html(titulo);
           $(".cargarVista").removeClass("active");
           itemVista.addClass("active");
-
           if(nombre == "v_inicio"){
            
           }
-
+          
           crearDataTable();
-         
+          
+
           if(typeof window[nombre] === 'function') {
             window[nombre]();
             console.log(nombre);
@@ -46,6 +77,89 @@ jQuery(document).ready(function($) {
     $(document).on('click', '#CerrarSesion', function() {
         cerrarSesion();
     });
+
+    $(document).on('click', '#VerContrasenas', function() {
+        console.log( $(this).parent().parent().html());
+        if($(this).children('i').hasClass('fa-eye')){
+            $(this).children('i').removeClass('fa-eye');
+            $(this).children('i').addClass('fa-eye-slash');
+            $('.contraCampo').attr('type', 'text');
+        }else{
+            $(this).children('i').removeClass('fa-eye-slash');
+            $(this).children('i').addClass('fa-eye');
+            $('.contraCampo').attr('type', 'password');
+        }
+    });
+
+    $(document).on('click', '#GuardarNuevaContrasena', function(event) {
+      event.preventDefault();
+      var boton = $(this);
+      var form = $('#FormNuevaContrasena');
+
+      form.validate({
+        rules: {
+          ContrasenaActual: {
+            required: true,
+          },
+          ContrasenaRepetir: {
+            required: true,
+            equalTo: "#ContrasenaNueva"
+          },
+
+        },
+        messages: {
+            ContrasenaActual: {
+                required: "La contraseña actual es obligatoria"
+            },
+            ContrasenaRepetir:{
+                required: "La nueva contraseña es obligatoria"
+            },
+        },
+      });
+
+      if (!form.valid()) {
+        return;
+      }else{
+        Swal.fire({
+          title: '¿Estas a punto de cambiar tu contraseña actual?',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, guardar',
+          cancelButtonText: 'Cancelar',
+        }).then((result) => {
+          if (result.value) {
+            var data = "metodo=detalles&accion=usuarios&tipo=CambiarContrasena&ContraActual="+$("#ContrasenaActual").val()+"&ContraNueva="+$("#ContrasenaNueva").val();
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data
+            })
+            .done(function(res) {
+              if ($.trim(res) == "Correcto") {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Contraseña cambiada correctamente'
+                });
+                $("#FormNuevaContrasena").trigger("reset");
+                $("#ModalCambiarContrasena").modal("hide");
+              }else{
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Error inesperado al cambiar la contraseña.'
+                });
+                console.log(res);
+              }
+            })
+            .fail(function(){
+              console.log("error ajax");
+            });
+          }
+        });
+      }
+    });  
 
 });
 
@@ -74,3 +188,4 @@ function readURL(input,ima) {
     reader.readAsDataURL(input.files[0]);
   }
 }
+

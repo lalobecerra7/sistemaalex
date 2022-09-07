@@ -163,7 +163,7 @@ jQuery(document).ready(function($) {
 
     $(document).on('click', '#ModificarUsuario', function() {
         var id = $(this).attr('attrid');
-        var data = "metodo=detalles&accion=usuarios&IDUsuario="+id;
+        var data = "metodo=detalles&accion=usuarios&IDUsuario="+id+"&tipo=ConsultarUsuario";
         $.ajax({
             url: 'index.php',
             type: 'POST',

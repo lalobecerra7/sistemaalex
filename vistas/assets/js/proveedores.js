@@ -51,7 +51,7 @@ function v_proveedores() {
                     type: 'POST',
                     data: data,
                     beforeSend: function() {
-                        progressBoton(btn);
+                        $("#carga").show();
                     }
                 })
                 .done(function(res) {
@@ -81,7 +81,7 @@ function v_proveedores() {
                     console.log("Error ajax");
                 })
                 .always(function() {
-                    unprogressBoton(btn);
+                    $("#carga").hide();
                 });   
             }         
         }
