@@ -44,7 +44,7 @@ function v_inventario() {
                         type: 'POST',
                         data: data,
                         beforeSend: function() {
-                            progressBoton(btn);
+                            $("#carga").show();
                         }
                     })
                     .done(function(res) {
@@ -70,7 +70,7 @@ function v_inventario() {
                         console.log("Error ajax");
                     })
                     .always(function() {
-                        unprogressBoton(btn);
+                         $("#carga").hide();
                     });
             }
                 
@@ -191,10 +191,22 @@ jQuery(document).ready(function($) {
                 data: data,
             })
             .done(function(res) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'La merma se ha registrado correctamente'
-                });
+               $('#Cantidad').attr('max', $.trim(res));
+               $('#Cantidad').val($.trim(res));
+               $("#SucursalDestino").find('option').not(':first').remove();
+               var data = "metodo=detalles&accion=inventario&tipo=sucursales&IDSucursal="+$('#SucursalOrigen').val();
+               $.ajax({
+                       url: 'index.php',
+                       type: 'POST',
+                       data: data,
+                   })
+                   .done(function(res) {
+                    console.log(res);
+                      $('#SucursalDestino').append(res);
+                   })
+                   .fail(function() {
+                       console.log("Error ajax");
+                   });
             })
             .fail(function() {
                 console.log("Error ajax");
@@ -238,7 +250,10 @@ jQuery(document).ready(function($) {
                 $.ajax({
                         url: 'index.php',
                         type: 'POST',
-                        data: data
+                        data: data,
+                        beforeSend: function() {
+                            $("#carga").show();
+                        }
                     })
                     .done(function(res) {
                         if ($.trim(res) == "Correcto") {
@@ -269,6 +284,9 @@ jQuery(document).ready(function($) {
                     .fail(function() {
                         console.log("Error ajax");
                     })
+                    .always(function() {
+                        $("#carga").hide();
+                   });
             }
         });
     });
@@ -332,13 +350,12 @@ function TablaInventario() {
         "colums": [
             "Producto",
             "Descripcion",
-            "Cantidad",
+            "Detalles",
             "Costo",
             "TotalCosto",
             "Precio",
             "TotalPrecio",
             "Merma",
-            "Detalles",
             "Acciones"
         ],
         "sort": [

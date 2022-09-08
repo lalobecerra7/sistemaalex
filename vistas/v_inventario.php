@@ -33,14 +33,13 @@
 						<table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaInventario" width="100%" style="font-size: 12px;">
 							<thead>
 								<th style="width: 5%;" orden="No">Foto</th>
-								<th style="width: 30%;">Descripción</th>
-								<th>Cantidad</th>
+								<th style="width: 20%;">Descripción</th>
+								<th orden="No">Distribución</th>
 								<th>Costo</th>
 								<th>Costo total</th>
 								<th>Precio</th>
 								<th>Precio total</th>
-								<th orden="No">Merma</th>
-								<th orden="No">Distribución</th>
+								<th style="width: 15%;"orden="No">Merma</th>
 								<th style="width: 10%;" orden="No">Acciones</th>
 							</thead>
 							<tbody>
@@ -83,14 +82,13 @@
 							<div class="form-floating mb-3">
 								<select class="form-select" name="SucursalDestino" id="SucursalDestino" >
 									<option value="">- Seleccione una opción -</option>
-										#sucursales#
 								</select>
 								<label for="SucursalDestino">Sucursal de destino</label>
 							</div>
                         </div>
                         <div class="col-md-12 col-sm-6 mb-3">
                             <div class="form-floating">
-                                <input type="number" min='0' max='' class="form-control" id="Cantidad" name="Cantidad" placeholder="Ingresa la cantidad de producto a trasladar">
+                                <input type="number" min='1' max='' class="form-control" id="Cantidad" name="Cantidad" placeholder="Ingresa la cantidad de producto a trasladar">
                                 <label for="Cantidad">Cantidad</label>
                             </div>
                         </div>
@@ -163,7 +161,7 @@
                         </div>
                         <div class="col-md-12 col-sm-6 mb-3">
                             <div class="form-floating">
-                                <input type="number" min='0' class="form-control" id="CantidadMerma" name="CantidadMerma" placeholder="Ingresa la cantidad de producto a trasladar">
+                                <input type="number" min='1' class="form-control" id="CantidadMerma" name="CantidadMerma" placeholder="Ingresa la cantidad de producto a trasladar">
                                 <label for="CantidadMerma">Cantidad</label>
                             </div>
                         </div>

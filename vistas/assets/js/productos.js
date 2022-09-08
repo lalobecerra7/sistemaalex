@@ -82,7 +82,7 @@ function v_productos() {
                     title: 'Oops...',
                     text: 'El stock máximo debe ser mayor al stock mínimo'
                 });
-            }else if(detallesProducto == ''){
+            }else if(detallesProducto == '' && ){
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -103,7 +103,7 @@ function v_productos() {
                     processData: false,
                     contentType: false,
                     beforeSend: function() {
-                        progressBoton(btn);
+                        $("#carga").show();
                     }
                 })
                 .done(function(res) {
@@ -133,7 +133,7 @@ function v_productos() {
                     console.log("Error ajax");
                 })
                 .always(function() {
-                    unprogressBoton(btn);
+                    $("#carga").hide();
                 });    
             }              
         }
