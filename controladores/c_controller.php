@@ -13,6 +13,7 @@ include "controladores/c_usuarios.php";
 include "controladores/c_productos.php";
 include "controladores/c_inventario.php";
 include "controladores/c_cajas.php";
+include "controladores/c_perfil.php";
 class controller {
 
 
@@ -23,13 +24,19 @@ class controller {
 
 		$fechahoy = date('Y-m-d H:i:s');
 		$pagina = file_get_contents('vistas/v_html.php');
-		$pagina = str_replace('#CorreoAdmin#',"Administrador",$pagina);
+		$pagina = str_replace('#NombreUsuario#',$_SESSION['user_admin']['Nombre'],$pagina);
+		$pagina = str_replace('#PermisosUsuario#',$_SESSION['user_admin']['Tipo_Usuario'],$pagina);
 		$pagina = str_replace('#IDUsuario#',$_SESSION['user_admin']['ID_Usuario'],$pagina);
 		$pagina = str_replace('#usuario#',$_SESSION['user_admin']['Nombre'],$pagina);
 		$pagina = str_replace('#prl#',substr($_SESSION['user_admin']['Nombre'], 0, 1),$pagina);
 		$pagina = str_replace('#fechahoy#',$fechahoy,$pagina);
 		$pagina = str_replace('#fechaIni#',$_SESSION['user_admin']['FechaIni'],$pagina);
-		$pagina = str_replace('#fechaFin#',$_SESSION['user_admin']['FechaFin'],$pagina);                          	
+		$pagina = str_replace('#fechaFin#',$_SESSION['user_admin']['FechaFin'],$pagina);
+		if ($_SESSION['user_admin']['Foto'] == "") {
+			$pagina = str_replace('#ImagenPerfil#', 'vistas/assets/archivos/default.jpg', $pagina);
+		}else{
+			$pagina = str_replace('#ImagenPerfil#', 'vistas/assets/archivos/fotosUsuarios/'.$_SESSION['user_admin']['Foto'], $pagina);
+		}                          	
 		return $pagina;
 	}
 
@@ -165,6 +172,14 @@ class controller {
 
 			$pagina = str_replace('#sucursales#', $opciones, $pagina);
 
+		}else if($nombre == "v_perfil"){
+			if ($_SESSION['user_admin']['Foto'] == "") {
+				$pagina = str_replace('#RutaImagenPerfil#', 'vistas/assets/archivos/default.jpg', $pagina);
+			}else{
+				$pagina = str_replace('#RutaImagenPerfil#', 'vistas/assets/archivos/fotosUsuarios/'.$_SESSION['user_admin']['Foto'], $pagina);
+			}
+
+			$pagina = str_replace('#CorreoActual#', $_SESSION['user_admin']['Correo'], $pagina);
 		}
 		
 		return $pagina;
