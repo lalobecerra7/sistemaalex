@@ -31,7 +31,12 @@ class controller {
 		$pagina = str_replace('#prl#',substr($_SESSION['user_admin']['Nombre'], 0, 1),$pagina);
 		$pagina = str_replace('#fechahoy#',$fechahoy,$pagina);
 		$pagina = str_replace('#fechaIni#',$_SESSION['user_admin']['FechaIni'],$pagina);
-		$pagina = str_replace('#fechaFin#',$_SESSION['user_admin']['FechaFin'],$pagina);                          	
+		$pagina = str_replace('#fechaFin#',$_SESSION['user_admin']['FechaFin'],$pagina);
+		if ($_SESSION['user_admin']['Foto'] == "") {
+			$pagina = str_replace('#ImagenPerfil#', 'vistas/assets/archivos/default.jpg', $pagina);
+		}else{
+			$pagina = str_replace('#ImagenPerfil#', 'vistas/assets/archivos/fotosUsuarios/'.$_SESSION['user_admin']['Foto'], $pagina);
+		}                          	
 		return $pagina;
 	}
 

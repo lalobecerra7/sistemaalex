@@ -33,6 +33,22 @@ class perfil {
 			}
 			
 			if($status == 0){
+				$query = "SELECT Foto FROM usuarios WHERE ID_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
+				$row = $omodelo->_consultar($query);
+				$numerofilas = $omodelo->numerofilas;
+				$nombreFotoAnterior = '';
+				if($row == 'si'){
+					echo "Error: ".mysqli_error($omodelo->link);
+				}else{
+					if($numerofilas > 0){
+						$nombreFotoAnterior = $row[0]["Foto"];
+					}
+				}
+
+				if (file_exists("vistas/assets/archivos/fotosUsuarios/".$nombreFotoAnterior)) {
+					unlink("vistas/assets/archivos/fotosUsuarios/".$nombreFotoAnterior);
+				}
+
 				$query2 = "UPDATE usuarios SET Foto = '".$_SESSION['user_admin']['ID_Usuario'].'_'.$nombreDoc."' WHERE ID_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
 				$error3 = $omodelo->_insertar($query2);	
 

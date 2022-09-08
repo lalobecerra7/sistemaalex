@@ -56,7 +56,12 @@ function v_perfil() {
 
 
 jQuery(document).ready(function($) {
-    
+    $(document).on('click', '#verFotoPerfil', function () {
+        $("#FotoPerfil").trigger("click");
+    });
 
+    $(document).on('change', '#FotoPerfil', function() {
+        readURL(this, $("#verFotoPerfil"));
+    });
    
 });

@@ -57,7 +57,6 @@ jQuery(document).ready(function($) {
           if(nombre == "v_inicio"){
            
           }
-          ConsultarImagen();
           crearDataTable();
           
 

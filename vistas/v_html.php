@@ -516,7 +516,7 @@
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                      <img src="vistas/assets/archivos/default.jpg" alt class="w-px-40 h-auto rounded-circle imagenPerfilChica" />
+                      <img src="#ImagenPerfil#" alt class="imagenPerfilChica" style="width: 100%; height: 100%; border-radius: 100%;" />
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
@@ -525,7 +525,7 @@
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
-                              <img src="vistas/assets/archivos/default.jpg" class="w-px-40 h-auto rounded-circle imagenPerfilChica" />
+                              <img src="#ImagenPerfil#" class="imagenPerfilChica" style="width: 100%; height: 100%; border-radius: 100%;"/>
                             </div>
                           </div>
                           <div class="flex-grow-1">
