@@ -46,7 +46,7 @@
 			<nav aria-label="breadcrumb">
 			  <ol class="breadcrumb">
 			    <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
-			    <li class="breadcrumb-item" aria-current="page">Producto a la venta</li>
+			    <li class="breadcrumb-item" aria-current="page">Productos a la venta</li>
 			    <li class="breadcrumb-item active" aria-current="page">Cajas</li>
 			  </ol>
 			</nav>

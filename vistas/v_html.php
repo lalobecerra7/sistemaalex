@@ -402,7 +402,7 @@
               </a>
             </li>
 
-            <!-- <li class="menu-item cargarVista" carga="v_proveedores" titulo="Proveedores" id="cargarProveedores">
+            <li class="menu-item cargarVista" carga="v_proveedores" titulo="Proveedores" id="cargarProveedores">
               <a href="javascript:void(0)"  class="menu-link">
                 <i class="menu-icon fas fa-suitcase"></i>
                 <div data-i18n="Proveedores">Proveedores</div>
@@ -422,15 +422,7 @@
                 <div data-i18n="Áreas">Áreas</div>
               </a>
             </li>
-
-
-            <li class="menu-item cargarVista" carga="v_categorias" titulo="Categorias / familias" id="cargarCategorias">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-project-diagram"></i>
-                <div data-i18n="Categorias">Categorias / familias</div>
-              </a>
-            </li>
-
+            <!-- 
             <li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
               <a href="javascript:void(0)"  class="menu-link">
                 <i class="menu-icon fas fa-copy"></i>
@@ -438,33 +430,12 @@
               </a>
             </li>
 
-            <li class="menu-item cargarVista" carga="v_productos" titulo="Productos" id="cargarProductos">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fa-solid fa-tags"></i>
-                <div data-i18n="Productos">Productos</div>
-              </a>
-            </li>
-
-            <li class="menu-item cargarVista" carga="v_inventario" titulo="Inventario" id="cargarInventario">
-              <a href="javascript:void(0)"  class="menu-link">
-                <div data-i18n="Inventario">Inventario</div>
-              </a>
-            </li>
-
-
             <li class="menu-item cargarVista" carga="v_personal" titulo="Personal" id="cargarPersonal">
               <a href="javascript:void(0)"  class="menu-link">
                 <i class="menu-icon fas fa-users"></i>
                 <div data-i18n="Personal">Personal</div>
               </a>
             </li> -->
-
-            <li class="menu-item cargarVista" carga="v_usuarios" titulo="Usuarios" id="cargarUsuarios">
-              <a href="javascript:void(0)"  class="menu-link">
-              <i class="menu-icon fas fa-user-plus"></i>
-                <div data-i18n="Usuarios">Usuarios</div>
-              </a>
-            </li>
 
             <!-- Layouts -->
             <li class="menu-item">
@@ -479,14 +450,14 @@
                     <div data-i18n="Productos">Productos</div>
                   </a>
                 </li>
-                <li class="menu-item cargarVista" carga="v_categorias" titulo="Categorias / familias" id="cargarCategorias">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Categorias">Categorias(familias)</div>
-                  </a>
-                </li>
                 <li class="menu-item cargarVista" carga="v_inventario" titulo="Inventario" id="cargarInventario">
                   <a href="javascript:void(0)"  class="menu-link">
                     <div data-i18n="Inventario">Inventario</div>
+                  </a>
+                </li>
+                <li class="menu-item cargarVista" carga="v_categorias" titulo="Categorias / familias" id="cargarCategorias">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Categorias">Categorias(familias)</div>
                   </a>
                 </li>
                 <li class="menu-item cargarVista" carga="v_cajas" titulo="Cajas" id="cargarCajas">
@@ -545,21 +516,21 @@
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                      <img src="vistas/assets/img/logos/icon.png" alt class="w-px-40 h-auto rounded-circle" />
+                      <img src="vistas/assets/archivos/default.jpg" alt class="w-px-40 h-auto rounded-circle imagenPerfilChica" />
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a class="dropdown-item" href="#">
+                      <a class="dropdown-item cargarVista" href="javascript:void(0)" carga="v_perfil" titulo="Perfil" id="cargarPerfil">
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
-                              <img src="vistas/assets/img/logos/icon.png" alt class="w-px-40 h-auto rounded-circle" />
+                              <img src="vistas/assets/archivos/default.jpg" class="w-px-40 h-auto rounded-circle imagenPerfilChica" />
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-semibold d-block" id="bUsuario" attrUsuario="#IDUsuario#">#CorreoAdmin#</span>
-                            <small class="text-muted">Administrador</small>
+                            <span class="fw-semibold d-block" id="bUsuario" attrUsuario="#IDUsuario#">#NombreUsuario#</span>
+                            <small class="text-muted">#PermisosUsuario#</small>
                           </div>
                         </div>
                       </a>
@@ -686,5 +657,6 @@
     <script type="text/javascript" src="vistas/assets/js/inventario.js"></script>
     <script type="text/javascript" src="vistas/assets/plugins/JsBarcode.all.min.js"></script>
     <script type="text/javascript" src="vistas/assets/js/cajas.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/perfil.js"></script>
   </body>
 </html>

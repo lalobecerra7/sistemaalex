@@ -57,7 +57,7 @@ jQuery(document).ready(function($) {
           if(nombre == "v_inicio"){
            
           }
-          
+          ConsultarImagen();
           crearDataTable();
           
 
@@ -189,3 +189,22 @@ function readURL(input,ima) {
   }
 }
 
+function ConsultarImagen(){
+  var data="metodo=detalles&accion=perfil";
+  $.ajax({
+    url: 'index.php',
+    type: 'POST',
+    data: data,
+  })
+  .done(function(res) {
+    if ($.trim(res) != "") {
+      $(".imagenPerfilChica").attr("src", "vistas/assets/archivos/fotosUsuarios/"+$.trim(res));
+    }else{
+      $(".imagenPerfilChica").attr("src", "vistas/assets/archivos/default.jpg");
+    }
+    
+  })
+  .fail(function() {
+    console.log("Error ajax");
+  });
+}

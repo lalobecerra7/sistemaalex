@@ -83,7 +83,9 @@ class usuarios {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
-		$query = "INSERT INTO usuarios SET Nombre = '$NombreUsuario', Primer_Apellido = '$PrimerApellidoUsuario', Segundo_Apellido = '$SegundoApellidoUsuario', Correo = '$CorreoUsuario', Contrasena = '$NuevaContrasena', Tipo_Usuario = '$TipoUsuario', Estatus = '$EstatusUsuario', Temporal = '$ContraTemporal', Activo = '$EstatusCuenta', Tipo_Login = '1', Conectado = '0', Fecha_Alta = '$fecha'";
+		$opciones = ['cost' => 12];
+		$password = password_hash($omodelo->link->real_escape_string($NuevaContrasena), PASSWORD_BCRYPT, $opciones);
+		$query = "INSERT INTO usuarios SET Nombre = '$NombreUsuario', Primer_Apellido = '$PrimerApellidoUsuario', Segundo_Apellido = '$SegundoApellidoUsuario', Correo = '$CorreoUsuario', Contrasena = '$password', Tipo_Usuario = '$TipoUsuario', Estatus = '$EstatusUsuario', Temporal = '$ContraTemporal', Activo = '$EstatusCuenta', Tipo_Login = '1', Conectado = '0', Fecha_Alta = '$fecha'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
@@ -130,7 +132,9 @@ class usuarios {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
-		$query = "UPDATE usuarios SET Nombre = '$NombreUsuario', Primer_Apellido = '$PrimerApellidoUsuario', Segundo_Apellido = '$SegundoApellidoUsuario', Correo = '$CorreoUsuario', Contrasena = '$NuevaContrasena', Tipo_Usuario = '$TipoUsuario', Estatus = '$EstatusUsuario', Temporal = '$ContraTemporal', Activo = '$EstatusCuenta', Tipo_Login = '1', Conectado = '0', Fecha_Alta = '$fecha' WHERE ID_Usuario = '$idUsuario'";
+		$opciones = ['cost' => 12];
+		$password = password_hash($omodelo->link->real_escape_string($NuevaContrasena), PASSWORD_BCRYPT, $opciones);
+		$query = "UPDATE usuarios SET Nombre = '$NombreUsuario', Primer_Apellido = '$PrimerApellidoUsuario', Segundo_Apellido = '$SegundoApellidoUsuario', Correo = '$CorreoUsuario', Contrasena = '$password', Tipo_Usuario = '$TipoUsuario', Estatus = '$EstatusUsuario', Temporal = '$ContraTemporal', Activo = '$EstatusCuenta', Tipo_Login = '1', Conectado = '0', Fecha_Alta = '$fecha' WHERE ID_Usuario = '$idUsuario'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
