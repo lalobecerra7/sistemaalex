@@ -82,7 +82,7 @@ function v_productos() {
                     title: 'Oops...',
                     text: 'El stock máximo debe ser mayor al stock mínimo'
                 });
-            }else if(detallesProducto == '' && ){
+            }else if(detallesProducto.length == 0 && $("#GuardarProducto").attr("tipo") == "insertar"){
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
