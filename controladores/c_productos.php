@@ -84,6 +84,7 @@ class productos {
 		$Categoria =  $omodelo->link->real_escape_string($Categoria);
 		$Clase =  $omodelo->link->real_escape_string($ClaseProducto);
 		$TipoUnidad =  $omodelo->link->real_escape_string($TipoUnidad);
+		$Unidad =  $omodelo->link->real_escape_string($Unidad);
 		$PonerUnidad =  $omodelo->link->real_escape_string($PonerUnidad);
 		$Costo =  $omodelo->link->real_escape_string($CostoProducto);
 		$Precio =  $omodelo->link->real_escape_string($PrecioProducto);
@@ -94,7 +95,7 @@ class productos {
 		$Maximo =  $omodelo->link->real_escape_string($Maximo);
 		$detalle =  explode("~", $detalleProducto);
 
-		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', Tipo = '$TipoUnidad', FK_Categoria = '$Categoria', Clase = '$Clase', FK_Unidad = '$TipoUnidad', Poner_Unidad = '$PonerUnidad', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha'";
+		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', Tipo = '$TipoUnidad', FK_Categoria = '$Categoria', Clase = '$Clase', FK_Unidad = '$Unidad', Poner_Unidad = '$PonerUnidad', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -157,6 +158,7 @@ class productos {
 		$Categoria =  $omodelo->link->real_escape_string($Categoria);
 		$Clase =  $omodelo->link->real_escape_string($ClaseProducto);
 		$TipoUnidad =  $omodelo->link->real_escape_string($TipoUnidad);
+		$Unidad =  $omodelo->link->real_escape_string($Unidad);
 		$PonerUnidad =  $omodelo->link->real_escape_string($PonerUnidad);
 		$Costo =  $omodelo->link->real_escape_string($CostoProducto);
 		$Precio =  $omodelo->link->real_escape_string($PrecioProducto);
@@ -166,7 +168,7 @@ class productos {
 		$Minimo =  $omodelo->link->real_escape_string($Minimo);
 		$Maximo =  $omodelo->link->real_escape_string($Maximo);
 
-		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', Tipo = '$TipoUnidad', FK_Categoria = '$Categoria', Clase = '$Clase', FK_Unidad = '$TipoUnidad', Poner_Unidad = '$PonerUnidad', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo' WHERE ID_Producto = '$IDProducto'";
+		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', Tipo = '$TipoUnidad', FK_Categoria = '$Categoria', Clase = '$Clase', FK_Unidad = '$Unidad', Poner_Unidad = '$PonerUnidad', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo' WHERE ID_Producto = '$IDProducto'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {

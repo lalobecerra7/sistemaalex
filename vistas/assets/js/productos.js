@@ -18,6 +18,9 @@ function v_productos() {
             TipoUnidad: {
                 required: true
             },
+            Unidad: {
+                required: true
+            },
             Categoria: {
                 required: true
             },
@@ -49,6 +52,9 @@ function v_productos() {
             },
             TipoUnidad: {
                 required: "El tipo de unidad del producto es obligatorio"
+            },
+            Unidad: {
+                required: "La unidad del producto es obligatorio"
             },
             Categorias: {
                 required: "La categoria del producto es obligatorio"
@@ -235,6 +241,7 @@ jQuery(document).ready(function($) {
             $("#Descripcion").val(datos.Descripcion);
             $("#ClaseProducto").val(datos.Clase);
             $("#TipoUnidad").val(datos.Tipo);
+            $("#Unidad").val(datos.FK_Unidad);
             $("#Categoria").val(datos.FK_Categoria);
             $("#CostoProducto").val(datos.Costo);
             $("#PrecioProducto").val(datos.Precio);

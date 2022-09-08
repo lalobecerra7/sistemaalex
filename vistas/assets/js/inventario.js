@@ -1,38 +1,44 @@
 function v_inventario() {
     TablaInventario();
-    $('#FormCliente').validate({
+    $('#FormTraslados').validate({
         rules: {
-            NombreNegocio: {
+            FechaTraslado: {
                 required: true
             },
-            NombreContacto: {
+            SucursalOrigen: {
                 required: true
             },
-            CelularCliente: {
+            SucursalDestino: {
+                required: true
+            },
+            Cantidad: {
                 required: true
             },
         },
         messages: {
-            NombreNegocio: {
-                required: "El nombre del negocio es requerido"
+            FechaTraslado: {
+                required: "La fecha de traslado es obligatoria"
             },
-            NombreContacto: {
-                required: "El nombre del contacto es requerido"
+            SucursalOrigen: {
+                required: "La sucursal de origen es obligatoria"
             },
-            CelularCliente: {
-                required: "El celular del contacto es requerido"
+            SucursalDestino: {
+                required: "La sucursal de destino es obligatoria"
+            },
+            Cantidad: {
+                required: "La cantidad es obligatoria"
             },
         },
         submitHandler: function(form) {
-            if ($("#TipoDescuento").val() != "" && ($("#DescuentoCliente").val() == "" || $("#DescuentoCliente").val() < 0)) {
+            if ($("#SucursalOrigen").val() == $("#SucursalDestino").val()){
                 Swal.fire({
-                    icon: 'warning',
-                    text: 'Ingresa la cantidad del descuento'
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'La sucursal de origen y destino deben ser diferentes.'
                 });
-                $("#DescuentoCliente").focus();
-            } else {
-                var data = "metodo=" + $("#GuardarCliente").attr("tipo") + "&accion=clientes&IDCliente=" + $("#GuardarCliente").attr("attrid") + "&NombreNegocio=" + $("#NombreNegocio").val() + "&CalleNegocio=" + $("#CalleNegocio").val() + "&ColoniaNegocio=" + $("#ColoniaNegocio").val() + "&NoInterior=" + $("#NumeroInteriorCliente").val() + "&NoExterior=" + $("#NumeroExteriorCliente").val() + "&NombreContacto=" + $("#NombreContacto").val() + "&CelularContacto=" + $("#CelularCliente").val() + "&TelefonoContacto=" + $("#TelefonoCliente").val() + "&TipoDescuento=" + $("#TipoDescuento").val() + "&CantidadDescuento=" + $("#DescuentoCliente").val();
-                var btn = $('#GuardarCliente');
+            }else{
+                var data = "metodo=insertar&accion=inventario&tipo=traslados&IDProducto=" + $("#GuardarTraslado").attr("attrid") + "&FechaTraslado=" + $("#FechaTraslado").val() + "&SucursalOrigen=" + $("#SucursalOrigen").val() + "&SucursalDestino=" + $("#SucursalDestino").val() + "&Cantidad=" + $("#Cantidad").val();
+                var btn = $('#GuardarTraslado');
                 $.ajax({
                         url: 'index.php',
                         type: 'POST',
@@ -43,22 +49,18 @@ function v_inventario() {
                     })
                     .done(function(res) {
                         if ($.trim(res) == "Correcto") {
-                            if ($("#GuardarCliente").attr("tipo") == "modificar") {
-                                var tipoAlerta = "modificado";
-                            } else {
-                                var tipoAlerta = "guardado";
-                            }
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Cliente ' + tipoAlerta + ' correctamente'
+                                title: 'El traslado se ha registrado correctamente'
                             });
-                            TablaClientes();
-                            $("#ModalNuevoCliente").modal("hide");
+                            TablaInventario();
+                            $("#FormTraslados").trigger('reset');
+                            $("#ModalTraslados").modal("hide");
                         } else {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Oops...',
-                                text: 'Error inesperado al ' + $("#GuardarCliente").attr("tipo") + ' el cliente.'
+                                text: 'Error inesperado al insertar el traslado.'
                             });
 
                             console.log($.trim(res));
@@ -71,122 +73,168 @@ function v_inventario() {
                         unprogressBoton(btn);
                     });
             }
+                
         }
     });
 }
 
 jQuery(document).ready(function($) {
-    $(document).on('click', '#Detalles', function() {
-        var id = $(this).attr("attrid");
-
-        var data = "metodo=detalles&accion=inventario&tipo=detalles&IDProducto=" + id;
-        $.ajax({
-                url: 'index.php',
-                type: 'POST',
-                data: data,
-            })
-            .done(function(res) {
-                if ($.trim(res) == "SinResultados") {
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'No se encontraron registros'
-                    });
-                } else {
-                    $("#ModalDetalles").modal("show");
-                    $("#NombreProducto").text($(this).attr('nombre'));
-                    $("#tbodyDetallesInventario").html(res);
-                }
-            })
-            .fail(function() {
-                console.log("Error ajax");
-            });
-    });
 
     $(document).on('click', '.verDetallesMerma', function() {
-        var id = $(this).attr("attrid");
-
-        var data = "metodo=detalles&accion=inventario&tipo=merma&IDProducto=" + id;
-        $.ajax({
-                url: 'index.php',
-                type: 'POST',
-                data: data,
-            })
-            .done(function(res) {
-                if ($.trim(res) == "SinResultados") {
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'No se encontraron registros'
-                    });
-                } else {
-                    $("#ModalMerma").modal("show");
-                    $("#NombreProductoM").text($(this).attr('nombre'));
-                    $("#tbodyMerma").html(res);
-                }
-            })
-            .fail(function() {
-                console.log("Error ajax");
-            });
-    });
-
-    $(document).on('click', '#Salidas', function() {
-        var id = $(this).attr("attrid");
-
-        var data = "metodo=detalles&accion=inventario&tipo=salidas&IDProducto=" + id;
-        $.ajax({
-                url: 'index.php',
-                type: 'POST',
-                data: data,
-            })
-            .done(function(res) {
-                if ($.trim(res) == "SinResultados") {
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'No se encontraron registros'
-                    });
-                } else {
-                    $("#ModalSalidas").modal("show");
-                    $("#NombreProductoS").text($(this).attr('nombre'));
-                    $("#tbodySalidas").html(res);
-                }
-            })
-            .fail(function() {
-                console.log("Error ajax");
-            });
+        var idproducto = $(this).attr("attrid");
+        TablaMerma(idproducto);
+        $("#ModalDetalles").modal("show");
+        $("#CerrarDetalle").attr("attrid", idproducto);
+        $('#NombreProductoM').text($(this).attr("nombre"));
     });
 
     $(document).on('click', '#AgregarMerma', function() {
-        $("#idProducto").val($(this).attr('attrid'));
-        $("#ModalAgregarMerma").modal("show");
-        $("#NombreProductoAM").text($(this).attr('nombre'));
+        $("#GuardarMerma").attr('attrid',$(this).attr('attrid'));
+        $("#ModalMerma").modal("show");
     });
 
-    $(document).on('click', '#AgregarExistencia', function() {
-        $("#idProductoE").val($(this).attr('attrid'));
-        $("#ModalAgregarExistencia").modal("show");
-        $("#NombreProductoAE").text($(this).attr('nombre'));
+    $(document).on('click', '#EliminarMerma', function() {
+        var id = $("#GuardarMerma").attr('attrid');
+        Swal.fire({
+	        title: '¿Estás seguro que quieres eliminar este registro de merma?',
+	        icon: 'warning',
+	        showCancelButton: true,
+	        confirmButtonColor: '#3085d6',
+	        cancelButtonColor: '#d33',
+	        cancelButtonText: '¡No, cancelar!',
+	        confirmButtonText: '¡Si, eliminar!'
+	    }).then((result) => {
+	        if (result.value) {
+
+	        	var regresarInventario = "";
+	        	Swal.fire({
+			        title: '¿Regresar los productos al inventario?',
+			        icon: 'warning',
+			        showCancelButton: true,
+			        confirmButtonColor: '#3085d6',
+			        cancelButtonColor: '#d33',
+			        cancelButtonText: 'No, continuar',
+			        confirmButtonText: 'Si, regresar'
+			    }).then((result) => {
+
+			        if (result.value) {
+			        	regresarInventario = "Si";
+			        }else{
+			        	regresarInventario = "No";
+			        }
+
+			        var data = "metodo=eliminar&accion=inventario&tipo=EliminarMerma&IDMerma="+$(this).attr('attrid')+"&RegresarInventario="+regresarInventario;
+					$.ajax({
+						url: 'index.php',
+						type: 'POST',
+						data: data
+					})
+					.done(function(res) {
+						if ($.trim(res) == "Correcto") {
+							Swal.fire({
+								icon: 'success',
+								title: 'Merma eliminada correctamente'
+							});
+							TablaMerma(id);
+							TablaInventario();
+						}else{
+							Swal.fire({
+								icon: 'error',
+								title: 'Oops...',
+								text: 'Error inesperado al eliminar la merma.'
+							});
+							console.log($.trim(res));
+						}
+					})
+					.fail(function() {
+						console.log("Error ajax");
+					})
+			    });
+			}    
+		});	  
     });
+
+    $(document).on('click', '#Traslados', function() {
+        $("#ModalTraslados").modal("show");
+        $("#GuardarTraslado").attr('attrid',$(this).attr('attrid'));
+    });
+
+    $(document).on('click', '#ModificarMerma', function() {
+        var id = $(this).attr('attrid');
+        var data = "metodo=detalles&accion=inventario&tipo=consultarMerma&IDMerma="+id;
+        $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+            })
+            .done(function(res) {
+                var datos = JSON.parse($.trim(res));
+                console.log(datos);
+                $("#FechaMermaE").val(datos.Fecha_Merma);
+                $("#MotivoMermaE").val(datos.Motivo);
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            });
+
+        $("#ModalEditarMerma").modal("show");
+        $("#GuardarMermaE").attr('attrid',$(this).attr('attrid'));
+    });
+
+    $(document).on('change', '#SucursalOrigen', function() {
+        var id = $(this).val();
+        var producto = $("#GuardarTraslado").attr('attrid');
+        var data = "metodo=detalles&accion=inventario&tipo=cantidadTraslado&IDProducto="+producto+"&IDSucursal="+id;
+        $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+            })
+            .done(function(res) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'La merma se ha registrado correctamente'
+                });
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            });
+    });
+
 
     $(document).on('click', '#GuardarMerma', function() {
-        var $id = $('#AgregarMerma').attr("attrid");
+        var $id = $('#GuardarMerma').attr("attrid");
         $('#FormMerma').validate({
             rules: {
-                Cantidad: {
+                CantidadMerma: {
                     required: true
                 },
-                Motivo: {
+                MotivoMerma: {
+                    required: true
+                },
+                Sucursal: {
+                    required: true
+                },
+                FechaMerma: {
                     required: true
                 },
             },
             messages: {
-                Cantidad: {
+                CantidadMerma: {
                     required: "La cantidad de merma es requerida"
                 },
-                Motivo: {
+                MotivoMerma: {
                     required: "El motivo de la merma es requerido"
+                },
+                Sucursal: {
+                    required: "La sucursal es requerida"
+                },
+                FechaMerma: {
+                    required: "La fecha de merma es requerida"
                 },
             },
             submitHandler: function(form) {
-                var data = "metodo=insertar&accion=inventario&tipo=agregarMerma&IDProducto=" + $("#idProducto").val() + "&Cantidad=" + $("#Cantidad").val() + "&Motivo=" + $("#Motivo").val();
+                var data = "metodo=insertar&accion=inventario&tipo=agregarMerma&IDProducto=" + $id + "&Cantidad=" + $("#CantidadMerma").val() + "&Motivo=" + $("#MotivoMerma").val() + "&IDSucursal=" + $("#Sucursal").val() + "&FechaMerma=" + $("#FechaMerma").val();
                 $.ajax({
                         url: 'index.php',
                         type: 'POST',
@@ -198,8 +246,9 @@ jQuery(document).ready(function($) {
                                 icon: 'success',
                                 title: 'La merma se ha registrado correctamente'
                             });
-                            $('#cargarInicio').trigger('click');
-                            $("#ModalAgregarMerma").modal("hide");
+                            TablaInventario()
+                            $("#FormMerma").trigger('reset');
+                            $("#ModalMerma").modal("hide");
                         } else if ($.trim(res) == "ErrorCantidad") {
                             Swal.fire({
                                 icon: 'error',
@@ -224,26 +273,26 @@ jQuery(document).ready(function($) {
         });
     });
 
-    $(document).on('click', '#GuardarExistencia', function() {
-        $('#FormExistencia').validate({
+    $(document).on('click', '#GuardarMermaE', function() {
+        $('#FormEditarMerma').validate({
             rules: {
-                CantidadE: {
+                FechaMermaE: {
                     required: true
                 },
-                CostoE: {
+                MotivoMermaE: {
                     required: true
                 },
             },
             messages: {
-                CantidadE: {
+                FechaMermaE: {
                     required: "La cantidad de producto es requerida"
                 },
-                CostoE: {
+                MotivoMermaE: {
                     required: "El costo del producto es requerido"
                 },
             },
             submitHandler: function(form) {
-                var data = "metodo=insertar&accion=inventario&tipo=agregarExistencia&IDProducto=" + $('#idProductoE').val() + "&Cantidad=" + $("#CantidadE").val() + "&Costo=" + $("#CostoE").val();
+                var data = "metodo=detalles&accion=inventario&tipo=editarMerma&IDMerma=" + $('#GuardarMermaE').attr('attrid') + "&FechaMerma=" + $("#FechaMermaE").val() + "&MotivoMerma=" + $("#MotivoMermaE").val();
                 $.ajax({
                         url: 'index.php',
                         type: 'POST',
@@ -254,15 +303,16 @@ jQuery(document).ready(function($) {
                         if ($.trim(res) == "Correcto") {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'El aumento de existencia se ha registrado correctamente'
+                                title: 'La merma se ha modificado correctamente'
                             });
-                            $('#cargarInicio').trigger('click');
-                            $("#ModalAgregarExistencia").modal("hide");
+                            
+                            TablaMerma($('CerrarDetalle').attr('attrid'));
+                            $("#ModalEditarMerma").modal("hide");
                         } else {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Oops...',
-                                text: 'Error inesperado al insertar el aumento de existencia.'
+                                text: 'Error inesperado al editar la merma.'
                             });
 
                             console.log($.trim(res));
@@ -299,6 +349,31 @@ function TablaInventario() {
         "params": {
             "metodo": "consultar",
             "accion": "inventario"
+        }
+    });
+}
+
+function TablaMerma(idproducto) {
+    ajaxMyDatatable({
+        "table": $("#TablaMerma"),
+        "colums": [
+            "Fecha",
+            "Motivo",
+            "Sucursal",
+            "Cantidad",
+            "Costo",
+            "Acciones"
+        ],
+        "sort": [
+            1,
+            "desc"
+        ],
+        "url": "index.php",
+        "params": {
+            "metodo": "detalles",
+            "accion": "inventario",
+            "tipo": "merma",
+            "id": idproducto
         }
     });
 }
