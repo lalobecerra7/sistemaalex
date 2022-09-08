@@ -12,7 +12,7 @@ include "controladores/c_categorias.php";
 include "controladores/c_usuarios.php";
 include "controladores/c_productos.php";
 include "controladores/c_inventario.php";
-
+include "controladores/c_cajas.php";
 class controller {
 
 
@@ -24,12 +24,12 @@ class controller {
 		$fechahoy = date('Y-m-d H:i:s');
 		$pagina = file_get_contents('vistas/v_html.php');
 		$pagina = str_replace('#CorreoAdmin#',"Administrador",$pagina);
+		$pagina = str_replace('#IDUsuario#',$_SESSION['user_admin']['ID_Usuario'],$pagina);
 		$pagina = str_replace('#usuario#',$_SESSION['user_admin']['Nombre'],$pagina);
 		$pagina = str_replace('#prl#',substr($_SESSION['user_admin']['Nombre'], 0, 1),$pagina);
 		$pagina = str_replace('#fechahoy#',$fechahoy,$pagina);
 		$pagina = str_replace('#fechaIni#',$_SESSION['user_admin']['FechaIni'],$pagina);
-		$pagina = str_replace('#fechaFin#',$_SESSION['user_admin']['FechaFin'],$pagina);
-
+		$pagina = str_replace('#fechaFin#',$_SESSION['user_admin']['FechaFin'],$pagina);                          	
 		return $pagina;
 	}
 

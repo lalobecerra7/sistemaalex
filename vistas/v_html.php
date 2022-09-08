@@ -18,6 +18,7 @@
     <meta name="description" content="" />
     <link rel="shortcut icon" href="vistas/assets/img/favicon/favicon.ico" /> 
     <link rel="stylesheet" href="vistas/assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="vistas/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="vistas/assets/vendor/css/core.css" class="template-customizer-core-css" />
     <link rel="stylesheet" href="vistas/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="vistas/assets/css/demo.css" />
@@ -30,6 +31,17 @@
   </head>
 
   <body>
+    <div id="carga">
+        <div class="container" style="min-height: 100vh;">
+            <div class="row align-items-center" style="min-height: 100vh;">
+                <div class="col-12 text-center">
+                    <div class="spinner-border text-danger" style="width: 8rem; height: 8rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Layout wrapper -->
     <div id="caja">
       <div class="container-fluid" style="height: 100vh; overflow-y: auto; ">
@@ -43,6 +55,314 @@
             <div class="row" id="verCaja">
             </div>
           </div>
+
+
+
+          <!-- ///////////////////////////Modal Abrir Caja/////////////////////////////////// -->  
+          <div class="modal fade" id="MAbrirCaja" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Abrir Caja</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <form id="formAbrirCaja">
+                          <div class="modal-body text-justify">
+                              <div class="form-floating mb-3">
+                                  <input type="number" step="any" class="form-control" name="montoAperCaja" id="montoAperCaja" placeholder="Monto" value="0.00">
+                                  <label for="floatingInput">Monto inicial en Caja</label>
+                              </div> 
+                          </div>
+                          <div class="modal-footer text-center">
+                              <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                              <button type="submit" class="btn btn-primary" id="bAbrirCaja">Abrir <i class="fa fa-check-circle"></i></button>
+                          </div>
+                      </form>
+                  </div>    
+              </div>
+          </div>
+
+          <!-- ///////////////////////////Modal Granel/////////////////////////////////// -->  
+          <div class="modal fade" id="MGranel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Cantidad</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <div id="datosGranel">
+                              
+                          </div>
+                          <br>
+                          <form id="formGranel" autocomplete="off">
+                              <div class="form-floating mb-3">
+                                  <input type="number" step="any" class="form-control" name="cantidadGranel" id="cantidadGranel" placeholder="Cantidad" value="1.00">
+                                  <label for="floatingInput">Cantidad</label>
+                              </div>                        
+                              <div class="form-floating mb-3">
+                                  <input type="number" step="any" class="form-control" name="importeGranel" id="importeGranel" placeholder="Importe">
+                                  <label for="floatingInput">Importe</label>
+                              </div> 
+                          </form>
+                      </div>
+                      <div class="modal-footer text-center">
+                          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                          <button type="button" class="btn btn-primary" id="bAgregarGranel">Agregar <i class="fa fa-check-circle"></i></button>
+                      </div>
+                  </div>    
+              </div>
+          </div>
+
+          <!-- ///////////////////////////Modal Int. Varios/////////////////////////////////// -->  
+          <div class="modal fade" id="MIntVarios" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Varios Productos</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form id="formIntVarios" autocomplete="off">
+                              <div class="input-group mb-3">
+                                  <span class="input-group-text"><i class="fas fa-barcode"></i></span>
+                                  <input type="text" class="form-control" placeholder="Código" name="barCodeIntVatios" id="barCodeIntVatios">
+                              </div>                         
+                              <div class="form-floating mb-3">
+                                  <input type="number" step="any" class="form-control" name="cantidadIntVatios" id="cantidadIntVatios" placeholder="Cantidad">
+                                  <label for="floatingInput">Cantidad</label>
+                              </div> 
+                          </form>
+                      </div>
+                      <div class="modal-footer text-center">
+                          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                          <button type="button" class="btn btn-primary" id="bAgregarVarios">Agregar <i class="fa fa-check-circle"></i></button>
+                      </div>
+                  </div>    
+              </div>
+          </div>
+
+          <!-- ///////////////////////////Modal Prod. Común/////////////////////////////////// -->  
+          <div class="modal fade" id="MProdComun" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Producto Común</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form id="formProdComun" autocomplete="off">
+                              <div class="form-floating mb-3">
+                                  <input type="text" class="form-control" name="descripcionProdComun" id="descripcionProdComun" placeholder="Descripción">
+                                  <label for="floatingInput">Descripción</label>
+                              </div> 
+                              <div class="form-floating mb-3">
+                                  <input type="number" step="any" class="form-control" name="cantidadProdComun" id="cantidadProdComun" placeholder="Cantidad" value="1.00">
+                                  <label for="floatingInput">Cantidad</label>
+                              </div>                        
+                              <div class="form-floating mb-3">
+                                  <input type="number" step="any" class="form-control" name="precioProdComun" id="precioProdComun" placeholder="Precio">
+                                  <label for="floatingInput">Precio</label>
+                              </div>
+                          </form>
+                      </div>
+                      <div class="modal-footer text-center">
+                          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                          <button type="button" class="btn btn-primary" id="bAgregarProdComun">Agregar <i class="fa fa-check-circle"></i></button>
+                      </div>
+                  </div>    
+              </div>
+          </div>
+
+          <!-- ///////////////////////////Modal Descuentos/////////////////////////////////// -->  
+          <div class="modal fade" id="ModalDescuentoProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Descuento</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form id="formDescuentoProd" autocomplete="off">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="form-floating mb-3">
+                                      <input type="number" step="any" class="form-control" name="CantidadDescuento" id="CantidadDescuento" placeholder="Cantidad de descuento">
+                                      <label for="floatingInput">Cantidad ($)</label>
+                                  </div> 
+                                </div>
+                                <div class="col-md-6">
+                                  <div class=" form-floating mb-3">
+                                      <input type="number" step="any" class="form-control" name="PorcentajeDescuento" id="PorcentajeDescuento" max="100" placeholder="Porcentaje de descuento">
+                                      <label for="floatingInput">Porcentaje (%)</label>
+                                  </div>
+                                </div>
+                              </div> 
+                          </form>
+                      </div>
+                      <div class="modal-footer text-center">
+                          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                          <button type="button" class="btn btn-primary" id="bAgregarDescuento">Agregar <i class="fa fa-check-circle"></i></button>
+                      </div>
+                  </div>    
+              </div>
+          </div>
+
+          <!-- ///////////////////////////Buscar Producto/////////////////////////////////// -->  
+          <div class="modal fade" id="MBuscarProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Buscar</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <form id="AgregarProdTabla">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-12 table-responsive" id="divTablaProductos">
+                                    <table class="table table-responsive table-striped text-center myDataTable" id="TablaProductosVenta" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Código</th>
+                                                <th>Descripción</th>
+                                                <th>Clase</th>
+                                                <th>Precio</th>
+                                                <th>Precio Mayoreo</th>
+                                                <th>Area</th>
+                                                <th>Existencia</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table> 
+                                </div>
+                            </div>    
+                        </div>
+                        <div class="modal-footer text-center">
+                            <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                            <button type="submit" class="btn btn-primary" id="bAgregarBuscarProd"><i class="fa fa-check-circle"></i> <strong>Agregar</strong></button>
+                        </div>
+                      </form>
+                  </div>    
+              </div>
+          </div>
+
+          <!-- ///////////////////////////Modal Entrada/////////////////////////////////// -->  
+          <div class="modal fade" id="ModalEntradaDinero" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Entrada</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form id="formEntradaDinero" autocomplete="off">                        
+                              <div class="form-floating mb-3">
+                                  <input type="number" step="any" class="form-control" name="CantidadEntrada" id="CantidadEntrada" placeholder="Cantidad de descuento">
+                                  <label for="CantidadEntrada">Cantidad</label>
+                              </div> 
+                              <div class="form-floating mb-3">
+                                  <input type="text" value="Entrada de dinero" class="form-control" name="MotivoEntrada" id="MotivoEntrada" placeholder="Cantidad de descuento">
+                                  <label for="MotivoEntrada">Motivo</label>
+                              </div>
+                          </form>
+                          <div class="row text-end">
+                            <div class="col-12 mb-1">
+                              <button class="btn btn-link" id="CargarEntradasRecientes"><span>Entradas realizadas en este turno <i class="fas fa-arrow-down"></i></span></button>
+                            </div>
+                          </div>
+                          <div class="row MostrarTablaEntradas oculto">
+                            <div class="col-12 table-responsive">
+                              <table class="table table-responsive table-striped text-center myDataTable" id="TablaEntradasRecientes" width="100%">
+                                <thead>
+                                  <tr>
+                                    <th>Fecha</th>
+                                    <th>Motivo</th>
+                                    <th>Cantidad</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                              </table> 
+                            </div>
+                          </div>
+                      </div>
+                      <div class="modal-footer text-center">
+                          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                          <button type="button" class="btn btn-primary" id="bAgregarEntrada">Agregar <i class="fa fa-check-circle"></i></button>
+                      </div>
+                  </div>    
+              </div>
+          </div>
+
+          <!-- ///////////////////////////Modal Salida/////////////////////////////////// -->  
+          <div class="modal fade" id="ModalSalidaDinero" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Salida</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form id="formSalidaDinero" autocomplete="off">                        
+                              <div class="form-floating mb-3">
+                                  <input type="number" step="any" class="form-control" name="CantidadSalida" id="CantidadSalida" placeholder="Cantidad de salida">
+                                  <label for="CantidadSalida">Cantidad</label>
+                              </div> 
+                              <div class="form-floating mb-3">
+                                  <input type="text" value="Salida de dinero" class="form-control" name="MotivoSalida" id="MotivoSalida" placeholder="Motivo de la salida">
+                                  <label for="MotivoSalida">Motivo</label>
+                              </div>
+                          </form>
+                          <div class="row text-end">
+                            <div class="col-12 mb-1">
+                              <button class="btn btn-link" id="CargarSalidasRecientes"><span>Salidas realizadas en este turno <i class="fas fa-arrow-down"></i></span></button>
+                            </div>
+                          </div>
+                          <div class="row MostrarTablaSalidas oculto">
+                            <div class="col-12 table-responsive">
+                              <table class="table table-responsive table-striped text-center myDataTable" id="TablaSalidasRecientes" width="100%">
+                                <thead>
+                                  <tr>
+                                    <th>Fecha</th>
+                                    <th>Motivo</th>
+                                    <th>Cantidad</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                              </table> 
+                            </div>
+                          </div>
+                      </div>
+                      <div class="modal-footer text-center">
+                          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                          <button type="button" class="btn btn-primary" id="bAgregarSalida">Agregar <i class="fa fa-check-circle"></i></button>
+                      </div>
+                  </div>    
+              </div>
+          </div>
+
+          <div id="noEncontrado">
+              <div class="container-fluid" style="height: 100vh; overflow-y: auto;">
+                  <div class="row align-items-center justify-content-center" style="height: 100vh;">
+                      <div class="col-10 text-center" style="background-color: #E74C3C;">
+                          <h1 style="color: #FFF; padding: 30px 0px;">Producto No Encontrado</h1>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div id="noMayoreo">
+              <div class="container-fluid" style="height: 100vh; overflow-y: auto;">
+                  <div class="row align-items-center justify-content-center" style="height: 100vh;">
+                      <div class="col-10 text-center" style="background-color: #ffc107;">
+                          <h1 style="color: #FFF; padding: 30px 0px;">El producto NO tiene precio de mayoreo</h1>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -169,6 +489,11 @@
                     <div data-i18n="Inventario">Inventario</div>
                   </a>
                 </li>
+                <li class="menu-item cargarVista" carga="v_cajas" titulo="Cajas" id="cargarCajas">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Cajas">Cajas</div>
+                  </a>
+                </li>
                 <!-- <li class="menu-item cargarVista" carga="v_compras" titulo="Compras" id="cargarCompras">
                   <a href="javascript:void(0)"  class="menu-link">
                     <div data-i18n="Compras">Compras</div>
@@ -179,11 +504,7 @@
                     <div data-i18n="Ventas">Ventas</div>
                   </a>
                 </li>
-                <li class="menu-item cargarVista" carga="v_cajas" titulo="Cajas" id="cargarCajas">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Cajas">Cajas</div>
-                  </a>
-                </li>
+                
                  <li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
                   <a href="javascript:void(0)"  class="menu-link">
                     <div data-i18n="Impuestos">Impuestos</div>
@@ -237,7 +558,7 @@
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-semibold d-block">#CorreoAdmin#</span>
+                            <span class="fw-semibold d-block" id="bUsuario" attrUsuario="#IDUsuario#">#CorreoAdmin#</span>
                             <small class="text-muted">Administrador</small>
                           </div>
                         </div>
@@ -247,7 +568,7 @@
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="javascript:void(0)" id="CambiarContra">
+                      <a class="dropdown-item" href="javascript:void(0)" id="CambiarContra" data-bs-toggle="modal" data-bs-target="#ModalCambiarContrasena">
                         <i class="fas fa-key me-2"></i>
                         <span class="align-middle">Cambiar contraseña</span>
                       </a>
@@ -291,10 +612,53 @@
     </div>
     <!-- / Layout wrapper -->
 
+    <div class="modal fade" id="ModalCambiarContrasena" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+        <div class="modal-content">
+          <div class="modal-header bg-inverse bd-inverse-darken">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Nueva contraseña</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="FormNuevaContrasena">
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-12 col-sm-12 mb-3">
+                  <div class="form-floating">
+                        <input type="password" class="form-control contraCampo" id="ContrasenaActual" name="ContrasenaActual" placeholder="Ingresa tu contraseña actual">
+                        <label for="ContrasenaActual">Contraseña actual</label>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 mb-3">
+                  <div class="form-floating">
+                        <input type="password" class="form-control contraCampo" id="ContrasenaNueva" name="ContrasenaNueva" placeholder="Ingresa tu contraseña actual">
+                        <label for="ContrasenaNueva">Contraseña nueva</label>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 mb-3">
+                  <div class="form-floating">
+                        <input type="password" class="form-control contraCampo" id="ContrasenaRepetir" name="ContrasenaRepetir" placeholder="Ingresa tu contraseña actual">
+                        <label for="ContrasenaRepetir">Repetir contraseña nueva</label>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light" id="VerContrasenas"><i class="fas fa-eye"></i></button>
+              <button type="submit" class="btn btn-primary" id="GuardarNuevaContrasena" attrid="" tipo="insertar"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+              <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div> 
+
+
+
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script src="vistas/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="vistas/assets/vendor/libs/popper/popper.js"></script>
+    <!-- <script src="vistas/assets/plugins/bootstrap/js/bootstrap.min.js"></script> -->
     <script src="vistas/assets/vendor/js/bootstrap.js"></script>
     <script src="vistas/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="vistas/assets/vendor/js/menu.js"></script>
@@ -321,5 +685,6 @@
     <script type="text/javascript" src="vistas/assets/js/productos.js"></script>
     <script type="text/javascript" src="vistas/assets/js/inventario.js"></script>
     <script type="text/javascript" src="vistas/assets/plugins/JsBarcode.all.min.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/cajas.js"></script>
   </body>
 </html>

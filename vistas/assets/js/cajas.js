@@ -1,19 +1,25 @@
-function v_categorias() {
-    TablaCategorias(); 
-    $('#FormCategorias').validate({
+function v_cajas() {
+    TablaCajas(); 
+    $('#FormCajas').validate({
         rules: {
-            NombreCategoria: {
+            NombreCaja: {
+                required: true
+            },
+            SucursalesCaja: {
                 required: true
             },
         },
         messages: {
-            NombreCategoria: {
-                required: "El nombre de la categoria o familia es obligatorio"
+            NombreCaja: {
+                required: "El nombre de la caja es obligatorio"
+            },
+            SucursalesCaja: {
+                required: "Seleccione una sucursal para esta caja"
             },
         },
         submitHandler: function(form) { 
-            var data = "metodo="+$("#GuardarCategoria").attr("tipo")+"&accion=categorias&IDCategoria="+$("#GuardarCategoria").attr("attrid")+"&Nombre="+$("#NombreCategoria").val()+"&Descripcion="+$("#DescripcionCategoria").val()
-            var btn = $('#GuardarCategoria');
+            var data = "metodo="+$("#GuardarCaja").attr("tipo")+"&accion=cajas&IDCaja="+$("#GuardarCaja").attr("attrid")+"&Nombre="+$("#NombreCaja").val()+"&Detalles="+$("#DetallesCaja").val()+"&Sucursal="+$("#SucursalesCaja").val();
+            var btn = $('#GuardarCaja');
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
@@ -24,22 +30,22 @@ function v_categorias() {
             })
             .done(function(res) {
                 if ($.trim(res) == "Correcto") {
-                    if ($("#GuardarCategoria").attr("tipo") == "modificar") {
+                    if ($("#GuardarCaja").attr("tipo") == "modificar") {
                         var tipoAlerta = "modificada";
                     }else{
                         var tipoAlerta = "guardada";
                     }
                     Swal.fire({
                         icon: 'success',
-                        title: 'Categoria / familia '+tipoAlerta+' correctamente'
+                        title: 'Caja '+tipoAlerta+' correctamente'
                     });
-                    TablaCategorias(); 
-                    $("#ModalCategorias").modal("hide");
+                    TablaCajas(); 
+                    $("#ModalCajas").modal("hide");
                 }else{
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Error inesperado al '+$("#GuardarCategoria").attr("tipo")+' categoria / familia.'
+                        text: 'Error inesperado al '+$("#GuardarCaja").attr("tipo")+' Caja.'
                     });
                     console.log($.trim(res));
                 }
@@ -55,12 +61,15 @@ function v_categorias() {
   
 }
 
-function TablaCategorias(){
+function TablaCajas(){
     ajaxMyDatatable({
-        "table": $("#TablaCategorias"), 
+        "table": $("#TablaCajas"), 
         "colums": [
-            "Nombre",
-            "Descripcion",
+            "Caja",
+            "Sucursal",
+            "Detalles",
+            "Estatus",
+            "Usuario",
             "Acciones"
         ],
         "sort": [
@@ -70,27 +79,43 @@ function TablaCategorias(){
         "url": "index.php", 
         "params":{
             "metodo": "consultar",
-            "accion": "categorias"
+            "accion": "cajas"
         }
     });
 }
 
+function ConsultarSucursales(){
+    var data = "metodo=detalles&accion=cajas&tipo=ConsultarSucursales";
+    $.ajax({
+        url: 'index.php',
+        type: 'POST',
+        data: data
+    })
+    .done(function(res) {
+        $("#SucursalesCaja").html(res);
+    })
+    .fail(function() {
+        console.log("Error ajax");
+    });  
+}
+
 jQuery(document).ready(function($) {
 
-    $(document).on('click', '#botonNuevaCategoria', function() {
-        $("#GuardarCategoria").attr('tipo', "insertar");
-        $("#GuardarCategoria").attr('attrid', "");
-        $("#FormCategorias").trigger('reset');
-        $("#TituloModalCategorias").text("Agregar nueva");
+    $(document).on('click', '#botonNuevaCaja', function() {
+        $("#GuardarCaja").attr('tipo', "insertar");
+        $("#GuardarCaja").attr('attrid', "");
+        $("#FormCajas").trigger('reset');
+        $("#TituloModalCajas").text("Agregar nueva");
+        ConsultarSucursales();
     });
 
-    $(document).on('click', '#EliminarCategoria', function() {
+    $(document).on('click', '#EliminarCaja', function() {
         var boton = $(this);
         var id = $(this).attr("attrid");
         var nombre = $(this).attr("nombre");
         console.log(id);
         Swal.fire({
-          title: '¿Estás a punto de eliminar la categoria / familia '+nombre+'?',
+          title: '¿Estás a punto de eliminar la caja '+nombre+'?',
           text: "Una vez eliminado ya no podrá ser recuperado",
           icon: 'warning',
           showCancelButton: true,
@@ -100,7 +125,7 @@ jQuery(document).ready(function($) {
           confirmButtonText: 'Si, eliminar'
         }).then((result) => {
           if (result.value) {
-            var data = "metodo=eliminar&accion=categorias&IDCategoria="+id;
+            var data = "metodo=eliminar&accion=cajas&IDCaja="+id;
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
@@ -109,16 +134,16 @@ jQuery(document).ready(function($) {
             .done(function(res) {
                 console.log(res);
                 if ($.trim(res) == "Correcto") {
-                    TablaCategorias();
+                    TablaCajas();
                     Swal.fire({
                         icon: 'success',
-                        title: 'Categoria / familia eliminada correctamente'
+                        title: 'Caja eliminada correctamente'
                     });
                 }else{
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Error inesperado al eliminar categoria / familia.'
+                        text: 'Error inesperado al eliminar Caja.'
                     });
                 }
             })
@@ -129,9 +154,10 @@ jQuery(document).ready(function($) {
         });
     });
 
-    $(document).on('click', '#ModificarCategoria', function() {
+    $(document).on('click', '#ModificarCaja', function() {
         var id = $(this).attr('attrid');
-        var data = "metodo=detalles&accion=categorias&IDCategoria="+id;
+        ConsultarSucursales();
+        var data = "metodo=detalles&accion=cajas&IDCaja="+id+"&tipo=ConsultarCaja";
         $.ajax({
             url: 'index.php',
             type: 'POST',
@@ -139,13 +165,14 @@ jQuery(document).ready(function($) {
         })
         .done(function(res) {
             console.log(res);
-            $("#GuardarCategoria").attr('tipo', 'modificar');
-            $("#GuardarCategoria").attr('attrid', id);
-            $("#TituloModalCategoria").text("Modificar");
+            $("#GuardarCaja").attr('tipo', 'modificar');
+            $("#GuardarCaja").attr('attrid', id);
+            $("#TituloModalCajas").text("Modificar");
             var datos = JSON.parse($.trim(res));
-            $("#NombreCategoria").val(datos.Nombre);
-            $("#DescripcionCategoria").val(datos.Descripcion);
-            $('#ModalCategorias').modal('show');
+            $("#NombreCaja").val(datos.Nombre);
+            $("#SucursalesCaja").val(datos.FK_Sucursal);
+            $("#DetallesCaja").val(datos.Detalles);
+            $('#ModalCajas').modal('show');
         })
         .fail(function() {
             console.log("Error ajax");

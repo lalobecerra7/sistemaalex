@@ -50,7 +50,6 @@ function ajaxMyDatatable(data) {
 	}else{
 		paginaSele = parseInt($(".paginasMyDataTable.active[tabla="+data.table.attr('id')+"]").text());
 	}
-
 	Object.assign(data.params, { "buscar": $(".buscadorMyDataTable[tabla="+data.table.attr('id')+"]").val() });
 	Object.assign(data.params, { "limit": $(".numRowsMyDataTable[tabla="+data.table.attr('id')+"]").val() });
 	Object.assign(data.params, { "pagina": paginaSele });
@@ -66,7 +65,6 @@ function ajaxMyDatatable(data) {
 		}
 	})
 	.done(function(res) {
-		console.log(res);
 		try {
 			var resA = JSON.parse(res);
 		  	if(resA.data != undefined && resA.data.length > 0){
@@ -193,7 +191,7 @@ function ajaxMyDatatable(data) {
 }
 
 function crearDataTable() {
-	
+
 	$(".myDataTable").each(function(index, el) {
 		var padre = $(this).parent();
 		var tabla = padre.children('table.myDataTable');
@@ -211,7 +209,13 @@ function crearDataTable() {
 		
 		$(this).remove();
 
-		padre.append(`<div class="row row-cols-auto">
+		//Se agrego esta clase porque cada que hacian click en una vista se hacia un append con otro buscador y otro select
+		if (id == "TablaProductosVenta") {
+			$(".agregadoDataTable").remove(); //No quitar esta clase
+		}
+
+		padre.append(`
+			<div class="row row-cols-auto agregadoDataTable">
 				<div class='col' style="padding-top: 5px;">
 					<select class="form-select form-select-sm numRowsMyDataTable" tabla="`+id+`">
 					  	<option value="25">25</option>
@@ -221,7 +225,7 @@ function crearDataTable() {
 					</select>
 				</div>
 			</div>
-			<div class="row row-cols-auto justify-content-end" style="margin-top: -30px;">
+			<div class="row row-cols-auto justify-content-end agregadoDataTable" style="margin-top: -30px;">
 				<div class='col'>
 					<div class="input-group mb-3">
 					  	<span class="input-group-text" style="color: #909090;"><i class="fas fa-search"></i></span>
@@ -229,7 +233,7 @@ function crearDataTable() {
 					</div>
 				</div>
 			</div>
-			</div class="row">
+			</div class="row agregadoDataTable">
 				<div class='col-12 table-responsive'>
 					`+tablaHtml+`
 				</div>

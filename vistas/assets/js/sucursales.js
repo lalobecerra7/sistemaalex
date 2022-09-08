@@ -31,7 +31,7 @@ function v_sucursales() {
                 type: 'POST',
                 data: data,
                 beforeSend: function() {
-                    progressBoton(btn);
+                    $("#carga").show();
                 }
             })
             .done(function(res) {
@@ -60,7 +60,7 @@ function v_sucursales() {
                 console.log("Error ajax");
             })
             .always(function() {
-                unprogressBoton(btn);
+                $("#carga").hide();
             });          
         }
     });  

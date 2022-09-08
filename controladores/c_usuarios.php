@@ -219,17 +219,50 @@ class usuarios {
 	public function _detalles(){
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$IDUsuario =  $omodelo->link->real_escape_string($IDUsuario);
+		if ($tipo == "ConsultarUsuario") {
+			$IDUsuario =  $omodelo->link->real_escape_string($IDUsuario);
 
-		$query = "SELECT ID_Usuario, Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta FROM usuarios WHERE ID_Usuario = '$IDUsuario'";
-		$row = $omodelo->_consultar($query);
-		$numerofilas = $omodelo->numerofilas;
+			$query = "SELECT ID_Usuario, Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta FROM usuarios WHERE ID_Usuario = '$IDUsuario'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
 
-		if($row == 'si'){
-			echo "Error: ".mysqli_error($omodelo->link);
-		}else{
-			if($numerofilas > 0){
-				echo json_encode($row[0]);
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					echo json_encode($row[0]);
+				}
+			}
+		}else if($tipo == "CambiarContrasena"){
+			$ContraActual =  $omodelo->link->real_escape_string($ContraActual);
+			$ContraNueva =  $omodelo->link->real_escape_string($ContraNueva);
+			$opciones = ['cost' => 12];
+			$password = password_hash($omodelo->link->real_escape_string($ContraNueva), PASSWORD_BCRYPT, $opciones);
+
+			$query1 = "SELECT Contrasena FROM usuarios WHERE ID_Usuario = '".$_SESSION['user_admin']["ID_Usuario"]."'";
+			$row = $omodelo->_consultar($query1);
+			$numerofilas = $omodelo->numerofilas;
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					if (password_verify($ContraActual, $row[0]['Contrasena'])) {
+						$query = "UPDATE usuarios SET Contrasena = '$password' WHERE ID_Usuario = '".$_SESSION['user_admin']["ID_Usuario"]."'";
+						$error = $omodelo->_insertar($query);
+
+						if ($error == "si") {
+							echo "Error: ".mysqli_error($omodelo->link);
+						}else{
+							echo "Correcto";
+							$_SESSION['user_admin']["Contrasena"] = $password;
+							$omodelo->movimiento($query, $_SESSION['user_admin']["ID_Usuario"]);
+						}
+					}else{
+						echo "NoCoincide";
+					}
+				}else{
+					echo "NoCoincide";
+				}
 			}
 		}
 	}

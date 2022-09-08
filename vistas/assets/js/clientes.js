@@ -52,7 +52,7 @@ function v_clientes() {
                     processData: false,
                     contentType: false,
                     beforeSend: function() {
-                        progressBoton(btn);
+                        $("#carga").show();
                     }
                 })
                 .done(function(res) {
@@ -92,7 +92,7 @@ function v_clientes() {
                     console.log("Error ajax");
                 })
                 .always(function() {
-                    unprogressBoton(btn);
+                    $("#carga").hide();
                 }); 
             }           
         }

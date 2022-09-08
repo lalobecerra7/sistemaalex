@@ -36,5 +36,15 @@ class principal {
 			echo $PedidosPendientes;
 		}
 	}
+
+	public function _modificar(){
+		$omodelo = new m_modelo();
+		extract($_POST);
+		
+
+	}
+
+
+	
 }
 ?>

@@ -90,7 +90,7 @@ class categorias {
 			echo "Error: ".mysqli_error($omodelo->link);
 		}else{
 			echo "Correcto";
-			//$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
@@ -107,7 +107,7 @@ class categorias {
 			echo "Error: ".mysqli_error($omodelo->link);
 		}else{
 			echo "Correcto";
-			//$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
