@@ -343,7 +343,7 @@
               </div>
           </div>
 
-          <div id="noEncontrado">
+          <div id="noEncontrado" class="mensajeError">
               <div class="container-fluid" style="height: 100vh; overflow-y: auto;">
                   <div class="row align-items-center justify-content-center" style="height: 100vh;">
                       <div class="col-10 text-center" style="background-color: #E74C3C;">
@@ -353,11 +353,21 @@
               </div>
           </div>
 
-          <div id="noMayoreo">
+          <div id="noMayoreo" class="mensajeError">
               <div class="container-fluid" style="height: 100vh; overflow-y: auto;">
                   <div class="row align-items-center justify-content-center" style="height: 100vh;">
                       <div class="col-10 text-center" style="background-color: #ffc107;">
                           <h1 style="color: #FFF; padding: 30px 0px;">El producto NO tiene precio de mayoreo</h1>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div id="noNegativos" class="mensajeError">
+              <div class="container-fluid" style="height: 100vh; overflow-y: auto;">
+                  <div class="row align-items-center justify-content-center" style="height: 100vh;">
+                      <div class="col-10 text-center" style="background-color: #ffc107;">
+                          <h1 style="color: #FFF; padding: 30px 0px;">No puede haber valores menores a 0</h1>
                       </div>
                   </div>
               </div>

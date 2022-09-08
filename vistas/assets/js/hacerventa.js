@@ -1,5 +1,5 @@
 jQuery(document).ready(function($) {
-   // TablaProductos();
+   // TablaProductosVenta();
 
     ///////////////////////////////////////////////////////////////////////////
     ///// AUDIOS PARA CUANDO AGREGUEN O ELIMINEN UN PRODUCTO DE LA VENTA  /////
@@ -701,7 +701,7 @@ jQuery(document).ready(function($) {
 
     $(document).on('shown.bs.modal', '#MBuscarProd', function(){
         $(this).find(".buscadorMyDataTable[tabla='TablaProductosVenta']").focus();
-        TablaProductos();
+        TablaProductosVenta();
     });
 
     $(document).on('hidden.bs.modal', '#MBuscarProd', function(){
@@ -1005,20 +1005,30 @@ jQuery(document).ready(function($) {
             }else if($("#PorcentajeDescuento").val() > 0 && $("#PorcentajeDescuento").val() != ""){
                 descuento = Math.round((parseFloat($("#PorcentajeDescuento").val()) * (cantidad * precio)) / 100);
             }
-            var descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
+            var total = ((precio * (cantidad)) - descuento);
+            if (total < 0) {
+                $("#noNegativos").show();
+                setTimeout(function() {
+                    $("#noNegativos").hide();
+                }, 1000);
+                $("#ModalDescuentoProd").modal('hide');
+                audio2.play();
+            }else{
+                var descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
             
-            if(descuento > 0){
-                descuHtml = '<span class="dinero">'+descuento+'</span>(<span class="porcentaje">'+((descuento / (precio * (cantidad))) * 100)+'</span>)';
-            }
+                if(descuento > 0){
+                    descuHtml = '<span class="dinero">'+descuento+'</span>(<span class="porcentaje">'+((descuento / (precio * (cantidad))) * 100)+'</span>)';
+                }
 
-            $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(2)').children('span.dinero').html(precio);
-            $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(4)').html(descuHtml);
-            $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(5)').children('span.dinero').html((precio * (cantidad)) - descuento);
-            
-            audio1.play();
-            $("#ModalDescuentoProd").modal('hide');
-            totalCaja();
-            moneda();
+                $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(2)').children('span.dinero').html(precio);
+                $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(4)').html(descuHtml);
+                $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(5)').children('span.dinero').html((precio * (cantidad)) - descuento);
+                
+                audio1.play();
+                $("#ModalDescuentoProd").modal('hide');
+                totalCaja();
+                moneda();
+            }
         }   
     });
 
@@ -1380,10 +1390,18 @@ jQuery(document).ready(function($) {
                 var precio = parseFloat($("#tablaCaja").children('tbody').children('tr.activa').attr("precio").replace('$', '').replace(',', ''));
                 var descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
                 var precioMayoreo = parseFloat($("#tablaCaja").children('tbody').children('tr.activa').attr("preciomayoreo"));
+                var precioActual = parseFloat($("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(2)').children('span.dinero').text().replace('$', '').replace(',', ''));
                 var total = parseFloat((precio * (cantidad)) - descuento);
                 if (total < 0) {
-                    console.log("no se pueden negativos");
+                    $("#noNegativos").show();
+                
+                    setTimeout(function() {
+                        $("#noNegativos").hide();
+                    }, 1000);
+
+                    audio2.play();
                     $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(4)').html(descuHtml);
+                    $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(5)').children('span.dinero').html((precioActual * (cantidad)));
                 }else{
                     if ($("#tablaCaja").children('tbody').children('tr.activa').hasClass("mayoreo")) {
                         if(descuento > 0){
@@ -1561,7 +1579,7 @@ setInterval(function() {
     $("#fechaHoraCaja").html(display());
 }, 1000);
 
-function TablaProductos(){
+function TablaProductosVenta(){
     ajaxMyDatatable({
         "table": $("#TablaProductosVenta"), 
         "colums": [
