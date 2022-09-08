@@ -380,6 +380,18 @@ class productos {
 					}
 				}
 			}
+		}else if($tipo == 'eliminarPrecio'){
+			$IDPrecio =  $omodelo->link->real_escape_string($IDPrecio);
+
+			$query = "DELETE FROM detalles_productos WHERE ID_Detalle_Producto='$IDPrecio'";
+			$error = $omodelo->_insertar($query);
+				
+			if ($error == "si") {
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				$omodelo->movimiento($query, $_SESSION['user_admin']["ID_Usuario"]);
+				echo "Correcto";
+			}
 		}
 	}
 }

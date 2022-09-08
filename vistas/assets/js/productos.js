@@ -223,6 +223,64 @@ jQuery(document).ready(function($) {
         });
     });
 
+    $(document).on('click', '#EliminarDetalle', function() {
+        var boton = $(this);
+        var id = $(this).attr("attrid");
+        console.log(id);
+        Swal.fire({
+          title: '¿Estás a punto de eliminar el precio de esta sucursal?',
+          text: "Una vez eliminado ya no podrá ser recuperado",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'No, cancelar',
+          confirmButtonText: 'Si, eliminar'
+        }).then((result) => {
+          if (result.value) {
+            var data = "metodo=detalles&accion=productos&tipo=eliminarPrecio&IDPrecio="+id;
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data
+            })
+            .done(function(res) {
+                console.log(res);
+                if ($.trim(res) == "Correcto") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Precio eliminado correctamente'
+                    });
+                    var id = $('#PSucursal').attr('idProducto');
+                    var data = "metodo=detalles&accion=productos&tipo=detalle&IDProducto="+id;
+                        $.ajax({
+                            url: 'index.php',
+                            type: 'POST',
+                            data: data
+                        })
+                        .done(function(res) {
+                            console.log(res);
+                            var datos = JSON.parse($.trim(res));
+                            $('#tbodyPreciosSucursal').html(datos);
+                        })
+                        .fail(function() {
+                            console.log("Error ajax");
+                        });
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Error inesperado al eliminar el precio.'
+                    });
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            });  
+          }
+        });
+    });
+
     $(document).on('click', '#ModificarProducto', function() {
         var id = $(this).attr('attrid');
         var data = "metodo=detalles&accion=productos&tipo=modificarProducto&IDProducto="+id;
@@ -437,7 +495,8 @@ $(document).on('click', '#PSucursal', function () {
                             icon: 'success',
                             title: 'Precio modificado correctamente'
                         }); 
-                        var id = $(this).attr('idProducto');
+                        $("#PSucursal").attr("tipo", 'agregar');
+                        var id = $('#PSucursal').attr('idProducto');
                         var data = "metodo=detalles&accion=productos&tipo=detalle&IDProducto="+id;
                         $.ajax({
                             url: 'index.php',
