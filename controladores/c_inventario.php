@@ -114,14 +114,13 @@ class inventario {
 						'ID' => $row[$i]['ID_Producto'],
 						'Producto' => $foto."<b>".$row[$i]['Codigo']."</b>",
 						'Descripcion' => $row[$i]['Descripcion'],
-						'Cantidad' => $row[$i]['Cantidad'],
 						'Costo' => '<b class="dinero">$'.number_format($row[$i]['Costo'], 2).'</b>',
 						'TotalCosto' => $totalCosto,
 						'Precio' => '<b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b>',
 						'TotalPrecio' => $totalPrecio,
 						'Merma' => $Merma,
-						'Detalles' => $sucursales,
-						'Acciones' => '<button class="btn btn-warning" id="AgregarMerma" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-cart-arrow-down"></i></button>   <button class="btn btn-primary" id="Traslados" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-right-left"></i></button>' ,
+						'Detalles' => 'Existencia: <b>'.$row[$i]['Cantidad'].'</b><br>'.$sucursales,
+						'Acciones' => '<button class="btn btn-warning btn-sm mb-1" id="AgregarMerma" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-cart-arrow-down"></i></button>   <button class="btn btn-primary btn-sm mb-1" id="Traslados" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-right-left"></i></button>' ,
 					);
 					
 				}
@@ -360,6 +359,23 @@ class inventario {
 				}else{
 					//$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 					echo "Correcto";
+				}
+			}else if ($tipo == 'sucursales'){
+				$IDSucursal = $omodelo->link->real_escape_string($IDSucursal);
+				$opciones= '';
+				$query = "SELECT ID_Sucursal, Nombre FROM sucursales WHERE ID_Sucursal != '$IDSucursal'";
+				$row = $omodelo->_consultar($query);
+				$numerofilas = $omodelo->numerofilas;
+
+				if ($row == "si") {
+					echo "Error: " . mysqli_error($omodelo->link);
+				} else {
+					if ($numerofilas > 0) {
+						for ($i = 0; $i < $numerofilas; $i++) {
+							$opciones .= '<option value="' . $row[$i]['ID_Sucursal'] . '">' . $row[$i]['Nombre'] . '</option>';
+						}
+					}
+					echo $opciones;
 				}
 			}
 	}
