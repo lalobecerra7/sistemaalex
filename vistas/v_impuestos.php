@@ -14,54 +14,70 @@
 		                <label for="NombreImpuesto">Nombre del impuesto</label>
 		            </div>
 		        </div>
-				<div class="col-md-12 col-sm-12 mb-3">
-					<div class="form-group">
-						<label class="control-label">Clave CFDI</label>
-						<select name="ClaveImpuesto" id="ClaveImpuesto" class="form-control" >
-							<option selected disabled value=""> - Seleccione - </option>
-							<option value="001">(001) ISR</option>
-							<option value="002">(002) IVA</option>
-							<option value="003">(003) IEPS</option>
-						</select>
-					</div>
-				</div>
-				<div class="col-md-12 col-sm-12 mb-3">
-					<div class="form-group">
-						<label class="control-label">Clase</label>
-						<select name="ClaseImpuesto" id="ClaseImpuesto" class="form-control" >
-							<option selected disabled value=""> - Seleccione - </option>
-							<option value="Trasladado">Trasladado</option>
-							<option value="Retenido">Retenido</option>
-						</select>
-					</div>
-				</div>
-				<div class="col-md-12 col-sm-12 mb-3">
-					<div class="form-group">
-						<label class="control-label">Tipo de Factor</label>
-						<select name="TipoFactorImpuesto" id="TipoFactorImpuesto" class="form-control" >
-							<option selected value="" disabled> - Seleccione - </option>
-							<option value="Taza">Taza</option>
-							<option value="Cuota">Cuota</option>
-							<option value="Excento">Excento</option>
-						</select>
-					</div>
-				</div>
-				<div class="col-md-12 col-sm-12 mb-3">
-					<div class="form-group">
-						<label class="control-label">Tipo de Impuesto</label>
-						<select name="TipoImpuesto" id="TipoImpuesto" class="form-control" required>
-							<option value="1">Porcentaje</option>
-							<option value="2">Monto</option>
-						</select>
-					</div>
-				</div>
 		        <div class="col-md-12 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		               	<input type="text" class="form-control" id="CantidadImpuesto" name="CantidadImpuesto" placeholder="Ingresa la cantidad del impuesto">
-		                <label for="CantidadImpuesto">Cantidad</label>
-		            </div>
-		        </div>
-	       	</div>
+				    	<div class="form-floating">
+								<select name="ClaveImpuesto" id="ClaveImpuesto" class="form-control" >
+									<option selected disabled value=""> - Seleccione - </option>
+									<option value="001">(001) ISR</option>
+									<option value="002">(002) IVA</option>
+									<option value="003">(003) IEPS</option>
+								</select>
+								<label for="ClaseProducto">Clave CFDI</label>
+							</div>
+				    </div>
+				    <div class="col-md-12 col-sm-12 mb-3">
+				    	<div class="form-floating">
+								<select name="ClaseImpuesto" id="ClaseImpuesto" class="form-control" >
+									<option selected disabled value=""> - Seleccione - </option>
+									<option value="Trasladado">Trasladado</option>
+									<option value="Retenido">Retenido</option>
+								</select>
+								<label for="ClaseImpuesto">Clase</label>
+							</div>
+				    </div>	
+
+				    <div class="col-md-12 col-sm-12 mb-3">
+				    	<div class="form-floating">
+								<select name="TipoFactorImpuesto" id="TipoFactorImpuesto" class="form-control" >
+									<option selected disabled value=""> - Seleccione - </option>
+									<option value="Taza">Taza</option>
+									<option value="Cuota">Cuota</option>
+									<option value="Excento">Excento</option>
+								</select>
+								<label for="TipoFactorImpuesto">Tipo de Factor</label>
+							</div>
+				    </div>
+						<div class="col-md-12 col-sm-12 mb-3">
+				    	<div class="form-floating">
+				      	<input type="number" min="0" step="any" class="form-control" id="PorcentajeImpuesto" name="PorcentajeImpuesto" placeholder="Ingresa el porcentaje del impuesto">
+				        <label for="PorcentajeImpuesto">Porcentaje</label>
+				      </div>
+				    </div>
+				    <br>
+				    <b>El impuesto aplica para: </b>
+				    <div class="col-md-12 col-sm-12 mb-3 mt-3">
+				    	<div class="table-responsive">
+				    		<table class="table table-hover text-center">
+				    			<thead>
+				    				<tr>
+				    					<th>Ticket</th>
+				    					<th>Productos</th>
+				    				</tr>
+				    			</thead>
+				    			<tbody class="text-center">
+				    				<tr>
+				    					<td>
+												  <input class="form-check-input" type="checkbox" id="ImpuestoTicket" name="ImpuestoTicket">
+				    					</td>
+				    					<td>
+												  <input class="form-check-input" type="checkbox" id="ImpuestoProducto" name="ImpuestoProducto">
+				    					</td>
+				    				</tr>
+				    			</tbody>
+				    		</table>			
+				    	</div>
+				   	</div>
+	      	</div>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="submit" class="btn btn-primary" id="GuardarImpuesto" attrid="" tipo="insertar"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>

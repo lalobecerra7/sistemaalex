@@ -143,7 +143,7 @@ class productos {
 				}
 			}
 			echo "Correcto";
-			//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+			$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
 		}
 	}
 

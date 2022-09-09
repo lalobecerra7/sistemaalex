@@ -1,19 +1,37 @@
 function v_impuestos() {
-    /*
-    $('#FormAreas').validate({
+    
+    $('#FormImpuestos').validate({
         rules: {
-            NombreArea: {
+            NombreImpuesto: {
                 required: true
+            },
+            PorcentajeImpuesto: {
+                required: true,
+                min: 0
             },
         },
         messages: {
-            NombreArea: {
-                required: "El nombre del área es obligatorio"
+            NombreImpuesto: {
+                required: "El nombre del impuesto es requerido"
+            },
+            PorcentajeImpuesto: {
+                required: "El porcentaje del impuesto es requerido",
+                min: "Ingrese un valor mayor a 0"
             },
         },
         submitHandler: function(form) { 
-            var data = "metodo="+$("#GuardarArea").attr("tipo")+"&accion=areas&IDArea="+$("#GuardarArea").attr("attrid")+"&Nombre="+$("#NombreArea").val()+"&Descripcion="+$("#DescripcionArea").val()
-            var btn = $('#GuardarArea');
+            var ticket = 0;
+            if ($("#ImpuestoTicket").prop("checked") == true) {
+                ticket = 1;
+            }
+            var producto = 0;
+            if ($("#ImpuestoProducto").prop("checked") == true) {
+                producto = 1;
+            }
+
+
+            var data = "metodo="+$("#GuardarImpuesto").attr("tipo")+"&accion=impuestos&IDImpuesto="+$("#GuardarImpuesto").attr("attrid")+"&Porcentaje="+$("#PorcentajeImpuesto").val()+"&Nombre="+$("#NombreImpuesto").val()+"&Clave="+$("#ClaveImpuesto").val()+"&Clase="+$("#ClaseImpuesto").val()+"&Tipo="+$("#TipoFactorImpuesto").val()+"&Ticket="+ticket+"&Producto="+producto;
+            var btn = $('#GuardarImpuesto');
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
@@ -24,22 +42,22 @@ function v_impuestos() {
             })
             .done(function(res) {
                 if ($.trim(res) == "Correcto") {
-                    if ($("#GuardarArea").attr("tipo") == "modificar") {
-                        var tipoAlerta = "modificada";
+                    if ($("#GuardarImpuesto").attr("tipo") == "modificar") {
+                        var tipoAlerta = "modificado";
                     }else{
-                        var tipoAlerta = "guardada";
+                        var tipoAlerta = "guardado";
                     }
                     Swal.fire({
                         icon: 'success',
-                        title: 'Área '+tipoAlerta+' correctamente'
+                        title: 'Impuesto '+tipoAlerta+' correctamente'
                     });
-                    TablaAreas();
-                    $("#ModalAreas").modal("hide");
+                    TablaImpuestos();
+                    $("#ModalImpuestos").modal("hide");
                 }else{
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Error inesperado al '+$("#GuardarArea").attr("tipo")+' área.'
+                        text: 'Error inesperado al '+$("#GuardarImpuesto").attr("tipo")+' impuesto.'
                     });
                     console.log($.trim(res));
                 }
@@ -51,9 +69,9 @@ function v_impuestos() {
                 $("#carga").hide();
             });                    
         }
-    }); */ 
+    });  
 
-    TablaImpuestos();   
+    TablaImpuestos();
 }
 
 function TablaImpuestos(){
@@ -85,10 +103,10 @@ jQuery(document).ready(function($) {
         $("#GuardarImpuesto").attr('tipo', "insertar");
         $("#GuardarImpuesto").attr('attrid', "");
         $("#FormImpuestos").trigger('reset');
-        $("#TituloModalArea").text("Agregar nuevo");
+        $("#TituloModalImpuestos").text("Agregar nuevo");
     });
 
-    $(document).on('click', '#EliminarArea', function() {
+    /*$(document).on('click', '#EliminarArea', function() {
         var boton = $(this);
         var id = $(this).attr("attrid");
         var nombre = $(this).attr("nombre");
@@ -129,11 +147,11 @@ jQuery(document).ready(function($) {
             });  
           }
         });
-    });
+    });*/
 
-    $(document).on('click', '#ModificarArea', function() {
+    $(document).on('click', '#ModificarImpuesto', function() {
         var id = $(this).attr('attrid');
-        var data = "metodo=detalles&accion=areas&IDArea="+id;
+        var data = "metodo=detalles&accion=impuestos&IDImpuesto="+id+"&tipo=ConsultarImpuesto";
         $.ajax({
             url: 'index.php',
             type: 'POST',
@@ -141,17 +159,64 @@ jQuery(document).ready(function($) {
         })
         .done(function(res) {
             //console.log(res);
-            $("#GuardarArea").attr('tipo', 'modificar');
-            $("#GuardarArea").attr('attrid', id);
-            $("#TituloModalArea").text("Modificar");
+            $("#GuardarImpuesto").attr('tipo', 'modificar');
+            $("#GuardarImpuesto").attr('attrid', id);
+            $("#TituloModalImpuestos").text("Modificar");
             var datos = JSON.parse($.trim(res));
-            $("#NombreArea").val(datos.Nombre);
-            $("#DescripcionArea").val(datos.Descripcion);
-            $('#ModalAreas').modal('show');
+            $("#NombreImpuesto").val(datos.Nombre);
+            $("#ClaveImpuesto").val(datos.Clave_CFDI);
+            $("#ClaseImpuesto").val(datos.Clase);
+            $("#TipoFactorImpuesto").val(datos.Tipo_Factor);
+            $("#PorcentajeImpuesto").val(datos.Porcentaje);
+            if (datos.Ticket == 1) {
+                $("#ImpuestoTicket").prop("checked", true);
+            }
+            if (datos.Producto == 1) {
+                $("#ImpuestoProducto").prop("checked", true);
+            }
+            $("#ModalImpuestos").modal("show");
         })
         .fail(function() {
             console.log("Error ajax");
         });
+    });
+
+    $(document).on('change', '#ImpuestoPredeterminado', function() {
+        var id = $(this).attr('attrid');
+        var valor = 0;
+        if ($(this).prop("checked") == true) {
+            valor = 1;
+        }
+        var data = "metodo=detalles&accion=impuestos&tipo=ImpuestoPredeterminado&IDImpuesto="+id+"&Valor="+valor;
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            data: data,
+            beforeSend: function() {
+                $("#carga").show();
+            }
+        })
+        .done(function(res) {
+            if ($.trim(res) == "Correcto") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Impuesto modificado correctamente'
+                });
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Error inesperado al modificar impuesto.'
+                });
+                console.log($.trim(res));
+            }
+        })
+        .fail(function() {
+            console.log("Error ajax");
+        })
+        .always(function() {
+            $("#carga").hide();
+        }); 
     });
 
 });
