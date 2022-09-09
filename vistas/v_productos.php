@@ -280,7 +280,7 @@
   <div class="modal-dialog modal-xl modal-dialog-centered" style="z-index: 9999 !important;">
     <div class="modal-content">
       <div class="modal-header bg-inverse bd-inverse-darken">
-        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;"><span id="TituloModalPrecios"></span>Modificar precios por sucursal</h5>
+        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Modificar precios por sucursal de <span id="TituloModalPrecios">producto</span></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form id="FormPrecios">
@@ -329,7 +329,7 @@
 		            </div>
 		        </div>
 				<div class="col-md-3 col-sm-12 mb-3">
-					<button type='button' class="btn btn-success" id="PSucursal" attrid="" tipo="agregar"><i class="fas fa-plus-circle"></i> <strong>Agregar</strong></button>
+					<button type='submit' class="btn btn-success" id="PSucursal" attrid="" tipo="agregar"><i class="fas fa-plus-circle"></i> <strong id='NombreBoton'>Agregar</strong></button>
 		        </div>
 	       	</div>
 			   <div class="table-responsive">
