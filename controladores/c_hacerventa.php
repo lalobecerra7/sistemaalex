@@ -135,6 +135,15 @@ class hacerventa {
 						if ($row[$i]['NombreArea'] == "") {
 							$row[$i]['NombreArea'] = "No hay area registrada";
 						}
+
+						if ($row[$i]['Precio_Mayoreo'] == "" || $row[$i]['Precio_Mayoreo'] < 0) {
+							$row[$i]['Precio_Mayoreo'] = $row[$i]['Precio_Mayoreo_General'];
+						}
+
+						if ($row[$i]['Precio'] == "" || $row[$i]['Precio'] < 0) {
+							$row[$i]['Precio'] = $row[$i]['Precio_General'];
+						}
+
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Producto'],
 							'Descripcion' => $row[$i]['Descripcion'],

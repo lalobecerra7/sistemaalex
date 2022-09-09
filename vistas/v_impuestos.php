@@ -64,7 +64,7 @@
 	       	</div>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="submit" class="btn btn-primary" id="GuardarCategoria" attrid="" tipo="insertar"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+	        <button type="submit" class="btn btn-primary" id="GuardarImpuesto" attrid="" tipo="insertar"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
 					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
 	      </div>
   		</form>
@@ -80,6 +80,7 @@
 			<nav aria-label="breadcrumb">
 			  <ol class="breadcrumb">
 			    <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
+			    <li class="breadcrumb-item" aria-current="page">Productos a la venta</li>
 			    <li class="breadcrumb-item active" aria-current="page">Impuestos</li>
 			  </ol>
 			</nav>
@@ -96,7 +97,6 @@
 			<br>
 			<div class="row">
 				<div class="col-12 text-end">
-					<!-- <button type="button" class="btn btn-success" id="botonNuevaArea" onclick="$('#ModalAreas').appendTo('body').modal('show')"><i class="fa fa-file"></i> Nueva</button> -->
 					<button type="button" class="btn btn-success" id="botonNuevoImpuesto" data-bs-toggle="modal" data-bs-target="#ModalImpuestos"><i class="fa fa-file"></i> Nuevo</button>
 					<a href="javascript:void(0)" class="btn btn-light btn-reload cargarVista" carga="v_impuestos" titulo="Impuestos"><i class="fa fa-retweet"></i></a>
 				</div>
@@ -107,12 +107,11 @@
 		      <div class="col-12">
 		        <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaImpuestos" width="100%" style="font-size: 12px;">
 		          <thead>
-		            <th style="width: 15%;">Nombre</th>
-		            <th style="width: 15%;">Clave CFDI</th>
-		            <th style="width: 15%;">Clase</th>
-		            <th style="width: 15%;">Tipo de Factor</th>
-		            <th style="width: 15%;">Tipo de Impuesto</th>
-		            <th style="width: 15%;">Cantidad</th>
+		            <th style="width: 20%;">Nombre</th>
+		            <th style="width: 20%;">Porcentaje</th>
+		            <th style="width: 20%;">Detalles</th>
+		            <th style="width: 20%;">Tipo de Impuesto</th>
+		            <th style="width: 10%;">Predeterminado</th>
 		            <th style="width: 10%;" orden="No">Acciones</th>
 		          </thead>
 		          <tbody>                        

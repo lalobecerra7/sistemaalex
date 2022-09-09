@@ -433,12 +433,6 @@
               </a>
             </li>
             <!-- 
-            <li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-copy"></i>
-                <div data-i18n="Impuestos">Impuestos</div>
-              </a>
-            </li>
 
             <li class="menu-item cargarVista" carga="v_personal" titulo="Personal" id="cargarPersonal">
               <a href="javascript:void(0)"  class="menu-link">
@@ -473,6 +467,11 @@
                 <li class="menu-item cargarVista" carga="v_cajas" titulo="Cajas" id="cargarCajas">
                   <a href="javascript:void(0)"  class="menu-link">
                     <div data-i18n="Cajas">Cajas</div>
+                  </a>
+                </li>
+                <li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Impuestos">Impuestos</div>
                   </a>
                 </li>
                 <!-- <li class="menu-item cargarVista" carga="v_compras" titulo="Compras" id="cargarCompras">
