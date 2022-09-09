@@ -435,58 +435,64 @@ $(document).on('click', '#DetalleProductoSucursal', function () {
         cont+2;
 });
 
-$(document).on('click', '#PSucursal', function () {
-        console.log('Ya entro');
-        if($('#Sucursal').val() ==''){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Debes seleccionar una sucursal.'
-            });
-        }else if($('#CostoProductoE').val() ==''){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Debes ingresar el costo del producto.'
-            });
-        }else if($('#PrecioProductoE').val() ==''){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Debes ingresar el precio del producto.'
-            });
-        }else if($('#PrecioMayoreoE').val() ==''){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Debes insertar el precio de mayoreo del producto.'
-            });
-        }else if($('#MinimoE').val() ==''){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Debes ingresar el stock minimo del producto.'
-            });
-        }else if($('#MaximoE').val() ==''){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Debes ingresar el stock maximo del producto.'
-            });
-        }else{
-                var data = new FormData(document.getElementById('FormPrecios'));
-                data.append('metodo', 'detalles');
-                data.append('accion', 'productos');
-                data.append('tipo', $(this).attr('tipo'));
-                data.append('IdDetalle', $(this).attr('attrid'));
-                data.append('IdProducto', $(this).attr('idProducto'));
-    
+$(document).on('click', '#PSucursal', function() {
+    console.log('entro');
+    $('#FormPrecios').validate({
+        rules: {
+            Sucursal: {
+                required: true
+            },
+            CostoProductoE: {
+                required: true
+            },
+            PrecioProductoE: {
+                required: true
+            },
+            PrecioMayoreoE: {
+                required: true
+            },
+            MinimoE: {
+                required: true
+            },
+            MaximoE: {
+                required: true
+            },
+        },
+        messages: {
+            Sucursal: {
+                required: "La sucursal es requerida"
+            },
+            CostoProductoE: {
+                required: "El costo del producto es requerido"
+            },
+            PrecioProductoE: {
+                required: "El precio del producto es requerido"
+            },
+            PrecioMayoreoE: {
+                required: "El precio de mayoreo del producto es requerido"
+            },
+            MinimoE: {
+                required: "El stock minimo del producto es requerido"
+            },
+            MaximoE: {
+                required: "El stock maximo del producto es requerido"
+            },
+        },
+        submitHandler: function(form) {
+            console.log('entro2');
+            if($('#MaximoE').val()<=$('#MinimoE').val()){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'El stock máximo debe ser mayor al stock mínimo'
+                });
+            }else{
+                var data = "metodo=detalles&accion=productos&tipo="+$('#PSucursal').attr('tipo')+"&IdDetalle=" + $('#PSucursal').attr('attrid') + "&IdProducto=" + $('#PSucursal').attr('idProducto') + "&Sucursal=" + $("#Sucursal").val() + "&CostoProductoE=" + $("#CostoProductoE").val() + "&PrecioProductoE=" + $("#PrecioProductoE").val() + "&PrecioMayoreoE=" + $("#PrecioMayoreoE").val() + "&MinimoE=" + $("#MinimoE").val() + "&MaximoE=" + $("#MaximoE").val();
+                console.log(data);
                 $.ajax({
                     url: 'index.php',
                     type: 'POST',
                     data: data,
-                    processData: false,
-                    contentType: false
                 })
                 .done(function(res) {
                     if ($.trim(res) == "Correcto") {
@@ -496,6 +502,7 @@ $(document).on('click', '#PSucursal', function () {
                             title: 'Precio modificado correctamente'
                         }); 
                         $("#PSucursal").attr("tipo", 'agregar');
+                        $("#NombreBoton").text("Agregar");
                         var id = $('#PSucursal').attr('idProducto');
                         var data = "metodo=detalles&accion=productos&tipo=detalle&IDProducto="+id;
                         $.ajax({
@@ -535,8 +542,10 @@ $(document).on('click', '#PSucursal', function () {
                 })
                 .fail(function() {
                     console.log("Error ajax");
-                })                    
+                })
             }
+        }
+    });
 });
 
 $(document).on('click', '#EditarDetalle', function () {
@@ -559,6 +568,7 @@ $(document).on('click', '#EditarDetalle', function () {
         $("#PSucursal").attr("tipo", 'modificar');
         $("#PSucursal").attr("attrid", datos.ID_Detalle_Producto);
         $("#PSucursal").attr("idProducto", datos.FK_Producto);
+        $("#NombreBoton").text("Guardar cambios");
     })
     .fail(function() {
         console.log("Error ajax");
@@ -566,6 +576,7 @@ $(document).on('click', '#EditarDetalle', function () {
 });
 
 $(document).on('click', '#EditarPrecios', function () {
+    $('#TituloModalPrecios').text($(this).attr('descripcion'));
     var id = $(this).attr('attrid');
     var data = "metodo=detalles&accion=productos&tipo=detalle&IDProducto="+id;
     $.ajax({
@@ -579,6 +590,7 @@ $(document).on('click', '#EditarPrecios', function () {
         $('#tbodyPreciosSucursal').html(datos);
         $('#ModalPreciosSucursal').modal('show');
         $("#PSucursal").attr("idProducto", id);
+       
     })
     .fail(function() {
         console.log("Error ajax");

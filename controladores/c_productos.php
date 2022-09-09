@@ -62,7 +62,7 @@ class productos {
 						'Precio' => '<b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b>',
 						'PrecioMayoreo' => '<b class="dinero">$'.number_format($row[$i]['Precio_Mayoreo'], 2).'</b>',
 						'Detalles' => $row[$i]['Detalles']."<br> Minimo: <b>".$row[$i]['Minimo']."</b> <br> Maximo: <b>".$row[$i]['Maximo']."</b>",
-						'Acciones' => '<button class="btn btn-primary btn-sm mb-1" id="ModificarProducto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm mb-1" id="EliminarProducto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-trash"></i></button> <button class="btn btn-warning btn-sm mb-1" id="EditarPrecios" attrid="'.$row[$i]['ID_Producto'].'"><i class="fas fa-plus"></i></button>',
+						'Acciones' => '<button class="btn btn-primary btn-sm mb-1" id="ModificarProducto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm mb-1" id="EliminarProducto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-trash"></i></button> <button class="btn btn-warning btn-sm mb-1" id="EditarPrecios" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-plus"></i></button>',
 					);
 					
 				}
@@ -296,6 +296,9 @@ class productos {
 						<td><button class="btn btn-primary btn-sm mb-1" type= "button" id="EditarDetalle" attrid="'.$row[$i]['ID_Detalle_Producto'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm mb-1" type= "button" id="EliminarDetalle" attrid="'.$row[$i]['ID_Detalle_Producto'].'" ><i class="fas fa-trash"></i></button></td>
 						</tr>';
 					}
+					echo json_encode($tabla);
+				}else {
+					$tabla = 'No se encontraron resultados';
 					echo json_encode($tabla);
 				}
 			}
