@@ -208,6 +208,28 @@
               </div>
           </div>
 
+          <div class="modal fade" id="ModalImpuestosVenta" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Agregar impuestos</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form id="formAgregarImpuestos" autocomplete="off">
+                              <div class="row">
+                                
+                              </div> 
+                          </form>
+                      </div>
+                      <div class="modal-footer text-center">
+                          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                          <button type="button" class="btn btn-primary" id="bAgregarImpuesto">Agregar <i class="fa fa-check-circle"></i></button>
+                      </div>
+                  </div>    
+              </div>
+          </div>
+
           <!-- ///////////////////////////Buscar Producto/////////////////////////////////// -->  
           <div class="modal fade" id="MBuscarProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
               <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
@@ -343,7 +365,7 @@
               </div>
           </div>
 
-          <div id="noEncontrado">
+          <div id="noEncontrado" class="mensajeError">
               <div class="container-fluid" style="height: 100vh; overflow-y: auto;">
                   <div class="row align-items-center justify-content-center" style="height: 100vh;">
                       <div class="col-10 text-center" style="background-color: #E74C3C;">
@@ -353,11 +375,21 @@
               </div>
           </div>
 
-          <div id="noMayoreo">
+          <div id="noMayoreo" class="mensajeError">
               <div class="container-fluid" style="height: 100vh; overflow-y: auto;">
                   <div class="row align-items-center justify-content-center" style="height: 100vh;">
                       <div class="col-10 text-center" style="background-color: #ffc107;">
                           <h1 style="color: #FFF; padding: 30px 0px;">El producto NO tiene precio de mayoreo</h1>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div id="noNegativos" class="mensajeError">
+              <div class="container-fluid" style="height: 100vh; overflow-y: auto;">
+                  <div class="row align-items-center justify-content-center" style="height: 100vh;">
+                      <div class="col-10 text-center" style="background-color: #ffc107;">
+                          <h1 style="color: #FFF; padding: 30px 0px;">No puede haber valores menores a 0</h1>
                       </div>
                   </div>
               </div>
@@ -423,12 +455,6 @@
               </a>
             </li>
             <!-- 
-            <li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-copy"></i>
-                <div data-i18n="Impuestos">Impuestos</div>
-              </a>
-            </li>
 
             <li class="menu-item cargarVista" carga="v_personal" titulo="Personal" id="cargarPersonal">
               <a href="javascript:void(0)"  class="menu-link">
@@ -463,6 +489,11 @@
                 <li class="menu-item cargarVista" carga="v_cajas" titulo="Cajas" id="cargarCajas">
                   <a href="javascript:void(0)"  class="menu-link">
                     <div data-i18n="Cajas">Cajas</div>
+                  </a>
+                </li>
+                <li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Impuestos">Impuestos</div>
                   </a>
                 </li>
                 <!-- <li class="menu-item cargarVista" carga="v_compras" titulo="Compras" id="cargarCompras">
@@ -510,7 +541,7 @@
             </div>
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <div id="DivPedidosPendientes">
-                <a href="javascript:void(0)" id="cargarVenta" ><i class="fas fa-shopping-cart"></i></a>
+                <a href="javascript:void(0)" style="font-size: 25x" id="cargarVenta" ><i class="fas fa-shopping-cart"></i></a>
               </div>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">

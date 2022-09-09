@@ -95,7 +95,7 @@ class personal {
 						'Empleado' => $foto.$row[$i]['Nombre'],
 						'Direccion' => $direccion,
 						'Contacto' => $contacto,
-						'Acciones' => '<button class="btn btn-primary btn-sm" id="ModificarEmpleado" attrid="'.$row[$i]['ID_Empleado'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" id="EliminarEmpleado" attrid="'.$row[$i]['ID_Empleado'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>',
+						'Acciones' => '<button class="btn btn-primary btn-sm mb-2" id="ModificarEmpleado" attrid="'.$row[$i]['ID_Empleado'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" id="EliminarEmpleado" attrid="'.$row[$i]['ID_Empleado'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>',
 						
 					);
 					

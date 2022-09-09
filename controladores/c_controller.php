@@ -14,6 +14,8 @@ include "controladores/c_productos.php";
 include "controladores/c_inventario.php";
 include "controladores/c_cajas.php";
 include "controladores/c_perfil.php";
+include "controladores/c_impuestos.php";
+
 class controller {
 
 

@@ -59,7 +59,7 @@ class cajas {
 						'Detalles' => $detalles,
 						'Estatus' => $estatus,
 						'Usuario' => $usuario,
-						'Acciones' => '<button class="btn btn-primary btn-sm" id="ModificarCaja" attrid="'.$row[$i]['ID_Caja'].'" nombre="'.$row[$i]['Caja'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" id="EliminarCaja" attrid="'.$row[$i]['ID_Caja'].'" nombre="'.$row[$i]['Caja'].'"><i class="fas fa-trash"></i></button>',
+						'Acciones' => '<button class="btn btn-primary btn-sm mb-2" id="ModificarCaja" attrid="'.$row[$i]['ID_Caja'].'" nombre="'.$row[$i]['Caja'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" id="EliminarCaja" attrid="'.$row[$i]['ID_Caja'].'" nombre="'.$row[$i]['Caja'].'"><i class="fas fa-trash"></i></button>',
 					);
 				}
 				$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	

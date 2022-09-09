@@ -1,5 +1,5 @@
 jQuery(document).ready(function($) {
-   // TablaProductos();
+   // TablaProductosVenta();
 
     ///////////////////////////////////////////////////////////////////////////
     ///// AUDIOS PARA CUANDO AGREGUEN O ELIMINEN UN PRODUCTO DE LA VENTA  /////
@@ -161,6 +161,7 @@ jQuery(document).ready(function($) {
             $("#ModalDescuentoProd").modal('hide');
             $("#ModalEntradaDinero").modal('hide');
             $("#ModalSalidaDinero").modal('hide');
+            $("#ModalImpuestosVenta").modal('hide');
             //ir agregando las demas modales
         }
     });
@@ -197,7 +198,6 @@ jQuery(document).ready(function($) {
                     var descuento = parseFloat($("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(4)').children('span.dinero').text().replace('$', '').replace(',', ''));
                     var precio = parseFloat($("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(2)').children('span.dinero').text().replace('$', '').replace(',', ''));
                     var descuHtml = '';
-
                     if(evt.key === "+"){
                         descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
                         if(descuento > 0){
@@ -233,16 +233,26 @@ jQuery(document).ready(function($) {
                                 }
                             });
                         }else{
-                            descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
-                            if(descuento > 0){
-                                descuHtml = '<span class="dinero">'+descuento+'</span>(<span class="porcentaje">'+((descuento / (precio * (cantidad - 1))) * 100)+'</span>)';
-                            }
-
-                            $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(3)').children('span.cantidad').html(cantidad - 1);
-                            $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(4)').html(descuHtml);
-                            $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(5)').children('span.dinero').html((precio * (cantidad - 1)) - descuento);
+                            var total = ((precio * (cantidad - 1)) - descuento);
                             
-                            totalCaja();
+                            if (total < 0) {
+                                $("#noNegativos").show();
+                                setTimeout(function() {
+                                    $("#noNegativos").hide();
+                                }, 1000);
+                                audio2.play();
+                            }else{
+                                 descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
+                                if(descuento > 0){
+                                    descuHtml = '<span class="dinero">'+descuento+'</span>(<span class="porcentaje">'+((descuento / (precio * (cantidad - 1))) * 100)+'</span>)';
+                                }
+
+                                $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(3)').children('span.cantidad').html(cantidad - 1);
+                                $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(4)').html(descuHtml);
+                                $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(5)').children('span.dinero').html((precio * (cantidad - 1)) - descuento);
+                                
+                                totalCaja();
+                            }
                         }
                     }
                 }
@@ -260,7 +270,6 @@ jQuery(document).ready(function($) {
             }else if(evt.key === "F10"){
                 $("#MBuscarProd").modal('show');
             }else if(event.altKey && evt.key === "q"){
-                console.log("entro");
                 $("#bPrecioMayoreo").trigger("click");
             }else if(evt.key === "F7"){
                 $("#bEntradaDinero").trigger("click");
@@ -348,6 +357,11 @@ jQuery(document).ready(function($) {
                     precio = datos.Precio;
                 }
 
+                var precioMayoreo = datos.Precio_Mayoreo_General;
+                if(datos.Precio_Mayoreo != null){
+                    precioMayoreo = datos.Precio_Mayoreo;
+                }
+              
                 var existencia = 0;
                 if(datos.Existencia != null){
                     existencia = datos.Existencia;
@@ -357,6 +371,8 @@ jQuery(document).ready(function($) {
                     $("#datosGranel").attr('attrID', datos.ID_Producto);
                     $("#datosGranel").attr('attrCodigo', datos.Codigo);
                     $("#datosGranel").attr('attrExistencia', existencia);
+                    $("#datosGranel").attr('precioMayoreo', precioMayoreo);
+                    $("#datosGranel").attr('precio', precio);
                     $("#datosGranel").html('<h4 class="text-center">'+datos.Descripcion+'</h4><h5 class="text-center"><b>Precio Unitario:</b> <span class="dinero">'+precio+'</span></h5>');
                     $("#importeGranel").val(precio);
                     $("#MGranel").modal('show');
@@ -393,7 +409,7 @@ jQuery(document).ready(function($) {
                             <td><span class="cantidad">`+existencia+`</span></td>
                         `);
                     }else{
-                        $("#tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`"  precioMayoreo="`+datos.Precio_Mayoreo+`" class="activa">
+                        $("#tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`"  precioMayoreo="`+precioMayoreo+`" class="activa normal">
                             <td>`+datos.Codigo+`</td>
                             <td>`+datos.Descripcion+`</td>
                             <td><span class="dinero">`+precio+`</span></td>
@@ -456,10 +472,17 @@ jQuery(document).ready(function($) {
                     existencia = datos.Existencia;
                 }
 
+                var precioMayoreo = datos.Precio_Mayoreo_General;
+                if(datos.Precio_Mayoreo != null){
+                    precioMayoreo = datos.Precio_Mayoreo;
+                }
+
                 if(datos.Clase == "Granel"){
                     $("#datosGranel").attr('attrID', datos.ID_Producto);
                     $("#datosGranel").attr('attrCodigo', datos.Codigo);
                     $("#datosGranel").attr('attrExistencia', existencia);
+                    $("#datosGranel").attr('precioMayoreo', precioMayoreo);
+                    $("#datosGranel").attr('precio', precio);
                     $("#datosGranel").html('<h4 class="text-center">'+datos.Descripcion+'</h4><h5 class="text-center"><b>Precio Unitario:</b> <span class="dinero">'+precio+'</span></h5>');
                     $("#importeGranel").val(precio);
                     $("#MGranel").modal('show');
@@ -489,7 +512,7 @@ jQuery(document).ready(function($) {
                             <td><span class="cantidad">`+existencia+`</span></td>
                         `);
                     }else{
-                        $("#tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+datos.Precio_Mayoreo+`" class="activa">
+                        $("#tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+precioMayoreo+`" class="activa normal">
                             <td>`+datos.Codigo+`</td>
                             <td>`+datos.Descripcion+`</td>
                             <td><span class="dinero">`+precio+`</span></td>
@@ -553,10 +576,17 @@ jQuery(document).ready(function($) {
                     existencia = datos.Existencia;
                 }
 
+                var precioMayoreo = datos.Precio_Mayoreo_General;
+                if(datos.Precio_Mayoreo != null){
+                    precioMayoreo = datos.Precio_Mayoreo;
+                }
+
                 if(datos.Clase == "Granel"){
                     $("#datosGranel").attr('attrID', datos.ID_Producto);
                     $("#datosGranel").attr('attrCodigo', datos.Codigo);
                     $("#datosGranel").attr('attrExistencia', existencia);
+                    $("#datosGranel").attr('precioMayoreo', precioMayoreo);
+                    $("#datosGranel").attr('precio', precio);
                     $("#datosGranel").html('<h4 class="text-center">'+datos.Descripcion+'</h4><h5 class="text-center"><b>Precio Unitario:</b> <span class="dinero">'+precio+'</span></h5>');
                     $("#importeGranel").val(precio);
                     $("#MGranel").modal('show');
@@ -593,7 +623,7 @@ jQuery(document).ready(function($) {
                             <td><span class="cantidad">`+existencia+`</span></td>
                         `);
                     }else{
-                        $("#tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+datos.Precio_Mayoreo+`" class="activa">
+                        $("#tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+precioMayoreo+`" class="activa normal">
                             <td>`+datos.Codigo+`</td>
                             <td>`+datos.Descripcion+`</td>
                             <td><span class="dinero">`+precio+`</span></td>
@@ -676,7 +706,7 @@ jQuery(document).ready(function($) {
             //$(".swal2-container").is(':visible') == false && 
             if($("#MBuscarProd").is(':visible')){
                $(".buscadorMyDataTable[tabla='TablaProductosVenta']").focus();
-            }else if($("#MIntVarios").is(':visible') == false && $("#MGranel").is(':visible') == false && $("#MProdComun").is(':visible') == false && $("#MBuscarProd").is(':visible') == false && $("#ModalDescuentoProd").is(':visible') == false && $("#ModalEntradaDinero").is(':visible') == false  && $("#ModalSalidaDinero").is(':visible') == false){
+            }else if($("#MIntVarios").is(':visible') == false && $("#MGranel").is(':visible') == false && $("#MProdComun").is(':visible') == false && $("#MBuscarProd").is(':visible') == false && $("#ModalDescuentoProd").is(':visible') == false && $("#ModalEntradaDinero").is(':visible') == false  && $("#ModalSalidaDinero").is(':visible') == false && $("#ModalImpuestosVenta").is(':visible') == false){
                 $("#barCodeV").focus();
             }
         }
@@ -701,7 +731,7 @@ jQuery(document).ready(function($) {
 
     $(document).on('shown.bs.modal', '#MBuscarProd', function(){
         $(this).find(".buscadorMyDataTable[tabla='TablaProductosVenta']").focus();
-        TablaProductos();
+        TablaProductosVenta();
     });
 
     $(document).on('hidden.bs.modal', '#MBuscarProd', function(){
@@ -768,7 +798,7 @@ jQuery(document).ready(function($) {
                     <td><span class="cantidad">`+$("#datosGranel").attr('attrExistencia')+`</span></td>
                 `);
             }else{
-                $("#tablaCaja").children('tbody').prepend(`<tr attrID="`+$("#datosGranel").attr('attrID')+`" class="activa">
+                $("#tablaCaja").children('tbody').prepend(`<tr attrID="`+$("#datosGranel").attr('attrID')+`"  precio="`+precio+`" precioMayoreo="`+$("#datosGranel").attr('precioMayoreo')+`" class="activa normal">
                     <td>`+$("#datosGranel").attr('attrCodigo')+`</td>
                     <td>`+$("#datosGranel").children('h4').text()+`</td>
                     <td><span class="dinero">`+precio+`</span></td>
@@ -873,6 +903,11 @@ jQuery(document).ready(function($) {
                             precio = datos.Precio;
                         }
 
+                        var preciomayoreo = datos.Precio_Mayoreo_General;
+                        if(datos.Precio_Mayoreo != null){
+                            preciomayoreo = datos.Precio_Mayoreo;
+                        }
+
                         if($("#tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').length > 0){
                             var cantidad = parseFloat($("#tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').children('td:eq(3)').children('span.cantidad').text().replace(',', ''));
                             var descuento = parseFloat($("#tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').children('td:eq(4)').children('span.dinero').text().replace('$', '').replace(',', ''));
@@ -884,6 +919,14 @@ jQuery(document).ready(function($) {
 
                             $("#tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').addClass('activa');
 
+                            if ($("#tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').hasClass("mayoreo")) {
+                                precio = parseFloat($("#tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').attr("preciomayoreo"));
+                            }else{
+                                precio = parseFloat($("#tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').attr("precio").replace('$', '').replace(',', ''));   
+                            }
+
+
+
                             $("#tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').html(`
                                 <td>`+datos.Codigo+`</td>
                                 <td>`+datos.Descripcion+`</td>
@@ -894,7 +937,7 @@ jQuery(document).ready(function($) {
                                 <td><span class="cantidad">`+existencia+`</span></td>
                             `);
                         }else{
-                            $("#tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+datos.Precio_Mayoreo+`" class="activa">
+                            $("#tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+preciomayoreo+`" class="activa normal">
                                 <td>`+datos.Codigo+`</td>
                                 <td>`+datos.Descripcion+`</td>
                                 <td><span class="dinero">`+precio+`</span></td>
@@ -1005,20 +1048,30 @@ jQuery(document).ready(function($) {
             }else if($("#PorcentajeDescuento").val() > 0 && $("#PorcentajeDescuento").val() != ""){
                 descuento = Math.round((parseFloat($("#PorcentajeDescuento").val()) * (cantidad * precio)) / 100);
             }
-            var descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
+            var total = ((precio * (cantidad)) - descuento);
+            if (total < 0) {
+                $("#noNegativos").show();
+                setTimeout(function() {
+                    $("#noNegativos").hide();
+                }, 1000);
+                $("#ModalDescuentoProd").modal('hide');
+                audio2.play();
+            }else{
+                var descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
             
-            if(descuento > 0){
-                descuHtml = '<span class="dinero">'+descuento+'</span>(<span class="porcentaje">'+((descuento / (precio * (cantidad))) * 100)+'</span>)';
-            }
+                if(descuento > 0){
+                    descuHtml = '<span class="dinero">'+descuento+'</span>(<span class="porcentaje">'+((descuento / (precio * (cantidad))) * 100)+'</span>)';
+                }
 
-            $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(2)').children('span.dinero').html(precio);
-            $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(4)').html(descuHtml);
-            $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(5)').children('span.dinero').html((precio * (cantidad)) - descuento);
-            
-            audio1.play();
-            $("#ModalDescuentoProd").modal('hide');
-            totalCaja();
-            moneda();
+                $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(2)').children('span.dinero').html(precio);
+                $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(4)').html(descuHtml);
+                $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(5)').children('span.dinero').html((precio * (cantidad)) - descuento);
+                
+                audio1.play();
+                $("#ModalDescuentoProd").modal('hide');
+                totalCaja();
+                moneda();
+            }
         }   
     });
 
@@ -1367,7 +1420,7 @@ jQuery(document).ready(function($) {
 
     $(document).on('click', '#bPrecioMayoreo', function() {
         if ($("#tablaCaja tbody tr").length > 0) {
-            if ($("#tablaCaja").children('tbody').children('tr.activa').attr("preciomayoreo") == "0" || $("#tablaCaja").children('tbody').children('tr.activa').attr("preciomayoreo") == "" || $("#tablaCaja").children('tbody').children('tr.activa').attr("preciomayoreo") < 0) {
+            if (isNaN($("#tablaCaja").children('tbody').children('tr.activa').attr("preciomayoreo")) || $("#tablaCaja").children('tbody').children('tr.activa').attr("preciomayoreo") <= 0) {
                 $("#noMayoreo").show();
                     
                 setTimeout(function() {
@@ -1380,10 +1433,23 @@ jQuery(document).ready(function($) {
                 var precio = parseFloat($("#tablaCaja").children('tbody').children('tr.activa').attr("precio").replace('$', '').replace(',', ''));
                 var descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
                 var precioMayoreo = parseFloat($("#tablaCaja").children('tbody').children('tr.activa').attr("preciomayoreo"));
-                var total = parseFloat((precio * (cantidad)) - descuento);
+                var precioActual = parseFloat($("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(2)').children('span.dinero').text().replace('$', '').replace(',', ''));
+                if ($("#tablaCaja").children('tbody').children('tr.activa').hasClass("mayoreo")) {
+                    var total = parseFloat((precio * (cantidad)) - descuento);
+                }else{
+                    var total = parseFloat((precioMayoreo * (cantidad)) - descuento);
+                }
+                
                 if (total < 0) {
-                    console.log("no se pueden negativos");
+                    $("#noNegativos").show();
+                
+                    setTimeout(function() {
+                        $("#noNegativos").hide();
+                    }, 1000);
+
+                    audio2.play();
                     $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(4)').html(descuHtml);
+                    $("#tablaCaja").children('tbody').children('tr.activa').children('td:eq(5)').children('span.dinero').html((precioActual * (cantidad)));
                 }else{
                     if ($("#tablaCaja").children('tbody').children('tr.activa').hasClass("mayoreo")) {
                         if(descuento > 0){
@@ -1412,6 +1478,24 @@ jQuery(document).ready(function($) {
         }else{
             $("#barCodeV").focus();
         }   
+    });
+
+    $(document).on('click', '#bImpuestoProd', function() {
+        if ($("#tablaCaja tbody tr").length > 0) {
+            $("#ModalImpuestosVenta").modal('show');
+        }else{
+            $("#barCodeV").focus();
+        }  
+    });
+
+    $(document).on('shown.bs.modal', '#ModalImpuestosVenta', function(){
+        $(this).find('#CantidadDescuento').focus();
+        $("#CantidadDescuento").val("");
+        $("#PorcentajeDescuento").val("");
+    });
+
+    $(document).on('hidden.bs.modal', '#ModalImpuestosVenta', function(){
+        $("#barCodeV").focus();
     });
 
 });
@@ -1561,7 +1645,7 @@ setInterval(function() {
     $("#fechaHoraCaja").html(display());
 }, 1000);
 
-function TablaProductos(){
+function TablaProductosVenta(){
     ajaxMyDatatable({
         "table": $("#TablaProductosVenta"), 
         "colums": [

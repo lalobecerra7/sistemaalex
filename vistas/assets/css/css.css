@@ -213,16 +213,7 @@ html, body{
     color:  black;
 }
 
-#noEncontrado {
-    position: fixed;
-    min-width: 100%;
-    min-height: 100vh;
-    z-index: 101;
-    background: rgba(255, 255, 255, 0.3);
-    display: none;
-}
-
-#noMayoreo {
+.mensajeError {
     position: fixed;
     min-width: 100%;
     min-height: 100vh;
