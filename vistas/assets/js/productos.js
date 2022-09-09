@@ -108,6 +108,7 @@ function v_productos() {
                 })
                 .done(function(res) {
                     if ($.trim(res) == "Correcto") {
+                        console.log($.trim(res));
                         if ($("#GuardarProducto").attr("tipo") == "modificar") {
                             var tipoAlerta = "modificada";
                         }else{
@@ -120,6 +121,12 @@ function v_productos() {
                         TablaProductos(); 
                         $("#ModalProductos").modal("hide");
                         detallesProducto = [];
+                    } else if ($.trim(res) == "Error: Duplicate entry 'Sed irure odit eius' for key 'Codigo'"){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'El código del producto ya fue registrado, intenta con otro.'
+                        });
                     }else{
                         Swal.fire({
                             icon: 'error',

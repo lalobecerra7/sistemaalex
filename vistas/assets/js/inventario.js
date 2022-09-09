@@ -89,6 +89,15 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('click', '#AgregarMerma', function() {
+        var now = new Date();
+
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+        var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+       
+        $('#FechaMerma').val(today);
+        $('#NombreProductoAM').text($(this).attr("nombre"));
         $("#GuardarMerma").attr('attrid',$(this).attr('attrid'));
         $("#ModalMerma").modal("show");
     });
@@ -155,6 +164,15 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('click', '#Traslados', function() {
+        var now = new Date();
+
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+        var today = now.getFullYear()+"-"+(month)+"-"+(day);
+       
+        $('#FechaTraslado').val(today);
+        $('#NombreProductoT').text($(this).attr("nombre"));
         $("#ModalTraslados").modal("show");
         $("#GuardarTraslado").attr('attrid',$(this).attr('attrid'));
     });

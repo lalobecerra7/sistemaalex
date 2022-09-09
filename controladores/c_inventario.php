@@ -89,8 +89,8 @@ class inventario {
 							if ($rowTotales[0]["TotalCosto"] == "") {
 								$rowTotales[0]["TotalCosto"] = 0;
 							}
-							$totalPrecio = '<b class="dinero">$'.number_format($rowTotales[0]["TotalPrecio"], 2);
-							$totalCosto = '<b class="dinero">$'.number_format($rowTotales[0]["TotalCosto"], 2);
+							$totalPrecio = '<b class="dinero">$'.number_format($rowTotales[0]["TotalPrecio"], 2).'</b>';
+							$totalCosto = '<b class="dinero">$'.number_format($rowTotales[0]["TotalCosto"], 2).'</b>';
 						}
 					}
 
@@ -109,15 +109,53 @@ class inventario {
 						 }
 					}
 					
+					$precios="";
+					$costos="";
+					$queryPrecios="SELECT sucursales.Nombre AS Sucursal, Precio, Costo FROM detalles_productos INNER JOIN sucursales ON FK_Sucursal = sucursales.ID_Sucursal WHERE FK_Producto ='".$row[$i]["ID_Producto"]."'";
+					$rowPrecios = $omodelo->_consultar($queryPrecios);
+					$numerofilasPrecios = $omodelo->numerofilas; 
+					
+					if ($rowPrecios == "si") {
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasPrecios > 0){
+							for($j=0; $j<$numerofilasPrecios; $j++){
+								$precios.= $rowPrecios[$j]["Sucursal"].": <b>$".number_format($rowPrecios[$j]["Precio"],2)."</b><br>";
+								$costos.= $rowPrecios[$j]["Sucursal"].": <b>$".number_format($rowPrecios[$j]["Costo"],2)."</b><br>";
+							}	
+						}
+					}
+
+					$preciosTotales="";
+					$costosTotales="";
+					$queryPreciosTotales="SELECT sucursales.Nombre AS Sucursal, SUM(inventario.Cantidad * detalles_productos.Precio) AS TotalPrecioSucursal, SUM(inventario.Cantidad * detalles_productos.Costo) AS TotalCostoSucursal FROM detalles_productos INNER JOIN inventario ON inventario.FK_Producto = '".$row[$i]["ID_Producto"]."' INNER JOIN sucursales ON detalles_productos.FK_Sucursal = sucursales.ID_Sucursal WHERE detalles_productos.FK_Producto = '".$row[$i]["ID_Producto"]."'";
+					$rowPreciosTotales = $omodelo->_consultar($queryPreciosTotales);
+					$numerofilasPreciosTotales = $omodelo->numerofilas; 
+					
+					if ($rowPreciosTotales == "si") {
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasPreciosTotales > 0){
+							for($j=0; $j<$numerofilasPreciosTotales; $j++){
+								if($rowPreciosTotales[$j]["Sucursal"] == '' || $rowPreciosTotales[$j]["Sucursal"] == null){
+									$preciosTotales=" ";
+									$costosTotales=" ";
+								}else {
+									$preciosTotales.= $rowPreciosTotales[$j]["Sucursal"].": <b>$".number_format($rowPreciosTotales[$j]["TotalPrecioSucursal"],2)."</b><br>";
+									$costosTotales.= $rowPreciosTotales[$j]["Sucursal"].": <b>$".number_format($rowPreciosTotales[$j]["TotalCostoSucursal"],2)."</b><br>";
+								}
+							}	
+						}
+					}
 
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Producto'],
 						'Producto' => $foto."<b>".$row[$i]['Codigo']."</b>",
 						'Descripcion' => $row[$i]['Descripcion'],
-						'Costo' => '<b class="dinero">$'.number_format($row[$i]['Costo'], 2).'</b>',
-						'TotalCosto' => $totalCosto,
-						'Precio' => '<b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b>',
-						'TotalPrecio' => $totalPrecio,
+						'Costo' => 'General: <b class="dinero">$'.number_format($row[$i]['Costo'], 2).'</b><br>'.$costos,
+						'TotalCosto' => 'General: '.$totalCosto.'<br>'.$costosTotales,
+						'Precio' => 'General: <b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b><br>'.$precios,
+						'TotalPrecio' => 'General: '.$totalPrecio.'<br>'.$preciosTotales,
 						'Merma' => $Merma,
 						'Detalles' => 'Existencia: <b>'.$row[$i]['Cantidad'].'</b><br>'.$sucursales,
 						'Acciones' => '<button class="btn btn-warning btn-sm mb-1" id="AgregarMerma" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-cart-arrow-down"></i></button>   <button class="btn btn-primary btn-sm mb-1" id="Traslados" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-right-left"></i></button>' ,
@@ -144,7 +182,8 @@ class inventario {
 			$FechaMerma = $omodelo->link->real_escape_string($FechaMerma);
 			$Usuario = $_SESSION['user_admin']['ID_Usuario'];
 			$existencia= '';
-			$query2 = "SELECT Cantidad FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$Sucursal'";
+			$Costo = '';
+			$query2 = "SELECT Cantidad, (SELECT Costo FROM detalles_Productos WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$Sucursal') AS Costo, productos.Costo AS CostoGral FROM inventario INNER JOIN productos ON ID_Producto = '$IDProducto' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$Sucursal'";
 			$row = $omodelo->_consultar($query2);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -157,9 +196,14 @@ class inventario {
 				if($existencia < $Cantidad){
 					echo "ErrorCantidad";
 				}else{
+					if($row[0]["Costo"] != '' || $row[0]["Costo"] != null){
+						$Costo = $row[0]["Costo"];
+					}else {
+						$Costo = $row[0]["CostoGral"];
+					}
 					$existenciaM = ($existencia-$Cantidad);
 				
-					$query = "INSERT INTO merma SET FK_Sucursal = '$Sucursal', FK_Producto = '$IDProducto', Cantidad = '$Cantidad', Motivo = '$Motivo', Fecha_Registro = '$fecha', Fecha_Merma = '$FechaMerma', FK_Usuario = '$Usuario'";
+					$query = "INSERT INTO merma SET FK_Sucursal = '$Sucursal', FK_Producto = '$IDProducto', Costo = '$Costo', Cantidad = '$Cantidad', Motivo = '$Motivo', Fecha_Registro = '$fecha', Fecha_Merma = '$FechaMerma', FK_Usuario = '$Usuario'";
 					$error = $omodelo->_insertar($query);
 			
 					if ($error == "si") {
@@ -282,10 +326,10 @@ class inventario {
 					}
 				}
 		
-				$query = "SELECT ID_Merma, merma.FK_Producto as 'ID_Producto', sucursales.Nombre as 'Sucursal', merma.Cantidad, (merma.Cantidad*productos.Costo) as 'Costo', 
-				DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r') AS Fecha_Merma, Motivo, (SELECT COUNT(DISTINCT(FK_Producto)) FROM merma) as 'Num' FROM `merma` inner join sucursales 
-				on sucursales.ID_Sucursal=merma.FK_Sucursal inner JOIN productos 
-				on productos.ID_Producto=merma.FK_Producto where FK_Producto='$IDProducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+				$query = "SELECT ID_Merma, merma.FK_Producto AS 'ID_Producto', sucursales.Nombre AS 'Sucursal', merma.Cantidad, (merma.Cantidad*merma.Costo) AS 'Costo', 
+				DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r') AS Fecha_Merma, Motivo, (SELECT COUNT(DISTINCT(FK_Producto)) FROM merma) AS 'Num' FROM `merma` INNER JOIN sucursales 
+				ON sucursales.ID_Sucursal=merma.FK_Sucursal INNER JOIN productos 
+				ON productos.ID_Producto=merma.FK_Producto WHERE FK_Producto='$IDProducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 				$row = $omodelo->_consultar($query);
 				$numerofilas = $omodelo->numerofilas;
 	
@@ -301,7 +345,7 @@ class inventario {
 								'Sucursal' => $row[$i]['Sucursal'],
 								'Cantidad' => $row[$i]['Cantidad'],
 								'Costo' => '<b class="dinero">$'.number_format($row[$i]['Costo'], 2).'</b>',
-								'Acciones' => '<button class="btn btn-warning" id="ModificarMerma" attrid="'.$row[$i]['ID_Merma'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger" id="EliminarMerma" attrid="'.$row[$i]['ID_Merma'].'"><i class="fas fa-trash"></i></button>' ,
+								'Acciones' => '<button class="btn btn-warning btn-sm mb-1" id="ModificarMerma" attrid="'.$row[$i]['ID_Merma'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm mb-1" id="EliminarMerma" attrid="'.$row[$i]['ID_Merma'].'"><i class="fas fa-trash"></i></button>' ,
 							);
 							
 						}

@@ -33,14 +33,14 @@
 						<table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaInventario" width="100%" style="font-size: 12px;">
 							<thead>
 								<th style="width: 5%;" orden="No">Foto</th>
-								<th style="width: 20%;">Descripción</th>
-								<th orden="No">Distribución</th>
-								<th>Costo</th>
-								<th>Costo total</th>
-								<th>Precio</th>
-								<th>Precio total</th>
+								<th style="width: 15%;">Descripción</th>
+								<th style="width: 10%;" orden="No">Distribución</th>
+								<th style="width: 10%;">Costo</th>
+								<th style="width: 15%;">Costo total</th>
+								<th style="width: 10%;">Precio</th>
+								<th style="width: 15%;">Precio total</th>
 								<th style="width: 15%;"orden="No">Merma</th>
-								<th style="width: 10%;" orden="No">Acciones</th>
+								<th style="width: 5%;" orden="No">Acciones</th>
 							</thead>
 							<tbody>
 							</tbody>
@@ -57,7 +57,7 @@
     <div class="modal-dialog modal-m modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Traslados</span></h5>
+                <h5 class="modal-title" id="exampleModalLabel">Traslado del producto <span id="NombreProductoT">Producto</span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="FormTraslados">
@@ -138,7 +138,7 @@
     <div class="modal-dialog modal-m modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar merma</span></h5>
+                <h5 class="modal-title" id="exampleModalLabel">Agregar merma de <span id="NombreProductoAM">Producto</span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="FormMerma">
