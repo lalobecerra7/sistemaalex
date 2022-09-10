@@ -218,7 +218,20 @@
                       <div class="modal-body">
                           <form id="formAgregarImpuestos" autocomplete="off">
                               <div class="row">
-                                
+                                <div class="table-responsive">
+                                  <table class="table table-responsive table-striped text-center myDataTable" id="TablaImpuestosProductos" width="100%">
+                                      <thead>
+                                        <tr>
+                                          <th></th>
+                                          <th>Nombre</th>
+                                          <th>Porcentaje</th>
+                                          <th>Detalles</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                  </table> 
+                                </div>
                               </div> 
                           </form>
                       </div>
