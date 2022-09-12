@@ -282,6 +282,140 @@ class hacerventa {
 			}
 
 			echo json_encode($arreglo);
+		}else if($tipo == "ConsultarImpuestosProducto"){
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(ID_Impuesto, Nombre, Porcentaje, Clave_CFDI, Tipo_Factor, Clase, Ticket, Producto, Predeterminado) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+
+			$query = "SELECT ID_Impuesto, Nombre, Porcentaje, Clave_CFDI, Tipo_Factor, Clase, Ticket, Producto, Predeterminado, (SELECT COUNT(*) FROM impuestos WHERE Producto = '1' $busqueda) AS Num FROM impuestos WHERE Producto = '1' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						$checked = "";
+						$queryImpuestos = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Sucursal, FK_Impuesto FROM detalles_impuestos_productos WHERE FK_Producto = '".$IDProducto."' AND FK_Impuesto = '". $row[$i]['ID_Impuesto']."'";
+						$rowI = $omodelo->_consultar($queryImpuestos);
+						$numerofilasI = $omodelo->numerofilas;
+						if($rowI == 'si'){
+							echo "Error: ".mysqli_error($omodelo->link);
+						}else{
+							if($numerofilasI > 0){
+								$checked = "checked";
+							}
+						}
+
+						$detalles = ""; 
+						if ($row[$i]['Clave_CFDI'] != "") {
+							$detalles .= "Clave CFDI: ".$row[$i]['Clave_CFDI']."<br>"; 
+						}
+
+						if ($row[$i]['Tipo_Factor'] != "") {
+							$detalles .= "Tipo de factor: ".$row[$i]['Tipo_Factor']."<br>"; 
+						}
+
+						if ($row[$i]['Clase'] != "") {
+							$detalles .= "Clase: ".$row[$i]['Clase']."<br>"; 
+						}
+
+						if ($detalles == "") {
+							$detalles = "No hay datos registrados"; 
+						}
+
+						$arreglo['data'][$i] = array(
+							'ID_Impuesto' => $row[$i]['ID_Impuesto'],
+							'Aplicar' => '<input class="form-check-input CheckImpuesto" '.$checked.' type="checkbox" attrid="'.$row[$i]["ID_Impuesto"].'" cantidad="'.$row[$i]["Porcentaje"].'">',
+							'Nombre' => $row[$i]['Nombre'],
+							'Porcentaje' => number_format($row[$i]["Porcentaje"], 2)."%",
+							'Detalles' => $detalles
+						);	
+					}
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+				}
+			}
+			echo json_encode($arreglo);	
+		}else if($tipo == "ConsultarClientesVenta"){
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'WHERE ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(ID_Cliente, Nombre, Direccion, Telefono, Foto) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+
+			$query = "SELECT ID_Cliente, Nombre, Direccion, Telefono, Foto, (SELECT COUNT(*) FROM clientes $busqueda) AS Num FROM clientes $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						$contacto = "";
+						$foto = '<a href="vistas/assets/archivos/default.jpg" data-fancybox="images">
+									<div style="background-image: url('."'".'vistas/assets/archivos/default.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
+									</div>
+								</a><br>';
+						if ($row[$i]["Foto"] != "") {
+							if($row[$i]["Foto"] != "" && file_exists("vistas/assets/archivos/fotosClientes/".$row[$i]["Foto"])){
+								$foto = '<a href="vistas/assets/archivos/fotosClientes/'.$row[$i]["Foto"].'" data-fancybox="images">
+										<div style="background-image: url('."'".'vistas/assets/archivos/fotosClientes/'.$row[$i]["Foto"]."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
+										</div>
+									</a><br>';
+							}	
+						}
+
+						if ($row[$i]['Direccion'] != "") {
+							$contacto .= "Dirección: ".$row[$i]['Direccion']."<br>";
+						}
+
+						if ($row[$i]['Telefono'] != "") {
+							$contacto .= "Telefono: ".$row[$i]['Telefono']."<br>";
+						}
+
+						$arreglo['data'][$i] = array(
+							'ID' => $row[$i]['ID_Cliente'],
+							'Foto' => $foto,
+							'Nombre' => $row[$i]['Nombre'],
+							'Contacto' => $contacto,
+						);	
+					}
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+				}
+			}
+			echo json_encode($arreglo);	
 		}
 	}
 }

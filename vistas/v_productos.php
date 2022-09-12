@@ -143,8 +143,7 @@
 			<div id = 'PreciosSucursal'>
 				<hr>
 				<b class="mb-3">Precios por sucursal</b>
-				<br>
-				<div class="row">
+				<div class="row mt-3">
 					<div class="col-md-4 col-sm-12 mb-3">
 						<div class="form-floating mb-3">
 							<select class="form-select" name="Sucursales" id="Sucursales" >
