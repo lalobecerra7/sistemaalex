@@ -528,6 +528,26 @@
               </ul>
             </li>
 
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon fas fa-cogs"></i>
+                <div data-i18n="Layouts">Configuración</div>
+              </a>
+
+              <ul class="menu-sub">
+                <li class="menu-item cargarVista" carga="v_tickets" titulo="Tickets" id="cargarTickets">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Tickets">Tickets</div>
+                  </a>
+                </li>
+                <!-- <li class="menu-item cargarVista" carga="v_inventario" titulo="Inventario" id="cargarInventario">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Inventario">Inventario</div>
+                  </a>
+                </li> -->
+              </ul>
+            </li>
+
             <li class="menu-item cargarVista" carga="v_usuarios" titulo="Usuarios" id="cargarUsuarios">
               <a href="javascript:void(0)"  class="menu-link">
                 <i class="menu-icon fas fa-user"></i>
