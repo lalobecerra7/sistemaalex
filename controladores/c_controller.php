@@ -182,6 +182,26 @@ class controller {
 			}
 
 			$pagina = str_replace('#CorreoActual#', $_SESSION['user_admin']['Correo'], $pagina);
+
+		}else if($nombre == "v_sucursales"){
+
+			$query = "SELECT ID_Usuario, Nombre, Primer_Apellido, Segundo_Apellido FROM usuarios";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Usuario'] . '" >' . $row[$i]['Nombre'].' '. $row[$i]['Primer_Apellido'].' '. $row[$i]['Segundo_Apellido']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#usuarios#', $opciones, $pagina);
+
 		}
 		
 		return $pagina;

@@ -25,7 +25,7 @@ class productos {
 			}
 		}
 
-		$query = "SELECT ID_Producto, Codigo, Descripcion, Tipo, Clase, Costo, Precio, Precio_Mayoreo, Detalles, Minimo, Maximo, Imagen, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Producto, Codigo, Descripcion, Tipo, Clase, Costo, Precio, Precio_Mayoreo, Detalles, Minimo, Maximo, Imagen, (SELECT COUNT(*) FROM productos $busqueda) AS Num, ((SELECT COUNT(*) FROM detalle_ventas INNER JOIN ventas ON FK_Venta = ID_Venta WHERE detalle_ventas.FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras INNER JOIN compras ON FK_Compra = ID_Compra WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM merma WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalles_productos WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM traslados WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM inventario WHERE FK_Producto = ID_Producto)) AS numProd FROM productos $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -52,6 +52,11 @@ class productos {
 					}else if ($row[$i]['Tipo'] == '0'){
 						$tipoProducto = 'Materia';
 					}
+
+					$EliminarProducto = '<button class="btn btn-danger btn-sm mb-1" id="EliminarProducto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-trash"></i></button>';
+					if ($row[$i]['numProd'] > 0) {
+						$EliminarProducto = '';
+					}
 					
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Producto'],
@@ -62,7 +67,7 @@ class productos {
 						'Precio' => '<b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b>',
 						'PrecioMayoreo' => '<b class="dinero">$'.number_format($row[$i]['Precio_Mayoreo'], 2).'</b>',
 						'Detalles' => $row[$i]['Detalles']."<br> Minimo: <b>".$row[$i]['Minimo']."</b> <br> Maximo: <b>".$row[$i]['Maximo']."</b>",
-						'Acciones' => '<button class="btn btn-primary btn-sm mb-1" id="ModificarProducto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm mb-1" id="EliminarProducto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-trash"></i></button> <button class="btn btn-warning btn-sm mb-1" id="EditarPrecios" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-plus"></i></button>',
+						'Acciones' => '<button class="btn btn-primary btn-sm mb-1" id="ModificarProducto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-warning btn-sm mb-1" id="EditarPrecios" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-plus"></i></button>'.$EliminarProducto,
 					);
 					
 				}
