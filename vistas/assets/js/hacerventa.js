@@ -162,6 +162,7 @@ jQuery(document).ready(function($) {
             $("#ModalEntradaDinero").modal('hide');
             $("#ModalSalidaDinero").modal('hide');
             $("#ModalImpuestosVenta").modal('hide');
+            $("#ModalAsignarCliente").modal('hide');
             //ir agregando las demas modales
         }
     });
@@ -265,19 +266,19 @@ jQuery(document).ready(function($) {
 
             if(evt.key === "F2"){
                 $("#MIntVarios").modal('show');
-            }else if(event.altKey && evt.key === "c"){
+            }else if(event.altKey && evt.key === "c" || evt.key === "C"){
                 $("#MProdComun").modal('show');
             }else if(evt.key === "F10"){
                 $("#MBuscarProd").modal('show');
-            }else if(event.altKey && evt.key === "q"){
+            }else if(event.altKey && evt.key === "q" || evt.key === "Q"){
                 $("#bPrecioMayoreo").trigger("click");
-            }else if(event.altKey && evt.key === "i"){
+            }else if(event.altKey && evt.key === "i" || evt.key === "I"){
                 $("#bImpuestoProd").trigger("click");
             }else if(evt.key === "F7"){
                 $("#bEntradaDinero").trigger("click");
             }else if(evt.key === "F8"){
                 $("#bSalidaDinero").trigger("click");
-            }else if(event.altKey && evt.key === "d"){
+            }else if(event.altKey && evt.key === "d" || evt.key === "D"){
                 $("#bDescuentoProd").trigger("click");
             }else if(evt.key === "Delete"){
                 if ($("#tablaCaja").children('tbody').children('tr').length > 0) {
@@ -308,15 +309,15 @@ jQuery(document).ready(function($) {
                 //console.log("Cambiar");
             }else if(evt.key === "F6"){
                 //console.log("Pendiente");
-            }else if(event.altKey && evt.key === "e"){
+            }else if(event.altKey && evt.key === "e" || evt.key === "E"){
                 //console.log("Eliminar");
-            }else if(event.altKey && evt.key === "a"){
-                //console.log("Asignar");
+            }else if(event.altKey && evt.key === "a" || evt.key === "A"){
+                $("#ModalAsignarCliente").modal('show');
             }else if(evt.key === "F12"){
                 //console.log("Cobrar");
-            }else if(event.altKey && evt.key === "u"){
+            }else if(event.altKey && evt.key === "u" || evt.key === "U"){
                 //console.log("Ultimo ticket");
-            }else if(event.altKey && evt.key === "v"){
+            }else if(event.altKey && evt.key === "v" || evt.key === "V"){
                 //console.log("Ventas y Devoluciones");
             }
         }
@@ -708,7 +709,7 @@ jQuery(document).ready(function($) {
             //$(".swal2-container").is(':visible') == false && 
             if($("#MBuscarProd").is(':visible')){
                $(".buscadorMyDataTable[tabla='TablaProductosVenta']").focus();
-            }else if($("#MIntVarios").is(':visible') == false && $("#MGranel").is(':visible') == false && $("#MProdComun").is(':visible') == false && $("#MBuscarProd").is(':visible') == false && $("#ModalDescuentoProd").is(':visible') == false && $("#ModalEntradaDinero").is(':visible') == false  && $("#ModalSalidaDinero").is(':visible') == false && $("#ModalImpuestosVenta").is(':visible') == false){
+            }else if($("#MIntVarios").is(':visible') == false && $("#MGranel").is(':visible') == false && $("#MProdComun").is(':visible') == false && $("#MBuscarProd").is(':visible') == false && $("#ModalDescuentoProd").is(':visible') == false && $("#ModalEntradaDinero").is(':visible') == false  && $("#ModalSalidaDinero").is(':visible') == false && $("#ModalImpuestosVenta").is(':visible') == false && $("#ModalAsignarCliente").is(':visible') == false){
                 $("#barCodeV").focus();
             }
         }
@@ -1491,13 +1492,99 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('shown.bs.modal', '#ModalImpuestosVenta', function(){
-        /*$(this).find('#CantidadDescuento').focus();
-        $("#CantidadDescuento").val("");
-        $("#PorcentajeDescuento").val("");*/
+        TablaImpuestosProductos($("#tablaCaja").children('tbody').children('tr.activa').attr("attrid"));
     });
 
     $(document).on('hidden.bs.modal', '#ModalImpuestosVenta', function(){
         $("#barCodeV").focus();
+    });
+
+    $(document).on('click', '#bAsignarCliente', function() {
+        $("#ModalAsignarCliente").modal('show');
+    });
+
+    $(document).on('shown.bs.modal', '#ModalAsignarCliente', function(){
+        $(this).find(".buscadorMyDataTable[tabla='TablaClientesVenta']").focus();
+        TablaClientesVenta();
+    });
+
+    $(document).on('hidden.bs.modal', '#ModalAsignarCliente', function(){
+        $("#barCodeV").focus();
+    });
+
+    $(document).on('click', '#TablaClientesVenta tbody tr', function(event) {
+        event.preventDefault();
+        $("#carga").show(); 
+        var idCliente = $(this).attr("id");
+        var Nombre = $(this).children("td:eq(1)").text();
+        $("#textoBotonAsignar").html(Nombre);
+        $("#textoBotonAsignar").attr("attrid", idCliente);
+        $("#ModalAsignarCliente").modal('hide');
+    });
+
+    $(document).on('click', '#bTicketNuevo', function() {
+        var cantidadTickets = 0;
+        var tickets = $("#navtabTickets").find("button").length;
+        $("#navtabTickets").find("button").removeClass("active");
+        $("#navtabTickets").append('<button class="nav-link active" id="tab_ticket_'+(tickets+1)+'" data-bs-toggle="tab" data-bs-target="#nav_ticket_'+(tickets+1)+'" type="button" role="tab" aria-selected="true">Ticket '+(tickets+1)+'</button>')
+        $(".tab-pane").removeClass("active");
+        $("#nav-tabContent").append(`\
+            <div class="tab-pane fade show active" id="nav_ticket_`+(tickets+1)+`" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div class="row">
+                    <div class="col-12 table-responsive" style="height: 45vh; background-color:#F0F0F0;">
+                        <table class="table table-hover text-center" id="tablaCaja" style="width: 100%; font-size: 12px;">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Descripción</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>Descuento</th>
+                                    <th>Total</th> 
+                                    <th>Existencia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-10 col-sm-8">
+                        <div class="row">
+                            <div class="col-12">
+                                <h6 class="text-muted"><b class="cantidad" id="cantidadCajaProd">0</b> Productos en la venta actual</h6>  
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-9 col-sm-8">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button type="button" class="btn btn-outline-secondary"><b>F3</b> <i class="fas fa-exchange-alt"></i> Cambiar</button>
+                                    <button type="button" class="btn btn-outline-secondary" id="bTicketNuevo"><b>F6</b> <i class="fas fa-thumbtack"></i> Pendiente</button>
+                                    <button type="button" class="btn btn-outline-secondary"><b>ALT + E</b> <i class="fas fa-trash"></i> Eliminar</button>
+                                    <button type="button" class="btn btn-outline-secondary" id="bAsignarCliente"><b>ALT + A</b> <i class="fas fa-user-tag"></i> <span id="textoBotonAsignar">Asignar</span></button>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-4 d-grid">
+                                <button type="button" class="btn btn-secondary btn-lg">F12 <i class="fas fa-cart-plus"></i> Cobrar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-4" style="background-color: #E9E9E9; color: blue; padding-top: 5px;">
+                        <h2 class="dinero text-center" style="margin: 0" id="totalCaja">0</h2>
+                        <p class="text-center" style="margin: 0;"><b>Total</b><p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12 text-end">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-outline-secondary"><b>ALT + U</b> <i class="fas fa-print"></i> Reimprimir Último Ticket</button>
+                            <button type="button" class="btn btn-outline-secondary"><b>ALT + V</b> <i class="fas fa-file-alt"></i> Ventas y Devoluciones</button>
+                        </div>
+                    </div>
+                </div>
+            </div>`);
+
     });
 
 });
@@ -1506,7 +1593,7 @@ function verCajaAbierta(id, sucursal, detalle_caja) {
     var html = `<div class="col-12" id="vistaCaja" attrCaja="`+id+`" attrSucursal="`+sucursal+`" attrDetalle="`+detalle_caja+`">
         <div class="row">
             <div class="col-md-6">
-                <h5 class="text-muted">Ticket 1</h5>
+                <h5 class="text-muted TextoTicketPrincipal">Ticket 1</h5>
             </div>
             <div class="col-md-6 text-end">
                 <button type="submit" class="btn btn-outline-secondary btn-sm" id="bEnterBarCode">Hacer corte de caja <i class="fas fa-calculator"></i></button>
@@ -1559,7 +1646,7 @@ function verCajaAbierta(id, sucursal, detalle_caja) {
                                             <th>Precio</th>
                                             <th>Cantidad</th>
                                             <th>Descuento</th>
-                                            <th>Total</th>
+                                            <th>Total</th> 
                                             <th>Existencia</th>
                                         </tr>
                                     </thead>
@@ -1580,9 +1667,9 @@ function verCajaAbierta(id, sucursal, detalle_caja) {
                                     <div class="col-md-9 col-sm-8">
                                         <div class="btn-group btn-group-sm" role="group">
                                             <button type="button" class="btn btn-outline-secondary"><b>F3</b> <i class="fas fa-exchange-alt"></i> Cambiar</button>
-                                            <button type="button" class="btn btn-outline-secondary"><b>F6</b> <i class="fas fa-thumbtack"></i> Pendiente</button>
+                                            <button type="button" class="btn btn-outline-secondary" id="bTicketNuevo"><b>F6</b> <i class="fas fa-thumbtack"></i> Pendiente</button>
                                             <button type="button" class="btn btn-outline-secondary"><b>ALT + E</b> <i class="fas fa-trash"></i> Eliminar</button>
-                                            <button type="button" class="btn btn-outline-secondary"><b>ALT + A</b> <i class="fas fa-user-tag"></i> Asignar</button>
+                                            <button type="button" class="btn btn-outline-secondary" id="bAsignarCliente"><b>ALT + A</b> <i class="fas fa-user-tag"></i> <span id="textoBotonAsignar">Asignar</span></button>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-sm-4 d-grid">
@@ -1713,6 +1800,50 @@ function TablaSalidas(){
             "accion": "hacerventa",
             "tipo": "ConsultarSalidasTurno",
             "DetalleCaja": $("#vistaCaja").attr('attrDetalle'),
+        }
+    });
+}
+
+function TablaImpuestosProductos(idProducto){
+    ajaxMyDatatable({
+        "table": $("#TablaImpuestosProductos"), 
+        "colums": [
+            "Aplicar",
+            "Nombre",
+            "Porcentaje",
+            "Detalles",
+        ], 
+        "sort": [
+            1,
+            "desc"
+        ],
+        "url": "index.php", 
+        "params":{
+            "metodo": "detalles",
+            "accion": "hacerventa",
+            "tipo": "ConsultarImpuestosProducto",
+            "IDProducto": idProducto
+        }
+    });
+}
+
+function TablaClientesVenta(){
+    ajaxMyDatatable({
+        "table": $("#TablaClientesVenta"), 
+        "colums": [
+            "Foto",
+            "Nombre",
+            "Contacto",
+        ], 
+        "sort": [
+            1,
+            "desc"
+        ],
+        "url": "index.php", 
+        "params":{
+            "metodo": "detalles",
+            "accion": "hacerventa",
+            "tipo": "ConsultarClientesVenta"
         }
     });
 }

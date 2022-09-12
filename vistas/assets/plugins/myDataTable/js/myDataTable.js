@@ -5,7 +5,6 @@ function ajaxMyDatatable(data) {
 		console.log("Error MyDataTable: La tabla no existe.");
 		return;
 	}
-
 	if(data.table.children('thead').children('tr').children('th').length != data.colums.length){
 		console.log("Error MyDataTable: El número de columnas no coincide con el arreglo dado.");
 		return;

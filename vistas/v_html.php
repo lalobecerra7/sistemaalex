@@ -208,41 +208,6 @@
               </div>
           </div>
 
-          <div class="modal fade" id="ModalImpuestosVenta" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          <h5 class="modal-title" id="staticBackdropLabel">Agregar impuestos</h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                          <form id="formAgregarImpuestos" autocomplete="off">
-                              <div class="row">
-                                <div class="table-responsive">
-                                  <table class="table table-responsive table-striped text-center myDataTable" id="TablaImpuestosProductos" width="100%">
-                                      <thead>
-                                        <tr>
-                                          <th></th>
-                                          <th>Nombre</th>
-                                          <th>Porcentaje</th>
-                                          <th>Detalles</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                  </table> 
-                                </div>
-                              </div> 
-                          </form>
-                      </div>
-                      <div class="modal-footer text-center">
-                          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-                          <button type="button" class="btn btn-primary" id="bAgregarImpuesto">Agregar <i class="fa fa-check-circle"></i></button>
-                      </div>
-                  </div>    
-              </div>
-          </div>
-
           <!-- ///////////////////////////Buscar Producto/////////////////////////////////// -->  
           <div class="modal fade" id="MBuscarProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
               <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
@@ -373,6 +338,74 @@
                       <div class="modal-footer text-center">
                           <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
                           <button type="button" class="btn btn-primary" id="bAgregarSalida">Agregar <i class="fa fa-check-circle"></i></button>
+                      </div>
+                  </div>    
+              </div>
+          </div>
+
+          <div class="modal fade" id="ModalImpuestosVenta" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Agregar impuestos</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form id="formAgregarImpuestos" autocomplete="off">
+                              <div class="row">
+                                <div class="table-responsive">
+                                  <table class="table table-responsive table-striped text-center myDataTable" id="TablaImpuestosProductos" width="100%">
+                                      <thead>
+                                        <tr>
+                                          <th orden="no">Aplicar</th>
+                                          <th>Nombre</th>
+                                          <th>Porcentaje</th>
+                                          <th orden="no">Detalles</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                  </table> 
+                                </div>
+                              </div> 
+                          </form>
+                      </div>
+                      <div class="modal-footer text-center">
+                          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                          <button type="button" class="btn btn-primary" id="bAgregarImpuesto">Agregar <i class="fa fa-check-circle"></i></button>
+                      </div>
+                  </div>    
+              </div>
+          </div>
+
+          <div class="modal fade" id="ModalAsignarCliente" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Seleccione al cliente para asignar</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form id="formAgregarCliente" autocomplete="off">
+                              <div class="row">
+                                <div class="table-responsive">
+                                  <table class="table table-responsive table-striped text-center myDataTable" id="TablaClientesVenta" width="100%">
+                                      <thead>
+                                        <tr>
+                                          <th orden="no">Foto</th>
+                                          <th>Nombre</th>
+                                          <th>Contacto</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                  </table> 
+                                </div>
+                              </div> 
+                          </form>
+                      </div>
+                      <div class="modal-footer text-center">
+                          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
                       </div>
                   </div>    
               </div>
