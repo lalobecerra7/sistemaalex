@@ -441,6 +441,16 @@
               </div>
           </div>
 
+          <div id="noPrincipal" class="mensajeError">
+              <div class="container-fluid" style="height: 100vh; overflow-y: auto;">
+                  <div class="row align-items-center justify-content-center" style="height: 100vh;">
+                      <div class="col-10 text-center" style="background-color: #ffc107;">
+                          <h1 style="color: #FFF; padding: 30px 0px;">No se puede eliminar el ticket principal</h1>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
         </div>
       </div>
     </div>
