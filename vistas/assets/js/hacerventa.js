@@ -271,6 +271,8 @@ jQuery(document).ready(function($) {
                 $("#MBuscarProd").modal('show');
             }else if(event.altKey && evt.key === "q"){
                 $("#bPrecioMayoreo").trigger("click");
+            }else if(event.altKey && evt.key === "i"){
+                $("#bImpuestoProd").trigger("click");
             }else if(evt.key === "F7"){
                 $("#bEntradaDinero").trigger("click");
             }else if(evt.key === "F8"){
@@ -1489,9 +1491,9 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('shown.bs.modal', '#ModalImpuestosVenta', function(){
-        $(this).find('#CantidadDescuento').focus();
+        /*$(this).find('#CantidadDescuento').focus();
         $("#CantidadDescuento").val("");
-        $("#PorcentajeDescuento").val("");
+        $("#PorcentajeDescuento").val("");*/
     });
 
     $(document).on('hidden.bs.modal', '#ModalImpuestosVenta', function(){
