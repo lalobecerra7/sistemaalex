@@ -144,7 +144,7 @@
 				<hr>
 				<b class="mb-3">Precios por sucursal</b>
 				<div class="row mt-3">
-					<div class="col-md-4 col-sm-12 mb-3">
+					<div class="col-md-3 col-sm-12 mb-3">
 						<div class="form-floating mb-3">
 							<select class="form-select" name="Sucursales" id="Sucursales" >
 								<option value="">- Seleccione una opción -</option>
@@ -153,26 +153,26 @@
 							<label for="Sucursales">Sucursal</label>
 						</div>
 					</div>
-					<div class="col-md-4 col-sm-12 mb-3">
+					<div class="col-md-3 col-sm-12 mb-3">
 					<div class="form-floating">
 							<input type="number" class="form-control" min='0' id="CostoProductoD" name="CostoProductoD" placeholder="Ingresa el costo del producto">
 							<label for="CostoProductoD">Costo</label>
 						</div>
 					</div>
-					<div class="col-md-4 col-sm-12 mb-3">
+					<div class="col-md-3 col-sm-12 mb-3">
 						<div class="form-floating">
 							<input type="number" class="form-control" ,in='0' id="PrecioProductoD" name="PrecioProductoD" placeholder="Ingresa el precio del producto">
 							<label for="PrecioProductoD">Precio</label>
 						</div>
 					</div>
-				</div>
-				<div class="row">
 					<div class="col-md-3 col-sm-12 mb-3">
 						<div class="form-floating">
 							<input type="number" class="form-control" min='0' id="PrecioMayoreoD" name="PrecioMayoreoD" placeholder="Ingresa el precio de mayoreo del producto">
 							<label for="PrecioMayoreoD">Precio de mayoreo</label>
 						</div>
 					</div>
+				</div>
+				<div class="row">
 					<div class="col-md-3 col-sm-12 mb-3">
 						<div class="form-floating">
 							<input type="number" class="form-control" id="MinimoD" name="MinimoD" placeholder="Ingresa el mínimo de stock del producto">
@@ -183,6 +183,14 @@
 						<div class="form-floating">
 							<input type="number" class="form-control" id="MaximoD" name="MaximoD" placeholder="Ingresa el máximo de stock del producto">
 							<label for="MaximoD">Stock Máximo</label>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-12 mb-3">
+						<div class="input-group mb-3">
+							<input type="text" class="form-control" placeholder="Impuestos" aria-label="Impuestos" aria-describedby="basic-addon2" id="impuestosProducto" disabled>
+							<div class="input-group-append">
+								<button type="button" class="btn btn-outline-secondary" id="impuestosProducto"><i class="fas fa-plus" aria-hidden="true"></i></button>
+							</div>
 						</div>
 					</div>
 					<div class="col-md-3 col-sm-12 mb-3">
