@@ -5,7 +5,28 @@ function v_sucursales() {
             NombreSucursal: {
                 required: true
             },
-            DireccionSucursal:{
+            EncargadoSucursal:{
+                required: true
+            },
+            CalleSucursal:{
+                required: true
+            },
+            NoExteriorSucursal:{
+                required: true
+            },
+            ColoniaSucursal:{
+                required: true
+            },
+            CPSucursal:{
+                required: true
+            },
+            CiudadSucursal:{
+                required: true
+            },
+            EstadoSucursal:{
+                required: true
+            },
+            PaisSucursal:{
                 required: true
             },
             TelefonoSucursal:{
@@ -16,15 +37,37 @@ function v_sucursales() {
             NombreSucursal: {
                 required: "El nombre de la sucursal es requerido"
             },
-            DireccionSucursal:{
-                required: "La dirección de la sucursal es requerida"
+            EncargadoSucursal:{
+                required: "El gerente de la sucursal es requerido"
+            },
+            CalleSucursal:{
+                required: "La calle de la sucursal es requerido"
+            },
+            NoExteriorSucursal:{
+                required: "El número esterior de la sucursal es requerido"
+            },
+            ColoniaSucursal:{
+                required: "La colonia es requerida"
+            },
+            CPSucursal:{
+                required: "El código postal es requerido"
+            },
+            CuidadSucursal:{
+                required: "La ciudad es requerida"
+            },
+            EstadoSucursal:{
+                required: "El estado es requerido"
+            },
+            PaisSucursal:{
+                required: "El pais es requerido"
             },
             TelefonoSucursal:{
                 required: "El telefono de la sucursal es requerido"
             },
         },
         submitHandler: function(form) { 
-            var data = "metodo="+$("#bGuardarSucu").attr("tipo")+"&accion=sucursales&IDSucursal="+$("#bGuardarSucu").attr("attrid")+"&NombreSucursal="+$("#NombreSucursal").val()+"&DireccionSucursal="+$("#DireccionSucursal").val()+"&TelefonoSucursal="+$("#TelefonoSucursal").val()+"&RFCSucursal="+$("#RFCSucursal").val()+"&NombreSucursalGerente="+$("#NombreSucursalGerente").val();
+            var data = "metodo="+$("#bGuardarSucu").attr("tipo")+"&accion=sucursales&IDSucursal="+$("#bGuardarSucu").attr("attrid")+"&NombreSucursal="+$("#NombreSucursal").val()+"&EncargadoSucursal="+$("#EncargadoSucursal").val()+"&CalleSucursal="+$("#CalleSucursal").val()+"&NoExteriorSucursal="+$("#NoExteriorSucursal").val()+"&NoInteriorSucursal="+$("#NoInteriorSucursal").val()+"&ColoniaSucursal="+$("#ColoniaSucursal").val()+"&CPSucursal="+$("#CPSucursal").val()+"&CiudadSucursal="+$("#CiudadSucursal").val()+"&EstadoSucursal="+$("#EstadoSucursal").val()+"&PaisSucursal="+$("#PaisSucursal").val()+"&EmailSucursal="+$("#EmailSucursal").val()+"&TelefonoSucursal="+$("#TelefonoSucursal").val()+"&Telefono2Sucursal="+$("#telefono2Sucursal").val();
+           console.log(data);
             var btn = $('#bGuardarSucu');
             $.ajax({
                 url: 'index.php',
@@ -136,10 +179,18 @@ jQuery(document).ready(function($) {
             $("#bGuardarSucu").attr("attrid", id);
             $("#bGuardarSucu").attr("tipo", "modificar");
             $("#NombreSucursal").val(res.Nombre);
-            $("#DireccionSucursal").val(res.Direccion);
+            $("#EncargadoSucursal").val(res.FK_Encargado);
+            $("#CalleSucursal").val(res.Calle);
+            $("#NoExteriorSucursal").val(res.No_Exterior);
+            $("#NoInteriorSucursal").val(res.No_Interior);
+            $("#ColoniaSucursal").val(res.Colonia);
+            $("#CPSucursal").val(res.CP);
+            $("#CiudadSucursal").val(res.Ciudad);
+            $("#EstadoSucursal").val(res.Estado);
+            $("#PaisSucursal").val(res.Pais);
+            $("#EmailSucursal").val(res.Email);
+            $("#telefono2Sucursal").val(res.Segundo_Telefono);
             $("#TelefonoSucursal").val(res.Telefono);
-            $("#RFCSucursal").val(res.RFC);
-            $("#NombreSucursalGerente").val(res['Nombre del Gerente']);
             $("#ModalSucursal").modal("show");
         })
         .fail(function() {
@@ -154,9 +205,9 @@ function TablaSucursales(){
         "colums": [
             "Nombre",
             "Direccion",
-            "Telefono",
-            "RFC",
             "NombreGerente",
+            "Correo",
+            "Telefonos",
             "Acciones"
         ], 
         "sort": [

@@ -17,14 +17,14 @@ class sucursales {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Sucursal, Nombre, Direccion, Telefono, RFC, NombreGerente) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Sucursal, Nombre, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Telefono, Email, FK_Encargado) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
-
-		$query = "SELECT ID_Sucursal, Nombre, Direccion, Telefono, RFC, NombreGerente, (SELECT COUNT(*) FROM sucursales $busqueda) AS Num, ((SELECT COUNT(*) FROM ventas INNER JOIN cajas ON FK_Caja = ID_Caja WHERE cajas.FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM cajas WHERE FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM pedidos WHERE FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM detalles_productos WHERE FK_Sucursal = ID_Sucursal)) AS numSucu FROM sucursales $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		
+		$query = "SELECT ID_Sucursal, sucursales.Nombre, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Telefono, Segundo_Telefono, Email, FK_Encargado, usuarios.Nombre AS NombreEncargado, usuarios.Primer_Apellido AS PrimerApellido, usuarios.Segundo_Apellido AS SegundoApellido, (SELECT COUNT(*) FROM sucursales $busqueda) AS Num, ((SELECT COUNT(*) FROM ventas INNER JOIN cajas ON FK_Caja = ID_Caja WHERE cajas.FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM cajas WHERE FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM pedidos WHERE FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM detalles_productos WHERE FK_Sucursal = ID_Sucursal)) AS numSucu FROM sucursales INNER JOIN usuarios ON ID_Usuario = FK_Encargado $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -33,27 +33,27 @@ class sucursales {
 		}else{
 			if($numerofilas > 0){
 				for($i=0; $i<$numerofilas; $i++){
-					$direccion = "";$telefono="";$rfc="";$gerente="";
-					if ($row[$i]['Direccion'] != "") {
-						$direccion = $row[$i]['Direccion'];
+					$direccion = "";$telefono="";$email="";$gerente="";
+					if ($row[$i]['Calle'] != "") {
+						$direccion = $row[$i]['Calle'].' '.$row[$i]['No_Exterior'].' - '.$row[$i]['No_Interior'].' <br> Colonia: '.$row[$i]['Colonia'].' C.P.: '.$row[$i]['CP'].' <br> '.$row[$i]['Ciudad'].', '.$row[$i]['Estado'].', '.$row[$i]['Pais'];
 					}else{	
 						$direccion = "No hay datos registrados";
 					}
 
 					if ($row[$i]['Telefono'] != "") {
-						$telefono = $row[$i]['Telefono'];
+						$telefono = $row[$i]['Telefono'].'<br>'.$row[$i]['Segundo_Telefono'];
 					}else{	
 						$telefono = "No hay telefono registrado";
 					}
 
-					if ($row[$i]['RFC'] != "") {
-						$rfc = $row[$i]['RFC'];
+					if ($row[$i]['Email'] != "") {
+						$email = $row[$i]['Email'];
 					}else{	
-						$rfc = "No hay un RFC registrado";
+						$email = "No hay un correo registrado";
 					}
 
-					if ($row[$i]['NombreGerente'] != "") {
-						$gerente = $row[$i]['NombreGerente'];
+					if ($row[$i]['FK_Encargado'] != "") {
+						$gerente = $row[$i]['NombreEncargado'].' '.$row[$i]['PrimerApellido'].' '.$row[$i]['SegundoApellido'];
 					}else{	
 						$gerente = "No hay datos registrados";
 					}
@@ -67,10 +67,10 @@ class sucursales {
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Sucursal'],
 						'Nombre' => $row[$i]['Nombre'],
-						'Direccion' => $direccion,
-						'Telefono' => $row[$i]['Telefono'],
-						'RFC' => $rfc,
 						'NombreGerente' => $gerente,
+						'Correo' => $email,
+						'Direccion' => $direccion,
+						'Telefonos' => $telefono,
 						'Acciones' => '<button class="btn btn-primary btn-sm" id="ModificarSucursal" attrid="'.$row[$i]['ID_Sucursal'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button> '.$EliminarSucursal,
 					);
 					
@@ -88,13 +88,21 @@ class sucursales {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$NombreSucursal =  $omodelo->link->real_escape_string($NombreSucursal);
-		$DireccionSucursal =  $omodelo->link->real_escape_string($DireccionSucursal);
+		$EncargadoSucursal =  $omodelo->link->real_escape_string($EncargadoSucursal);
+		$CalleSucursal =  $omodelo->link->real_escape_string($CalleSucursal);
+		$NoExteriorSucursal =  $omodelo->link->real_escape_string($NoExteriorSucursal);
+		$NoInteriorSucursal =  $omodelo->link->real_escape_string($NoInteriorSucursal);
+		$ColoniaSucursal =  $omodelo->link->real_escape_string($ColoniaSucursal);
+		$CPSucursal =  $omodelo->link->real_escape_string($CPSucursal);
+		$CiudadSucursal =  $omodelo->link->real_escape_string($CiudadSucursal);
+		$EstadoSucursal =  $omodelo->link->real_escape_string($EstadoSucursal);
+		$PaisSucursal =  $omodelo->link->real_escape_string($PaisSucursal);
+		$EmailSucursal =  $omodelo->link->real_escape_string($EmailSucursal);
 		$TelefonoSucursal =  $omodelo->link->real_escape_string($TelefonoSucursal);
-		$RFCSucursal =  $omodelo->link->real_escape_string($RFCSucursal);
-		$NombreSucursalGerente =  $omodelo->link->real_escape_string($NombreSucursalGerente);
+		$Telefono2Sucursal =  $omodelo->link->real_escape_string($Telefono2Sucursal);
 
 
-		$query = "INSERT INTO sucursales SET Nombre = '$NombreSucursal', Direccion = '$DireccionSucursal', Telefono = '$TelefonoSucursal', RFC = '$RFCSucursal', NombreGerente = '$NombreSucursalGerente'";
+		$query = "INSERT INTO sucursales SET Nombre = '$NombreSucursal', FK_Encargado = '$EncargadoSucursal', Calle = '$CalleSucursal', No_Exterior = '$NoExteriorSucursal', No_Interior = '$NoInteriorSucursal', Colonia = '$ColoniaSucursal', CP = '$CPSucursal', Ciudad = '$CiudadSucursal', Estado = '$EstadoSucursal', Pais = '$PaisSucursal', Email = '$EmailSucursal', Telefono = '$TelefonoSucursal', Segundo_Telefono  = '$Telefono2Sucursal'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -127,13 +135,20 @@ class sucursales {
 		extract($_POST);
 		$IDSucursal =  $omodelo->link->real_escape_string($IDSucursal);
 		$NombreSucursal =  $omodelo->link->real_escape_string($NombreSucursal);
-		$DireccionSucursal =  $omodelo->link->real_escape_string($DireccionSucursal);
+		$EncargadoSucursal =  $omodelo->link->real_escape_string($EncargadoSucursal);
+		$CalleSucursal =  $omodelo->link->real_escape_string($CalleSucursal);
+		$NoExteriorSucursal =  $omodelo->link->real_escape_string($NoExteriorSucursal);
+		$NoInteriorSucursal =  $omodelo->link->real_escape_string($NoInteriorSucursal);
+		$ColoniaSucursal =  $omodelo->link->real_escape_string($ColoniaSucursal);
+		$CPSucursal =  $omodelo->link->real_escape_string($CPSucursal);
+		$CiudadSucursal =  $omodelo->link->real_escape_string($CiudadSucursal);
+		$EstadoSucursal =  $omodelo->link->real_escape_string($EstadoSucursal);
+		$PaisSucursal =  $omodelo->link->real_escape_string($PaisSucursal);
+		$EmailSucursal =  $omodelo->link->real_escape_string($EmailSucursal);
 		$TelefonoSucursal =  $omodelo->link->real_escape_string($TelefonoSucursal);
-		$RFCSucursal =  $omodelo->link->real_escape_string($RFCSucursal);
-		$NombreSucursalGerente =  $omodelo->link->real_escape_string($NombreSucursalGerente);
+		$Telefono2Sucursal =  $omodelo->link->real_escape_string($Telefono2Sucursal);
 
-
-		$query = "UPDATE sucursales SET Nombre = '$NombreSucursal', Direccion = '$DireccionSucursal', Telefono = '$TelefonoSucursal', RFC = '$RFCSucursal', NombreGerente = '$NombreSucursalGerente' WHERE ID_Sucursal = '$IDSucursal'";
+		$query = "UPDATE sucursales SET Nombre = '$NombreSucursal', FK_Encargado = '$EncargadoSucursal', Calle = '$CalleSucursal', No_Exterior = '$NoExteriorSucursal', No_Interior = '$NoInteriorSucursal', Colonia = '$ColoniaSucursal', CP = '$CPSucursal', Ciudad = '$CiudadSucursal', Estado = '$EstadoSucursal', Pais = '$PaisSucursal', Email = '$EmailSucursal', Telefono = '$TelefonoSucursal', Segundo_Telefono  = '$Telefono2Sucursal' WHERE ID_Sucursal = '$IDSucursal'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -164,7 +179,7 @@ class sucursales {
 				}
 				$botonModificar = '<button type="button" class="btn btn-theme-inverse btn-info bModificarSucu" attrID="'.$row[0]["ID_Sucursal"].'" nombre="'.$row[0]["Nombre"].'"><i class="fa fa-pencil-square-o"></i></button> ';
 
-				$arreglo = array('Nombre' => $row[0]["Nombre"], 'Direccion' => $row[0]["Direccion"], 'Telefono' => utf8_encode($row[0]["Telefono"]), 'RFC' => utf8_encode($row[0]["RFC"]), 'Nombre del Gerente' => $row[0]["NombreGerente"]);
+				$arreglo = array('Nombre' => $row[0]["Nombre"], 'FK_Encargado' => $row[0]["FK_Encargado"], 'Calle' => utf8_encode($row[0]["Calle"]), 'No_Exterior' => utf8_encode($row[0]["No_Exterior"]), 'No_Interior' => $row[0]["No_Interior"], 'Colonia' => $row[0]["Colonia"], 'CP' => $row[0]["CP"], 'Ciudad' => $row[0]["Ciudad"], 'Estado' => $row[0]["Estado"], 'Pais' => $row[0]["Pais"], 'Email' => $row[0]["Email"], 'Telefono' => $row[0]["Telefono"], 'Segundo_Telefono' => $row[0]["Segundo_Telefono"]);
 
 				echo json_encode($arreglo);
 			}
