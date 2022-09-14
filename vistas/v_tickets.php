@@ -75,7 +75,7 @@
 								</div>
 							</div>
 							<div class="col-md-2 col-sm-12 mb-3">
-								<input type="checkbox" id='check' name='check'>
+								<input type="checkbox" id='check' name='check' checked>
 							</div>
 						</div>
 					</form>

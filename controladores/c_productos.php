@@ -99,6 +99,7 @@ class productos {
 		$Minimo =  $omodelo->link->real_escape_string($Minimo);
 		$Maximo =  $omodelo->link->real_escape_string($Maximo);
 		$detalle =  explode("~", $detalleProducto);
+		$impuesto =  explode(",", $impuestos);
 
 		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', Tipo = '$TipoUnidad', FK_Categoria = '$Categoria', Clase = '$Clase', FK_Unidad = '$Unidad', Poner_Unidad = '$PonerUnidad', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha'";
 		$row = $omodelo->_insertar($query);
@@ -147,8 +148,19 @@ class productos {
 					echo "Error: ".mysqli_error($omodelo->link);
 				}
 			}
+
+			for($j=0; $j<sizeOf($impuesto); $j++){
+				$imp = explode("~", $impuesto[$j]);
+				$query = "INSERT INTO detalles_impuestos_productos SET FK_Producto = '$id', FK_Sucursal = '$imp[0]', FK_Impuesto = '$imp[1]'";
+				$row = $omodelo->_insertar($query);
+
+				if ($row == "si") {
+					echo "Error: ".mysqli_error($omodelo->link);
+				}
+			}
+			
 			echo "Correcto";
-			$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+			//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
 		}
 	}
 
@@ -318,13 +330,34 @@ class productos {
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
 				if($numerofilas > 0){
-					echo json_encode($row[0]);
+					echo json_encode($row[0]);		
+				}
+			}
+		}else if($tipo == 'impuestosSucursalP'){
+			$IdSucursal =  $omodelo->link->real_escape_string($IdSucursal);
+			$IdProducto =  $omodelo->link->real_escape_string($IdProducto);
+			$arreglo = '';
+
+			$query = "SELECT ID_Detalle_Im_Producto, FK_Sucursal, FK_Producto, FK_Impuesto, impuestos.Nombre AS NombreImpuesto FROM detalles_impuestos_productos INNER JOIN impuestos ON ID_Impuesto = FK_Impuesto WHERE FK_Producto = '$IdProducto' AND FK_Sucursal = '$IdSucursal'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						$arreglo .= 
+							$row[$i]['FK_Sucursal'].'~'.$row[$i]['FK_Impuesto'].','.$row[$i]['NombreImpuesto'].',';
+					}
+					echo json_encode($arreglo);	
 				}
 			}
 		} else if ($tipo == 'modificar'){
 			$omodelo = new m_modelo();
 			extract($_POST);
 			$fecha = date('Y-m-d H:i:s'); 
+			$IdProducto =  $omodelo->link->real_escape_string($IdProducto);
 			$IdDetalle =  $omodelo->link->real_escape_string($IdDetalle);
 			$Sucursal =  $omodelo->link->real_escape_string($Sucursal);
 			$Costo =  $omodelo->link->real_escape_string($CostoProductoE);
@@ -332,6 +365,7 @@ class productos {
 			$PrecioMayoreo =  $omodelo->link->real_escape_string($PrecioMayoreoE);
 			$Minimo =  $omodelo->link->real_escape_string($MinimoE);
 			$Maximo =  $omodelo->link->real_escape_string($MaximoE);
+			$impuesto = explode(",", $impuestos);
 
 			$query = "SELECT * FROM detalles_productos WHERE FK_Producto = '$IdProducto' AND FK_Sucursal = '$Sucursal' AND ID_Detalle_Producto != '$IdDetalle'";
 			$row = $omodelo->_consultar($query);
@@ -349,7 +383,23 @@ class productos {
 					if ($row == "si") {
 						echo "Error: ".mysqli_error($omodelo->link);
 					}else{
-						echo "Correcto";
+						$query = "DELETE FROM detalles_impuestos_productos WHERE FK_Producto='$IdProducto' AND FK_Sucursal = '$Sucursal'";
+						$error = $omodelo->_insertar($query);
+							
+						if ($error == "si") {
+							echo "Error: ".mysqli_error($omodelo->link);
+						}else{
+							for($j=0; $j<sizeOf($impuesto); $j++){
+								$imp = explode("~", $impuesto[$j]);
+								$query = "INSERT INTO detalles_impuestos_productos SET FK_Producto = '$IdProducto', FK_Sucursal = '$imp[0]', FK_Impuesto = '$imp[1]'";
+								$row = $omodelo->_insertar($query);
+				
+								if ($row == "si") {
+									echo "Error: ".mysqli_error($omodelo->link);
+								}
+							}
+							echo "Correcto";
+						}
 						//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
 					}
 				}
@@ -366,6 +416,7 @@ class productos {
 			$PrecioMayoreo =  $omodelo->link->real_escape_string($PrecioMayoreoE);
 			$Minimo =  $omodelo->link->real_escape_string($MinimoE);
 			$Maximo =  $omodelo->link->real_escape_string($MaximoE);
+			$impuesto = explode(",", $impuestos);
 
 			$query = "SELECT * FROM detalles_productos WHERE FK_Producto = '$IdProducto' AND FK_Sucursal = '$Sucursal'";
 			$row = $omodelo->_consultar($query);
@@ -383,6 +434,15 @@ class productos {
 					if ($row == "si") {
 						echo "Error: ".mysqli_error($omodelo->link);
 					}else{
+						for($j=0; $j<sizeOf($impuesto); $j++){
+							$imp = explode("~", $impuesto[$j]);
+							$query = "INSERT INTO detalles_impuestos_productos SET FK_Producto = '$IdProducto', FK_Sucursal = '$imp[0]', FK_Impuesto = '$imp[1]'";
+							$row = $omodelo->_insertar($query);
+			
+							if ($row == "si") {
+								echo "Error: ".mysqli_error($omodelo->link);
+							}
+						}
 						echo "Correcto";
 						//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
 					}
@@ -400,6 +460,63 @@ class productos {
 				$omodelo->movimiento($query, $_SESSION['user_admin']["ID_Usuario"]);
 				echo "Correcto";
 			}
+		}else if($tipo == 'impuestos'){
+			$impuesto = explode(",", $impuestos); ;
+			$query = "SELECT * FROM impuestos";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$tabla = '';
+			$checked = '';
+			if ($row == "si") {
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				for($i=0; $i<$numerofilas; $i++){
+					for($j=0; $j<sizeof($impuesto); $j++){
+						if($impuesto[$j] == $row[$i]['ID_Impuesto']){
+							$checked = 'checked';
+							break;
+						}else {
+							$checked = '';
+						}
+					}
+
+					$tabla .='
+
+					<tr>
+
+					<td><input type="checkbox" id="checkImpuesto" name="checkImpuesto" attrid = '. $row[$i]['ID_Impuesto'] .' '.$checked.'></td>
+
+					<td>' . $row[$i]['Nombre'] . '</td>
+
+					<td>' . $row[$i]['Descripcion'] . '</td>
+
+					<td>' . $row[$i]['Porcentaje'] . '</td>
+
+					</tr>';
+
+				}
+				
+				echo $tabla;
+			}
+		}else if($tipo == 'impuestosSeleccionados'){
+			$Impuestos =  $omodelo->link->real_escape_string($impuestos);
+			$Impuestos = trim($Impuestos, ',');
+			$impuestos = '';
+				
+				$query = "SELECT Nombre FROM impuestos WHERE ID_Impuesto IN ($Impuestos)";
+				$row = $omodelo->_consultar($query);
+				$numerofilas = $omodelo->numerofilas;
+				
+				if ($row == "si") {
+					echo "Error: ".mysqli_error($omodelo->link);
+				}else{
+					for($i=0; $i<$numerofilas; $i++){
+
+						$impuestos .= $row[$i]['Nombre'].', ';
+
+					}
+				}
+			echo $impuestos;
 		}
 	}
 }

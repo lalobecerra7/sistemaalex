@@ -1,5 +1,6 @@
 var detallesProducto = [];
 var cont = 1;
+var impuesto = [];
 function v_productos() {
     console.log("entro a la funcion");
     
@@ -94,6 +95,7 @@ function v_productos() {
                 data.append('accion', 'productos');
                 data.append('IDProducto', $('#GuardarProducto').attr('attrid'));
                 data.append('detalleProducto', detallesProducto);
+                data.append('impuestos', impuesto);
 
                 var btn = $('#GuardarProducto');
                 $.ajax({
@@ -180,9 +182,11 @@ jQuery(document).ready(function($) {
         $("#GuardarProducto").attr('attrid', "");
         $("#FormProductos").trigger('reset');
         $("#TituloModalProductos").text("Agregar nuevo");
+        $('#tbodyDetallesProducto').html('');
         $('#verImagenProducto').html('<img src="vistas/assets/archivos/fotosProductos/default.jpg" style="width: 250px; height: 170px; cursor:pointer;border-radius:4px;border:2px solid grey;" class="img-thumbnail"><br>');
         $('#PreciosSucursal').show();
         JsBarcode("#CodigoB", "CODIGO");
+        impuesto = [];
     });
 
     $(document).on('click', '#EliminarProducto', function() {
@@ -401,6 +405,7 @@ $(document).on('click', '#DetalleProductoSucursal', function () {
             $('#PrecioMayoreoD').val('');
             $('#MinimoD').val('');
             $('#MaximoD').val('');
+            $('#impuestosProducto').val('Impuestos');
         }
         }else if($('#Sucursales').val() ==''){
             Swal.fire({
@@ -494,7 +499,7 @@ $(document).on('click', '#PSucursal', function() {
                     text: 'El stock máximo debe ser mayor al stock mínimo'
                 });
             }else{
-                var data = "metodo=detalles&accion=productos&tipo="+$('#PSucursal').attr('tipo')+"&IdDetalle=" + $('#PSucursal').attr('attrid') + "&IdProducto=" + $('#PSucursal').attr('idProducto') + "&Sucursal=" + $("#Sucursal").val() + "&CostoProductoE=" + $("#CostoProductoE").val() + "&PrecioProductoE=" + $("#PrecioProductoE").val() + "&PrecioMayoreoE=" + $("#PrecioMayoreoE").val() + "&MinimoE=" + $("#MinimoE").val() + "&MaximoE=" + $("#MaximoE").val();
+                var data = "metodo=detalles&accion=productos&tipo="+$('#PSucursal').attr('tipo')+"&IdDetalle=" + $('#PSucursal').attr('attrid') + "&IdProducto=" + $('#PSucursal').attr('idProducto') + "&Sucursal=" + $("#Sucursal").val() + "&CostoProductoE=" + $("#CostoProductoE").val() + "&PrecioProductoE=" + $("#PrecioProductoE").val() + "&PrecioMayoreoE=" + $("#PrecioMayoreoE").val() + "&MinimoE=" + $("#MinimoE").val() + "&MaximoE=" + $("#MaximoE").val()+"&impuestos="+impuesto;
                 console.log(data);
                 $.ajax({
                     url: 'index.php',
@@ -527,6 +532,8 @@ $(document).on('click', '#PSucursal', function() {
                             $('#PrecioMayoreoE').val('');
                             $('#MinimoE').val('');
                             $('#MaximoE').val('');
+                            $('#impuestosProductoE').val('Impuestos');
+                            impuesto = [];
                         })
                         .fail(function() {
                             console.log("Error ajax");
@@ -576,6 +583,43 @@ $(document).on('click', '#EditarDetalle', function () {
         $("#PSucursal").attr("attrid", datos.ID_Detalle_Producto);
         $("#PSucursal").attr("idProducto", datos.FK_Producto);
         $("#NombreBoton").text("Guardar cambios");
+
+        var data = "metodo=detalles&accion=productos&tipo=impuestosSucursalP&IdSucursal="+datos.FK_Sucursal+"&IdProducto="+$('#PSucursal').attr('idproducto');
+        console.log(data);
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            data: data
+        })
+        .done(function(res) {
+            console.log($.trim(res));
+            var nombres = '';
+            if($.trim(res) != ''){
+                var dato = JSON.parse($.trim(res));
+                console.log(dato);
+                var separa = dato.split(',');
+                console.log(separa);
+                for(var i=0; i<separa.length; i++){
+                    impuesto.push(separa[i]);
+                    nombres += separa[i+1]+', ';
+                    i++;
+                }
+                console.log(impuesto);
+                console.log(nombres);
+                var nom = nombres.substring(0, nombres.length - 12);
+                console.log(nom);
+                impuesto.pop();
+                console.log(impuesto);
+                $('#impuestosProductoE').val(nom);
+            }else {
+                $('#impuestosProductoE').val('Impuestos');
+            }
+            
+        })
+        .fail(function() {
+            console.log("Error ajax");
+        });
+
     })
     .fail(function() {
         console.log("Error ajax");
@@ -594,9 +638,18 @@ $(document).on('click', '#EditarPrecios', function () {
     .done(function(res) {
         console.log(res);
         var datos = JSON.parse($.trim(res));
+        $('#Sucursal').val('');
+        $('#CostoProductoE').val('');
+        $('#PrecioProductoE').val('');
+        $('#PrecioMayoreoE').val('');
+        $('#MinimoE').val('');
+        $('#MaximoE').val('');
+        impuesto = [];
         $('#tbodyPreciosSucursal').html(datos);
         $('#ModalPreciosSucursal').modal('show');
+        $("#NombreBoton").text("Agregar");
         $("#PSucursal").attr("idProducto", id);
+        $('#impuestosProductoE').val('Impuestos');
        
     })
     .fail(function() {
@@ -606,4 +659,121 @@ $(document).on('click', '#EditarPrecios', function () {
 
 $(document).on('keyup', '#CodigoBarras', function() {
     JsBarcode("#CodigoB", $(this).val());
+});
+
+$(document).on('click', '#botonimpuestosProducto', function() {
+    var imp = '';
+    if(impuesto.length>0){
+        for(var i=0; i<impuesto.length; i++){
+             var separa = impuesto[i].split("~");
+             console.log(separa);
+             if ($('#Sucursales').val() != ''){
+                if (separa[0] == $('#Sucursales').val()){
+                    imp += separa[1]+',';
+                }
+             }else {
+                if (separa[0] == $('#Sucursal').val()){
+                    imp += separa[1]+',';
+                }
+             }
+            
+        }
+    }
+    var data = "metodo=detalles&accion=productos&tipo=impuestos&impuestos="+imp;
+    $.ajax({
+        url: 'index.php',
+        type: 'POST',
+        data: data
+    })
+    .done(function(res) {
+            console.log(res);
+            $('#tbodyImpuestosProducto').html($.trim(res));
+            $('#ModalImpuestosProducto').modal('show');
+
+    })
+    .fail(function() {
+        console.log("Error ajax");
+    });
+});
+
+$(document).on('change', '#checkImpuesto', function() {
+    if (impuesto != ''){
+        if($(this).prop("checked")){
+            if($('#Sucursales').val() != ''){
+                impuesto.push($('#Sucursales').val()+'~'+$(this).attr('attrid'));
+            }else{
+                impuesto.push($('#Sucursal').val()+'~'+$(this).attr('attrid'));
+            }
+            console.log(impuesto);
+        }else {
+            for (var i=0; i< impuesto.length; i++ ){
+                if($('#Sucursales').val() != ''){
+                    if(impuesto[i] == ($('#Sucursales').val()+'~'+$(this).attr('attrid'))){
+                        impuesto.splice(i,1);
+                        console.log(impuesto);
+                    }
+                }else{
+                    if(impuesto[i] == ($('#Sucursal').val()+'~'+$(this).attr('attrid'))){
+                        impuesto.splice(i,1);
+                        console.log(impuesto);
+                    }
+                }
+            }
+        }
+    }else{
+        if($('#Sucursales').val() != ''){
+            impuesto.push($('#Sucursales').val()+'~'+$(this).attr('attrid'));
+        }else{
+            impuesto.push($('#Sucursal').val()+'~'+$(this).attr('attrid'));
+        }
+        console.log(impuesto);
+    }
+});
+
+$(document).on('click', '#GuardarImpuestos', function() {
+        var imp = '';
+        if(impuesto.length>0){
+            for(var i=0; i<impuesto.length; i++){
+                var separa = impuesto[i].split("~");
+                console.log(separa);
+                if($('#Sucursales').val() != ''){
+                    if (separa[0] == $('#Sucursales').val()){
+                        imp += separa[1]+',';
+                    }
+                }else {
+                    if (separa[0] == $('#Sucursal').val()){
+                        imp += separa[1]+',';
+                    }
+                }
+                
+            }
+        }
+        if(imp != ''){
+            var data = "metodo=detalles&accion=productos&tipo=impuestosSeleccionados&impuestos="+imp;
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data
+            })
+            .done(function(res) {
+                    console.log(res);
+                    if($('#Sucursales').val() != ''){
+                        $('#impuestosProducto').val($.trim(res));
+                    }else{
+                        $('#impuestosProductoE').val($.trim(res));
+                    }
+                    $('#ModalImpuestosProducto').modal('hide');
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            });
+        }else{
+            if($('#Sucursales').val() != ''){
+                $('#impuestosProducto').val('Impuestos');
+            }else{
+                $('#impuestosProductoE').val('Impuestos');
+            }
+            $('#ModalImpuestosProducto').modal('hide');
+        }
+        
 });
