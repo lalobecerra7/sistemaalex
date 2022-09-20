@@ -392,7 +392,7 @@
 								<tr>
 									<th>Seleccionar</th>
 									<th>Nombre</th>
-									<th>Descripcion</th>
+									<th>Clave CFDI</th>
 									<th>Porcentaje</th>
 								</tr>
 							</thead>
