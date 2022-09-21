@@ -54,13 +54,13 @@
 				</div>
 			</div>
 			<br>
-		    <div class="col-sm-12">
+		    <div class="row col-sm-12">
 				<div class="row">
 					<div class="col-sm-12">
 						<h5>Datos del Ticket</h5>
 					</div>
 				</div>
-				<div class="row col-sm-5">
+				<div class="col-sm-6">
 					<div class="col-sm-12">
 						<form id="formTickets">
 							<input type="hidden" id="nomPagina" value="v_ticket">
@@ -68,110 +68,145 @@
 							<input type="hidden" name="accion" value="ticket"> 
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
-									<label for="NombreSucTicket">Nombre de la sucursal</label>
-									<input type="text" class="form-control" id="NombreSucTicket" name="NombreSucTicket" placeholder="Ingresa el nombre de la sucursal">
+									<div class="form-floating mb-3">
+										<select class="form-select" name="SucursalTicket" id="SucursalTicket" >
+											<option value="">- Seleccione una opción -</option>
+												#sucursales#
+										</select>
+										<label for="SucursalTicket">Sucursal</label>
+									</div>
 								</div>
-								<div class="col-md-2 col-sm-12 mb-3">
-									<input type="checkbox" id='checkNombre' name='checkNombre' checked>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-10 col-sm-12 mb-3">
-									<label for="CalleSucTicket">Calle</label>
-									<input type="text" class="form-control" id="CalleSucTicket" name="CalleSucTicket" placeholder="Ingresa la calle de la sucursal">
-								</div>
-								<div class="col-md-2 col-sm-12 mb-3">
-									<input type="checkbox" id='checkCalle' name='checkCalle' checked>
+								<div class="col-md-2 col-sm-12 mb-3" style="margin: 20px auto;">
+									<input type="checkbox" id='checkNombre' name='checkNombre'>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
-									<label for="NoExtTicket">No. Exterior</label>
-									<input type="text" class="form-control" id="NoExtTicket" name="NoExtTicket" placeholder="Ingresa el número exterior de la sucursal">
+									<label for="DireccionTicket">Dirección</label>
 								</div>
 								<div class="col-md-2 col-sm-12 mb-3">
-									<input type="checkbox" id='checkNoExt' name='checkNoExt' checked>
+									<input type="checkbox" id='checkDireccion' name='checkDireccion'>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
-									<label for="NoIntTicket">No. Interior</label>
-									<input type="text" class="form-control" id="NoIntTicket" name="NoIntTicket" placeholder="Ingresa el número interior de la sucursal">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="CalleSucTicket" name="CalleSucTicket" placeholder="Ingresa la calle de la sucursal">
+										<label for="CalleSucTicket">Calle</label>
+									</div>
 								</div>
-								<div class="col-md-2 col-sm-12 mb-3">
-									<input type="checkbox" id='checkNoInt' name='checkNoInt' checked>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-10 col-sm-12 mb-3">
-									<label for="ColoniaTicket">Colonia</label>
-									<input type="text" class="form-control" id="ColoniaTicket" name="ColoniaTicket" placeholder="Ingresa la colonia de la sucursal">
-								</div>
-								<div class="col-md-2 col-sm-12 mb-3">
-									<input type="checkbox" id='checkColonia' name='checkColonia' checked>
+								<div class="col-md-2 col-sm-12 mb-3" style="margin: 20px auto;">
+									<input type="checkbox" id='checkCalle' name='checkCalle'>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
-									<label for="CPTicket">Código Postal</label>
-									<input type="text" class="form-control" id="CPTicket" name="CPTicket" placeholder="Ingresa el código postal">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="NoExtTicket" name="NoExtTicket" placeholder="Ingresa el número exterior de la sucursal">
+										<label for="NoExtTicket">No. Exterior</label>
+									</div>
 								</div>
-								<div class="col-md-2 col-sm-12 mb-3">
-									<input type="checkbox" id='checkCP' name='checkCP' checked>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-10 col-sm-12 mb-3">
-									<label for="CiudadTicket">Ciudad</label>
-									<input type="text" class="form-control" id="CiudadTicket" name="CiudadTicket" placeholder="Ingresa la ciudad de la sucursal">
-								</div>
-								<div class="col-md-2 col-sm-12 mb-3">
-									<input type="checkbox" id='checkCiudad' name='checkCiudad' checked>
+								<div class="col-md-2 col-sm-12 mb-3" style="margin: 20px auto;">
+									<input type="checkbox" id='checkNoExt' name='checkNoExt'>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
-									<label for="EstadoTicket">Estado</label>
-									<input type="text" class="form-control" id="EstadoTicket" name="EstadoTicket" placeholder="Ingresa el estado ">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="NoIntTicket" name="NoIntTicket" placeholder="Ingresa el número interior de la sucursal">
+										<label for="NoIntTicket">No. Interior</label>
+									</div>
 								</div>
-								<div class="col-md-2 col-sm-12 mb-3">
-									<input type="checkbox" id='checkEstado' name='checkEstado' checked>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-10 col-sm-12 mb-3">
-									<label for="PaisTicket">Pais</label>
-									<input type="text" class="form-control" id="PaisTicket" name="PaisTicket" placeholder="Ingresa el pais">
-								</div>
-								<div class="col-md-2 col-sm-12 mb-3">
-									<input type="checkbox" id='checkPais' name='checkPais' checked>
+								<div class="col-md-2 col-sm-12 mb-3" style="margin: 20px auto;">
+									<input type="checkbox" id='checkNoInt' name='checkNoInt'>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
-									<label for="TelefonoTicket">Telefono</label>
-									<input type="phone" class="form-control" id="TelefonoTicket" name="TelefonoTicket" placeholder="Ingresa el telefono de la sucursal">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="ColoniaTicket" name="ColoniaTicket" placeholder="Ingresa la colonia de la sucursal">
+										<label for="ColoniaTicket">Colonia</label>
+									</div>
 								</div>
-								<div class="col-md-2 col-sm-12 mb-3">
-									<input type="checkbox" id='checkTelefono' name='checkTelefono' checked>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-10 col-sm-12 mb-3">
-									<label for="EmailTicket">Correo</label>
-									<input type="text" class="form-control" id="EmailTicket" name="EmailTicket" placeholder="Ingresa el email de la sucursal">
-								</div>
-								<div class="col-md-2 col-sm-12 mb-3">
-									<input type="checkbox" id='checkEmail' name='checkEmail' checked>
+								<div class="col-md-2 col-sm-12 mb-3" style="margin: 20px auto;">
+									<input type="checkbox" id='checkColonia' name='checkColonia'>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
-									<label for="MensajeTicket">Mensaje</label>
-									<input type="text" class="form-control" id="MensajeTicket" name="MensajeTicket" placeholder="Ingresa el mensaje">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="CPTicket" name="CPTicket" placeholder="Ingresa el código postal">
+										<label for="CPTicket">Código Postal</label>
+									</div>
 								</div>
-								<div class="col-md-2 col-sm-12 mb-3">
-									<input type="checkbox" id='checkMensaje' name='checkMensaje' checked>
+								<div class="col-md-2 col-sm-12 mb-3" style="margin: 20px auto;">
+									<input type="checkbox" id='checkCP' name='checkCP'>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-10 col-sm-12 mb-3">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="CiudadTicket" name="CiudadTicket" placeholder="Ingresa la ciudad de la sucursal">
+										<label for="CiudadTicket">Ciudad</label>
+									</div>
+								</div>
+								<div class="col-md-2 col-sm-12 mb-3" style="margin: 20px auto;">
+									<input type="checkbox" id='checkCiudad' name='checkCiudad'>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-10 col-sm-12 mb-3">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="EstadoTicket" name="EstadoTicket" placeholder="Ingresa el estado ">
+										<label for="EstadoTicket">Estado</label>
+									</div>
+								</div>
+								<div class="col-md-2 col-sm-12 mb-3" style="margin: 20px auto;">
+									<input type="checkbox" id='checkEstado' name='checkEstado'>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-10 col-sm-12 mb-3">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="PaisTicket" name="PaisTicket" placeholder="Ingresa el pais">
+										<label for="PaisTicket">Pais</label>
+									</div>
+								</div>
+								<div class="col-md-2 col-sm-12 mb-3" style="margin: 20px auto;">
+									<input type="checkbox" id='checkPais' name='checkPais'>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-10 col-sm-12 mb-3">
+									<div class="form-floating">
+										<input type="phone" class="form-control" id="TelefonoTicket" name="TelefonoTicket" placeholder="Ingresa el telefono de la sucursal">
+										<label for="TelefonoTicket">Telefono</label>
+									</div>
+								</div>
+								<div class="col-md-2 col-sm-12 mb-3" style="margin: 20px auto;">
+									<input type="checkbox" id='checkTelefono' name='checkTelefono'>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-10 col-sm-12 mb-3">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="EmailTicket" name="EmailTicket" placeholder="Ingresa el email de la sucursal">
+										<label for="EmailTicket">Correo</label>
+									</div>
+								</div>
+								<div class="col-md-2 col-sm-12 mb-3" style="margin: 20px auto;">
+									<input type="checkbox" id='checkEmail' name='checkEmail'>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-10 col-sm-12 mb-3">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="MensajeTicket" name="MensajeTicket" placeholder="Ingresa el mensaje">
+										<label for="MensajeTicket">Mensaje</label>
+									</div>
+								</div>
+								<div class="col-md-2 col-sm-12 mb-3" style="margin: 20px auto;">
+									<input type="checkbox" id='checkMensaje' name='checkMensaje'>
 								</div>
 							</div>
 							<div class="row">
@@ -179,7 +214,7 @@
 									<label for="TotalLetraTicket">Total con letra</label>
 								</div>
 								<div class="col-md-2 col-sm-12 mb-3">
-									<input type="checkbox" id='checkTotalLetra' name='checkTotalLetra' checked>
+									<input type="checkbox" id='checkTotalLetra' name='checkTotalLetra'>
 								</div>
 							</div>
 							<div class="col-12 text-center">
@@ -188,7 +223,7 @@
 						</form>
 					</div>
 				</div>
-				<div class="row col-sm-6 col-sm-offset-1" style="padding: 50px; border: dashed; box-sizing: border-box;">
+				<div class="col-sm-6" style="padding: 50px; border: dashed; box-sizing: border-box;">
 					<br>
 					<div class="row">
 						<div class="col-sm-12 text-center" id="imgTicket" style="padding: 30px 60px; box-sizing: border-box;">

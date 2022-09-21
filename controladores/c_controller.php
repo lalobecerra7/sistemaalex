@@ -15,6 +15,7 @@ include "controladores/c_inventario.php";
 include "controladores/c_cajas.php";
 include "controladores/c_perfil.php";
 include "controladores/c_impuestos.php";
+include "controladores/c_tickets.php";
 
 class controller {
 
@@ -238,6 +239,24 @@ class controller {
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_usuarios'][2] == '0') {
 				echo '<script>$("#botonNuevoUsuario").remove();</script>';
 			}
+		}else if($nombre == "v_tickets"){
+
+			$query = "SELECT ID_Sucursal, Nombre FROM sucursales";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Sucursal'] . '" >' . $row[$i]['Nombre']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#sucursales#', $opciones, $pagina);
 		}
 		
 		return $pagina;

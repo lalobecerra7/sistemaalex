@@ -764,5 +764,6 @@
     <script type="text/javascript" src="vistas/assets/plugins/JsBarcode.all.min.js"></script>
     <script type="text/javascript" src="vistas/assets/js/cajas.js"></script>
     <script type="text/javascript" src="vistas/assets/js/perfil.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/tickets.js"></script>
   </body>
 </html>

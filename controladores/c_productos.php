@@ -34,13 +34,13 @@ class productos {
 		}else{
 			if($numerofilas > 0){
 				for($i=0; $i<$numerofilas; $i++){
-					$imagen = '<a href="vistas/assets/img/default.jpg" data-fancybox="images">
+					$imagen = '<a href="vistas/assets/archivos/fotosProductos/default.jpg" data-fancybox="images">
 									<div style="background-image: url('."'".'vistas/assets/archivos/fotosProductos/default.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
 									</div>
 								</a><br>';
 					if ($row[$i]["Imagen"] != "") {
 						if($row[$i]["Imagen"] != "" && file_exists("vistas/assets/archivos/fotosProductos/".$row[$i]["Imagen"])){
-							$imagen = '<a href="vistas/assets/img/productos/'.$row[$i]["Imagen"].'" data-fancybox="images">
+							$imagen = '<a href="vistas/assets/archivos/fotosProductos/'.$row[$i]["Imagen"].'" data-fancybox="images">
 									<div style="background-image: url('."'".'vistas/assets/archivos/fotosProductos/'.$row[$i]["Imagen"]."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
 									</div>
 								</a><br>';
@@ -164,13 +164,15 @@ class productos {
 				}
 			}
 
-			for($j=0; $j<sizeOf($impuesto); $j++){
-				$imp = explode("~", $impuesto[$j]);
-				$query = "INSERT INTO detalles_impuestos_productos SET FK_Producto = '$id', FK_Sucursal = '$imp[0]', FK_Impuesto = '$imp[1]'";
-				$row = $omodelo->_insertar($query);
-
-				if ($row == "si") {
-					echo "Error: ".mysqli_error($omodelo->link);
+			if(sizeOf($impuesto)>0){
+				for($j=0; $j<sizeOf($impuesto); $j++){
+					$imp = explode("~", $impuesto[$j]);
+					$query = "INSERT INTO detalles_impuestos_productos SET FK_Producto = '$id', FK_Sucursal = '$imp[0]', FK_Impuesto = '$imp[1]'";
+					$row = $omodelo->_insertar($query);
+	
+					if ($row == "si") {
+						echo "Error: ".mysqli_error($omodelo->link);
+					}
 				}
 			}
 			
