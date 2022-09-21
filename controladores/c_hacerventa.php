@@ -164,6 +164,7 @@ class hacerventa {
 			echo json_encode($arreglo);
 		}else if($tipo == "AgregarProducto"){
 			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, Clase, Abreviatura AS Unidad, Poner_Unidad, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, detalles_productos.Costo AS Costo, detalles_productos.Precio AS Precio, detalles_productos.Precio_Mayoreo AS Precio_Mayoreo, detalles_productos.Minimo AS Minimo, detalles_productos.Maximo AS Maximo FROM productos LEFT JOIN detalles_productos ON detalles_productos.FK_Producto = ID_Producto AND detalles_productos.FK_Sucursal = '$sucursal' LEFT JOIN unidades ON FK_Unidad = ID_Unidad LEFT JOIN areas ON FK_Area = ID_Area LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' WHERE Tipo = 1 AND Codigo = '$codigo'";
+			echo $query;
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -171,7 +172,32 @@ class hacerventa {
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
 				if($numerofilas > 0){
-					echo json_encode($row[0]);
+
+					/*$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Sucursal, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje,  FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."' AND FK_Sucursal = '".$sucursal."'";
+
+					$arreglo[$i] = array(
+						'ID_Producto' => $row[0]["ID_Producto"],
+						'Codigo' => $row[0]["Codigo"],
+						'Descripcion' => $row[0]["Descripcion"],
+						'Clase' => $row[0]["Clase"],
+						'Unidad' => $row[0]["Unidad"],
+						'Poner_Unidad' => $row[0]["Poner_Unidad"],
+						'Costo_General' => $row[0]["Costo_General"],
+						'Precio_General' => $row[0]["Precio_General"],
+						'Precio_Mayoreo_General' => $row[0]["Precio_Mayoreo_General"],
+						'NombreArea' => $row[0]["NombreArea"],
+						'Detalles' => $row[0]["Detalles"],
+						'Minimo_General' => $row[0]["Minimo_General"],
+						'Maximo_General' => $row[0]["Maximo_General"],
+						'Fecha_Registro' => $row[0]["Fecha_Registro"],
+						'Existencia' => $row[0]["Existencia"],
+						'Costo' => $row[0]["Costo"],
+						'Precio' => $row[0]["Precio"],
+						'Precio_Mayoreo' => $row[0]["Precio_Mayoreo"],
+						'Minimo' => $row[0]["Minimo"],
+						'Maximo' => $row[0]["Maximo"],
+						'Impuestos' => 
+					);*/
 				}else{
 					echo "No encontrado";
 				}

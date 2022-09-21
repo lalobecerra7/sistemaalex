@@ -163,6 +163,7 @@ jQuery(document).ready(function($) {
             $("#ModalSalidaDinero").modal('hide');
             $("#ModalImpuestosVenta").modal('hide');
             $("#ModalAsignarCliente").modal('hide');
+            $("#ModalCambiarTicket").modal('hide');
             //ir agregando las demas modales
         }
     });
@@ -306,6 +307,7 @@ jQuery(document).ready(function($) {
                     });
                 }
             }else if(evt.key === "F3"){
+                $("#ModalCambiarTicket").modal("show");
                 //console.log("Cambiar");
             }else if(evt.key === "F6"){
                 $("#bTicketNuevo").trigger("click");
@@ -710,7 +712,7 @@ jQuery(document).ready(function($) {
             //$(".swal2-container").is(':visible') == false && 
             if($("#MBuscarProd").is(':visible')){
                $(".buscadorMyDataTable[tabla='TablaProductosVenta']").focus();
-            }else if($("#MIntVarios").is(':visible') == false && $("#MGranel").is(':visible') == false && $("#MProdComun").is(':visible') == false && $("#MBuscarProd").is(':visible') == false && $("#ModalDescuentoProd").is(':visible') == false && $("#ModalEntradaDinero").is(':visible') == false  && $("#ModalSalidaDinero").is(':visible') == false && $("#ModalImpuestosVenta").is(':visible') == false && $("#ModalAsignarCliente").is(':visible') == false){
+            }else if($("#MIntVarios").is(':visible') == false && $("#MGranel").is(':visible') == false && $("#MProdComun").is(':visible') == false && $("#MBuscarProd").is(':visible') == false && $("#ModalDescuentoProd").is(':visible') == false && $("#ModalEntradaDinero").is(':visible') == false  && $("#ModalSalidaDinero").is(':visible') == false && $("#ModalImpuestosVenta").is(':visible') == false && $("#ModalAsignarCliente").is(':visible') == false && $(".swal2-container").is(':visible') == false && $("#ModalCambiarTicket").is(':visible') == false){
                 $("#barCodeV").focus();
             }
         }
@@ -1518,73 +1520,103 @@ jQuery(document).ready(function($) {
         $("#carga").show(); 
         var idCliente = $(this).attr("id");
         var Nombre = $(this).children("td:eq(1)").text();
-        $("#textoBotonAsignar").html(Nombre);
-        $("#textoBotonAsignar").attr("attrid", idCliente);
+        $("#nav-tabContent .active #textoBotonAsignar").html(Nombre);
+        $("#nav-tabContent .active #textoBotonAsignar").attr("attrid", idCliente);
         $("#ModalAsignarCliente").modal('hide');
     });
 
     $(document).on('click', '#bTicketNuevo', function() {
-        var tickets = $("#navtabTickets").find("button").length;
-        $("#navtabTickets").find("button").removeClass("active");
-        $("#navtabTickets").append('<button class="nav-link active" id="tab_ticket_'+(tickets+1)+'" data-bs-toggle="tab" data-bs-target="#nav_ticket_'+(tickets+1)+'" type="button" role="tab" aria-selected="true">Ticket '+(tickets+1)+'</button>')
-        $(".tab-pane").removeClass("active");
-        $(".TextoTicketPrincipal").text("Ticket "+(tickets+1));
-        $("#nav-tabContent").append(`\
-            <div class="tab-pane fade show active" id="nav_ticket_`+(tickets+1)+`" role="tabpanel" aria-labelledby="nav-home-tab">
-                <div class="row">
-                    <div class="col-12 table-responsive" style="height: 45vh; background-color:#F0F0F0;">
-                        <table class="table table-hover text-center" id="tablaCaja" style="width: 100%; font-size: 12px;">
-                            <thead>
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Descripción</th>
-                                    <th>Precio</th>
-                                    <th>Cantidad</th>
-                                    <th>Descuento</th>
-                                    <th>Total</th> 
-                                    <th>Existencia</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-10 col-sm-8">
+       
+        if ($("#nav-tabContent .active #textoBotonAsignar").text() != "Asignar") {
+            var nombreCliente = $("#nav-tabContent .active #textoBotonAsignar").text();   
+        }else{
+            var nombreCliente = $("#navtabTickets .active").text();   
+        }
+        var idActual = $("#navtabTickets .active").attr("id");
+        $("#NombreTicket").focus();
+        Swal.fire({
+            title: 'Nombre del ticket',
+            icon: 'warning',
+            html: '<input type="text" id="NombreTicket" value="'+nombreCliente+'" class="swal2-input" placeholder="Ingresa el nombre del ticket">',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Aceptar'
+        }).then((result) => {
+            if (result.value) {
+                var nombre = $("#NombreTicket").val();
+                /*if (ComprobarNombreTicket(nombre, idActual) == true) {
+                    alert("Ya existe");
+                }else{*/
+                    //var NombreNuevo = ComprobarNombreTicket(nombre);
+                $("#navtabTickets .active").text(nombre);
+                var tickets = $("#navtabTickets").find("button").length;
+                $("#navtabTickets").find("button").removeClass("active");
+                $("#navtabTickets").append('<button class="nav-link active" id="tab_ticket_'+(tickets+1)+'" data-bs-toggle="tab" data-bs-target="#nav_ticket_'+(tickets+1)+'" type="button" role="tab" aria-selected="true">Ticket '+(tickets+1)+'</button>')
+                $(".tab-pane").removeClass("active");
+                $(".TextoTicketPrincipal").text("Ticket "+(tickets+1));
+                $("#nav-tabContent").append(`\
+                    <div class="tab-pane fade show active" id="nav_ticket_`+(tickets+1)+`" role="tabpanel" aria-labelledby="nav-home-tab">
                         <div class="row">
-                            <div class="col-12">
-                                <h6 class="text-muted"><b class="cantidad" id="cantidadCajaProd">0</b> Productos en la venta actual</h6>  
+                            <div class="col-12 table-responsive" style="height: 45vh; background-color:#F0F0F0;">
+                                <table class="table table-hover text-center" id="tablaCaja" style="width: 100%; font-size: 12px;">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Descripción</th>
+                                            <th>Precio</th>
+                                            <th>Cantidad</th>
+                                            <th>Descuento</th>
+                                            <th>Total</th> 
+                                            <th>Existencia</th>
+                                            <th>Impuestos</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-9 col-sm-8">
-                                <div class="btn-group btn-group-sm" role="group">
-                                     <button type="button" class="btn btn-outline-secondary"><b>F3</b> <i class="fas fa-exchange-alt"></i> Cambiar</button>
+                        <div class="row mb-3">
+                            <div class="col-md-10 col-sm-8">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h6 class="text-muted"><b class="cantidad" id="cantidadCajaProd">0</b> Productos en la venta actual</h6>  
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-9 col-sm-8">
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <button type="button" class="btn btn-outline-secondary" id="bCambiarTicket"><b>F3</b> <i class="fas fa-exchange-alt"></i> Cambiar</button>
                                             <button type="button" class="btn btn-outline-secondary" id="bTicketNuevo"><b>F6</b> <i class="fas fa-thumbtack"></i> Pendiente</button>
                                             <button type="button" class="btn btn-outline-secondary" id="bEliminarTicket"><b>ALT + E</b> <i class="fas fa-trash"></i> Eliminar</button>
                                             <button type="button" class="btn btn-outline-secondary" id="bAsignarCliente"><b>ALT + A</b> <i class="fas fa-user-tag"></i> <span id="textoBotonAsignar">Asignar</span></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-4 d-grid">
+                                        <button type="button" class="btn btn-secondary btn-lg">F12 <i class="fas fa-cart-plus"></i> Cobrar</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-4 d-grid">
-                                <button type="button" class="btn btn-secondary btn-lg">F12 <i class="fas fa-cart-plus"></i> Cobrar</button>
+                            <div class="col-md-2 col-sm-4" style="background-color: #E9E9E9; color: blue; padding-top: 5px;">
+                                <h2 class="dinero text-center" style="margin: 0" id="totalCaja">0</h2>
+                                <p class="text-center" style="margin: 0;"><b>Total</b><p>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 col-sm-4" style="background-color: #E9E9E9; color: blue; padding-top: 5px;">
-                        <h2 class="dinero text-center" style="margin: 0" id="totalCaja">0</h2>
-                        <p class="text-center" style="margin: 0;"><b>Total</b><p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-12 text-end">
-                        <div class="btn-group btn-group-sm" role="group">
-                            <button type="button" class="btn btn-outline-secondary"><b>ALT + U</b> <i class="fas fa-print"></i> Reimprimir Último Ticket</button>
-                            <button type="button" class="btn btn-outline-secondary"><b>ALT + V</b> <i class="fas fa-file-alt"></i> Ventas y Devoluciones</button>
+                        <div class="row mb-3">
+                            <div class="col-12 text-end">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button type="button" class="btn btn-outline-secondary"><b>ALT + U</b> <i class="fas fa-print"></i> Reimprimir Último Ticket</button>
+                                    <button type="button" class="btn btn-outline-secondary"><b>ALT + V</b> <i class="fas fa-file-alt"></i> Ventas y Devoluciones</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>`);
+                    </div>`);
+                $("#NombreTicket").val("");
+                //}
+            }
+        });
     });
 
     $(document).on('click', '#navtabTickets .active', function() {
@@ -1596,12 +1628,10 @@ jQuery(document).ready(function($) {
         if (tickets > 1) {
             var ticketAnterior = $("#navtabTickets .active").prev().attr("id");
             $("#navtabTickets .active").remove();
+            $("#nav-tabContent .active").remove();
             $("#"+ticketAnterior).trigger("click");
-           /* $("#navtabTickets .active").prev().addClass("active");
-            $("#navtabTickets .active").prev().trigger("click");
-            */
-            /*$("#navtabTickets").find("#tab_ticket_"+(tickets - 1)).addClass("active");
-            $("#tab_ticket_"+(tickets - 1)).trigger("click");*/
+            $("#navtabTickets").find("button:eq(0)").trigger("click");
+           // $("#navtabTickets").find("button:eq(0)").addClass("active");
         }else{
             $("#noPrincipal").show();
             setTimeout(function() {
@@ -1611,7 +1641,49 @@ jQuery(document).ready(function($) {
         }
     });
 
+    $(document).on('click', '#bCambiarTicket', function() {
+        var tickets = $("#navtabTickets").find("button").length;
+        if (tickets > 1) {
+            $("#ModalCambiarTicket").modal('show');
+        }else{
+            $("#noHayTickets").show();
+            setTimeout(function() {
+                $("#noHayTickets").hide();
+            }, 1000);
+            audio2.play();
+        }
+    });
+
+    $(document).on('shown.bs.modal', '#ModalCambiarTicket', function(){
+        TablaTicketsActuales();
+    });
+
+    $(document).on('hidden.bs.modal', '#ModalCambiarTicket', function(){
+        $("#barCodeV").focus();
+    });
+
+    $(document).on('click', '.botonCambiar', function() {
+        var ticket = $(this).attr("idTicket");
+        $("#"+ticket).trigger("click");
+        $("#ModalCambiarTicket").modal("hide");
+    });
+
 });
+
+/*function ComprobarNombreTicket(nombreTicket, id){
+    var nombre = false;
+    var contador = 0;
+    $("#navtabTickets button").each(function(index, el) {
+        if ($.trim($(this).text()) == $.trim(nombreTicket) && index > 1) {
+            contador++;
+        }
+    });
+    if (contador > 1) {
+        nombre = true;
+    }
+    console.log(nombre);
+    return nombre;
+}*/
 
 function verCajaAbierta(id, sucursal, detalle_caja) {
     var html = `<div class="col-12" id="vistaCaja" attrCaja="`+id+`" attrSucursal="`+sucursal+`" attrDetalle="`+detalle_caja+`">
@@ -1672,6 +1744,7 @@ function verCajaAbierta(id, sucursal, detalle_caja) {
                                             <th>Descuento</th>
                                             <th>Total</th> 
                                             <th>Existencia</th>
+                                            <th>Impuestos</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1690,7 +1763,7 @@ function verCajaAbierta(id, sucursal, detalle_caja) {
                                 <div class="row">
                                     <div class="col-md-9 col-sm-8">
                                         <div class="btn-group btn-group-sm" role="group">
-                                            <button type="button" class="btn btn-outline-secondary"><b>F3</b> <i class="fas fa-exchange-alt"></i> Cambiar</button>
+                                            <button type="button" class="btn btn-outline-secondary" id="bCambiarTicket"><b>F3</b> <i class="fas fa-exchange-alt"></i> Cambiar</button>
                                             <button type="button" class="btn btn-outline-secondary" id="bTicketNuevo"><b>F6</b> <i class="fas fa-thumbtack"></i> Pendiente</button>
                                             <button type="button" class="btn btn-outline-secondary" id="bEliminarTicket"><b>ALT + E</b> <i class="fas fa-trash"></i> Eliminar</button>
                                             <button type="button" class="btn btn-outline-secondary" id="bAsignarCliente"><b>ALT + A</b> <i class="fas fa-user-tag"></i> <span id="textoBotonAsignar">Asignar</span></button>
@@ -1725,7 +1798,7 @@ function verCajaAbierta(id, sucursal, detalle_caja) {
             </div>
         </div>  
     </div>`;
-
+    moneda();
     setTimeout(function() {
         $("#barCodeV").focus();
     }, 500);
@@ -1869,5 +1942,12 @@ function TablaClientesVenta(){
             "accion": "hacerventa",
             "tipo": "ConsultarClientesVenta"
         }
+    });
+}
+
+function TablaTicketsActuales(){
+    $("#DivTickets").html("");
+    $("#navtabTickets button").each(function(index, el) {
+        $("#DivTickets").append('<button type="button" class="btn btn-primary mb-3 botonCambiar" idTicket="'+$(this).attr("id")+'">'+$(this).html()+'</button><br>');
     });
 }
