@@ -74,7 +74,7 @@
 		        	<div class="form-floating">
 		               	<input type="text" class="form-control" id="NombreCliente" name="NombreCliente" placeholder="Ingresa el nombre del cliente">
 		                <label for="NombreCliente">Nombre del cliente</label>
-		            </div>
+		          </div>
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
@@ -162,7 +162,7 @@
 		        </div>
 		        <hr>
 		        <b class="mb-3">Datos adicionales</b>
-		        <div class="col-md-4 col-sm-12 mb-3">
+		        <div class="col-md-3 col-sm-12 mb-3">
               <div class="form-floating">
               	<select class="form-select" id="TipoDescuentoCliente" name="TipoDescuentoCliente">
                 	<option value="" selected> - Seleccione una opción - </option>
@@ -172,15 +172,24 @@
                 <label for="TipoDescuentoCliente">Tipo de descuento</label>
               </div>
             </div>
-            <div class="col-md-4 col-sm-12 mb-3">
+            <div class="col-md-3 col-sm-12 mb-3">
             	<div class="form-floating">
               	<input type="number" disabled="true" min="0" step="any" class="form-control" id="DescuentoCliente" name="DescuentoCliente" placeholder="Ingresa el valor del descuento">
                 <label for="DescuentoCliente"><span id="TituloTipoDescuento"></span></label>
               </div>
             </div>
-            <div class="col-md-4 text-center col-sm-12 mb-3">
+            <div class="col-md-3 text-center col-sm-12 mb-3">
             	<h6>Descuento</h6>
               <h4 id="LabelDescuentoCliente"><b class="cantidad">0</b></h4>
+            </div>
+            <div class="col-md-3">
+            	<div class="form-floating mb-3">
+								<select class="form-select" name="SucursalCliente" id="SucursalCliente" >
+									<option value="0">- Seleccione una opción -</option>
+										#SucursalesCliente#
+								</select>
+								<label for="SucursalCliente">Sucursal</label>
+							</div>
             </div>
             <hr>
 		        <b class="mb-3">Datos bancarios</b>   

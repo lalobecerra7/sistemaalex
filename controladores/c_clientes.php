@@ -18,14 +18,14 @@ class clientes {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'AND ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Cliente, Nombre, Foto, Direccion, Telefono, Celular, Correo, Ciudad, Colonia, Codigo_Postal, Estado, Pais, Lim_Credito, Titular, Banco, No_Cuenta, Fecha_Registro) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Cliente, clientes.Nombre, Foto, Direccion, clientes.Telefono, Celular, Correo, clientes.Ciudad, clientes.Colonia, clientes.Codigo_Postal, clientes.Estado, clientes.Pais, Lim_Credito, Titular, Banco, No_Cuenta, Fecha_Registro, sucursales.Nombre) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Cliente, Nombre, Foto, Direccion, Telefono, Celular, Correo, Ciudad, Colonia, Codigo_Postal, Estado, Pais, Fecha_Registro AS Fecha, Lim_Credito, Titular, Banco, No_Cuenta, (SELECT COUNT(*) FROM clientes WHERE ID_Cliente <> 1 $busqueda) AS Num FROM clientes WHERE ID_Cliente <> 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Cliente, clientes.Nombre, Foto, Direccion, clientes.Telefono, Celular, Correo, clientes.Ciudad, clientes.Colonia, clientes.Codigo_Postal, clientes.Estado, clientes.Pais, Fecha_Registro AS Fecha, Lim_Credito, Titular, Banco, No_Cuenta, FK_Sucursal, sucursales.Nombre AS NombreSucursal, (SELECT COUNT(*) FROM clientes WHERE ID_Cliente <> 1 $busqueda) AS Num FROM clientes INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE ID_Cliente <> 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -72,6 +72,10 @@ class clientes {
 						$contacto .= "Correo electrónico: ".$row[$i]['Correo']."<br>";
 					}
 
+					if ($row[$i]['NombreSucursal'] != "") {
+						$datosbancarios .= "Sucursal del cliente: <b>".$row[$i]['NombreSucursal']."</b><br>";
+					}
+
 					if ($row[$i]['Titular'] != "") {
 						$datosbancarios .= "Titular: ".$row[$i]['Titular']."<br>";
 					}
@@ -99,7 +103,7 @@ class clientes {
 
 					$botonPermisosModificar = "";
 					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_clientes'][3] == '1') {
-						$botonPermisosModificar = '<button class="btn btn-primary btn-sm mb-2" id="ModificarCliente" attrid="'.$row[$i]['ID_Cliente'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button>';
+						$botonPermisosModificar = '<button class="btn btn-primary btn-sm " id="ModificarCliente" attrid="'.$row[$i]['ID_Cliente'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button>';
 					}
 
 					$botonPermisosEliminar = "";
@@ -130,7 +134,7 @@ class clientes {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
-		$query = "INSERT INTO clientes SET Nombre = '$NombreCliente', Direccion = '$DireccionCliente', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Ciudad = '$CiudadCliente', Colonia = '$ColoniaCliente', Codigo_Postal = '$CPCliente', Tipo_Descuento = '$TipoDescuentoCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', Fecha_Registro = '$fecha', RFC = '$RFCCliente', Empresa = '$NombreEmpresaCliente', No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', Pais = '$PaisCliente', Estado = '$EstadoCliente'";
+		$query = "INSERT INTO clientes SET Nombre = '$NombreCliente', Direccion = '$DireccionCliente', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Ciudad = '$CiudadCliente', Colonia = '$ColoniaCliente', Codigo_Postal = '$CPCliente', Tipo_Descuento = '$TipoDescuentoCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', Fecha_Registro = '$fecha', RFC = '$RFCCliente', Empresa = '$NombreEmpresaCliente', No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', Pais = '$PaisCliente', Estado = '$EstadoCliente', FK_Sucursal = '$SucursalCliente'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
@@ -177,7 +181,7 @@ class clientes {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
-		$query = "UPDATE clientes SET Nombre = '$NombreCliente', Direccion = '$DireccionCliente', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Ciudad = '$CiudadCliente', Colonia = '$ColoniaCliente', Codigo_Postal = '$CPCliente', Tipo_Descuento = '$TipoDescuentoCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', RFC = '$RFCCliente', Empresa = '$NombreEmpresaCliente', No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', Pais = '$PaisCliente', Estado = '$EstadoCliente' WHERE ID_Cliente = '$IDCliente'";
+		$query = "UPDATE clientes SET Nombre = '$NombreCliente', Direccion = '$DireccionCliente', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Ciudad = '$CiudadCliente', Colonia = '$ColoniaCliente', Codigo_Postal = '$CPCliente', Tipo_Descuento = '$TipoDescuentoCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', RFC = '$RFCCliente', Empresa = '$NombreEmpresaCliente', No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', Pais = '$PaisCliente', Estado = '$EstadoCliente', FK_Sucursal = '$SucursalCliente' WHERE ID_Cliente = '$IDCliente'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
@@ -268,7 +272,7 @@ class clientes {
 		extract($_POST);
 		$IDCliente =  $omodelo->link->real_escape_string($IDCliente);
 
-		$query = "SELECT ID_Cliente, Nombre, Direccion, Telefono, Celular, Ciudad, Colonia, Codigo_Postal, Tipo_Descuento, Descuento, Lim_Credito, Correo, Fecha_Nacimiento, Sexo, Fecha_Registro, Foto, RFC, Empresa, No_Cuenta, Banco, Titular, Pais, Estado FROM clientes WHERE ID_Cliente = '$IDCliente'";
+		$query = "SELECT ID_Cliente, Nombre, Direccion, Telefono, Celular, Ciudad, Colonia, Codigo_Postal, Tipo_Descuento, Descuento, Lim_Credito, Correo, Fecha_Nacimiento, Sexo, Fecha_Registro, Foto, RFC, Empresa, No_Cuenta, Banco, Titular, Pais, Estado, FK_Sucursal FROM clientes WHERE ID_Cliente = '$IDCliente'";
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
