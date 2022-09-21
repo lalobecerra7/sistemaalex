@@ -338,7 +338,7 @@ class productos {
 							}
 						}
 
-						$impuestosNombres=substr($impuestosNombres, 0, -1);
+						$impuestosNombre= substr($impuestosNombres, 0, -1);
 
 						$tabla .= ' 
 						<tr>
@@ -348,7 +348,7 @@ class productos {
 						<td>' . $row[$i]['Precio_Mayoreo'] . '</td>
 						<td>' . $row[$i]['Minimo'] . '</td>
 						<td>' . $row[$i]['Maximo'] . '</td>
-						<td>' . $impuestosNombres . '</td>
+						<td>' . $impuestosNombre . '</td>
 						<td><button class="btn btn-primary btn-sm mb-1" type= "button" id="EditarDetalle" attrid="'.$row[$i]['ID_Detalle_Producto'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm mb-1" type= "button" id="EliminarDetalle" attrid="'.$row[$i]['ID_Detalle_Producto'].'" ><i class="fas fa-trash"></i></button></td>
 						</tr>';
 					}
@@ -428,7 +428,7 @@ class productos {
 						if ($error == "si") {
 							echo "Error: ".mysqli_error($omodelo->link);
 						}else{
-							if(sizeOf($impuesto) > 1){
+							if(sizeOf($impuesto) > 0){
 								for($j=0; $j<sizeOf($impuesto); $j++){
 									$imp = explode("~", $impuesto[$j]);
 									$query = "INSERT INTO detalles_impuestos_productos SET FK_Producto = '$IdProducto', FK_Sucursal = '$imp[0]', FK_Impuesto = '$imp[1]'";
@@ -475,7 +475,7 @@ class productos {
 					if ($row == "si") {
 						echo "Error: ".mysqli_error($omodelo->link);
 					}else{
-						if(sizeOf($impuesto) > 1){
+						if(sizeOf($impuesto) > 0){
 							for($j=0; $j<sizeOf($impuesto); $j++){
 								$imp = explode("~", $impuesto[$j]);
 								$query = "INSERT INTO detalles_impuestos_productos SET FK_Producto = '$IdProducto', FK_Sucursal = '$imp[0]', FK_Impuesto = '$imp[1]'";
@@ -562,7 +562,8 @@ class productos {
 
 					}
 				}
-			echo $impuestos;
+				$imp = substr($impuestos, 0, -1);
+			echo $imp;
 		}
 	}
 }

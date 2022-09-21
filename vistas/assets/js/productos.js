@@ -731,6 +731,23 @@ $(document).on('change', '#checkImpuesto', function() {
     }
 });
 
+$(document).on('change', '#Sucursal', function() {
+    if (impuesto != ''){
+        var imp = '';
+        var imp2 = [];
+        var suc = $(this).val();;
+        for(var i=0; i<impuesto.length; i++){
+            imp = impuesto[i].split('~');
+            imp2.push(imp[1]);
+        }
+        impuesto=[];
+        for(var j=0; j<imp2.length; j++){ 
+            impuesto.push(suc+'~'+imp2[j]);
+        }
+        
+    }
+});
+
 $(document).on('click', '#GuardarImpuestos', function() {
         var imp = '';
         if(impuesto.length>0){
