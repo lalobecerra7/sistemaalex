@@ -67,6 +67,16 @@ class impuestos {
 					if ($row[$i]['Predeterminado'] == "1") {
 						$predeterminado = "checked";
 					}
+
+					$botonPermisosModificar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_impuestos'][3] == '1') {
+						$botonPermisosModificar = '<button class="btn btn-primary btn-sm mb-2" id="ModificarImpuesto" attrid="'.$row[$i]['ID_Impuesto'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button>';
+					}
+
+					$botonPermisosEliminar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_impuestos'][4] == '1') {
+						$botonPermisosEliminar = '<button class="btn btn-danger btn-sm" id="EliminarImpuesto" attrid="'.$row[$i]['ID_Impuesto'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>';
+					}
 					
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Impuesto'],
@@ -75,7 +85,7 @@ class impuestos {
 						'Detalles' => $detalles,
 						'Tipo de Impuesto' => $tipo,
 						'Predeterminado' => '<input class="form-check-input" type="checkbox" id="ImpuestoPredeterminado" name="ImpuestoPredeterminado" '.$predeterminado.' attrid="'.$row[$i]['ID_Impuesto'].'">',
-						'Acciones' => '<button class="btn btn-primary btn-sm mb-2" id="ModificarImpuesto" attrid="'.$row[$i]['ID_Impuesto'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" id="EliminarImpuesto" attrid="'.$row[$i]['ID_Impuesto'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>',
+						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,
 					);
 					
 				}

@@ -17,7 +17,7 @@ class sucursales {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Sucursal, Nombre, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Telefono, Email, FK_Encargado) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Sucursal, sucursales.Nombre, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Telefono, Email, FK_Encargado, usuarios.Nombre,  usuarios.Primer_Apellido, usuarios.Segundo_Apellido) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
@@ -35,14 +35,20 @@ class sucursales {
 				for($i=0; $i<$numerofilas; $i++){
 					$direccion = "";$telefono="";$email="";$gerente="";
 					if ($row[$i]['Calle'] != "") {
-						$direccion = $row[$i]['Calle'].' '.$row[$i]['No_Exterior'].' - '.$row[$i]['No_Interior'].' <br> Colonia: '.$row[$i]['Colonia'].' C.P.: '.$row[$i]['CP'].' <br> '.$row[$i]['Ciudad'].', '.$row[$i]['Estado'].', '.$row[$i]['Pais'];
+						$direccion = $row[$i]['Calle'].' '.$row[$i]['No_Exterior'].' - '.$row[$i]['No_Interior'].' <br> Colonia: '.$row[$i]['Colonia'].' <br>C.P.: '.$row[$i]['CP'].' <br> '.$row[$i]['Ciudad'].', '.$row[$i]['Estado'].', '.$row[$i]['Pais'];
 					}else{	
 						$direccion = "No hay datos registrados";
 					}
 
 					if ($row[$i]['Telefono'] != "") {
-						$telefono = $row[$i]['Telefono'].'<br>'.$row[$i]['Segundo_Telefono'];
-					}else{	
+						$telefono .= "Primer teléfono: <b>".$row[$i]['Telefono'].'</b><br>';
+					}
+
+					if ($row[$i]['Segundo_Telefono'] != "") {
+						$telefono .= "Segundo teléfono: <b>".$row[$i]['Segundo_Telefono'].'</b><br>';
+					}
+
+					if ($telefono == "") {
 						$telefono = "No hay telefono registrado";
 					}
 
@@ -62,6 +68,15 @@ class sucursales {
 					if ($row[$i]['numSucu'] > 0) {
 						$EliminarSucursal = '';
 					}
+					$botonPermisosModificar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_sucursales'][3] == '1') {
+						$botonPermisosModificar = '<button class="btn btn-primary btn-sm" id="ModificarSucursal" attrid="'.$row[$i]['ID_Sucursal'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button>';
+					}
+
+					$botonPermisosEliminar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_sucursales'][4] == '1') {
+						$botonPermisosEliminar = $EliminarSucursal;
+					}
 					
 
 					$arreglo['data'][$i] = array(
@@ -71,7 +86,7 @@ class sucursales {
 						'Correo' => $email,
 						'Direccion' => $direccion,
 						'Telefonos' => $telefono,
-						'Acciones' => '<button class="btn btn-primary btn-sm" id="ModificarSucursal" attrid="'.$row[$i]['ID_Sucursal'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button> '.$EliminarSucursal,
+						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,
 					);
 					
 				}

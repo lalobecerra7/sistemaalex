@@ -63,7 +63,6 @@
 			<br>
 			<div class="row">
 				<div class="col-12 text-end">
-					<!-- <button type="button" class="btn btn-success" id="botonNuevaArea" onclick="$('#ModalAreas').appendTo('body').modal('show')"><i class="fa fa-file"></i> Nueva</button> -->
 					<button type="button" class="btn btn-success" id="botonNuevaCaja" data-bs-toggle="modal" data-bs-target="#ModalCajas"><i class="fa fa-file"></i> Nueva</button>
 					<a href="javascript:void(0)" class="btn btn-light btn-reload cargarVista" carga="v_cajas" titulo="Cajas"><i class="fa fa-retweet"></i></a>
 				</div>

@@ -30,7 +30,7 @@ jQuery(document).ready(function($) {
     setTimeout(function(){
       $("#cargarInicio").trigger("click");
     },100);
-
+    permisos();
     $(document).on('click', '.cargarVista', function() {
 
         var nombre = $(this).attr('carga'), titulo = $(this).attr('titulo'), id = $(this).attr('id'), atri = $(this).attr('atri'), pesta = $(this).attr('pesta'); 
@@ -157,6 +157,59 @@ jQuery(document).ready(function($) {
     });  
 
 });
+
+function permisos() {
+    var data = "metodo=detalles&accion=usuarios&tipo=ConsultarPermisosUsuario";
+    $.ajax({
+        url: 'index.php',
+        type: 'POST',
+        data: data
+    })
+    .done(function(res) {
+        console.log($.trim(res));
+        var resA = JSON.parse(res);
+        if(resA.Tipo != "Administrador"){
+          //$(".cargarVista").hide();
+          //$(".cargarVista[carga='v_usuarios']").remove();
+          var cadena = resA.Cadena.split('~');
+          var permisos = "";
+          //console.log(cadena);
+
+          for (var i = cadena.length - 1; i >= 0; i--) {
+            permisos = cadena[i].split(',');
+            if(permisos[0] == "v_ventas"){
+              if(permisos[2] == '0'){
+                $("#cargarHacerVenta").remove();
+              }
+            }
+
+            if(permisos[0] == "v_inicio"){
+              if(permisos[1] == '1'){
+                setTimeout(function(){
+                    $("#cargarInicio").trigger("click");
+                }, 10);
+              }else{
+                $(".cargarVista[carga='"+permisos[0]+"']").remove();
+              }
+            }else{
+              if(permisos[1] == '0'){
+                $(".cargarVista[carga='"+permisos[0]+"']").remove();
+              }       
+            }                
+          }
+        }else{
+          setTimeout(function(){
+            $("#cargarInicio").trigger("click");
+          }, 10);
+        }
+    })
+    .fail(function() {
+        console.log("Error ajax");
+    })
+    .always(function() {
+        //console.log("complete");
+    });
+}
 
 function cerrarSesion(){
     var data="metodo=eliminar&accion=login";

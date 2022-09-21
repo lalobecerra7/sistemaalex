@@ -51,6 +51,21 @@ class cajas {
 					if ($row[$i]['UsuarioActual'] != "") {
 						$usuario = $row[$i]['UsuarioActual'];
 					}
+
+					$botonPermisosModificar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cajas'][3] == '1') {
+						$botonPermisosModificar = '<button class="btn btn-primary btn-sm mb-2" id="ModificarCaja" attrid="'.$row[$i]['ID_Caja'].'" nombre="'.$row[$i]['Caja'].'"><i class="fas fa-edit"></i></button>';
+					}
+
+					$botonPermisosEliminar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cajas'][4] == '1') {
+						$botonPermisosEliminar = '<button class="btn btn-danger btn-sm" id="EliminarCaja" attrid="'.$row[$i]['ID_Caja'].'" nombre="'.$row[$i]['Caja'].'"><i class="fas fa-trash"></i></button>';
+					}
+
+					if($row[$i]['Estado'] == "1"){
+						$botonPermisosEliminar = "";
+					}
+
 					
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Caja'],
@@ -59,7 +74,7 @@ class cajas {
 						'Detalles' => $detalles,
 						'Estatus' => $estatus,
 						'Usuario' => $usuario,
-						'Acciones' => '<button class="btn btn-primary btn-sm mb-2" id="ModificarCaja" attrid="'.$row[$i]['ID_Caja'].'" nombre="'.$row[$i]['Caja'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" id="EliminarCaja" attrid="'.$row[$i]['ID_Caja'].'" nombre="'.$row[$i]['Caja'].'"><i class="fas fa-trash"></i></button>',
+						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,
 					);
 				}
 				$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	

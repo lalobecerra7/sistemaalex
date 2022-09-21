@@ -200,6 +200,12 @@ jQuery(document).ready(function($) {
                     var descuento = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr.activa').children('td:eq(4)').children('span.dinero').text().replace('$', '').replace(',', ''));
                     var precio = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr.activa').children('td:eq(2)').children('span.dinero').text().replace('$', '').replace(',', ''));
                     var descuHtml = '';
+                    /*var impuestos = '';
+                    if (datos.Impuestos != null) {
+                        for (var i = 0; i < datos.Impuestos.length; i++) {
+                            impuestos += (parseFloat(datos.Impuestos[i].Porcentaje) * parseFloat(precio)) / 100;
+                        }
+                    }*/
                     if(evt.key === "+"){
                         descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
                         if(descuento > 0){
@@ -345,7 +351,7 @@ jQuery(document).ready(function($) {
             }
         })
         .done(function(res) {
-            //console.log(res);
+            console.log(res);
             $("#barCodeV").val("");
 
             if($.trim(res) == "No encontrado"){
@@ -403,6 +409,13 @@ jQuery(document).ready(function($) {
                             }
                         }
 
+                        /*var impuestos = '';
+                        if (datos.Impuestos != null) {
+                            for (var i = 0; i < datos.Impuestos.length; i++) {
+                                impuestos += (parseFloat(datos.Impuestos[i].Porcentaje) * parseFloat(precio)) / 100;
+                            }
+                        }*/
+
                         $("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').addClass('activa');
 
                         $("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').html(`
@@ -415,7 +428,14 @@ jQuery(document).ready(function($) {
                             <td><span class="cantidad">`+existencia+`</span></td>
                         `);
                     }else{
-                        $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`"  precioMayoreo="`+precioMayoreo+`" class="activa normal">
+                        var impuestos = '';
+                        if (datos.Impuestos != null) {
+                            for (var i = 0; i < datos.Impuestos.length; i++) {
+                                impuestos += datos.Impuestos[i].Nombre+"-"+datos.Impuestos[i].Porcentaje+",";
+                            }
+                        }
+
+                        $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`"  precioMayoreo="`+precioMayoreo+`" impuestos="`+impuestos+`" class="activa normal">
                             <td>`+datos.Codigo+`</td>
                             <td>`+datos.Descripcion+`</td>
                             <td><span class="dinero">`+precio+`</span></td>
@@ -518,7 +538,14 @@ jQuery(document).ready(function($) {
                             <td><span class="cantidad">`+existencia+`</span></td>
                         `);
                     }else{
-                        $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+precioMayoreo+`" class="activa normal">
+                        var impuestos = '';
+                        if (datos.Impuestos != null) {
+                            for (var i = 0; i < datos.Impuestos.length; i++) {
+                                impuestos += datos.Impuestos[i].Nombre+"-"+datos.Impuestos[i].Porcentaje+",";
+                            }
+                        }
+
+                        $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+precioMayoreo+`" impuestos="`+impuestos+`" class="activa normal">
                             <td>`+datos.Codigo+`</td>
                             <td>`+datos.Descripcion+`</td>
                             <td><span class="dinero">`+precio+`</span></td>
@@ -629,7 +656,13 @@ jQuery(document).ready(function($) {
                             <td><span class="cantidad">`+existencia+`</span></td>
                         `);
                     }else{
-                        $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+precioMayoreo+`" class="activa normal">
+                        var impuestos = '';
+                        if (datos.Impuestos != null) {
+                            for (var i = 0; i < datos.Impuestos.length; i++) {
+                                impuestos += datos.Impuestos[i].Nombre+"-"+datos.Impuestos[i].Porcentaje+",";
+                            }
+                        }
+                        $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+precioMayoreo+`" impuestos="`+impuestos+`" class="activa normal">
                             <td>`+datos.Codigo+`</td>
                             <td>`+datos.Descripcion+`</td>
                             <td><span class="dinero">`+precio+`</span></td>
@@ -943,7 +976,13 @@ jQuery(document).ready(function($) {
                                 <td><span class="cantidad">`+existencia+`</span></td>
                             `);
                         }else{
-                            $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+preciomayoreo+`" class="activa normal">
+                            var impuestos = '';
+                            if (datos.Impuestos != null) {
+                                for (var i = 0; i < datos.Impuestos.length; i++) {
+                                    impuestos += datos.Impuestos[i].Nombre+"-"+datos.Impuestos[i].Porcentaje+",";
+                                }
+                            }
+                            $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+preciomayoreo+`" impuestos="`+impuestos+`" class="activa normal">
                                 <td>`+datos.Codigo+`</td>
                                 <td>`+datos.Descripcion+`</td>
                                 <td><span class="dinero">`+precio+`</span></td>
@@ -1570,7 +1609,6 @@ jQuery(document).ready(function($) {
                                             <th>Descuento</th>
                                             <th>Total</th> 
                                             <th>Existencia</th>
-                                            <th>Impuestos</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1744,7 +1782,6 @@ function verCajaAbierta(id, sucursal, detalle_caja) {
                                             <th>Descuento</th>
                                             <th>Total</th> 
                                             <th>Existencia</th>
-                                            <th>Impuestos</th>
                                         </tr>
                                     </thead>
                                     <tbody>

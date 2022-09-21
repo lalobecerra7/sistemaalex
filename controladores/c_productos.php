@@ -34,13 +34,13 @@ class productos {
 		}else{
 			if($numerofilas > 0){
 				for($i=0; $i<$numerofilas; $i++){
-					$imagen = '<a href="vistas/assets/img/default.jpg" data-fancybox="images">
+					$imagen = '<a href="vistas/assets/archivos/fotosProductos/default.jpg" data-fancybox="images">
 									<div style="background-image: url('."'".'vistas/assets/archivos/fotosProductos/default.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
 									</div>
 								</a><br>';
 					if ($row[$i]["Imagen"] != "") {
 						if($row[$i]["Imagen"] != "" && file_exists("vistas/assets/archivos/fotosProductos/".$row[$i]["Imagen"])){
-							$imagen = '<a href="vistas/assets/img/productos/'.$row[$i]["Imagen"].'" data-fancybox="images">
+							$imagen = '<a href="vistas/assets/archivos/fotosProductos/'.$row[$i]["Imagen"].'" data-fancybox="images">
 									<div style="background-image: url('."'".'vistas/assets/archivos/fotosProductos/'.$row[$i]["Imagen"]."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
 									</div>
 								</a><br>';
@@ -57,6 +57,21 @@ class productos {
 					if ($row[$i]['numProd'] > 0) {
 						$EliminarProducto = '';
 					}
+
+					$botonPermisosModificar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_productos'][3] == '1') {
+						$botonPermisosModificar = '<button class="btn btn-primary btn-sm mb-1" id="ModificarProducto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-edit"></i></button>';
+					}
+
+					$botonPermisosEliminar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_productos'][4] == '1') {
+						$botonPermisosEliminar = $EliminarProducto;
+					}
+
+					$botonPermisosPreciosSucursal = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_productos'][5] == '1') {
+						$botonPermisosPreciosSucursal = '<button class="btn btn-warning btn-sm mb-1" id="EditarPrecios" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-plus"></i></button>';
+					}
 					
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Producto'],
@@ -67,7 +82,7 @@ class productos {
 						'Precio' => '<b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b>',
 						'PrecioMayoreo' => '<b class="dinero">$'.number_format($row[$i]['Precio_Mayoreo'], 2).'</b>',
 						'Detalles' => $row[$i]['Detalles']."<br> Minimo: <b>".$row[$i]['Minimo']."</b> <br> Maximo: <b>".$row[$i]['Maximo']."</b>",
-						'Acciones' => '<button class="btn btn-primary btn-sm mb-1" id="ModificarProducto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-warning btn-sm mb-1" id="EditarPrecios" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-plus"></i></button>'.$EliminarProducto,
+						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar.' '.$botonPermisosPreciosSucursal,
 					);
 					
 				}

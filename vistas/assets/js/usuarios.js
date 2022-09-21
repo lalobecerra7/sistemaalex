@@ -250,12 +250,12 @@ jQuery(document).ready(function($) {
             setTimeout(function() {
                 if(btn.attr('id') == "perfil1"){
                     perfil = "Capturista";
-                    cadena = "v_inventario,1,1,0~v_ventas,0,0,0,0,0~v_salidas,0,0,0~v_clientes,1,1,1,1~v_etiquetas,1,1~v_productos,1,1,1,1~v_merma,1,1~v_reportesalidas,0~v_vendedores,1,1,1,1~v_vehiculos,1,1,1,1~v_usuarios,1,1,0,0,0~";
+                    cadena = "v_sucursales,1,1,1,0~v_proveedores,1,1,1,0~v_clientes,1,1,1,0~v_areas,1,1,1,0~v_categorias,1,1,1,0~v_productos,1,1,1,0,0~v_inventario,1,1,1,0~v_cajas,1,1,0,0~v_impuestos,1,1,0,0~v_tickets,0~v_general,0~v_usuarios,1,1,1,0,0~Capturista";
                 }else if(btn.attr('id') == "perfil2"){
-                    cadena = "v_inventario,1,1,1~v_ventas,1,1,1,1,1~v_salidas,1,0,0~v_clientes,1,1,0,0~v_etiquetas,0,0~v_productos,0,0,0,0~v_merma,0,0~v_reportesalidas,1~v_vendedores,1,1,1,1~v_vehiculos,0,0,0,0~v_usuarios,0,0,0,0,0~";
+                    cadena = "v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,1,0,0,0~v_areas,0,0,0,0~v_categorias,0,0,0,0~v_productos,1,0,0,0,0~v_inventario,1,0,0,0~v_cajas,1,0,0,0~v_impuestos,1,1,1,1~v_tickets,1~v_general,1~v_usuarios,0,0,0,0,0~Vendedor";
                     perfil = "Vendedor";
                 }else if(btn.attr('id') == "perfil3"){
-                    cadena = "v_inventario,1,1,1~v_ventas,1,1,1,1,1~v_salidas,1,1,1~v_clientes,1,1,1,1~v_etiquetas,1,1~v_productos,1,1,1,1~v_merma,1,1~v_reportesalidas,1~v_vendedores,1,1,1,1~v_vehiculos,1,1,1,1~v_usuarios,1,0,0,0,0~";
+                    cadena = "v_sucursales,1,1,1,1~v_proveedores,1,1,1,1~v_clientes,1,1,1,1~v_areas,1,1,1,1~v_categorias,1,1,1,1~v_productos,1,1,1,1,1~v_inventario,1,1,1,1~v_cajas,1,1,1,1~v_impuestos,1,1,1,1~v_tickets,1~v_general,1~v_usuarios,1,1,1,0,1~Supervisor";
                     perfil = "Supervisor";
                 }
 
@@ -317,7 +317,7 @@ jQuery(document).ready(function($) {
         }).then((result) => {
             if (result.value) {
                 //Cada que se agreguen o modifiquen permisos modificar esta cadena
-                var cadena = 'v_inventario,0,0,0,0,0~v_ventas,0,0,0,0,0~v_salidas,0,0,0~v_clientes,0,0,0,0~v_etiquetas,0,0~v_productos,0,0,0,0~v_reportesalidas,0~v_vendedores,0,0,0,0~v_vehiculos,0,0,0,0~v_usuarios,0,0,0,0,0~';
+                var cadena = 'v_sucursales,0,0,0,0~v_proveedores,0,0,0,0~v_clientes,0,0,0,0~v_areas,0,0,0,0~v_categorias,0,0,0,0~v_productos,0,0,0,0,0~v_inventario,0,0,0,0~v_cajas,0,0,0,0~v_impuestos,0,0,0,0~v_tickets,0~v_general,0~v_usuarios,0,0,0,0,0~';
                 var data = "metodo=detalles&accion=usuarios&tipo=ModificarPermisos&id="+boton.attr('attrid')+"&cadena="+cadena;
 
                 $.ajax({
