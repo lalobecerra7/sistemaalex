@@ -395,6 +395,7 @@ $(document).on('click', '#DetalleProductoSucursal', function () {
                     <td>' +$('#PrecioMayoreoD').val()+ '</td>\
                     <td>' +$('#MinimoD').val()+ '</td>\
                     <td>' +$('#MaximoD').val()+ '</td>\
+                    <td>' +$('#impuestosProducto').val()+ '</td>\
                     <td><button class="btn btn-danger btn-sm" type="button" id="EliminarFila" fila="'+cont+'" class="borrar" value="Eliminar"><i class="fas fa-trash"></i></button></td>\
                 </tr>'
             );
