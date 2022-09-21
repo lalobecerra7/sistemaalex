@@ -207,6 +207,7 @@
 									<th>Precio Mayoreo</th>
 									<th>Stock mínimo</th>
 									<th>Stock máximo</th>
+									<th>Impuestos</th>
 									<th>Acciones</th>
 								</tr>
 							</thead>
@@ -357,6 +358,7 @@
 									<th>Precio Mayoreo</th>
 									<th>Stock mínimo</th>
 									<th>Stock máximo</th>
+									<th>Impuestos</th>
 									<th>Acciones</th>
 								</tr>
 							</thead>

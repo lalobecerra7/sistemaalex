@@ -1,38 +1,3 @@
-<div class="modal fade" id="ModalCategorias" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
-    <div class="modal-content">
-      <div class="modal-header bg-inverse bd-inverse-darken">
-        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;"><span id="TituloModalCategorias"></span> categoria / familia</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="FormCategorias">
-	      <div class="modal-body">
-	       	<div class="row">
-	       		<div class="col-md-12 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		               	<input type="text" class="form-control" id="NombreCategoria" name="NombreCategoria" placeholder="Ingresa el nombre de la categoria o familia">
-		                <label for="NombreCategoria">Nombre de la categoria o familia</label>
-		            </div>
-		        </div>
-		        <div class="col-md-12 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		               	<input type="text" class="form-control" id="DescripcionCategoria" name="DescripcionCategoria" placeholder="Ingresa la descripción de la categoria o familia">
-		                <label for="DescripcionCategoria">Descripción de la categoria o familia</label>
-		            </div>
-		        </div>
-	       	</div>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="submit" class="btn btn-primary" id="GuardarCategoria" attrid="" tipo="insertar"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
-					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-	      </div>
-  		</form>
-    </div>
-  </div>
-</div> 
-
-
-<br>
 <div class="mb-3 mt-2">
 	<div class="row">
 		<div class="col-12">
