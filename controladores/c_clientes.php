@@ -96,6 +96,16 @@ class clientes {
 								</a><br>';
 						}	
 					}
+
+					$botonPermisosModificar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_clientes'][3] == '1') {
+						$botonPermisosModificar = '<button class="btn btn-primary btn-sm mb-2" id="ModificarCliente" attrid="'.$row[$i]['ID_Cliente'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button>';
+					}
+
+					$botonPermisosEliminar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_clientes'][4] == '1') {
+						$botonPermisosEliminar = '<button class="btn btn-danger btn-sm" id="EliminarCliente" attrid="'.$row[$i]['ID_Cliente'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>';
+					}
 					
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Cliente'],
@@ -104,7 +114,7 @@ class clientes {
 						'Direccion' => $direccion,
 						'Contacto' => $contacto,
 						'Detalles' => $datosbancarios,
-						'Acciones' => '<button class="btn btn-primary btn-sm mb-2" id="ModificarCliente" attrid="'.$row[$i]['ID_Cliente'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" id="EliminarCliente" attrid="'.$row[$i]['ID_Cliente'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>',
+						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,
 					);
 					
 				}

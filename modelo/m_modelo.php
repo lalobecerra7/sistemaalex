@@ -45,7 +45,7 @@ class m_modelo extends conexion{
 	
 	public function permisos(){
 		$permisosMo = null;
-		$query = "SELECT Permisos, Tipo FROM usuarios_administrador WHERE ID_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
+		$query = "SELECT Permisos, Tipo_Usuario FROM usuarios WHERE ID_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
 		$row = $this->_consultar($query);
 		$numerofilas = $this->numerofilas;
 
@@ -53,7 +53,7 @@ class m_modelo extends conexion{
 			echo "Error: ".mysqli_error($this->link);
 		}else{
 			if($numerofilas > 0){
-				if($row[0]['Tipo'] == 'Administrador'){
+				if($row[0]['Tipo_Usuario'] == 'Administrador'){
 					$permisosMo = 'Administrador';
 				}else{
 					$modulos = explode('~', $row[0]['Permisos']);

@@ -164,7 +164,6 @@ class hacerventa {
 			echo json_encode($arreglo);
 		}else if($tipo == "AgregarProducto"){
 			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, Clase, Abreviatura AS Unidad, Poner_Unidad, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, detalles_productos.Costo AS Costo, detalles_productos.Precio AS Precio, detalles_productos.Precio_Mayoreo AS Precio_Mayoreo, detalles_productos.Minimo AS Minimo, detalles_productos.Maximo AS Maximo FROM productos LEFT JOIN detalles_productos ON detalles_productos.FK_Producto = ID_Producto AND detalles_productos.FK_Sucursal = '$sucursal' LEFT JOIN unidades ON FK_Unidad = ID_Unidad LEFT JOIN areas ON FK_Area = ID_Area LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' WHERE Tipo = 1 AND Codigo = '$codigo'";
-			echo $query;
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -172,10 +171,26 @@ class hacerventa {
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
 				if($numerofilas > 0){
+					$subarreglo = null;
+					$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Sucursal, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."' AND FK_Sucursal = '".$sucursal."'";
+					$rowI = $omodelo->_consultar($queryI);
+					$numerofilasI = $omodelo->numerofilas;
 
-					/*$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Sucursal, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje,  FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."' AND FK_Sucursal = '".$sucursal."'";
+					if($rowI == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasI > 0){
+							for ($i=0; $i < $numerofilasI; $i++) { 
+								$subarreglo[$i] = array(
+									'ID_Impuesto' => $rowI[$i]["FK_Impuesto"],
+									'Nombre' => $rowI[$i]["Nombre"],
+									'Porcentaje' => $rowI[$i]["Porcentaje"]
+								);
+							}
+						}
+					}
 
-					$arreglo[$i] = array(
+					$arreglo = array(
 						'ID_Producto' => $row[0]["ID_Producto"],
 						'Codigo' => $row[0]["Codigo"],
 						'Descripcion' => $row[0]["Descripcion"],
@@ -196,8 +211,9 @@ class hacerventa {
 						'Precio_Mayoreo' => $row[0]["Precio_Mayoreo"],
 						'Minimo' => $row[0]["Minimo"],
 						'Maximo' => $row[0]["Maximo"],
-						'Impuestos' => 
-					);*/
+						'Impuestos' => $subarreglo
+					);
+					echo json_encode($arreglo);
 				}else{
 					echo "No encontrado";
 				}

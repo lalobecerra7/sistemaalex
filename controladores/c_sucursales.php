@@ -62,6 +62,15 @@ class sucursales {
 					if ($row[$i]['numSucu'] > 0) {
 						$EliminarSucursal = '';
 					}
+					$botonPermisosModificar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_sucursales'][3] == '1') {
+						$botonPermisosModificar = '<button class="btn btn-primary btn-sm" id="ModificarSucursal" attrid="'.$row[$i]['ID_Sucursal'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button>';
+					}
+
+					$botonPermisosEliminar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_sucursales'][4] == '1') {
+						$botonPermisosEliminar = $EliminarSucursal;
+					}
 					
 
 					$arreglo['data'][$i] = array(
@@ -71,7 +80,7 @@ class sucursales {
 						'Correo' => $email,
 						'Direccion' => $direccion,
 						'Telefonos' => $telefono,
-						'Acciones' => '<button class="btn btn-primary btn-sm" id="ModificarSucursal" attrid="'.$row[$i]['ID_Sucursal'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button> '.$EliminarSucursal,
+						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,
 					);
 					
 				}

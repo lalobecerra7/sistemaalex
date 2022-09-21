@@ -538,14 +538,6 @@
                 <div data-i18n="Áreas">Áreas</div>
               </a>
             </li>
-            <!-- 
-
-            <li class="menu-item cargarVista" carga="v_personal" titulo="Personal" id="cargarPersonal">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-users"></i>
-                <div data-i18n="Personal">Personal</div>
-              </a>
-            </li> -->
 
             <!-- Layouts -->
             <li class="menu-item">
@@ -580,22 +572,6 @@
                     <div data-i18n="Impuestos">Impuestos</div>
                   </a>
                 </li>
-                <!-- <li class="menu-item cargarVista" carga="v_compras" titulo="Compras" id="cargarCompras">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Compras">Compras</div>
-                  </a>
-                </li>
-                <li class="menu-item cargarVista" carga="v_ventas" titulo="Ventas" id="cargarVentas">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Ventas">Ventas</div>
-                  </a>
-                </li>
-                
-                 <li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Impuestos">Impuestos</div>
-                  </a>
-                </li> -->
               </ul>
             </li>
 
@@ -611,11 +587,6 @@
                     <div data-i18n="Tickets">Tickets</div>
                   </a>
                 </li>
-                <!-- <li class="menu-item cargarVista" carga="v_inventario" titulo="Inventario" id="cargarInventario">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Inventario">Inventario</div>
-                  </a>
-                </li> -->
               </ul>
             </li>
 

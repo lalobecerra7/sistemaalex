@@ -59,6 +59,21 @@ class usuarios {
 					}else{
 						$botonPermisos = '<button class="btn btn-link"><i class="fas fa-ellipsis"></i></button>';
 					}
+
+					$botonPermisosModificar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_usuarios'][3] == '1') {
+						$botonPermisosModificar = '<button class="btn btn-primary btn-sm" id="ModificarUsuario" attrid="'.$row[$i]['ID_Usuario'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button>';
+					}
+
+					$botonPermisosEliminar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_usuarios'][4] == '1') {
+						$botonPermisosEliminar = '<button class="btn btn-danger btn-sm" id="EliminarUsuario" attrid="'.$row[$i]['ID_Usuario'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>';
+					}
+
+					$botonPermisosPermisos = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_usuarios'][5] == '1') {
+						$botonPermisosPermisos = $botonPermisos;
+					}
 					
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Usuario'],
@@ -66,8 +81,8 @@ class usuarios {
 						'Nombre' => $row[$i]['Nombre']." ".$row[$i]['Primer_Apellido']." ".$row[$i]['Segundo_Apellido'],
 						'Usuario' => $row[$i]['Correo']."<br>Tipo de usuario: <b>".$row[$i]['Tipo_Usuario']."</b>",
 						'Estatus' => $estatus,
-						'Permisos' => $botonPermisos,
-						'Acciones' => '<button class="btn btn-primary btn-sm" id="ModificarUsuario" attrid="'.$row[$i]['ID_Usuario'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm" id="EliminarUsuario" attrid="'.$row[$i]['ID_Usuario'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>',
+						'Permisos' => $botonPermisosPermisos,
+						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,
 					);
 					
 				}
@@ -268,6 +283,33 @@ class usuarios {
 					echo "NoCoincide";
 				}
 			}
+		}else if($tipo == "ModificarPermisos"){
+			$id = $omodelo->link->real_escape_string($id);
+			$cadena = $omodelo->link->real_escape_string($cadena);
+
+			$query = "UPDATE usuarios SET Permisos = '$cadena' WHERE ID_Usuario = '$id'";	
+			$error = $omodelo->_insertar($query);
+
+			if ($error == "si") {
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
+		}else if($tipo == "ConsultarPermisosUsuario"){
+			$query = "SELECT Permisos, Tipo_Usuario FROM usuarios WHERE ID_Usuario='".$_SESSION['user_admin']['ID_Usuario']."'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			
+			if ($row == "si"){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					$arreglo = array('Cadena'=> $row[0]['Permisos'], 'Tipo'=> $row[0]['Tipo_Usuario']); 
+				}
+			}
+
+			echo json_encode($arreglo);
 		}
 	}
 

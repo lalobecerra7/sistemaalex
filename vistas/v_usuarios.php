@@ -192,16 +192,393 @@
                                 </th>
                             </tr>
                             <tr>
-                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_inventario">Inventario</th>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_sucursales">Sucursales</th>
                                 <td class="table-responsive">
                                     <table class="table table-bordered text-center" width="100%">
                                         <tbody>
                                             <tr>
                                                 <td>Ver</td>
-                                                <td>Ver merma</td>
+                                                <td>Agregar</td>
+                                                <td>Modificar</td>
+                                                <td>Eliminar</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_proveedores">Proveedores</th>
+                                <td class="table-responsive">
+                                    <table class="table table-bordered text-center" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Ver</td>
+                                                <td>Agregar</td>
+                                                <td>Modificar</td>
+                                                <td>Eliminar</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_clientes">Clientes</th>
+                                <td class="table-responsive">
+                                    <table class="table table-bordered text-center" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Ver</td>
+                                                <td>Agregar</td>
+                                                <td>Modificar</td>
+                                                <td>Eliminar</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_areas">Áreas</th>
+                                <td class="table-responsive">
+                                    <table class="table table-bordered text-center" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Ver</td>
+                                                <td>Agregar</td>
+                                                <td>Modificar</td>
+                                                <td>Eliminar</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_categorias">Categorias / Familias</th>
+                                <td class="table-responsive">
+                                    <table class="table table-bordered text-center" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Ver</td>
+                                                <td>Agregar</td>
+                                                <td>Modificar</td>
+                                                <td>Eliminar</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_productos">Productos</th>
+                                <td class="table-responsive">
+                                    <table class="table table-bordered text-center" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Ver</td>
+                                                <td>Agregar</td>
+                                                <td>Modificar</td>
+                                                <td>Eliminar</td>
+                                                <td>Actualizar precios</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_inventario">Inventario</th>
+                                <td class="table-responsive">
+                                    <table class="table table-bordered text-center" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Ver inventario</td>
                                                 <td>Registrar merma</td>
-                                                <td>Eliminar merma</td>
-                                                <td>Aumentar existencias</td>
+                                                <td>Registrar traslados</td>
+                                                <td>Ver merma</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_cajas">Cajas</th>
+                                <td class="table-responsive">
+                                    <table class="table table-bordered text-center" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Ver</td>
+                                                <td>Agregar</td>
+                                                <td>Modificar</td>
+                                                <td>Eliminar</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_impuestos">Impuestos</th>
+                                <td class="table-responsive">
+                                    <table class="table table-bordered text-center" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Ver</td>
+                                                <td>Agregar</td>
+                                                <td>Modificar</td>
+                                                <td>Eliminar</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_tickets">Configuracion del ticket</th>
+                                <td class="table-responsive">
+                                    <table class="table table-bordered text-center" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Ver</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_general">Configuracion general</th>
+                                <td class="table-responsive">
+                                    <table class="table table-bordered text-center" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Ver</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_usuarios">Usuarios</th>
+                                <td class="table-responsive">
+                                    <table class="table table-bordered text-center" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Ver</td>
+                                                <td>Agregar</td>
+                                                <td>Modificar</td>
+                                                <td>Eliminar</td>
+                                                <td>Permisos</td>
                                             </tr>
                                             <tr>
                                                 <td>

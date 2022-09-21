@@ -87,6 +87,11 @@ class controller {
 		if($nombre == "v_inicio"){
 
 		}else if($nombre == "v_productos"){
+
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_productos'][2] == '0') {
+				echo '<script>$("#botonNuevoProductos").remove();</script>';
+			}
+
 			$query = "SELECT ID_Categoria, Nombre FROM categorias";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
@@ -184,6 +189,9 @@ class controller {
 			$pagina = str_replace('#CorreoActual#', $_SESSION['user_admin']['Correo'], $pagina);
 
 		}else if($nombre == "v_sucursales"){
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_sucursales'][2] == '0') {
+				echo '<script>$("#bontonNuevoSu").remove();</script>';
+			}
 
 			$query = "SELECT ID_Usuario, Nombre, Primer_Apellido, Segundo_Apellido FROM usuarios";
 			$row = $omodelo->_consultar($query);
@@ -202,6 +210,34 @@ class controller {
 
 			$pagina = str_replace('#usuarios#', $opciones, $pagina);
 
+		}else if($nombre == "v_proveedores"){
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_proveedores'][2] == '0') {
+				echo '<script>$("#bontonNuevoProve").remove();</script>';
+			}
+		}else if($nombre == "v_clientes"){
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_clientes'][2] == '0') {
+				echo '<script>$("#botonNuevoCliente").remove();</script>';
+			}
+		}else if($nombre == "v_areas"){
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_areas'][2] == '0') {
+				echo '<script>$("#botonNuevaArea").remove();</script>';
+			}
+		}else if($nombre == "v_categorias"){
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_categorias'][2] == '0') {
+				echo '<script>$("#botonNuevaCategoria").remove();</script>';
+			}
+		}else if($nombre == "v_cajas"){
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_cajas'][2] == '0') {
+				echo '<script>$("#botonNuevaCaja").remove();</script>';
+			}
+		}else if($nombre == "v_impuestos"){
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_impuestos'][2] == '0') {
+				echo '<script>$("#botonNuevoImpuesto").remove();</script>';
+			}
+		}else if($nombre == "v_usuarios"){
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_usuarios'][2] == '0') {
+				echo '<script>$("#botonNuevoUsuario").remove();</script>';
+			}
 		}
 		
 		return $pagina;

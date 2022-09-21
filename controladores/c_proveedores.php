@@ -91,6 +91,15 @@ class proveedores {
 					if ($row[$i]['RazonSocial'] != "") {
 						$razonsocial="Razón social: <b>".$row[$i]['RazonSocial']."</b><br>";
 					}
+
+					$botonPermisosModificar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_proveedores'][3] == '1') {
+						$botonPermisosModificar = '<button class="btn btn-primary btn-sm" id="ModificarProveedor" attrid="'.$row[$i]['ID_Proveedor'].'" nombre="'.$row[$i]['Empresa'].'"><i class="fas fa-edit"></i></button>';
+					}
+					$botonPermisosEliminar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_proveedores'][4] == '1') {
+						$botonPermisosEliminar = $EliminarProveedor;
+					}
 					
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Proveedor'],
@@ -98,7 +107,7 @@ class proveedores {
 						'Empresa' => $razonsocial.$row[$i]['Empresa'].$telefono,
 						'Contacto' => $contacto,
 						'Direccion' => $direccion,
-						'Acciones' => '<button class="btn btn-primary btn-sm" id="ModificarProveedor" attrid="'.$row[$i]['ID_Proveedor'].'" nombre="'.$row[$i]['Empresa'].'"><i class="fas fa-edit"></i></button> '.$EliminarProveedor,
+						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,
 					);
 				}
 
