@@ -672,7 +672,7 @@ $(document).on('click', '#botonimpuestosProducto', function() {
                 if (separa[0] == $('#Sucursales').val()){
                     imp += separa[1]+',';
                 }
-             }else {
+             }else if ($('#Sucursal').val() != ''){
                 if (separa[0] == $('#Sucursal').val()){
                     imp += separa[1]+',';
                 }
