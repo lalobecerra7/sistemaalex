@@ -242,7 +242,7 @@ jQuery(document).ready(function($) {
             $("#TitularBancoCliente").val(datos.Titular);
             $("#BancoCliente").val(datos.Banco);
             $("#CuentaBancoCliente").val(datos.No_Cuenta);
-
+            $("#SucursalCliente").val(datos.FK_Sucursal);
             if (datos.Foto != "") {
                 $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/fotosClientes/'+datos.Foto);
             }else{

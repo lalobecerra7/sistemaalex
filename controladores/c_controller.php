@@ -219,6 +219,23 @@ class controller {
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_clientes'][2] == '0') {
 				echo '<script>$("#botonNuevoCliente").remove();</script>';
 			}
+
+			$query = "SELECT ID_Sucursal, Nombre FROM sucursales";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Sucursal'] . '" >' . $row[$i]['Nombre']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#SucursalesCliente#', $opciones, $pagina);
 		}else if($nombre == "v_areas"){
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_areas'][2] == '0') {
 				echo '<script>$("#botonNuevaArea").remove();</script>';
