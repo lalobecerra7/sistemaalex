@@ -319,7 +319,7 @@ class inventario {
 					$separa = explode(' ', trim($buscar));
 					$busqueda = 'AND ';
 					for ($i=0; $i < count($separa); $i++) { 
-						$busqueda .= "CONCAT(ID_Producto, Sucursal, Cantidad, Costo, DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r')) REGEXP '".$separa[$i]."'";
+						$busqueda .= "CONCAT(ID_Producto, sucursales.Nombre, merma.Cantidad, merma.Costo, DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r'), Motivo) REGEXP '".$separa[$i]."'";
 						if($i < (count($separa)-1)){
 							$busqueda .= ' AND ';
 						}

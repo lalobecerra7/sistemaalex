@@ -111,8 +111,8 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<div class="table-responsive">
-				<table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaMerma" width="100%" style="font-size: 12px;">
+				<div class="">
+				<table class="table table-hover table-striped table-bordered text-center myDataTable" id="TablaMerma" width="100%" style="font-size: 12px;">
 						<thead>
 								<th style="width: 20%;" >Fecha de merma</th>
 								<th style="width: 20%;" >Motivo</th>
