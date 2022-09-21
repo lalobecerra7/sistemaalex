@@ -123,7 +123,7 @@ function v_productos() {
                         TablaProductos(); 
                         $("#ModalProductos").modal("hide");
                         detallesProducto = [];
-                    } else if ($.trim(res) == "Error: Duplicate entry 'Sed irure odit eius' for key 'Codigo'"){
+                    } else if ($.trim(res) == "Error: Duplicate entry '"+$("#CodigoBarras").val()+"' for key 'Codigo'"){
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
@@ -672,7 +672,7 @@ $(document).on('click', '#botonimpuestosProducto', function() {
                 if (separa[0] == $('#Sucursales').val()){
                     imp += separa[1]+',';
                 }
-             }else {
+             }else if ($('#Sucursal').val() != ''){
                 if (separa[0] == $('#Sucursal').val()){
                     imp += separa[1]+',';
                 }

@@ -338,6 +338,8 @@ class productos {
 							}
 						}
 
+						$impuestosNombres=substr($impuestosNombres, 0, -1);
+
 						$tabla .= ' 
 						<tr>
 						<td>' . $row[$i]['NombreSucursal'] . '</td>
@@ -512,14 +514,17 @@ class productos {
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
 				for($i=0; $i<$numerofilas; $i++){
-					for($j=0; $j<sizeof($impuesto); $j++){
-						if($impuesto[$j] == $row[$i]['ID_Impuesto']){
-							$checked = 'checked';
-							break;
-						}else {
-							$checked = '';
+					if(sizeof($impuesto)>0){
+						for($j=0; $j<sizeof($impuesto); $j++){
+							if($impuesto[$j] == $row[$i]['ID_Impuesto']){
+								$checked = 'checked';
+								break;
+							}else {
+								$checked = '';
+							}
 						}
 					}
+					
 
 					$tabla .='
 
