@@ -25,7 +25,7 @@ class productos {
 			}
 		}
 
-		$query = "SELECT ID_Producto, Codigo, Descripcion, Tipo, Clase, Costo, Precio, Precio_Mayoreo, Detalles, Minimo, Maximo, Imagen, (SELECT COUNT(*) FROM productos $busqueda) AS Num, ((SELECT COUNT(*) FROM detalles_ventas INNER JOIN ventas ON FK_Venta = ID_Venta WHERE detalles_ventas.FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras INNER JOIN compras ON FK_Compra = ID_Compra WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM merma WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalles_productos WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM traslados WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM inventario WHERE FK_Producto = ID_Producto)) AS numProd FROM productos $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Producto, Codigo, Descripcion, Tipo, Clase, Costo, Precio, Precio_Mayoreo, Detalles, Minimo, Maximo, Imagen, (SELECT COUNT(*) FROM productos $busqueda) AS Num, ((SELECT COUNT(*) FROM detalles_ventas INNER JOIN ventas ON FK_Venta = ID_Venta WHERE detalles_ventas.FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras INNER JOIN compras ON FK_Compra = ID_Compra WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM merma WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM traslados WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM inventario WHERE FK_Producto = ID_Producto)) AS numProd FROM productos $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -149,13 +149,15 @@ class productos {
 				}
 			}
 
-			for($j=0; $j<sizeOf($impuesto); $j++){
-				$imp = explode("~", $impuesto[$j]);
-				$query = "INSERT INTO detalles_impuestos_productos SET FK_Producto = '$id', FK_Sucursal = '$imp[0]', FK_Impuesto = '$imp[1]'";
-				$row = $omodelo->_insertar($query);
-
-				if ($row == "si") {
-					echo "Error: ".mysqli_error($omodelo->link);
+			if(sizeOf($impuesto)>0){
+				for($j=0; $j<sizeOf($impuesto); $j++){
+					$imp = explode("~", $impuesto[$j]);
+					$query = "INSERT INTO detalles_impuestos_productos SET FK_Producto = '$id', FK_Sucursal = '$imp[0]', FK_Impuesto = '$imp[1]'";
+					$row = $omodelo->_insertar($query);
+	
+					if ($row == "si") {
+						echo "Error: ".mysqli_error($omodelo->link);
+					}
 				}
 			}
 			

@@ -77,7 +77,7 @@ function v_productos() {
             },
         },
         submitHandler: function(form) { 
-            if($('#Maximo').val()<=$('#Minimo').val()){
+            if($('#Maximo').val()!= '' && $('#Minimo').val() != '' && $('#Maximo').val()<=$('#Minimo').val()){
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
