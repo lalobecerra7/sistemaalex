@@ -5,9 +5,7 @@ function moneda() {
             $(this).html(parseFloat($(this).html().replace('$', '').replace(/,/g, '')) * -1);
             $(this).html('$'+new Intl.NumberFormat('en-US').format(Math.round(parseFloat($(this).html().replace('$', '').replace(/,/g, '')) * 100) / 100));
             $(this).html('-'+$(this).html());
-            $(this).css('color', 'red');
         }else{
-            $(this).css('color', '#000');
             $(this).html('$'+new Intl.NumberFormat('en-US').format(Math.round(parseFloat($(this).html().replace('$', '').replace(/,/g, '')) * 100) / 100));
         }
     });
@@ -17,9 +15,7 @@ function moneda() {
             $(this).html(parseFloat($(this).html().replace('%', '').replace(/,/g, '')) * -1);
             $(this).html(new Intl.NumberFormat('en-US').format(Math.round(parseFloat($(this).html().replace('%', '').replace(/,/g, '')) * 100) / 100)+'%');
             $(this).html('-'+$(this).html());
-            $(this).css('color', 'red');
         }else{
-            $(this).css('color', '#000');
             $(this).html(new Intl.NumberFormat('en-US').format(Math.round(parseFloat($(this).html().replace('%', '').replace(/,/g, '')) * 100) / 100)+'%');
         }
     });

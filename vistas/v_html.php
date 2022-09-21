@@ -411,6 +411,24 @@
               </div>
           </div>
 
+          <div class="modal fade" id="ModalCambiarTicket" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Seleccione un ticket</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <div class="col-md-12 text-center" id="DivTickets" style="height: 200px; overflow-y: scroll;">
+                          </div>
+                      </div>
+                      <div class="modal-footer text-center">
+                          <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                      </div>
+                  </div>    
+              </div>
+          </div>
+
           <div id="noEncontrado" class="mensajeError">
               <div class="container-fluid" style="height: 100vh; overflow-y: auto;">
                   <div class="row align-items-center justify-content-center" style="height: 100vh;">
@@ -446,6 +464,16 @@
                   <div class="row align-items-center justify-content-center" style="height: 100vh;">
                       <div class="col-10 text-center" style="background-color: #ffc107;">
                           <h1 style="color: #FFF; padding: 30px 0px;">No se puede eliminar el ticket principal</h1>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div id="noHayTickets" class="mensajeError">
+              <div class="container-fluid" style="height: 100vh; overflow-y: auto;">
+                  <div class="row align-items-center justify-content-center" style="height: 100vh;">
+                      <div class="col-10 text-center" style="background-color: #ffc107;">
+                          <h1 style="color: #FFF; padding: 30px 0px;">No hay mas tickets para seleccionar</h1>
                       </div>
                   </div>
               </div>

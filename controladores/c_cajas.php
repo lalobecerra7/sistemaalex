@@ -25,7 +25,7 @@ class cajas {
 			}
 		}
 
-		$query = "SELECT ID_Caja, FK_Sucursal, sucursales.Nombre AS NombreSucursal, cajas.Nombre AS Caja, Detalles, Estado, FK_Usuario, usuarios.Nombre AS UsuarioActual, (SELECT COUNT(*) FROM cajas $busqueda) AS Num FROM cajas INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal LEFT JOIN usuarios ON FK_Usuario = ID_Usuario $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Caja, FK_Sucursal, sucursales.Nombre AS NombreSucursal, cajas.Nombre AS Caja, Detalles, cajas.Estado, FK_Usuario, usuarios.Nombre AS UsuarioActual, (SELECT COUNT(*) FROM cajas $busqueda) AS Num FROM cajas INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal LEFT JOIN usuarios ON FK_Usuario = ID_Usuario $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
