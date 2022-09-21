@@ -112,9 +112,9 @@ function v_productos() {
                     if ($.trim(res) == "Correcto") {
                         console.log($.trim(res));
                         if ($("#GuardarProducto").attr("tipo") == "modificar") {
-                            var tipoAlerta = "modificada";
+                            var tipoAlerta = "modificado";
                         }else{
-                            var tipoAlerta = "guardada";
+                            var tipoAlerta = "guardado";
                         }
                         Swal.fire({
                             icon: 'success',
