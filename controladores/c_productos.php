@@ -488,7 +488,7 @@ class productos {
 
 					<td>' . $row[$i]['Nombre'] . '</td>
 
-					<td>' . $row[$i]['Descripcion'] . '</td>
+					<td>' . $row[$i]['Clave_CFDI'] . '</td>
 
 					<td>' . $row[$i]['Porcentaje'] . '</td>
 
