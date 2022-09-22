@@ -536,7 +536,7 @@ class productos {
 
 					<td>' . $row[$i]['Clave_CFDI'] . '</td>
 
-					<td>' . $row[$i]['Porcentaje'] . '</td>
+					<td>' . $row[$i]['Porcentaje'] . '%</td>
 
 					</tr>';
 

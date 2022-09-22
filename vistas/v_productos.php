@@ -161,7 +161,7 @@
 					</div>
 					<div class="col-md-3 col-sm-12 mb-3">
 						<div class="form-floating">
-							<input type="number" class="form-control" ,in='0' id="PrecioProductoD" name="PrecioProductoD" placeholder="Ingresa el precio del producto">
+							<input type="number" class="form-control" min='0' id="PrecioProductoD" name="PrecioProductoD" placeholder="Ingresa el precio del producto">
 							<label for="PrecioProductoD">Precio</label>
 						</div>
 					</div>
@@ -175,13 +175,13 @@
 				<div class="row">
 					<div class="col-md-3 col-sm-12 mb-3">
 						<div class="form-floating">
-							<input type="number" class="form-control" id="MinimoD" name="MinimoD" placeholder="Ingresa el mínimo de stock del producto">
+							<input type="number" class="form-control" min='0' id="MinimoD" name="MinimoD" placeholder="Ingresa el mínimo de stock del producto">
 							<label for="MinimoD">Stock Mínimo</label>
 						</div>
 					</div>
 					<div class="col-md-3 col-sm-12 mb-3">
 						<div class="form-floating">
-							<input type="number" class="form-control" id="MaximoD" name="MaximoD" placeholder="Ingresa el máximo de stock del producto">
+							<input type="number" class="form-control" min='0' id="MaximoD" name="MaximoD" placeholder="Ingresa el máximo de stock del producto">
 							<label for="MaximoD">Stock Máximo</label>
 						</div>
 					</div>
@@ -326,13 +326,13 @@
 			<div class="row">
 				<div class="col-md-3 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		               	<input type="number" class="form-control" id="MinimoE" name="MinimoE" placeholder="Ingresa el mínimo de stock del producto">
+		               	<input type="number" class="form-control" min='0' id="MinimoE" name="MinimoE" placeholder="Ingresa el mínimo de stock del producto">
 		                <label for="MinimoE">Stock Mínimo</label>
 		            </div>
 		        </div>
 				<div class="col-md-3 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		               	<input type="number" class="form-control" id="MaximoE" name="MaximoE" placeholder="Ingresa el máximo de stock del producto">
+		               	<input type="number" class="form-control" min='0' id="MaximoE" name="MaximoE" placeholder="Ingresa el máximo de stock del producto">
 		                <label for="MaximoE">Stock Máximo</label>
 		            </div>
 		        </div>
