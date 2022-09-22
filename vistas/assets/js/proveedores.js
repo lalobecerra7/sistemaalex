@@ -191,6 +191,11 @@ jQuery(document).ready(function($) {
             $("#TituloTipoDescuentoProveedor").text(tipo);
             $("#DescuentoProveedor").attr("disabled", false);
             $("#DescuentoProveedor").val("");
+            if (tipo == 'Porcentaje'){
+                $('#DescuentoProveedor').attr('max', '100');
+            }else {
+                $('#DescuentoProveedor').attr('max', '1000000');
+            }
         }else{
             $("#TituloTipoDescuentoProveedor").text("No aplica descuento");
             $("#DescuentoProveedor").attr("disabled", true);

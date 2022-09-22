@@ -68,6 +68,12 @@ function v_usuarios() {
                         footer: footer
                     });
                     TablaUsuarios();
+                }else if ($.trim(datos[0]) == "ErrorInsertar: Duplicate entry '"+$('#CorreoUsuario').val()+"' for key 'Correo'") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'El correo ingresado ya fue registrado con anterioridad intenta con otro.'
+                    });
                 }else{
                     Swal.fire({
                         icon: 'error',
@@ -86,6 +92,7 @@ function v_usuarios() {
         }
     });    
 }
+
 
 jQuery(document).ready(function($) {
 

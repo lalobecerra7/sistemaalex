@@ -82,19 +82,19 @@
 			<div class="row">
 	       		<div class="col-md-4 col-sm-12 mb-3">
 				   <div class="form-floating">
-		               	<input type="number" class="form-control" min='0'  id="CostoProducto" name="CostoProducto" placeholder="Ingresa el costo del producto">
+		               	<input type="number" class="form-control" min='0' max='10000' id="CostoProducto" name="CostoProducto" placeholder="Ingresa el costo del producto">
 		                <label for="CostoProducto">Costo</label>
 		            </div>
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		               	<input type="number" class="form-control" min='0' id="PrecioProducto" name="PrecioProducto" placeholder="Ingresa el precio del producto">
+		               	<input type="number" class="form-control" min='0' max='10000' id="PrecioProducto" name="PrecioProducto" placeholder="Ingresa el precio del producto">
 		                <label for="PrecioProducto">Precio</label>
 		            </div>
 		        </div>
 				<div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		               	<input type="number" class="form-control" min='0' id="PrecioMayoreo" name="PrecioMayoreo" placeholder="Ingresa el precio de mayoreo del producto">
+		               	<input type="number" class="form-control" min='0' max='10000' id="PrecioMayoreo" name="PrecioMayoreo" placeholder="Ingresa el precio de mayoreo del producto">
 		                <label for="PrecioMayoreo">Precio de mayoreo</label>
 		            </div>
 		        </div>
@@ -111,13 +111,13 @@
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		               	<input type="number" class="form-control" id="Minimo" name="Minimo" placeholder="Ingresa el mínimo de stock del producto">
+		               	<input type="number" class="form-control" id="Minimo" min='0' max='1000' name="Minimo" placeholder="Ingresa el mínimo de stock del producto">
 		                <label for="Minimo">Stock Mínimo</label>
 		            </div>
 		        </div>
 				<div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		               	<input type="number" class="form-control" id="Maximo" name="Maximo" placeholder="Ingresa el máximo de stock del producto">
+		               	<input type="number" class="form-control" id="Maximo" min='0' max='1000'name="Maximo" placeholder="Ingresa el máximo de stock del producto">
 		                <label for="Maximo">Stock Máximo</label>
 		            </div>
 		        </div>
@@ -155,19 +155,19 @@
 					</div>
 					<div class="col-md-3 col-sm-12 mb-3">
 					<div class="form-floating">
-							<input type="number" class="form-control" min='0' id="CostoProductoD" name="CostoProductoD" placeholder="Ingresa el costo del producto">
+							<input type="number" class="form-control" min='0' max='10000' id="CostoProductoD" name="CostoProductoD" placeholder="Ingresa el costo del producto">
 							<label for="CostoProductoD">Costo</label>
 						</div>
 					</div>
 					<div class="col-md-3 col-sm-12 mb-3">
 						<div class="form-floating">
-							<input type="number" class="form-control" min='0' id="PrecioProductoD" name="PrecioProductoD" placeholder="Ingresa el precio del producto">
+							<input type="number" class="form-control" min='0' max='10000' id="PrecioProductoD" name="PrecioProductoD" placeholder="Ingresa el precio del producto">
 							<label for="PrecioProductoD">Precio</label>
 						</div>
 					</div>
 					<div class="col-md-3 col-sm-12 mb-3">
 						<div class="form-floating">
-							<input type="number" class="form-control" min='0' id="PrecioMayoreoD" name="PrecioMayoreoD" placeholder="Ingresa el precio de mayoreo del producto">
+							<input type="number" class="form-control" min='0' max='10000' id="PrecioMayoreoD" name="PrecioMayoreoD" placeholder="Ingresa el precio de mayoreo del producto">
 							<label for="PrecioMayoreoD">Precio de mayoreo</label>
 						</div>
 					</div>
@@ -175,13 +175,13 @@
 				<div class="row">
 					<div class="col-md-3 col-sm-12 mb-3">
 						<div class="form-floating">
-							<input type="number" class="form-control" min='0' id="MinimoD" name="MinimoD" placeholder="Ingresa el mínimo de stock del producto">
+							<input type="number" class="form-control" min='0' max='1000' id="MinimoD" name="MinimoD" placeholder="Ingresa el mínimo de stock del producto">
 							<label for="MinimoD">Stock Mínimo</label>
 						</div>
 					</div>
 					<div class="col-md-3 col-sm-12 mb-3">
 						<div class="form-floating">
-							<input type="number" class="form-control" min='0' id="MaximoD" name="MaximoD" placeholder="Ingresa el máximo de stock del producto">
+							<input type="number" class="form-control" min='0' max='1000' id="MaximoD" name="MaximoD" placeholder="Ingresa el máximo de stock del producto">
 							<label for="MaximoD">Stock Máximo</label>
 						</div>
 					</div>
@@ -306,19 +306,19 @@
 		        </div>
 				<div class="col-md-3 col-sm-12 mb-3">
 				   <div class="form-floating">
-		               	<input type="number" class="form-control"  min='0' id="CostoProductoE" name="CostoProductoE" placeholder="Ingresa el costo del producto">
+		               	<input type="number" class="form-control"  min='0' max='10000'id="CostoProductoE" name="CostoProductoE" placeholder="Ingresa el costo del producto">
 		                <label for="CostoProductoE">Costo</label>
 		            </div>
 		        </div>
 		        <div class="col-md-3 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		               	<input type="number" class="form-control" min='0' id="PrecioProductoE" name="PrecioProductoE" placeholder="Ingresa el precio del producto">
+		               	<input type="number" class="form-control" min='0' max='10000' id="PrecioProductoE" name="PrecioProductoE" placeholder="Ingresa el precio del producto">
 		                <label for="PrecioProductoE">Precio</label>
 		            </div>
 		        </div>
 				<div class="col-md-3 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		               	<input type="number" class="form-control"min='0' id="PrecioMayoreoE" name="PrecioMayoreoE" placeholder="Ingresa el precio de mayoreo del producto">
+		               	<input type="number" class="form-control"min='0' max='10000' id="PrecioMayoreoE" name="PrecioMayoreoE" placeholder="Ingresa el precio de mayoreo del producto">
 		                <label for="PrecioMayoreoE">Precio de mayoreo</label>
 		            </div>
 		        </div>
@@ -326,13 +326,13 @@
 			<div class="row">
 				<div class="col-md-3 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		               	<input type="number" class="form-control" min='0' id="MinimoE" name="MinimoE" placeholder="Ingresa el mínimo de stock del producto">
+		               	<input type="number" class="form-control" min='0' max='1000' id="MinimoE" name="MinimoE" placeholder="Ingresa el mínimo de stock del producto">
 		                <label for="MinimoE">Stock Mínimo</label>
 		            </div>
 		        </div>
 				<div class="col-md-3 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		               	<input type="number" class="form-control" min='0' id="MaximoE" name="MaximoE" placeholder="Ingresa el máximo de stock del producto">
+		               	<input type="number" class="form-control" min='0' max='1000' id="MaximoE" name="MaximoE" placeholder="Ingresa el máximo de stock del producto">
 		                <label for="MaximoE">Stock Máximo</label>
 		            </div>
 		        </div>
