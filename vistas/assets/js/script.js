@@ -30,7 +30,7 @@ jQuery(document).ready(function($) {
     setTimeout(function(){
       $("#cargarInicio").trigger("click");
     },100);
-    permisos();
+    //permisos();
     $(document).on('click', '.cargarVista', function() {
 
         var nombre = $(this).attr('carga'), titulo = $(this).attr('titulo'), id = $(this).attr('id'), atri = $(this).attr('atri'), pesta = $(this).attr('pesta'); 

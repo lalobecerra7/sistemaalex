@@ -511,33 +511,13 @@
               </a>
             </li>
 
-            <li class="menu-item cargarVista" carga="v_sucursales" titulo="Sucursales" id="cargarSucursales">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-map-marker"></i>
-                <div data-i18n="Sucursales">Sucursales</div>
-              </a>
-            </li>
+            #MenuSucursales#
 
-            <li class="menu-item cargarVista" carga="v_proveedores" titulo="Proveedores" id="cargarProveedores">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-suitcase"></i>
-                <div data-i18n="Proveedores">Proveedores</div>
-              </a>
-            </li>
+            #MenuProveedores#
 
-            <li class="menu-item cargarVista" carga="v_clientes" titulo="Clientes" id="cargarClientes">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-face-grin"></i>
-                <div data-i18n="Clientes">Clientes</div>
-              </a>
-            </li>
+            #MenuClientes#
 
-            <li class="menu-item cargarVista" carga="v_areas" titulo="Áreas" id="cargarAreas">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-building-user"></i>
-                <div data-i18n="Áreas">Áreas</div>
-              </a>
-            </li>
+            #MenuAreas#
 
             <!-- Layouts -->
             <li class="menu-item">
@@ -547,31 +527,15 @@
               </a>
 
               <ul class="menu-sub">
-                <li class="menu-item cargarVista" carga="v_productos" titulo="Productos" id="cargarProductos">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Productos">Productos</div>
-                  </a>
-                </li>
-                <li class="menu-item cargarVista" carga="v_inventario" titulo="Inventario" id="cargarInventario">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Inventario">Inventario</div>
-                  </a>
-                </li>
-                <li class="menu-item cargarVista" carga="v_categorias" titulo="Categorias / familias" id="cargarCategorias">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Categorias">Categorias(familias)</div>
-                  </a>
-                </li>
-                <li class="menu-item cargarVista" carga="v_cajas" titulo="Cajas" id="cargarCajas">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Cajas">Cajas</div>
-                  </a>
-                </li>
-                <li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Impuestos">Impuestos</div>
-                  </a>
-                </li>
+                #MenuProductos#
+                
+                #MenuInventario#
+
+                #MenuCategorias#
+                
+                #MenuCajas#
+                
+                #MenuImpuestos#
               </ul>
             </li>
 
@@ -582,20 +546,11 @@
               </a>
 
               <ul class="menu-sub">
-                <li class="menu-item cargarVista" carga="v_tickets" titulo="Tickets" id="cargarTickets">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Tickets">Tickets</div>
-                  </a>
-                </li>
+                #MenuTickets#
               </ul>
             </li>
 
-            <li class="menu-item cargarVista" carga="v_usuarios" titulo="Usuarios" id="cargarUsuarios">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-user"></i>
-                <div data-i18n="Usuarios">Usuarios</div>
-              </a>
-            </li>
+            #MenuUsuarios#
 
           </ul>
         </aside>

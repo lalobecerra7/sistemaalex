@@ -2,7 +2,6 @@ var detallesProducto = [];
 var cont = 1;
 var impuesto = [];
 function v_productos() {
-    console.log("entro a la funcion");
     
     TablaProductos(); 
     $('#FormProductos').validate({
@@ -16,28 +15,7 @@ function v_productos() {
             ClaseProducto: {
                 required: true
             },
-            TipoUnidad: {
-                required: true
-            },
-            Unidad: {
-                required: true
-            },
-            Categoria: {
-                required: true
-            },
-            CostoProducto: {
-                required: true
-            },
             PrecioProducto: {
-                required: true
-            },
-            PrecioMayoreo: {
-                required: true
-            },
-            Area: {
-                required: true
-            },
-            PonerUnidad: {
                 required: true
             },
         },
@@ -51,29 +29,8 @@ function v_productos() {
             ClaseProducto: {
                 required: "La clase del producto es obligatorio"
             },
-            TipoUnidad: {
-                required: "El tipo de unidad del producto es obligatorio"
-            },
-            Unidad: {
-                required: "La unidad del producto es obligatorio"
-            },
-            Categorias: {
-                required: "La categoria del producto es obligatorio"
-            },
-            CostoProducto: {
-                required: "El costo del producto es obligatorio"
-            },
             PrecioProducto: {
                 required: "El precio del producto es obligatorio"
-            },
-            PrecioMayoreo: {
-                required: "El precio de mayoreo del producto es obligatorio"
-            },
-            Area: {
-                required: "El area donde se encuentra el producto es obligatorio"
-            },
-            PonerUnidad: {
-                required: "Se debe seleccionar si poner la unidad en el ticket"
             },
         },
         submitHandler: function(form) { 
@@ -364,7 +321,7 @@ $(document).on('click', '#EliminarFila', function() {
 $(document).on('click', '#DetalleProductoSucursal', function () {
     var sucursal = [];
     var agregar = 'si';
-    if ($('#Sucursales').val() !='' && $('#CostoProductoD').val() !='' && $('#PrecioProductoD').val() !='' && $('#PrecioMayoreoD').val() !='' && $('#MinimoD').val() !='' && $('#MaximoD').val() !=''){
+    if ($('#Sucursales').val() !='' && $('#PrecioProductoD').val() !=''){
         console.log(detallesProducto);
         if (detallesProducto != ''){
             for (var i=0; i< detallesProducto.length; i++ ){
@@ -383,7 +340,7 @@ $(document).on('click', '#DetalleProductoSucursal', function () {
             }
         }
         if(agregar == 'si'){
-            sucursal.push($('#Sucursales').val(), $('#CostoProductoD').val(), $('#PrecioProductoD').val(), $('#PrecioMayoreoD').val(), $('#MinimoD').val(), $('#MaximoD').val());
+            sucursal.push($('#Sucursales').val(), $('#CostoProductoD').val(), $('#PrecioProductoD').val(), $('#PrecioMayoreoD').val(), $('#MinimoD').val(), $('#MaximoD').val(), $('#ExistenciaProducto').val());
             detallesProducto.push('~',sucursal);
             console.log(detallesProducto);
     
@@ -396,6 +353,7 @@ $(document).on('click', '#DetalleProductoSucursal', function () {
                     <td>' +$('#MinimoD').val()+ '</td>\
                     <td>' +$('#MaximoD').val()+ '</td>\
                     <td>' +$('#impuestosProducto').val()+ '</td>\
+                    <td>' +$('#ExistenciaProducto').val()+ '</td>\
                     <td><button class="btn btn-danger btn-sm" type="button" id="EliminarFila" fila="'+cont+'" class="borrar" value="Eliminar"><i class="fas fa-trash"></i></button></td>\
                 </tr>'
             );
@@ -406,6 +364,7 @@ $(document).on('click', '#DetalleProductoSucursal', function () {
             $('#PrecioMayoreoD').val('');
             $('#MinimoD').val('');
             $('#MaximoD').val('');
+            $("#ExistenciaProducto").val('');
             $('#impuestosProducto').val('Impuestos');
         }
         }else if($('#Sucursales').val() ==''){
@@ -414,35 +373,11 @@ $(document).on('click', '#DetalleProductoSucursal', function () {
                 title: 'Oops...',
                 text: 'Debes seleccionar una sucursal.'
             });
-        }else if($('#CostoProductoD').val() ==''){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Debes ingresar el costo del producto.'
-            });
         }else if($('#PrecioProductoD').val() ==''){
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Debes ingresar el precio del producto.'
-            });
-        }else if($('#PrecioMayoreoD').val() ==''){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Debes insertar el precio de mayoreo del producto.'
-            });
-        }else if($('#MinimoD').val() ==''){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Debes ingresar el stock minimo del producto.'
-            });
-        }else if($('#MaximoD').val() ==''){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Debes ingresar el stock maximo del producto.'
             });
         }
         cont+2;
@@ -492,7 +427,6 @@ $(document).on('click', '#PSucursal', function() {
             },
         },
         submitHandler: function(form) {
-            console.log('entro2');
             if($('#MaximoE').val()<=$('#MinimoE').val()){
                 Swal.fire({
                     icon: 'error',
@@ -533,6 +467,7 @@ $(document).on('click', '#PSucursal', function() {
                             $('#PrecioMayoreoE').val('');
                             $('#MinimoE').val('');
                             $('#MaximoE').val('');
+                            $("#ExistenciaProductoE").val("");
                             $('#impuestosProductoE').val('Impuestos');
                             impuesto = [];
                         })

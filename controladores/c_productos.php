@@ -25,7 +25,7 @@ class productos {
 			}
 		}
 
-		$query = "SELECT ID_Producto, Codigo, Descripcion, Tipo, Clase, Costo, Precio, Precio_Mayoreo, Detalles, Minimo, Maximo, Imagen, (SELECT COUNT(*) FROM productos $busqueda) AS Num, ((SELECT COUNT(*) FROM detalles_ventas INNER JOIN ventas ON FK_Venta = ID_Venta WHERE detalles_ventas.FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras INNER JOIN compras ON FK_Compra = ID_Compra WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM merma WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM traslados WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM inventario WHERE FK_Producto = ID_Producto)) AS numProd FROM productos $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Producto, Codigo, Descripcion, Tipo, Clase, Costo, Precio, Precio_Mayoreo, Detalles, Minimo, Maximo, Imagen, (SELECT COUNT(*) FROM productos $busqueda) AS Num, ((SELECT COUNT(*) FROM detalles_ventas INNER JOIN ventas ON FK_Venta = ID_Venta WHERE detalles_ventas.FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras INNER JOIN compras ON FK_Compra = ID_Compra WHERE FK_Producto = ID_Producto)) AS numProd FROM productos $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -103,7 +103,6 @@ class productos {
 		$Descripcion =  $omodelo->link->real_escape_string($Descripcion);
 		$Categoria =  $omodelo->link->real_escape_string($Categoria);
 		$Clase =  $omodelo->link->real_escape_string($ClaseProducto);
-		$TipoUnidad =  $omodelo->link->real_escape_string($TipoUnidad);
 		$Unidad =  $omodelo->link->real_escape_string($Unidad);
 		$PonerUnidad =  $omodelo->link->real_escape_string($PonerUnidad);
 		$Costo =  $omodelo->link->real_escape_string($CostoProducto);
@@ -116,7 +115,7 @@ class productos {
 		$detalle =  explode("~", $detalleProducto);
 		$impuesto =  explode(",", $impuestos);
 
-		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', Tipo = '$TipoUnidad', FK_Categoria = '$Categoria', Clase = '$Clase', FK_Unidad = '$Unidad', Poner_Unidad = '$PonerUnidad', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha'";
+		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion',  FK_Categoria = '$Categoria', Clase = '$Clase', FK_Unidad = '$Unidad', Poner_Unidad = '$PonerUnidad', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -162,6 +161,16 @@ class productos {
 				if ($row == "si") {
 					echo "Error: ".mysqli_error($omodelo->link);
 				}
+
+				if ($detallesucursal[7] != "" && $detallesucursal[7] > "0") {
+					$queryInventario = "INSERT INTO inventario SET FK_Producto = '$id', FK_Sucursal = '$detallesucursal[1]', Cantidad = '$detallesucursal[7]'";
+					$error = $omodelo->_insertar($queryInventario);
+
+					if ($error == "si") {
+						echo "Error: ".mysqli_error($omodelo->link);
+					}
+				}
+
 			}
 
 			if(sizeOf($impuesto) > 1 ){
@@ -191,7 +200,6 @@ class productos {
 		$Descripcion =  $omodelo->link->real_escape_string($Descripcion);
 		$Categoria =  $omodelo->link->real_escape_string($Categoria);
 		$Clase =  $omodelo->link->real_escape_string($ClaseProducto);
-		$TipoUnidad =  $omodelo->link->real_escape_string($TipoUnidad);
 		$Unidad =  $omodelo->link->real_escape_string($Unidad);
 		$PonerUnidad =  $omodelo->link->real_escape_string($PonerUnidad);
 		$Costo =  $omodelo->link->real_escape_string($CostoProducto);
@@ -202,7 +210,7 @@ class productos {
 		$Minimo =  $omodelo->link->real_escape_string($Minimo);
 		$Maximo =  $omodelo->link->real_escape_string($Maximo);
 
-		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', Tipo = '$TipoUnidad', FK_Categoria = '$Categoria', Clase = '$Clase', FK_Unidad = '$Unidad', Poner_Unidad = '$PonerUnidad', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo' WHERE ID_Producto = '$IDProducto'";
+		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', FK_Categoria = '$Categoria', Clase = '$Clase', FK_Unidad = '$Unidad', Poner_Unidad = '$PonerUnidad', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo' WHERE ID_Producto = '$IDProducto'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {

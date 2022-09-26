@@ -6,28 +6,10 @@ function v_proveedores() {
             NombreEmpresaProveedor: {
                 required: true
             },
-            DireccionProveedor:{
-                required: true
-            },
-            ContactoProveedor:{
-                required: true
-            },
-            CelularContactoProveedor:{
-                required: true
-            },
         },
         messages: {
             NombreEmpresaProveedor: {
                 required: "El nombre de la empresa es obligatorio"
-            },
-            DireccionProveedor:{
-                required: "La dirección del proveedor es obligatoria"
-            },
-            ContactoProveedor:{
-                required: "El nombre del contacto es obligatorio"
-            },
-            CelularContactoProveedor:{
-                required: "El telefono del contacto es obligatorio"
             },
         },
         submitHandler: function(form) { 
@@ -191,6 +173,11 @@ jQuery(document).ready(function($) {
             $("#TituloTipoDescuentoProveedor").text(tipo);
             $("#DescuentoProveedor").attr("disabled", false);
             $("#DescuentoProveedor").val("");
+            if (tipo == 'Porcentaje'){
+                $('#DescuentoProveedor').attr('max', '100');
+            }else {
+                $('#DescuentoProveedor').attr('max', '1000000');
+            }
         }else{
             $("#TituloTipoDescuentoProveedor").text("No aplica descuento");
             $("#DescuentoProveedor").attr("disabled", true);

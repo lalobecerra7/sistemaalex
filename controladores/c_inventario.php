@@ -56,7 +56,7 @@ class inventario {
 							if ($rowmerma[0]["CantidadMerma"] == "") {
 								$rowmerma[0]["CantidadMerma"] = 0;
 							}
-							$Merma = '<b class="dinero">$'.number_format($rowmerma[0]["TotalMerma"], 2).'</b><br>Cantidad: <b class="cantidad">'.$rowmerma[0]["CantidadMerma"].'</b><br><button type="button" class="btn btn-link btn-sm verDetallesMerma" nombre="'.$row[$i]["Descripcion"].'" attrid="'.$row[$i]["ID_Producto"].'" title="Detalles de la merma Merma">Ver detalles <i class="fas fa-eye"></i></button>';
+							$Merma = '<b class="dinero">$'.number_format($rowmerma[0]["TotalMerma"], 2).'</b><br>Cantidad: <b class="cantidad">'.$rowmerma[0]["CantidadMerma"].'</b>';
 						}
 					}
 
@@ -148,6 +148,21 @@ class inventario {
 						}
 					}
 
+					$botonPermisosAgregarMerma = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][2] == '1') {
+						$botonPermisosAgregarMerma = '<button class="btn btn-warning btn-sm mb-1" id="AgregarMerma" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fas fa-level-down"></i></button>';
+					}
+
+					$botonPermisosTraslados = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][3] == '1') {
+						$botonPermisosTraslados = '<button class="btn btn-primary btn-sm mb-1" id="Traslados" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-right-left"></i></button>';
+					}
+
+					$botonPermisosVerMerma = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][4] == '1') {
+						$botonPermisosVerMerma = '<br><button type="button" class="btn btn-link btn-sm verDetallesMerma" nombre="'.$row[$i]["Descripcion"].'" attrid="'.$row[$i]["ID_Producto"].'" title="Detalles de la merma Merma">Ver detalles <i class="fas fa-eye"></i></button>';
+					}
+
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Producto'],
 						'Producto' => $foto."<b>".$row[$i]['Codigo']."</b>",
@@ -156,9 +171,9 @@ class inventario {
 						'TotalCosto' => 'General: '.$totalCosto.'<br>'.$costosTotales,
 						'Precio' => 'General: <b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b><br>'.$precios,
 						'TotalPrecio' => 'General: '.$totalPrecio.'<br>'.$preciosTotales,
-						'Merma' => $Merma,
+						'Merma' => $Merma.$botonPermisosVerMerma,
 						'Detalles' => 'Existencia: <b>'.$row[$i]['Cantidad'].'</b><br>'.$sucursales,
-						'Acciones' => '<button class="btn btn-warning btn-sm mb-1" id="AgregarMerma" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-cart-arrow-down"></i></button>   <button class="btn btn-primary btn-sm mb-1" id="Traslados" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-right-left"></i></button>' ,
+						'Acciones' => $botonPermisosAgregarMerma.' '.$botonPermisosTraslados,
 					);
 					
 				}
@@ -229,7 +244,7 @@ class inventario {
 			$SucursalDestino = $omodelo->link->real_escape_string($SucursalDestino);
 			$Cantidad = $omodelo->link->real_escape_string($Cantidad);
 			
-			$query = "INSERT INTO traslados SET Fecha_Registro = '$fecha', Fecha_Traslado = '$FechaTraslado', FK_Producto = '$IDProducto', FK_Sucursal_Origen = '$SucursalOrigen', Cantidad = '$Cantidad', FK_Sucursal_Destino = '$SucursalDestino'";
+			$query = "INSERT INTO traslados SET Fecha_Registro = '$fecha', Fecha_Traslado = '$FechaTraslado', FK_Producto = '$IDProducto', FK_Sucursal_Origen = '$SucursalOrigen', Cantidad = '$Cantidad', FK_Sucursal_Destino = '$SucursalDestino', FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
 			$error = $omodelo->_insertar($query);
 	
 			if ($error == "si") {
@@ -421,6 +436,51 @@ class inventario {
 					}
 					echo $opciones;
 				}
+			}else if($tipo == "TablaTraslados"){
+				$IDProducto = $omodelo->link->real_escape_string($id);
+				$buscar =  $omodelo->link->real_escape_string($buscar);
+				$limit =  $omodelo->link->real_escape_string($limit);
+				$pagina =  $omodelo->link->real_escape_string($pagina);
+				$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+				$orden =  $omodelo->link->real_escape_string($orden);
+				$arreglo = array();
+		
+				$busqueda = '';
+				if(trim($buscar) != ''){
+					$separa = explode(' ', trim($buscar));
+					$busqueda = 'AND ';
+					for ($i=0; $i < count($separa); $i++) { 
+						$busqueda .= "CONCAT(ID_Traslado, FK_Producto, FK_Sucursal_Origen, FK_Sucursal_Destino, Cantidad, Fecha_Traslado, Fecha_Registro, FK_Usuario) REGEXP '".$separa[$i]."'";
+						if($i < (count($separa)-1)){
+							$busqueda .= ' AND ';
+						}
+					}
+				}
+		
+				$query = "SELECT ID_Traslado, FK_Producto, FK_Sucursal_Origen AS Origen, FK_Sucursal_Destino AS Destino, Cantidad, Fecha_Traslado, Fecha_Registro, FK_Usuario, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Origen) AS NombreOrigen, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Destino) AS NombreDestino, usuarios.Nombre AS Usuario, (SELECT COUNT(DISTINCT(ID_Traslado)) FROM traslados WHERE FK_Producto = $IDProducto $busqueda) AS 'Num' FROM `traslados` INNER JOIN usuarios ON FK_Usuario = ID_Usuario WHERE FK_Producto = $IDProducto $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+				$row = $omodelo->_consultar($query);
+				$numerofilas = $omodelo->numerofilas;
+	
+				if($row == 'si'){
+					echo "Error: ".mysqli_error($omodelo->link);
+				}else{
+					if($numerofilas > 0){
+						for($i=0; $i<$numerofilas; $i++){
+							$arreglo['data'][$i] = array(
+								'ID' => $row[$i]['ID_Traslado'],
+								'Fecha' => $row[$i]['Fecha_Traslado'],
+								'Origen' => $row[$i]['NombreOrigen'],
+								'Destino' => $row[$i]['NombreDestino'],
+								'Cantidad' => $row[$i]['Cantidad'],
+								'Usuario' => $row[$i]['Usuario'],
+							);
+							
+						}
+		
+						$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+					}
+				}
+				echo json_encode($arreglo);
 			}
 	}
 

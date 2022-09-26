@@ -8,30 +8,6 @@ function v_sucursales() {
             EncargadoSucursal:{
                 required: true
             },
-            CalleSucursal:{
-                required: true
-            },
-            NoExteriorSucursal:{
-                required: true
-            },
-            ColoniaSucursal:{
-                required: true
-            },
-            CPSucursal:{
-                required: true
-            },
-            CiudadSucursal:{
-                required: true
-            },
-            EstadoSucursal:{
-                required: true
-            },
-            PaisSucursal:{
-                required: true
-            },
-            TelefonoSucursal:{
-                required: true
-            },
         },
         messages: {
             NombreSucursal: {
@@ -39,30 +15,6 @@ function v_sucursales() {
             },
             EncargadoSucursal:{
                 required: "El gerente de la sucursal es requerido"
-            },
-            CalleSucursal:{
-                required: "La calle de la sucursal es requerido"
-            },
-            NoExteriorSucursal:{
-                required: "El número esterior de la sucursal es requerido"
-            },
-            ColoniaSucursal:{
-                required: "La colonia es requerida"
-            },
-            CPSucursal:{
-                required: "El código postal es requerido"
-            },
-            CuidadSucursal:{
-                required: "La ciudad es requerida"
-            },
-            EstadoSucursal:{
-                required: "El estado es requerido"
-            },
-            PaisSucursal:{
-                required: "El pais es requerido"
-            },
-            TelefonoSucursal:{
-                required: "El telefono de la sucursal es requerido"
             },
         },
         submitHandler: function(form) { 

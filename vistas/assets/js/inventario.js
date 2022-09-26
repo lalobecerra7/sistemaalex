@@ -55,7 +55,8 @@ function v_inventario() {
                             });
                             TablaInventario();
                             $("#FormTraslados").trigger('reset');
-                            $("#ModalTraslados").modal("hide");
+                            TablaTraslados($("#GuardarTraslado").attr("attrid"));
+                            //$("#ModalTraslados").modal("hide");
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -170,10 +171,11 @@ jQuery(document).ready(function($) {
         var month = ("0" + (now.getMonth() + 1)).slice(-2);
 
         var today = now.getFullYear()+"-"+(month)+"-"+(day);
-       
+        var idProducto = $(this).attr('attrid');
         $('#FechaTraslado').val(today);
         $('#NombreProductoT').text($(this).attr("nombre"));
         $("#ModalTraslados").modal("show");
+        TablaTraslados(idProducto);
         $("#GuardarTraslado").attr('attrid',$(this).attr('attrid'));
     });
 
@@ -408,6 +410,31 @@ function TablaMerma(idproducto) {
             "metodo": "detalles",
             "accion": "inventario",
             "tipo": "merma",
+            "id": idproducto
+        }
+    });
+}
+
+function TablaTraslados(idproducto) {
+    console.log("el id es"+idproducto);
+    ajaxMyDatatable({
+        "table": $("#TablaTraslados"),
+        "colums": [
+            "Fecha",
+            "Origen",
+            "Destino",
+            "Cantidad",
+            "Usuario",
+        ],
+        "sort": [
+            1,
+            "desc"
+        ],
+        "url": "index.php",
+        "params": {
+            "metodo": "detalles",
+            "accion": "inventario",
+            "tipo": "TablaTraslados",
             "id": idproducto
         }
     });

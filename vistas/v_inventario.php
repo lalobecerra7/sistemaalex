@@ -54,7 +54,7 @@
 
 
 <div class="modal fade" id="ModalTraslados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-m modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Traslado del producto <span id="NombreProductoT">Producto</span></h5>
@@ -92,6 +92,24 @@
                                 <label for="Cantidad">Cantidad</label>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
+                    	<div class="col-md-12 col-sm-12">
+                    		<div class="">
+								<table class="table table-hover table-striped table-bordered text-center myDataTable" id="TablaTraslados" width="100%" style="font-size: 12px;">
+									<thead>
+										<th style="width: 20%;" >Fecha</th>
+							     		<th style="width: 20%;" >Origen</th>
+										<th style="width: 15%;" >Destino</th>
+										<th style="width: 15%;" >Cantidad</th>
+										<th style="width: 15%;" >Usuario</th>
+									</thead>
+									<tbody>
+									
+									</tbody>
+								</table>
+							</div>
+                    	</div>
                     </div>
                 </div>
                 <div class="modal-footer">
