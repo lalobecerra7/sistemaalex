@@ -10,7 +10,7 @@ class login {
 		$usuario = $omodelo->link->real_escape_string($usuario);
 		$contrasena = $omodelo->link->real_escape_string($contrasena);
 
-		$query4 = "SELECT ID_Usuario, Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta FROM usuarios WHERE Correo = '$usuario' AND Estatus='0'";
+		$query4 = "SELECT ID_Usuario, Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta FROM usuarios WHERE Correo = '$usuario'";
 		$row = $omodelo->_consultar($query4);
 		$numerofilas = $omodelo->numerofilas;
 		
@@ -18,73 +18,51 @@ class login {
 			echo "Error 1: ".mysqli_error($omodelo->link);
 		}else{
 			if($numerofilas > 0){
-				if($row[0]['Intentos'] == '5'){
-					$nuevafecha = strtotime('+15 minute', strtotime($row[0]['Ultimo_Intento']));
-					if(strtotime($fecha) >= $nuevafecha){
-						$query5 = "UPDATE usuarios SET Intentos = 0 WHERE Correo = '$usuario'";
-						$resultado = $omodelo->_insertar($query5);
+				if($row[0]['Estatus'] == '1'){
+					echo 'Bloqueado';
+				}else{
+					if($row[0]['Intentos'] == '5'){
+						$nuevafecha = strtotime('+15 minute', strtotime($row[0]['Ultimo_Intento']));
+						if(strtotime($fecha) >= $nuevafecha){
+							$query5 = "UPDATE usuarios SET Intentos = 0 WHERE Correo = '$usuario'";
+							$resultado = $omodelo->_insertar($query5);
+
+							if ($resultado == "si") {
+								echo "Error 2: ".mysqli_error($omodelo->link);
+							}else{
+								$row[0]['Intentos'] = '0';
+							}
+						}else{
+							echo "Supero Intentos";
+						}
+					}
+					if($row[0]['Intentos'] < 5){
+						$query1 = "UPDATE usuarios SET Ultimo_Intento = '$fecha', Intentos = Intentos+1 WHERE Correo = '$usuario'";
+						$resultado = $omodelo->_insertar($query1);
+						$afectadas = $omodelo->numerofilas;
 
 						if ($resultado == "si") {
-							echo "Error 2: ".mysqli_error($omodelo->link);
+							echo "Error 3: ".mysqli_error($omodelo->link);
 						}else{
-							$row[0]['Intentos'] = '0';
-						}
-					}else{
-						echo "Supero Intentos";
-					}
-				}
-				if($row[0]['Intentos'] < 5){
-					$query1 = "UPDATE usuarios SET Ultimo_Intento = '$fecha', Intentos = Intentos+1 WHERE Correo = '$usuario'";
-					$resultado = $omodelo->_insertar($query1);
-					$afectadas = $omodelo->numerofilas;
+							if($afectadas > 0){
 
-					if ($resultado == "si") {
-						echo "Error 3: ".mysqli_error($omodelo->link);
-					}else{
-						if($afectadas > 0){
-
-							if($numerofilas > 0 && password_verify($contrasena, $row[0]['Contrasena'])){
-								$query2 = "UPDATE usuarios SET Tiempo_Inicio = '$fecha', Intentos = 0 WHERE Correo = '$usuario'";
-								$resultado = $omodelo->_insertar($query2);
-						
-								if ($resultado == "si") {
-								    echo "Error 5: ".mysqli_error($omodelo->link);
-								}else{
-									$_SESSION['user_admin'] = $row[0];
-									echo "Correcto";
-								}
-							}else{
-								$query3 = "SELECT Intentos FROM usuarios WHERE Correo = '$usuario' AND Intentos = 5";
-								$resultado = $omodelo->_consultar($query3);
-								$numerofilas = $omodelo->numerofilas;
-
-								if ($resultado == "si") {
-								    echo "Error 6: ".mysqli_error($omodelo->link);
-								}else{
-									echo "0";
-									if($numerofilas > 0){
-										echo "Superaste el numero de intentos";
+								if($numerofilas > 0 && password_verify($contrasena, $row[0]['Contrasena'])){
+									$query2 = "UPDATE usuarios SET Tiempo_Inicio = '$fecha', Intentos = 0 WHERE Correo = '$usuario'";
+									$resultado = $omodelo->_insertar($query2);
+							
+									if ($resultado == "si") {
+										echo "Error 5: ".mysqli_error($omodelo->link);
+									}else{
+										$_SESSION['user_admin'] = $row[0];
+										echo "Correcto";
 									}
-								}
-							}
-
-
-							/*$query = "SELECT ID_Usuario, Nombre, Correo, Foto, Tipo, Permisos FROM usuarios WHERE Correo = '$usuario' AND Contrasena = MD5('$contrasena') AND Contrasena != '' AND usuarios.Tipo = 'Administrador'"; 
-							$row = $omodelo->_consultar($query);
-							$numerofilas = $omodelo->numerofilas;
-
-							if ($row == "si") {
-								echo "Error 4: ".mysqli_error($omodelo->link);
-							}else{
-								if($numerofilas > 0){
-									
 								}else{
 									$query3 = "SELECT Intentos FROM usuarios WHERE Correo = '$usuario' AND Intentos = 5";
 									$resultado = $omodelo->_consultar($query3);
 									$numerofilas = $omodelo->numerofilas;
 
 									if ($resultado == "si") {
-									    echo "Error 6: ".mysqli_error($omodelo->link);
+										echo "Error 6: ".mysqli_error($omodelo->link);
 									}else{
 										echo "0";
 										if($numerofilas > 0){
@@ -92,8 +70,34 @@ class login {
 										}
 									}
 								}
-							}*/
-						}	
+
+
+								/*$query = "SELECT ID_Usuario, Nombre, Correo, Foto, Tipo, Permisos FROM usuarios WHERE Correo = '$usuario' AND Contrasena = MD5('$contrasena') AND Contrasena != '' AND usuarios.Tipo = 'Administrador'"; 
+								$row = $omodelo->_consultar($query);
+								$numerofilas = $omodelo->numerofilas;
+
+								if ($row == "si") {
+									echo "Error 4: ".mysqli_error($omodelo->link);
+								}else{
+									if($numerofilas > 0){
+										
+									}else{
+										$query3 = "SELECT Intentos FROM usuarios WHERE Correo = '$usuario' AND Intentos = 5";
+										$resultado = $omodelo->_consultar($query3);
+										$numerofilas = $omodelo->numerofilas;
+
+										if ($resultado == "si") {
+											echo "Error 6: ".mysqli_error($omodelo->link);
+										}else{
+											echo "0";
+											if($numerofilas > 0){
+												echo "Superaste el numero de intentos";
+											}
+										}
+									}
+								}*/
+							}	
+						}
 					}
 				}
 			}else{

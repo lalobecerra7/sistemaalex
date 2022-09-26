@@ -74,7 +74,7 @@ function v_usuarios() {
                         footer: footer
                     });
                     TablaUsuarios();
-                }else if ($.trim(datos[0]) == "ErrorInsertar: Duplicate entry '"+$('#CorreoUsuario').val()+"' for key 'usuarios.Correo'") {
+                }else if ($.trim(datos[0]) == "ErrorInsertar: Duplicate entry '"+$('#CorreoUsuario').val()+"' for key 'Correo'") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
