@@ -5,7 +5,7 @@
 			<nav aria-label="breadcrumb">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
-					<li class="breadcrumb-item"><a href="index.php">Productos a la venta</a></li>
+					<li class="breadcrumb-item"><a href="index.php">Productos</a></li>
 					<li class="breadcrumb-item active" aria-current="page">Inventario</li>
 				</ol>
 			</nav>

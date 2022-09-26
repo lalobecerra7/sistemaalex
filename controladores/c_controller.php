@@ -16,6 +16,7 @@ include "controladores/c_cajas.php";
 include "controladores/c_perfil.php";
 include "controladores/c_impuestos.php";
 include "controladores/c_tickets.php";
+include "controladores/c_zonas.php";
 
 class controller {
 
@@ -79,12 +80,21 @@ class controller {
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_areas'][1] == '1') {
 			$botonAreas = '<li class="menu-item cargarVista" carga="v_areas" titulo="Áreas" id="cargarAreas">
               <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-building-user"></i>
                 <div data-i18n="Áreas">Áreas</div>
               </a>
             </li>';
 		}
 		$pagina = str_replace('#MenuAreas#', $botonAreas, $pagina);
+
+		$botonZonas = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_zonas'][1] == '1') {
+			$botonZonas = '<li class="menu-item cargarVista" carga="v_zonas" titulo="Zonas" id="cargarZonas">
+              <a href="javascript:void(0)"  class="menu-link">
+                <div data-i18n="Zonas">Zonas</div>
+              </a>
+            </li>';
+		}
+		$pagina = str_replace('#MenuZonas#', $botonZonas, $pagina);
 		
 
 		$botonProductos = '';
@@ -358,6 +368,24 @@ class controller {
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_areas'][2] == '0') {
 				echo '<script>$("#botonNuevaArea").remove();</script>';
 			}
+
+			$query = "SELECT ID_Zona, Nombre FROM zona";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Zona'] . '" >' . $row[$i]['Nombre']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#ZonasArea#', $opciones, $pagina);
+			
 		}else if($nombre == "v_categorias"){
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_categorias'][2] == '0') {
 				echo '<script>$("#botonNuevaCategoria").remove();</script>';

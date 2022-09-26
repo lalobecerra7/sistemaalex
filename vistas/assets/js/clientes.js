@@ -306,6 +306,7 @@ jQuery(document).ready(function($) {
             $("#SexoCliente").val(datos.Sexo);
             $("#DescuentoCliente").val(datos.Descuento);
             $("#RFCCliente").val(datos.RFC);
+            $("#FacturarCliente").val(datos.Facturar);
             $("#TitularBancoCliente").val(datos.Titular);
             $("#BancoCliente").val(datos.Banco);
             $("#CuentaBancoCliente").val(datos.No_Cuenta);
@@ -316,7 +317,7 @@ jQuery(document).ready(function($) {
                 $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/default.jpg');
             }
             $("#TablaUbicacionClientes tbody").html("");
-            if (datos.Extras.length > 0) {
+            if (datos.Extras != null && datos.Extras.length > 0) {
                 for (var i = 0; i < datos.Extras.length; i++) {
                     var CalleCliente = datos.Extras[i].Calle;
                     var NoExteriorCliente = datos.Extras[i].No_Exterior;

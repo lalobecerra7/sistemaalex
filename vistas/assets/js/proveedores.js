@@ -26,7 +26,7 @@ function v_proveedores() {
                 }else{
                     descuentoProveedor = $("#DescuentoProveedor").val();
                 }
-                var data = "metodo="+$("#GuardarProveedor").attr("tipo")+"&accion=proveedores&IDProveedor="+$("#GuardarProveedor").attr("attrid")+"&NombreEmpresaProveedor="+$("#NombreEmpresaProveedor").val()+"&RazonSocialProveedor="+$("#RazonSocialProveedor").val()+"&TelefonoProveedor="+$("#TelefonoProveedor").val()+"&DireccionProveedor="+$("#DireccionProveedor").val()+"&ColoniaProveedor="+$("#ColoniaProveedor").val()+"&CiudadProveedor="+$("#CiudadProveedor").val()+"&EstadoProveedor="+$("#EstadoProveedor").val()+"&PaisProveedor="+$("#PaisProveedor").val()+"&CPProveedor="+$("#CPProveedor").val()+"&ContactoProveedor="+$("#ContactoProveedor").val()+"&PuestoContactoProveedor="+$("#PuestoContactoProveedor").val()+"&CorreoContactoProveedor="+$("#CorreoContactoProveedor").val()+"&CelularContactoProveedor="+$("#CelularContactoProveedor").val()+"&RFCProveedor="+$("#RFCProveedor").val()+"&BancoProveedor="+$("#BancoProveedor").val()+"&NoCuentaProveedor="+$("#NoCuentaProveedor").val()+"&TipoDescuento="+$("#TipoDescuentoProveedor").val()+"&DescuentoProveedor="+descuentoProveedor+"&Credito="+$("#CreditoProveedor").val();
+                var data = "metodo="+$("#GuardarProveedor").attr("tipo")+"&accion=proveedores&IDProveedor="+$("#GuardarProveedor").attr("attrid")+"&NombreEmpresaProveedor="+$("#NombreEmpresaProveedor").val()+"&RazonSocialProveedor="+$("#RazonSocialProveedor").val()+"&TelefonoProveedor="+$("#TelefonoProveedor").val()+"&CalleProveedor="+$("#CalleProveedor").val()+"&NoExterior="+$("#NoExteriorProveedor").val()+"&NoInterior="+$("#NoInteriorProveedor").val()+"&ColoniaProveedor="+$("#ColoniaProveedor").val()+"&CiudadProveedor="+$("#CiudadProveedor").val()+"&EstadoProveedor="+$("#EstadoProveedor").val()+"&PaisProveedor="+$("#PaisProveedor").val()+"&CPProveedor="+$("#CPProveedor").val()+"&ContactoProveedor="+$("#ContactoProveedor").val()+"&PuestoContactoProveedor="+$("#PuestoContactoProveedor").val()+"&CorreoContactoProveedor="+$("#CorreoContactoProveedor").val()+"&CelularContactoProveedor="+$("#CelularContactoProveedor").val()+"&RFCProveedor="+$("#RFCProveedor").val()+"&BancoProveedor="+$("#BancoProveedor").val()+"&NoCuentaProveedor="+$("#NoCuentaProveedor").val()+"&TipoDescuento="+$("#TipoDescuentoProveedor").val()+"&DescuentoProveedor="+descuentoProveedor+"&Credito="+$("#CreditoProveedor").val();
                 var btn = $('#GuardarProveedor');
                 $.ajax({
                     url: 'index.php',
@@ -143,7 +143,9 @@ jQuery(document).ready(function($) {
             $("#NombreEmpresaProveedor").val(datos.Empresa);
             $("#RazonSocialProveedor").val(datos.Razon_Social);
             $("#TelefonoProveedor").val(datos.Telefono);
-            $("#DireccionProveedor").val(datos.Direccion);
+            $("#CalleProveedor").val(datos.Calle);
+            $("#NoExteriorProveedor").val(datos.No_Exterior);
+            $("#NoInteriorProveedor").val(datos.No_Interior);
             $("#ColoniaProveedor").val(datos.Colonia);
             $("#CiudadProveedor").val(datos.Ciudad);
             $("#EstadoProveedor").val(datos.Estado);

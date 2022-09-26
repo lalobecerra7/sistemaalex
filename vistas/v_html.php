@@ -502,9 +502,9 @@
 
           <div class="menu-inner-shadow"></div>
 
-          <ul class="menu-inner py-1">
+          <ul class="menu-inner py-1" style="overflow-x: hidden; overflow-y: hidden;">
             <!-- Dashboard -->
-            <li class="menu-item active cargarVista" aria-current="page" carga="v_inicio" titulo="Inicio" id="cargarInicio">
+            <li class="menu-item active cargarVista mt-4" aria-current="page" carga="v_inicio" titulo="Inicio" id="cargarInicio">
               <a class="menu-link" href="javascript:void(0)">
                 <i class="menu-icon fas fa-home"></i>
                 <div data-i18n="Inicio">Inicio </div>
@@ -517,13 +517,13 @@
 
             #MenuClientes#
 
-            #MenuAreas#
+            
 
             <!-- Layouts -->
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon fas fa-boxes-stacked"></i>
-                <div data-i18n="Layouts">Productos a la venta</div>
+                <div data-i18n="Layouts">Productos</div>
               </a>
 
               <ul class="menu-sub">
@@ -536,6 +536,11 @@
                 #MenuCajas#
                 
                 #MenuImpuestos#
+
+                #MenuZonas#
+
+                #MenuAreas#
+
               </ul>
             </li>
 
@@ -720,5 +725,6 @@
     <script type="text/javascript" src="vistas/assets/js/cajas.js"></script>
     <script type="text/javascript" src="vistas/assets/js/perfil.js"></script>
     <script type="text/javascript" src="vistas/assets/js/tickets.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/zonas.js"></script>
   </body>
 </html>

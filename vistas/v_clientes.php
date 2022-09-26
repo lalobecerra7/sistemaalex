@@ -133,19 +133,29 @@
 		        <hr>
 		        <b class="mb-3">Datos bancarios</b>   
 		        <br>
-		        <div class="col-md-4 col-sm-12 mb-3">
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+								<select class="form-select" id="FacturarCliente" name="FacturarCliente">
+							    	<option value="" selected> - Seleccione una opción - </option>
+							    	<option value="1">Si</option>
+							    	<option value="0">No</option>
+							  	</select>
+							 	<label for="FacturarCliente">Facturar ventas</label>
+							</div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		            <input type="text" class="form-control" id="TitularBancoCliente" name="TitularBancoCliente" placeholder="Ingresa el nombre del titular">
 		            <label for="TitularBancoCliente">Titular</label>
 		          </div>
 		        </div>
-		        <div class="col-md-4 col-sm-12 mb-3">
+		        <div class="col-md-3 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		            <input type="text" class="form-control" id="BancoCliente" name="BancoCliente" placeholder="Ingresa el nombre del banco">
 		            <label for="BancoCliente">Banco</label>
 		          </div>
 		        </div>
-		        <div class="col-md-4 col-sm-12 mb-3">
+		        <div class="col-md-3 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		            <input type="text" class="form-control" id="CuentaBancoCliente" name="CuentaBancoCliente" placeholder="Ingresa el número de cuenta o clabe">
 		            <label for="CuentaBancoCliente">No. Cuenta / CLABE</label>

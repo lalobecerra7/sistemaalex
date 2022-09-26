@@ -1,18 +1,19 @@
-function v_areas() {
-    $('#FormAreas').validate({
+function v_zonas() {
+    console.log("entro a la funcion");
+    $('#FormZonas').validate({
         rules: {
-            NombreArea: {
+            NombreZona: {
                 required: true
             },
         },
         messages: {
-            NombreArea: {
-                required: "El nombre del área es obligatorio"
+            NombreZona: {
+                required: "El nombre de la zona es obligatorio"
             },
         },
         submitHandler: function(form) { 
-            var data = "metodo="+$("#GuardarArea").attr("tipo")+"&accion=areas&IDArea="+$("#GuardarArea").attr("attrid")+"&Nombre="+$("#NombreArea").val()+"&Descripcion="+$("#DescripcionArea").val()+"&Zona="+$("#ZonasArea").val()+"&Nivel="+$("#NivelArea").val();
-            var btn = $('#GuardarArea');
+            var data = "metodo="+$("#GuardarZona").attr("tipo")+"&accion=zonas&IDZona="+$("#GuardarZona").attr("attrid")+"&Nombre="+$("#NombreZona").val()+"&Descripcion="+$("#DescripcionZona").val()
+            var btn = $('#GuardarZona');
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
@@ -23,22 +24,22 @@ function v_areas() {
             })
             .done(function(res) {
                 if ($.trim(res) == "Correcto") {
-                    if ($("#GuardarArea").attr("tipo") == "modificar") {
+                    if ($("#GuardarZona").attr("tipo") == "modificar") {
                         var tipoAlerta = "modificada";
                     }else{
                         var tipoAlerta = "guardada";
                     }
                     Swal.fire({
                         icon: 'success',
-                        title: 'Área '+tipoAlerta+' correctamente'
+                        title: 'Zona '+tipoAlerta+' correctamente'
                     });
-                    TablaAreas();
-                    $("#ModalAreas").modal("hide");
+                    TablaZonas();
+                    $("#ModalZonas").modal("hide");
                 }else{
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Error inesperado al '+$("#GuardarArea").attr("tipo")+' área.'
+                        text: 'Error inesperado al '+$("#GuardarZona").attr("tipo")+' zona.'
                     });
                     console.log($.trim(res));
                 }
@@ -52,16 +53,14 @@ function v_areas() {
         }
     });  
 
-    TablaAreas();   
+    TablaZonas();   
 }
 
-function TablaAreas(){
+function TablaZonas(){
     ajaxMyDatatable({
-        "table": $("#TablaAreas"), 
+        "table": $("#TablaZonas"), 
         "colums": [
             "Nombre",
-            "Zona",
-            "Nivel",
             "Descripcion",
             "Acciones"
         ],
@@ -72,27 +71,27 @@ function TablaAreas(){
         "url": "index.php", 
         "params":{
             "metodo": "consultar",
-            "accion": "areas"
+            "accion": "zonas"
         }
     });
 }
 
 jQuery(document).ready(function($) {
 
-    $(document).on('click', '#botonNuevaArea', function() {
-        $("#GuardarArea").attr('tipo', "insertar");
-        $("#GuardarArea").attr('attrid', "");
-        $("#FormAreas").trigger('reset');
-        $("#TituloModalArea").text("Agregar nueva");
+    $(document).on('click', '#botonNuevaZona', function() {
+        $("#GuardarZona").attr('tipo', "insertar");
+        $("#GuardarZona").attr('attrid', "");
+        $("#FormZonas").trigger('reset');
+        $("#TituloModalZona").text("Agregar nueva");
     });
 
-    $(document).on('click', '#EliminarArea', function() {
+    $(document).on('click', '#EliminarZona', function() {
         var boton = $(this);
         var id = $(this).attr("attrid");
         var nombre = $(this).attr("nombre");
         Swal.fire({
-          title: '¿Estás a punto de eliminar el área '+nombre+'?',
-          text: "Una vez eliminado ya no podrá ser recuperado",
+          title: '¿Estás a punto de eliminar la zona '+nombre+'?',
+          text: "Una vez eliminada ya no podrá ser recuperado",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
@@ -101,7 +100,7 @@ jQuery(document).ready(function($) {
           confirmButtonText: 'Si, eliminar'
         }).then((result) => {
           if (result.value) {
-            var data = "metodo=eliminar&accion=areas&IDArea="+id;
+            var data = "metodo=eliminar&accion=zonas&IDZona="+id;
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
@@ -109,16 +108,16 @@ jQuery(document).ready(function($) {
             })
             .done(function(res) {
                 if ($.trim(res) == "Correcto") {
-                    TablaAreas();
+                    TablaZonas();
                     Swal.fire({
                         icon: 'success',
-                        title: 'Área eliminada correctamente'
+                        title: 'Zona eliminada correctamente'
                     });
                 }else{
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Error inesperado al eliminar área.'
+                        text: 'Error inesperado al eliminar zona.'
                     });
                 }
             })
@@ -129,9 +128,9 @@ jQuery(document).ready(function($) {
         });
     });
 
-    $(document).on('click', '#ModificarArea', function() {
+    $(document).on('click', '#ModificarZona', function() {
         var id = $(this).attr('attrid');
-        var data = "metodo=detalles&accion=areas&IDArea="+id;
+        var data = "metodo=detalles&accion=zonas&IDZona="+id;
         $.ajax({
             url: 'index.php',
             type: 'POST',
@@ -139,15 +138,13 @@ jQuery(document).ready(function($) {
         })
         .done(function(res) {
             //console.log(res);
-            $("#GuardarArea").attr('tipo', 'modificar');
-            $("#GuardarArea").attr('attrid', id);
-            $("#TituloModalArea").text("Modificar");
+            $("#GuardarZona").attr('tipo', 'modificar');
+            $("#GuardarZona").attr('attrid', id);
+            $("#TituloModalZona").text("Modificar");
             var datos = JSON.parse($.trim(res));
-            $("#NombreArea").val(datos.Nombre);
-            $("#DescripcionArea").val(datos.Descripcion);
-            $("#ZonasArea").val(datos.FK_Zona);
-            $("#NivelArea").val(datos.Nivel);
-            $('#ModalAreas').modal('show');
+            $("#NombreZona").val(datos.Nombre);
+            $("#DescripcionZona").val(datos.Descripcion);
+            $('#ModalZonas').modal('show');
         })
         .fail(function() {
             console.log("Error ajax");
