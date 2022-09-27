@@ -74,7 +74,7 @@ function v_usuarios() {
                         footer: footer
                     });
                     TablaUsuarios();
-                }else if ($.trim(datos[0]) == "ErrorInsertar: Duplicate entry '"+$('#CorreoUsuario').val()+"' for key 'Correo'") {
+                }else if ($.trim(datos[0]) == "ErrorInsertar: Duplicate entry '"+$('#CorreoUsuario').val()+"' for key 'usuarios.Correo'") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
@@ -125,6 +125,9 @@ jQuery(document).ready(function($) {
         $("#NuevaContrasena").removeAttr("disabled");
         $("#RepetirNuevaContrasena").removeAttr("disabled");
         $(".campoMostrarContrasena").css("display", "none");
+        
+        $("#NuevaContrasena").val("");
+        $("#RepetirNuevaContrasena").val("");
     });
 
 
@@ -190,6 +193,7 @@ jQuery(document).ready(function($) {
         })
         .done(function(res) {
             //console.log(res);
+            $('#mostrarContrasena').prop('checked', false);
             $("#GuardarUsuario").attr('tipo', 'modificar');
             $("#GuardarUsuario").attr('attrid', id);
             $("#TituloModalUsuario").text("Modificar");
@@ -200,6 +204,7 @@ jQuery(document).ready(function($) {
             $("#CorreoUsuario").val(datos.Correo);
             $("#TipoUsuario").val(datos.Tipo_Usuario);
             $("#EstatusUsuario").val(datos.Estatus);
+            $("#SucursalUsuario").val(datos.FK_Sucursal);
             $("#EstatusCuenta").val(datos.Activo);
             $("#ContraTemporal").val(datos.Temporal);
             $(".campoMostrarContrasena").css("display", "inline");

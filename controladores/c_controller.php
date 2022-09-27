@@ -339,6 +339,23 @@ class controller {
 
 			$pagina = str_replace('#usuarios#', $opciones, $pagina);
 
+			$query = "SELECT ID_Zona, Nombre FROM zona";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Zona'] . '" >' . $row[$i]['Nombre']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#ZonasSucursales#', $opciones, $pagina);
+
 		}else if($nombre == "v_proveedores"){
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_proveedores'][2] == '0') {
 				echo '<script>$("#bontonNuevoProve").remove();</script>';
@@ -368,23 +385,6 @@ class controller {
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_areas'][2] == '0') {
 				echo '<script>$("#botonNuevaArea").remove();</script>';
 			}
-
-			$query = "SELECT ID_Zona, Nombre FROM zona";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-			$opciones = "";
-
-			if ($row == "si") {
-				echo "Error: " . mysqli_error($omodelo->link);
-			} else {
-				if ($numerofilas > 0) {
-					for ($i = 0; $i < $numerofilas; $i++) {
-						$opciones .= '<option value="' . $row[$i]['ID_Zona'] . '" >' . $row[$i]['Nombre']. '</option>';
-					}
-				}
-			}
-
-			$pagina = str_replace('#ZonasArea#', $opciones, $pagina);
 			
 		}else if($nombre == "v_categorias"){
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_categorias'][2] == '0') {
@@ -402,6 +402,23 @@ class controller {
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_usuarios'][2] == '0') {
 				echo '<script>$("#botonNuevoUsuario").remove();</script>';
 			}
+
+			$query = "SELECT ID_Sucursal, Nombre FROM sucursales";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Sucursal'] . '" >' . $row[$i]['Nombre']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#SucursalesUsuarios#', $opciones, $pagina);
 		}else if($nombre == "v_tickets"){
 
 			$query = "SELECT ID_Sucursal, Nombre FROM sucursales";

@@ -61,10 +61,11 @@
 	      	<div class="row">
 	      	 	<div class="offset-md-4 col-md-4 col-sm-12 text-center">
 	      	 		<div class="fileinput fileinput-new" data-provides="fileinput">
-									<div class="fileinput-new thumbnail" id="verfotoUsuario" style="width: 250px; height: 170px;cursor:pointer;border-radius:4px;border:2px solid grey;"><img src="vistas/assets/archivos/default.jpg"></div>	
-								</div>
-								<br>
-								<input class="form-control" type="file" id="FotoUsuario" name="FotoUsuario">
+						<div class="fileinput-new thumbnail" id="verfotoUsuario" style="width: 250px; height: 170px;cursor:pointer;border-radius:4px;border:2px solid grey;"><img src="vistas/assets/archivos/default.jpg">
+						</div>	
+					</div>
+					<br>
+					<input class="form-control" type="file" id="FotoUsuario" name="FotoUsuario">
 	      	 	</div>
 	      	</div>
 	      	<br>
@@ -77,78 +78,96 @@
 	      		</div>
 	      		<div class="col-md-4 col-sm-12 mb-3">
 	      			<div class="form-floating">
-		            <input type="text" class="form-control" id="PrimerApellidoUsuario" name="PrimerApellidoUsuario" placeholder="Ingresa el primer apellido del usuario">
-		          	<label for="PrimerApellidoUsuario">Primer apellido</label>
-		          </div>
-						</div>
-						<div class="col-md-4 col-sm-12 mb-3">
+			            <input type="text" class="form-control" id="PrimerApellidoUsuario" name="PrimerApellidoUsuario" placeholder="Ingresa el primer apellido del usuario">
+			          	<label for="PrimerApellidoUsuario">Primer apellido</label>
+		          	</div>
+				</div>
+				<div class="col-md-4 col-sm-12 mb-3">
 	      			<div class="form-floating">
-		            <input type="text" class="form-control" id="SegundoApellidoUsuario" name="SegundoApellidoUsuario" placeholder="Ingresa el segundo apellido del usuario">
-		          	<label for="SegundoApellidoUsuario">Segundo apellido</label>
-		          </div>
+		        	    <input type="text" class="form-control" id="SegundoApellidoUsuario" name="SegundoApellidoUsuario" placeholder="Ingresa el segundo apellido del usuario">
+		          		<label for="SegundoApellidoUsuario">Segundo apellido</label>
+		          	</div>
+				</div>
+				<hr>
+				<b>Contraseña</b>
+				<div class="row mt-2 mb-2">
+					<div class="col-md-3 col-sm-12 campoMostrarContrasena">
+						<div class="form-check form-switch">
+						  <input class="form-check-input" type="checkbox" id="mostrarContrasena" name="mostrarContrasena">
+						  <label class="form-check-label" for="mostrarContrasena">Cambiar contraseña</label>
 						</div>
-						<hr>
-						<b class="mb-3">Datos de sesión</b>
-						<div class="col-md-4 col-sm-12 mb-3">
+					</div>
+					<div class="col-md-4 col-sm-12 mb-3 camposContrasena">
+		      			<div class="form-floating">
+			        		<input type="password" class="form-control contra" id="NuevaContrasena" name="NuevaContrasena" placeholder="Ingresa la nueva contraseña">
+			          		<label for="NuevaContrasena">Nueva contraseña</label>
+			          	</div>
+					</div>
+					<div class="col-md-4 col-sm-12 mb-3 camposContrasena">
+		      			<div class="form-floating">
+			        	    <input type="password" class="form-control contra" id="RepetirNuevaContrasena" name="RepetirNuevaContrasena" placeholder="Ingresa la nueva contraseña otra vez">
+			          		<label for="RepetirNuevaContrasena">Repetir contraseña</label>
+			          	</div>
+					</div>
+					<div class="col-md-1 col-sm-12 mb-3 camposContrasena">
+						<button class="btn btn-light VerContrasenas" type="button">
+							<i class="fas fa-eye"></i>
+						</button>
+					</div>
+				</div>
+				<hr>
+				<b class="mb-3">Datos de sesión</b>
+				<div class="col-md-4 col-sm-12 mb-3">
 	      			<div class="form-floating">
-		            <input type="email" class="form-control" id="CorreoUsuario" name="CorreoUsuario" placeholder="Ingresa el correo del usuario">
-		          	<label for="CorreoUsuario">Correo electrónico</label>
-		          </div>
-						</div>
-
-						<div class="col-md-3 col-sm-12 mb-3">
-	      			<div class="form-floating">
-		            <input type="password" class="form-control contra" id="NuevaContrasena" name="NuevaContrasena" placeholder="Ingresa la nueva contraseña">
-		          	<label for="NuevaContrasena">Nueva contraseña</label>
-		          </div>
-						</div>
-						<div class="col-md-3 col-sm-12 mb-3">
-	      			<div class="form-floating">
-		            <input type="password" class="form-control contra" id="RepetirNuevaContrasena" name="RepetirNuevaContrasena" placeholder="Ingresa la nueva contraseña otra vez">
-		          	<label for="RepetirNuevaContrasena">Repetir contraseña</label>
-		          </div>
-						</div>
-						<div class="col-md-2 col-sm-12 mb-3 d-grid gap-2">
-							<button class="btn btn-light VerContrasenas" type="button">
-								<i class="fas fa-eye"></i>
-							</button>
-						</div>
-						<div class="col-md-3 col-sm-12 mb-3">
-							<div class="form-floating">
-		            <select class="form-control contra" id="TipoUsuario" name="TipoUsuario" placeholder="Ingresa el tipo de usuario">
-		            	<option value="Normal">Normal</option>
-		            	<option value="Administrador">Administrador</option>
-		            </select>
-		          	<label for="TipoUsuario">Tipo de usuario</label>
-		          </div>
-						</div>
-						<div class="col-md-3 col-sm-12 mb-3">
-							<div class="form-floating">
-		            <select class="form-control contra" id="EstatusUsuario" name="EstatusUsuario" placeholder="Ingresa el tipo de usuario">
-		            	<option value="0">Desbloqueado</option>
-		            	<option value="1">Bloqueado</option>
-		            </select>
-		          	<label for="EstatusUsuario">Estatus</label>
-		          </div>
-						</div>
-						<div class="col-md-3 col-sm-12 mb-3">
-							<div class="form-floating">
-		            <select class="form-control contra" id="EstatusCuenta" name="EstatusCuenta" placeholder="Ingresa el estatus de la cuenta">
-		            	<option value="0">Inactivo</option>
-		            	<option value="1">Activo</option>
-		            </select>
-		          	<label for="EstatusCuenta">Estatus de la cuenta</label>
-		          </div>
-						</div>
-						<div class="col-md-3 col-sm-12 mb-3">
-							<div class="form-floating">
-		            <select class="form-control contra" id="ContraTemporal" name="ContraTemporal" placeholder="Ingresa el tipo de usuario">
-		            	<option value="0">Inactiva</option>
-		            	<option value="1">Activa</option>
-		            </select>
-		          	<label for="ContraTemporal">Contraseña temporal</label>
-		          </div>
-						</div>
+		        	    <input type="email" class="form-control" id="CorreoUsuario" name="CorreoUsuario" placeholder="Ingresa el correo del usuario">
+		          		<label for="CorreoUsuario">Correo electrónico</label>
+		          	</div>
+				</div>
+				<div class="col-md-4 col-sm-12 mb-3">
+					<div class="form-floating">
+		        	    <select class="form-control contra" id="TipoUsuario" name="TipoUsuario" placeholder="Ingresa el tipo de usuario">
+		            		<option value="Normal">Normal</option>
+		            		<option value="Administrador">Administrador</option>
+		            	</select>
+		          		<label for="TipoUsuario">Tipo de usuario</label>
+		          	</div>
+				</div>
+				<div class="col-md-4 col-sm-12 mb-3">
+					<div class="form-floating">
+		        	    <select class="form-control contra" id="EstatusUsuario" name="EstatusUsuario" placeholder="Ingresa el tipo de usuario">
+		            		<option value="0">Desbloqueado</option>
+		            		<option value="1">Bloqueado</option>
+		            	</select>
+		          		<label for="EstatusUsuario">Estatus</label>
+		          	</div>
+				</div>
+				<div class="col-md-4">
+	            	<div class="form-floating mb-3">
+						<select class="form-select" name="SucursalUsuario" id="SucursalUsuario" >
+							<option value="0">- Seleccione una opción -</option>
+							#SucursalesUsuarios#
+					    </select>
+						<label for="SucursalUsuario">Sucursal</label>
+					</div>
+	            </div>
+				<div class="col-md-4 col-sm-12 mb-3">
+					<div class="form-floating">
+		        	    <select class="form-control contra" id="EstatusCuenta" name="EstatusCuenta" placeholder="Ingresa el estatus de la cuenta">
+		            		<option value="0">Inactivo</option>
+		            		<option value="1">Activo</option>
+		            	</select>
+		          		<label for="EstatusCuenta">Estatus de la cuenta</label>
+		          	</div>
+				</div>
+				<div class="col-md-4 col-sm-12 mb-3">
+					<div class="form-floating">
+		        	    <select class="form-control contra" id="ContraTemporal" name="ContraTemporal" placeholder="Ingresa el tipo de usuario">
+		            		<option value="0">Inactiva</option>
+		            		<option value="1">Activa</option>
+		            	</select>
+		          		<label for="ContraTemporal">Contraseña temporal</label>
+		          	</div>
+				</div>
 	      	</div>
 	      </div>
 	      <div class="modal-footer">
@@ -304,43 +323,6 @@
                             </tr>
                             <tr>
                                 <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_areas">Áreas</th>
-                                <td class="table-responsive">
-                                    <table class="table table-bordered text-center" width="100%">
-                                        <tbody>
-                                            <tr>
-                                                <td>Ver</td>
-                                                <td>Agregar</td>
-                                                <td>Modificar</td>
-                                                <td>Eliminar</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div>
-                                                        <input class="form-check-input checkPermisos" type="checkbox">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <input class="form-check-input checkPermisos" type="checkbox">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <input class="form-check-input checkPermisos" type="checkbox">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <input class="form-check-input checkPermisos" type="checkbox">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_zonas">Zonas</th>
                                 <td class="table-responsive">
                                     <table class="table table-bordered text-center" width="100%">
                                         <tbody>

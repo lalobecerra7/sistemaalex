@@ -11,7 +11,7 @@ function v_areas() {
             },
         },
         submitHandler: function(form) { 
-            var data = "metodo="+$("#GuardarArea").attr("tipo")+"&accion=areas&IDArea="+$("#GuardarArea").attr("attrid")+"&Nombre="+$("#NombreArea").val()+"&Descripcion="+$("#DescripcionArea").val()+"&Zona="+$("#ZonasArea").val()+"&Nivel="+$("#NivelArea").val();
+            var data = "metodo="+$("#GuardarArea").attr("tipo")+"&accion=areas&IDArea="+$("#GuardarArea").attr("attrid")+"&Nombre="+$("#NombreArea").val()+"&Descripcion="+$("#DescripcionArea").val()+"&Nivel="+$("#NivelArea").val();
             var btn = $('#GuardarArea');
             $.ajax({
                 url: 'index.php',
@@ -60,7 +60,6 @@ function TablaAreas(){
         "table": $("#TablaAreas"), 
         "colums": [
             "Nombre",
-            "Zona",
             "Nivel",
             "Descripcion",
             "Acciones"
@@ -145,7 +144,6 @@ jQuery(document).ready(function($) {
             var datos = JSON.parse($.trim(res));
             $("#NombreArea").val(datos.Nombre);
             $("#DescripcionArea").val(datos.Descripcion);
-            $("#ZonasArea").val(datos.FK_Zona);
             $("#NivelArea").val(datos.Nivel);
             $('#ModalAreas').modal('show');
         })

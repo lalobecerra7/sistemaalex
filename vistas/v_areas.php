@@ -16,15 +16,6 @@
 		        </div>
 		        <div class="col-md-12 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		              <select class="form-select" name="ZonasArea" id="ZonasArea" >
-										<option value="0">- Seleccione una opción -</option>
-										#ZonasArea#
-									</select>
-		              <label for="ZonasArea">Zonas</label>
-		            </div>
-		        </div>
-		        <div class="col-md-12 col-sm-12 mb-3">
-		        	<div class="form-floating">
 		               	<input type="text" class="form-control" id="NivelArea" name="NivelArea" placeholder="Ingresa el nombre del nivel">
 		                <label for="NivelArea">Nivel</label>
 		            </div>
@@ -82,11 +73,10 @@
 		      <div class="col-12">
 		        <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaAreas" width="100%" style="font-size: 12px;">
 		          <thead>
-		            <th style="width: 20%;">Nombre</th>
-		            <th style="width: 20%;">Zona</th>
-		            <th style="width: 20%;">Nivel</th>
-		            <th style="width: 20%;">Descripción</th>
-		            <th style="width: 20%;" orden="No">Acciones</th>
+		            <th style="width: 25%;">Nombre</th>
+		            <th style="width: 25%;">Nivel</th>
+		            <th style="width: 25%;">Descripción</th>
+		            <th style="width: 25%;" orden="No">Acciones</th>
 		          </thead>
 		          <tbody>                        
 		          </tbody>

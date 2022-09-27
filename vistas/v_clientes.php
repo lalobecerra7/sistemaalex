@@ -131,6 +131,56 @@
 							</div>
 		        </div>
 		        <hr>
+		        <b class="mb-3">Dirección fiscal</b>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<input type="text" class="form-control" id="CalleClienteGeneral" name="CalleClienteGeneral" placeholder="Ingresa la calle del cliente">
+		            <label for="CalleClienteGeneral">Calle</label>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<input type="text" class="form-control" id="NoExteriorClienteGeneral" name="NoExteriorClienteGeneral" placeholder="Ingresa el número exterior">
+		            <label for="NoExteriorClienteGeneral">No. Exterior</label>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<input type="text" class="form-control" id="NoInteriorClienteGeneral" name="NoInteriorClienteGeneral" placeholder="Ingresa el número interior">
+		            <label for="NoInteriorClienteGeneral">No. Interior</label>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <input type="text" class="form-control" id="CPClienteGeneral" name="CPClienteGeneral" placeholder="Ingresa el codigo postal del cliente">
+		          	<label for="CPClienteGeneral">Codigo postal</label>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <input type="text" class="form-control" id="ColoniaClienteGeneral" name="ColoniaClienteGeneral" placeholder="Ingresa la colonia del cliente">
+		          	<label for="ColoniaClienteGeneral">Colonia</label>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <input type="text" class="form-control" id="CiudadClienteGeneral" name="CiudadClienteGeneral" placeholder="Ingresa la ciudad del cliente">
+		            <label for="CiudadClienteGeneral">Ciudad</label>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <input type="text" class="form-control" id="EstadoClienteGeneral" name="EstadoClienteGeneral" placeholder="Ingresa el estado del cliente">
+		            <label for="EstadoClienteGeneral">Estado</label>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <input type="text" class="form-control" id="PaisClienteGeneral" name="PaisClienteGeneral" placeholder="Ingresa el país del cliente">
+		            <label for="PaisClienteGeneral">País</label>
+		          </div>
+		        </div>
+		        <hr>
 		        <b class="mb-3">Datos bancarios</b>   
 		        <br>
 		        <div class="col-md-3 col-sm-12 mb-3">

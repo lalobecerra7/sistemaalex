@@ -18,14 +18,14 @@ class clientes {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'AND ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Cliente, clientes.Nombre, Foto, clientes.Telefono, Celular, Correo, Lim_Credito, RFC, Facturar, Titular, Banco, No_Cuenta, Fecha_Registro, sucursales.Nombre) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Cliente, clientes.Nombre, Foto, clientes.Telefono, Celular, Correo, Lim_Credito, clientes.RFC, Facturar, Titular, Banco, No_Cuenta, Fecha_Registro, sucursales.Nombre) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Cliente, clientes.Nombre, Foto, clientes.Telefono, Celular, Correo, Fecha_Registro AS Fecha, Lim_Credito, clientes.RFC, Facturar, Titular, Banco, No_Cuenta, FK_Sucursal, sucursales.Nombre AS NombreSucursal, (SELECT COUNT(*) FROM clientes WHERE ID_Cliente <> 1 $busqueda) AS Num FROM clientes LEFT JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE ID_Cliente <> 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Cliente, clientes.Nombre, Foto, clientes.Telefono, Celular, Correo, Fecha_Registro AS Fecha, Lim_Credito, clientes.RFC, Facturar, Titular, Banco, No_Cuenta, FK_Sucursal, sucursales.Nombre AS NombreSucursal, clientes.Calle AS Direccion, clientes.No_Exterior, clientes.No_Interior, clientes.Colonia, clientes.Ciudad, clientes.Codigo_Postal, clientes.Estado, clientes.Pais, (SELECT COUNT(*) FROM clientes WHERE ID_Cliente <> 1 $busqueda) AS Num FROM clientes LEFT JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE ID_Cliente <> 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -34,31 +34,43 @@ class clientes {
 		}else{
 			if($numerofilas > 0){
 				for($i=0; $i<$numerofilas; $i++){
-					$direccion = ""; $contacto = ""; $datosbancarios = "";
+					$direccion = ""; $contacto = ""; $datosbancarios = ""; $direccionfiscal = "";
 
-					/*if ($row[$i]['Direccion'] != "") {
-						$direccion .= "Dirección: ".$row[$i]['Direccion']."<br>";
+					if ($row[$i]['Direccion'] != "") {
+						$direccionfiscal .= "Calle: ".$row[$i]['Direccion']."<br>";
+					}
+
+					if ($row[$i]['No_Exterior'] != "") {
+						$direccionfiscal .= "No. Exterior: ".$row[$i]['No_Exterior']."<br>";
+					}
+
+					if ($row[$i]['No_Interior'] != "") {
+						$direccionfiscal .= "No. Interior: ".$row[$i]['No_Interior']."<br>";
 					}
 
 					if ($row[$i]['Colonia'] != "") {
-						$direccion .= "Colonia: ".$row[$i]['Colonia']."<br>";
+						$direccionfiscal .= "Colonia: ".$row[$i]['Colonia']."<br>";
 					}
 
 					if ($row[$i]['Codigo_Postal'] != "") {
-						$direccion .= "Codigo postal: ".$row[$i]['Codigo_Postal']."<br>";
+						$direccionfiscal .= "Codigo postal: ".$row[$i]['Codigo_Postal']."<br>";
 					}
 
 					if ($row[$i]['Ciudad'] != "") {
-						$direccion .= "Ciudad: ".$row[$i]['Ciudad']."<br>";
+						$direccionfiscal .= "Ciudad: ".$row[$i]['Ciudad']."<br>";
 					}
 
 					if ($row[$i]['Estado'] != "") {
-						$direccion .= "Estado: ".$row[$i]['Estado']."<br>";
+						$direccionfiscal .= "Estado: ".$row[$i]['Estado']."<br>";
 					}
 
 					if ($row[$i]['Pais'] != "") {
-						$direccion .= "País: ".$row[$i]['Pais']."<br>";
-					}*/
+						$direccionfiscal .= "País: ".$row[$i]['Pais']."<br>";
+					}
+
+					if ($direccionfiscal == "") {
+						$direccionfiscal = "No hay datos registrados";
+					}
 
 					$queryDirecciones = "SELECT ID_Detalle_Cliente, FK_Cliente, Calle, No_Exterior, No_Interior, Colonia, Codigo_Postal, Ciudad, Estado, Pais, Nombre_Contacto, Puesto_Contacto, Email_Contacto, Telefono_Contacto FROM detalles_clientes WHERE FK_Cliente = '".$row[$i]['ID_Cliente']."'";
 					$rowDirecciones = $omodelo->_consultar($queryDirecciones);
@@ -138,7 +150,7 @@ class clientes {
 						'ID' => $row[$i]['ID_Cliente'],
 						'Fecha' => $row[$i]['Fecha'],
 						'Nombre' => $foto.$row[$i]['Nombre'],
-						'Direcciones' => $direccion,
+						'Direcciones' => "Dirección fiscal: <br>".$direccionfiscal."<br>".$direccion,
 						'Detalles' => $datosbancarios,
 						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,
 					);
@@ -157,7 +169,7 @@ class clientes {
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
 
-		$query = "INSERT INTO clientes SET Nombre = '$NombreCliente', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', Fecha_Registro = '$fecha', RFC = '$RFCCliente', Facturar = '$FacturarCliente',  No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', FK_Sucursal = '$SucursalCliente'";
+		$query = "INSERT INTO clientes SET Nombre = '$NombreCliente', Calle = '$CalleClienteGeneral', No_Exterior = '$NoExteriorClienteGeneral', No_Interior = '$NoInteriorClienteGeneral', Codigo_Postal = '$CPClienteGeneral', Colonia = '$ColoniaClienteGeneral', Ciudad = '$CiudadClienteGeneral', Estado = '$EstadoClienteGeneral', Pais = '$PaisClienteGeneral', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', Fecha_Registro = '$fecha', RFC = '$RFCCliente', Facturar = '$FacturarCliente',  No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', FK_Sucursal = '$SucursalCliente'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
@@ -216,7 +228,7 @@ class clientes {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
-		$query = "UPDATE clientes SET Nombre = '$NombreCliente', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', RFC = '$RFCCliente', Facturar = '$FacturarCliente', No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', FK_Sucursal = '$SucursalCliente' WHERE ID_Cliente = '$IDCliente'";
+		$query = "UPDATE clientes SET Nombre = '$NombreCliente', Calle = '$CalleClienteGeneral', No_Exterior = '$NoExteriorClienteGeneral', No_Interior = '$NoInteriorClienteGeneral', Codigo_Postal = '$CPClienteGeneral', Colonia = '$ColoniaClienteGeneral', Ciudad = '$CiudadClienteGeneral', Estado = '$EstadoClienteGeneral', Pais = '$PaisClienteGeneral', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', RFC = '$RFCCliente', Facturar = '$FacturarCliente', No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', FK_Sucursal = '$SucursalCliente' WHERE ID_Cliente = '$IDCliente'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {

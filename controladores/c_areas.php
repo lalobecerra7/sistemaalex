@@ -18,14 +18,14 @@ class areas {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Area, areas.Nombre, areas.Descripcion, zona.Nombre) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Area, areas.Nombre, areas.Descripcion) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Area, areas.Nombre, areas.Descripcion, Nivel, zona.Nombre AS NombreZona, FK_Zona, (SELECT COUNT(*) FROM areas $busqueda) AS Num FROM areas INNER JOIN zona ON FK_Zona = ID_Zona $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Area, areas.Nombre, areas.Descripcion, Nivel, (SELECT COUNT(*) FROM areas $busqueda) AS Num FROM areas $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -53,7 +53,6 @@ class areas {
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Area'],
 						'Nombre' => $row[$i]['Nombre'],
-						'Zona' => $row[$i]['NombreZona'],
 						'Nivel' => $row[$i]['Nivel'],
 						'Descripcion' => $row[$i]['Descripcion'],
 						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,
@@ -74,10 +73,9 @@ class areas {
 		extract($_POST);
 		$Nombre =  $omodelo->link->real_escape_string($Nombre);
 		$Descripcion =  $omodelo->link->real_escape_string($Descripcion);
-		$Zona =  $omodelo->link->real_escape_string($Zona);
 		$Nivel =  $omodelo->link->real_escape_string($Nivel);
 
-		$query = "INSERT INTO areas SET Nombre = '$Nombre', Descripcion = '$Descripcion', FK_Zona = '$Zona', Nivel = '$Nivel'";
+		$query = "INSERT INTO areas SET Nombre = '$Nombre', Descripcion = '$Descripcion', Nivel = '$Nivel'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -96,11 +94,10 @@ class areas {
 		$IDArea =  $omodelo->link->real_escape_string($IDArea);
 		$Nombre =  $omodelo->link->real_escape_string($Nombre);
 		$Descripcion =  $omodelo->link->real_escape_string($Descripcion);
-		$Zona =  $omodelo->link->real_escape_string($Zona);
 		$Nivel =  $omodelo->link->real_escape_string($Nivel);
 
 
-		$query = "UPDATE areas SET Nombre = '$Nombre', Descripcion = '$Descripcion', FK_Zona = '$Zona', Nivel = '$Nivel' WHERE ID_Area = '$IDArea'";
+		$query = "UPDATE areas SET Nombre = '$Nombre', Descripcion = '$Descripcion', Nivel = '$Nivel' WHERE ID_Area = '$IDArea'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -134,7 +131,7 @@ class areas {
 		extract($_POST);
 		$IDArea =  $omodelo->link->real_escape_string($IDArea);
 
-		$query = "SELECT ID_Area, Nombre, Descripcion, FK_Zona, Nivel FROM areas WHERE ID_Area = '$IDArea'";
+		$query = "SELECT ID_Area, Nombre, Descripcion, Nivel FROM areas WHERE ID_Area = '$IDArea'";
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
