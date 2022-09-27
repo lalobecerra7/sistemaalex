@@ -116,7 +116,6 @@ function TablaProductos(){
 		    "Tipo",
 		    "Costo",
 		    "Precio",
-		    "PrecioMayoreo",
             "Detalles",
 		    "Acciones"
         ],

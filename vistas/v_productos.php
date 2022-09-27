@@ -208,7 +208,6 @@
 									<th>Sucursal</th>
 									<th>Costo</th>
 									<th>Precio</th>
-									<th>Mayoreo</th>
 									<th>Stock mín</th>
 									<th>Stock máx</th>
 									<th>Impuestos</th>
@@ -273,7 +272,6 @@
 		            <th style="width: 10%;">Tipo</th>
 		            <th style="width: 10%;">Costo</th>
 		            <th style="width: 10%;">Precio</th>
-		            <th style="width: 15%;">Precio de mayoreo</th>
 		            <th style="width: 15%;">Detalles</th>
 		            <th style="width: 10%;" orden="No">Acciones</th>
 		          </thead>

@@ -18,14 +18,14 @@ class cajas {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Caja, FK_Sucursal, sucursales.Nombre, cajas.Nombre, Detalles, Estado, FK_Usuario, usuarios.Nombre) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Caja, cajas.FK_Sucursal, sucursales.Nombre, cajas.Nombre, Detalles, cajas.Estado, FK_Usuario, usuarios.Nombre) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Caja, FK_Sucursal, sucursales.Nombre AS NombreSucursal, cajas.Nombre AS Caja, Detalles, cajas.Estado, FK_Usuario, usuarios.Nombre AS UsuarioActual, (SELECT COUNT(*) FROM cajas $busqueda) AS Num FROM cajas INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal LEFT JOIN usuarios ON FK_Usuario = ID_Usuario $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Caja, cajas.FK_Sucursal, sucursales.Nombre AS NombreSucursal, cajas.Nombre AS Caja, Detalles, cajas.Estado, FK_Usuario, usuarios.Nombre AS UsuarioActual, (SELECT COUNT(*) FROM cajas $busqueda) AS Num FROM cajas INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal LEFT JOIN usuarios ON FK_Usuario = ID_Usuario $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
