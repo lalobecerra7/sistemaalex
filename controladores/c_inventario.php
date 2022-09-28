@@ -191,10 +191,10 @@ class inventario {
 		if($tipo == 'agregarMerma'){
 			$fecha = date('Y-m-d H:i:s'); 
 			$IDProducto = $omodelo->link->real_escape_string($IDProducto);
-			$Cantidad = $omodelo->link->real_escape_string($Cantidad);
+			/*$Cantidad = $omodelo->link->real_escape_string($Cantidad);
 			$Motivo = $omodelo->link->real_escape_string($Motivo);
 			$Sucursal = $omodelo->link->real_escape_string($IDSucursal);
-			$FechaMerma = $omodelo->link->real_escape_string($FechaMerma);
+			$FechaMerma = $omodelo->link->real_escape_string($FechaMerma);*/
 			$Usuario = $_SESSION['user_admin']['ID_Usuario'];
 			$existencia= '';
 			$Costo = '';
@@ -208,7 +208,7 @@ class inventario {
 				if($numerofilas > 0){
 					$existencia = $row[0]["Cantidad"];
 				}
-				if($existencia < $Cantidad){
+				if($existencia < $CantidadMerma){
 					echo "ErrorCantidad";
 				}else{
 					if($row[0]["Costo"] != '' || $row[0]["Costo"] != null){
@@ -216,14 +216,15 @@ class inventario {
 					}else {
 						$Costo = $row[0]["CostoGral"];
 					}
-					$existenciaM = ($existencia-$Cantidad);
+					$existenciaM = ($existencia-$CantidadMerma);
 				
-					$query = "INSERT INTO merma SET FK_Sucursal = '$Sucursal', FK_Producto = '$IDProducto', Costo = '$Costo', Cantidad = '$Cantidad', Motivo = '$Motivo', Fecha_Registro = '$fecha', Fecha_Merma = '$FechaMerma', FK_Usuario = '$Usuario'";
+					$query = "INSERT INTO merma SET FK_Sucursal = '$Sucursal', FK_Producto = '$IDProducto', Cantidad = '$CantidadMerma', Motivo = '$MotivoMerma', Fecha_Registro = '$fecha', Fecha_Merma = '$FechaMerma', FK_Usuario = '$Usuario'";
 					$error = $omodelo->_insertar($query);
 			
 					if ($error == "si") {
 						echo "Error 1: ".mysqli_error($omodelo->link);
 					}else{
+						$IDMerma = mysqli_insert_id($omodelo->link);
 						$query3 = "UPDATE inventario SET Cantidad = '$existenciaM' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$Sucursal'";
 						$error3 = $omodelo->_insertar($query3);
 					
@@ -232,6 +233,37 @@ class inventario {
 						}else{
 							$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 							echo "Correcto";
+
+							$status = 1;
+							if ($_FILES['FotoMerma']['size'] > 0 && $_FILES['FotoMerma']['error'] == 0) {
+								$file = $_FILES["FotoMerma"];
+								$nombreDoc = $file["name"];
+								$tipo = $file["type"];
+								$ruta_provisional = $file["tmp_name"];
+								$size = $file["size"];
+								$carpeta = "vistas/assets/archivos/fotosMerma/";
+
+								if ($tipo != 'image/jpeg' && $tipo != 'image/JPEG' && $tipo != 'image/jpg' && $tipo != 'image/JPG' && $tipo != 'image/png' && $tipo != 'image/PNG' && $tipo != 'application/pdf' && $tipo != 'application/PDF' && $tipo != ''){
+									echo "Error 2 Formato";
+								}else if ($size > (1024*1024*10)){
+									echo "Error 3 Peso";
+								}else{
+									$status = 0;
+									$ruta = $carpeta;
+								}
+							}
+							//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+							if($status == 0){
+								$query3 = "UPDATE merma SET Foto = '".$IDMerma.'_'.$nombreDoc."' WHERE ID_Merma = '$IDMerma'";
+								$error4 = $omodelo->_insertar($query3);	
+
+								if ($error4 == "si") {
+									echo "Error 4: ".mysqli_error($omodelo->link); 
+								}else{
+									move_uploaded_file($ruta_provisional,  $ruta.''.$IDMerma.'_'.$nombreDoc);
+								}
+							}
 						}
 					}
 				}
@@ -342,7 +374,7 @@ class inventario {
 				}
 		
 				$query = "SELECT ID_Merma, merma.FK_Producto AS 'ID_Producto', sucursales.Nombre AS 'Sucursal', merma.Cantidad, (merma.Cantidad*merma.Costo) AS 'Costo', 
-				DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r') AS Fecha_Merma, Motivo, (SELECT COUNT(DISTINCT(FK_Producto)) FROM merma) AS 'Num' FROM `merma` INNER JOIN sucursales 
+				DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r') AS Fecha_Merma, Motivo, (SELECT COUNT(DISTINCT(FK_Producto)) FROM merma) AS 'Num', Foto FROM `merma` INNER JOIN sucursales 
 				ON sucursales.ID_Sucursal=merma.FK_Sucursal INNER JOIN productos 
 				ON productos.ID_Producto=merma.FK_Producto WHERE FK_Producto='$IDProducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 				$row = $omodelo->_consultar($query);
@@ -353,13 +385,28 @@ class inventario {
 				}else{
 					if($numerofilas > 0){
 						for($i=0; $i<$numerofilas; $i++){
+
+							$foto = '<a href="vistas/assets/archivos/defaultImagen.jpg" data-fancybox="images">
+									<div style="background-image: url('."'".'vistas/assets/archivos/defaultImagen.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
+									</div>
+								</a><br>';
+							if ($row[$i]["Foto"] != "") {
+								if($row[$i]["Foto"] != "" && file_exists("vistas/assets/archivos/fotosMerma/".$row[$i]["Foto"])){
+									$foto = '<a href="vistas/assets/archivos/fotosMerma/'.$row[$i]["Foto"].'" data-fancybox="images">
+											<div style="background-image: url('."'".'vistas/assets/archivos/fotosMerma/'.$row[$i]["Foto"]."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
+											</div>
+										</a><br>';
+								}	
+							}
+
+
 							$arreglo['data'][$i] = array(
 								'ID' => $row[$i]['ID_Producto'],
 								'Fecha' => $row[$i]['Fecha_Merma'],
 								'Motivo' => $row[$i]['Motivo'],
 								'Sucursal' => $row[$i]['Sucursal'],
 								'Cantidad' => $row[$i]['Cantidad'],
-								'Costo' => '<b class="dinero">$'.number_format($row[$i]['Costo'], 2).'</b>',
+								'Imagen' => $foto,
 								'Acciones' => '<button class="btn btn-warning btn-sm mb-1" id="ModificarMerma" attrid="'.$row[$i]['ID_Merma'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm mb-1" id="EliminarMerma" attrid="'.$row[$i]['ID_Merma'].'"><i class="fas fa-trash"></i></button>' ,
 							);
 							
@@ -492,7 +539,7 @@ class inventario {
 			$IDMerma = $omodelo->link->real_escape_string($IDMerma);
 			$RegresarInventario = $omodelo->link->real_escape_string($RegresarInventario);
 			if ($RegresarInventario == "Si") {
-				$queryInventario = "SELECT ID_Merma, FK_Producto, Cantidad, FK_Sucursal FROM merma WHERE ID_Merma = '$IDMerma'";
+				$queryInventario = "SELECT ID_Merma, FK_Producto, Cantidad, FK_Sucursal, Foto FROM merma WHERE ID_Merma = '$IDMerma'";
 				$row = $omodelo->_consultar($queryInventario);
 				$numerofilas = $omodelo->numerofilas;
 
@@ -500,6 +547,10 @@ class inventario {
 					echo "Error: ".mysqli_error($omodelo->link);
 				}else{
 					if($numerofilas > 0){
+
+						if($row[0]["Foto"] != "" && file_exists("vistas/assets/archivos/fotosMerma/".$row[0]["Foto"])){
+					       	unlink("vistas/assets/archivos/fotosMerma/".$row[0]["Foto"]);
+					    }
 
 						$query1 = "UPDATE inventario SET Cantidad = (Cantidad + ".$row[0]["Cantidad"].") WHERE FK_Producto = '".$row[0]["FK_Producto"]."' AND FK_Sucursal = '".$row[0]["FK_Sucursal"]."'";
 						$error1 = $omodelo->_insertar($query1);

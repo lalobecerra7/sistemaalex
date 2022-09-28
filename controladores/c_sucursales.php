@@ -227,7 +227,7 @@ class sucursales {
 				}
 				$botonModificar = '<button type="button" class="btn btn-theme-inverse btn-info bModificarSucu" attrID="'.$row[0]["ID_Sucursal"].'" nombre="'.$row[0]["Nombre"].'"><i class="fa fa-pencil-square-o"></i></button> ';
 
-				$arreglo = array('Nombre' => $row[0]["Nombre"], 'FK_Encargado' => $row[0]["FK_Encargado"], 'Calle' => utf8_encode($row[0]["Calle"]), 'No_Exterior' => utf8_encode($row[0]["No_Exterior"]), 'No_Interior' => $row[0]["No_Interior"], 'Colonia' => $row[0]["Colonia"], 'CP' => $row[0]["CP"], 'Ciudad' => $row[0]["Ciudad"], 'Estado' => $row[0]["Estado"], 'Pais' => $row[0]["Pais"], 'Email' => $row[0]["Email"], 'Telefono' => $row[0]["Telefono"], 'Segundo_Telefono' => $row[0]["Segundo_Telefono"]);
+				$arreglo = array('Nombre' => $row[0]["Nombre"], 'FK_Encargado' => $row[0]["FK_Encargado"], 'Calle' => utf8_encode($row[0]["Calle"]), 'No_Exterior' => utf8_encode($row[0]["No_Exterior"]), 'No_Interior' => $row[0]["No_Interior"], 'Colonia' => $row[0]["Colonia"], 'CP' => $row[0]["CP"], 'Ciudad' => $row[0]["Ciudad"], 'Estado' => $row[0]["Estado"], 'Pais' => $row[0]["Pais"], 'Email' => $row[0]["Email"], 'Telefono' => $row[0]["Telefono"], 'Segundo_Telefono' => $row[0]["Segundo_Telefono"], 'FK_Zona' => $row[0]["FK_Zona"]);
 
 				echo json_encode($arreglo);
 			}

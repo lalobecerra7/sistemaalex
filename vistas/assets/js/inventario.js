@@ -100,7 +100,16 @@ jQuery(document).ready(function($) {
         $('#FechaMerma').val(today);
         $('#NombreProductoAM').text($(this).attr("nombre"));
         $("#GuardarMerma").attr('attrid',$(this).attr('attrid'));
+        $("#verFotoMerma img").attr('src', 'vistas/assets/archivos/defaultImagen.jpg');
         $("#ModalMerma").modal("show");
+    });
+
+    $(document).on('click', '#verFotoMerma', function() {
+        $("#FotoMerma").trigger("click");
+    });
+
+    $(document).on('change', '#FotoMerma', function() {
+        readURL(this, $("#verFotoMerma"));
     });
 
     $(document).on('click', '#EliminarMerma', function() {
@@ -235,7 +244,7 @@ jQuery(document).ready(function($) {
 
 
     $(document).on('click', '#GuardarMerma', function() {
-        var $id = $('#GuardarMerma').attr("attrid");
+        var id = $('#GuardarMerma').attr("attrid");
         $('#FormMerma').validate({
             rules: {
                 CantidadMerma: {
@@ -266,11 +275,18 @@ jQuery(document).ready(function($) {
                 },
             },
             submitHandler: function(form) {
-                var data = "metodo=insertar&accion=inventario&tipo=agregarMerma&IDProducto=" + $id + "&Cantidad=" + $("#CantidadMerma").val() + "&Motivo=" + $("#MotivoMerma").val() + "&IDSucursal=" + $("#Sucursal").val() + "&FechaMerma=" + $("#FechaMerma").val();
+                //var data = "metodo=insertar&accion=inventario&tipo=agregarMerma&IDProducto=" + id + "&Cantidad=" + $("#CantidadMerma").val() + "&Motivo=" + $("#MotivoMerma").val() + "&IDSucursal=" + $("#Sucursal").val() + "&FechaMerma=" + $("#FechaMerma").val();
+                var data = new FormData(document.getElementById("FormMerma"));
+                data.append("tipo", "agregarMerma");
+                data.append("metodo", "insertar");
+                data.append("accion", "inventario");
+                data.append("IDProducto", id);
                 $.ajax({
                         url: 'index.php',
                         type: 'POST',
                         data: data,
+                        processData: false,
+                        contentType: false,
                         beforeSend: function() {
                             $("#carga").show();
                         }
@@ -344,7 +360,7 @@ jQuery(document).ready(function($) {
                                 title: 'La merma se ha modificado correctamente'
                             });
                             
-                            TablaMerma($('CerrarDetalle').attr('attrid'));
+                            TablaMerma($('#CerrarDetalle').attr('attrid'));
                             $("#ModalEditarMerma").modal("hide");
                         } else {
                             Swal.fire({
@@ -398,7 +414,7 @@ function TablaMerma(idproducto) {
             "Motivo",
             "Sucursal",
             "Cantidad",
-            "Costo",
+            "Imagen",
             "Acciones"
         ],
         "sort": [

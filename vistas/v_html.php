@@ -14,7 +14,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
-    <title>SmartPoint</title>
+    <title>CREMASI</title>
     <meta name="description" content="" />
     <link rel="shortcut icon" href="vistas/assets/img/favicon/favicon.ico" /> 
     <link rel="stylesheet" href="vistas/assets/vendor/fonts/boxicons.css" />
@@ -490,7 +490,8 @@
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
             <a href="index.php">
-              <img src="vistas/assets/img/logos/icon.png" style="width:100%;">
+              <!-- //<img src="vistas/assets/img/logos/icon.png" style="width:100%;"> -->
+              <h1>CREMASI</h1>
             </a>
 
             <a href="index.php;" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">

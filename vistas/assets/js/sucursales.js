@@ -149,7 +149,11 @@ jQuery(document).ready(function($) {
             $("#EmailSucursal").val(res.Email);
             $("#telefono2Sucursal").val(res.Segundo_Telefono);
             $("#TelefonoSucursal").val(res.Telefono);
-            $("#ZonasSucursal").val(res.FK_Zona);
+            if (res.FK_Zona == "0") {
+                $("#ZonasSucursal").val("");
+            }else{
+                $("#ZonasSucursal").val(res.FK_Zona);
+            }
             $("#ModalSucursal").modal("show");
         })
         .fail(function() {
