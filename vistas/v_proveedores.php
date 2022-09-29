@@ -79,8 +79,20 @@
 		        <b class="mb-3">Datos de ubicación</b>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		               	<input type="text" class="form-control" id="DireccionProveedor" name="DireccionProveedor" placeholder="Ingresa la dirección del proveedor">
-		                <label for="DireccionProveedor">Dirección del proveedor</label>
+		               	<input type="text" class="form-control" id="CalleProveedor" name="CalleProveedor" placeholder="Ingresa la dirección del proveedor">
+		                <label for="CalleProveedor">Calle del proveedor</label>
+		            </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		               	<input type="text" class="form-control" id="NoExteriorProveedor" name="NoExteriorProveedor" placeholder="Ingresa la dirección del proveedor">
+		                <label for="NoExteriorProveedor">No. Exterior</label>
+		            </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		               	<input type="text" class="form-control" id="NoInteriorProveedor" name="NoInteriorProveedor" placeholder="Ingresa la dirección del proveedor">
+		                <label for="NoInteriorProveedor">No. Interior</label>
 		            </div>
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">

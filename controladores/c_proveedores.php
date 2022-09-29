@@ -17,14 +17,14 @@ class proveedores {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'AND ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(Fecha_Registro, ID_Proveedor, Nombre, Direccion, Telefono, Ciudad, Estado, Pais, Empresa , Colonia, Codigo_Postal, Puesto, Correo, RFC, Credito, Celular, No_Cuenta, Banco, Razon_Social) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(Fecha_Registro, ID_Proveedor, Nombre, Calle, No_Exterior, No_Interior, Telefono, Ciudad, Estado, Pais, Empresa , Colonia, Codigo_Postal, Puesto, Correo, RFC, Credito, Celular, No_Cuenta, Banco, Razon_Social) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Proveedor, Nombre, Direccion, Telefono, Ciudad, Estado, Pais, Empresa , Colonia, Codigo_Postal, Puesto, Correo, RFC, Credito, Celular, No_Cuenta, Banco, Razon_Social AS RazonSocial, Fecha_Registro AS Fecha, (SELECT COUNT(*) FROM proveedores WHERE ID_Proveedor <> 2 $busqueda) AS Num, ((SELECT COUNT(*) FROM compras WHERE proveedor = ID_Proveedor) + (SELECT COUNT(*) FROM detalle_proveedores WHERE proveedor = ID_Proveedor)) AS numProve FROM proveedores WHERE ID_Proveedor <> 2 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Proveedor, Nombre, Calle, No_Exterior, No_Interior, Telefono, Ciudad, Estado, Pais, Empresa , Colonia, Codigo_Postal, Puesto, Correo, RFC, Credito, Celular, No_Cuenta, Banco, Razon_Social AS RazonSocial, Fecha_Registro AS Fecha, (SELECT COUNT(*) FROM proveedores WHERE ID_Proveedor <> 1 $busqueda) AS Num, ((SELECT COUNT(*) FROM compras WHERE proveedor = ID_Proveedor) + (SELECT COUNT(*) FROM detalle_proveedores WHERE proveedor = ID_Proveedor)) AS numProve FROM proveedores WHERE ID_Proveedor <> 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -58,8 +58,16 @@ class proveedores {
 						$contacto .= "No. de cuenta: ".$row[$i]['No_Cuenta']."<br>";
 					}
 
-					if ($row[$i]['Direccion'] != "") {
-						$direccion .= "Dirección: ".$row[$i]['Direccion']."<br>";
+					if ($row[$i]['Calle'] != "") {
+						$direccion .= "Calle: ".$row[$i]['Calle']."<br>";
+					}
+
+					if ($row[$i]['No_Exterior'] != "") {
+						$direccion .= "No. Exterior: ".$row[$i]['No_Exterior']."<br>";
+					}
+
+					if ($row[$i]['No_Interior'] != "") {
+						$direccion .= "No. Interior: ".$row[$i]['No_Interior']."<br>";
 					}
 
 					if ($row[$i]['Colonia'] != "") {
@@ -126,7 +134,9 @@ class proveedores {
 		$NombreEmpresaProveedor =  $omodelo->link->real_escape_string($NombreEmpresaProveedor);
 		$RazonSocialProveedor =  $omodelo->link->real_escape_string($RazonSocialProveedor);
 		$TelefonoProveedor =  $omodelo->link->real_escape_string($TelefonoProveedor);
-		$DireccionProveedor =  $omodelo->link->real_escape_string($DireccionProveedor);
+		$CalleProveedor =  $omodelo->link->real_escape_string($CalleProveedor);
+		$NoExterior =  $omodelo->link->real_escape_string($NoExterior);
+		$NoInterior =  $omodelo->link->real_escape_string($NoInterior);
 		$ColoniaProveedor =  $omodelo->link->real_escape_string($ColoniaProveedor);
 		$CiudadProveedor =  $omodelo->link->real_escape_string($CiudadProveedor);
 		$EstadoProveedor =  $omodelo->link->real_escape_string($EstadoProveedor);
@@ -143,7 +153,7 @@ class proveedores {
 		$DescuentoProveedor =  $omodelo->link->real_escape_string($DescuentoProveedor);
 		$Credito =  $omodelo->link->real_escape_string($Credito);
 
-		$query = "INSERT INTO proveedores SET Nombre = '$ContactoProveedor', Direccion = '$DireccionProveedor', Telefono = '$TelefonoProveedor', Ciudad = '$CiudadProveedor', Estado = '$EstadoProveedor', Pais = '$PaisProveedor', Empresa = '$NombreEmpresaProveedor', Colonia = '$ColoniaProveedor', Codigo_Postal = '$CPProveedor', Puesto = '$PuestoContactoProveedor', Correo = '$CorreoContactoProveedor', RFC = '$RFCProveedor', Celular = '$CelularContactoProveedor', No_Cuenta = '$NoCuentaProveedor', Banco = '$BancoProveedor', Razon_Social = '$RazonSocialProveedor', Fecha_Registro = '$fecha', Tipo_Descuento = '$TipoDescuento', Descuento = '$DescuentoProveedor', Credito = '$Credito'";
+		$query = "INSERT INTO proveedores SET Nombre = '$ContactoProveedor', Calle = '$CalleProveedor', No_Exterior = '$NoExterior', No_Interior = '$NoInterior', Telefono = '$TelefonoProveedor', Ciudad = '$CiudadProveedor', Estado = '$EstadoProveedor', Pais = '$PaisProveedor', Empresa = '$NombreEmpresaProveedor', Colonia = '$ColoniaProveedor', Codigo_Postal = '$CPProveedor', Puesto = '$PuestoContactoProveedor', Correo = '$CorreoContactoProveedor', RFC = '$RFCProveedor', Celular = '$CelularContactoProveedor', No_Cuenta = '$NoCuentaProveedor', Banco = '$BancoProveedor', Razon_Social = '$RazonSocialProveedor', Fecha_Registro = '$fecha', Tipo_Descuento = '$TipoDescuento', Descuento = '$DescuentoProveedor', Credito = '$Credito'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -163,7 +173,9 @@ class proveedores {
 		$NombreEmpresaProveedor =  $omodelo->link->real_escape_string($NombreEmpresaProveedor);
 		$RazonSocialProveedor =  $omodelo->link->real_escape_string($RazonSocialProveedor);
 		$TelefonoProveedor =  $omodelo->link->real_escape_string($TelefonoProveedor);
-		$DireccionProveedor =  $omodelo->link->real_escape_string($DireccionProveedor);
+		$CalleProveedor =  $omodelo->link->real_escape_string($CalleProveedor);
+		$NoExterior =  $omodelo->link->real_escape_string($NoExterior);
+		$NoInterior =  $omodelo->link->real_escape_string($NoInterior);
 		$ColoniaProveedor =  $omodelo->link->real_escape_string($ColoniaProveedor);
 		$CiudadProveedor =  $omodelo->link->real_escape_string($CiudadProveedor);
 		$EstadoProveedor =  $omodelo->link->real_escape_string($EstadoProveedor);
@@ -180,7 +192,7 @@ class proveedores {
 		$DescuentoProveedor =  $omodelo->link->real_escape_string($DescuentoProveedor);
 		$Credito =  $omodelo->link->real_escape_string($Credito);
 
-		$query = "UPDATE proveedores SET Nombre = '$ContactoProveedor', Direccion = '$DireccionProveedor', Telefono = '$TelefonoProveedor', Ciudad = '$CiudadProveedor', Estado = '$EstadoProveedor', Pais = '$PaisProveedor', Empresa = '$NombreEmpresaProveedor', Colonia = '$ColoniaProveedor', Codigo_Postal = '$CPProveedor', Puesto = '$PuestoContactoProveedor', Correo = '$CorreoContactoProveedor', RFC = '$RFCProveedor', Celular = '$CelularContactoProveedor', No_Cuenta = '$NoCuentaProveedor', Banco = '$BancoProveedor', Razon_Social = '$RazonSocialProveedor', Tipo_Descuento = '$TipoDescuento', Descuento = '$DescuentoProveedor', Credito = '$Credito' WHERE ID_Proveedor = '$IDProveedor'";
+		$query = "UPDATE proveedores SET Nombre = '$ContactoProveedor', Calle = '$CalleProveedor', No_Exterior = '$NoExterior', No_Interior = '$NoInterior', Telefono = '$TelefonoProveedor', Ciudad = '$CiudadProveedor', Estado = '$EstadoProveedor', Pais = '$PaisProveedor', Empresa = '$NombreEmpresaProveedor', Colonia = '$ColoniaProveedor', Codigo_Postal = '$CPProveedor', Puesto = '$PuestoContactoProveedor', Correo = '$CorreoContactoProveedor', RFC = '$RFCProveedor', Celular = '$CelularContactoProveedor', No_Cuenta = '$NoCuentaProveedor', Banco = '$BancoProveedor', Razon_Social = '$RazonSocialProveedor', Tipo_Descuento = '$TipoDescuento', Descuento = '$DescuentoProveedor', Credito = '$Credito' WHERE ID_Proveedor = '$IDProveedor'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -213,7 +225,7 @@ class proveedores {
 		extract($_POST);
 		$IDProveedor =  $omodelo->link->real_escape_string($IDProveedor);
 
-		$query = "SELECT ID_Proveedor, Nombre, Direccion, Telefono, Ciudad, Estado, Pais, Empresa , Colonia, Codigo_Postal, Puesto, Correo, RFC, Credito, Celular, No_Cuenta, Banco, Razon_Social, Tipo_Descuento, Descuento FROM proveedores WHERE ID_Proveedor = '$IDProveedor'";
+		$query = "SELECT ID_Proveedor, Nombre, Calle, No_Exterior, No_Interior, Telefono, Ciudad, Estado, Pais, Empresa , Colonia, Codigo_Postal, Puesto, Correo, RFC, Credito, Celular, No_Cuenta, Banco, Razon_Social, Tipo_Descuento, Descuento FROM proveedores WHERE ID_Proveedor = '$IDProveedor'";
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 

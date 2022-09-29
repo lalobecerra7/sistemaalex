@@ -5,7 +5,7 @@
 			<nav aria-label="breadcrumb">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
-					<li class="breadcrumb-item"><a href="index.php">Productos a la venta</a></li>
+					<li class="breadcrumb-item"><a href="index.php">Productos</a></li>
 					<li class="breadcrumb-item active" aria-current="page">Inventario</li>
 				</ol>
 			</nav>
@@ -54,7 +54,7 @@
 
 
 <div class="modal fade" id="ModalTraslados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-m modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Traslado del producto <span id="NombreProductoT">Producto</span></h5>
@@ -93,10 +93,28 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                    	<div class="col-md-12 col-sm-12">
+                    		<div class="">
+								<table class="table table-hover table-striped table-bordered text-center myDataTable" id="TablaTraslados" width="100%" style="font-size: 12px;">
+									<thead>
+										<th style="width: 20%;" >Fecha</th>
+							     		<th style="width: 20%;" >Origen</th>
+										<th style="width: 15%;" >Destino</th>
+										<th style="width: 15%;" >Cantidad</th>
+										<th style="width: 15%;" >Usuario</th>
+									</thead>
+									<tbody>
+									
+									</tbody>
+								</table>
+							</div>
+                    	</div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" attrid='' id="GuardarTraslado">Guardar</button>
+                    <button type="submit" class="btn btn-primary" attrid='' id="GuardarTraslado"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
                 </div>
             </form>
         </div>
@@ -118,7 +136,7 @@
 								<th style="width: 20%;" >Motivo</th>
 								<th style="width: 15%;" >Sucursal</th>
 								<th style="width: 15%;" >Cantidad</th>
-								<th style="width: 15%;" >Costo</th>
+								<th style="width: 15%;" orden="No">Imagen</th>
 								<th style="width: 15%;" orden="No">Acciones</th>
 						</thead>
 						<tbody>
@@ -144,6 +162,13 @@
             <form id="FormMerma">
                 <div class="modal-body">
                     <div class="row mt-3">
+                    	<div class="col-md-12 col-sm-12 text-center mb-3">
+				      		<div class="fileinput fileinput-new" data-provides="fileinput">
+								<div class="fileinput-new thumbnail" id="verFotoMerma" style="width: 250px; height: 170px;cursor:pointer;border-radius:4px;border:2px solid grey;"><img src="vistas/assets/archivos/defaultImagen.jpg"></div>	
+							</div>
+							<br>
+							<input class="form-control" type="file" id="FotoMerma" name="FotoMerma">
+				      	</div>
                         <div class="col-md-12 col-sm-6 mb-3">
                             <div class="form-floating">
                                 <input type="date"  class="form-control" id="FechaMerma" name="FechaMerma" placeholder="Selecciona la fecha de la merma">
@@ -174,8 +199,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" attrid='' id="GuardarMerma">Guardar</button>
+                	<button type="submit" class="btn btn-primary" attrid='' id="GuardarMerma"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
                 </div>
             </form>
         </div>
@@ -207,8 +232,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" attrid='' id="GuardarMermaE">Guardar</button>
+                    <button type="submit" class="btn btn-primary" attrid='' id="GuardarMermaE"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
                 </div>
             </form>
         </div>

@@ -18,14 +18,14 @@ class productos {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Producto, Codigo, Descripcion, Tipo, Clase, Costo, Precio, Precio_Mayoreo, Detalles, Minimo, Maximo, Imagen) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Producto, Codigo, productos.Descripcion, Tipo, Clase, Costo, Precio, Precio_Mayoreo, Detalles, Minimo, Maximo, Imagen, areas.Nombre, areas.Descripcion, areas.Nivel) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Producto, Codigo, Descripcion, Tipo, Clase, Costo, Precio, Precio_Mayoreo, Detalles, Minimo, Maximo, Imagen, (SELECT COUNT(*) FROM productos $busqueda) AS Num, ((SELECT COUNT(*) FROM detalles_ventas INNER JOIN ventas ON FK_Venta = ID_Venta WHERE detalles_ventas.FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras INNER JOIN compras ON FK_Compra = ID_Compra WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM merma WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM traslados WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM inventario WHERE FK_Producto = ID_Producto)) AS numProd FROM productos $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Producto, Codigo, productos.Descripcion, Tipo, Clase, Costo, Precio, Precio_Mayoreo, Detalles, Minimo, Maximo, Imagen, areas.Nombre, areas.Descripcion AS DescripcionArea, areas.Nivel, (SELECT COUNT(*) FROM productos $busqueda) AS Num, ((SELECT COUNT(*) FROM detalles_ventas INNER JOIN ventas ON FK_Venta = ID_Venta WHERE detalles_ventas.FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras INNER JOIN compras ON FK_Compra = ID_Compra WHERE FK_Producto = ID_Producto)) AS numProd FROM productos LEFT JOIN areas ON FK_Area = ID_Area $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -34,6 +34,7 @@ class productos {
 		}else{
 			if($numerofilas > 0){
 				for($i=0; $i<$numerofilas; $i++){
+					$area = "";
 					$imagen = '<a href="vistas/assets/archivos/fotosProductos/default.jpg" data-fancybox="images">
 									<div style="background-image: url('."'".'vistas/assets/archivos/fotosProductos/default.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
 									</div>
@@ -52,6 +53,19 @@ class productos {
 					}else if ($row[$i]['Tipo'] == '0'){
 						$tipoProducto = 'Materia';
 					}
+
+					if ($row[$i]['Nombre'] != "") {
+						$area .= "Area: ".$row[$i]['Nombre']."<br>";
+					}
+
+					if ($row[$i]['Nivel'] != "") {
+						$area .= "Nivel: ".$row[$i]['Nivel']."<br>";
+					}
+
+					if ($row[$i]['DescripcionArea'] != "") {
+						$area .= "Descripción: ".$row[$i]['DescripcionArea']."<br>";
+					}
+
 
 					$EliminarProducto = '<button class="btn btn-danger btn-sm mb-1" id="EliminarProducto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-trash"></i></button>';
 					if ($row[$i]['numProd'] > 0) {
@@ -80,8 +94,7 @@ class productos {
 						'Tipo' => $tipoProducto."<br> Clase: <b>".$row[$i]['Clase']."</b>",
 						'Costo' => '<b class="dinero">$'.number_format($row[$i]['Costo'], 2).'</b>',
 						'Precio' => '<b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b>',
-						'PrecioMayoreo' => '<b class="dinero">$'.number_format($row[$i]['Precio_Mayoreo'], 2).'</b>',
-						'Detalles' => $row[$i]['Detalles']."<br> Minimo: <b>".$row[$i]['Minimo']."</b> <br> Maximo: <b>".$row[$i]['Maximo']."</b>",
+						'Detalles' => $area."Detalles: ".$row[$i]['Detalles']."<br> Minimo: <b>".$row[$i]['Minimo']."</b> <br> Maximo: <b>".$row[$i]['Maximo']."</b>",
 						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar.' '.$botonPermisosPreciosSucursal,
 					);
 					
@@ -103,7 +116,6 @@ class productos {
 		$Descripcion =  $omodelo->link->real_escape_string($Descripcion);
 		$Categoria =  $omodelo->link->real_escape_string($Categoria);
 		$Clase =  $omodelo->link->real_escape_string($ClaseProducto);
-		$TipoUnidad =  $omodelo->link->real_escape_string($TipoUnidad);
 		$Unidad =  $omodelo->link->real_escape_string($Unidad);
 		$PonerUnidad =  $omodelo->link->real_escape_string($PonerUnidad);
 		$Costo =  $omodelo->link->real_escape_string($CostoProducto);
@@ -116,7 +128,7 @@ class productos {
 		$detalle =  explode("~", $detalleProducto);
 		$impuesto =  explode(",", $impuestos);
 
-		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', Tipo = '$TipoUnidad', FK_Categoria = '$Categoria', Clase = '$Clase', FK_Unidad = '$Unidad', Poner_Unidad = '$PonerUnidad', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha'";
+		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion',  FK_Categoria = '$Categoria', Clase = '$Clase', FK_Unidad = '$Unidad', Poner_Unidad = '$PonerUnidad', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -162,6 +174,16 @@ class productos {
 				if ($row == "si") {
 					echo "Error: ".mysqli_error($omodelo->link);
 				}
+
+				if ($detallesucursal[7] != "" && $detallesucursal[7] > "0") {
+					$queryInventario = "INSERT INTO inventario SET FK_Producto = '$id', FK_Sucursal = '$detallesucursal[1]', Cantidad = '$detallesucursal[7]'";
+					$error = $omodelo->_insertar($queryInventario);
+
+					if ($error == "si") {
+						echo "Error: ".mysqli_error($omodelo->link);
+					}
+				}
+
 			}
 
 			if(sizeOf($impuesto) > 1 ){
@@ -191,7 +213,6 @@ class productos {
 		$Descripcion =  $omodelo->link->real_escape_string($Descripcion);
 		$Categoria =  $omodelo->link->real_escape_string($Categoria);
 		$Clase =  $omodelo->link->real_escape_string($ClaseProducto);
-		$TipoUnidad =  $omodelo->link->real_escape_string($TipoUnidad);
 		$Unidad =  $omodelo->link->real_escape_string($Unidad);
 		$PonerUnidad =  $omodelo->link->real_escape_string($PonerUnidad);
 		$Costo =  $omodelo->link->real_escape_string($CostoProducto);
@@ -202,7 +223,7 @@ class productos {
 		$Minimo =  $omodelo->link->real_escape_string($Minimo);
 		$Maximo =  $omodelo->link->real_escape_string($Maximo);
 
-		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', Tipo = '$TipoUnidad', FK_Categoria = '$Categoria', Clase = '$Clase', FK_Unidad = '$Unidad', Poner_Unidad = '$PonerUnidad', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo' WHERE ID_Producto = '$IDProducto'";
+		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', FK_Categoria = '$Categoria', Clase = '$Clase', FK_Unidad = '$Unidad', Poner_Unidad = '$PonerUnidad', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo' WHERE ID_Producto = '$IDProducto'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
