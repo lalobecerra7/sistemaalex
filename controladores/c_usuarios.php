@@ -97,50 +97,7 @@ class usuarios {
 	public function _insertar(){
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$fecha = date('Y-m-d H:i:s'); 
-		$opciones = ['cost' => 12];
-		$password = password_hash($omodelo->link->real_escape_string($NuevaContrasena), PASSWORD_BCRYPT, $opciones);
-		$query = "INSERT INTO usuarios SET Nombre = '$NombreUsuario', Primer_Apellido = '$PrimerApellidoUsuario', Segundo_Apellido = '$SegundoApellidoUsuario', Correo = '$CorreoUsuario', Contrasena = '$password', Tipo_Usuario = '$TipoUsuario', Estatus = '$EstatusUsuario', Temporal = '$ContraTemporal', Activo = '$EstatusCuenta', Tipo_Login = '1', Conectado = '0', Fecha_Alta = '$fecha'";
-		$error = $omodelo->_insertar($query);
-
-		if ($error == "si") {
-			echo "ErrorInsertar: ".mysqli_error($omodelo->link);
-		}else{
-			$IDUsuario = mysqli_insert_id($omodelo->link);
-			echo "Correcto";
-			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
-
-			$status = 1;
-			if ($_FILES['FotoUsuario']['size'] > 0 && $_FILES['FotoUsuario']['error'] == 0) {
-				$file = $_FILES["FotoUsuario"];
-				$nombreDoc = $file["name"];
-				$tipo = $file["type"];
-				$ruta_provisional = $file["tmp_name"];
-				$size = $file["size"];
-				$carpeta = "vistas/assets/archivos/fotosUsuarios/";
-
-				if ($tipo != 'image/jpeg' && $tipo != 'image/JPEG' && $tipo != 'image/jpg' && $tipo != 'image/JPG' && $tipo != 'image/png' && $tipo != 'image/PNG' && $tipo != 'application/pdf' && $tipo != 'application/PDF' && $tipo != ''){
-					echo "Error 2 Formato";
-				}else if ($size > (1024*1024*10)){
-					echo "Error 3 Peso";
-				}else{
-					$status = 0;
-					$ruta = $carpeta;
-				}
-			}
-			//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-			if($status == 0){
-				$query2 = "UPDATE usuarios SET Foto = '".$IDUsuario.'_'.$nombreDoc."' WHERE ID_Usuario = '$IDUsuario'";
-				$error3 = $omodelo->_insertar($query2);	
-
-				if ($error3 == "si") {
-					echo "Error 4: ".mysqli_error($omodelo->link); 
-				}else{
-					move_uploaded_file($ruta_provisional,  $ruta.''.$IDUsuario.'_'.$nombreDoc);
-				}
-			}
-		}
+		
 	}
 
 	public function _modificar(){
