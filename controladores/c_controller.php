@@ -16,6 +16,7 @@ include "controladores/c_cajas.php";
 include "controladores/c_perfil.php";
 include "controladores/c_impuestos.php";
 include "controladores/c_tickets.php";
+include "controladores/c_general.php";
 
 class controller {
 
