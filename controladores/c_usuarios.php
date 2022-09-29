@@ -18,14 +18,14 @@ class usuarios {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'AND ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Usuario, Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Usuario, Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta, sucursales.Nombre) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Usuario, Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta, (SELECT COUNT(*) FROM usuarios WHERE ID_Usuario <> '".$_SESSION['user_admin']['ID_Usuario']."' $busqueda) AS Num FROM usuarios WHERE ID_Usuario <> '".$_SESSION['user_admin']['ID_Usuario']."' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Usuario, usuarios.Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta, sucursales.Nombre AS NombreSucursal, FK_Sucursal, (SELECT COUNT(*) FROM usuarios WHERE ID_Usuario <> '".$_SESSION['user_admin']['ID_Usuario']."' $busqueda) AS Num FROM usuarios LEFT JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE ID_Usuario <> '".$_SESSION['user_admin']['ID_Usuario']."' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -79,7 +79,7 @@ class usuarios {
 						'ID' => $row[$i]['ID_Usuario'],
 						'Foto' => $foto,
 						'Nombre' => $row[$i]['Nombre']." ".$row[$i]['Primer_Apellido']." ".$row[$i]['Segundo_Apellido'],
-						'Usuario' => $row[$i]['Correo']."<br>Tipo de usuario: <b>".$row[$i]['Tipo_Usuario']."</b>",
+						'Usuario' => $row[$i]['Correo']."<br>Tipo de usuario: <b>".$row[$i]['Tipo_Usuario']."</b><br>".$row[$i]['NombreSucursal'],
 						'Estatus' => $estatus,
 						'Permisos' => $botonPermisosPermisos,
 						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,
@@ -97,7 +97,51 @@ class usuarios {
 	public function _insertar(){
 		$omodelo = new m_modelo();
 		extract($_POST);
-		
+
+		$fecha = date('Y-m-d H:i:s'); 
+		$opciones = ['cost' => 12];
+		$password = password_hash($omodelo->link->real_escape_string($NuevaContrasena), PASSWORD_BCRYPT, $opciones);
+		$query = "INSERT INTO usuarios SET Nombre = '$NombreUsuario', Primer_Apellido = '$PrimerApellidoUsuario', Segundo_Apellido = '$SegundoApellidoUsuario', Correo = '$CorreoUsuario', Contrasena = '$password', Tipo_Usuario = '$TipoUsuario', Estatus = '$EstatusUsuario', Temporal = '$ContraTemporal', Activo = '$EstatusCuenta', Tipo_Login = '1', Conectado = '0', Fecha_Alta = '$fecha', FK_Sucursal = '$SucursalUsuario'";
+		$error = $omodelo->_insertar($query);
+
+		if ($error == "si") {
+			echo "ErrorInsertar: ".mysqli_error($omodelo->link);
+		}else{
+			$IDUsuario = mysqli_insert_id($omodelo->link);
+			echo "Correcto";
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+
+			$status = 1;
+			if ($_FILES['FotoUsuario']['size'] > 0 && $_FILES['FotoUsuario']['error'] == 0) {
+				$file = $_FILES["FotoUsuario"];
+				$nombreDoc = $file["name"];
+				$tipo = $file["type"];
+				$ruta_provisional = $file["tmp_name"];
+				$size = $file["size"];
+				$carpeta = "vistas/assets/archivos/fotosUsuarios/";
+
+				if ($tipo != 'image/jpeg' && $tipo != 'image/JPEG' && $tipo != 'image/jpg' && $tipo != 'image/JPG' && $tipo != 'image/png' && $tipo != 'image/PNG' && $tipo != 'application/pdf' && $tipo != 'application/PDF' && $tipo != ''){
+					echo "Error 2 Formato";
+				}else if ($size > (1024*1024*10)){
+					echo "Error 3 Peso";
+				}else{
+					$status = 0;
+					$ruta = $carpeta;
+				}
+			}
+			//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+			if($status == 0){
+				$query2 = "UPDATE usuarios SET Foto = '".$IDUsuario.'_'.$nombreDoc."' WHERE ID_Usuario = '$IDUsuario'";
+				$error3 = $omodelo->_insertar($query2);	
+
+				if ($error3 == "si") {
+					echo "Error 4: ".mysqli_error($omodelo->link); 
+				}else{
+					move_uploaded_file($ruta_provisional,  $ruta.''.$IDUsuario.'_'.$nombreDoc);
+				}
+			}
+		}
 	}
 
 	public function _modificar(){
@@ -105,8 +149,14 @@ class usuarios {
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
 		$opciones = ['cost' => 12];
-		$password = password_hash($omodelo->link->real_escape_string($NuevaContrasena), PASSWORD_BCRYPT, $opciones);
-		$query = "UPDATE usuarios SET Nombre = '$NombreUsuario', Primer_Apellido = '$PrimerApellidoUsuario', Segundo_Apellido = '$SegundoApellidoUsuario', Correo = '$CorreoUsuario', Contrasena = '$password', Tipo_Usuario = '$TipoUsuario', Estatus = '$EstatusUsuario', Temporal = '$ContraTemporal', Activo = '$EstatusCuenta', Tipo_Login = '1', Conectado = '0', Fecha_Alta = '$fecha' WHERE ID_Usuario = '$idUsuario'";
+
+		$queryPassword = "";
+		if (isset($NuevaContrasena)) {
+			$password = password_hash($omodelo->link->real_escape_string($NuevaContrasena), PASSWORD_BCRYPT, $opciones);
+			$queryPassword = "Contrasena = '$password',";
+		}
+
+		$query = "UPDATE usuarios SET Nombre = '$NombreUsuario', Primer_Apellido = '$PrimerApellidoUsuario', Segundo_Apellido = '$SegundoApellidoUsuario', Correo = '$CorreoUsuario', $queryPassword Tipo_Usuario = '$TipoUsuario', Estatus = '$EstatusUsuario', Temporal = '$ContraTemporal', Activo = '$EstatusCuenta', Tipo_Login = '1', Conectado = '0', Fecha_Alta = '$fecha', FK_Sucursal = '$SucursalUsuario' WHERE ID_Usuario = '$idUsuario'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
@@ -198,7 +248,7 @@ class usuarios {
 		if ($tipo == "ConsultarUsuario") {
 			$IDUsuario =  $omodelo->link->real_escape_string($IDUsuario);
 
-			$query = "SELECT ID_Usuario, Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta FROM usuarios WHERE ID_Usuario = '$IDUsuario'";
+			$query = "SELECT ID_Usuario, Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta, FK_Sucursal FROM usuarios WHERE ID_Usuario = '$IDUsuario'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 

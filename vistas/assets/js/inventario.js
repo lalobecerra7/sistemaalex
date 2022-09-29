@@ -55,7 +55,8 @@ function v_inventario() {
                             });
                             TablaInventario();
                             $("#FormTraslados").trigger('reset');
-                            $("#ModalTraslados").modal("hide");
+                            TablaTraslados($("#GuardarTraslado").attr("attrid"));
+                            //$("#ModalTraslados").modal("hide");
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -99,7 +100,16 @@ jQuery(document).ready(function($) {
         $('#FechaMerma').val(today);
         $('#NombreProductoAM').text($(this).attr("nombre"));
         $("#GuardarMerma").attr('attrid',$(this).attr('attrid'));
+        $("#verFotoMerma img").attr('src', 'vistas/assets/archivos/defaultImagen.jpg');
         $("#ModalMerma").modal("show");
+    });
+
+    $(document).on('click', '#verFotoMerma', function() {
+        $("#FotoMerma").trigger("click");
+    });
+
+    $(document).on('change', '#FotoMerma', function() {
+        readURL(this, $("#verFotoMerma"));
     });
 
     $(document).on('click', '#EliminarMerma', function() {
@@ -170,10 +180,11 @@ jQuery(document).ready(function($) {
         var month = ("0" + (now.getMonth() + 1)).slice(-2);
 
         var today = now.getFullYear()+"-"+(month)+"-"+(day);
-       
+        var idProducto = $(this).attr('attrid');
         $('#FechaTraslado').val(today);
         $('#NombreProductoT').text($(this).attr("nombre"));
         $("#ModalTraslados").modal("show");
+        TablaTraslados(idProducto);
         $("#GuardarTraslado").attr('attrid',$(this).attr('attrid'));
     });
 
@@ -233,7 +244,7 @@ jQuery(document).ready(function($) {
 
 
     $(document).on('click', '#GuardarMerma', function() {
-        var $id = $('#GuardarMerma').attr("attrid");
+        var id = $('#GuardarMerma').attr("attrid");
         $('#FormMerma').validate({
             rules: {
                 CantidadMerma: {
@@ -264,11 +275,18 @@ jQuery(document).ready(function($) {
                 },
             },
             submitHandler: function(form) {
-                var data = "metodo=insertar&accion=inventario&tipo=agregarMerma&IDProducto=" + $id + "&Cantidad=" + $("#CantidadMerma").val() + "&Motivo=" + $("#MotivoMerma").val() + "&IDSucursal=" + $("#Sucursal").val() + "&FechaMerma=" + $("#FechaMerma").val();
+                //var data = "metodo=insertar&accion=inventario&tipo=agregarMerma&IDProducto=" + id + "&Cantidad=" + $("#CantidadMerma").val() + "&Motivo=" + $("#MotivoMerma").val() + "&IDSucursal=" + $("#Sucursal").val() + "&FechaMerma=" + $("#FechaMerma").val();
+                var data = new FormData(document.getElementById("FormMerma"));
+                data.append("tipo", "agregarMerma");
+                data.append("metodo", "insertar");
+                data.append("accion", "inventario");
+                data.append("IDProducto", id);
                 $.ajax({
                         url: 'index.php',
                         type: 'POST',
                         data: data,
+                        processData: false,
+                        contentType: false,
                         beforeSend: function() {
                             $("#carga").show();
                         }
@@ -342,7 +360,7 @@ jQuery(document).ready(function($) {
                                 title: 'La merma se ha modificado correctamente'
                             });
                             
-                            TablaMerma($('CerrarDetalle').attr('attrid'));
+                            TablaMerma($('#CerrarDetalle').attr('attrid'));
                             $("#ModalEditarMerma").modal("hide");
                         } else {
                             Swal.fire({
@@ -396,7 +414,7 @@ function TablaMerma(idproducto) {
             "Motivo",
             "Sucursal",
             "Cantidad",
-            "Costo",
+            "Imagen",
             "Acciones"
         ],
         "sort": [
@@ -408,6 +426,31 @@ function TablaMerma(idproducto) {
             "metodo": "detalles",
             "accion": "inventario",
             "tipo": "merma",
+            "id": idproducto
+        }
+    });
+}
+
+function TablaTraslados(idproducto) {
+    console.log("el id es"+idproducto);
+    ajaxMyDatatable({
+        "table": $("#TablaTraslados"),
+        "colums": [
+            "Fecha",
+            "Origen",
+            "Destino",
+            "Cantidad",
+            "Usuario",
+        ],
+        "sort": [
+            1,
+            "desc"
+        ],
+        "url": "index.php",
+        "params": {
+            "metodo": "detalles",
+            "accion": "inventario",
+            "tipo": "TablaTraslados",
             "id": idproducto
         }
     });

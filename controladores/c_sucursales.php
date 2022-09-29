@@ -17,14 +17,14 @@ class sucursales {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Sucursal, sucursales.Nombre, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Telefono, Email, FK_Encargado, usuarios.Nombre,  usuarios.Primer_Apellido, usuarios.Segundo_Apellido) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Sucursal, sucursales.Nombre, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Telefono, Email, FK_Encargado, usuarios.Nombre,  usuarios.Primer_Apellido, usuarios.Segundo_Apellido, zona.Nombre) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 		
-		$query = "SELECT ID_Sucursal, sucursales.Nombre, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Telefono, Segundo_Telefono, Email, FK_Encargado, usuarios.Nombre AS NombreEncargado, usuarios.Primer_Apellido AS PrimerApellido, usuarios.Segundo_Apellido AS SegundoApellido, (SELECT COUNT(*) FROM sucursales $busqueda) AS Num, ((SELECT COUNT(*) FROM ventas INNER JOIN cajas ON FK_Caja = ID_Caja WHERE cajas.FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM cajas WHERE FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM pedidos WHERE FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM detalles_productos WHERE FK_Sucursal = ID_Sucursal)) AS numSucu FROM sucursales INNER JOIN usuarios ON ID_Usuario = FK_Encargado $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Sucursal, sucursales.Nombre, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Telefono, Segundo_Telefono, Email, FK_Encargado, usuarios.Nombre AS NombreEncargado, usuarios.Primer_Apellido AS PrimerApellido, usuarios.Segundo_Apellido AS SegundoApellido, FK_Zona, zona.Nombre AS NombreZona, (SELECT COUNT(*) FROM sucursales $busqueda) AS Num, ((SELECT COUNT(*) FROM ventas INNER JOIN cajas ON FK_Caja = ID_Caja WHERE cajas.FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM cajas WHERE FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM pedidos WHERE FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM detalles_productos WHERE FK_Sucursal = ID_Sucursal)) AS numSucu FROM sucursales INNER JOIN usuarios ON ID_Usuario = FK_Encargado LEFT JOIN zona ON FK_Zona = ID_Zona $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -34,10 +34,41 @@ class sucursales {
 			if($numerofilas > 0){
 				for($i=0; $i<$numerofilas; $i++){
 					$direccion = "";$telefono="";$email="";$gerente="";
+
+					if ($row[$i]['NombreZona'] != "") {
+						$direccion .= "Zona: <b>".$row[$i]['NombreZona'].'</b><br>';
+					}
+
 					if ($row[$i]['Calle'] != "") {
-						$direccion = $row[$i]['Calle'].' '.$row[$i]['No_Exterior'].' - '.$row[$i]['No_Interior'].' <br> Colonia: '.$row[$i]['Colonia'].' <br>C.P.: '.$row[$i]['CP'].' <br> '.$row[$i]['Ciudad'].', '.$row[$i]['Estado'].', '.$row[$i]['Pais'];
-					}else{	
-						$direccion = "No hay datos registrados";
+						$direccion .= "Calle: <b>".$row[$i]['Calle'].'</b><br>';
+					}
+
+					if ($row[$i]['No_Exterior'] != "") {
+						$direccion .= "No. Exterior: <b>".$row[$i]['No_Exterior'].'</b><br>';
+					}
+
+					if ($row[$i]['No_Interior'] != "") {
+						$direccion .= "No. Interior: <b>".$row[$i]['No_Interior'].'</b><br>';
+					}
+
+					if ($row[$i]['Colonia'] != "") {
+						$direccion .= "Colonia: <b>".$row[$i]['Colonia'].'</b><br>';
+					}
+
+					if ($row[$i]['CP'] != "") {
+						$direccion .= "Codigo postal: <b>".$row[$i]['CP'].'</b><br>';
+					}
+
+					if ($row[$i]['Ciudad'] != "") {
+						$direccion .= "Ciudad: <b>".$row[$i]['Ciudad'].'</b><br>';
+					}
+
+					if ($row[$i]['Estado'] != "") {
+						$direccion .= "Estado: <b>".$row[$i]['Estado'].'</b><br>';
+					}
+
+					if ($row[$i]['Pais'] != "") {
+						$direccion .= "País: <b>".$row[$i]['Pais'].'</b><br>';
 					}
 
 					if ($row[$i]['Telefono'] != "") {
@@ -115,9 +146,10 @@ class sucursales {
 		$EmailSucursal =  $omodelo->link->real_escape_string($EmailSucursal);
 		$TelefonoSucursal =  $omodelo->link->real_escape_string($TelefonoSucursal);
 		$Telefono2Sucursal =  $omodelo->link->real_escape_string($Telefono2Sucursal);
+		$Zona =  $omodelo->link->real_escape_string($Zona);
 
 
-		$query = "INSERT INTO sucursales SET Nombre = '$NombreSucursal', FK_Encargado = '$EncargadoSucursal', Calle = '$CalleSucursal', No_Exterior = '$NoExteriorSucursal', No_Interior = '$NoInteriorSucursal', Colonia = '$ColoniaSucursal', CP = '$CPSucursal', Ciudad = '$CiudadSucursal', Estado = '$EstadoSucursal', Pais = '$PaisSucursal', Email = '$EmailSucursal', Telefono = '$TelefonoSucursal', Segundo_Telefono  = '$Telefono2Sucursal'";
+		$query = "INSERT INTO sucursales SET Nombre = '$NombreSucursal', FK_Encargado = '$EncargadoSucursal', Calle = '$CalleSucursal', No_Exterior = '$NoExteriorSucursal', No_Interior = '$NoInteriorSucursal', Colonia = '$ColoniaSucursal', CP = '$CPSucursal', Ciudad = '$CiudadSucursal', Estado = '$EstadoSucursal', Pais = '$PaisSucursal', Email = '$EmailSucursal', Telefono = '$TelefonoSucursal', Segundo_Telefono  = '$Telefono2Sucursal', FK_Zona = '$Zona'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -162,8 +194,9 @@ class sucursales {
 		$EmailSucursal =  $omodelo->link->real_escape_string($EmailSucursal);
 		$TelefonoSucursal =  $omodelo->link->real_escape_string($TelefonoSucursal);
 		$Telefono2Sucursal =  $omodelo->link->real_escape_string($Telefono2Sucursal);
+		$Zona =  $omodelo->link->real_escape_string($Zona);
 
-		$query = "UPDATE sucursales SET Nombre = '$NombreSucursal', FK_Encargado = '$EncargadoSucursal', Calle = '$CalleSucursal', No_Exterior = '$NoExteriorSucursal', No_Interior = '$NoInteriorSucursal', Colonia = '$ColoniaSucursal', CP = '$CPSucursal', Ciudad = '$CiudadSucursal', Estado = '$EstadoSucursal', Pais = '$PaisSucursal', Email = '$EmailSucursal', Telefono = '$TelefonoSucursal', Segundo_Telefono  = '$Telefono2Sucursal' WHERE ID_Sucursal = '$IDSucursal'";
+		$query = "UPDATE sucursales SET Nombre = '$NombreSucursal', FK_Encargado = '$EncargadoSucursal', Calle = '$CalleSucursal', No_Exterior = '$NoExteriorSucursal', No_Interior = '$NoInteriorSucursal', Colonia = '$ColoniaSucursal', CP = '$CPSucursal', Ciudad = '$CiudadSucursal', Estado = '$EstadoSucursal', Pais = '$PaisSucursal', Email = '$EmailSucursal', Telefono = '$TelefonoSucursal', Segundo_Telefono  = '$Telefono2Sucursal', FK_Zona = '$Zona' WHERE ID_Sucursal = '$IDSucursal'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -194,7 +227,7 @@ class sucursales {
 				}
 				$botonModificar = '<button type="button" class="btn btn-theme-inverse btn-info bModificarSucu" attrID="'.$row[0]["ID_Sucursal"].'" nombre="'.$row[0]["Nombre"].'"><i class="fa fa-pencil-square-o"></i></button> ';
 
-				$arreglo = array('Nombre' => $row[0]["Nombre"], 'FK_Encargado' => $row[0]["FK_Encargado"], 'Calle' => utf8_encode($row[0]["Calle"]), 'No_Exterior' => utf8_encode($row[0]["No_Exterior"]), 'No_Interior' => $row[0]["No_Interior"], 'Colonia' => $row[0]["Colonia"], 'CP' => $row[0]["CP"], 'Ciudad' => $row[0]["Ciudad"], 'Estado' => $row[0]["Estado"], 'Pais' => $row[0]["Pais"], 'Email' => $row[0]["Email"], 'Telefono' => $row[0]["Telefono"], 'Segundo_Telefono' => $row[0]["Segundo_Telefono"]);
+				$arreglo = array('Nombre' => $row[0]["Nombre"], 'FK_Encargado' => $row[0]["FK_Encargado"], 'Calle' => utf8_encode($row[0]["Calle"]), 'No_Exterior' => utf8_encode($row[0]["No_Exterior"]), 'No_Interior' => $row[0]["No_Interior"], 'Colonia' => $row[0]["Colonia"], 'CP' => $row[0]["CP"], 'Ciudad' => $row[0]["Ciudad"], 'Estado' => $row[0]["Estado"], 'Pais' => $row[0]["Pais"], 'Email' => $row[0]["Email"], 'Telefono' => $row[0]["Telefono"], 'Segundo_Telefono' => $row[0]["Segundo_Telefono"], 'FK_Zona' => $row[0]["FK_Zona"]);
 
 				echo json_encode($arreglo);
 			}

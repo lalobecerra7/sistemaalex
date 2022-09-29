@@ -34,7 +34,7 @@
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
 									<div class="form-floating mb-3">
-										<select class="form-select" name="SucursalTicket" id="SucursalTicket" >
+										<select class="form-select" name="SucursalTicket" id="SucursalTicket">
 											<option value="">- Seleccione una opción -</option>
 												#sucursales#
 										</select>
@@ -42,7 +42,7 @@
 									</div>
 								</div>
 								<div class="col-md-2 col-sm-12 mb-3" style="margin: 20px auto;">
-									<input type="checkbox" id='checkNombre' name='checkNombre'>
+									<input type="checkbox" id='checkNombre' name='checkNombre' disabled>
 								</div>
 							</div>
 							<div class="row">
@@ -197,14 +197,8 @@
 					</div>
 					<div class="row">
 						<form enctype="multipart/form-data" id="formImgTicket">
-							<input type="hidden" name="metodo" value="contranueva"> 
-							<input type="hidden" name="accion" value="ticket">
-							<input type="hidden" name="imagenElimina" id="imagenElimina"> 
 							<div class="col-sm-12">
-								<input type="file" class="form-control" name='archivo' id="imagenTicket">
-							</div>
-							<div class="col-sm-3" style="display: none;">
-								<button type="submit" class="btn btn-default btn-block" id="cambiarImagenTicket">Cambiar</button>
+								<input type="file" class="form-control" name='imagenTicket' id="imagenTicket" idRegistro="">
 							</div>
 						</form>
 					</div>
@@ -239,7 +233,7 @@
 					<div class="row" id="impuestosTiket">
 						<div class="col-sm-12">
 							<div id="fReportes" class="elfondo recargaElContenido row">
-								#ImpuestosTabla# <!-- 	PROHIBIDO ELIMINAR ESTA LINEA 	-->
+								<!-- #ImpuestosTabla# 	PROHIBIDO ELIMINAR ESTA LINEA 	 -->
 							</div>	
 						</div>		
 					</div>

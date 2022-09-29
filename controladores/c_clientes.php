@@ -18,14 +18,14 @@ class clientes {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'AND ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Cliente, clientes.Nombre, Foto, Direccion, clientes.Telefono, Celular, Correo, clientes.Ciudad, clientes.Colonia, clientes.Codigo_Postal, clientes.Estado, clientes.Pais, Lim_Credito, Titular, Banco, No_Cuenta, Fecha_Registro, sucursales.Nombre) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Cliente, clientes.Nombre, Foto, clientes.Telefono, Celular, Correo, Lim_Credito, clientes.RFC, Facturar, Titular, Banco, No_Cuenta, Fecha_Registro, sucursales.Nombre) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Cliente, clientes.Nombre, Foto, Direccion, clientes.Telefono, Celular, Correo, clientes.Ciudad, clientes.Colonia, clientes.Codigo_Postal, clientes.Estado, clientes.Pais, Fecha_Registro AS Fecha, Lim_Credito, Titular, Banco, No_Cuenta, FK_Sucursal, sucursales.Nombre AS NombreSucursal, (SELECT COUNT(*) FROM clientes WHERE ID_Cliente <> 1 $busqueda) AS Num FROM clientes INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE ID_Cliente <> 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Cliente, clientes.Nombre, Foto, clientes.Telefono, Celular, Correo, Fecha_Registro AS Fecha, Lim_Credito, clientes.RFC, Facturar, Titular, Banco, No_Cuenta, FK_Sucursal, sucursales.Nombre AS NombreSucursal, clientes.Calle AS Direccion, clientes.No_Exterior, clientes.No_Interior, clientes.Colonia, clientes.Ciudad, clientes.Codigo_Postal, clientes.Estado, clientes.Pais, (SELECT COUNT(*) FROM clientes WHERE ID_Cliente <> 1 $busqueda) AS Num FROM clientes LEFT JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE ID_Cliente <> 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -34,30 +34,51 @@ class clientes {
 		}else{
 			if($numerofilas > 0){
 				for($i=0; $i<$numerofilas; $i++){
-					$direccion = ""; $contacto = ""; $datosbancarios = "";
+					$direccion = ""; $contacto = ""; $datosbancarios = ""; $direccionfiscal = "";
 
 					if ($row[$i]['Direccion'] != "") {
-						$direccion .= "Dirección: ".$row[$i]['Direccion']."<br>";
+						$direccionfiscal .= "Calle: ".$row[$i]['Direccion']."<br>";
+					}
+
+					if ($row[$i]['No_Exterior'] != "") {
+						$direccionfiscal .= "No. Exterior: ".$row[$i]['No_Exterior']."<br>";
+					}
+
+					if ($row[$i]['No_Interior'] != "") {
+						$direccionfiscal .= "No. Interior: ".$row[$i]['No_Interior']."<br>";
 					}
 
 					if ($row[$i]['Colonia'] != "") {
-						$direccion .= "Colonia: ".$row[$i]['Colonia']."<br>";
+						$direccionfiscal .= "Colonia: ".$row[$i]['Colonia']."<br>";
 					}
 
 					if ($row[$i]['Codigo_Postal'] != "") {
-						$direccion .= "Codigo postal: ".$row[$i]['Codigo_Postal']."<br>";
+						$direccionfiscal .= "Codigo postal: ".$row[$i]['Codigo_Postal']."<br>";
 					}
 
 					if ($row[$i]['Ciudad'] != "") {
-						$direccion .= "Ciudad: ".$row[$i]['Ciudad']."<br>";
+						$direccionfiscal .= "Ciudad: ".$row[$i]['Ciudad']."<br>";
 					}
 
 					if ($row[$i]['Estado'] != "") {
-						$direccion .= "Estado: ".$row[$i]['Estado']."<br>";
+						$direccionfiscal .= "Estado: ".$row[$i]['Estado']."<br>";
 					}
 
 					if ($row[$i]['Pais'] != "") {
-						$direccion .= "País: ".$row[$i]['Pais']."<br>";
+						$direccionfiscal .= "País: ".$row[$i]['Pais']."<br>";
+					}
+
+					if ($direccionfiscal == "") {
+						$direccionfiscal = "No hay datos registrados";
+					}
+
+					$queryDirecciones = "SELECT ID_Detalle_Cliente, FK_Cliente, Calle, No_Exterior, No_Interior, Colonia, Codigo_Postal, Ciudad, Estado, Pais, Nombre_Contacto, Puesto_Contacto, Email_Contacto, Telefono_Contacto FROM detalles_clientes WHERE FK_Cliente = '".$row[$i]['ID_Cliente']."'";
+					$rowDirecciones = $omodelo->_consultar($queryDirecciones);
+					$numerofilasDirecciones = $omodelo->numerofilas;
+					for ($x=0; $x < $numerofilasDirecciones; $x++) { 
+						$direccion .= "<button class='btn btn-link verDatosDireccion' Calle='".$rowDirecciones[$x]['Calle']."' No_Exterior='".$rowDirecciones[$x]['No_Exterior']."' No_Interior='".$rowDirecciones[$x]['No_Interior']."' Colonia='".$rowDirecciones[$x]['Colonia']."' Codigo_Postal='".$rowDirecciones[$x]['Codigo_Postal']."' Ciudad='".$rowDirecciones[$x]['Ciudad']."' Estado='".$rowDirecciones[$x]['Estado']."' Pais='".$rowDirecciones[$x]['Pais']."' Nombre_Contacto='".$rowDirecciones[$x]['Nombre_Contacto']."' Puesto_Contacto='".$rowDirecciones[$x]['Puesto_Contacto']."' Email_Contacto='".$rowDirecciones[$x]['Email_Contacto']."' Telefono_Contacto='".$rowDirecciones[$x]['Telefono_Contacto']."'  title='Ver datos de la dirección' attrid='".$rowDirecciones[$x]['ID_Detalle_Cliente']."' >
+						Contacto: ".$rowDirecciones[$x]['Nombre_Contacto']." <br>
+						Dirección: ".$rowDirecciones[$x]['Calle']." ".$rowDirecciones[$x]['No_Exterior']."</button><br>";
 					}
 
 					if ($row[$i]['Telefono'] != "") {
@@ -72,8 +93,18 @@ class clientes {
 						$contacto .= "Correo electrónico: ".$row[$i]['Correo']."<br>";
 					}
 
+					if ($row[$i]['Facturar'] == "1") {
+						$datosbancarios .= "Facturar ventas: <b>Si</b><br>";
+					}else{
+						$datosbancarios .= "Facturar ventas: <b>No</b><br>";
+					}
+
 					if ($row[$i]['NombreSucursal'] != "") {
 						$datosbancarios .= "Sucursal del cliente: <b>".$row[$i]['NombreSucursal']."</b><br>";
+					}
+
+					if ($row[$i]['RFC'] != "") {
+						$datosbancarios .= "RFC: <b>".$row[$i]['RFC']."</b><br>";
 					}
 
 					if ($row[$i]['Titular'] != "") {
@@ -86,6 +117,10 @@ class clientes {
 
 					if ($row[$i]['No_Cuenta'] != "") {
 						$datosbancarios .= "CLABE o número de cuenta: ".$row[$i]['No_Cuenta']."<br>";
+					}
+
+					if ($direccion == "") {
+						$direccion = "No hay direcciones agregadas";
 					}
 
 					$foto = '<a href="vistas/assets/archivos/default.jpg" data-fancybox="images">
@@ -103,20 +138,19 @@ class clientes {
 
 					$botonPermisosModificar = "";
 					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_clientes'][3] == '1') {
-						$botonPermisosModificar = '<button class="btn btn-primary btn-sm " id="ModificarCliente" attrid="'.$row[$i]['ID_Cliente'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button>';
+						$botonPermisosModificar = '<button class="btn btn-primary btn-sm " id="ModificarCliente" title="Modificar cliente" attrid="'.$row[$i]['ID_Cliente'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button>';
 					}
 
 					$botonPermisosEliminar = "";
 					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_clientes'][4] == '1') {
-						$botonPermisosEliminar = '<button class="btn btn-danger btn-sm" id="EliminarCliente" attrid="'.$row[$i]['ID_Cliente'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>';
+						$botonPermisosEliminar = '<button class="btn btn-danger btn-sm" title="Eliminar cliente" id="EliminarCliente" attrid="'.$row[$i]['ID_Cliente'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>';
 					}
 					
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Cliente'],
 						'Fecha' => $row[$i]['Fecha'],
 						'Nombre' => $foto.$row[$i]['Nombre'],
-						'Direccion' => $direccion,
-						'Contacto' => $contacto,
+						'Direcciones' => "Dirección fiscal: <br>".$direccionfiscal."<br>".$direccion,
 						'Detalles' => $datosbancarios,
 						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,
 					);
@@ -134,7 +168,8 @@ class clientes {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
-		$query = "INSERT INTO clientes SET Nombre = '$NombreCliente', Direccion = '$DireccionCliente', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Ciudad = '$CiudadCliente', Colonia = '$ColoniaCliente', Codigo_Postal = '$CPCliente', Tipo_Descuento = '$TipoDescuentoCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', Fecha_Registro = '$fecha', RFC = '$RFCCliente', Empresa = '$NombreEmpresaCliente', No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', Pais = '$PaisCliente', Estado = '$EstadoCliente', FK_Sucursal = '$SucursalCliente'";
+
+		$query = "INSERT INTO clientes SET Nombre = '$NombreCliente', Calle = '$CalleClienteGeneral', No_Exterior = '$NoExteriorClienteGeneral', No_Interior = '$NoInteriorClienteGeneral', Codigo_Postal = '$CPClienteGeneral', Colonia = '$ColoniaClienteGeneral', Ciudad = '$CiudadClienteGeneral', Estado = '$EstadoClienteGeneral', Pais = '$PaisClienteGeneral', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', Fecha_Registro = '$fecha', RFC = '$RFCCliente', Facturar = '$FacturarCliente',  No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', FK_Sucursal = '$SucursalCliente'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
@@ -144,6 +179,18 @@ class clientes {
 			echo "Correcto";
 			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 
+			$direcciones = explode(",", $direcciones);
+			for ($i=0; $i < sizeof($direcciones) - 1; $i++) { 
+				$datosdireccion = explode("~", $direcciones[$i]);
+				$queryDirecciones = "INSERT INTO detalles_clientes SET FK_Cliente = '$IDCliente', Calle = '$datosdireccion[0]', No_Exterior = '$datosdireccion[1]', No_Interior = '$datosdireccion[2]', Colonia = '$datosdireccion[4]', Codigo_Postal = '$datosdireccion[3]', Ciudad = '$datosdireccion[5]', Estado = '$datosdireccion[6]', Pais = '$datosdireccion[7]', Nombre_Contacto = '$datosdireccion[8]', Puesto_Contacto = '$datosdireccion[9]', Email_Contacto = '$datosdireccion[10]', Telefono_Contacto  = '$datosdireccion[11]'";
+				$errorDirecciones = $omodelo->_insertar($queryDirecciones);	
+
+				if ($errorDirecciones == "si") {
+					echo "Error direcciones: ".mysqli_error($omodelo->link); 
+				}
+			}
+
+			
 			$status = 1;
 			if ($_FILES['FotoCliente']['size'] > 0 && $_FILES['FotoCliente']['error'] == 0) {
 				$file = $_FILES["FotoCliente"];
@@ -181,7 +228,7 @@ class clientes {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
-		$query = "UPDATE clientes SET Nombre = '$NombreCliente', Direccion = '$DireccionCliente', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Ciudad = '$CiudadCliente', Colonia = '$ColoniaCliente', Codigo_Postal = '$CPCliente', Tipo_Descuento = '$TipoDescuentoCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', RFC = '$RFCCliente', Empresa = '$NombreEmpresaCliente', No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', Pais = '$PaisCliente', Estado = '$EstadoCliente', FK_Sucursal = '$SucursalCliente' WHERE ID_Cliente = '$IDCliente'";
+		$query = "UPDATE clientes SET Nombre = '$NombreCliente', Calle = '$CalleClienteGeneral', No_Exterior = '$NoExteriorClienteGeneral', No_Interior = '$NoInteriorClienteGeneral', Codigo_Postal = '$CPClienteGeneral', Colonia = '$ColoniaClienteGeneral', Ciudad = '$CiudadClienteGeneral', Estado = '$EstadoClienteGeneral', Pais = '$PaisClienteGeneral', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', RFC = '$RFCCliente', Facturar = '$FacturarCliente', No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', FK_Sucursal = '$SucursalCliente' WHERE ID_Cliente = '$IDCliente'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
@@ -189,6 +236,24 @@ class clientes {
 		}else{
 			echo "Correcto~";
 			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+
+			$queryDir = "DELETE FROM detalles_clientes WHERE FK_Cliente = '$IDCliente'";
+			$errorDir = $omodelo->_insertar($queryDir);
+
+			if ($errorDir == "si") {
+				echo "Error Eliminar Direcciones: ".mysqli_error($omodelo->link);
+			}else{
+				$direcciones = explode(",", $direcciones);
+				for ($i=0; $i < sizeof($direcciones) - 1; $i++) { 
+					$datosdireccion = explode("~", $direcciones[$i]);
+					$queryDirecciones = "INSERT INTO detalles_clientes SET FK_Cliente = '$IDCliente', Calle = '$datosdireccion[0]', No_Exterior = '$datosdireccion[1]', No_Interior = '$datosdireccion[2]', Colonia = '$datosdireccion[4]', Codigo_Postal = '$datosdireccion[3]', Ciudad = '$datosdireccion[5]', Estado = '$datosdireccion[6]', Pais = '$datosdireccion[7]', Nombre_Contacto = '$datosdireccion[8]', Puesto_Contacto = '$datosdireccion[9]', Email_Contacto = '$datosdireccion[10]', Telefono_Contacto  = '$datosdireccion[11]'";
+					$errorDirecciones = $omodelo->_insertar($queryDirecciones);	
+
+					if ($errorDirecciones == "si") {
+						echo "Error direcciones: ".mysqli_error($omodelo->link); 
+					}
+				}
+			}
 
 			$status = 1;
 			if ($_FILES['FotoCliente']['size'] > 0 && $_FILES['FotoCliente']['error'] == 0) {
@@ -272,7 +337,7 @@ class clientes {
 		extract($_POST);
 		$IDCliente =  $omodelo->link->real_escape_string($IDCliente);
 
-		$query = "SELECT ID_Cliente, Nombre, Direccion, Telefono, Celular, Ciudad, Colonia, Codigo_Postal, Tipo_Descuento, Descuento, Lim_Credito, Correo, Fecha_Nacimiento, Sexo, Fecha_Registro, Foto, RFC, Empresa, No_Cuenta, Banco, Titular, Pais, Estado, FK_Sucursal FROM clientes WHERE ID_Cliente = '$IDCliente'";
+		$query = "SELECT ID_Cliente, Nombre, Telefono, Celular, Descuento, Lim_Credito, Correo, Fecha_Nacimiento, Sexo, Fecha_Registro, Foto, RFC, Facturar, No_Cuenta, Banco, Titular, FK_Sucursal	FROM clientes WHERE ID_Cliente = '$IDCliente'";
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -280,404 +345,57 @@ class clientes {
 			echo "Error: ".mysqli_error($omodelo->link);
 		}else{
 			if($numerofilas > 0){
-				echo json_encode($row[0]);
-			}
-		}
-	}
+				$subarreglo = null;
 
-	
-	/*public function _insertar(){
-		$omodelo = new m_modelo();
-		date_default_timezone_set('America/Mexico_City');
-		//::::::::::::::::::::::::::::::::::::VALIDACIÓN DE CARACTERES ESPECIALES NO BORRAR
-		function sanitize($arg) {
-		    if (is_array($arg)) {
-		        return array_map('sanitize', $arg);
-		    }
 
-		    return htmlspecialchars($arg, ENT_QUOTES, 'UTF-8');
-		}
-		$array = array_map('sanitize', $_POST);
-		extract($array);
-		//::::::::::::::::::::::::::::::::::::VALIDACIÓN DE CARACTERES ESPECIALES NO BORRAR
-		$Estatus = 0;
-
-		function LimpiarArchivo($string) {
-		   $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
-		   return preg_replace('/[^A-Za-z0-9\-.]/', '', $string); // Removes special chars.
-		}
-
-		$nombreImg = "";
-		$ruta_provisional="";
-		$ruta="";
-
-		if (isset($_FILES["fotoCliente"]) && $_FILES["fotoCliente"]['name'] != "") {
-			$file = $_FILES["fotoCliente"];
-		    $nombreImg = $file["name"];
-		    $tipo = $file["type"];
-		    $ruta_provisional = $file["tmp_name"];
-		    $size = $file["size"];
-		    $carpeta = "vistas/assets/archivos/fotosClientes/";
-		    
-		    if ($tipo != 'image/jpg' && $tipo != 'image/jpeg' && $tipo != 'image/png' && $tipo != 'image/svg' && $tipo != 'image/bmp' && $tipo != ''){
-		      	echo "Error1"; 
-		      	$Estatus = 1;
-		    }else if ($size > (1024*1024*10)){
-	      		echo "Error2";
-	      		$Estatus = 1;
-	    	}else{
-	    		$NombreArchivo = LimpiarArchivo($nombreImg);
-	    		$nombreImg = $_SESSION['user_admin']['cliente']['id_cliente']."_".rand()."_".$NombreArchivo;
-	    		$ruta = $carpeta.$nombreImg;
-	    	}
-		}
-
-		if($Estatus == 0){
-			$query = "INSERT INTO clientes SET nombre  = '$nombreC', direccion = '$DireccionC', telefono = '$TelefonoC', celular = '$CelularC', ciudad = '$CiudadC', colonia = '$ColoniaC', codigo_postal = '$CodPostalC', descuento = '$DescuentoC', lim_credito = '$limiteC', correo = '$correoC', fecha_nacimiento = '$fechaNacimientoC', sexo = '$sexoC', fecha_alta = NOW(), rfc = '$rfcC', empresa = '$empresaC', no_cuenta = '$cuentaC', banco = '$bancoC', Pais = '$PaisC', Estado = '$EstadoC', foto = '$nombreImg'";
-			$error = $omodelo->_insertar($query);
-			if ($error == "si") {
-				echo "Error al insertar cliente: ".mysqli_error($omodelo->link);
-			}else{
-				$id = mysqli_insert_id($omodelo->link);
-				echo "Correcto~$id";	
-				if(file_exists("$ruta") && $nombreImg != ""){
-		       		unlink("$ruta");
-		    	}
-				move_uploaded_file($ruta_provisional,  $ruta);
-				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
-			}
-		}
-	}
-	
-	public function _modificar(){
-		$omodelo = new m_modelo();
-		//::::::::::::::::::::::::::::::::::::VALIDACIÓN DE CARACTERES ESPECIALES NO BORRAR
-		function sanitize($arg) {
-		    if (is_array($arg)) {
-		        return array_map('sanitize', $arg);
-		    }
-
-		    return htmlspecialchars($arg, ENT_QUOTES, 'UTF-8');
-		}
-		$array = array_map('sanitize', $_POST);
-		extract($array);
-		//::::::::::::::::::::::::::::::::::::VALIDACIÓN DE CARACTERES ESPECIALES NO BORRAR
-		
-		$Estatus = 0;
-
-		function LimpiarArchivo($string) {
-		   $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
-		   return preg_replace('/[^A-Za-z0-9\-.]/', '', $string); // Removes special chars.
-		}
-
-		$nombreImg = "";
-		$ruta_provisional="";
-		$ruta="";
-
-		if (isset($_FILES["fotoCliente"]) && $_FILES["fotoCliente"]['name'] != "") {
-			$file = $_FILES["fotoCliente"];
-		    $nombreImg = $file["name"];
-		    $tipo = $file["type"];
-		    $ruta_provisional = $file["tmp_name"];
-		    $size = $file["size"];
-		    $carpeta = "vistas/assets/archivos/fotosClientes/";
-		    
-		    if ($tipo != 'image/jpg' && $tipo != 'image/jpeg' && $tipo != 'image/png' && $tipo != 'image/svg' && $tipo != 'image/bmp' && $tipo != ''){
-		      	echo "Error1"; 
-		      	$Estatus = 1;
-		    }else if ($size > (1024*1024*10)){
-	      		echo "Error2";
-	      		$Estatus = 1;
-	    	}else{
-	    		$NombreArchivo = LimpiarArchivo($nombreImg);
-	    		$nombreImg = $_SESSION['user_admin']['cliente']['id_cliente']."_".rand()."_".$NombreArchivo;
-	    		$ruta = $carpeta.$nombreImg;
-	    	}
-	    	$queryfoto = ", foto = '$nombreImg'";
-	    	$antigua = $ligaFotoCliente;
-	    	$rutaantigua = $carpeta.$antigua;
-		}else{
-			$queryfoto = "";
-			$nombreImg = $ligaFotoCliente;
-			$ruta = "";
-		}
-
-		if($Estatus == 0){
-			$query = "UPDATE clientes SET nombre  = '$nombreC', direccion = '$DireccionC', telefono = '$TelefonoC', celular = '$CelularC', ciudad = '$CiudadC', colonia = '$ColoniaC', codigo_postal = '$CodPostalC', descuento = '$DescuentoC', lim_credito = '$limiteC', correo = '$correoC', fecha_nacimiento = '$fechaNacimientoC', sexo = '$sexoC', fecha_alta = NOW(), rfc = '$rfcC', empresa = '$empresaC', no_cuenta = '$cuentaC', banco = '$bancoC', Pais = '$PaisC', Estado = '$EstadoC' $queryfoto WHERE id_cliente = '$id'";
-			$error = $omodelo->_insertar($query);
-			if ($error == "si") {
-				echo "Error al modificar cliente: ".mysqli_error($omodelo->link);
-			}else{
-				echo "Correcto~$id";	
-
-				if(file_exists("$rutaantigua") && $nombreImg != ""){
-		       		unlink("$rutaantigua");
-		    	}
-				move_uploaded_file($ruta_provisional,  $ruta);
-				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
-			}
-		}
-	}
-
-	public function _eliminar(){
-		$omodelo = new m_modelo();
-		extract($_POST);
-		
-		$query = ("DELETE FROM clientes WHERE id_cliente = '$id';");
-		$error = $omodelo->_insertar($query);
-		if ($error == "si") {
-			echo "Error al eliminar el cliente: ".mysqli_error($omodelo->link);
-		}else{
-			echo "Correcto";
-
-			if($foto != "" && file_exists("vistas/assets/archivos/fotosClientes/$foto")){
-		       	unlink("vistas/assets/archivos/fotosClientes/$foto");
-		    }
-		    $omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
-		}
-	}
-
-	public function _foto(){
-		$omodelo = new m_modelo();
-		extract($_POST);
-		if (!empty($_FILES)) {
-			//var_dump($_FILES);
-			if($ligaFoto != 0){
-				$dir = "archivos/fotosClientes/".$ligaFoto;
-				if(file_exists($dir)){
-					unlink($dir);
+				$queryDirecciones = "SELECT ID_Detalle_Cliente, FK_Cliente, Calle, No_Exterior, No_Interior, Colonia, Codigo_Postal, Ciudad, Estado, Pais, Nombre_Contacto, Puesto_Contacto, Email_Contacto, Telefono_Contacto FROM detalles_clientes WHERE FK_Cliente = '".$row[0]['ID_Cliente']."'";
+				$rowDirecciones = $omodelo->_consultar($queryDirecciones);
+				$numerofilasDirecciones = $omodelo->numerofilas;
+				for ($x=0; $x < $numerofilasDirecciones; $x++) { 
+					$subarreglo[$x] = array(
+						'ID_Detalle_Cliente' => $rowDirecciones[$x]["ID_Detalle_Cliente"],
+						'FK_Cliente' => $rowDirecciones[$x]["FK_Cliente"],
+						'Calle' => $rowDirecciones[$x]["Calle"],
+						'No_Exterior' => $rowDirecciones[$x]["No_Exterior"],
+						'No_Interior' => $rowDirecciones[$x]["No_Interior"],
+						'Colonia' => $rowDirecciones[$x]["Colonia"],
+						'Codigo_Postal' => $rowDirecciones[$x]["Codigo_Postal"],
+						'Ciudad' => $rowDirecciones[$x]["Ciudad"],
+						'Estado' => $rowDirecciones[$x]["Estado"],
+						'Pais' => $rowDirecciones[$x]["Pais"],
+						'Nombre_Contacto' => $rowDirecciones[$x]["Nombre_Contacto"],
+						'Puesto_Contacto' => $rowDirecciones[$x]["Puesto_Contacto"],
+						'Email_Contacto' => $rowDirecciones[$x]["Email_Contacto"],
+						'Telefono_Contacto' => $rowDirecciones[$x]["Telefono_Contacto"],
+					);
 				}
-			}
-			if($_FILES["foto"]["size"] > 0){
-				$tipob = $_FILES["foto"]["type"];
-				$archivob = $_FILES["foto"]["name"];
-				$prefijo = substr(md5(uniqid(rand())),0,4);
-				$archiv = explode(".",$archivob);
-				$liga = $_SESSION['id_cliente']."_".$prefijo."_".$archivob;
-				$destino =  "archivos/fotosClientes/".$liga;
-				if ($archiv[1] == "jpg" || $archiv[1] == "png" || $archiv[1] == "gif") {
-					/*if ($nombre != "") {
-					$nombreEx = explode(" ",$nombre);
-					for($w=0;$w<count($nombreEx);$w++){
-						$nombreFotoB = $nombreFotoB.$nombreEx[$w];
-					}
-					$nombreFoto = $nombreFotoB.".".$archiv[1];
-					if (copy($_FILES['foto']['tmp_name'],$destino)) {								
-						$estado = "Archivo subido: ".$archiv[0]."";
-					} else {
-						$estado =  "Error 1 al subir el archivo";
-					}
-				/*} else {
-					$estado =  "Error 2 al subir archivo";
-				}
-				$query = ("UPDATE clientes set foto='".$liga."' where id_cliente = '$idR';");
-				$error = $omodelo->_insertar($query);
-				}else{
-					echo "Error al subir el archivo";
-				}
-			}
-		}
-	}
 
-	
-	public function _consultar(){
-		$omodelo = new m_modelo();
-		extract($_POST);
+				$arreglo = array(
+						'ID' => $row[0]['ID_Cliente'],
+						'Nombre' => $row[0]["Nombre"],
+						'Telefono' => $row[0]["Telefono"],
+						'Celular' => $row[0]["Celular"],
+						'Descuento' => $row[0]["Descuento"],
+						'Lim_Credito' => $row[0]["Lim_Credito"],
+						'Correo' => $row[0]["Correo"],
+						'Fecha_Nacimiento' => $row[0]["Fecha_Nacimiento"],
+						'Sexo' => $row[0]["Sexo"],
+						'Fecha_Registro' => $row[0]["Fecha_Registro"],
+						'Foto' => $row[0]["Foto"],
+						'RFC' => $row[0]["RFC"],
+						'Facturar' => $row[0]["Facturar"],
+						'No_Cuenta' => $row[0]["No_Cuenta"],
+						'Banco' => $row[0]["Banco"],
+						'Titular' => $row[0]["Titular"],
+						'FK_Sucursal' => $row[0]["FK_Sucursal"],
+						'Extras' => $subarreglo
+				);
 
-		$permisosMo = null;
-
-		if(isset($_SESSION['user_admin'])){
-			$query = "SELECT permisos FROM usuarios WHERE id_usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
-			$row = $omodelo->_consultar($query); 
-			$numerofilas = $omodelo->numerofilas;
-
-			if ($row == "si") {
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				if($numerofilas > 0){
-					$modulos = explode('~', $row[0]['permisos']);
-					for ($i=0; $i < count($modulos); $i++) { 
-						$cadena = explode(',', $modulos[$i]);
-						$nombreModu = $cadena[0];
-						unset($cadena[0]);
-						$permisosMo[$nombreModu] = $cadena;
-					}	
-				}
-			}
-		}
-
-		if ($tipo == "tabla") {
-			$arreglo['data'] = array(); 
-			$query  = "SELECT * FROM clientes WHERE id_cliente <> '1'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-			if ($row == "si") {
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				if($numerofilas > 0){
-					for ($i=0; $i < $numerofilas; $i++) {
-						$laFoto = 'vistas/assets/archivos/fotosClientes/user.gif';
-						if($row[$i]["foto"] != "" && file_exists('vistas/assets/archivos/fotosClientes/'.$row[$i]["foto"].'')){
-							$laFoto = 'vistas/assets/archivos/fotosClientes/'.$row[$i]["foto"].'';
-						}
-
-						$BotonModificar = '';
-						$BotonEliminar = '';
-
-						if (@$permisosMo['v_clientes'][3] == '1') {
-							$BotonModificar = '<button type="button" class="btn btn-theme-inverse btn-info modificarCliente btnModificar'.$row[$i]["id_cliente"].'" attrid="'.$row[$i]["id_cliente"].'"  nombre="'.$row[$i]['nombre'].'"  data-toggle="modal" data-target="#ModalClientes"><i class="fa fa-pencil-square-o"></i></button>';
-						}
-
-						if (@$permisosMo['v_clientes'][4] == '1') {
-							$BotonEliminar = '<button type="button" class="btn btn-danger eliminarCliente" foto="'.$row[$i]['foto'].'"  nombre="'.$row[$i]['nombre'].'" attrid="'.$row[$i]["id_cliente"].'"><i class="fa fa-trash-o"></i></button>';
-						}
-
-						$arreglo['data'][$i] = array("Nombre" => '<a href="'.$laFoto.'" title="'.utf8_encode($row[$i]["nombre"]).'" class="preview_fancybox" attrID="'.$row[$i]['id_cliente'].'"><img style="width:50px" class="circle" src="'.$laFoto.'"/></a><br><b>'.$row[$i]["nombre"].'</b>', "Direccion" => $row[$i]["direccion"], "Telefonos" => "<b>Telefono: </b>".$row[$i]["telefono"]."<br> <b>Celular: </b>".$row[$i]["celular"], "Correo" => $row[$i]["correo"], "Limite credito" => "<b class='dinero'>".$row[$i]["lim_credito"]."</b>", "Detalles" => '<button class="btn btn-sm btn-link bVerDetallesCliente" data-toggle="modal" data-target="#ModalVerDetallesCliente" nombre="'.$row[$i]['nombre'].'" attrID="'.$row[$i]['id_cliente'].'"><i class="fa fa-eye"></i> Ver detalles</button>', "Accion" => $BotonModificar.' '.$BotonEliminar); 
-					}
-				}
 				echo json_encode($arreglo);
-			} 	
-		}else if ($tipo == "ClienteNuevo") {
-			$arreglo['data'] = array(); 
-			$query  = "SELECT * FROM clientes WHERE id_cliente = '$id'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-			if ($row == "si") {
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				if($numerofilas > 0){
-					for ($i=0; $i < $numerofilas; $i++) {
-						$laFoto = 'vistas/assets/archivos/fotosClientes/user.gif';
-						if($row[$i]["foto"] != "" && file_exists('vistas/assets/archivos/fotosClientes/'.$row[$i]["foto"].'')){
-							$laFoto = 'vistas/assets/archivos/fotosClientes/'.$row[$i]["foto"].'';
-						}
-
-						$BotonModificar = '';
-						$BotonEliminar = '';
-
-						if (@$permisosMo['v_clientes'][3] == '1') {
-							$BotonModificar = '<button type="button" class="btn btn-theme-inverse btn-info modificarCliente btnModificar'.$row[$i]["id_cliente"].'" attrid="'.$row[$i]["id_cliente"].'"  nombre="'.$row[$i]['nombre'].'"  data-toggle="modal" data-target="#ModalClientes"><i class="fa fa-pencil-square-o"></i></button>';
-						}
-
-						if (@$permisosMo['v_clientes'][4] == '1') {
-							$BotonEliminar = '<button type="button" class="btn btn-danger eliminarCliente" foto="'.$row[$i]['foto'].'"  nombre="'.$row[$i]['nombre'].'" attrid="'.$row[$i]["id_cliente"].'"><i class="fa fa-trash-o"></i></button>';
-						}
-
-						$arreglo['data'][$i] = array("Nombre" => '<a href="'.$laFoto.'" title="'.$row[$i]["nombre"].'" class="preview_fancybox" attrID="'.$row[$i]['id_cliente'].'"><img style="width:50px" class="circle" src="'.$laFoto.'"/></a><br><b>'.$row[$i]["nombre"].'</b>', "Direccion" => $row[$i]["direccion"], "Telefonos" => "<b>Telefono: </b>".$row[$i]["telefono"]."<br> <b>Celular: </b>".$row[$i]["celular"], "Correo" => $row[$i]["correo"], "Limite credito" => "<b class='dinero'>".$row[$i]["lim_credito"]."</b>", "Detalles" => '<button class="btn btn-sm btn-link bVerDetallesCliente" data-toggle="modal" data-target="#ModalVerDetallesCliente" nombre="'.$row[$i]['nombre'].'" attrID="'.$row[$i]['id_cliente'].'"><i class="fa fa-eye"></i> Ver detalles</button>', "Accion" => $BotonModificar.' '.$BotonEliminar); 
-					}
-					echo json_encode($arreglo);
-				}
-			} 	
-		}else if ($tipo == "DetallesCliente") {
-			$query = "SELECT fecha_nacimiento, ciudad, colonia, Estado, Pais, empresa, codigo_postal, descuento, sexo, rfc, no_cuenta, banco FROM clientes WHERE id_cliente = '$id'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-			if ($row == "si") {
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				if($numerofilas > 0){
-					$tabla = '<table class="table table-responsive">
-						<thead>';
-					if ($row[0]["fecha_nacimiento"] != "") {
-						$tabla .= '
-							<tr>
-								<th>Fecha de nacimiento</th>
-								<th>'.$row[0]["fecha_nacimiento"].'</th>
-							</tr>';
-					}
-					if ($row[0]["sexo"] != "") {
-						$tabla .= '
-							<tr>
-								<th>Sexo</th>
-								<th>'.$row[0]["sexo"].'</th>
-							</tr>';
-					}
-					if ($row[0]["descuento"] != "") {
-						$tabla .= '
-							<tr>
-								<th>Descuento</th>
-								<th>'.$row[0]["descuento"].'</th>
-							</tr>';
-					}
-					if ($row[0]["empresa"] != "") {
-						$tabla .= '
-							<tr>
-								<th>Empresa</th>
-								<th>'.$row[0]["empresa"].'</th>
-							</tr>';
-					}
-					if ($row[0]["Estado"] != "") {
-						$tabla .= '
-							<tr>
-								<th>Estado</th>
-								<th>'.$row[0]["Estado"].'</th>
-							</tr>';
-					}
-					if ($row[0]["colonia"] != "" || $row[0]["codigo_postal"] != "" || $row[0]["ciudad"] != "") {
-						$tabla .= '
-							<tr>
-								<th>Ciudad</th>
-								<th>'.$row[0]["colonia"].', '.$row[0]["codigo_postal"].', '.$row[0]["ciudad"].'</th>
-							</tr>';
-					}
-					if ($row[0]["Pais"] != "") {
-						$tabla .= '
-							<tr>
-								<th>Pais</th>
-								<th>'.$row[0]["Pais"].'</th>
-							</tr>';
-					}
-					if ($row[0]["rfc"] != "") {
-						$tabla .= '
-							<tr>
-								<th>RFC</th>
-								<th>'.$row[0]["rfc"].'</th>
-							</tr>';
-					}
-					if ($row[0]["no_cuenta"] != "") {
-						$tabla .= '
-							<tr>
-								<th>Numero de cuenta: </th>
-								<th>'.$row[0]["no_cuenta"].'</th>
-							</tr>';
-					}
-					if ($row[0]["banco"] != "") {
-						$tabla .= '
-							<tr>
-								<th>Banco</th>
-								<th>'.$row[0]["banco"].'</th>
-							</tr>';
-					}
-
-					$tabla .= '</thead>
-							</table>';
-
-					echo $tabla;
-				}
-			}
-		}else if($tipo == "CargarCliente"){
-			$query  = "SELECT * FROM clientes WHERE id_cliente = '$id'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-			if ($row == "si") {
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				if($numerofilas > 0){
-					echo json_encode($row);
-				}
 			}
 		}
 	}
 
-	public function _detalles(){
-		unset($_SESSION['sus']);
-		$_SESSION['susEmpresa'] = array(
-			"id" => $_SESSION['id_cliente'],
-			"paquete" => $_SESSION['Paquete'],
-			"fechaInicio" => $_SESSION["Fecha_Inicio"],
-			"fechaFin" => $_SESSION["Fecha_Fin"]
-		);
-	}*/
 
 }
 ?>

@@ -16,6 +16,8 @@ include "controladores/c_cajas.php";
 include "controladores/c_perfil.php";
 include "controladores/c_impuestos.php";
 include "controladores/c_tickets.php";
+include "controladores/c_general.php";
+include "controladores/c_zonas.php";
 
 class controller {
 
@@ -39,7 +41,134 @@ class controller {
 			$pagina = str_replace('#ImagenPerfil#', 'vistas/assets/archivos/default.jpg', $pagina);
 		}else{
 			$pagina = str_replace('#ImagenPerfil#', 'vistas/assets/archivos/fotosUsuarios/'.$_SESSION['user_admin']['Foto'], $pagina);
-		}                          	
+		}       
+
+		///************************* PERMISOS DEL MENU **************************///
+		$botonSucursales = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_sucursales'][1] == '1') {
+			$botonSucursales = '<li class="menu-item cargarVista" carga="v_sucursales" titulo="Sucursales" id="cargarSucursales">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-map-marker"></i>
+                <div data-i18n="Sucursales">Sucursales</div>
+              </a>
+            </li>';
+		}
+		$pagina = str_replace('#MenuSucursales#', $botonSucursales, $pagina);
+
+		$botonProveedores = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_proveedores'][1] == '1') {
+			$botonProveedores = '<li class="menu-item cargarVista" carga="v_proveedores" titulo="Proveedores" id="cargarProveedores">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-suitcase"></i>
+                <div data-i18n="Proveedores">Proveedores</div>
+              </a>
+            </li>';
+		}
+		$pagina = str_replace('#MenuProveedores#', $botonProveedores, $pagina);
+
+		$botonClientes = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_clientes'][1] == '1') {
+			$botonClientes = '<li class="menu-item cargarVista" carga="v_clientes" titulo="Clientes" id="cargarClientes">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-face-grin"></i>
+                <div data-i18n="Clientes">Clientes</div>
+              </a>
+            </li>';
+		}
+		$pagina = str_replace('#MenuClientes#', $botonClientes, $pagina);
+
+		$botonAreas = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_areas'][1] == '1') {
+			$botonAreas = '<li class="menu-item cargarVista" carga="v_areas" titulo="Áreas" id="cargarAreas">
+              <a href="javascript:void(0)"  class="menu-link">
+                <div data-i18n="Áreas">Áreas</div>
+              </a>
+            </li>';
+		}
+		$pagina = str_replace('#MenuAreas#', $botonAreas, $pagina);
+
+		$botonZonas = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_zonas'][1] == '1') {
+			$botonZonas = '<li class="menu-item cargarVista" carga="v_zonas" titulo="Zonas" id="cargarZonas">
+              <a href="javascript:void(0)"  class="menu-link">
+                <div data-i18n="Zonas">Zonas</div>
+              </a>
+            </li>';
+		}
+		$pagina = str_replace('#MenuZonas#', $botonZonas, $pagina);
+		
+
+		$botonProductos = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_productos'][1] == '1') {
+			$botonProductos = '<li class="menu-item cargarVista" carga="v_productos" titulo="Productos" id="cargarProductos">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Productos">Productos</div>
+                  </a>
+                </li>';
+		}
+		$pagina = str_replace('#MenuProductos#', $botonProductos, $pagina);
+
+		$botonInventario = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][1] == '1') {
+			$botonInventario = '<li class="menu-item cargarVista" carga="v_inventario" titulo="Inventario" id="cargarInventario">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Inventario">Inventario</div>
+                  </a>
+                </li>';
+		}
+		$pagina = str_replace('#MenuInventario#', $botonInventario, $pagina);
+
+		$botonCategorias = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_categorias'][1] == '1') {
+			$botonCategorias = '<li class="menu-item cargarVista" carga="v_categorias" titulo="Categorias / familias" id="cargarCategorias">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Categorias">Categorias(familias)</div>
+                  </a>
+                </li>';
+		}
+		$pagina = str_replace('#MenuCategorias#', $botonCategorias, $pagina);
+
+		$botonCajas = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cajas'][1] == '1') {
+			$botonCajas = '<li class="menu-item cargarVista" carga="v_cajas" titulo="Cajas" id="cargarCajas">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Cajas">Cajas</div>
+                  </a>
+                </li>';
+		}
+		$pagina = str_replace('#MenuCajas#', $botonCajas, $pagina);
+
+		$botonImpuestos = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_impuestos'][1] == '1') {
+			$botonImpuestos = '<li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Impuestos">Impuestos</div>
+                  </a>
+                </li>';
+		}
+		$pagina = str_replace('#MenuImpuestos#', $botonImpuestos, $pagina);
+
+		$botonTickets = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_tickets'][1] == '1') {
+			$botonTickets = '<li class="menu-item cargarVista" carga="v_tickets" titulo="Tickets" id="cargarTickets">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Tickets">Tickets</div>
+                  </a>
+                </li>';
+		}
+		$pagina = str_replace('#MenuTickets#', $botonTickets, $pagina);
+
+		$botonUsuarios = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_usuarios'][1] == '1') {
+			$botonUsuarios = '<li class="menu-item cargarVista" carga="v_usuarios" titulo="Usuarios" id="cargarUsuarios">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-user"></i>
+                <div data-i18n="Usuarios">Usuarios</div>
+              </a>
+            </li>';
+		}
+		$pagina = str_replace('#MenuUsuarios#', $botonUsuarios, $pagina);
+
 		return $pagina;
 	}
 
@@ -211,6 +340,23 @@ class controller {
 
 			$pagina = str_replace('#usuarios#', $opciones, $pagina);
 
+			$query = "SELECT ID_Zona, Nombre FROM zona";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Zona'] . '" >' . $row[$i]['Nombre']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#ZonasSucursales#', $opciones, $pagina);
+
 		}else if($nombre == "v_proveedores"){
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_proveedores'][2] == '0') {
 				echo '<script>$("#bontonNuevoProve").remove();</script>';
@@ -240,6 +386,7 @@ class controller {
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_areas'][2] == '0') {
 				echo '<script>$("#botonNuevaArea").remove();</script>';
 			}
+			
 		}else if($nombre == "v_categorias"){
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_categorias'][2] == '0') {
 				echo '<script>$("#botonNuevaCategoria").remove();</script>';
@@ -256,6 +403,23 @@ class controller {
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_usuarios'][2] == '0') {
 				echo '<script>$("#botonNuevoUsuario").remove();</script>';
 			}
+
+			$query = "SELECT ID_Sucursal, Nombre FROM sucursales";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Sucursal'] . '" >' . $row[$i]['Nombre']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#SucursalesUsuarios#', $opciones, $pagina);
 		}else if($nombre == "v_tickets"){
 
 			$query = "SELECT ID_Sucursal, Nombre FROM sucursales";

@@ -8,28 +8,7 @@ function v_sucursales() {
             EncargadoSucursal:{
                 required: true
             },
-            CalleSucursal:{
-                required: true
-            },
-            NoExteriorSucursal:{
-                required: true
-            },
-            ColoniaSucursal:{
-                required: true
-            },
-            CPSucursal:{
-                required: true
-            },
-            CiudadSucursal:{
-                required: true
-            },
-            EstadoSucursal:{
-                required: true
-            },
-            PaisSucursal:{
-                required: true
-            },
-            TelefonoSucursal:{
+            ZonasSucursal:{
                 required: true
             },
         },
@@ -40,33 +19,12 @@ function v_sucursales() {
             EncargadoSucursal:{
                 required: "El gerente de la sucursal es requerido"
             },
-            CalleSucursal:{
-                required: "La calle de la sucursal es requerido"
-            },
-            NoExteriorSucursal:{
-                required: "El número esterior de la sucursal es requerido"
-            },
-            ColoniaSucursal:{
-                required: "La colonia es requerida"
-            },
-            CPSucursal:{
-                required: "El código postal es requerido"
-            },
-            CuidadSucursal:{
-                required: "La ciudad es requerida"
-            },
-            EstadoSucursal:{
-                required: "El estado es requerido"
-            },
-            PaisSucursal:{
-                required: "El pais es requerido"
-            },
-            TelefonoSucursal:{
-                required: "El telefono de la sucursal es requerido"
+            ZonasSucursal:{
+                required: "La zona de la sucursal es requerida"
             },
         },
         submitHandler: function(form) { 
-            var data = "metodo="+$("#bGuardarSucu").attr("tipo")+"&accion=sucursales&IDSucursal="+$("#bGuardarSucu").attr("attrid")+"&NombreSucursal="+$("#NombreSucursal").val()+"&EncargadoSucursal="+$("#EncargadoSucursal").val()+"&CalleSucursal="+$("#CalleSucursal").val()+"&NoExteriorSucursal="+$("#NoExteriorSucursal").val()+"&NoInteriorSucursal="+$("#NoInteriorSucursal").val()+"&ColoniaSucursal="+$("#ColoniaSucursal").val()+"&CPSucursal="+$("#CPSucursal").val()+"&CiudadSucursal="+$("#CiudadSucursal").val()+"&EstadoSucursal="+$("#EstadoSucursal").val()+"&PaisSucursal="+$("#PaisSucursal").val()+"&EmailSucursal="+$("#EmailSucursal").val()+"&TelefonoSucursal="+$("#TelefonoSucursal").val()+"&Telefono2Sucursal="+$("#telefono2Sucursal").val();
+            var data = "metodo="+$("#bGuardarSucu").attr("tipo")+"&accion=sucursales&IDSucursal="+$("#bGuardarSucu").attr("attrid")+"&NombreSucursal="+$("#NombreSucursal").val()+"&EncargadoSucursal="+$("#EncargadoSucursal").val()+"&CalleSucursal="+$("#CalleSucursal").val()+"&NoExteriorSucursal="+$("#NoExteriorSucursal").val()+"&NoInteriorSucursal="+$("#NoInteriorSucursal").val()+"&ColoniaSucursal="+$("#ColoniaSucursal").val()+"&CPSucursal="+$("#CPSucursal").val()+"&CiudadSucursal="+$("#CiudadSucursal").val()+"&EstadoSucursal="+$("#EstadoSucursal").val()+"&PaisSucursal="+$("#PaisSucursal").val()+"&EmailSucursal="+$("#EmailSucursal").val()+"&TelefonoSucursal="+$("#TelefonoSucursal").val()+"&Telefono2Sucursal="+$("#telefono2Sucursal").val()+"&Zona="+$("#ZonasSucursal").val();
            console.log(data);
             var btn = $('#bGuardarSucu');
             $.ajax({
@@ -191,6 +149,11 @@ jQuery(document).ready(function($) {
             $("#EmailSucursal").val(res.Email);
             $("#telefono2Sucursal").val(res.Segundo_Telefono);
             $("#TelefonoSucursal").val(res.Telefono);
+            if (res.FK_Zona == "0") {
+                $("#ZonasSucursal").val("");
+            }else{
+                $("#ZonasSucursal").val(res.FK_Zona);
+            }
             $("#ModalSucursal").modal("show");
         })
         .fail(function() {

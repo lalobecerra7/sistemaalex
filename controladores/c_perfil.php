@@ -45,7 +45,7 @@ class perfil {
 					}
 				}
 
-				if (file_exists("vistas/assets/archivos/fotosUsuarios/".$nombreFotoAnterior)) {
+				if ($row[0]["Foto"] != "" && file_exists("vistas/assets/archivos/fotosUsuarios/".$nombreFotoAnterior)) {
 					unlink("vistas/assets/archivos/fotosUsuarios/".$nombreFotoAnterior);
 				}
 

@@ -1,59 +1,77 @@
 function v_tickets() { 
     console.log('entro a la funcion');
-        consultarGeneral();
+        consultarDatosGeneral();
 
-    // $('#FormCategorias').validate({
-    //     rules: {
-    //         NombreCategoria: {
-    //             required: true
-    //         },
-    //     },
-    //     messages: {
-    //         NombreCategoria: {
-    //             required: "El nombre de la categoria o familia es obligatorio"
-    //         },
-    //     },
-    //     submitHandler: function(form) { 
-    //         var data = "metodo="+$("#GuardarCategoria").attr("tipo")+"&accion=categorias&IDCategoria="+$("#GuardarCategoria").attr("attrid")+"&Nombre="+$("#NombreCategoria").val()+"&Descripcion="+$("#DescripcionCategoria").val()
-    //         var btn = $('#GuardarCategoria');
-    //         $.ajax({
-    //             url: 'index.php',
-    //             type: 'POST',
-    //             data: data,
-    //             beforeSend: function() {
-    //                 $("#carga").show();
-    //             }
-    //         })
-    //         .done(function(res) {
-    //             if ($.trim(res) == "Correcto") {
-    //                 if ($("#GuardarCategoria").attr("tipo") == "modificar") {
-    //                     var tipoAlerta = "modificada";
-    //                 }else{
-    //                     var tipoAlerta = "guardada";
-    //                 }
-    //                 Swal.fire({
-    //                     icon: 'success',
-    //                     title: 'Categoria / familia '+tipoAlerta+' correctamente'
-    //                 });
-    //                 TablaCategorias(); 
-    //                 $("#ModalCategorias").modal("hide");
-    //             }else{
-    //                 Swal.fire({
-    //                     icon: 'error',
-    //                     title: 'Oops...',
-    //                     text: 'Error inesperado al '+$("#GuardarCategoria").attr("tipo")+' categoria / familia.'
-    //                 });
-    //                 console.log($.trim(res));
-    //             }
-    //         })
-    //         .fail(function() {
-    //             console.log("Error ajax");
-    //         })
-    //         .always(function() {
-    //             $("#carga").hide();
-    //         });                    
-    //     }
-    // });  
+    $('#formTickets').validate({
+        rules: {
+            SucursalTicket: {
+                required: true
+            },
+        },
+        messages: {
+            SucursalTicket: {
+                required: "Se debe seleccionar primero una sucursal"
+            },
+        },
+        submitHandler: function(form) { 
+            var nombre = '0';
+            var domicilio = '0';
+            var telefono = '0';
+            var email = '0';
+            var totalLetras = '0';
+            var incluirMensaje = '0';
+            if($("#checkNombre").prop('checked')){
+                nombre = '1';
+            }
+            if($("#checkDireccion").prop('checked')){
+                domicilio = '1';
+            }
+            if($("#checkTelefono").prop('checked')){
+                telefono = '1';
+            }
+            if($("#checkEmail").prop('checked')){
+                email = '1';
+            }
+            if($("#checkTotalLetra").prop('checked')){
+                totalLetras = '1';
+            }
+            if($("#checkMensaje").prop('checked')){
+                incluirMensaje = '1';
+            }
+            var data = "metodo=insertar&accion=tickets&IDSucursal="+$("#SucursalTicket").val()+"&Nombre="+nombre+"&Domicilio="+domicilio+"&Telefono="+telefono+"&Email="+email+"&TotalLetras="+totalLetras+"&IncluirMensaje="+incluirMensaje+"&Mensaje="+$("#MensajeTicket").val();
+            var btn = $('#bGuardarSucu');
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+                beforeSend: function() {
+                    $("#carga").show();
+                }
+            })
+            .done(function(res) {
+                if ($.trim(res) == "Correcto") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Se ha guardado los cambios correctamente'
+                    });
+                    mostrarTicket();
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Error inesperado al guardar los cambios.'
+                    });
+                    console.log($.trim(res));
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            })
+            .always(function() {
+                $("#carga").hide();
+            });                    
+        }
+    });  
   
 }
 
@@ -127,6 +145,7 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('change', '#SucursalTicket', function() {
+        
         var data = "metodo=detalles&accion=tickets&tipo=Sucursal&IDSucursal="+$(this).val();
         $.ajax({
             url: 'index.php',
@@ -136,6 +155,7 @@ jQuery(document).ready(function($) {
         .done(function(res) {
             console.log(res);
             var datos = JSON.parse($.trim(res));
+            $("#checkDireccion").prop('checked', false);
             $("#CalleSucTicket").val(datos.Calle);
             $("#NoExtTicket").val(datos.No_Exterior);
             $("#NoIntTicket").val(datos.No_Interior);
@@ -154,17 +174,58 @@ jQuery(document).ready(function($) {
             })
             .done(function(res) {
                 console.log(res);
-                var datos = JSON.parse($.trim(res));
-                $("#CalleSucTicket").val(datos.Calle);
-                $("#NoExtTicket").val(datos.No_Exterior);
-                $("#NoIntTicket").val(datos.No_Interior);
-                $("#ColoniaTicket").val(datos.Colonia);
-                $("#CPTicket").val(datos.CP);
-                $("#CiudadTicket").val(datos.Ciudad);
-                $("#EstadoTicket").val(datos.Estado);
-                $("#PaisTicket").val(datos.Pais);
-                $("#TelefonoTicket").val(datos.Telefono);
-                $("#EmailTicket").val(datos.Email);
+                var dato = JSON.parse($.trim(res));
+                if(dato.Nombre == 1){
+                    $("#checkNombre").prop('checked', true).prop('disabled', false);
+                }else {
+                    $("#checkNombre").prop('checked', false).prop('disabled', false);
+                }
+                if(dato.Domicilio == 1){
+                    $("#checkDireccion").prop('checked', true);
+                    $("#checkCalle").prop('checked', true).prop('disabled', false);
+                    $("#checkNoExt").prop('checked', true).prop('disabled', false);
+                    $("#checkNoInt").prop('checked', true).prop('disabled', false);
+                    $("#checkColonia").prop('checked', true).prop('disabled', false);
+                    $("#checkCP").prop('checked', true).prop('disabled', false);
+                    $("#checkCiudad").prop('checked', true).prop('disabled', false);
+                    $("#checkEstado").prop('checked', true).prop('disabled', false);
+                    $("#checkPais").prop('checked', true).prop('disabled', false);
+                }else {
+                    $("#checkDireccion").prop('checked', false);
+                    $("#checkCalle").prop('checked', false).prop('disabled', true);
+                    $("#checkNoExt").prop('checked', false).prop('disabled', true);
+                    $("#checkNoInt").prop('checked', false).prop('disabled', true);
+                    $("#checkColonia").prop('checked', false).prop('disabled', true);
+                    $("#checkCP").prop('checked', false).prop('disabled', true);
+                    $("#checkCiudad").prop('checked', false).prop('disabled', true);
+                    $("#checkEstado").prop('checked', false).prop('disabled', true);
+                    $("#checkPais").prop('checked', false).prop('disabled', true);
+                }
+                if(dato.Telefono == 1){
+                    $("#checkTelefono").prop('checked', true);
+                }else {
+                    $("#checkTelefono").prop('checked', false);
+                }
+                if(dato.Email == 1){
+                    $("#checkEmail").prop('checked', true);
+                }else {
+                    $("#checkEmail").prop('checked', False);
+                }
+                if(dato.Incluir_Mensaje == 1){
+                    $("#checkMensaje").prop('checked', true);
+                    $("#MensajeTicket").val(dato.Mensaje);
+                }else {
+                    $("#checkMensaje").prop('checked', false);
+                }
+                if(dato.Total_Letras == 1){
+                    $("#checkTotalLetra").prop('checked', true);
+                }else {
+                    $("#checkTotalLetra").prop('checked', false);
+                }
+                $("#imagenTicket").attr('idRegistro', dato.ID_Ticket);
+                $('#imgTicket').html('<img src="vistas/assets/archivos/imagenTicket/Sucursales/' + dato.Ruta_Imagen + '" style="max-width: 100%; max-height: 200px;"><br>');
+                mostrarTicket();
+                
             })
             .fail(function() {
                 console.log("Error ajax");
@@ -174,13 +235,9 @@ jQuery(document).ready(function($) {
             console.log("Error ajax");
         });
     });
-
-
-    
-
 });
 
-function consultarGeneral(){
+function consultarDatosGeneral(){
     var data = "metodo=consultar&accion=tickets";
         $.ajax({
             url: 'index.php',
@@ -211,6 +268,20 @@ function consultarGeneral(){
             $("#checkPais").prop('checked', true);
             $("#checkTelefono").prop('checked', true);
             $("#checkEmail").prop('checked', true);
+            $('#imgTicket').html('<img src="vistas/assets/archivos/imagenTicket/General/' + datos.Imagen_Ticket + '" style="max-width: 100%; max-height: 200px;"><br>');
+            var data = "metodo=detalles&accion=tickets&tipo=impuestos";
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data
+            })
+            .done(function(res) {
+                console.log(res);
+                $("#fReportes").html(res);
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            });
             mostrarTicket();
         })
         .fail(function() {
@@ -218,11 +289,70 @@ function consultarGeneral(){
         });
 }
 
+$(document).on('change', '#imagenTicket', function() {
+    readURL(this, $("#imgTicket"));
+    var registro = $(this).attr('idRegistro');
+    var idTicket = '';
+    var tabla = 'general';
+    if(registro != ''){
+        idTicket = registro;
+        tabla = 'tickets'
+    }
+    console.log(registro);
+    console.log(idTicket);
+    console.log(tabla);
+    var data = new FormData(document.getElementById('formImgTicket'));
+    data.append('metodo', 'detalles');
+    data.append('accion', 'tickets');
+    data.append('tipo', 'CambiarImagen');
+    data.append('idTicket', idTicket);
+    data.append('tabla', tabla);
+
+    $.ajax({
+        url: 'index.php',
+        type: 'POST',
+        data: data,
+        processData: false,
+        contentType: false,
+        beforeSend: function() {
+            $("#carga").show();
+        }
+    })
+    .done(function(res) {
+        if ($.trim(res) == "Correcto") {
+            console.log($.trim(res));
+        }else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Error inesperado al '+$("#GuardarProducto").attr("tipo")+' producto.'
+            });
+            console.log($.trim(res));
+        }
+    })
+    .fail(function() {
+        console.log("Error ajax");
+    })
+    .always(function() {
+        $("#carga").hide();
+    });
+});
+
+function readURL(input,ima) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $(ima).html("<img src='"+e.target.result+"' style='max-width: 100%; max-height: 200px;'>");
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+}
+
 function mostrarTicket() {
-    var columnas = 3, contenido="", calle="", noExt="", noInt="", colonia="", cp="", ciudad="", estado="", pais=""; 
+    var columnas = 3, contenido="", sucursal="", calle="", noExt="", noInt="", colonia="", cp="", ciudad="", estado="", pais=""; 
     $("#datosTicket").html("");
-    if($("#formTickets").find('input[name=checkCalle]').prop('checked')){
-      
+    if($("#formTickets").find('input[name=checkNombre]').prop('checked')){
+        sucursal = $('select[name="SucursalTicket"] option:selected').text();
     }
     if($("#formTickets").find('input[name=checkDireccion]').prop('checked')){
         if($("#formTickets").find('input[name=checkCalle]').prop('checked')){
@@ -300,7 +430,7 @@ function mostrarTicket() {
     $("#extrasTicket").append("<div class='col-sm-10 col-sm-offset-1 text-right'><h5>Folio de Venta: ...</h5></div>");
 
     $("#finalTicket").html("");
-    if($("#formTickets").find('input[name=MensajeTicket]').prop('checked')){
+    if($("#formTickets").find('input[name=checkMensaje]').prop('checked')){
       $("#finalTicket").append("<div class='col-sm-12 text-center'><h4>"+$("#MensajeTicket").val()+"</h4></div>");
     }
   }
