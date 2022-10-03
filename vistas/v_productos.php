@@ -33,32 +33,20 @@
 			      </div>
 		      </div>
 					<div class="row">
-			      <div class="col-md-12 col-sm-12 mb-3">
+			      <div class="col-md-4 col-sm-12 mb-3">
 			      	<div class="form-floating">
 			         	<input type="text" class="form-control" id="Descripcion" name="Descripcion" placeholder="Ingresa una descripción del producto">
 			          <label for="Descripcion">Descripción</label>
 			        </div>
 			      </div>
-		      </div>
-					<div class="row">
-	       		<div class="col-md-4 col-sm-12 mb-3">
-					  	<div class="form-floating mb-3">
-								<select class="form-select" name="ClaseProducto" id="ClaseProducto" >
+			      <div class="col-md-4 col-sm-12 mb-3">
+					   	<div class="form-floating mb-3">
+								<select class="form-select" name="Area" id="Area" >
 									<option value="">- Seleccione una opción -</option>
-									<option value="Pieza">Pieza</option>
-									<option value="Granel">Granel</option>
+										#areas#
 								</select>
-								<label for="ClaseProducto">Clase de producto</label>
+								<label for="Area">Area</label>
 							</div>
-		        </div>
-						<div class="col-md-4 col-sm-12 mb-3">
-						  	<div class="form-floating mb-3">
-									<select class="form-select" name="Unidad" id="Unidad" >
-										<option value="">- Seleccione una opción -</option>
-											#unidades#
-									</select>
-									<label for="Unidad">Unidad</label>
-								</div>
 		        </div>
 						<div class="col-md-4 col-sm-12 mb-3">
 						  	<div class="form-floating mb-3">
@@ -69,13 +57,18 @@
 									<label for="Categoria">Categoria</label>
 								</div>
 		        </div>
-	       	</div>
+		      </div>
+
 					<div class="row">
-	       		<div class="col-md-4 col-sm-12 mb-3">
-				   		<div class="form-floating">
-		           	<input type="number" class="form-control" min='0' max='10000' id="CostoProducto" name="CostoProducto" placeholder="Ingresa el costo del producto">
-		            <label for="CostoProducto">Costo</label>
-		          </div>
+						<div class="col-md-4 col-sm-12 mb-3">
+					  	<div class="form-floating mb-3">
+								<select class="form-select" name="ClaseProducto" id="ClaseProducto" >
+									<option value="">- Seleccione una opción -</option>
+									<option value="Pieza">Pieza</option>
+									<option value="Granel">Granel</option>
+								</select>
+								<label for="ClaseProducto">Clase de producto</label>
+							</div>
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
@@ -83,22 +76,19 @@
 		            <label for="PrecioProducto">Precio</label>
 		          </div>
 		        </div>
+	       		<div class="col-md-4 col-sm-12 mb-3">
+				   		<div class="form-floating">
+		           	<input type="number" class="form-control" min='0' max='10000' id="CostoProducto" name="CostoProducto" placeholder="Ingresa el costo del producto">
+		            <label for="CostoProducto">Costo</label>
+		          </div>
+		        </div>
+	       	</div>
+					<div class="row">
 						<div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		            <input type="number" class="form-control" min='0' max='10000' id="PrecioMayoreo" name="PrecioMayoreo" placeholder="Ingresa el precio de mayoreo del producto">
 		            <label for="PrecioMayoreo">Precio de mayoreo</label>
 		          </div>
-		        </div>
-	       	</div>
-					<div class="row">
-	       		<div class="col-md-4 col-sm-12 mb-3">
-					   	<div class="form-floating mb-3">
-								<select class="form-select" name="Area" id="Area" >
-									<option value="">- Seleccione una opción -</option>
-										#areas#
-								</select>
-								<label for="Area">Area</label>
-							</div>
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
@@ -114,16 +104,6 @@
 		        </div>
 	       	</div>
 					<div class="row">
-	       		<div class="col-md-4 col-sm-12 mb-3">
-					   	<div class="form-floating mb-3">
-								<select class="form-select" name="PonerUnidad" id="PonerUnidad" >
-									<option value="">- Seleccione una opción -</option>
-									<option value="1">Sí</option>
-									<option value="0">No</option>
-								</select>
-								<label for="PonerUnidad">Mostrar unidad en ticket</label>
-							</div>
-		        </div>
 		        <div class="col-md-8 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		            <input type="text" class="form-control" id="DetallesProducto" name="DetallesProducto" placeholder="Ingresa los detalles adicionales del producto">
@@ -137,7 +117,7 @@
 		       		<b class="mb-3">Precios del producto</b>
 		       	</div>
 		       	<div class="col-md-6 col-sm-12 text-end">
-		       		<button type="button" class="btn btn-success" id="AgregarPrecioProducto" data-bs-toggle="modal" data-bs-target="#ModalPreciosProductos">Agregar precio <i class="fas fa-plus"></i></button>
+		       		<button type="button" class="btn btn-success" id="AgregarPrecioProducto" >Agregar precio <i class="fas fa-plus"></i></button>
 		      	</div>
 		      </div>
 		      <div class="col-md-12 col-sm-12">
@@ -145,10 +125,10 @@
 		       		<table class="table table table-hover table-striped table-bordered text-center" id="TablaPreciosProductos" width="100%" style="font-size: 12px;">
 				        <thead>
 				          <th style="width: 20%;">Zona</th>
-				          <th style="width: 20%;">Nombre</th>
+				          <th style="width: 30%;">Nombre</th>
 				        	<th style="width: 20%;">Precio</th>
 				        	<th style="width: 20%;">Precio mayoreo</th>
-				        	<th style="width: 20%;">Acciones</th>
+				        	<th style="width: 10%;">Acciones</th>
 				        </thead>
 				        <tbody>
 				        </tbody>
@@ -201,11 +181,10 @@
 		          <thead>
 		            <th style="width: 15%;">Código</th>
 		            <th style="width: 15%;">Descripción</th>
-		            <th style="width: 10%;">Tipo</th>
 		            <th style="width: 10%;">Costo</th>
-		            <th style="width: 10%;">Precio</th>
-		            <th style="width: 15%;">Detalles</th>
-		            <th style="width: 10%;" orden="No">Acciones</th>
+		            <th style="width: 25%;">Precio</th>
+		            <th style="width: 30%;">Detalles</th>
+		            <th style="width: 5%;" orden="No">Acciones</th>
 		          </thead>
 		          <tbody>                        
 		          </tbody>
@@ -218,99 +197,6 @@
 </div>
 
 
-
-<div class="modal fade" id="ModalPreciosSucursal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered" style="z-index: 9999 !important;">
-    <div class="modal-content">
-      <div class="modal-header bg-inverse bd-inverse-darken">
-        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Modificar precios por sucursal de <span id="TituloModalPrecios">producto</span></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="FormPrecios">
-	      <div class="modal-body">
-	       	<div class="row">
-			<div class="row">
-	       		<div class="col-md-3 col-sm-12 mb-3">
-				   	<div class="form-floating mb-3">
-						<select class="form-select" name="Sucursal" id="Sucursal" >
-							<option value="">- Seleccione una opción -</option>
-								#sucursales#
-						</select>
-						<label for="Sucursal">Sucursal</label>
-					</div>
-		        </div>
-				<div class="col-md-3 col-sm-12 mb-3">
-				   <div class="form-floating">
-		               	<input type="number" class="form-control"  min='0' max='10000'id="CostoProductoE" name="CostoProductoE" placeholder="Ingresa el costo del producto">
-		                <label for="CostoProductoE">Costo</label>
-		            </div>
-		        </div>
-		        <div class="col-md-3 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		               	<input type="number" class="form-control" min='0' max='10000' id="PrecioProductoE" name="PrecioProductoE" placeholder="Ingresa el precio del producto">
-		                <label for="PrecioProductoE">Precio</label>
-		            </div>
-		        </div>
-				<div class="col-md-3 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		               	<input type="number" class="form-control"min='0' max='10000' id="PrecioMayoreoE" name="PrecioMayoreoE" placeholder="Ingresa el precio de mayoreo del producto">
-		                <label for="PrecioMayoreoE">Precio de mayoreo</label>
-		            </div>
-		        </div>
-	       	</div>
-			<div class="row">
-				<div class="col-md-3 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		               	<input type="number" class="form-control" min='0' max='1000' id="MinimoE" name="MinimoE" placeholder="Ingresa el mínimo de stock del producto">
-		                <label for="MinimoE">Stock Mínimo</label>
-		            </div>
-		        </div>
-				<div class="col-md-3 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		               	<input type="number" class="form-control" min='0' max='1000' id="MaximoE" name="MaximoE" placeholder="Ingresa el máximo de stock del producto">
-		                <label for="MaximoE">Stock Máximo</label>
-		            </div>
-		        </div>
-				<div class="col-md-3 col-sm-12 mb-3">
-					<div class="input-group mb-3">
-						<input type="text" class="form-control" placeholder="Impuestos" aria-label="Impuestos" aria-describedby="basic-addon2" id="impuestosProductoE" disabled>
-						<div class="input-group-append">
-							<button type="button" class="btn btn-outline-secondary" id="botonimpuestosProducto"><i class="fas fa-plus" aria-hidden="true"></i></button>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-12 mb-3">
-					<button type='submit' class="btn btn-success" id="PSucursal" attrid="" tipo="agregar"><i class="fas fa-plus-circle"></i> <strong id='NombreBoton'>Agregar</strong></button>
-		        </div>
-	       	</div>
-			   <div class="table-responsive">
-						<table class="table table-bordered table-striped text-center">
-							<thead>
-								<tr>
-									<th>Sucursal</th>
-									<th>Costo</th>
-									<th>Precio</th>
-									<th>Precio Mayoreo</th>
-									<th>Stock mínimo</th>
-									<th>Stock máximo</th>
-									<th>Impuestos</th>
-									<th>Acciones</th>
-								</tr>
-							</thead>
-							<tbody id="tbodyPreciosSucursal">
-							</tbody>
-						</table>
-					</div>
-				</div>
-	      </div>
-	      <div class="modal-footer">
-	        <!-- <button type="submit" class="btn btn-primary" id="GuardarDetalle" attrid="" tipo="insertar"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button> -->
-				<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-	      </div>
-  		</form>
-    </div>
-  </div>
-</div> 
 
 
 <div class="modal fade" id="ModalImpuestosProducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

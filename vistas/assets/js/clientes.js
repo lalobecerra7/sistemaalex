@@ -12,6 +12,12 @@ function v_clientes() {
             SucursalCliente: {
                 required: true
             },
+            CalleCliente: {
+                required: true
+            },
+            NombreContactoCliente: {
+                required: true
+            }
         },
         messages: {
             NombreCliente: {
@@ -27,7 +33,9 @@ function v_clientes() {
         submitHandler: function(form) { 
             var direcciones = '';
             $("#TablaUbicacionClientes tbody tr").each(function(index, el){
-                direcciones += $(this).attr("calle")+"~"+$(this).attr("noexterior")+"~"+$(this).attr("nointerior")+"~"+$(this).attr("cp")+"~"+$(this).attr("colonia")+"~"+$(this).attr("ciudad")+"~"+$(this).attr("estado")+"~"+$(this).attr("pais")+"~"+$(this).attr("nombre")+"~"+$(this).attr("puesto")+"~"+$(this).attr("correo")+"~"+$(this).attr("telefono")+",";
+                if ($(this).find("#CalleCliente").val() != "" && $(this).find("#NombreContactoCliente").val() != "") {
+                    direcciones += $(this).find("#CalleCliente").val()+"~"+$(this).find("#NoExteriorCliente").val()+"~"+$(this).find("#NoInteriorCliente").val()+"~"+$(this).find("#CPCliente").val()+"~"+$(this).find("#ColoniaCliente").val()+"~"+$(this).find("#CiudadCliente").val()+"~"+$(this).find("#EstadoCliente").val()+"~"+$(this).find("#PaisCliente").val()+"~"+$(this).find("#NombreContactoCliente").val()+"~"+$(this).find("#PuestoContactoCliente").val()+"~"+$(this).find("#CorreoContactoCliente").val()+"~"+$(this).find("#TelefonoContactoCliente").val()+",";
+                }
             });
             var data = new FormData(document.getElementById("FormClientes"));
             data.append("metodo", $("#GuardarCliente").attr("tipo"));
@@ -94,7 +102,7 @@ function v_clientes() {
         }
     }); 
 
-    $('#FormDireccion').validate({
+    /*$('#FormDireccion').validate({
         rules: {
             CalleCliente: {
                 required: true
@@ -142,7 +150,7 @@ function v_clientes() {
             $("#ModalNuevaDireccionCliente").modal("hide");
             $("#ModalCliente").modal("show");
         }
-    });       
+    }); */      
 }
 
 jQuery(document).ready(function($) {
@@ -155,6 +163,7 @@ jQuery(document).ready(function($) {
         $("#TituloModalCliente").text("Agregar nuevo");
         $("#TipoDescuentoCliente").trigger("change");
         $("#DescuentoCliente").val("");
+        $("#TablaUbicacionClientes tbody").html("");
     });
 
     $(document).on('hidden.bs.modal', '#ModalNuevaDireccionCliente', function() {
@@ -185,7 +194,61 @@ jQuery(document).ready(function($) {
     });*/
 
     $(document).on('click', '#AgregarDireccionCliente', function() {
-        $("#FormDireccion").trigger("reset");
+        //$("#FormDireccion").trigger("reset");
+        var tabla = `\
+        <tr>
+            <td>
+                <label for="CalleCliente">Calle</label>
+                <input type="text" class="form-control" id="CalleCliente" name="CalleCliente" placeholder="Ingresa la calle del cliente">
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="NoExteriorCliente">No. Exterior</label>
+                        <input type="text" class="form-control" id="NoExteriorCliente" name="NoExteriorCliente" placeholder="Ingresa el número exterior">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="NoInteriorCliente">No. Interior</label>
+                        <input type="text" class="form-control" id="NoInteriorCliente" name="NoInteriorCliente" placeholder="Ingresa el número interior">
+                     </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="CPCliente">Codigo postal</label>
+                        <input type="text" class="form-control" id="CPCliente" name="CPCliente" placeholder="Ingresa el codigo postal del cliente">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="ColoniaCliente">Colonia</label>
+                        <input type="text" class="form-control" id="ColoniaCliente" name="ColoniaCliente" placeholder="Ingresa la colonia del cliente">
+                     </div>
+                </div> 
+            </td>
+            <td>
+                <label for="CiudadCliente">Ciudad</label>
+                <input type="text" class="form-control" id="CiudadCliente" name="CiudadCliente" placeholder="Ingresa la ciudad del cliente">
+                <br>
+                <label for="EstadoCliente">Estado</label>
+                <input type="text" class="form-control" id="EstadoCliente" name="EstadoCliente" placeholder="Ingresa el estado del cliente">
+                <br>
+                <label for="PaisCliente">País</label>
+                <input type="text" class="form-control" id="PaisCliente" name="PaisCliente" placeholder="Ingresa el país del cliente">
+            </td>
+            <td>
+                <label for="NombreContactoCliente">Nombre</label>
+                <input type="text" class="form-control" id="NombreContactoCliente" name="NombreContactoCliente" placeholder="Ingresa nombre del contacto">
+                <br>
+                <label for="PuestoContactoCliente">Puesto</label>
+                <input type="text" class="form-control" id="PuestoContactoCliente" name="PuestoContactoCliente" placeholder="Ingresa el puesto del contacto">
+                <br>
+                <label for="CorreoContactoCliente">Correo electrónico</label>
+                <input type="text" class="form-control" id="CorreoContactoCliente" name="CorreoContactoCliente" placeholder="Ingresa el correo electrónico">
+                <br>
+                <label for="TelefonoContactoCliente">Teléfono</label>
+                <input type="text" class="form-control" id="TelefonoContactoCliente" name="TelefonoContactoCliente" placeholder="Ingresa el teléfono del contacto">
+            </td>
+            <td><button class="btn btn-sm btn-danger" id="EliminarDireccion"><i class="fas fa-trash"></i></button></td>
+        </tr>`;
+        $("#TablaUbicacionClientes tbody").append(tabla);
     });
 
 
@@ -286,6 +349,7 @@ jQuery(document).ready(function($) {
 
     $(document).on('click', '#ModificarCliente', function() {
         var id = $(this).attr('attrid');
+        $("#TablaUbicacionClientes tbody").html("");
         var data = "metodo=detalles&accion=clientes&IDCliente="+id;
         $.ajax({
             url: 'index.php',
@@ -331,13 +395,59 @@ jQuery(document).ready(function($) {
                     var PuestoContactoCliente = datos.Extras[i].Puesto_Contacto;
                     var CorreoContactoCliente = datos.Extras[i].Email_Contacto;
                     var TelefonoContactoCliente = datos.Extras[i].Telefono_Contacto;
-                    var tabla = '\
-                    <tr calle="'+CalleCliente+'" noexterior="'+NoExteriorCliente+'" nointerior="'+NoInteriorCliente+'" cp="'+CPCliente+'" colonia="'+ColoniaCliente+'" ciudad="'+CiudadCliente+'" estado="'+EstadoCliente+'" pais="'+PaisCliente+'" nombre="'+NombreContactoCliente+'" puesto="'+PuestoContactoCliente+'" correo="'+CorreoContactoCliente+'" telefono="'+TelefonoContactoCliente+'">\
-                        <td>Calle: '+CalleCliente+', No. Ext: '+NoExteriorCliente+', No. Int: '+NoInteriorCliente+'<br>Codigo Postal: '+CPCliente+'<br>Colonia: '+ColoniaCliente+'</td>\
-                        <td>Ciudad: '+CiudadCliente+'<br>Estado: '+EstadoCliente+'<br>País: '+PaisCliente+'</td>\
-                        <td>Nombre: '+NombreContactoCliente+'<br>Puesto: '+PuestoContactoCliente+'<br>Correo electrónico: '+CorreoContactoCliente+'<br>Teléfono: '+TelefonoContactoCliente+'</td>\
-                        <td><button type="button" class="btn btn-sm btn-danger" id="EliminarDireccion"><i class="fas fa-trash"></i></button></td>\
-                    </tr>';
+                    var tabla = `\
+                    <tr>
+                        <td>
+                            <label for="CalleCliente">Calle</label>
+                            <input type="text" class="form-control" value="`+CalleCliente+`" id="CalleCliente" name="CalleCliente" placeholder="Ingresa la calle del cliente">
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="NoExteriorCliente">No. Exterior</label>
+                                    <input type="text" class="form-control" value="`+NoExteriorCliente+`" id="NoExteriorCliente" name="NoExteriorCliente" placeholder="Ingresa el número exterior">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="NoInteriorCliente">No. Interior</label>
+                                    <input type="text" class="form-control" value="`+NoInteriorCliente+`" id="NoInteriorCliente" name="NoInteriorCliente" placeholder="Ingresa el número interior">
+                                 </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="CPCliente">Codigo postal</label>
+                                    <input type="text" class="form-control" value="`+CPCliente+`" id="CPCliente" name="CPCliente" placeholder="Ingresa el codigo postal del cliente">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="ColoniaCliente">Colonia</label>
+                                    <input type="text" class="form-control" value="`+ColoniaCliente+`" id="ColoniaCliente" name="ColoniaCliente" placeholder="Ingresa la colonia del cliente">
+                                 </div>
+                            </div> 
+                        </td>
+                        <td>
+                            <label for="CiudadCliente">Ciudad</label>
+                            <input type="text" class="form-control" value="`+CiudadCliente+`" id="CiudadCliente" name="CiudadCliente" placeholder="Ingresa la ciudad del cliente">
+                            <br>
+                            <label for="EstadoCliente">Estado</label>
+                            <input type="text" class="form-control" value="`+EstadoCliente+`" id="EstadoCliente" name="EstadoCliente" placeholder="Ingresa el estado del cliente">
+                            <br>
+                            <label for="PaisCliente">País</label>
+                            <input type="text" class="form-control" value="`+PaisCliente+`" id="PaisCliente" name="PaisCliente" placeholder="Ingresa el país del cliente">
+                        </td>
+                        <td>
+                            <label for="NombreContactoCliente">Nombre</label>
+                            <input type="text" class="form-control" value="`+NombreContactoCliente+`" id="NombreContactoCliente" name="NombreContactoCliente" placeholder="Ingresa nombre del contacto">
+                            <br>
+                            <label for="PuestoContactoCliente">Puesto</label>
+                            <input type="text" class="form-control" value="`+PuestoContactoCliente+`" id="PuestoContactoCliente" name="PuestoContactoCliente" placeholder="Ingresa el puesto del contacto">
+                            <br>
+                            <label for="CorreoContactoCliente">Correo electrónico</label>
+                            <input type="text" class="form-control" value="`+CorreoContactoCliente+`" id="CorreoContactoCliente" name="CorreoContactoCliente" placeholder="Ingresa el correo electrónico">
+                            <br>
+                            <label for="TelefonoContactoCliente">Teléfono</label>
+                            <input type="text" class="form-control" value="`+TelefonoContactoCliente+`" id="TelefonoContactoCliente" name="TelefonoContactoCliente" placeholder="Ingresa el teléfono del contacto">
+                        </td>
+                        <td><button class="btn btn-sm btn-danger" id="EliminarDireccion"><i class="fas fa-trash"></i></button></td>
+                    </tr>`;
                     $("#TablaUbicacionClientes tbody").append(tabla);
                 }
             }

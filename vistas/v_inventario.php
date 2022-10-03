@@ -22,7 +22,7 @@
 			<br>
 			<div class="row">
 				<div class="col-12 text-end">
-					<!-- <button type="button" class="btn btn-success" id="botonNuevoInventario" data-bs-toggle="modal" data-bs-target="#ModalInventario"><i class="fa fa-file"></i> Nueva</button> -->
+					<button type="button" class="btn btn-primary" id="botonVerTraslados" data-bs-toggle="modal" data-bs-target="#ModalVerTraslados"><i class="fa fa-print"></i> Traslados</button>
 					<a href="javascript:void(0)" class="btn btn-light btn-reload" onclick="$('#cargarInventario').trigger('click')"><i class="fa fa-retweet"></i></a>
 				</div>
 			</div>
@@ -50,6 +50,45 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+<div class="modal fade" id="ModalVerTraslados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Traslados</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            	<div class="row mb-3">
+            		<div class="col-md-6">
+            			<label for="FechaInicioTraslado">Desde</label>
+            			<input type="date" id="FechaInicioTraslado" name="FechaInicioTraslado" class="form-control">
+            		</div>
+            		<div class="col-md-6">
+            			<label for="FechaFinalTraslado">Hasta</label>
+            			<input type="date" id="FechaFinalTraslado" name="FechaFinalTraslado" class="form-control">
+            		</div>
+            	</div>
+            	<div class="row mb-5">
+					<div class="col-12">
+						<table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaImprimirTraslados" width="100%" style="font-size: 12px;">
+							<thead>
+								<th style="width: 33%;">Fecha</th>
+								<th style="width: 33%;">Detalles</th>
+								<th style="width: 33%;">Acciones</th>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+            </div>
+            <div class="modal-footer">
+				<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+            </div>
+        </div>
+    </div>
 </div>
 
 

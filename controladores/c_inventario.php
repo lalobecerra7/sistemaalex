@@ -528,6 +528,50 @@ class inventario {
 					}
 				}
 				echo json_encode($arreglo);
+			}else if($tipo == "TablaTrasladosPrincipal"){
+				$fechainicio = $omodelo->link->real_escape_string($fechainicio);
+				$fechafin = $omodelo->link->real_escape_string($fechafin);
+				$buscar =  $omodelo->link->real_escape_string($buscar);
+				$limit =  $omodelo->link->real_escape_string($limit);
+				$pagina =  $omodelo->link->real_escape_string($pagina);
+				$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+				$orden =  $omodelo->link->real_escape_string($orden);
+				$arreglo = array();
+		
+				$busqueda = '';
+				if(trim($buscar) != ''){
+					$separa = explode(' ', trim($buscar));
+					$busqueda = 'AND ';
+					for ($i=0; $i < count($separa); $i++) { 
+						$busqueda .= "CONCAT(Fecha_Traslado) REGEXP '".$separa[$i]."'";
+						if($i < (count($separa)-1)){
+							$busqueda .= ' AND ';
+						}
+					}
+				}
+		
+				$query = "SELECT ID_Traslado, Fecha_Traslado AS Fecha, SUM(Cantidad) AS CantidadTraslado, (SELECT COUNT(*) FROM traslados WHERE Fecha_Traslado >= '$fechainicio' AND Fecha_Traslado <= '$fechafin' $busqueda) AS 'Num' FROM `traslados` WHERE Fecha_Traslado >= '$fechainicio' AND Fecha_Traslado <= '$fechafin'  $busqueda GROUP BY DATE_FORMAT(Fecha_Traslado, '%Y-%m-%d') ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+				$row = $omodelo->_consultar($query);
+				$numerofilas = $omodelo->numerofilas;
+	
+				if($row == 'si'){
+					echo "Error: ".mysqli_error($omodelo->link);
+				}else{
+					if($numerofilas > 0){
+						for($i=0; $i<$numerofilas; $i++){
+							$arreglo['data'][$i] = array(
+								'ID' => $row[$i]['ID_Traslado'],
+								'Fecha' => $row[$i]['Fecha'],
+								'Detalles' => "Cantidad total de traslado: ".$row[$i]['CantidadTraslado'],
+								'Acciones' => '',
+							);
+							
+						}
+		
+						$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+					}
+				}
+				echo json_encode($arreglo);
 			}
 	}
 

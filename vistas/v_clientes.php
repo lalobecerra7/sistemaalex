@@ -217,17 +217,17 @@
 		        		<b class="mb-3">Datos de ubicación</b>
 		        	</div>
 		        	<div class="col-md-6 col-sm-12 text-end">
-		        		<button type="button" class="btn btn-success" id="AgregarDireccionCliente" data-bs-toggle="modal" data-bs-target="#ModalNuevaDireccionCliente">Agregar dirección <i class="fas fa-plus"></i></button>
+		        		<button type="button" class="btn btn-success" id="AgregarDireccionCliente">Agregar dirección <i class="fas fa-plus"></i></button>
 		        	</div>
 		        </div>
 		        <div class="col-md-12 col-sm-12">
 		        	<div class="table-responsive">
 		        		<table class="table table table-hover table-striped table-bordered text-center" id="TablaUbicacionClientes" width="100%" style="font-size: 12px;">
 				          <thead>
-				            <th style="width: 25%;">Domicilio</th>
-				            <th style="width: 25%;">Ubicacion</th>
-				          	<th style="width: 25%;">Contacto</th>
-				          	<th style="width: 25%;">Acciones</th>
+				            <th style="width: 30%;">Domicilio</th>
+				            <th style="width: 30%;">Ubicacion</th>
+				          	<th style="width: 30%;">Contacto</th>
+				          	<th style="width: 10%;">Acciones</th>
 				          </thead>
 				          <tbody>
 				          </tbody>
@@ -239,102 +239,6 @@
 	      <div class="modal-footer">
 	        <button type="submit" class="btn btn-primary" id="GuardarCliente" attrid="" tipo="insertar"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
 			<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-	      </div>
-  		</form>
-    </div>
-  </div>
-</div>
-
-
-<div class="modal fade" id="ModalNuevaDireccionCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-inverse bd-inverse-darken">
-        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Agregar nueva dirección</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="FormDireccion">
-	      <div class="modal-body">
-	      	<div class="row">
-			   	 	<div class="col-md-3 col-sm-12 mb-3"> 
-			      	<div class="form-floating">
-			        	<input type="text" class="form-control" id="CalleCliente" name="CalleCliente" placeholder="Ingresa la calle del cliente">
-			          <label for="CalleCliente">Calle</label>
-			        </div>
-			      </div>
-			      <div class="col-md-3 col-sm-12 mb-3"> 
-			      	<div class="form-floating">
-			        	<input type="text" class="form-control" id="NoExteriorCliente" name="NoExteriorCliente" placeholder="Ingresa el número exterior">
-			          <label for="NoExteriorCliente">No. Exterior</label>
-			        </div>
-			      </div>
-			      <div class="col-md-3 col-sm-12 mb-3"> 
-			      	<div class="form-floating">
-			        	<input type="text" class="form-control" id="NoInteriorCliente" name="NoInteriorCliente" placeholder="Ingresa el número interior">
-			          <label for="NoInteriorCliente">No. Interior</label>
-			        </div>
-			      </div>
-			      <div class="col-md-3 col-sm-12 mb-3">
-			      	<div class="form-floating">
-			        	<input type="text" class="form-control" id="CPCliente" name="CPCliente" placeholder="Ingresa el codigo postal del cliente">
-			          <label for="CPCliente">Codigo postal</label>
-			        </div>
-			      </div>
-			      <div class="col-md-3 col-sm-12 mb-3">
-			      	<div class="form-floating">
-			          <input type="text" class="form-control" id="ColoniaCliente" name="ColoniaCliente" placeholder="Ingresa la colonia del cliente">
-			         	<label for="ColoniaCliente">Colonia</label>
-			        </div>
-			      </div>
-			      <div class="col-md-3 col-sm-12 mb-3">
-			      	<div class="form-floating">
-			          <input type="text" class="form-control" id="CiudadCliente" name="CiudadCliente" placeholder="Ingresa la ciudad del cliente">
-			          <label for="CiudadCliente">Ciudad</label>
-			        </div>
-			      </div>
-			      <div class="col-md-3 col-sm-12 mb-3">
-			      	<div class="form-floating">
-			          <input type="text" class="form-control" id="EstadoCliente" name="EstadoCliente" placeholder="Ingresa el estado del cliente">
-			          <label for="EstadoCliente">Estado</label>
-			        </div>
-			      </div>
-			      <div class="col-md-3 col-sm-12 mb-3">
-			      	<div class="form-floating">
-			          <input type="text" class="form-control" id="PaisCliente" name="PaisCliente" placeholder="Ingresa el país del cliente">
-			          <label for="PaisCliente">País</label>
-			        </div>
-			      </div>
-			      <hr>
-			      <b class="mb-3">Datos de contacto</b>
-			      <div class="col-md-3 col-sm-12 mb-3">
-			      	<div class="form-floating">
-			          <input type="text" class="form-control" id="NombreContactoCliente" name="NombreContactoCliente" placeholder="Ingresa nombre del contacto">
-			          <label for="NombreContactoCliente">Nombre</label>
-			        </div>
-			      </div>
-			      <div class="col-md-3 col-sm-12 mb-3">
-			      	<div class="form-floating">
-			          <input type="text" class="form-control" id="PuestoContactoCliente" name="PuestoContactoCliente" placeholder="Ingresa el puesto del contacto">
-			          <label for="PuestoContactoCliente">Puesto</label>
-			        </div>
-			      </div>
-			      <div class="col-md-3 col-sm-12 mb-3">
-			      	<div class="form-floating">
-			          <input type="text" class="form-control" id="CorreoContactoCliente" name="CorreoContactoCliente" placeholder="Ingresa el correo electrónico">
-			          <label for="CorreoContactoCliente">Correo electrónico</label>
-			        </div>
-			      </div>
-			      <div class="col-md-3 col-sm-12 mb-3">
-			      	<div class="form-floating">
-			          <input type="text" class="form-control" id="TelefonoContactoCliente" name="TelefonoContactoCliente" placeholder="Ingresa el teléfono del contacto">
-			          <label for="TelefonoContactoCliente">Teléfono</label>
-			        </div>
-			      </div>
-		      </div>
-		    </div>
-	      <div class="modal-footer">
-	        <button type="submit" class="btn btn-primary" id="GuardarDireccionCliente"><i class="fa fa-check-circle"></i> <strong>Agregar</strong></button>
-					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
 	      </div>
   		</form>
     </div>

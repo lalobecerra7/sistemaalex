@@ -378,6 +378,32 @@ jQuery(document).ready(function($) {
             }
         });
     });
+
+
+    $(document).on('click', '#botonVerTraslados', function() {
+        var fecha = new Date();
+        var dia = ("0" + (fecha.getDate() - 15)).slice(-2);
+        var mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
+        var inicio = fecha.getFullYear()+"-"+(mes)+"-"+(dia);
+
+        var fecha = new Date();
+        var dia = ("0" + fecha.getDate()).slice(-2);
+        var mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
+        var final = fecha.getFullYear()+"-"+(mes)+"-"+(dia);
+
+
+        $('#FechaInicioTraslado').val(inicio);
+        $('#FechaFinalTraslado').val(final);
+        TablaTrasladosPrincipal();
+    });
+
+    $(document).on('change', '#FechaInicioTraslado', function() {
+        TablaTrasladosPrincipal();
+    });
+
+    $(document).on('change', '#FechaFinalTraslado', function() {
+        TablaTrasladosPrincipal();
+    });
 });
 
 function TablaInventario() {
@@ -452,6 +478,30 @@ function TablaTraslados(idproducto) {
             "accion": "inventario",
             "tipo": "TablaTraslados",
             "id": idproducto
+        }
+    });
+}
+
+function TablaTrasladosPrincipal() {
+    console.log($('#FechaInicioTraslado').val()+" "+$('#FechaFinalTraslado').val());
+    ajaxMyDatatable({
+        "table": $("#TablaImprimirTraslados"),
+        "colums": [
+            "Fecha",
+            "Detalles",
+            "Acciones",
+        ],
+        "sort": [
+            0,
+            "desc"
+        ],
+        "url": "index.php",
+        "params": {
+            "metodo": "detalles",
+            "accion": "inventario",
+            "tipo": "TablaTrasladosPrincipal",
+            "fechainicio": $('#FechaInicioTraslado').val(),
+            "fechafin": $('#FechaFinalTraslado').val()
         }
     });
 }
