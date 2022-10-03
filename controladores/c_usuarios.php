@@ -97,6 +97,7 @@ class usuarios {
 	public function _insertar(){
 		$omodelo = new m_modelo();
 		extract($_POST);
+
 		$fecha = date('Y-m-d H:i:s'); 
 		$opciones = ['cost' => 12];
 		$password = password_hash($omodelo->link->real_escape_string($NuevaContrasena), PASSWORD_BCRYPT, $opciones);

@@ -554,6 +554,14 @@
               <ul class="menu-sub">
                 #MenuTickets#
               </ul>
+
+              <ul class="menu-sub">
+                <li class="menu-item cargarVista" carga="v_general" titulo="General" id="cargarGeneral">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="General">General</div>
+                  </a>
+                </li>
+              </ul>
             </li>
 
             #MenuUsuarios#
@@ -726,6 +734,7 @@
     <script type="text/javascript" src="vistas/assets/js/cajas.js"></script>
     <script type="text/javascript" src="vistas/assets/js/perfil.js"></script>
     <script type="text/javascript" src="vistas/assets/js/tickets.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/general.js"></script>
     <script type="text/javascript" src="vistas/assets/js/zonas.js"></script>
   </body>
 </html>

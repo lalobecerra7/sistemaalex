@@ -98,9 +98,9 @@
 		        </div>
 						<div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		           	<input type="number" class="form-control" id="Maximo" min='0' max='1000'name="Maximo" placeholder="Ingresa el máximo de stock del producto">
-		            <label for="Maximo">Stock Máximo</label>
-		          </div>
+		               	<input type="number" class="form-control" id="Maximo" min='0' max='1000' name="Maximo" placeholder="Ingresa el máximo de stock del producto">
+		                <label for="Maximo">Stock Máximo</label>
+		            </div>
 		        </div>
 	       	</div>
 					<div class="row">
