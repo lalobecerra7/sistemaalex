@@ -37,8 +37,6 @@
 								<th style="width: 10%;" orden="No">Distribución</th>
 								<th style="width: 10%;">Costo</th>
 								<th style="width: 15%;">Costo total</th>
-								<th style="width: 10%;">Precio</th>
-								<th style="width: 15%;">Precio total</th>
 								<th style="width: 15%;"orden="No">Merma</th>
 								<th style="width: 5%;" orden="No">Acciones</th>
 							</thead>

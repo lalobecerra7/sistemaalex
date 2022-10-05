@@ -415,8 +415,6 @@ function TablaInventario() {
             "Detalles",
             "Costo",
             "TotalCosto",
-            "Precio",
-            "TotalPrecio",
             "Merma",
             "Acciones"
         ],

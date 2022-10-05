@@ -111,7 +111,7 @@ class inventario {
 					
 					$precios="";
 					$costos="";
-					$queryPrecios="SELECT sucursales.Nombre AS Sucursal, Precio, Costo FROM detalles_productos INNER JOIN sucursales ON FK_Sucursal = sucursales.ID_Sucursal WHERE FK_Producto ='".$row[$i]["ID_Producto"]."'";
+					$queryPrecios="SELECT sucursales.Nombre AS Sucursal, Costo FROM detalles_productos INNER JOIN sucursales ON FK_Sucursal = sucursales.ID_Sucursal WHERE FK_Producto ='".$row[$i]["ID_Producto"]."'";
 					$rowPrecios = $omodelo->_consultar($queryPrecios);
 					$numerofilasPrecios = $omodelo->numerofilas; 
 					
@@ -120,7 +120,7 @@ class inventario {
 					}else{
 						if($numerofilasPrecios > 0){
 							for($j=0; $j<$numerofilasPrecios; $j++){
-								$precios.= $rowPrecios[$j]["Sucursal"].": <b>$".number_format($rowPrecios[$j]["Precio"],2)."</b><br>";
+								$precios.= "<br>";
 								$costos.= $rowPrecios[$j]["Sucursal"].": <b>$".number_format($rowPrecios[$j]["Costo"],2)."</b><br>";
 							}	
 						}
@@ -128,7 +128,7 @@ class inventario {
 
 					$preciosTotales="";
 					$costosTotales="";
-					$queryPreciosTotales="SELECT sucursales.Nombre AS Sucursal, SUM(inventario.Cantidad * detalles_productos.Precio) AS TotalPrecioSucursal, SUM(inventario.Cantidad * detalles_productos.Costo) AS TotalCostoSucursal FROM detalles_productos INNER JOIN inventario ON inventario.FK_Producto = '".$row[$i]["ID_Producto"]."' INNER JOIN sucursales ON detalles_productos.FK_Sucursal = sucursales.ID_Sucursal WHERE detalles_productos.FK_Producto = '".$row[$i]["ID_Producto"]."'";
+					$queryPreciosTotales="SELECT sucursales.Nombre AS Sucursal, SUM(inventario.Cantidad) AS TotalPrecioSucursal, SUM(inventario.Cantidad * detalles_productos.Costo) AS TotalCostoSucursal FROM detalles_productos INNER JOIN inventario ON inventario.FK_Producto = '".$row[$i]["ID_Producto"]."' INNER JOIN sucursales ON detalles_productos.FK_Sucursal = sucursales.ID_Sucursal WHERE detalles_productos.FK_Producto = '".$row[$i]["ID_Producto"]."'";
 					$rowPreciosTotales = $omodelo->_consultar($queryPreciosTotales);
 					$numerofilasPreciosTotales = $omodelo->numerofilas; 
 					
@@ -169,8 +169,6 @@ class inventario {
 						'Descripcion' => $row[$i]['Descripcion'],
 						'Costo' => 'General: <b class="dinero">$'.number_format($row[$i]['Costo'], 2).'</b><br>'.$costos,
 						'TotalCosto' => 'General: '.$totalCosto.'<br>'.$costosTotales,
-						'Precio' => 'General: <b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b><br>'.$precios,
-						'TotalPrecio' => 'General: '.$totalPrecio.'<br>'.$preciosTotales,
 						'Merma' => $Merma.$botonPermisosVerMerma,
 						'Detalles' => 'Existencia: <b>'.$row[$i]['Cantidad'].'</b><br>'.$sucursales,
 						'Acciones' => $botonPermisosAgregarMerma.' '.$botonPermisosTraslados,

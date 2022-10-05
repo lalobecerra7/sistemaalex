@@ -135,6 +135,28 @@
 				    	</table>
 		      	</div>
 		      </div>
+		      <hr>
+	    		<div class="row mb-3">
+		       	<div class="col-md-6 col-sm-12 text-start">
+		       		<b class="mb-3">Presentaciones del productos</b>
+		       	</div>
+		       	<div class="col-md-6 col-sm-12 text-end">
+		       		<button type="button" class="btn btn-success" id="AgregarPresentacionProducto" >Agregar presentacion <i class="fas fa-plus"></i></button>
+		      	</div>
+		      </div>
+		      <div class="col-md-12 col-sm-12">
+		      	<div class="table-responsive">
+		       		<table class="table table table-hover table-striped table-bordered text-center" id="TablaPresentacionProducto" width="100%" style="font-size: 12px;">
+				        <thead>
+				          <th style="width: 33%;">Nombre</th>
+				        	<th style="width: 33%;">Abreviatura</th>
+				        	<th style="width: 33%;">Acciones</th>
+				        </thead>
+				        <tbody>
+				        </tbody>
+				    	</table>
+		      	</div>
+		      </div>
 				</div>
 	      <div class="modal-footer">
 	        <button type="submit" class="btn btn-primary" id="GuardarProducto" attrid="" tipo="insertar"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
@@ -196,6 +218,45 @@
 	</div>
 </div>
 
+
+<div class="modal fade" id="ModalExistenciasProducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-centered" style="z-index: 9999 !important;">
+    <div class="modal-content">
+      <div class="modal-header bg-inverse bd-inverse-darken">
+        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Aumentar existencias</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="FormExistenciaProducto">
+	      <div class="modal-body">
+	       	<div class="row">
+				   	<div class="col-md-12">
+				   		<div class="form-floating mb-3">
+								<select class="form-select" name="PresentacionesProducto" id="PresentacionesProducto" >
+								</select>
+								<label for="PresentacionesProducto">Presentación</label>
+							</div>
+							<div class="form-floating mb-3">
+								<select class="form-select" name="SucursalExistencia" id="SucursalExistencia" >
+									<option value="">- Seleccione una opción -</option>
+									#sucursales#
+								</select>
+								<label for="SucursalExistencia">Sucursal</label>
+							</div>
+							<div class="form-floating mb-3">
+								<input type="number" class="form-control" min='0' id="CantidadExistencia" name="CantidadExistencia" placeholder="Ingresa la cantidad">
+								<label for="CantidadExistencia">Cantidad</label>
+							</div>
+				   	</div>
+					</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="submit" class="btn btn-primary" id="GuardarExistenciaProducto"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+	      </div>
+  		</form>
+    </div>
+  </div>
+</div> 
 
 
 

@@ -61,6 +61,13 @@ function v_productos() {
                     }
                 });
 
+                var presentaciones = '';
+                $("#TablaPresentacionProducto tbody tr").each(function(index, el){
+                    if ($(this).find("#NombrePresentacion").val() != "") {
+                        presentaciones += $(this).find("#NombrePresentacion").val()+"~"+$(this).find("#AbreviaturaPresentacion").val()+",";
+                    }
+                });
+
 
                 var data = new FormData(document.getElementById('FormProductos'));
                 data.append('metodo', $('#GuardarProducto').attr('tipo'));
@@ -69,6 +76,7 @@ function v_productos() {
                 data.append('detalleProducto', detallesProducto);
                 data.append('impuestos', impuesto);
                 data.append('productos', productos);
+                data.append('presentaciones', presentaciones);
 
                 var btn = $('#GuardarProducto');
                 $.ajax({
@@ -119,6 +127,72 @@ function v_productos() {
             }              
         }
     });  
+
+    $('#FormExistenciaProducto').validate({
+        rules: {
+            PresentacionesProducto: {
+                required: true
+            },
+            SucursalExistencia: {
+                required: true
+            },
+            CantidadExistencia: {
+                required: true
+            },
+        },
+        messages: {
+            PresentacionesProducto: {
+                required: "La presentación del producto es obligatoria"
+            },
+            SucursalExistencia: {
+                required: "La sucursal es obligatoria"
+            },
+            CantidadExistencia: {
+                required: "La cantidad es obligatoria"
+            },
+        },
+        submitHandler: function(form) { 
+            var data = new FormData(document.getElementById('FormExistenciaProducto'));
+            data.append('metodo', "detalles");
+            data.append('accion', 'productos');
+            data.append('tipo', 'AgregarExistenciaProducto');
+            data.append('IDProducto',  $("#GuardarExistenciaProducto").attr("attrid"));
+
+            var btn = $('#GuardarExistenciaProducto');
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    $("#carga").show();
+                }
+            })
+            .done(function(res) {
+                if ($.trim(res) == "Correcto") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Existencia agregada correctamente'
+                    });
+                    $("#FormExistenciaProducto").trigger("reset");
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Error inesperado al agregar existencia.'
+                    });
+                    console.log($.trim(res));
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            })
+            .always(function() {
+                $("#carga").hide();
+            });    
+        }              
+    });  
   
 }
 
@@ -154,6 +228,7 @@ jQuery(document).ready(function($) {
         $("#FormProductos").trigger('reset');
         $("#TituloModalProductos").text("Agregar nuevo");
         $('#tbodyDetallesProducto').html('');
+        $("#TablaPresentacionProducto tbody").html("");
         $('#verImagenProducto').html('<img src="vistas/assets/archivos/fotosProductos/default.jpg" style="width: 250px; height: 170px; cursor:pointer;border-radius:4px;border:2px solid grey;" class="img-thumbnail"><br>');
         $('#PreciosSucursal').show();
         JsBarcode("#CodigoB", "CODIGO");
@@ -161,6 +236,10 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('click', '#EliminarPrecio', function() {
+        $(this).parent().parent().remove();
+    });
+
+    $(document).on('click', '#EliminarPresentacion', function() {
         $(this).parent().parent().remove();
     });
 
@@ -197,6 +276,46 @@ jQuery(document).ready(function($) {
             console.log("Error ajax");
         }); 
     });
+
+    $(document).on('click', '#AgregarPresentacionProducto', function() {
+        /*var UltimoNombre = $("#TablaPresentacionProducto tbody").find("tr:eq(0)").html();
+        console.log(UltimoNombre);*/
+        var tabla = `\
+            <tr>
+                <td>
+                    <input type="text" class="form-control" id="NombrePresentacion" name="NombrePresentacion" placeholder="Ingresa el nombre de la presentación">
+                </td>
+                <td>
+                    <input type="text" class="form-control" id="AbreviaturaPresentacion" name="AbreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación">
+                </td>
+                <td><button class="btn btn-sm btn-danger" id="EliminarPresentacion"><i class="fas fa-trash"></i></button></td>
+            </tr>`;
+        $("#TablaPresentacionProducto tbody").append(tabla);
+    });
+
+
+    /*$(document).on('click', '#AgregarExistenciaProducto', function() {
+        if ($("#TablaPresentacionProducto tbody tr").length > 0) {
+            /*var tabla = `\
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" id="NombrePresentacion" name="NombrePresentacion" placeholder="Ingresa el nombre de la presentación">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" id="AbreviaturaPresentacion" name="AbreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación">
+                    </td>
+                    <td><button class="btn btn-sm btn-danger" id="EliminarPresentacion"><i class="fas fa-trash"></i></button></td>
+                </tr>`;
+            $("#TablaPresentacionProducto tbody").append(tabla);
+            console.log("entro");
+        }else{
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Tienes que ingresar al menos una presentación.'
+            });
+        }
+    });*/
 
     $(document).on('click', '#EliminarProducto', function() {
         var boton = $(this);
@@ -304,6 +423,7 @@ jQuery(document).ready(function($) {
     $(document).on('click', '#ModificarProducto', function() {
         var id = $(this).attr('attrid');
         $("#TablaPreciosProductos tbody").html("");
+        $("#TablaPresentacionProducto tbody").html("");
         var data = "metodo=detalles&accion=productos&tipo=modificarProducto&IDProducto="+id;
         $.ajax({
             url: 'index.php',
@@ -361,21 +481,61 @@ jQuery(document).ready(function($) {
                     $("#TablaPreciosProductos tbody").append(tabla);
                 }
             }
+
+            if (datos.Presentaciones != null && datos.Presentaciones.length > 0) {
+                for (var i = 0; i < datos.Presentaciones.length; i++) {
+                    var Abreviatura = datos.Presentaciones[i].Abreviatura;
+                    var Nombre = datos.Presentaciones[i].Nombre;
+
+                    var tabla = `\
+                        <tr>
+                            <td>
+                                <input type="text" class="form-control" value="`+Nombre+`" id="NombrePresentacion" name="NombrePresentacion" placeholder="Ingresa el nombre de la presentación">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" value="`+Abreviatura+`" id="AbreviaturaPresentacion" name="AbreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación">
+                            </td>
+                            <td><button class="btn btn-sm btn-danger" id="EliminarPresentacion"><i class="fas fa-trash"></i></button></td>
+                        </tr>`;
+                    $("#TablaPresentacionProducto tbody").append(tabla);
+                }
+            }
             $('#ModalProductos').modal('show');
         })
         .fail(function() {
             console.log("Error ajax");
         });
     });
+
+    $(document).on('click', '#AumentarExistencias', function() {
+        var id = $(this).attr('attrid');
+        var data = "metodo=detalles&accion=productos&tipo=ConsultarPresentacionesExistencia&IDProducto="+id;
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            data: data
+        })
+        .done(function(res) {
+            $("#PresentacionesProducto").html(res);
+            $("#GuardarExistenciaProducto").attr("attrid", id);
+            $('#ModalExistenciasProducto').modal('show');
+        })
+        .fail(function() {
+            console.log("Error ajax");
+        });
+    });
+
+    $(document).on('click', '#verImagenProducto', function () {
+        $("#ImagenProducto").trigger("click");
+    });
+
+    $(document).on('change', '#ImagenProducto', function() {
+        readURL(this, $("#verImagenProducto"));
+    });
+
 });
 
-$(document).on('click', '#verImagenProducto', function () {
-    $("#ImagenProducto").trigger("click");
-});
 
-$(document).on('change', '#ImagenProducto', function() {
-    readURL(this, $("#verImagenProducto"));
-});
 
 function readURL(input,ima) {
     if (input.files && input.files[0]) {
