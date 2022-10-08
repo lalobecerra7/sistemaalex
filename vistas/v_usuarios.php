@@ -405,7 +405,7 @@
                                                 <td>Agregar</td>
                                                 <td>Modificar</td>
                                                 <td>Eliminar</td>
-                                                <td>Actualizar precios</td>
+                                                <td>Agregar existencias</td>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -448,8 +448,20 @@
                                                 <td>Registrar merma</td>
                                                 <td>Registrar traslados</td>
                                                 <td>Ver merma</td>
+                                                <td>Ver conversiones</td>
+                                                <td>Registrar conversiones</td>
                                             </tr>
                                             <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <div>
                                                         <input class="form-check-input checkPermisos" type="checkbox">
@@ -475,7 +487,7 @@
                                     </table>
                                 </td>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_cajas">Cajas</th>
                                 <td class="table-responsive">
                                     <table class="table table-bordered text-center" width="100%">
@@ -548,8 +560,8 @@
                                         </tbody>
                                     </table>
                                 </td>
-                            </tr>
-                            <tr>
+                            </tr> -->
+                            <!-- <tr>
                                 <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_tickets">Configuracion del ticket</th>
                                 <td class="table-responsive">
                                     <table class="table table-bordered text-center" width="100%">
@@ -586,7 +598,7 @@
                                         </tbody>
                                     </table>
                                 </td>
-                            </tr>
+                            </tr> -->
                             <tr>
                                 <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_usuarios">Usuarios</th>
                                 <td class="table-responsive">

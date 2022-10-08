@@ -108,12 +108,12 @@ class productos {
 						$botonPermisosEliminar = $EliminarProducto;
 					}
 
-					$botonPermisosPreciosSucursal = "";
-					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_productos'][5] == '1') {
-						$botonPermisosPreciosSucursal = '<button class="btn btn-warning btn-sm mb-1" id="EditarPrecios" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-plus"></i></button>';
-					}
 					$botonAumentarExistencias = '';
-					$botonAumentarExistencias = '<button class="btn btn-warning btn-sm mb-1" id="AumentarExistencias" title="Aumentar existencias" attrid="'.$row[$i]['ID_Producto'].'"><i class="fas fa-plus"></i></button>';
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_productos'][5] == '1') {
+						$botonAumentarExistencias = '<button class="btn btn-warning btn-sm mb-1" id="AumentarExistencias" title="Aumentar existencias" attrid="'.$row[$i]['ID_Producto'].'"><i class="fas fa-plus"></i></button>';
+					}
+					
+					
 					
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Producto'],
@@ -780,7 +780,7 @@ class productos {
 				echo $opciones;
 			}
 		}else if($tipo == 'AgregarExistenciaProducto'){
-			$query = "SELECT * FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalExistencia'";
+			$query = "SELECT * FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalExistencia' AND FK_Presentacion = '$PresentacionesProducto'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			if ($row == "si") {

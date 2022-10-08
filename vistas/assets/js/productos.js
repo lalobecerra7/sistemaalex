@@ -508,6 +508,9 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('click', '#AumentarExistencias', function() {
+        $("#PresentacionesProducto").html("");
+        $("#GuardarExistenciaProducto").attr("attrid", "");
+        $("#FormExistenciaProducto").trigger("reset");
         var id = $(this).attr('attrid');
         var data = "metodo=detalles&accion=productos&tipo=ConsultarPresentacionesExistencia&IDProducto="+id;
         $.ajax({

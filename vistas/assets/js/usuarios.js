@@ -250,13 +250,13 @@ jQuery(document).ready(function($) {
         }else{
             setTimeout(function() {     
                 var separa = botonPerP.attr('cadena').split("~");
-                console.log(separa);
+                console.log(separa[(separa.length-1)]);
                 
-                if(separa[(separa.length-1)] == "Capturista"){
+                if($.trim(separa[(separa.length-1)]) == "Capturista"){
                     $("#perfil1").prop('checked', true);
-                }else if(separa[(separa.length-1)] == "Vendedor"){
+                }else if($.trim(separa[(separa.length-1)]) == "Vendedor"){
                     $("#perfil2").prop('checked', true)
-                }else if(separa[(separa.length-1)] == "Supervisor"){
+                }else if($.trim(separa[(separa.length-1)]) == "Supervisor"){
                     $("#perfil3").prop('checked', true)
                 }else{
                     $("#perfil1").prop('checked', false);
@@ -289,16 +289,16 @@ jQuery(document).ready(function($) {
             setTimeout(function() {
                 if(btn.attr('id') == "perfil1"){
                     perfil = "Capturista";
-                    cadena = "v_sucursales,1,1,1,0~v_proveedores,1,1,1,0~v_clientes,1,1,1,0~v_areas,1,1,1,0~v_categorias,1,1,1,0~v_productos,1,1,1,0,0~v_inventario,1,1,1,0~v_cajas,1,1,0,0~v_impuestos,1,1,0,0~v_tickets,0~v_general,0~v_usuarios,1,1,1,0,0~Capturista";
+                    cadena = "v_sucursales,1,1,1,0~v_proveedores,1,1,1,0~v_clientes,1,1,1,0~v_areas,1,1,1,0~v_categorias,1,1,1,0~v_productos,1,1,1,0,0~v_inventario,1,1,1,0~v_cajas,1,1,0,0~v_impuestos,1,1,0,0~v_tickets,0~v_general,0~v_usuarios,1,1,1,0,0~";
                 }else if(btn.attr('id') == "perfil2"){
-                    cadena = "v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,1,0,0,0~v_areas,0,0,0,0~v_categorias,0,0,0,0~v_productos,1,0,0,0,0~v_inventario,1,0,0,0~v_cajas,1,0,0,0~v_impuestos,1,1,1,1~v_tickets,1~v_general,1~v_usuarios,0,0,0,0,0~Vendedor";
+                    cadena = "v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,1,0,0,0~v_areas,0,0,0,0~v_categorias,0,0,0,0~v_productos,1,0,0,0,0~v_inventario,1,0,0,0~v_cajas,1,0,0,0~v_impuestos,1,1,1,1~v_tickets,1~v_general,1~v_usuarios,0,0,0,0,0~";
                     perfil = "Vendedor";
                 }else if(btn.attr('id') == "perfil3"){
-                    cadena = "v_sucursales,1,1,1,1~v_proveedores,1,1,1,1~v_clientes,1,1,1,1~v_areas,1,1,1,1~v_categorias,1,1,1,1~v_productos,1,1,1,1,1~v_inventario,1,1,1,1~v_cajas,1,1,1,1~v_impuestos,1,1,1,1~v_tickets,1~v_general,1~v_usuarios,1,1,1,0,1~Supervisor";
+                    cadena = "v_sucursales,1,1,1,1~v_proveedores,1,1,1,1~v_clientes,1,1,1,1~v_areas,1,1,1,1~v_categorias,1,1,1,1~v_productos,1,1,1,1,1~v_inventario,1,1,1,1~v_cajas,1,1,1,1~v_impuestos,1,1,1,1~v_tickets,1~v_general,1~v_usuarios,1,1,1,0,1~";
                     perfil = "Supervisor";
                 }
 
-                var separa = cadena.split("~");
+                var separa = $.trim(cadena).split("~");
 
                 for (var i = 0; i < (separa.length-1); i++) {
                     var modulos = separa[i].split(",");
@@ -356,7 +356,7 @@ jQuery(document).ready(function($) {
         }).then((result) => {
             if (result.value) {
                 //Cada que se agreguen o modifiquen permisos modificar esta cadena
-                var cadena = 'v_sucursales,0,0,0,0~v_proveedores,0,0,0,0~v_clientes,0,0,0,0~v_areas,0,0,0,0~v_categorias,0,0,0,0~v_productos,0,0,0,0,0~v_inventario,0,0,0,0~v_cajas,0,0,0,0~v_impuestos,0,0,0,0~v_tickets,0~v_general,0~v_usuarios,0,0,0,0,0~';
+                var cadena = 'v_sucursales,0,0,0,0~v_proveedores,0,0,0,0~v_clientes,0,0,0,0~v_areas,0,0,0,0~v_categorias,0,0,0,0~v_productos,0,0,0,0,0~v_inventario,0,0,0,0~v_usuarios,0,0,0,0,0~';
                 var data = "metodo=detalles&accion=usuarios&tipo=ModificarPermisos&id="+boton.attr('attrid')+"&cadena="+cadena;
 
                 $.ajax({
