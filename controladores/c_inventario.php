@@ -73,29 +73,10 @@ class inventario {
 						}	
 					}
 
-					$totalPrecio = '';
-					$totalCosto = '';
-					$queryTotales = "SELECT SUM(inventario.Cantidad * Precio) AS TotalPrecio, SUM(inventario.Cantidad * Costo) AS TotalCosto FROM productos, inventario WHERE ID_Producto = '".$row[$i]["ID_Producto"]."'";
-					$rowTotales = $omodelo->_consultar($queryTotales);
-					$numerofilasTotales = $omodelo->numerofilas; 
-
-					if ($rowTotales == "si") {
-						echo "Error: ".mysqli_error($omodelo->link);
-					}else{
-						if($numerofilasTotales > 0){
-							if ($rowTotales[0]["TotalPrecio"] == "") {
-								$rowTotales[0]["TotalPrecio"] = 0;
-							}
-							if ($rowTotales[0]["TotalCosto"] == "") {
-								$rowTotales[0]["TotalCosto"] = 0;
-							}
-							$totalPrecio = '<b class="dinero">$'.number_format($rowTotales[0]["TotalPrecio"], 2).'</b>';
-							$totalCosto = '<b class="dinero">$'.number_format($rowTotales[0]["TotalCosto"], 2).'</b>';
-						}
-					}
+					
 
 					$sucursales="";
-					$querySucursales="SELECT sucursales.Nombre AS 'Sucursal', Cantidad FROM inventario INNER JOIN sucursales ON  FK_Sucursal=sucursales.ID_Sucursal WHERE FK_Producto ='".$row[$i]["ID_Producto"]."'";
+					$querySucursales="SELECT ID_Sucursal, sucursales.Nombre AS 'Sucursal', SUM(Cantidad) AS Cantidad FROM inventario INNER JOIN sucursales ON  FK_Sucursal=sucursales.ID_Sucursal WHERE FK_Producto ='".$row[$i]["ID_Producto"]."' GROUP BY ID_Sucursal";
 					$rowSucursales = $omodelo->_consultar($querySucursales);
 					$numerofilasSucursales = $omodelo->numerofilas; 
 					
@@ -104,58 +85,41 @@ class inventario {
 					}else{
 						if($numerofilasSucursales > 0){
 							for($a=0; $a<$numerofilasSucursales; $a++){
-								$sucursales.= $rowSucursales[$a]["Sucursal"].": ".$rowSucursales[$a]["Cantidad"]."\n";
+								$sucursales.= "<button class='btn btn-sm mt-2 btn-outline-dark' id='verDistribucionSucursal' attrid='".$rowSucursales[$a]["ID_Sucursal"]."' nombreProducto='".$row[$i]['Descripcion']."' nombre='".$rowSucursales[$a]["Sucursal"]."' producto='".$row[$i]['ID_Producto']."'>".$rowSucursales[$a]["Sucursal"].": ".$rowSucursales[$a]["Cantidad"]."</button><br>";
 							}	
 						 }
 					}
-					
-					$precios="";
-					$costos="";
-					$queryPrecios="SELECT sucursales.Nombre AS Sucursal, Precio, Costo FROM detalles_productos INNER JOIN sucursales ON FK_Sucursal = sucursales.ID_Sucursal WHERE FK_Producto ='".$row[$i]["ID_Producto"]."'";
-					$rowPrecios = $omodelo->_consultar($queryPrecios);
-					$numerofilasPrecios = $omodelo->numerofilas; 
-					
-					if ($rowPrecios == "si") {
-						echo "Error: ".mysqli_error($omodelo->link);
-					}else{
-						if($numerofilasPrecios > 0){
-							for($j=0; $j<$numerofilasPrecios; $j++){
-								$precios.= $rowPrecios[$j]["Sucursal"].": <b>$".number_format($rowPrecios[$j]["Precio"],2)."</b><br>";
-								$costos.= $rowPrecios[$j]["Sucursal"].": <b>$".number_format($rowPrecios[$j]["Costo"],2)."</b><br>";
-							}	
-						}
-					}
 
-					$preciosTotales="";
-					$costosTotales="";
-					$queryPreciosTotales="SELECT sucursales.Nombre AS Sucursal, SUM(inventario.Cantidad * detalles_productos.Precio) AS TotalPrecioSucursal, SUM(inventario.Cantidad * detalles_productos.Costo) AS TotalCostoSucursal FROM detalles_productos INNER JOIN inventario ON inventario.FK_Producto = '".$row[$i]["ID_Producto"]."' INNER JOIN sucursales ON detalles_productos.FK_Sucursal = sucursales.ID_Sucursal WHERE detalles_productos.FK_Producto = '".$row[$i]["ID_Producto"]."'";
-					$rowPreciosTotales = $omodelo->_consultar($queryPreciosTotales);
-					$numerofilasPreciosTotales = $omodelo->numerofilas; 
-					
-					if ($rowPreciosTotales == "si") {
-						echo "Error: ".mysqli_error($omodelo->link);
-					}else{
-						if($numerofilasPreciosTotales > 0){
-							for($j=0; $j<$numerofilasPreciosTotales; $j++){
-								if($rowPreciosTotales[$j]["Sucursal"] == '' || $rowPreciosTotales[$j]["Sucursal"] == null){
-									$preciosTotales=" ";
-									$costosTotales=" ";
-								}else {
-									$preciosTotales.= $rowPreciosTotales[$j]["Sucursal"].": <b>$".number_format($rowPreciosTotales[$j]["TotalPrecioSucursal"],2)."</b><br>";
-									$costosTotales.= $rowPreciosTotales[$j]["Sucursal"].": <b>$".number_format($rowPreciosTotales[$j]["TotalCostoSucursal"],2)."</b><br>";
+					$conversiones = "<button class='btn btn-sm mt-2 btn-outline-primary' id='VerConversionesProducto' nombreProducto='".$row[$i]['Descripcion']."'  producto='".$row[$i]['ID_Producto']."'>Conversiones</button>";
+
+					$precios = '';
+					$queryZona = "SELECT ID_Zona, Nombre FROM zona";
+					$rowZona = $omodelo->_consultar($queryZona);
+					$numerofilasZona = $omodelo->numerofilas;
+					if ($numerofilasZona > 0) {
+						for ($a=0; $a < $numerofilasZona; $a++) { 
+							$queryPrecios = "SELECT ID_Precio, FK_Producto, FK_Zona, Nombre, Precio, Precio_Mayoreo FROM precios WHERE FK_Producto = '".$row[$i]['ID_Producto']."' AND FK_Zona = '".$rowZona[$a]["ID_Zona"]."'";
+							$rowPrecios = $omodelo->_consultar($queryPrecios);
+							$numerofilasPrecios = $omodelo->numerofilas;
+							if ($numerofilasPrecios > 0) {
+								$precios .= "Zona: ".$rowZona[$a]["Nombre"]."<br>";
+								for ($x=0; $x < $numerofilasPrecios; $x++) { 
+									$precios .= $rowPrecios[$x]["Nombre"].": <b>$".number_format($rowPrecios[$x]["Precio"], 2)."</b><br>";
 								}
 							}	
 						}
 					}
 
+					
+					
 					$botonPermisosAgregarMerma = "";
 					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][2] == '1') {
-						$botonPermisosAgregarMerma = '<button class="btn btn-warning btn-sm mb-1" id="AgregarMerma" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fas fa-level-down"></i></button>';
+						$botonPermisosAgregarMerma = '<button class="btn btn-warning btn-sm mb-1" id="AgregarMerma" title="Registrar merma" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fas fa-level-down"></i></button>';
 					}
 
 					$botonPermisosTraslados = "";
 					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][3] == '1') {
-						$botonPermisosTraslados = '<button class="btn btn-primary btn-sm mb-1" id="Traslados" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-right-left"></i></button>';
+						$botonPermisosTraslados = '<button class="btn btn-primary btn-sm mb-1" id="Traslados" title="Traslado de producto" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-right-left"></i></button>';
 					}
 
 					$botonPermisosVerMerma = "";
@@ -163,17 +127,23 @@ class inventario {
 						$botonPermisosVerMerma = '<br><button type="button" class="btn btn-link btn-sm verDetallesMerma" nombre="'.$row[$i]["Descripcion"].'" attrid="'.$row[$i]["ID_Producto"].'" title="Detalles de la merma Merma">Ver detalles <i class="fas fa-eye"></i></button>';
 					}
 
+					$botonPermisosVerConversiones = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][5] == '1') {
+						$botonPermisosVerConversiones = $conversiones;
+					}
+
+					$botonConversion = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][6] == '1') {
+						$botonConversion = '<button class="btn btn-success btn-sm mb-1" id="ConvertirProducto" title="Convertir producto" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-boxes-stacked"></i></button>';
+					}
+
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Producto'],
-						'Producto' => $foto."<b>".$row[$i]['Codigo']."</b>",
-						'Descripcion' => $row[$i]['Descripcion'],
-						'Costo' => 'General: <b class="dinero">$'.number_format($row[$i]['Costo'], 2).'</b><br>'.$costos,
-						'TotalCosto' => 'General: '.$totalCosto.'<br>'.$costosTotales,
-						'Precio' => 'General: <b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b><br>'.$precios,
-						'TotalPrecio' => 'General: '.$totalPrecio.'<br>'.$preciosTotales,
+						'Descripcion' => $foto.$row[$i]['Descripcion']."<br> Codigo: <b>".$row[$i]['Codigo']."</b>",
+						'Distribucion' => 'Existencia: <b>'.$row[$i]['Cantidad'].'</b><br>'.$sucursales.$botonPermisosVerConversiones,
+						'Precios' => 'General: <b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b><br>'.$precios,
 						'Merma' => $Merma.$botonPermisosVerMerma,
-						'Detalles' => 'Existencia: <b>'.$row[$i]['Cantidad'].'</b><br>'.$sucursales,
-						'Acciones' => $botonPermisosAgregarMerma.' '.$botonPermisosTraslados,
+						'Acciones' => $botonPermisosAgregarMerma.' '.$botonPermisosTraslados." ".$botonConversion,
 					);
 					
 				}
@@ -198,7 +168,7 @@ class inventario {
 			$Usuario = $_SESSION['user_admin']['ID_Usuario'];
 			$existencia= '';
 			$Costo = '';
-			$query2 = "SELECT Cantidad, (SELECT Costo FROM detalles_Productos WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$Sucursal') AS Costo, productos.Costo AS CostoGral FROM inventario INNER JOIN productos ON ID_Producto = '$IDProducto' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$Sucursal'";
+			$query2 = "SELECT Cantidad, (SELECT Costo FROM detalles_Productos WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma') AS Costo, productos.Costo AS CostoGral FROM inventario INNER JOIN productos ON ID_Producto = '$IDProducto' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma' AND FK_Presentacion = '$PresentacionProductoMerma'";
 			$row = $omodelo->_consultar($query2);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -218,14 +188,14 @@ class inventario {
 					}
 					$existenciaM = ($existencia-$CantidadMerma);
 				
-					$query = "INSERT INTO merma SET FK_Sucursal = '$Sucursal', FK_Producto = '$IDProducto', Cantidad = '$CantidadMerma', Motivo = '$MotivoMerma', Fecha_Registro = '$fecha', Fecha_Merma = '$FechaMerma', FK_Usuario = '$Usuario'";
+					$query = "INSERT INTO merma SET FK_Sucursal = '$SucursalMerma', FK_Producto = '$IDProducto', FK_Presentacion = '$PresentacionProductoMerma', Cantidad = '$CantidadMerma', Motivo = '$MotivoMerma', Fecha_Registro = '$fecha', Fecha_Merma = '$FechaMerma', FK_Usuario = '$Usuario'";
 					$error = $omodelo->_insertar($query);
 			
 					if ($error == "si") {
 						echo "Error 1: ".mysqli_error($omodelo->link);
 					}else{
 						$IDMerma = mysqli_insert_id($omodelo->link);
-						$query3 = "UPDATE inventario SET Cantidad = '$existenciaM' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$Sucursal'";
+						$query3 = "UPDATE inventario SET Cantidad = '$existenciaM' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma'";
 						$error3 = $omodelo->_insertar($query3);
 					
 						if ($error3 == "si") {
@@ -273,37 +243,23 @@ class inventario {
 			$IDProducto = $omodelo->link->real_escape_string($IDProducto);
 			$FechaTraslado = $omodelo->link->real_escape_string($FechaTraslado);
 			$SucursalOrigen = $omodelo->link->real_escape_string($SucursalOrigen);
+			$Presentacion = $omodelo->link->real_escape_string($Presentacion);
 			$SucursalDestino = $omodelo->link->real_escape_string($SucursalDestino);
 			$Cantidad = $omodelo->link->real_escape_string($Cantidad);
+
+			$querycomprobar = "SELECT Cantidad FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalOrigen' AND FK_Presentacion = '$Presentacion'";
+			$rowcomprobar = $omodelo->_consultar($querycomprobar);
+			$numerofilascomprobar = $omodelo->numerofilas;
+			if ($numerofilascomprobar > 0) {
+				if ($rowcomprobar[0]["Cantidad"] >= $Cantidad) {
+					$query = "INSERT INTO traslados SET Fecha_Registro = '$fecha', Fecha_Traslado = '$FechaTraslado', FK_Producto = '$IDProducto', FK_Presentacion = '$Presentacion',  FK_Sucursal_Origen = '$SucursalOrigen', Cantidad = '$Cantidad', FK_Sucursal_Destino = '$SucursalDestino', FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
+					$error = $omodelo->_insertar($query);
 			
-			$query = "INSERT INTO traslados SET Fecha_Registro = '$fecha', Fecha_Traslado = '$FechaTraslado', FK_Producto = '$IDProducto', FK_Sucursal_Origen = '$SucursalOrigen', Cantidad = '$Cantidad', FK_Sucursal_Destino = '$SucursalDestino', FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
-			$error = $omodelo->_insertar($query);
-	
-			if ($error == "si") {
-				echo "Error 1: ".mysqli_error($omodelo->link);
-			}else{
-				$query2 = "SELECT Cantidad FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalOrigen'";
-				$row = $omodelo->_consultar($query2);
-				$numerofilas = $omodelo->numerofilas;
-
-				if($row == 'si'){
-					echo "Error: ".mysqli_error($omodelo->link);
-				}else{
-					if($numerofilas > 0){
-						for($i=0; $i<$numerofilas; $i++){
-							$cantidadPrevia = $row[$i]["Cantidad"];
-						}
-					}
-					$cantidadNueva = ($cantidadPrevia-$Cantidad);
-
-					$query3 = "UPDATE inventario SET Cantidad = '$cantidadNueva' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalOrigen' ";
-					$error3 = $omodelo->_insertar($query3);
-				
-					if ($error3 == "si") {
+					if ($error == "si") {
 						echo "Error 1: ".mysqli_error($omodelo->link);
 					}else{
-						$query4 = "SELECT Cantidad FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalDestino'";
-						$row = $omodelo->_consultar($query4);
+						$query2 = "SELECT Cantidad FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalOrigen' AND FK_Presentacion = '$Presentacion'";
+						$row = $omodelo->_consultar($query2);
 						$numerofilas = $omodelo->numerofilas;
 
 						if($row == 'si'){
@@ -313,32 +269,129 @@ class inventario {
 								for($i=0; $i<$numerofilas; $i++){
 									$cantidadPrevia = $row[$i]["Cantidad"];
 								}
-								$cantidadNueva = ($cantidadPrevia+$Cantidad);
+							}
+							$cantidadNueva = ($cantidadPrevia-$Cantidad);
 
-								$query5 = "UPDATE inventario SET Cantidad = '$cantidadNueva' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalDestino' ";
-								$error5 = $omodelo->_insertar($query5);
-							
-								if ($error5 == "si") {
-									echo "Error 1: ".mysqli_error($omodelo->link);
+							$query3 = "UPDATE inventario SET Cantidad = '$cantidadNueva' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalOrigen' AND FK_Presentacion = '$Presentacion'";
+							$error3 = $omodelo->_insertar($query3);
+						
+							if ($error3 == "si") {
+								echo "Error 1: ".mysqli_error($omodelo->link);
+							}else{
+								$query4 = "SELECT Cantidad FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalDestino' AND FK_Presentacion = '$Presentacion'";
+								$row = $omodelo->_consultar($query4);
+								$numerofilas = $omodelo->numerofilas;
+
+								if($row == 'si'){
+									echo "Error: ".mysqli_error($omodelo->link);
 								}else{
-									//$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
-									echo "Correcto";
-								}
-							}else {
-								$query6 = "INSERT INTO inventario SET Cantidad = '$Cantidad', FK_Producto = '$IDProducto', FK_Sucursal = '$SucursalDestino' ";
-								$error6 = $omodelo->_insertar($query6);
-							
-								if ($error6 == "si") {
-									echo "Error 1: ".mysqli_error($omodelo->link);
-								}else{
-									//$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
-									echo "Correcto";
+									if($numerofilas > 0){
+										for($i=0; $i<$numerofilas; $i++){
+											$cantidadPrevia = $row[$i]["Cantidad"];
+										}
+										$cantidadNueva = ($cantidadPrevia+$Cantidad);
+
+										$query5 = "UPDATE inventario SET Cantidad = '$cantidadNueva' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalDestino' AND FK_Presentacion = '$Presentacion'";
+										$error5 = $omodelo->_insertar($query5);
+									
+										if ($error5 == "si") {
+											echo "Error 1: ".mysqli_error($omodelo->link);
+										}else{
+											//$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+											echo "Correcto";
+										}
+									}else {
+										$query6 = "INSERT INTO inventario SET Cantidad = '$Cantidad', FK_Producto = '$IDProducto', FK_Sucursal = '$SucursalDestino', FK_Presentacion = '$Presentacion'";
+										$error6 = $omodelo->_insertar($query6);
+									
+										if ($error6 == "si") {
+											echo "Error 1: ".mysqli_error($omodelo->link);
+										}else{
+											//$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+											echo "Correcto";
+										}
+									}
+									
 								}
 							}
-							
+						}
+					}
+				}else{
+					echo "ErrorExistencia";
+				}
+			}
+		}else if($tipo == "GuardarConversion"){
+			$fecha = date('Y-m-d H:i:s'); 
+			$IDProducto = $omodelo->link->real_escape_string($IDProducto);
+			$SucursalOrigen = $omodelo->link->real_escape_string($SucursalOrigen);
+			$Origen = $omodelo->link->real_escape_string($Origen);
+			$CantidadOrigen = $omodelo->link->real_escape_string($CantidadOrigen);
+			$SucursalDestino = $omodelo->link->real_escape_string($SucursalDestino);
+			$Destino = $omodelo->link->real_escape_string($Destino);
+			$CantidadDestino = $omodelo->link->real_escape_string($CantidadDestino);
+			$CantidadTotalInventario = 0;
+			$query4 = "SELECT SUM(Cantidad) AS Total FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalOrigen' AND FK_Presentacion = '$Origen'";
+			$row = $omodelo->_consultar($query4);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					$CantidadTotalInventario = $row[0]["Total"];
+				}
+			}
+
+			if ($CantidadTotalInventario >= $CantidadOrigen) {
+				$query = "INSERT INTO conversiones SET FK_Producto = '$IDProducto', FK_Sucursal_Origen = '$SucursalOrigen', FK_Sucursal_Destino = '$SucursalDestino', FK_Presentacion_Origen = '$Origen', Cantidad_Origen = '$CantidadOrigen', FK_Presentacion_Destino= '$Destino', Cantidad_Destino = '$CantidadDestino', Fecha_Registro = '$fecha', FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
+				$error = $omodelo->_insertar($query);
+		
+				if ($error == "si") {
+					echo "Error: ".mysqli_error($omodelo->link);
+				}else{
+				 	echo "Correcto";
+
+				 	$querydestino = "SELECT * FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalDestino' AND FK_Presentacion = '$Destino'";
+					$rowdestino = $omodelo->_consultar($querydestino);
+					$numerofilasdestino = $omodelo->numerofilas;
+
+					if($rowdestino == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasdestino > 0){
+							$query = "UPDATE inventario SET Cantidad = (Cantidad - '$CantidadOrigen') WHERE FK_Producto = '$IDProducto' AND FK_Presentacion = '$Origen' AND FK_Sucursal= '$SucursalOrigen';";
+							$error = $omodelo->_insertar($query);
+					
+							if ($error == "si") {
+								echo "Error 1: ".mysqli_error($omodelo->link);
+							}
+
+							$query2 = "UPDATE inventario SET Cantidad = (Cantidad + '$CantidadDestino') WHERE FK_Producto = '$IDProducto' AND FK_Presentacion = '$Destino' AND FK_Sucursal= '$SucursalDestino';";
+							$error2 = $omodelo->_insertar($query2);
+					
+							if ($error2 == "si") {
+								echo "Error 2: ".mysqli_error($omodelo->link);
+							}
+						}else{
+							$query = "UPDATE inventario SET Cantidad = (Cantidad - '$CantidadOrigen') WHERE FK_Producto = '$IDProducto' AND FK_Presentacion = '$Origen' AND FK_Sucursal= '$SucursalOrigen';";
+							$error = $omodelo->_insertar($query);
+					
+							if ($error == "si") {
+								echo "Error 1: ".mysqli_error($omodelo->link);
+							}
+
+							$query2 = "INSERT INTO inventario SET Cantidad = '$CantidadDestino', FK_Producto = '$IDProducto', FK_Presentacion = '$Destino', FK_Sucursal= '$SucursalDestino';";
+							$error2 = $omodelo->_insertar($query2);
+					
+							if ($error2 == "si") {
+								echo "Error 2: ".mysqli_error($omodelo->link);
+							}
+
 						}
 					}
 				}
+			}else{
+				echo "ErrorExistencia";
 			}
 		}
 	}
@@ -352,183 +405,382 @@ class inventario {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		if ($tipo == 'merma'){
-
-				$IDProducto = $omodelo->link->real_escape_string($id);
-				$buscar =  $omodelo->link->real_escape_string($buscar);
-				$limit =  $omodelo->link->real_escape_string($limit);
-				$pagina =  $omodelo->link->real_escape_string($pagina);
-				$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
-				$orden =  $omodelo->link->real_escape_string($orden);
-				$arreglo = array();
+			$IDProducto = $omodelo->link->real_escape_string($id);
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
 		
-				$busqueda = '';
-				if(trim($buscar) != ''){
-					$separa = explode(' ', trim($buscar));
-					$busqueda = 'AND ';
-					for ($i=0; $i < count($separa); $i++) { 
-						$busqueda .= "CONCAT(ID_Producto, sucursales.Nombre, merma.Cantidad, merma.Costo, DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r'), Motivo) REGEXP '".$separa[$i]."'";
-						if($i < (count($separa)-1)){
-							$busqueda .= ' AND ';
-						}
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(ID_Producto, sucursales.Nombre, presentaciones.Nombre, merma.Cantidad, merma.Costo, DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r'), Motivo) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
 					}
 				}
+			}
 		
-				$query = "SELECT ID_Merma, merma.FK_Producto AS 'ID_Producto', sucursales.Nombre AS 'Sucursal', merma.Cantidad, (merma.Cantidad*merma.Costo) AS 'Costo', 
-				DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r') AS Fecha_Merma, Motivo, (SELECT COUNT(DISTINCT(FK_Producto)) FROM merma) AS 'Num', Foto FROM `merma` INNER JOIN sucursales 
+			$query = "SELECT ID_Merma, merma.FK_Producto AS 'ID_Producto', sucursales.Nombre AS 'Sucursal', merma.Cantidad, presentaciones.Nombre AS NombrePresentacion, (merma.Cantidad*merma.Costo) AS 'Costo', 
+				DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r') AS Fecha_Merma, Motivo, (SELECT COUNT(DISTINCT(merma.FK_Producto)) FROM merma) AS 'Num', Foto FROM `merma` INNER JOIN sucursales 
 				ON sucursales.ID_Sucursal=merma.FK_Sucursal INNER JOIN productos 
-				ON productos.ID_Producto=merma.FK_Producto WHERE FK_Producto='$IDProducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
-				$row = $omodelo->_consultar($query);
-				$numerofilas = $omodelo->numerofilas;
+				ON productos.ID_Producto=merma.FK_Producto INNER JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE merma.FK_Producto='$IDProducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
 	
-				if($row == 'si'){
-					echo "Error: ".mysqli_error($omodelo->link);
-				}else{
-					if($numerofilas > 0){
-						for($i=0; $i<$numerofilas; $i++){
-
-							$foto = '<a href="vistas/assets/archivos/defaultImagen.jpg" data-fancybox="images">
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						$foto = '<a href="vistas/assets/archivos/defaultImagen.jpg" data-fancybox="images">
 									<div style="background-image: url('."'".'vistas/assets/archivos/defaultImagen.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
 									</div>
 								</a><br>';
-							if ($row[$i]["Foto"] != "") {
-								if($row[$i]["Foto"] != "" && file_exists("vistas/assets/archivos/fotosMerma/".$row[$i]["Foto"])){
-									$foto = '<a href="vistas/assets/archivos/fotosMerma/'.$row[$i]["Foto"].'" data-fancybox="images">
+						if ($row[$i]["Foto"] != "") {
+							if($row[$i]["Foto"] != "" && file_exists("vistas/assets/archivos/fotosMerma/".$row[$i]["Foto"])){
+								$foto = '<a href="vistas/assets/archivos/fotosMerma/'.$row[$i]["Foto"].'" data-fancybox="images">
 											<div style="background-image: url('."'".'vistas/assets/archivos/fotosMerma/'.$row[$i]["Foto"]."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
 											</div>
 										</a><br>';
-								}	
-							}
-
-
-							$arreglo['data'][$i] = array(
-								'ID' => $row[$i]['ID_Producto'],
-								'Fecha' => $row[$i]['Fecha_Merma'],
-								'Motivo' => $row[$i]['Motivo'],
-								'Sucursal' => $row[$i]['Sucursal'],
-								'Cantidad' => $row[$i]['Cantidad'],
-								'Imagen' => $foto,
-								'Acciones' => '<button class="btn btn-warning btn-sm mb-1" id="ModificarMerma" attrid="'.$row[$i]['ID_Merma'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm mb-1" id="EliminarMerma" attrid="'.$row[$i]['ID_Merma'].'"><i class="fas fa-trash"></i></button>' ,
-							);
-							
+							}	
 						}
-		
-						$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
-					}
-				}
-				echo json_encode($arreglo);
-			} else if ($tipo == 'cantidadTraslado'){
-				$IDProducto = $omodelo->link->real_escape_string($IDProducto);
-				$IDSucursal = $omodelo->link->real_escape_string($IDSucursal);
-				$cantidad = '';
-				$query = "SELECT Cantidad FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$IDSucursal'";
-				$row = $omodelo->_consultar($query);
-				$numerofilas = $omodelo->numerofilas;
 
-				if($row == 'si'){
-					echo "Error: ".mysqli_error($omodelo->link);
-				}else{
-					if($numerofilas > 0){
-						if($row[0]["Cantidad"] == null || $row[0]["Cantidad"] == ''){
-							$cantidad = 0;
-						}else {
-							$cantidad = $row[0]["Cantidad"];
-						}
-						echo $cantidad;
+						$arreglo['data'][$i] = array(
+							'ID' => $row[$i]['ID_Producto'],
+							'Fecha' => $row[$i]['Fecha_Merma'],
+							'Motivo' => $row[$i]['Motivo'],
+							'Sucursal' => $row[$i]['Sucursal'],
+							'Presentacion' => $row[$i]["NombrePresentacion"],
+							'Cantidad' => $row[$i]['Cantidad'],
+							'Imagen' => $foto,
+							'Acciones' => '<button class="btn btn-warning btn-sm mb-1" id="ModificarMerma" attrid="'.$row[$i]['ID_Merma'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm mb-1" id="EliminarMerma" attrid="'.$row[$i]['ID_Merma'].'"><i class="fas fa-trash"></i></button>' ,
+						);
 					}
-					
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
 				}
-			}else if ($tipo == 'consultarMerma'){
-				$IDMerma = $omodelo->link->real_escape_string($IDMerma);
-				
-				$query = "SELECT DATE_FORMAT(Fecha_Merma, '%Y-%m-%d') AS Fecha_Merma, Motivo FROM merma WHERE ID_Merma = '$IDMerma'";
-				$row = $omodelo->_consultar($query);
-				$numerofilas = $omodelo->numerofilas;
-
-				if($row == 'si'){
-					echo "Error: ".mysqli_error($omodelo->link);
-				}else{
-					if($numerofilas > 0){
-						echo json_encode($row[0]);
-					}
-					
-				}
-			}else if ($tipo == 'editarMerma'){
-				$IDMerma = $omodelo->link->real_escape_string($IDMerma);
-				$FechaMerma = $omodelo->link->real_escape_string($FechaMerma);
-				$Motivo = $omodelo->link->real_escape_string($MotivoMerma);
-
-				$query = "UPDATE merma SET Fecha_Merma = '$FechaMerma', Motivo = '$Motivo' WHERE ID_Merma = '$IDMerma'";
-				$error = $omodelo->_insertar($query);
-							
-				if ($error == "si") {
-					echo "Error 1: ".mysqli_error($omodelo->link);
-				}else{
-					//$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
-					echo "Correcto";
-				}
-			}else if ($tipo == 'sucursales'){
-				$IDSucursal = $omodelo->link->real_escape_string($IDSucursal);
-				$opciones= '';
-				$query = "SELECT ID_Sucursal, Nombre FROM sucursales WHERE ID_Sucursal != '$IDSucursal'";
-				$row = $omodelo->_consultar($query);
-				$numerofilas = $omodelo->numerofilas;
-
-				if ($row == "si") {
-					echo "Error: " . mysqli_error($omodelo->link);
-				} else {
-					if ($numerofilas > 0) {
-						for ($i = 0; $i < $numerofilas; $i++) {
-							$opciones .= '<option value="' . $row[$i]['ID_Sucursal'] . '">' . $row[$i]['Nombre'] . '</option>';
-						}
-					}
-					echo $opciones;
-				}
-			}else if($tipo == "TablaTraslados"){
-				$IDProducto = $omodelo->link->real_escape_string($id);
-				$buscar =  $omodelo->link->real_escape_string($buscar);
-				$limit =  $omodelo->link->real_escape_string($limit);
-				$pagina =  $omodelo->link->real_escape_string($pagina);
-				$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
-				$orden =  $omodelo->link->real_escape_string($orden);
-				$arreglo = array();
-		
-				$busqueda = '';
-				if(trim($buscar) != ''){
-					$separa = explode(' ', trim($buscar));
-					$busqueda = 'AND ';
-					for ($i=0; $i < count($separa); $i++) { 
-						$busqueda .= "CONCAT(ID_Traslado, FK_Producto, FK_Sucursal_Origen, FK_Sucursal_Destino, Cantidad, Fecha_Traslado, Fecha_Registro, FK_Usuario) REGEXP '".$separa[$i]."'";
-						if($i < (count($separa)-1)){
-							$busqueda .= ' AND ';
-						}
-					}
-				}
-		
-				$query = "SELECT ID_Traslado, FK_Producto, FK_Sucursal_Origen AS Origen, FK_Sucursal_Destino AS Destino, Cantidad, Fecha_Traslado, Fecha_Registro, FK_Usuario, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Origen) AS NombreOrigen, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Destino) AS NombreDestino, usuarios.Nombre AS Usuario, (SELECT COUNT(DISTINCT(ID_Traslado)) FROM traslados WHERE FK_Producto = $IDProducto $busqueda) AS 'Num' FROM `traslados` INNER JOIN usuarios ON FK_Usuario = ID_Usuario WHERE FK_Producto = $IDProducto $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
-				$row = $omodelo->_consultar($query);
-				$numerofilas = $omodelo->numerofilas;
-	
-				if($row == 'si'){
-					echo "Error: ".mysqli_error($omodelo->link);
-				}else{
-					if($numerofilas > 0){
-						for($i=0; $i<$numerofilas; $i++){
-							$arreglo['data'][$i] = array(
-								'ID' => $row[$i]['ID_Traslado'],
-								'Fecha' => $row[$i]['Fecha_Traslado'],
-								'Origen' => $row[$i]['NombreOrigen'],
-								'Destino' => $row[$i]['NombreDestino'],
-								'Cantidad' => $row[$i]['Cantidad'],
-								'Usuario' => $row[$i]['Usuario'],
-							);
-							
-						}
-		
-						$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
-					}
-				}
-				echo json_encode($arreglo);
 			}
+			echo json_encode($arreglo);
+		} else if ($tipo == 'cantidadTraslado'){
+			$IDProducto = $omodelo->link->real_escape_string($IDProducto);
+			$IDSucursal = $omodelo->link->real_escape_string($IDSucursal);
+			$cantidad = '';
+			$query = "SELECT Cantidad FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$IDSucursal'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					if($row[0]["Cantidad"] == null || $row[0]["Cantidad"] == ''){
+						$cantidad = 0;
+					}else {
+						$cantidad = $row[0]["Cantidad"];
+					}
+					echo $cantidad;
+				}	
+			}
+		}else if ($tipo == 'consultarMerma'){
+			$IDMerma = $omodelo->link->real_escape_string($IDMerma);
+				
+			$query = "SELECT DATE_FORMAT(Fecha_Merma, '%Y-%m-%d') AS Fecha_Merma, Motivo FROM merma WHERE ID_Merma = '$IDMerma'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					echo json_encode($row[0]);
+				}
+					
+			}
+		}else if ($tipo == 'editarMerma'){
+			$IDMerma = $omodelo->link->real_escape_string($IDMerma);
+			$FechaMerma = $omodelo->link->real_escape_string($FechaMerma);
+			$Motivo = $omodelo->link->real_escape_string($MotivoMerma);
+
+			$query = "UPDATE merma SET Fecha_Merma = '$FechaMerma', Motivo = '$Motivo' WHERE ID_Merma = '$IDMerma'";
+			$error = $omodelo->_insertar($query);
+							
+			if ($error == "si") {
+				echo "Error 1: ".mysqli_error($omodelo->link);
+			}else{
+				//$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+				echo "Correcto";
+			}
+		}else if ($tipo == 'sucursales'){
+			$IDSucursal = $omodelo->link->real_escape_string($IDSucursal);
+			$opciones= '';
+			$query = "SELECT ID_Sucursal, Nombre FROM sucursales WHERE ID_Sucursal != '$IDSucursal'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Sucursal'] . '">' . $row[$i]['Nombre'] . '</option>';
+					}
+				}
+				echo $opciones;
+			}
+		}else if($tipo == "TablaTraslados"){
+			$IDProducto = $omodelo->link->real_escape_string($id);
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+		
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(ID_Traslado, FK_Producto, FK_Sucursal_Origen, FK_Sucursal_Destino, Cantidad, Fecha_Traslado, Fecha_Registro, FK_Usuario) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+		
+			$query = "SELECT ID_Traslado, FK_Producto, FK_Sucursal_Origen AS Origen, FK_Sucursal_Destino AS Destino, Cantidad, Fecha_Traslado, Fecha_Registro, FK_Usuario, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Origen) AS NombreOrigen, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Destino) AS NombreDestino, usuarios.Nombre AS Usuario, (SELECT COUNT(DISTINCT(ID_Traslado)) FROM traslados WHERE FK_Producto = $IDProducto $busqueda) AS 'Num' FROM `traslados` INNER JOIN usuarios ON FK_Usuario = ID_Usuario WHERE FK_Producto = $IDProducto $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+	
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						$arreglo['data'][$i] = array(
+							'ID' => $row[$i]['ID_Traslado'],
+							'Fecha' => $row[$i]['Fecha_Traslado'],
+							'Origen' => $row[$i]['NombreOrigen'],
+							'Destino' => $row[$i]['NombreDestino'],
+							'Cantidad' => $row[$i]['Cantidad'],
+							'Usuario' => $row[$i]['Usuario'],
+						);			
+					}
+		
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+				}
+			}
+			echo json_encode($arreglo);
+		}else if($tipo == "TablaTrasladosPrincipal"){
+			$fechainicio = $omodelo->link->real_escape_string($fechainicio);
+			$fechafin = $omodelo->link->real_escape_string($fechafin);
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+		
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(Fecha_Traslado) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+			$query = "SELECT ID_Traslado, Fecha_Traslado AS Fecha, SUM(Cantidad) AS CantidadTraslado, (SELECT COUNT(*) FROM traslados WHERE Fecha_Traslado >= '$fechainicio' AND Fecha_Traslado <= '$fechafin' $busqueda) AS 'Num' FROM `traslados` WHERE Fecha_Traslado >= '$fechainicio' AND Fecha_Traslado <= '$fechafin'  $busqueda GROUP BY DATE_FORMAT(Fecha_Traslado, '%Y-%m-%d') ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+	
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						$arreglo['data'][$i] = array(
+							'ID' => $row[$i]['ID_Traslado'],
+							'Fecha' => $row[$i]['Fecha'],
+							'Detalles' => "Cantidad total de traslado: ".$row[$i]['CantidadTraslado'],
+								'Acciones' => '',
+						);			
+					}
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+				}
+			}
+			echo json_encode($arreglo);
+		}else if($tipo == "ConsultarSucursalesConversion"){
+			$IDProducto = $omodelo->link->real_escape_string($IDProducto);
+			$opciones = '<option value=""> Seleccione una opción </option>';
+			$query = "SELECT ID_Sucursal, Nombre FROM inventario INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE FK_Producto = '$IDProducto' GROUP BY ID_Sucursal";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Sucursal'] . '">' . $row[$i]['Nombre'] . '</option>';
+					}
+				}
+			}
+			echo $opciones;
+		}else if($tipo == "ConsultarPresentacionOrigen"){
+			$IDProducto = $omodelo->link->real_escape_string($IDProducto);
+			$IDSucursal = $omodelo->link->real_escape_string($IDSucursal);
+			$query = "SELECT ID_Presentacion, Nombre, Abreviatura FROM inventario INNER JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE inventario.FK_Producto = '$IDProducto' AND inventario.FK_Sucursal = '$IDSucursal' GROUP BY ID_Presentacion";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = '<option value=""> Seleccione una opción </option>';
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="'.$row[$i]['ID_Presentacion'].'">'.$row[$i]['Nombre'].' ('.$row[$i]['Abreviatura'].')</option>';
+					}
+				}
+			}
+			echo $opciones;
+		}else if($tipo == "ConsultarPresentacionDestino"){
+			$IDProducto = $omodelo->link->real_escape_string($IDProducto);
+			$IDSucursal = $omodelo->link->real_escape_string($IDSucursal);
+			$IDPresentacion = $omodelo->link->real_escape_string($IDPresentacion);
+
+			$query = "SELECT ID_Presentacion, Nombre, Abreviatura FROM presentaciones WHERE FK_Producto = '$IDProducto' AND ID_Presentacion != '$IDPresentacion' GROUP BY ID_Presentacion";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = '<option value=""> Seleccione una opción </option>';
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="'.$row[$i]['ID_Presentacion'].'">'.$row[$i]['Nombre'].' ('.$row[$i]['Abreviatura'].')</option>';
+					}
+				}
+			}
+			echo $opciones;
+		}else if($tipo == "PresentacionesProducto"){
+			$idProducto = $omodelo->link->real_escape_string($idProducto);
+			$idSucursal = $omodelo->link->real_escape_string($idSucursal);
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+		
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(presentaciones.Nombre, presentaciones.Abreviatura, Cantidad) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+			$query = "SELECT ID_Inventario, inventario.FK_Producto, FK_Presentacion, Cantidad, FK_Sucursal, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS Abreviatura, (SELECT COUNT(*) FROM inventario WHERE inventario.FK_Producto = '$idProducto' AND FK_Sucursal = '$idSucursal' $busqueda) AS 'Num' FROM inventario INNER JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE inventario.FK_Producto = '$idProducto' AND FK_Sucursal = '$idSucursal' $busqueda GROUP BY FK_Presentacion ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+	
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						$arreglo['data'][$i] = array(
+							'ID' => $row[$i]['ID_Inventario'],
+							'Presentacion' => $row[$i]['Presentacion'],
+							'Abreviatura' => $row[$i]['Abreviatura'],
+							'Cantidad' => $row[$i]['Cantidad'],
+						);			
+					}
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+				}
+			}
+			echo json_encode($arreglo);
+		}else if($tipo == "ConversionesProducto"){
+			$idProducto = $omodelo->link->real_escape_string($idProducto);
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+		
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(ID_Conversion, conversiones.FK_Producto, FK_Sucursal_Origen, sucursales.Nombre, presentaciones.Nombre, FK_Presentacion_Origen, Cantidad_Origen, FK_Sucursal_Destino, FK_Presentacion_Destino, Cantidad_Destino, Fecha_Registro, FK_Usuario) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+			$query = "SELECT ID_Conversion, CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) AS NombreUsuario, conversiones.FK_Producto, FK_Sucursal_Origen, FK_Presentacion_Origen, Cantidad_Origen, FK_Sucursal_Destino, sucursales.Nombre AS SucursalOrigen, FK_Presentacion_Destino, Cantidad_Destino, Fecha_Registro, FK_Usuario, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Destino) AS NombreDestino,  presentaciones.Nombre AS Origen, (SELECT Nombre FROM presentaciones WHERE ID_Presentacion = FK_Presentacion_Destino) AS PresentacionDestino, (SELECT COUNT(*) FROM conversiones WHERE conversiones.FK_Producto = '$idProducto' $busqueda) AS 'Num' FROM conversiones INNER JOIN sucursales ON FK_Sucursal_Origen = ID_Sucursal INNER JOIN presentaciones ON FK_Presentacion_Origen = ID_Presentacion INNER JOIN usuarios ON conversiones.FK_Usuario = ID_Usuario WHERE conversiones.FK_Producto = '$idProducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+	
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						$origen = "
+							Sucursal de origen: ".$row[$i]['SucursalOrigen']."<br>
+							Presentación: ".$row[$i]['Origen']."<br>
+							Cantidad: ".$row[$i]['Cantidad_Origen']."<br>
+						"; 
+						$destino = "
+							Sucursal de destino: ".$row[$i]['NombreDestino']."<br>
+							Presentación: ".$row[$i]['PresentacionDestino']."<br>
+							Cantidad: ".$row[$i]['Cantidad_Destino']."<br>
+						"; 
+
+						$arreglo['data'][$i] = array(
+							'ID' => $row[$i]['ID_Conversion'],
+							'Origen' => $origen,
+							'Destino' => $destino,
+							'Usuario' => $row[$i]['NombreUsuario'],
+						);			
+					}
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+				}
+			}
+			echo json_encode($arreglo);
+		}else if($tipo == "ConsultarPresentacionMerma"){
+			$IDProducto = $omodelo->link->real_escape_string($IDProducto);
+			$IDSucursal = $omodelo->link->real_escape_string($IDSucursal);
+
+			$query = "SELECT ID_Presentacion, Nombre, Abreviatura FROM inventario INNER JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE inventario.FK_Producto = '$IDProducto' AND FK_Sucursal = '$IDSucursal' GROUP BY ID_Presentacion";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = '<option value=""> Seleccione una opción </option>';
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="'.$row[$i]['ID_Presentacion'].'">'.$row[$i]['Nombre'].' ('.$row[$i]['Abreviatura'].')</option>';
+					}
+				}
+			}
+			echo $opciones;
+		}
 	}
 
 	public function _eliminar(){
