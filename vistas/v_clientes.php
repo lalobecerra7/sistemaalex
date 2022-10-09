@@ -99,7 +99,7 @@
 		            <label for="RFCCliente">RFC</label>
 		          </div>
 		        </div>
-		         <div class="col-md-4 col-sm-12 mb-3">
+		        <div class="col-md-4 col-sm-12 mb-3">
             	<div class="form-floating">
               	<input type="number" min="0" step="any" class="form-control" id="DescuentoCliente" name="DescuentoCliente" placeholder="Ingresa el valor del descuento">
                 <label for="DescuentoCliente">Descuento (%)</label>

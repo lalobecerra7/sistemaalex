@@ -208,7 +208,7 @@ jQuery(document).ready(function($) {
             $("#EstatusCuenta").val(datos.Activo);
             $("#ContraTemporal").val(datos.Temporal);
             $(".campoMostrarContrasena").css("display", "inline");
-           $(".camposContrasena").css("display", "none");
+            $(".camposContrasena").css("display", "none");
             $("#NuevaContrasena").attr("disabled", true);
             $("#RepetirNuevaContrasena").attr("disabled", true);
             if (datos.Foto != "") {
