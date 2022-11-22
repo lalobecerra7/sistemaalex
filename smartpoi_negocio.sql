@@ -3129,16 +3129,16 @@ INSERT INTO `detalle_compras` (`id_detalle`, `FK_Compra`, `FK_Producto`, `costo`
 --
 -- Disparadores `detalle_compras`
 --
-DELIMITER $$
-CREATE TRIGGER `promedio1` AFTER INSERT ON `detalle_compras` FOR EACH ROW BEGIN 
-	IF (SELECT costo FROM productos WHERE id_producto=New.producto) > 0 THEN 
-    	UPDATE productos SET Costo_Unidad=New.subtotal, costo=(((SELECT SUM(cantidad) FROM detalle_productos WHERE producto=New.producto)*costo)+(New.cantidad*New.subtotal))/((SELECT SUM(cantidad) FROM detalle_productos WHERE producto=New.producto)+New.cantidad) WHERE id_producto=New.producto; 
-    ELSE 
-        UPDATE productos SET Costo_Unidad=New.subtotal, costo=New.subtotal WHERE id_producto=New.producto; 
-	END IF; 
-END
-$$
-DELIMITER ;
+-- DELIMITER $$
+-- CREATE TRIGGER `promedio1` AFTER INSERT ON `detalle_compras` FOR EACH ROW BEGIN 
+-- 	IF (SELECT costo FROM productos WHERE id_producto=New.producto) > 0 THEN 
+--     	UPDATE productos SET Costo_Unidad=New.subtotal, costo=(((SELECT SUM(cantidad) FROM detalle_productos WHERE producto=New.producto)*costo)+(New.cantidad*New.subtotal))/((SELECT SUM(cantidad) FROM detalle_productos WHERE producto=New.producto)+New.cantidad) WHERE id_producto=New.producto; 
+--     ELSE 
+--         UPDATE productos SET Costo_Unidad=New.subtotal, costo=New.subtotal WHERE id_producto=New.producto; 
+-- 	END IF; 
+-- END
+-- $$
+-- DELIMITER ;
 
 -- --------------------------------------------------------
 
