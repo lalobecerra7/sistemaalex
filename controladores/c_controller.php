@@ -18,6 +18,8 @@ include "controladores/c_impuestos.php";
 include "controladores/c_tickets.php";
 include "controladores/c_general.php";
 include "controladores/c_zonas.php";
+include "controladores/c_compras.php";
+include "controladores/c_hacerCompra.php";
 
 class controller {
 
@@ -117,6 +119,16 @@ class controller {
                 </li>';
 		}
 		$pagina = str_replace('#MenuInventario#', $botonInventario, $pagina);
+
+		$botonCompras = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_compras'][1] == '1') {
+			$botonCompras = '<li class="menu-item cargarVista" carga="v_compras" titulo="Compras" id="cargarCompras">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Compras">Compras</div>
+                  </a>
+                </li>';
+		}
+		$pagina = str_replace('#MenuCompras#', $botonCompras, $pagina);
 
 		$botonCategorias = '';
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_categorias'][1] == '1') {
