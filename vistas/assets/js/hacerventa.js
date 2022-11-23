@@ -164,6 +164,7 @@ jQuery(document).ready(function($) {
             $("#ModalImpuestosVenta").modal('hide');
             $("#ModalAsignarCliente").modal('hide');
             $("#ModalCambiarTicket").modal('hide');
+            $("#ModalPreciosProd").modal('hide');
             //ir agregando las demas modales
         }
     });
@@ -279,6 +280,8 @@ jQuery(document).ready(function($) {
                 $("#MBuscarProd").modal('show');
             }else if(event.altKey && evt.key === "q" || evt.key === "Q"){
                 $("#bPrecioMayoreo").trigger("click");
+            }else if(event.altKey && evt.key === "p" || evt.key === "P"){
+                $("#ModalPreciosProd").modal('show');
             }else if(event.altKey && evt.key === "i" || evt.key === "I"){
                 $("#bImpuestoProd").trigger("click");
             }else if(evt.key === "F7"){
@@ -745,7 +748,7 @@ jQuery(document).ready(function($) {
             //$(".swal2-container").is(':visible') == false && 
             if($("#MBuscarProd").is(':visible')){
                $(".buscadorMyDataTable[tabla='TablaProductosVenta']").focus();
-            }else if($("#MIntVarios").is(':visible') == false && $("#MGranel").is(':visible') == false && $("#MProdComun").is(':visible') == false && $("#MBuscarProd").is(':visible') == false && $("#ModalDescuentoProd").is(':visible') == false && $("#ModalEntradaDinero").is(':visible') == false  && $("#ModalSalidaDinero").is(':visible') == false && $("#ModalImpuestosVenta").is(':visible') == false && $("#ModalAsignarCliente").is(':visible') == false && $(".swal2-container").is(':visible') == false && $("#ModalCambiarTicket").is(':visible') == false){
+            }else if($("#MIntVarios").is(':visible') == false && $("#MGranel").is(':visible') == false && $("#MProdComun").is(':visible') == false && $("#MBuscarProd").is(':visible') == false && $("#ModalDescuentoProd").is(':visible') == false && $("#ModalEntradaDinero").is(':visible') == false  && $("#ModalSalidaDinero").is(':visible') == false && $("#ModalImpuestosVenta").is(':visible') == false && $("#ModalAsignarCliente").is(':visible') == false && $(".swal2-container").is(':visible') == false && $("#ModalCambiarTicket").is(':visible') == false && $("#ModalPreciosProd").is(':visible') == false){
                 $("#barCodeV").focus();
             }
         }
@@ -1706,6 +1709,18 @@ jQuery(document).ready(function($) {
         $("#ModalCambiarTicket").modal("hide");
     });
 
+    $(document).on('click', '#bBuscarPrecios', function(){
+        $("#ModalPreciosProd").modal("show");
+    });
+
+    $(document).on('shown.bs.modal', '#ModalPreciosProd', function(){
+        TablaPreciosProducto();
+    });
+
+    $(document).on('hidden.bs.modal', '#ModalPreciosProd', function(){
+        $("#barCodeV").focus();
+    });
+
 });
 
 /*function ComprobarNombreTicket(nombreTicket, id){
@@ -1751,6 +1766,7 @@ function verCajaAbierta(id, sucursal, detalle_caja) {
                     <button type="button" class="btn btn-outline-secondary" id="bIntVarios"><b>F2</b> <i class="fas fa-clipboard"></i> Insert. Varios</button>
                     <button type="button" class="btn btn-outline-secondary" id="bProdComun"><b>ALT + C</b> <i class="fas fa-file"></i> Prod. Común</button>
                     <button type="button" class="btn btn-outline-secondary" id="bBuscarProd"><b>F10</b> <i class="fas fa-search"></i> Buscar</button>
+                    <button type="button" class="btn btn-outline-secondary" id="bBuscarPrecios"><b>ALT + P</b> <i class="fas fa-search-dollar"></i> Precios</button>
                     <button type="button" class="btn btn-outline-secondary" id="bPrecioMayoreo"><b>ALT + Q</b> <i class="fas fa-certificate"></i> Mayoreo</button>
                     <button type="button" class="btn btn-outline-secondary" id="bImpuestoProd"><b>ALT + I</b> <i class="fas fa-dollar"></i> Impuestos</button>
                     <button type="button" class="btn btn-outline-secondary" id="bDescuentoProd"><b>ALT + D</b> <i class="fas fa-percent"></i> Descuento</button>
@@ -1874,7 +1890,7 @@ function TablaProductosVenta(){
         "colums": [
             "Codigo",
             "Descripcion",
-            "Clase",
+            "Presentacion",
             "Precio",
             "Precio Mayoreo",
             "Area",
@@ -1986,5 +2002,27 @@ function TablaTicketsActuales(){
     $("#DivTickets").html("");
     $("#navtabTickets button").each(function(index, el) {
         $("#DivTickets").append('<button type="button" class="btn btn-primary mb-3 botonCambiar" idTicket="'+$(this).attr("id")+'">'+$(this).html()+'</button><br>');
+    });
+}
+
+function TablaPreciosProducto(){
+    ajaxMyDatatable({
+        "table": $("#TablaPreciosProductos"), 
+        "colums": [
+            "Nombre",
+            "Precio",
+            "Mayoreo",
+        ], 
+        "sort": [
+            1,
+            "desc"
+        ],
+        "url": "index.php", 
+        "params":{
+            "metodo": "detalles",
+            "accion": "hacerventa",
+            "tipo": "ConsultarPreciosProducto",
+            "Sucursal": $("#vistaCaja").attr('attrSucursal'),
+        }
     });
 }

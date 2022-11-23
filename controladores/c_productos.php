@@ -293,7 +293,36 @@ class productos {
 				}
 			}
 
-			$queryProd = "DELETE FROM precios WHERE FK_Producto = '$IDProducto'";
+			$productos = explode(",", $productos);
+			for ($i=0; $i < sizeof($productos) - 1; $i++) { 
+				$datosproductos = explode("~", $productos[$i]);
+
+				$queryPrecio = "SELECT 	ID_Precio, FK_Producto, FK_Zona, Nombre, Precio, Precio_Mayoreo FROM precios WHERE FK_Producto = '$IDProducto' AND FK_Zona = '$datosproductos[0]' AND Nombre = '$datosproductos[1]'";
+				$rowPrecio = $omodelo->_consultar($queryPrecio);
+				$numerofilasPrecio = $omodelo->numerofilas;
+
+				if ($rowPrecio == "si") {
+					echo "Error consultar archivo: ".mysqli_error($omodelo->link);
+				}else{
+					if($numerofilasPrecio > 0){
+						$queryPreciosProductos = "UPDATE precios SET Precio = '$datosproductos[2]', Precio_Mayoreo = '$datosproductos[3]' WHERE FK_Producto = '$IDProducto' AND Nombre = '$datosproductos[1]' AND FK_Zona = '$datosproductos[0]'";
+						$errorPrecios = $omodelo->_insertar($queryPreciosProductos);	
+
+						if ($errorPrecios == "si") {
+							echo "Error productos: ".mysqli_error($omodelo->link); 
+						}	
+					}else{
+						$queryPreciosProductos = "INSERT INTO precios SET FK_Producto = '$IDProducto', Nombre = '$datosproductos[1]', FK_Zona = '$datosproductos[0]', Precio = '$datosproductos[2]', Precio_Mayoreo = '$datosproductos[3]'";
+						$errorPrecios = $omodelo->_insertar($queryPreciosProductos);	
+
+						if ($errorPrecios == "si") {
+							echo "Error productos: ".mysqli_error($omodelo->link); 
+						}
+					}
+				}
+			}
+
+			/*$queryProd = "DELETE FROM precios WHERE FK_Producto = '$IDProducto'";
 			$errorDir = $omodelo->_insertar($queryProd);
 
 			if ($errorDir == "si") {
@@ -309,9 +338,42 @@ class productos {
 						echo "Error productos: ".mysqli_error($omodelo->link); 
 					}
 				}
+			}*/
+
+
+			$presentaciones = explode(",", $presentaciones);
+			for ($i=0; $i < sizeof($presentaciones) - 1; $i++) { 
+				$datospresentacion = explode("~", $presentaciones[$i]);
+
+				$queryPrese = "SELECT ID_Presentacion, FK_Producto, Nombre, Abreviatura FROM presentaciones WHERE FK_Producto = '$IDProducto' AND Nombre = '$datospresentacion[0]'";
+				$rowPrese = $omodelo->_consultar($queryPrese);
+				$numerofilasPrese = $omodelo->numerofilas;
+
+				if ($rowPrese == "si") {
+					echo "Error consultar archivo: ".mysqli_error($omodelo->link);
+				}else{
+					if($numerofilasPrese > 0){
+						$queryPresentacionProducto = "UPDATE presentaciones SET Abreviatura = '$datospresentacion[1]' WHERE ID_Presentacion = '".$rowPrese[0]["ID_Presentacion"]."'";
+						$errorPresentacion = $omodelo->_insertar($queryPresentacionProducto);	
+
+						if ($errorPresentacion == "si") {
+							echo "Error presentacion: ".mysqli_error($omodelo->link); 
+						}
+					}else{
+						$queryPresentacionProducto = "INSERT INTO presentaciones SET FK_Producto = '$IDProducto', Nombre = '$datospresentacion[0]', Abreviatura = '$datospresentacion[1]'";
+						$errorPresentacion = $omodelo->_insertar($queryPresentacionProducto);	
+
+						if ($errorPresentacion == "si") {
+							echo "Error presentacion: ".mysqli_error($omodelo->link); 
+						}
+					}
+				}
 			}
 
-			$queryProd = "DELETE FROM presentaciones WHERE FK_Producto = '$IDProducto'";
+
+			
+
+			/*$queryProd = "DELETE FROM presentaciones WHERE FK_Producto = '$IDProducto'";
 			$errorDir = $omodelo->_insertar($queryProd);
 
 			if ($errorDir == "si") {
@@ -327,7 +389,7 @@ class productos {
 						echo "Error presentacion: ".mysqli_error($omodelo->link); 
 					}
 				}
-			}
+			}*/
 			
 			if($status == 0){
 				$query1 = "SELECT Imagen FROM productos WHERE ID_Producto = '$IDProducto'";
@@ -361,32 +423,55 @@ class productos {
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$IDProducto =  $omodelo->link->real_escape_string($IDProducto);
-
-		$query = "SELECT Imagen FROM productos WHERE ID_Producto = '$IDProducto'";
-		$row = $omodelo->_consultar($query);
-		$numerofilas = $omodelo->numerofilas;
-		if ($row == "si") {
-			echo "Error: " . mysqli_error($omodelo->link);
-		} else {
-			if ($numerofilas > 0) {
-				if ($row[0]["Imagen"] !="" && file_exists("vistas/assets/archivos/fotosProductos/".$row[0]["Imagen"]."")) {
-					unlink("vistas/assets/archivos/fotosProductos/".$row[0]["Imagen"]."");
-				}
-				$query = "DELETE FROM productos WHERE ID_Producto='$IDProducto'";
-				$error = $omodelo->_insertar($query);
-				if ($error == "si") {
-					echo "Error 1: " . mysqli_error($omodelo->link);
-				} else {
-					$query = "DELETE FROM detalles_productos WHERE FK_Producto='$IDProducto'";
+		if ($tipo == "EliminarProducto") {
+			$IDProducto =  $omodelo->link->real_escape_string($IDProducto);
+			$query = "SELECT Imagen FROM productos WHERE ID_Producto = '$IDProducto'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					if ($row[0]["Imagen"] !="" && file_exists("vistas/assets/archivos/fotosProductos/".$row[0]["Imagen"]."")) {
+						unlink("vistas/assets/archivos/fotosProductos/".$row[0]["Imagen"]."");
+					}
+					$query = "DELETE FROM productos WHERE ID_Producto='$IDProducto'";
 					$error = $omodelo->_insertar($query);
 					if ($error == "si") {
 						echo "Error 1: " . mysqli_error($omodelo->link);
 					} else {
-						echo "Correcto";
-						//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+						$query = "DELETE FROM detalles_productos WHERE FK_Producto='$IDProducto'";
+						$error = $omodelo->_insertar($query);
+						if ($error == "si") {
+							echo "Error 1: " . mysqli_error($omodelo->link);
+						} else {
+							echo "Correcto";
+							//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+						}
 					}
 				}
+			}
+		}else if($tipo == "EliminarPresentacion"){
+			$IDPresentacion =  $omodelo->link->real_escape_string($IDPresentacion);
+
+			$query = "DELETE FROM presentaciones WHERE ID_Presentacion='$IDPresentacion'";
+			$error = $omodelo->_insertar($query);
+			if ($error == "si") {
+				echo "Error 1: " . mysqli_error($omodelo->link);
+			} else {
+				echo "Correcto";
+				//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+			}
+		}else if($tipo == "EliminarPrecio"){
+			$IDPrecio =  $omodelo->link->real_escape_string($IDPrecio);
+
+			$query = "DELETE FROM precios WHERE ID_Precio = '$IDPrecio'";
+			$error = $omodelo->_insertar($query);
+			if ($error == "si") {
+				echo "Error 1: " . mysqli_error($omodelo->link);
+			} else {
+				echo "Correcto";
+				//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
 			}
 		}
 	}
