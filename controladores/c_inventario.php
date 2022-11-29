@@ -161,14 +161,10 @@ class inventario {
 		if($tipo == 'agregarMerma'){
 			$fecha = date('Y-m-d H:i:s'); 
 			$IDProducto = $omodelo->link->real_escape_string($IDProducto);
-			/*$Cantidad = $omodelo->link->real_escape_string($Cantidad);
-			$Motivo = $omodelo->link->real_escape_string($Motivo);
-			$Sucursal = $omodelo->link->real_escape_string($IDSucursal);
-			$FechaMerma = $omodelo->link->real_escape_string($FechaMerma);*/
 			$Usuario = $_SESSION['user_admin']['ID_Usuario'];
 			$existencia= '';
 			$Costo = '';
-			$query2 = "SELECT Cantidad, (SELECT Costo FROM detalles_Productos WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma') AS Costo, productos.Costo AS CostoGral FROM inventario INNER JOIN productos ON ID_Producto = '$IDProducto' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma' AND FK_Presentacion = '$PresentacionProductoMerma'";
+			$query2 = "SELECT Cantidad, (SELECT Costo FROM detalles_productos WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma') AS Costo, productos.Costo AS CostoGral FROM inventario INNER JOIN productos ON ID_Producto = FK_Producto WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma' AND FK_Presentacion = '$PresentacionProductoMerma'";
 			$row = $omodelo->_consultar($query2);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -195,7 +191,7 @@ class inventario {
 						echo "Error 1: ".mysqli_error($omodelo->link);
 					}else{
 						$IDMerma = mysqli_insert_id($omodelo->link);
-						$query3 = "UPDATE inventario SET Cantidad = '$existenciaM' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma'";
+						$query3 = "UPDATE inventario SET Cantidad = '$existenciaM' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma' AND FK_Presentacion = '$PresentacionProductoMerma'";
 						$error3 = $omodelo->_insertar($query3);
 					
 						if ($error3 == "si") {
@@ -426,7 +422,7 @@ class inventario {
 			}
 		
 			$query = "SELECT ID_Merma, merma.FK_Producto AS 'ID_Producto', sucursales.Nombre AS 'Sucursal', merma.Cantidad, presentaciones.Nombre AS NombrePresentacion, (merma.Cantidad*merma.Costo) AS 'Costo', 
-				DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r') AS Fecha_Merma, Motivo, (SELECT COUNT(DISTINCT(merma.FK_Producto)) FROM merma) AS 'Num', Foto FROM `merma` INNER JOIN sucursales 
+				DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r') AS Fecha_Merma, Motivo, (SELECT COUNT(*) FROM merma $busqueda) AS 'Num', Foto FROM `merma` INNER JOIN sucursales 
 				ON sucursales.ID_Sucursal=merma.FK_Sucursal INNER JOIN productos 
 				ON productos.ID_Producto=merma.FK_Producto INNER JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE merma.FK_Producto='$IDProducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
@@ -791,7 +787,7 @@ class inventario {
 			$IDMerma = $omodelo->link->real_escape_string($IDMerma);
 			$RegresarInventario = $omodelo->link->real_escape_string($RegresarInventario);
 			if ($RegresarInventario == "Si") {
-				$queryInventario = "SELECT ID_Merma, FK_Producto, Cantidad, FK_Sucursal, Foto FROM merma WHERE ID_Merma = '$IDMerma'";
+				$queryInventario = "SELECT ID_Merma, FK_Producto, FK_Presentacion, Cantidad, FK_Sucursal, Foto FROM merma WHERE ID_Merma = '$IDMerma'";
 				$row = $omodelo->_consultar($queryInventario);
 				$numerofilas = $omodelo->numerofilas;
 
@@ -804,7 +800,7 @@ class inventario {
 					       	unlink("vistas/assets/archivos/fotosMerma/".$row[0]["Foto"]);
 					    }
 
-						$query1 = "UPDATE inventario SET Cantidad = (Cantidad + ".$row[0]["Cantidad"].") WHERE FK_Producto = '".$row[0]["FK_Producto"]."' AND FK_Sucursal = '".$row[0]["FK_Sucursal"]."'";
+						$query1 = "UPDATE inventario SET Cantidad = (Cantidad + ".$row[0]["Cantidad"].") WHERE FK_Producto = '".$row[0]["FK_Producto"]."' AND FK_Sucursal = '".$row[0]["FK_Sucursal"]."' AND FK_Presentacion = '".$row[0]["FK_Presentacion"]."'";
 						$error1 = $omodelo->_insertar($query1);
 
 						if ($error1 == "si") {

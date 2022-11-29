@@ -208,6 +208,41 @@
               </div>
           </div>
 
+          <!-- ///////////////////////////Modal Descuentos/////////////////////////////////// -->  
+          <div class="modal fade" id="ModalPreciosProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Precios</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <form id="AgregarProdTabla">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-12 table-responsive" id="divTablaProductos">
+                                    <table class="table table-responsive table-striped text-center myDataTable" id="TablaPreciosProductos" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Precio</th>
+                                                <th>Precio Mayoreo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table> 
+                                </div>
+                            </div>    
+                        </div>
+                        <div class="modal-footer text-center">
+                            <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                            <button type="submit" class="btn btn-primary" id="bAgregarBuscarProd"><i class="fa fa-check-circle"></i> <strong>Agregar</strong></button>
+                        </div>
+                      </form>
+                  </div>    
+              </div>
+          </div>
+
           <!-- ///////////////////////////Buscar Producto/////////////////////////////////// -->  
           <div class="modal fade" id="MBuscarProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
               <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
@@ -225,7 +260,7 @@
                                             <tr>
                                                 <th>Código</th>
                                                 <th>Descripción</th>
-                                                <th>Clase</th>
+                                                <th>Presentación</th>
                                                 <th>Precio</th>
                                                 <th>Precio Mayoreo</th>
                                                 <th>Area</th>
@@ -537,7 +572,7 @@
                 #MenuCategorias#
 
                 <li class="dropdown dropdown-list-toggle" hidden>
-                  <a class="nav-link notification-toggle nav-link-lg cargarVista" href="javascript:void(0)" carga="v_hacerCompra" titulo="Venta" id="cargarHacerCompra">
+                  <a class="nav-link notification-toggle nav-link-lg cargarVista" href="javascript:void(0)" carga="v_hacerCompra" titulo="Compra" id="cargarHacerCompra">
                     </a>
                 </li>
 
@@ -545,8 +580,11 @@
 
                 #MenuAreas#
 
+<<<<<<< HEAD
                 <!--#MenuMovimientos#-->
 
+=======
+>>>>>>> a4d703dd46ec035bba22264ff918e47d11388841
               </ul>
             </li>
 
@@ -593,7 +631,7 @@
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <div id="DivPedidosPendientes">
                 <a href="javascript:void(0)" style="font-size: 25x" id="cargarVenta" ><i class="fas fa-shopping-cart"></i></a>
-              </div>
+              </div> 
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
