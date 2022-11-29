@@ -66,7 +66,7 @@ class productos {
 						$area .= "Descripción: ".$row[$i]['DescripcionArea']."<br>";
 					}
 					$precios = '';
-					$queryZona = "SELECT ID_Zona, Nombre FROM zona";
+					$queryZona = "SELECT ID_Zona, Nombre FROM zonas";
 					$rowZona = $omodelo->_consultar($queryZona);
 					$numerofilasZona = $omodelo->numerofilas;
 					if ($numerofilasZona > 0) {
@@ -497,7 +497,7 @@ class productos {
 					$numerofilasPrecios = $omodelo->numerofilas;
 					for ($x=0; $x < $numerofilasPrecios; $x++) { 
 
-						$queryZona = "SELECT ID_Zona, Nombre FROM zona";
+						$queryZona = "SELECT ID_Zona, Nombre FROM zonas";
 						$rowZona = $omodelo->_consultar($queryZona);
 						$numerofilasZona = $omodelo->numerofilas;
 						$opciones = "";
@@ -829,7 +829,7 @@ class productos {
 				$imp = substr($impuestos, 0, -1);
 			echo $imp;
 		}else if($tipo  == "ConsultarZonaProducto"){
-			$query = "SELECT ID_Zona, Nombre FROM zona";
+			$query = "SELECT ID_Zona, Nombre FROM zonas";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			$opciones = "";

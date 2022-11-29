@@ -25,7 +25,7 @@ class zonas {
 			}
 		}
 
-		$query = "SELECT ID_Zona, Nombre, Descripcion, (SELECT COUNT(*) FROM zona $busqueda) AS Num FROM zona $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Zona, Nombre, Descripcion, (SELECT COUNT(*) FROM zonas $busqueda) AS Num FROM zonas $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -110,7 +110,7 @@ class zonas {
 		extract($_POST);
 		$IDZona =  $omodelo->link->real_escape_string($IDZona);
 
-		$query = "DELETE FROM zona WHERE ID_Zona = '$IDZona'";
+		$query = "DELETE FROM zonas WHERE ID_Zona = '$IDZona'";
 		$error = $omodelo->_insertar($query);
 			
 		if ($error == "si") {
@@ -127,7 +127,7 @@ class zonas {
 		extract($_POST);
 		$IDZona =  $omodelo->link->real_escape_string($IDZona);
 
-		$query = "SELECT ID_Zona, Nombre, Descripcion FROM zona WHERE ID_Zona = '$IDZona'";
+		$query = "SELECT ID_Zona, Nombre, Descripcion FROM zonas WHERE ID_Zona = '$IDZona'";
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 

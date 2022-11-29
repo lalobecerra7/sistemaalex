@@ -93,7 +93,7 @@ class inventario {
 					$conversiones = "<button class='btn btn-sm mt-2 btn-outline-primary' id='VerConversionesProducto' nombreProducto='".$row[$i]['Descripcion']."'  producto='".$row[$i]['ID_Producto']."'>Conversiones</button>";
 
 					$precios = '';
-					$queryZona = "SELECT ID_Zona, Nombre FROM zona";
+					$queryZona = "SELECT ID_Zona, Nombre FROM zonas";
 					$rowZona = $omodelo->_consultar($queryZona);
 					$numerofilasZona = $omodelo->numerofilas;
 					if ($numerofilasZona > 0) {

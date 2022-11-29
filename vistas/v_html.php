@@ -552,7 +552,9 @@
 
             #MenuClientes#
 
-            
+            #MenuCompras#
+
+            #MenuCajas#
 
             <!-- Layouts -->
             <li class="menu-item">
@@ -566,18 +568,12 @@
                 
                 #MenuInventario#
 
-                #MenuCompras#
-
                 #MenuCategorias#
 
                 <li class="dropdown dropdown-list-toggle" hidden>
                   <a class="nav-link notification-toggle nav-link-lg cargarVista" href="javascript:void(0)" carga="v_hacerCompra" titulo="Compra" id="cargarHacerCompra">
                     </a>
                 </li>
-                
-                #MenuCajas#
-                
-                #MenuImpuestos#
 
                 #MenuZonas#
 
@@ -604,6 +600,8 @@
                 </li>
               </ul>
             </li> -->
+
+            #MenuImpuestos#
 
             #MenuUsuarios#
 
@@ -764,7 +762,6 @@
     <script type="text/javascript" src="vistas/assets/js/clientes.js"></script>
     <script type="text/javascript" src="vistas/assets/js/proveedores.js"></script>
     <script type="text/javascript" src="vistas/assets/js/areas.js"></script>
-    <script type="text/javascript" src="vistas/assets/js/personal.js"></script>
     <script type="text/javascript" src="vistas/assets/js/hacerventa.js"></script>
     <script type="text/javascript" src="vistas/assets/js/categorias.js"></script>
     <script type="text/javascript" src="vistas/assets/js/impuestos.js"></script>
@@ -775,9 +772,8 @@
     <script type="text/javascript" src="vistas/assets/js/cajas.js"></script>
     <script type="text/javascript" src="vistas/assets/js/perfil.js"></script>
     <script type="text/javascript" src="vistas/assets/js/tickets.js"></script>
-    <script type="text/javascript" src="vistas/assets/js/general.js"></script>
     <script type="text/javascript" src="vistas/assets/js/zonas.js"></script>
-    <script type="text/javascript" src="vistas/assets/js/ventas.js"></script>
+    <!--<script type="text/javascript" src="vistas/assets/js/ventas.js"></script>-->
     <script type="text/javascript" src="vistas/assets/js/compras.js"></script>
     <script type="text/javascript" src="vistas/assets/js/hacerCompra.js"></script>
   </body>

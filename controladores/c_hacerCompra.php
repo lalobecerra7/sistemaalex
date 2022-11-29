@@ -28,7 +28,7 @@ class hacerCompra {
 			$estatus = '1';
 		}
 
-		$query = "INSERT INTO compras SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Proveedor= '$idProveedor', Total= '$total', Anticipo= '$ImportePagadoCompra', Estatus= '$estatus', Fecha = '$fecha', Fecha_Credito = '$fechaCredito', Tipo_Compra = '$tipoCompra', Descuento = '$descuento'";
+		$query = "INSERT INTO compras SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Proveedor= '$idProveedor', Total= '$total', Anticipo= '$ImportePagadoCompra', Estatus= '$estatus', Fecha_Registro = '$fecha', Fecha_Credito = '$fechaCredito', Tipo_Compra = '$tipoCompra', Descuento = '$descuento'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
@@ -37,21 +37,28 @@ class hacerCompra {
 			$IDCompra = mysqli_insert_id($omodelo->link);
 
 			foreach ($datos as $fila) {
-				// $query = "SELECT ID_Producto, Nombre, Foto FROM productos WHERE ID_Producto = '".$fila[0]."'";
-				// $row = $omodelo->_consultar($query);
-				// $numerofilas = $omodelo->numerofilas;
+				$calcularSubtotal = floatval($fila[1]) * floatval($fila[2]);
+				$queryDetalles = "INSERT INTO detalle_compras SET FK_Compra = '$IDCompra', FK_Producto = '".$fila[0]."', Costo = '".$fila[1]."', Cantidad = '".$fila[2]."', FK_Presentacion = '".$fila[4]."', Subtotal = '$calcularSubtotal'";
+				$errorDetalles = $omodelo->_insertar($queryDetalles);
 
-				// if($row == 'si'){
-				// 	echo "Error: ".mysqli_error($omodelo->link);
-				// }else{
-				// 	if($numerofilas > 0){
-						$calcularSubtotal = floatval($fila[1]) * floatval($fila[2]);
-						$queryDetalles = "INSERT INTO detalle_compras SET FK_Compra = '$IDCompra', FK_Producto = '".$fila[0]."', Costo = '".$fila[1]."', Cantidad = '".$fila[2]."', FK_Sucursal = '".$fila[3]."', FK_Presentacion = '".$fila[4]."', Subtotal = '$calcularSubtotal'";
-						$errorDetalles = $omodelo->_insertar($queryDetalles);
-
-						if ($errorDetalles == "si") {
-							echo "Error detalles: ".mysqli_error($omodelo->link);
+				if ($errorDetalles == "si") {
+					echo "Error detalles: ".mysqli_error($omodelo->link);
+				}else{
+					/*$querySumar = "UPDATE inventario SET Cantidad = (Cantidad + ".$fila[2].") WHERE FK_Producto = '".$fila[0]."' AND FK_Sucursal = '".$fila[3]."' AND FK_Presentacion = '".$fila[4]."'";
+					$errorSumar = $omodelo->_insertar($querySumar);
+					
+					if ($errorSumar == "si") {
+						echo "Error sumar: ".mysqli_error($omodelo->link);
+					}else {
+						$usuario = $_SESSION['user_admin']['ID_Usuario'];
+						$queryPago = "INSERT INTO pagos SET FK_Compra = '$IDCompra', Monto = '$ImportePagadoCompra', Concepto = 'Anticipo', Tipo_Pago = '$tipoPago', Fecha = '$fecha', FK_Usuario = '$usuario', Detalles_Pago = '$detalles'";
+						$errorPago = $omodelo->_insertar($queryPago);
+						if ($errorPago == "si") {
+							echo "Error pagos: ".mysqli_error($omodelo->link);
 						}else{
+							echo "Correcto~".$IDCompra;
+							$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+
 							$querySumar = "UPDATE inventario SET Cantidad = (Cantidad + ".$fila[2].") WHERE FK_Producto = '".$fila[0]."' AND FK_Presentacion = '".$fila[3]."' AND FK_Sucursal = '".$fila[4]."'";
 							$errorSumar = $omodelo->_insertar($querySumar);
 							if ($errorSumar == "si") {
@@ -68,8 +75,8 @@ class hacerCompra {
 								}
 							}
 						}
-					//}
-				//}
+					}*/
+				}	
 			}
 		}
 	}

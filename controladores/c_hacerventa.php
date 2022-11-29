@@ -29,8 +29,9 @@ class hacerventa {
 	public function _detalles(){
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$arreglo = null;
+		$arreglo = array();
 		$fecha = date('Y-m-d H:i:s'); 
+
 		if ($tipo == "ConsultarCajas") {
 			$query = "SELECT ID_Caja, cajas.Nombre AS Caja, Detalles, cajas.Estado AS Estado, FK_Usuario, CONCAT(usuarios.Nombre, ' ', Primer_Apellido, ' ', Segundo_Apellido) AS Usuario, ID_Detalle_Caja, DATE_FORMAT(Fecha_Abrir, '%d-%m-%Y %r') AS Fecha_Abrir, Monto_Abrir, FK_Usuario_Abrir, (SELECT CONCAT(usuarios.Nombre, ' ', Primer_Apellido, ' ', Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario_Abrir) AS Abrio, DATE_FORMAT(Fecha_Cierre, '%d-%m-%Y %r') AS Fecha_Cierre, Monto_Cierre, FK_Usuario_Cierre, cajas.FK_Sucursal, sucursales.Nombre AS Sucursal FROM cajas INNER JOIN sucursales ON cajas.FK_Sucursal = ID_Sucursal LEFT JOIN usuarios ON FK_Usuario = ID_Usuario LEFT JOIN detalles_caja ON FK_Caja = ID_Caja AND ID_Detalle_Caja = (SELECT MAX(ID_Detalle_Caja) FROM cajas WHERE FK_Caja = ID_Caja) ORDER BY cajas.Nombre";
 			$row = $omodelo->_consultar($query);
@@ -61,9 +62,9 @@ class hacerventa {
 						);
 					}
 				}
-				echo json_encode($arreglo);
 			}
 
+			echo json_encode($arreglo);
 		}else if ($tipo == "AbrirCaja") {
 			$query = "UPDATE cajas SET Estado = '1', FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."' WHERE ID_Caja = '$Caja'";
 			$error = $omodelo->_insertar($query);
@@ -154,11 +155,13 @@ class hacerventa {
 
 			echo json_encode($arreglo);
 		}else if($tipo == "AgregarProducto"){
+
 			$queryPresentacion = "";
 			if (isset($presentacion) && $presentacion != "") {
 				$queryPresentacion = "AND inventario.FK_Presentacion = '$presentacion'";
 			}
 			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.Nombre AS Presentacion, presentaciones.ID_Presentacion AS IDPresentacion, Clase, Poner_Unidad, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, detalles_productos.Costo AS Costo, detalles_productos.Minimo AS Minimo, detalles_productos.Maximo AS Maximo FROM productos LEFT JOIN detalles_productos ON detalles_productos.FK_Producto = ID_Producto AND detalles_productos.FK_Sucursal = '$sucursal' LEFT JOIN unidades ON FK_Unidad = ID_Unidad LEFT JOIN areas ON FK_Area = ID_Area LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion WHERE Tipo = 1 AND Codigo = '$codigo' $queryPresentacion";
+
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 

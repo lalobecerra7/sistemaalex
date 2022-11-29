@@ -17,14 +17,14 @@ class compras {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(DATE_FORMAT(compras.Fecha, '%Y-%m-%d'), ID_Compra, FK_Proveedor, FK_Usuario, proveedores.Nombre, proveedores.Empresa, proveedores.Credito, Anticipo, Total, Estatus) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(DATE_FORMAT(compras.Fecha_Registro, '%Y-%m-%d'), ID_Compra, FK_Proveedor, FK_Usuario, proveedores.Nombre, proveedores.Empresa, proveedores.Credito, Anticipo, Total, Estatus) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Compra, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Proveedor, proveedores.Nombre AS Datos, proveedores.Empresa AS Empresa, proveedores.Telefono AS Telefono, proveedores.Razon_Social AS RazonSocial, proveedores.Credito as Credito, Anticipo, Total, Estatus, compras.Fecha, (SELECT COUNT(*) FROM compras ) AS Num FROM compras INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Compra, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Proveedor, proveedores.Nombre AS Datos, proveedores.Empresa AS Empresa, proveedores.Telefono AS Telefono, proveedores.Razon_Social AS RazonSocial, proveedores.Credito as Credito, Anticipo, Total, Estatus, compras.Fecha_Registro AS Fecha_Registro, (SELECT COUNT(*) FROM compras) AS Num FROM compras INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -64,9 +64,9 @@ class compras {
 
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Compra'],
-						'Datos' => "Fecha: <b>".$row[$i]['Fecha']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b>",
+						'Datos' => "Fecha: <b>".$row[$i]['Fecha_Registro']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b>",
 						'Proveedor' => 'Nombre: <b>'.$row[$i]['Datos'].'</b><br>Empresa: <b>'.$row[$i]['Empresa'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Razón social: <b>'.$row[$i]['RazonSocial'].'</b>',
-						'Total' => 'Anticipo: <b>$'.number_format($row[$i]['Anticipo'],2).'</b><br>Crédito: <b>$'.number_format($row[$i]['Credito'],2).'</b><br>Total: <b style="font-size: 15px;">$'.number_format($row[$i]['Total'],2).'</b><br>',
+						'Total' => 'Anticipo: <b>$'.number_format($row[$i]['Anticipo'], 2).'</b><br>Crédito: <b>$'.number_format($row[$i]['Credito'],2).'</b><br>Total: <b style="font-size: 15px;">$'.number_format($row[$i]['Total'],2 ).'</b><br>',
 						'Detalles' => $estatus.'<br>'.$motivocancelada.'<br><button class="btn btn-link btn-sm" id="VerProductosCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'">Ver productos</button>',
 						'Acciones' => $botonEliminar.' '.$botondeCancelar .' '.$botonPagos,
 					);

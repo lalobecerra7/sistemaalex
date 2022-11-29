@@ -357,7 +357,7 @@ jQuery(document).ready(function($) {
             }
         })
         .done(function(res) {
-            console.log(res);
+            console.log($.trim(res));
             $("#barCodeV").val("");
 
             if($.trim(res) == "No encontrado"){
