@@ -235,14 +235,6 @@ jQuery(document).ready(function($) {
         impuesto = [];
     });
 
-    $(document).on('click', '#EliminarPrecio', function() {
-        $(this).parent().parent().remove();
-    });
-
-    $(document).on('click', '#EliminarPresentacion', function() {
-        $(this).parent().parent().remove();
-    });
-
     $(document).on('click', '#AgregarPrecioProducto', function() {
         var zonas = '';
         var data = "metodo=detalles&accion=productos&tipo=ConsultarZonaProducto";
@@ -268,7 +260,7 @@ jQuery(document).ready(function($) {
                 <td>
                     <input type="number" class="form-control" id="PrecioProductoMayoreo" name="PrecioProductoMayoreo" min="0" placeholder="$0.00">
                 </td>
-                <td><button class="btn btn-sm btn-danger" id="EliminarPrecio"><i class="fas fa-trash"></i></button></td>
+                <td><button type="button" class="btn btn-sm btn-danger" id="EliminarPrecio" attrid nombre><i class="fas fa-trash"></i></button></td>
             </tr>`;
             $("#TablaPreciosProductos tbody").append(tabla);
         })
@@ -288,7 +280,7 @@ jQuery(document).ready(function($) {
                 <td>
                     <input type="text" class="form-control" id="AbreviaturaPresentacion" name="AbreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación">
                 </td>
-                <td><button class="btn btn-sm btn-danger" id="EliminarPresentacion"><i class="fas fa-trash"></i></button></td>
+                <td><button  type="button" class="btn btn-sm btn-danger" id="EliminarPresentacionProducto" attrid nombre><i class="fas fa-trash"></i></button></td>
             </tr>`;
         $("#TablaPresentacionProducto tbody").append(tabla);
     });
@@ -304,7 +296,7 @@ jQuery(document).ready(function($) {
                     <td>
                         <input type="text" class="form-control" id="AbreviaturaPresentacion" name="AbreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación">
                     </td>
-                    <td><button class="btn btn-sm btn-danger" id="EliminarPresentacion"><i class="fas fa-trash"></i></button></td>
+                    <td><button class="btn btn-sm btn-danger" id="EliminarPresentacionProducto"><i class="fas fa-trash"></i></button></td>
                 </tr>`;
             $("#TablaPresentacionProducto tbody").append(tabla);
             console.log("entro");
@@ -333,7 +325,7 @@ jQuery(document).ready(function($) {
           confirmButtonText: 'Si, eliminar'
         }).then((result) => {
           if (result.value) {
-            var data = "metodo=eliminar&accion=productos&IDProducto="+id;
+            var data = "metodo=eliminar&accion=productos&tipo=EliminarProducto&IDProducto="+id;
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
@@ -476,7 +468,7 @@ jQuery(document).ready(function($) {
                             <td>
                                 <input type="number" class="form-control" value="`+Precio_Mayoreo+`" id="PrecioProductoMayoreo" name="PrecioProductoMayoreo" min="0" placeholder="$0.00">
                             </td>
-                            <td><button class="btn btn-sm btn-danger" id="EliminarPrecio"><i class="fas fa-trash"></i></button></td>
+                            <td><button  type="button" class="btn btn-sm btn-danger" id="EliminarPrecio" attrid="`+datos.Extras[i].ID_Precio+`" nombre="`+Nombre+`"><i class="fas fa-trash"></i></button></td>
                         </tr>`;
                     $("#TablaPreciosProductos tbody").append(tabla);
                 }
@@ -495,7 +487,7 @@ jQuery(document).ready(function($) {
                             <td>
                                 <input type="text" class="form-control" value="`+Abreviatura+`" id="AbreviaturaPresentacion" name="AbreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación">
                             </td>
-                            <td><button class="btn btn-sm btn-danger" id="EliminarPresentacion"><i class="fas fa-trash"></i></button></td>
+                            <td><button type="button" class="btn btn-sm btn-danger" id="EliminarPresentacionProducto" nombre="`+Nombre+`" attrid="`+datos.Presentaciones[i].ID_Presentacion+`"><i class="fas fa-trash"></i></button></td>
                         </tr>`;
                     $("#TablaPresentacionProducto tbody").append(tabla);
                 }
@@ -505,6 +497,102 @@ jQuery(document).ready(function($) {
         .fail(function() {
             console.log("Error ajax");
         });
+    });
+
+    $(document).on('click', '#EliminarPresentacionProducto', function() {
+        if ($(this).attr("attrid") != "" || $(this).attr("attrid") != null) {
+            var boton = $(this);
+            var id = $(this).attr("attrid");
+            var nombre = $(this).attr("nombre");
+            console.log(id);
+            Swal.fire({
+              title: '¿Estás a punto de eliminar la presentación '+nombre+'?',
+              text: "Una vez eliminado ya no podrá ser recuperado",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              cancelButtonText: 'No, cancelar',
+              confirmButtonText: 'Si, eliminar'
+            }).then((result) => {
+              if (result.value) {
+                var data = "metodo=eliminar&accion=productos&tipo=EliminarPresentacion&IDPresentacion="+id;
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data
+                })
+                .done(function(res) {
+                    console.log(res);
+                    if ($.trim(res) == "Correcto") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Presentación eliminada correctamente'
+                        });
+                        TablaProductos();
+                        $(boton).parent().parent().remove();
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error inesperado al eliminar presentación.'
+                        });
+                    }
+                })
+                .fail(function() {
+                    console.log("Error ajax");
+                });  
+              }
+            });
+        }
+    });
+
+    $(document).on('click', '#EliminarPrecio', function() {
+        if ($(this).attr("attrid") != "" || $(this).attr("attrid") != null) {
+            var boton = $(this);
+            var id = $(this).attr("attrid");
+            var nombre = $(this).attr("nombre");
+            console.log(id);
+            Swal.fire({
+              title: '¿Estás a punto de eliminar el precio '+nombre+'?',
+              text: "Una vez eliminado ya no podrá ser recuperado",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              cancelButtonText: 'No, cancelar',
+              confirmButtonText: 'Si, eliminar'
+            }).then((result) => {
+              if (result.value) {
+                var data = "metodo=eliminar&accion=productos&tipo=EliminarPrecio&IDPrecio="+id;
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data
+                })
+                .done(function(res) {
+                    console.log(res);
+                    if ($.trim(res) == "Correcto") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Precio eliminado correctamente'
+                        });
+                        TablaProductos();
+                        $(boton).parent().parent().remove();
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error inesperado al eliminar precio.'
+                        });
+                    }
+                })
+                .fail(function() {
+                    console.log("Error ajax");
+                });  
+              }
+            });
+        }
     });
 
     $(document).on('click', '#AumentarExistencias', function() {

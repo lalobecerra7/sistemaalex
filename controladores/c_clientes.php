@@ -237,20 +237,33 @@ class clientes {
 			echo "Correcto~";
 			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 
-			$queryDir = "DELETE FROM detalles_clientes WHERE FK_Cliente = '$IDCliente'";
-			$errorDir = $omodelo->_insertar($queryDir);
 
-			if ($errorDir == "si") {
-				echo "Error Eliminar Direcciones: ".mysqli_error($omodelo->link);
-			}else{
-				$direcciones = explode(",", $direcciones);
-				for ($i=0; $i < sizeof($direcciones) - 1; $i++) { 
-					$datosdireccion = explode("~", $direcciones[$i]);
-					$queryDirecciones = "INSERT INTO detalles_clientes SET FK_Cliente = '$IDCliente', Calle = '$datosdireccion[0]', No_Exterior = '$datosdireccion[1]', No_Interior = '$datosdireccion[2]', Colonia = '$datosdireccion[4]', Codigo_Postal = '$datosdireccion[3]', Ciudad = '$datosdireccion[5]', Estado = '$datosdireccion[6]', Pais = '$datosdireccion[7]', Nombre_Contacto = '$datosdireccion[8]', Puesto_Contacto = '$datosdireccion[9]', Email_Contacto = '$datosdireccion[10]', Telefono_Contacto  = '$datosdireccion[11]'";
-					$errorDirecciones = $omodelo->_insertar($queryDirecciones);	
 
-					if ($errorDirecciones == "si") {
-						echo "Error direcciones: ".mysqli_error($omodelo->link); 
+			$direcciones = explode(",", $direcciones);
+			for ($i=0; $i < sizeof($direcciones) - 1; $i++) { 
+				$datosdireccion = explode("~", $direcciones[$i]);
+
+				$queryPrese = "SELECT ID_Detalle_Cliente, FK_Cliente, Calle, No_Exterior, No_Interior, Colonia, Codigo_Postal, Ciudad, Estado, Pais, Nombre_Contacto, Puesto_Contacto, Email_Contacto, Telefono_Contacto FROM detalles_clientes WHERE FK_Cliente = '$IDCliente' AND Calle = '$datosdireccion[0]' AND No_Exterior = '$datosdireccion[1]' AND Ciudad = '$datosdireccion[5]' AND Estado = '$datosdireccion[6]' AND Pais = '$datosdireccion[7]'";
+				$rowPrese = $omodelo->_consultar($queryPrese);
+				$numerofilasPrese = $omodelo->numerofilas;
+
+				if ($rowPrese == "si") {
+					echo "Error consultar archivo: ".mysqli_error($omodelo->link);
+				}else{
+					if($numerofilasPrese > 0){
+						$queryDirecciones = "UPDATE detalles_clientes SET No_Interior = '$datosdireccion[2]', Colonia = '$datosdireccion[4]', Codigo_Postal = '$datosdireccion[3]',  Nombre_Contacto = '$datosdireccion[8]', Puesto_Contacto = '$datosdireccion[9]', Email_Contacto = '$datosdireccion[10]', Telefono_Contacto  = '$datosdireccion[11]' WHERE FK_Cliente = '$IDCliente' AND Calle = '$datosdireccion[0]' AND No_Exterior = '$datosdireccion[1]' AND Ciudad = '$datosdireccion[5]' AND Estado = '$datosdireccion[6]' AND Pais = '$datosdireccion[7]'";
+						$errorDirecciones = $omodelo->_insertar($queryDirecciones);	
+
+						if ($errorDirecciones == "si") {
+							echo "Error direcciones: ".mysqli_error($omodelo->link); 
+						}
+					}else{
+						$queryDirecciones = "INSERT INTO detalles_clientes SET FK_Cliente = '$IDCliente', Calle = '$datosdireccion[0]', No_Exterior = '$datosdireccion[1]', No_Interior = '$datosdireccion[2]', Colonia = '$datosdireccion[4]', Codigo_Postal = '$datosdireccion[3]', Ciudad = '$datosdireccion[5]', Estado = '$datosdireccion[6]', Pais = '$datosdireccion[7]', Nombre_Contacto = '$datosdireccion[8]', Puesto_Contacto = '$datosdireccion[9]', Email_Contacto = '$datosdireccion[10]', Telefono_Contacto  = '$datosdireccion[11]'";
+						$errorDirecciones = $omodelo->_insertar($queryDirecciones);	
+
+						if ($errorDirecciones == "si") {
+							echo "Error direcciones: ".mysqli_error($omodelo->link); 
+						}
 					}
 				}
 			}
@@ -306,29 +319,42 @@ class clientes {
 	public function _eliminar(){
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$IDCliente =  $omodelo->link->real_escape_string($IDCliente);
+		if ($tipo == "EliminarCliente") {
+			$IDCliente =  $omodelo->link->real_escape_string($IDCliente);
 
-		$query = "SELECT Foto FROM clientes WHERE ID_Cliente = '$IDCliente'";
-		$row = $omodelo->_consultar($query);
-		$numerofilas = $omodelo->numerofilas;
-		$nombreFoto = "";
-		if($row == 'si'){
-			echo "Error: ".mysqli_error($omodelo->link);
-		}else{
-			if($numerofilas > 0){
-				if($row[0]["Foto"] != "" && file_exists("vistas/assets/archivos/fotosClientes/".$row[0]["Foto"])){
-			       	unlink("vistas/assets/archivos/fotosClientes/".$row[0]["Foto"]);
-			    }
+			$query = "SELECT Foto FROM clientes WHERE ID_Cliente = '$IDCliente'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$nombreFoto = "";
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					if($row[0]["Foto"] != "" && file_exists("vistas/assets/archivos/fotosClientes/".$row[0]["Foto"])){
+				       	unlink("vistas/assets/archivos/fotosClientes/".$row[0]["Foto"]);
+				    }
+				}
 			}
-		}
 
-		$query = "DELETE FROM clientes WHERE ID_Cliente = '$IDCliente'";
-		$error = $omodelo->_insertar($query);
-		if ($error == "si") {
-			echo "Error: ".mysqli_error($omodelo->link);
-		}else{
-			echo "Correcto";
-		    $omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			$query = "DELETE FROM clientes WHERE ID_Cliente = '$IDCliente'";
+			$error = $omodelo->_insertar($query);
+			if ($error == "si") {
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+			    $omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
+		}else if ($tipo == "EliminarDireccion") {
+			$IDDireccion =  $omodelo->link->real_escape_string($IDDireccion);
+
+			$query = "DELETE FROM detalles_clientes WHERE ID_Detalle_Cliente = '$IDDireccion'";
+			$error = $omodelo->_insertar($query);
+			if ($error == "si") {
+				echo "Error 1: " . mysqli_error($omodelo->link);
+			} else {
+				echo "Correcto";
+				//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+			}
 		}
 	}
 

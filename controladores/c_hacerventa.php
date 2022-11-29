@@ -111,7 +111,7 @@ class hacerventa {
 				}
 			}
 
-			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, Clase, Abreviatura AS Unidad, Poner_Unidad, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, detalles_productos.Costo AS Costo, detalles_productos.Precio AS Precio, detalles_productos.Precio_Mayoreo AS Precio_Mayoreo, detalles_productos.Minimo AS Minimo, detalles_productos.Maximo AS Maximo, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos LEFT JOIN detalles_productos ON detalles_productos.FK_Producto = ID_Producto AND detalles_productos.FK_Sucursal = '$sucursal' LEFT JOIN unidades ON FK_Unidad = ID_Unidad LEFT JOIN areas ON FK_Area = ID_Area LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.Nombre AS Presentacion, Poner_Unidad, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, detalles_productos.Costo AS Costo, detalles_productos.Minimo AS Minimo, detalles_productos.Maximo AS Maximo, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos LEFT JOIN detalles_productos ON detalles_productos.FK_Producto = ID_Producto AND detalles_productos.FK_Sucursal = '$sucursal' LEFT JOIN areas ON FK_Area = ID_Area LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion  $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -120,13 +120,6 @@ class hacerventa {
 			}else{
 				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
-						if ($row[$i]['Precio'] == "") {
-							$row[$i]['Precio'] = 0;
-						}
-
-						if ($row[$i]['Precio_Mayoreo'] == "") {
-							$row[$i]['Precio_Mayoreo'] = 0;
-						}
 
 						if ($row[$i]['Existencia'] == "") {
 							$row[$i]['Existencia'] = 0;
@@ -136,21 +129,13 @@ class hacerventa {
 							$row[$i]['NombreArea'] = "No hay area registrada";
 						}
 
-						if ($row[$i]['Precio_Mayoreo'] == "" || $row[$i]['Precio_Mayoreo'] < 0) {
-							$row[$i]['Precio_Mayoreo'] = $row[$i]['Precio_Mayoreo_General'];
-						}
-
-						if ($row[$i]['Precio'] == "" || $row[$i]['Precio'] < 0) {
-							$row[$i]['Precio'] = $row[$i]['Precio_General'];
-						}
-
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Producto'],
 							'Descripcion' => $row[$i]['Descripcion'],
 							'Codigo' => $row[$i]['Codigo'],
-							'Clase' => $row[$i]['Clase'],
-							'Precio' => $row[$i]['Precio'],
-							'Precio Mayoreo' => $row[$i]['Precio_Mayoreo'],
+							'Presentacion' => $row[$i]['Presentacion'],
+							'Precio' => $row[$i]['Precio_General'],
+							'Precio Mayoreo' => $row[$i]['Precio_Mayoreo_General'],
 							'Area' => $row[$i]['NombreArea'],
 							'Existencia' => $row[$i]['Existencia'],
 						);
@@ -163,7 +148,7 @@ class hacerventa {
 
 			echo json_encode($arreglo);
 		}else if($tipo == "AgregarProducto"){
-			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, Clase, Abreviatura AS Unidad, Poner_Unidad, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, detalles_productos.Costo AS Costo, detalles_productos.Precio AS Precio, detalles_productos.Precio_Mayoreo AS Precio_Mayoreo, detalles_productos.Minimo AS Minimo, detalles_productos.Maximo AS Maximo FROM productos LEFT JOIN detalles_productos ON detalles_productos.FK_Producto = ID_Producto AND detalles_productos.FK_Sucursal = '$sucursal' LEFT JOIN unidades ON FK_Unidad = ID_Unidad LEFT JOIN areas ON FK_Area = ID_Area LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' WHERE Tipo = 1 AND Codigo = '$codigo'";
+			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, Clase, Abreviatura AS Unidad, Poner_Unidad, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, detalles_productos.Costo AS Costo, detalles_productos.Minimo AS Minimo, detalles_productos.Maximo AS Maximo FROM productos LEFT JOIN detalles_productos ON detalles_productos.FK_Producto = ID_Producto AND detalles_productos.FK_Sucursal = '$sucursal' LEFT JOIN unidades ON FK_Unidad = ID_Unidad LEFT JOIN areas ON FK_Area = ID_Area LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' WHERE Tipo = 1 AND Codigo = '$codigo'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -207,8 +192,6 @@ class hacerventa {
 						'Fecha_Registro' => $row[0]["Fecha_Registro"],
 						'Existencia' => $row[0]["Existencia"],
 						'Costo' => $row[0]["Costo"],
-						'Precio' => $row[0]["Precio"],
-						'Precio_Mayoreo' => $row[0]["Precio_Mayoreo"],
 						'Minimo' => $row[0]["Minimo"],
 						'Maximo' => $row[0]["Maximo"],
 						'Impuestos' => $subarreglo
@@ -458,6 +441,62 @@ class hacerventa {
 				}
 			}
 			echo json_encode($arreglo);	
+		}else if ($tipo == "ConsultarPreciosProducto") { //NOS QUEDAMOS EN QUE SE MUESTREN LOS PRECIOS DEL PRODUCTO DEPENDIENDO LA SUCURSAL
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'WHERE ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(ID_Precio, FK_Producto, FK_Zona, Nombre, Precio, Precio_Mayoreo) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+
+			$query = "SELECT ID_Precio, FK_Producto, FK_Zona, Nombre, Precio, Precio_Mayoreo, (SELECT COUNT(*) FROM precios $busqueda) AS Num FROM precios $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+
+						if ($row[$i]['Existencia'] == "") {
+							$row[$i]['Existencia'] = 0;
+						}
+
+						if ($row[$i]['NombreArea'] == "") {
+							$row[$i]['NombreArea'] = "No hay area registrada";
+						}
+
+						$arreglo['data'][$i] = array(
+							'ID' => $row[$i]['ID_Producto'],
+							'Descripcion' => $row[$i]['Descripcion'],
+							'Codigo' => $row[$i]['Codigo'],
+							'Presentacion' => $row[$i]['NombrePresentacion'],
+							'Precio' => $row[$i]['Precio_General'],
+							'Precio Mayoreo' => $row[$i]['Precio_Mayoreo_General'],
+							'Area' => $row[$i]['NombreArea'],
+							'Existencia' => $row[$i]['Existencia'],
+						);
+						
+					}
+
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+				}
+			}
+
+			echo json_encode($arreglo);
 		}
 	}
 }
