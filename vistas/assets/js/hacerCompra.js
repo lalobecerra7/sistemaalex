@@ -316,7 +316,7 @@ $(document).on('change', '#TipoCompra', function() {
 
 $(document).on('click', '#GuardarCompra', function() {
 	var total = $("#TotalCompra").text().replace("$", "").replace(",", "");
-	var ImportePagadoCompra = $("#ImportePagadoCompra").val();
+	var ImportePagadoCompra = parseFloat($("#ImportePagadoCompra").val());
 	var idProveedor = $("#RealizarCompra").attr("idProveedor");
 	var descuento = $("#Descuento").text().replace("$", "").replace(",", "");
 	var subtotal = $("#MostrarSubtotal").text().replace("$", "").replace(",", "");
@@ -324,14 +324,14 @@ $(document).on('click', '#GuardarCompra', function() {
 	var detalles = $('#DetallesPago').val();
 	var tipoCompra = $('#TipoCompra').val();
 	var fechaCredito = $('#fechaCredito').val();
-	console.log('subtotal: '+subtotal);
-	if(tipoCompra == 'Credito' && $("#Total").text().replace("$", "").replace(",", "") > ImportePagadoCompra){
+	
+	if(tipoCompra == 'Credito' && ImportePagadoCompra >= parseFloat($("#Total").text().replace("$", "").replace(",", ""))){
 		Swal.fire({
 			icon: 'error',
 			title: 'Oops...',
-			text: 'El importe pagado dede ser mayor o igual a '+$("#Total").text()
+			text: 'El importe pagado dede ser menor a '+$("#Total").text()
 		});
-	}else if(tipoCompra == 'Contado' && ImportePagadoCompra < $("#Total").text().replace("$", "").replace(",", "")){
+	}else if(tipoCompra == 'Contado' && ImportePagadoCompra < parseFloat($("#Total").text().replace("$", "").replace(",", ""))){
 		Swal.fire({
 			icon: 'error',
 			title: 'Oops...',
@@ -353,7 +353,7 @@ $(document).on('click', '#GuardarCompra', function() {
 		}else if(tipoCompra == 'Credito'){
 			estatus = '0';
 		}
-		console.log(total);
+		
 		var data = "metodo=insertar&accion=hacerCompra&Importe="+ImportePagadoCompra+"&idProveedor="+idProveedor+"&FechaCredito="+fechaCredito+"&Productos="+JSON.stringify(productos)+"&subtotal="+subtotal+"&total="+total+"&TipoCompra="+tipoCompra+"&Descuento="+descuento+"&TipoPago="+tipoPago+"&Detalles="+detalles;
 		$.ajax({
 			url: 'index.php',
@@ -361,7 +361,6 @@ $(document).on('click', '#GuardarCompra', function() {
 			data: data,
 		})
 		.done(function(res) {
-			console.log(res);
 			var datos = res.split("~");
 			if ($.trim(datos[0]) == "Correcto") {
 				Swal.fire({
@@ -384,7 +383,8 @@ $(document).on('click', '#GuardarCompra', function() {
 					title: 'Oops...',
 					text: 'Error inesperado al registrar la compra.'
 				});
-				console.log(res);
+
+				console.log($.trim(res));
 			}
 		})
 		.fail(function() {

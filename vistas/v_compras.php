@@ -24,7 +24,7 @@
 				<div class="col-12 text-end">
 					<!-- <button type="button" class="btn btn-success" id="botonNuevaArea" onclick="$('#ModalAreas').appendTo('body').modal('show')"><i class="fa fa-file"></i> Nueva</button> -->
 					<button type="button" class="btn btn-primary botonNuevaCompra" onclick="$('#cargarHacerCompra').trigger('click')">Nueva compra <i class="fa fa-file"></i></button>
-                    <a href="javascript:void(0)" class="btn btn-light btn-reload cargarVista" carga="v_cargarCompras" titulo="Compras"><i class="fa fa-retweet"></i></a>
+                    <a href="javascript:void(0)" class="btn btn-light btn-reload cargarVista" carga="v_compras" titulo="Compras"><i class="fa fa-retweet"></i></a>
 				</div>
 			</div>
 			<br>
