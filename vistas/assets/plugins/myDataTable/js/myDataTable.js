@@ -177,6 +177,8 @@ function ajaxMyDatatable(data) {
 				data.table.children('tfoot').html("");
 				$("#"+data.table.attr('id')+"_Pagination").remove();
 			}
+
+			moneda();
 		} catch (error) {
 			console.error("Error MyDataTable: "+error);
 			console.log($.trim(res));

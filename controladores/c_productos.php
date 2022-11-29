@@ -66,7 +66,7 @@ class productos {
 						$area .= "Descripción: ".$row[$i]['DescripcionArea']."<br>";
 					}
 					$precios = '';
-					$queryZona = "SELECT ID_Zona, Nombre FROM zona";
+					$queryZona = "SELECT ID_Zona, Nombre FROM zonas";
 					$rowZona = $omodelo->_consultar($queryZona);
 					$numerofilasZona = $omodelo->numerofilas;
 					if ($numerofilasZona > 0) {
@@ -153,7 +153,7 @@ class productos {
 		$detalle =  explode("~", $detalleProducto);
 		$impuesto =  explode(",", $impuestos);
 
-		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion',  FK_Categoria = '$Categoria', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha'";
+		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion',  FK_Categoria = '$Categoria', Tipo = '1', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -497,7 +497,7 @@ class productos {
 					$numerofilasPrecios = $omodelo->numerofilas;
 					for ($x=0; $x < $numerofilasPrecios; $x++) { 
 
-						$queryZona = "SELECT ID_Zona, Nombre FROM zona";
+						$queryZona = "SELECT ID_Zona, Nombre FROM zonas";
 						$rowZona = $omodelo->_consultar($queryZona);
 						$numerofilasZona = $omodelo->numerofilas;
 						$opciones = "";
@@ -829,7 +829,7 @@ class productos {
 				$imp = substr($impuestos, 0, -1);
 			echo $imp;
 		}else if($tipo  == "ConsultarZonaProducto"){
-			$query = "SELECT ID_Zona, Nombre FROM zona";
+			$query = "SELECT ID_Zona, Nombre FROM zonas";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			$opciones = "";

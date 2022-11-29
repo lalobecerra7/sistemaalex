@@ -24,7 +24,8 @@ class proveedores {
 			}
 		}
 
-		$query = "SELECT ID_Proveedor, Nombre, Calle, No_Exterior, No_Interior, Telefono, Ciudad, Estado, Pais, Empresa , Colonia, Codigo_Postal, Puesto, Correo, RFC, Credito, Celular, No_Cuenta, Banco, Razon_Social AS RazonSocial, Fecha_Registro AS Fecha, (SELECT COUNT(*) FROM proveedores WHERE ID_Proveedor <> 1 $busqueda) AS Num, ((SELECT COUNT(*) FROM compras WHERE proveedor = ID_Proveedor) + (SELECT COUNT(*) FROM detalle_proveedores WHERE proveedor = ID_Proveedor)) AS numProve FROM proveedores WHERE ID_Proveedor <> 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Proveedor, Nombre, Calle, No_Exterior, No_Interior, Telefono, Ciudad, Estado, Pais, Empresa , Colonia, Codigo_Postal, Puesto, Correo, RFC, Credito, Celular, No_Cuenta, Banco, Razon_Social AS RazonSocial, Fecha_Registro AS Fecha, (SELECT COUNT(*) FROM proveedores WHERE ID_Proveedor <> 1 $busqueda) AS Num, ((SELECT COUNT(*) FROM compras WHERE FK_Proveedor = ID_Proveedor)) AS numProve FROM proveedores WHERE ID_Proveedor <> 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
