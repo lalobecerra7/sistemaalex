@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
     	if (cantidad == "") {
     		cantidad = 0;
     	}
-    	var costo = $(".campoCosto").val();
+    	var costo = $(this).parent().parent().find(".campoCosto").val();
     	var total = parseFloat(costo) * parseFloat(cantidad);
     	$(this).parent().parent().find('.totalP').text(parseFloat(total.toFixed(2)));
     	CalcularSubtotal();
@@ -31,13 +31,14 @@ jQuery(document).ready(function($) {
     });
 
 	$(document).on('keyup change', '.campoCosto', function() {
-    	var cantidad = $('.campoCantidad').val();
+    	var cantidad = $(this).parent().parent().find('.campoCantidad').val();
+		console.log(cantidad);
     	if (cantidad == "") {
     		cantidad = 0;
     	}
-    	var costo = $(".campoCosto").val();
+    	var costo = $(this).val();
     	var total = parseFloat(costo) * parseFloat(cantidad);
-    	$(".campoCantidad").parent().parent().find('.totalP').text(parseFloat(total.toFixed(2)));
+    	$(this).parent().parent().find('.totalP').text(parseFloat(total.toFixed(2)));
     	CalcularSubtotal();
     	$("#DescuentoCompraDinero").trigger("change");
     });
@@ -91,9 +92,9 @@ jQuery(document).ready(function($) {
 		var encontrado = false;
 
 		$("#tbodyTablaProductosAgregados tr").each(function(){
-			if ($(this).attr("attrid") == idProducto) {
-				var cantidadAnterior = $(this).children("td:eq(3)").find(".campoCantidad").val();
-				$(this).children("td:eq(3)").find(".campoCantidad").val(parseFloat(cantidadAnterior)+1);
+			if ($(this).attr("attrid") == idProducto && $(this).attr("idpresentacion") == idPresentacion && $(this).attr("idsucursal") == idSucursal) {
+				var cantidadAnterior = $(this).children("td:eq(5)").find(".campoCantidad").val();
+				$(this).children("td:eq(5)").find(".campoCantidad").val(parseFloat(cantidadAnterior)+1);
 				encontrado = true;
 				$(".campoCantidad").trigger("keyup");
 				return false;
@@ -353,7 +354,7 @@ $(document).on('click', '#GuardarCompra', function() {
 		}else if(tipoCompra == 'Credito'){
 			estatus = '0';
 		}
-		console.log(total);
+		console.log(productos);
 		var data = "metodo=insertar&accion=hacerCompra&Importe="+ImportePagadoCompra+"&idProveedor="+idProveedor+"&FechaCredito="+fechaCredito+"&Productos="+JSON.stringify(productos)+"&subtotal="+subtotal+"&total="+total+"&TipoCompra="+tipoCompra+"&Descuento="+descuento+"&TipoPago="+tipoPago+"&Detalles="+detalles;
 		$.ajax({
 			url: 'index.php',
@@ -368,7 +369,8 @@ $(document).on('click', '#GuardarCompra', function() {
 					icon: 'success',
 					title: 'Compra realizada correctamente'
 				});
-				$("#cargarHacerCompra").trigger("click");
+				$("#ModalCobrarCompra").modal("hide");
+				$('#cargarHacerCompra').trigger('click');
 				console.log(datos[1]);
 				var idCompra = datos[1];
 				var altura=50;
@@ -378,6 +380,7 @@ $(document).on('click', '#GuardarCompra', function() {
 				var x= parseInt((window.screen.width/2)-(anchura/2));
 
 				window.open("controladores/ticket.php?id="+idCompra, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
+				
 			}else{
 				Swal.fire({
 					icon: 'error',
