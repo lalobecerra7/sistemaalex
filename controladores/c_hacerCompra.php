@@ -52,7 +52,7 @@ class hacerCompra {
 						if ($errorDetalles == "si") {
 							echo "Error detalles: ".mysqli_error($omodelo->link);
 						}else{
-							$querySumar = "UPDATE inventario SET Cantidad = (Cantidad + ".$fila[2].") WHERE FK_Producto = '".$fila[0]."' AND FK_Sucursal = '".$fila[3]."' AND FK_Presentacion = '".$fila[4]."'";
+							$querySumar = "UPDATE inventario SET Cantidad = (Cantidad + ".$fila[2].") WHERE FK_Producto = '".$fila[0]."' AND FK_Presentacion = '".$fila[3]."' AND FK_Sucursal = '".$fila[4]."'";
 							$errorSumar = $omodelo->_insertar($querySumar);
 							if ($errorSumar == "si") {
 								echo "Error sumar: ".mysqli_error($omodelo->link);
