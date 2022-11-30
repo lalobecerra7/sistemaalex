@@ -582,7 +582,7 @@
               </ul>
             </li>
 
-            <!-- <li class="menu-item">
+            <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
               <i class="menu-icon fas fa-cogs"></i>
                 <div data-i18n="Layouts">Configuración</div>
@@ -599,7 +599,7 @@
                   </a>
                 </li>
               </ul>
-            </li> -->
+            </li> 
 
             #MenuImpuestos#
 
