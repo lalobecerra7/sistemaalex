@@ -118,6 +118,50 @@
     </div>
 </div>
 
+<div class="modal fade" id="ModalVerHistorialPagos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Productos <span id="FolioCompraPagos"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Fecha
+                                </th>
+                                <th>
+                                    Concepto
+                                </th>
+                                <th>
+                                    Tipo de pago
+                                </th>
+                                <th>
+                                    Monto
+                                </th>
+                                <th>
+                                    Detalles
+                                </th>
+                                <th>
+                                    Comprobante
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyVerHistorialPagos">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="ModalPagoCompra" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
     <div class="modal-content">
@@ -171,7 +215,7 @@
 		                <label for="DetallesPago">Detalles: </label>
 		            </div>
 		        </div>
-                <div class="col-md-12 col-sm-12 mb-3" id='Archivo'hidden>
+                <div class="col-md-12 col-sm-12 mb-3" id='Archivo'>
 		        	<div class="form-floating">
 		               	<input type="file" class="form-control" id="ComprobantePago" name="ComprobantePago" placeholder="Ingresa un comprobante de pago">
 		                <label for="CmprobantePago">Comprobante de pago</label>

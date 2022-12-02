@@ -146,6 +146,26 @@ jQuery(document).ready(function($) {
 			console.log("Error ajax");
 		});
 	});
+
+	$(document).on('click', '#VerHistorialPagos', function() {
+		var folio = $(this).attr("folio");
+		var id = $(this).attr("attrid");
+		$("#ModalVerHistorialPagos").modal("show");
+		$("#FolioCompraPagos").text(folio);
+
+		var data = "metodo=detalles&accion=compras&tipo=historialPagos&IDCompra="+id;
+		$.ajax({
+			url: 'index.php',
+			type: 'POST',
+			data: data,
+		})
+		.done(function(res) {
+			$("#tbodyVerHistorialPagos").html(res);
+		})
+		.fail(function() {
+			console.log("Error ajax");
+		});
+	});
 });
 
 $(document).on('click', '#PagoCompra', function() {
@@ -244,14 +264,6 @@ $(document).on('click', '#GuardarPago', function() {
             }              
         }
 	});
-});
-
-$(document).on('change', '#TipoDePago', function() {
-	if($('#TipoDePago').val()!='Efectivo'){
-		$('#Archivo').attr('hidden', false);
-	}else if($('#TipoDePago').val()=='Efectivo'){
-		$('#Archivo').attr('hidden', true);
-	}
 });
 
 function TablaReporteCompras(){

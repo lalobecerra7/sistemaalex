@@ -3,6 +3,14 @@
 	<div class="card-body">
         <div class="section">
             <div class="Principal">
+                <div class="row">
+					<div class="col-md-6">
+						<label>Sucursal: <label>
+                        #sucursal#
+                        
+					</div>
+			    </div>
+                <br>
                 <form id="FormAgregarProductoC" class="row">
                     <div class="col-md-6 col-sm-12 mb-3">
                         <div class="input-group">
@@ -120,7 +128,6 @@
                             <th style="width: 20%;">Descripción</th>
                             <th style="width: 20%;">Costo</th>
                             <th style="width: 20%;">Presentación</th>
-                            <th style="width: 20%;">Sucursal</th>
                         </thead>
                         <tbody>
                                
@@ -207,23 +214,23 @@
                         <label for="TipoPago">Tipo de pago</label>
                     </div>
                 </div>
-		        <div class="col-md-12 col-sm-12 mb-3" id='Detalles'hidden>
+		        <div class="col-md-12 col-sm-12 mb-3" id='Detalles'>
 		        	<div class="form-floating">
 		               	<input type="text" class="form-control" id="DetallesPago" name="DetallesPago" placeholder="Ingresa los datos del pago">
 		                <label for="DetallesPago">Detalles</label>
 		            </div>
 		        </div>
-                <!-- <div class="col-md-12 col-sm-12 mb-3" id='Archivo'hidden>
+                <div class="col-md-12 col-sm-12 mb-3" id='Archivo'>
 		        	<div class="form-floating">
 		               	<input type="file" class="form-control" id="ComprobantePago" name="ComprobantePago" placeholder="Ingresa un comprobante de pago">
 		                <label for="CmprobantePago">Comprobante de pago</label>
 		            </div>
-		        </div> -->
+		        </div>
 	       	</div>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-primary" id="GuardarCompra" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
-					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+			<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
 	      </div>
   		</form>
     </div>

@@ -67,7 +67,7 @@ class compras {
 						'Datos' => "Fecha: <b>".$row[$i]['Fecha_Registro']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b>",
 						'Proveedor' => 'Nombre: <b>'.$row[$i]['Datos'].'</b><br>Empresa: <b>'.$row[$i]['Empresa'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Razón social: <b>'.$row[$i]['RazonSocial'].'</b>',
 						'Total' => 'Anticipo: <b>$'.number_format($row[$i]['Anticipo'], 2).'</b><br>Crédito: <b>$'.number_format($row[$i]['Credito'],2).'</b><br>Total: <b style="font-size: 15px;">$'.number_format($row[$i]['Total'],2 ).'</b><br>',
-						'Detalles' => $estatus.'<br>'.$motivocancelada.'<br><button class="btn btn-link btn-sm" id="VerProductosCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'">Ver productos</button>',
+						'Detalles' => $estatus.'<br>'.$motivocancelada.'<br><button class="btn btn-link btn-sm" id="VerProductosCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'">Ver productos</button><br><button class="btn btn-link btn-sm" id="VerHistorialPagos" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'">Ver pagos</button>',
 						'Acciones' => $botonEliminar.' '.$botondeCancelar .' '.$botonPagos,
 					);
 				}
@@ -299,6 +299,43 @@ class compras {
 					echo json_encode($row[0]);
 				}
 			}
+		}else if($tipo == 'historialPagos'){
+			$IDCompra = $omodelo->link->real_escape_string($IDCompra);
+			$tabla = "";
+			$imagen = '';
+			$query = "SELECT ID_Pago, FK_Compra, Concepto, Monto, Tipo_Pago, Fecha, Detalles_Pago, Archivo FROM pagos WHERE FK_Compra = '$IDCompra'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						if ($row[$i]["Archivo"] != "") {
+							if($row[$i]["Archivo"] != "" && file_exists("vistas/assets/archivos/fotosPagos/".$row[$i]["Archivo"])){
+								$imagen = '<a href="vistas/assets/archivos/fotosPagos/'.$row[$i]["Archivo"].'" data-fancybox="images">
+										<div style="background-image: url('."'".'vistas/assets/archivos/fotosPagos/'.$row[$i]["Archivo"]."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer;">
+										</div>
+									</a><br>';
+							}	
+						}
+
+						$tabla .= "
+							<tr>
+								<td >".$row[$i]["Fecha"]."</td>
+								<td >".$row[$i]["Concepto"]."</td>
+								<td >".$row[$i]["Tipo_Pago"]."</td>
+								<td style='vertical-align: middle;'>$".number_format($row[$i]["Monto"], 2)."</td>
+								<td >".$row[$i]["Detalles_Pago"]."</td>
+								<td >".$imagen."</td>
+							</tr>
+						";
+					}
+				}
+			}
+
+			echo $tabla;
 		}
 	}
 }
