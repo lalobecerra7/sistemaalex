@@ -57,7 +57,7 @@ function v_productos() {
                 var productos = '';
                 $("#TablaPreciosProductos tbody tr").each(function(index, el){
                     if ($(this).find("#ZonaPrecioProducto").val() != "" && $(this).find("#NombrePrecio").val() != "" && $(this).find("#PrecioProducto").val() != "" && $(this).find("#PrecioProducto").val() > 0) {
-                        productos += $(this).find("#ZonaPrecioProducto").val()+"~"+$(this).find("#NombrePrecio").val()+"~"+$(this).find("#PrecioProducto").val()+"~"+$(this).find("#PrecioProductoMayoreo").val()+",";
+                        productos += $(this).find("#ZonaPrecioProducto").val()+"~"+$(this).find("#PresentacionProdSelect").val()+"~"+$(this).find("#NombrePrecio").val()+"~"+$(this).find("#PrecioProducto").val()+"~"+$(this).find("#PrecioProductoMayoreo").val()+",";
                     }
                 });
 
@@ -261,6 +261,7 @@ jQuery(document).ready(function($) {
                 </td>
                 <td>
                     <select class="form-select SelectPresentacionProd" name="PresentacionProdSelect" id="PresentacionProdSelect" >
+                        <option value="">Seleccione una opción</option>
                         `+opcionesSelect+`   
                     </select>
                 </td>
@@ -477,19 +478,36 @@ jQuery(document).ready(function($) {
                 }
             }    
 
-            setTimeout(function(){ //NOS QUEDAMOS AQUI
+            setTimeout(function(){ 
                 if (datos.Extras != null && datos.Extras.length > 0) {
                     for (var i = 0; i < datos.Extras.length; i++) {
                         var Zona = datos.Extras[i].Zona;
+                        var Presentacion = datos.Extras[i].Presentacion;
                         var Nombre = datos.Extras[i].Nombre;
                         var Precio = datos.Extras[i].Precio;
                         var Precio_Mayoreo = datos.Extras[i].Precio_Mayoreo;
+
+                         var opcionesSelect = "";
+                        $("#TablaPresentacionProducto tbody tr").each(function(index, el){
+                            if ($(this).find("#NombrePresentacion").val() != "") {
+                                if ($(this).find("#NombrePresentacion").val() == Presentacion) {
+                                    opcionesSelect += '<option value="'+$(this).find("#NombrePresentacion").val()+'" selected>'+$(this).find("#NombrePresentacion").val()+'</option>';        
+                                }else{
+                                    opcionesSelect += '<option value="'+$(this).find("#NombrePresentacion").val()+'">'+$(this).find("#NombrePresentacion").val()+'</option>';
+                                }
+                            }
+                        });
 
                         var tabla = `\
                             <tr>
                                 <td>
                                     <select class="form-select SelectProductosZona" name="ZonaPrecioProducto" id="ZonaPrecioProducto" >
                                         `+Zona+`
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-select SelectPresentacionProd" name="PresentacionProdSelect" id="PresentacionProdSelect" disabled>
+                                        `+opcionesSelect+`   
                                     </select>
                                 </td>
                                 <td>

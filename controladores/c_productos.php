@@ -194,7 +194,7 @@ class productos {
 			$productos = explode(",", $productos);
 			for ($i=0; $i < sizeof($productos) - 1; $i++) { 
 				$datosproductos = explode("~", $productos[$i]);
-				$queryPreciosProductos = "INSERT INTO precios SET FK_Producto = '$id', Nombre = '$datosproductos[1]', FK_Zona = '$datosproductos[0]', Precio = '$datosproductos[2]', Precio_Mayoreo = '$datosproductos[3]'";
+				$queryPreciosProductos = "INSERT INTO precios SET FK_Producto = '$id', Nombre = '$datosproductos[2]', FK_Presentacion = '$datosproductos[1]', FK_Zona = '$datosproductos[0]', Precio = '$datosproductos[3]', Precio_Mayoreo = '$datosproductos[4]'";
 				$errorPrecios = $omodelo->_insertar($queryPreciosProductos);	
 
 				if ($errorPrecios == "si") {
@@ -297,7 +297,26 @@ class productos {
 			for ($i=0; $i < sizeof($productos) - 1; $i++) { 
 				$datosproductos = explode("~", $productos[$i]);
 
-				$queryPrecio = "SELECT 	ID_Precio, FK_Producto, FK_Zona, Nombre, Precio, Precio_Mayoreo FROM precios WHERE FK_Producto = '$IDProducto' AND FK_Zona = '$datosproductos[0]' AND Nombre = '$datosproductos[1]'";
+				$idPresentacion = "";
+				$queryNombrePrese = "SELECT ID_Presentacion, FK_Producto, Nombre, Abreviatura FROM presentaciones WHERE FK_Producto = '$IDProducto' AND Nombre = '$datosproductos[1]'";
+				$rowNombrePrese = $omodelo->_consultar($queryNombrePrese);
+				$numerofilasNombrePrese = $omodelo->numerofilas;
+
+				if ($rowNombrePrese == "si") {
+					echo "Error consultar archivo: ".mysqli_error($omodelo->link);
+				}else{
+					if($numerofilasNombrePrese > 0){
+						$idPresentacion = $rowNombrePrese[0]["ID_Presentacion"];
+					}
+				}
+				$queryIdPresentacion = "";
+				$queryAgregarPresentacion = "";
+				if ($idPresentacion != "" && $idPresentacion != "0") {
+					$queryIdPresentacion = "AND FK_Presentacion = '$idPresentacion'";
+					$queryAgregarPresentacion = ", FK_Presentacion = '$idPresentacion'";
+				}
+
+				$queryPrecio = "SELECT 	ID_Precio, FK_Producto, FK_Presentacion, FK_Zona, Nombre, Precio, Precio_Mayoreo FROM precios WHERE FK_Producto = '$IDProducto' AND FK_Zona = '$datosproductos[0]' AND Nombre = '$datosproductos[2]' $queryIdPresentacion";
 				$rowPrecio = $omodelo->_consultar($queryPrecio);
 				$numerofilasPrecio = $omodelo->numerofilas;
 
@@ -305,14 +324,14 @@ class productos {
 					echo "Error consultar archivo: ".mysqli_error($omodelo->link);
 				}else{
 					if($numerofilasPrecio > 0){
-						$queryPreciosProductos = "UPDATE precios SET Precio = '$datosproductos[2]', Precio_Mayoreo = '$datosproductos[3]' WHERE FK_Producto = '$IDProducto' AND Nombre = '$datosproductos[1]' AND FK_Zona = '$datosproductos[0]'";
+						$queryPreciosProductos = "UPDATE precios SET Precio = '$datosproductos[3]', Precio_Mayoreo = '$datosproductos[4]' WHERE FK_Producto = '$IDProducto' AND Nombre = '$datosproductos[2]' AND FK_Zona = '$datosproductos[0]'";
 						$errorPrecios = $omodelo->_insertar($queryPreciosProductos);	
 
 						if ($errorPrecios == "si") {
 							echo "Error productos: ".mysqli_error($omodelo->link); 
 						}	
 					}else{
-						$queryPreciosProductos = "INSERT INTO precios SET FK_Producto = '$IDProducto', Nombre = '$datosproductos[1]', FK_Zona = '$datosproductos[0]', Precio = '$datosproductos[2]', Precio_Mayoreo = '$datosproductos[3]'";
+						$queryPreciosProductos = "INSERT INTO precios SET FK_Producto = '$IDProducto', Nombre = '$datosproductos[2]', FK_Zona = '$datosproductos[0]', Precio = '$datosproductos[3]', Precio_Mayoreo = '$datosproductos[4]' $queryAgregarPresentacion";
 						$errorPrecios = $omodelo->_insertar($queryPreciosProductos);	
 
 						if ($errorPrecios == "si") {
@@ -492,7 +511,7 @@ class productos {
 			}else{
 				if($numerofilas > 0){
 					$subarreglo = null; $subarreglo2 = null;
-					$queryPrecios = "SELECT ID_Precio, FK_Producto, FK_Zona, Nombre, Precio, Precio_Mayoreo FROM precios WHERE FK_Producto = '".$row[0]['ID_Producto']."'";
+					$queryPrecios = "SELECT ID_Precio, precios.FK_Producto, FK_Zona, presentaciones.Nombre AS NombrePresentacion, precios.Nombre, Precio, Precio_Mayoreo FROM precios LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE precios.FK_Producto = '".$row[0]['ID_Producto']."'";
 					$rowPrecios = $omodelo->_consultar($queryPrecios);
 					$numerofilasPrecios = $omodelo->numerofilas;
 					for ($x=0; $x < $numerofilasPrecios; $x++) { 
@@ -521,6 +540,7 @@ class productos {
 							'ID_Precio' => $rowPrecios[$x]["ID_Precio"],
 							'FK_Producto' => $rowPrecios[$x]["FK_Producto"],
 							'Zona' => $opciones,
+							'Presentacion' => $rowPrecios[$x]["NombrePresentacion"],
 							'Nombre' => $rowPrecios[$x]["Nombre"],
 							'Precio' => $rowPrecios[$x]["Precio"],
 							'Precio_Mayoreo' => $rowPrecios[$x]["Precio_Mayoreo"],
