@@ -554,6 +554,15 @@
 
             #MenuCompras#
 
+            <li class="menu-item cargarVista" carga="v_ventas" titulo="Ventas" id="cargarVentas">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-shopping-cart"></i>
+                <div data-i18n="Ventas">Ventas</div>
+              </a>
+            </li>
+
+           
+
             #MenuCajas#
 
             <!-- Layouts -->
@@ -599,6 +608,7 @@
                   </a>
                 </li>
               </ul>
+
             </li>
 
             #MenuImpuestos#
@@ -776,5 +786,6 @@
     <!--<script type="text/javascript" src="vistas/assets/js/ventas.js"></script>-->
     <script type="text/javascript" src="vistas/assets/js/compras.js"></script>
     <script type="text/javascript" src="vistas/assets/js/hacerCompra.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/ventas.js"></script>
   </body>
 </html>
