@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-11-2022 a las 20:32:01
+-- Tiempo de generación: 02-12-2022 a las 18:29:12
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.3
 
@@ -76,7 +76,7 @@ CREATE TABLE `cajas` (
 
 INSERT INTO `cajas` (`ID_Caja`, `FK_Sucursal`, `Nombre`, `Detalles`, `Estado`, `FK_Usuario`) VALUES
 (1, 1, 'Caja 1', '', 1, 2),
-(2, 1, 'Caja 2', '', 1, 13);
+(2, 1, 'Prueba', '', 1, 13);
 
 -- --------------------------------------------------------
 
@@ -154,7 +154,7 @@ INSERT INTO `clientes` (`ID_Cliente`, `Nombre`, `Calle`, `No_Exterior`, `No_Inte
 (11, 'Julio Martin Lopez', '', '', '', '', '', '', '', '', '01 44 99 13 33 36, 9135146 ', '449 467 14 87', 0, 0, 'roponesmagali@prodigy.net.mx', '0000-00-00', '', '2019-06-30 14:05:20', '', 'MALJ721026F84', 0, '', '', '', 0),
 (16, 'Luz Rebeca Gonzalez Gonzalez', '', '', '', '', '', '', '', '', '3787090598', '3787090598', 0, 0, 'deazaharesexclusivos@hotmail.com', '0000-00-00', '', '2016-07-13 11:47:40', '', 'GOGL691210FS8', 0, '', '', '', 0),
 (17, 'Ma. De Lourdes Portilla Calderon', '', '', '', '', '', '', '', '', '01 89 99 22 06 65, 8999221322', '', 0, 0, 'latiendanuevareynosa@hotmail.com', '0000-00-00', '', '2019-06-30 14:07:29', '', 'POCL351007JV7', 0, '', '', '', 0),
-(24, 'Sr. Manuel Yanez', '', '', '', '', '', '', '', '', '01 63 94 72 03 98, 6394745148', '', 0, 0, 'novia2003@gmail.com', '0000-00-00', '', '2019-06-30 14:08:17', '', 'CMN84080213', 0, '', '', '', 0),
+(24, 'Sr. Manuel Yanez 2', '', '', '', '', '', '', '', '', '01 63 94 72 03 98, 6394745148', '', 0, 0, 'novia2003@gmail.com', '0000-00-00', '', '2019-06-30 14:08:17', '', 'CMN84080213', 0, '', '', '', 0),
 (26, 'Manuel Emilio Torres Sanchez', '', '', '', '', '', '', '', '', '34 87 84 64 64', '', 0, 0, 'replamex@hotmail.com', '0000-00-00', '', '2016-07-13 12:07:44', '', 'TOSM860124SH5', 0, '', '', '', 0);
 
 -- --------------------------------------------------------
@@ -180,6 +180,13 @@ CREATE TABLE `compras` (
   `Impuestos` tinytext NOT NULL,
   `Anticipo` double NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `compras`
+--
+
+INSERT INTO `compras` (`ID_Compra`, `Fecha_Registro`, `FK_Usuario`, `FK_Proveedor`, `Total`, `Estatus`, `Clase`, `Dias_Pagar`, `Tipo_Compra`, `Fecha_Credito`, `FK_Caja`, `FK_Sucursal`, `Descuento`, `Impuestos`, `Anticipo`) VALUES
+(4, '2022-11-29 14:12:47', 2, 2, 25, '0', 0, 0, 'Credito', '2022-12-03 00:00:00', 0, 0, 0, '', 0);
 
 -- --------------------------------------------------------
 
@@ -3643,7 +3650,43 @@ INSERT INTO `movimientos` (`ID_Movimiento`, `Descripcion`, `IP`, `Pais`, `Estado
 (3124, 'Admin: DELETE FROM compras WHERE ID_Compra = \'2\'', '', '', '', '', '', '2022-11-28 18:20:57', '', 2),
 (3125, 'Admin: DELETE FROM compras WHERE ID_Compra = \'1\'', '', '', '', '', '', '2022-11-28 19:16:33', '', 2),
 (3126, 'Admin: DELETE FROM compras WHERE ID_Compra = \'3\'', '', '', '', '', '', '2022-11-28 19:16:36', '', 2),
-(3127, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-11-29 11:45:48', '', 0);
+(3127, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-11-29 11:45:48', '', 0),
+(3128, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-11-29 13:46:45', '', 0),
+(3129, 'Admin: UPDATE clientes SET Nombre = \'Sr. Manuel Yanez 2\', Calle = \'\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'01 63 94 72 03 98, 6394745148\', Celular = \'\', Descuento = \'0\', Correo = \'novia2003@gmail.com\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'CMN84080213\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\' WHERE ID_Cliente = \'24\'', '', '', '', '', '', '2022-11-29 14:00:31', '', 2),
+(3130, 'Admin: UPDATE cajas SET Nombre = \'Prueba\', Detalles = \'\', FK_Sucursal = \'1\' WHERE ID_Caja = \'2\'', '', '', '', '', '', '2022-11-29 14:01:56', '', 2),
+(3131, 'Admin: LOGIN ADMIN prueba@gmail.com', '', '', '', '', '', '2022-11-29 14:47:05', '', 0),
+(3132, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-11-29 14:47:10', '', 0),
+(3133, 'Admin: LOGIN ADMIN prueba@gmail.com', '', '', '', '', '', '2022-11-30 15:21:07', '', 0),
+(3134, 'Admin: LOGIN ADMIN lalobecerra7@gmail.com', '', '', '', '', '', '2022-11-30 15:21:11', '', 0),
+(3135, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-11-30 15:21:44', '', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pagos`
+--
+
+CREATE TABLE `pagos` (
+  `ID_Pago` int(11) NOT NULL,
+  `FK_Compra` int(11) NOT NULL COMMENT 'Hace referencia al id de la compra.',
+  `Concepto` text CHARACTER SET latin1 NOT NULL,
+  `Monto` double NOT NULL COMMENT 'Monto en pesos del pago realizado para la nota seleccionada.',
+  `Tipo_Pago` varchar(100) CHARACTER SET latin1 NOT NULL,
+  `Fecha` datetime NOT NULL COMMENT 'Fecha exacta en la que se realizo el pago.',
+  `FK_Usuario` int(11) NOT NULL,
+  `Archivo` varchar(300) CHARACTER SET latin1 NOT NULL,
+  `Clase` int(11) NOT NULL COMMENT 'Tipo de pago: 1 productos venta 2 materia prima',
+  `FK_Caja` int(11) NOT NULL,
+  `Detalles_Pago` text CHARACTER SET latin1 NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `pagos`
+--
+
+INSERT INTO `pagos` (`ID_Pago`, `FK_Compra`, `Concepto`, `Monto`, `Tipo_Pago`, `Fecha`, `FK_Usuario`, `Archivo`, `Clase`, `FK_Caja`, `Detalles_Pago`) VALUES
+(1, 13, 'Anticipo', 30, 'Efectivo', '2022-11-29 20:59:12', 2, '', 0, 0, '111'),
+(3, 14, 'Anticipo', 5, 'Efectivo', '2022-11-29 21:02:07', 2, '', 0, 0, '1');
 
 -- --------------------------------------------------------
 
@@ -3655,10 +3698,18 @@ CREATE TABLE `precios` (
   `ID_Precio` int(11) NOT NULL,
   `FK_Producto` int(11) NOT NULL,
   `FK_Zona` int(11) NOT NULL,
+  `FK_Presentacion` int(11) NOT NULL,
   `Nombre` varchar(300) NOT NULL,
   `Precio` double NOT NULL,
   `Precio_Mayoreo` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `precios`
+--
+
+INSERT INTO `precios` (`ID_Precio`, `FK_Producto`, `FK_Zona`, `FK_Presentacion`, `Nombre`, `Precio`, `Precio_Mayoreo`) VALUES
+(17, 26, 3, 1, 'gATIÃ‘O', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -3672,6 +3723,15 @@ CREATE TABLE `presentaciones` (
   `Nombre` varchar(300) NOT NULL,
   `Abreviatura` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `presentaciones`
+--
+
+INSERT INTO `presentaciones` (`ID_Presentacion`, `FK_Producto`, `Nombre`, `Abreviatura`) VALUES
+(1, 26, 'Gato', '12'),
+(2, 26, 'Perro', 'Pe'),
+(4, 26, 'Elefante', 'Ele');
 
 -- --------------------------------------------------------
 
@@ -3704,7 +3764,7 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`ID_Producto`, `Codigo`, `Descripcion`, `Tipo`, `FK_Categoria`, `Clase`, `FK_Unidad`, `Poner_Unidad`, `Costo`, `Precio`, `Precio_Mayoreo`, `FK_Area`, `Detalles`, `Minimo`, `Maximo`, `Fecha_Registro`, `Imagen`) VALUES
-(26, '123', 'Prueba', 0, 4, 'Pieza', 0, 0, 0, 50, 0, 34, '', 0, 0, '2022-11-28 19:17:40', ''),
+(26, '123', 'No lo se', 0, 4, 'Pieza', 0, 0, 0, 1, 0, 34, '', 0, 0, '2022-11-28 19:17:40', ''),
 (27, '1234', 'Prueba 2', 0, 4, 'Pieza', 0, 0, 0, 60, 0, 34, '', 0, 0, '2022-11-28 19:18:09', '');
 
 -- --------------------------------------------------------
@@ -3893,7 +3953,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`ID_Usuario`, `Nombre`, `Primer_Apellido`, `Segundo_Apellido`, `Correo`, `Contrasena`, `Tipo_Usuario`, `Permisos`, `BD`, `Estatus`, `Intentos`, `Ultimo_Intento`, `Tiempo_Inicio`, `Tiempo_Final`, `Foto`, `Temporal`, `Activo`, `Tipo_Login`, `Conectado`, `Fecha_Alta`, `FK_Sucursal`) VALUES
-(2, 'Admin', 'cremasi', '', 'admin@gmail.com', '$2y$12$lhPLfk6dsc6TdYE5fnes2OfWuBPlqUQhh8JF9ujg0iNNmSGQC74Xe', 'Administrador', '', 0, 0, 0, '2022-11-29 11:45:47', '2022-11-29 11:45:47', '2022-10-26 12:37:20', '2_anuncio.png', 0, 1, 1, 0, '2022-09-21 18:52:42', 0),
+(2, 'Admin', 'cremasi', '', 'admin@gmail.com', '$2y$12$lhPLfk6dsc6TdYE5fnes2OfWuBPlqUQhh8JF9ujg0iNNmSGQC74Xe', 'Administrador', '', 0, 0, 0, '2022-11-30 15:21:43', '2022-11-30 15:21:43', '2022-12-01 08:43:01', '2_anuncio.png', 0, 1, 1, 0, '2022-09-21 18:52:42', 0),
 (10, 'Lalo', 'bECERRA', '', 'lalo@gmail.com', '$2y$12$ACrdPWFFaSDrOmehjwt0MuIgTfsCmuxpWnDwf8TCoRAwzC8C50QsK', 'Normal', 'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_areas,0,0,0,0~v_categorias,0,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0~v_cajas,0,0,0,0~v_impuestos,0,0,0,0~v_tickets,0~v_general,0~v_usuarios,0,0,0,0,0~', 0, 0, 0, '2022-09-22 18:51:43', '2022-09-22 18:51:43', '2022-09-22 19:02:18', '', 0, 0, 1, 0, '2022-09-22 18:51:31', 0),
 (11, 'Ejemplo', 'sdesde', 'dds', 'ejemplo@gmail.com', '$2y$12$ks7YsxZ13IARNevWP1q4X.Lh8KF0TeogNzNxukBbsnOe4KU5mm0qi', 'Normal', '', 0, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 1, 1, 0, '2022-09-22 18:49:49', 0),
 (14, 'Antonio de Jesus', 'Torres', 'Vazquez', 'antonioudgarandas@gmal.com', '$2y$12$36ZKO7frlfjtaKpoP4K5CumUm/lOK6S7niuUrVNhVrWkIX7D/PKHy', 'Administrador', '', 0, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 1, 1, 0, '2022-11-05 15:25:49', 1);
@@ -3921,7 +3981,7 @@ CREATE TABLE `ventas` (
   `Fecha_Registro` datetime NOT NULL,
   `Cancelada` tinyint(1) NOT NULL,
   `Fecha_Cancelacion` datetime NOT NULL,
-  `Regrezo_Inventario` tinyint(1) NOT NULL
+  `Regreso_Inventario` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -3942,7 +4002,7 @@ CREATE TABLE `zonas` (
 
 INSERT INTO `zonas` (`ID_Zona`, `Nombre`, `Descripcion`) VALUES
 (2, 'Guadalajara', 'Zona metropolitana de guadalajara'),
-(3, 'Monterrey', 'Zona de monterrey. Nuevo León.');
+(3, 'Monterrey', 'Zona de monterrey. Nuevo Leon.');
 
 --
 -- Índices para tablas volcadas
@@ -4066,7 +4126,8 @@ ALTER TABLE `impuestos`
 ALTER TABLE `inventario`
   ADD PRIMARY KEY (`ID_Inventario`),
   ADD KEY `FK_Sucursal` (`FK_Sucursal`),
-  ADD KEY `FK_Producto` (`FK_Producto`);
+  ADD KEY `FK_Producto` (`FK_Producto`),
+  ADD KEY `FK_Presentacion` (`FK_Presentacion`);
 
 --
 -- Indices de la tabla `merma`
@@ -4083,11 +4144,19 @@ ALTER TABLE `movimientos`
   ADD PRIMARY KEY (`ID_Movimiento`);
 
 --
+-- Indices de la tabla `pagos`
+--
+ALTER TABLE `pagos`
+  ADD PRIMARY KEY (`ID_Pago`);
+
+--
 -- Indices de la tabla `precios`
 --
 ALTER TABLE `precios`
   ADD PRIMARY KEY (`ID_Precio`),
-  ADD KEY `FK_Producto` (`FK_Producto`);
+  ADD KEY `FK_Producto` (`FK_Producto`),
+  ADD KEY `FK_Zona` (`FK_Zona`),
+  ADD KEY `precios_ibfk_3` (`FK_Presentacion`);
 
 --
 -- Indices de la tabla `presentaciones`
@@ -4191,7 +4260,7 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
-  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `conversiones`
@@ -4275,19 +4344,25 @@ ALTER TABLE `merma`
 -- AUTO_INCREMENT de la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
-  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3128;
+  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3136;
+
+--
+-- AUTO_INCREMENT de la tabla `pagos`
+--
+ALTER TABLE `pagos`
+  MODIFY `ID_Pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `precios`
 --
 ALTER TABLE `precios`
-  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `presentaciones`
 --
 ALTER TABLE `presentaciones`
-  MODIFY `ID_Presentacion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Presentacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
@@ -4372,48 +4447,19 @@ ALTER TABLE `detalles_ventas`
   ADD CONSTRAINT `detalles_ventas_ibfk_1` FOREIGN KEY (`FK_Venta`) REFERENCES `ventas` (`ID_Venta`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `detalle_pedidos`
---
-ALTER TABLE `detalle_pedidos`
-  ADD CONSTRAINT `detalle_pedidos_ibfk_1` FOREIGN KEY (`FK_Pedido`) REFERENCES `pedidos` (`ID_Pedido`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Filtros para la tabla `inventario`
 --
 ALTER TABLE `inventario`
-  ADD CONSTRAINT `inventario_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `inventario_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `inventario_ibfk_2` FOREIGN KEY (`FK_Presentacion`) REFERENCES `presentaciones` (`ID_Presentacion`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `precios`
 --
 ALTER TABLE `precios`
-  ADD CONSTRAINT `precios_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `presentaciones`
---
-ALTER TABLE `presentaciones`
-  ADD CONSTRAINT `presentaciones_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `sucursales`
---
-ALTER TABLE `sucursales`
-  ADD CONSTRAINT `sucursales_ibfk_1` FOREIGN KEY (`FK_Zona`) REFERENCES `zonas` (`ID_Zona`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `tickets`
---
-ALTER TABLE `tickets`
-  ADD CONSTRAINT `tickets_ibfk_1` FOREIGN KEY (`FK_Sucursal`) REFERENCES `sucursales` (`ID_Sucursal`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `traslados`
---
-ALTER TABLE `traslados`
-  ADD CONSTRAINT `traslados_ibfk_1` FOREIGN KEY (`FK_Sucursal_Destino`) REFERENCES `sucursales` (`ID_Sucursal`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `traslados_ibfk_2` FOREIGN KEY (`FK_Sucursal_Origen`) REFERENCES `sucursales` (`ID_Sucursal`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `traslados_ibfk_3` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `precios_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `precios_ibfk_2` FOREIGN KEY (`FK_Zona`) REFERENCES `zonas` (`ID_Zona`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `precios_ibfk_3` FOREIGN KEY (`FK_Presentacion`) REFERENCES `presentaciones` (`ID_Presentacion`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
