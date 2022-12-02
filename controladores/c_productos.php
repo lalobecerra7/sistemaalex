@@ -66,7 +66,7 @@ class productos {
 						$area .= "Descripción: ".$row[$i]['DescripcionArea']."<br>";
 					}
 					$precios = '';
-					$queryZona = "SELECT ID_Zona, Nombre FROM zona";
+					$queryZona = "SELECT ID_Zona, Nombre FROM zonas";
 					$rowZona = $omodelo->_consultar($queryZona);
 					$numerofilasZona = $omodelo->numerofilas;
 					if ($numerofilasZona > 0) {

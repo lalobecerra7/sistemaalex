@@ -5,6 +5,15 @@ function v_impuestos() {
             NombreImpuesto: {
                 required: true
             },
+            ClaveImpuesto:{
+                required: true
+            },
+            ClaseImpuesto:{
+                required: true
+            },
+            TipoFactorImpuesto:{
+                required: true
+            },
             PorcentajeImpuesto: {
                 required: true,
                 min: 0
@@ -12,26 +21,25 @@ function v_impuestos() {
         },
         messages: {
             NombreImpuesto: {
-                required: "El nombre del impuesto es requerido"
+                required: "El nombre del impuesto es requerido."
+            },
+            ClaveImpuesto:{
+                required: "La clave es requerida."
+            },
+            ClaseImpuesto:{
+                required: "La clase es requerida."
+            },
+            TipoFactorImpuesto:{
+                required: "El factor es requerido."
             },
             PorcentajeImpuesto: {
-                required: "El porcentaje del impuesto es requerido",
-                min: "Ingrese un valor mayor a 0"
+                required: "El porcentaje del impuesto es requerido.",
+                min: "Ingrese un valor mayor o igual a 0."
             },
         },
         submitHandler: function(form) { 
-            var ticket = 0;
-            if ($("#ImpuestoTicket").prop("checked") == true) {
-                ticket = 1;
-            }
-            var producto = 0;
-            if ($("#ImpuestoProducto").prop("checked") == true) {
-                producto = 1;
-            }
-
-
-            var data = "metodo="+$("#GuardarImpuesto").attr("tipo")+"&accion=impuestos&IDImpuesto="+$("#GuardarImpuesto").attr("attrid")+"&Porcentaje="+$("#PorcentajeImpuesto").val()+"&Nombre="+$("#NombreImpuesto").val()+"&Clave="+$("#ClaveImpuesto").val()+"&Clase="+$("#ClaseImpuesto").val()+"&Tipo="+$("#TipoFactorImpuesto").val()+"&Ticket="+ticket+"&Producto="+producto;
-            var btn = $('#GuardarImpuesto');
+            var data = "metodo="+$("#GuardarImpuesto").attr("tipo")+"&accion=impuestos&IDImpuesto="+$("#GuardarImpuesto").attr("attrid")+"&Porcentaje="+$("#PorcentajeImpuesto").val()+"&Nombre="+$("#NombreImpuesto").val()+"&Clave="+$("#ClaveImpuesto").val()+"&Clase="+$("#ClaseImpuesto").val()+"&Tipo="+$("#TipoFactorImpuesto").val();
+            
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
@@ -47,11 +55,13 @@ function v_impuestos() {
                     }else{
                         var tipoAlerta = "guardado";
                     }
+
                     Swal.fire({
                         icon: 'success',
                         title: 'Impuesto '+tipoAlerta+' correctamente'
                     });
-                    TablaImpuestos();
+
+                    tablaImpuestos();
                     $("#ModalImpuestos").modal("hide");
                 }else{
                     Swal.fire({
@@ -71,18 +81,18 @@ function v_impuestos() {
         }
     });  
 
-    TablaImpuestos();
+    tablaImpuestos();
 }
 
-function TablaImpuestos(){
+function tablaImpuestos(){
     ajaxMyDatatable({
-        "table": $("#TablaImpuestos"), 
+        "table": $("#tablaImpuestos"), 
         "colums": [
             "Nombre",
             "Porcentaje",
-            "Detalles",
-            "Tipo de Impuesto",
-            "Predeterminado",
+            "Clave",
+            "Tipo",
+            "Clase",
             "Acciones"
         ],
         "sort": [
@@ -106,12 +116,11 @@ jQuery(document).ready(function($) {
         $("#TituloModalImpuestos").text("Agregar nuevo");
     });
 
-    /*$(document).on('click', '#EliminarArea', function() {
-        var boton = $(this);
-        var id = $(this).attr("attrid");
-        var nombre = $(this).attr("nombre");
+    $(document).on('click', '.EliminarImpuesto', function() {
+        var btn = $(this);
+
         Swal.fire({
-          title: '¿Estás a punto de eliminar el área '+nombre+'?',
+          title: '¿Estás seguro que quieres eliminar el impuesto?',
           text: "Una vez eliminado ya no podrá ser recuperado",
           icon: 'warning',
           showCancelButton: true,
@@ -120,64 +129,74 @@ jQuery(document).ready(function($) {
           cancelButtonText: 'No, cancelar',
           confirmButtonText: 'Si, eliminar'
         }).then((result) => {
-          if (result.value) {
-            var data = "metodo=eliminar&accion=areas&IDArea="+id;
-            $.ajax({
-                url: 'index.php',
-                type: 'POST',
-                data: data
-            })
-            .done(function(res) {
-                if ($.trim(res) == "Correcto") {
-                    TablaAreas();
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Área eliminada correctamente'
-                    });
-                }else{
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Error inesperado al eliminar área.'
-                    });
-                }
-            })
-            .fail(function() {
-                console.log("Error ajax");
-            });  
-          }
-        });
-    });*/
+            if (result.value) {
+                var data = "metodo=eliminar&accion=impuestos&id="+btn.attr('attrID');
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data,
+                    beforeSend: function() {
+                        $("#carga").show();
+                    }
+                })
+                .done(function(res) {
+                    if ($.trim(res) == "Correcto") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Impuesto eliminado correctamente'
+                        });
 
-    $(document).on('click', '#ModificarImpuesto', function() {
-        var id = $(this).attr('attrid');
-        var data = "metodo=detalles&accion=impuestos&IDImpuesto="+id+"&tipo=ConsultarImpuesto";
+                        tablaImpuestos();
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error inesperado al eliminar el impuesto.'
+                        });
+                    }
+                })
+                .fail(function() {
+                    console.log("Error ajax");
+                }).always(function() {
+                    $("#carga").hide();
+                }); 
+            }
+        });
+    });
+
+    $(document).on('click', '.ModificarImpuesto', function() {
+        $("#GuardarImpuesto").attr('tipo', 'modificar');
+        var btn = $(this);
+
+        var data = "metodo=detalles&accion=impuestos&IDImpuesto="+btn.attr('attrID')+"&tipo=ConsultarImpuesto";
         $.ajax({
             url: 'index.php',
             type: 'POST',
-            data: data
+            data: data,
+            beforeSend: function() {
+                $("#carga").show();
+            }
         })
         .done(function(res) {
             //console.log(res);
-            $("#GuardarImpuesto").attr('tipo', 'modificar');
-            $("#GuardarImpuesto").attr('attrid', id);
+            $("#GuardarImpuesto").attr('attrID', btn.attr('attrID'));
             $("#TituloModalImpuestos").text("Modificar");
+
             var datos = JSON.parse($.trim(res));
+
             $("#NombreImpuesto").val(datos.Nombre);
-            $("#ClaveImpuesto").val(datos.Clave_CFDI);
+            $("#ClaveImpuesto").val(datos.Clave);
             $("#ClaseImpuesto").val(datos.Clase);
-            $("#TipoFactorImpuesto").val(datos.Tipo_Factor);
+            $("#TipoFactorImpuesto").val(datos.Tipo);
             $("#PorcentajeImpuesto").val(datos.Porcentaje);
-            if (datos.Ticket == 1) {
-                $("#ImpuestoTicket").prop("checked", true);
-            }
-            if (datos.Producto == 1) {
-                $("#ImpuestoProducto").prop("checked", true);
-            }
+            
             $("#ModalImpuestos").modal("show");
         })
         .fail(function() {
             console.log("Error ajax");
+        })
+        .always(function() {
+            $("#carga").hide();
         });
     });
 

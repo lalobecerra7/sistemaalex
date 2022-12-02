@@ -579,12 +579,8 @@
                 #MenuZonas#
 
                 #MenuAreas#
-
-<<<<<<< HEAD
+                
                 <!--#MenuMovimientos#-->
-
-=======
->>>>>>> a4d703dd46ec035bba22264ff918e47d11388841
               </ul>
             </li>
 

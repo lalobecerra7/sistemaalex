@@ -18,14 +18,14 @@ class impuestos {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Impuesto, Nombre, Porcentaje, Clave_CFDI, Tipo_Factor, Clase, Ticket, Producto, Predeterminado) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(Nombre, Porcentaje, Clave_CFDI, Tipo_Factor, Clase) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Impuesto, Nombre, Porcentaje, Clave_CFDI, Tipo_Factor, Clase, Ticket, Producto, Predeterminado, (SELECT COUNT(*) FROM impuestos $busqueda) AS Num FROM impuestos $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Impuesto, Nombre, Porcentaje, Clave_CFDI, Tipo_Factor, Clase, (SELECT COUNT(*) FROM impuestos $busqueda) AS Num FROM impuestos $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -34,57 +34,24 @@ class impuestos {
 		}else{
 			if($numerofilas > 0){
 				for($i=0; $i<$numerofilas; $i++){
-					$detalles = ""; $tipo = "";$predeterminado = "";
-
-					if ($row[$i]['Clave_CFDI'] != "") {
-						$detalles .= "Clave CFDI: ".$row[$i]['Clave_CFDI']."<br>"; 
-					}
-
-					if ($row[$i]['Tipo_Factor'] != "") {
-						$detalles .= "Tipo de factor: ".$row[$i]['Tipo_Factor']."<br>"; 
-					}
-
-					if ($row[$i]['Clase'] != "") {
-						$detalles .= "Clase: ".$row[$i]['Clase']."<br>"; 
-					}
-
-					if ($detalles == "") {
-						$detalles = "No hay datos registrados"; 
-					}
-
-					if ($row[$i]['Ticket'] == 1) {
-						$tipo .= "Ticket <br>";
-					}
-
-					if ($row[$i]['Producto'] == 1) {
-						$tipo .= "Producto <br>";
-					}
-
-					if ($tipo == "") {
-						$tipo = "No hay datos seleccionados";
-					}
-
-					if ($row[$i]['Predeterminado'] == "1") {
-						$predeterminado = "checked";
-					}
 
 					$botonPermisosModificar = "";
 					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_impuestos'][3] == '1') {
-						$botonPermisosModificar = '<button class="btn btn-primary btn-sm mb-2" id="ModificarImpuesto" attrid="'.$row[$i]['ID_Impuesto'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button>';
+						$botonPermisosModificar = '<button class="btn btn-primary btn-sm mb-2 ModificarImpuesto" attrid="'.$row[$i]['ID_Impuesto'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button>';
 					}
 
 					$botonPermisosEliminar = "";
 					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_impuestos'][4] == '1') {
-						$botonPermisosEliminar = '<button class="btn btn-danger btn-sm" id="EliminarImpuesto" attrid="'.$row[$i]['ID_Impuesto'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>';
+						$botonPermisosEliminar = '<button class="btn btn-danger btn-sm EliminarImpuesto" attrid="'.$row[$i]['ID_Impuesto'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>';
 					}
 					
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Impuesto'],
 						'Nombre' => $row[$i]['Nombre'],
 						'Porcentaje' => number_format($row[$i]['Porcentaje'], 2)."%",
-						'Detalles' => $detalles,
-						'Tipo de Impuesto' => $tipo,
-						'Predeterminado' => '<input class="form-check-input" type="checkbox" id="ImpuestoPredeterminado" name="ImpuestoPredeterminado" '.$predeterminado.' attrid="'.$row[$i]['ID_Impuesto'].'">',
+						'Clave' => $row[$i]['Clave_CFDI'],
+						'Tipo' => $row[$i]['Tipo_Factor'],
+						'Clase' => $row[$i]['Clase'],
 						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,
 					);
 					
@@ -106,9 +73,8 @@ class impuestos {
 		$Clave = $omodelo->link->real_escape_string($Clave);
 		$Clase = $omodelo->link->real_escape_string($Clase);
 		$Tipo = $omodelo->link->real_escape_string($Tipo);
-		$Ticket = $omodelo->link->real_escape_string($Ticket);
-		$Producto = $omodelo->link->real_escape_string($Producto);
-		$query = "INSERT INTO impuestos SET Nombre = '$Nombre', Porcentaje = '$Porcentaje', Clave_CFDI = '$Clave', Tipo_Factor = '$Tipo', Clase = '$Clase', Ticket = '$Ticket', Producto = '$Producto', Predeterminado = '0'";
+
+		$query = "INSERT INTO impuestos SET Nombre = '$Nombre', Porcentaje = '$Porcentaje', Clave_CFDI = '$Clave', Tipo_Factor = '$Tipo', Clase = '$Clase'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -129,15 +95,15 @@ class impuestos {
 		$Clave = $omodelo->link->real_escape_string($Clave);
 		$Clase = $omodelo->link->real_escape_string($Clase);
 		$Tipo = $omodelo->link->real_escape_string($Tipo);
-		$Ticket = $omodelo->link->real_escape_string($Ticket);
-		$Producto = $omodelo->link->real_escape_string($Producto);
-		$query = "UPDATE impuestos SET Nombre = '$Nombre', Porcentaje = '$Porcentaje', Clave_CFDI = '$Clave', Tipo_Factor = '$Tipo', Clase = '$Clase', Ticket = '$Ticket', Producto = '$Producto'WHERE ID_Impuesto = '$IDImpuesto'";
+
+		$query = "UPDATE impuestos SET Nombre = '$Nombre', Porcentaje = '$Porcentaje', Clave_CFDI = '$Clave', Tipo_Factor = '$Tipo', Clase = '$Clase' WHERE ID_Impuesto = '$IDImpuesto'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
 			echo "Error: ".mysqli_error($omodelo->link);
 		}else{
 			echo "Correcto";
+
 			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
@@ -146,15 +112,16 @@ class impuestos {
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$IDImpuesto =  $omodelo->link->real_escape_string($IDImpuesto);
+		$id =  $omodelo->link->real_escape_string($id);
 
-		$query = "DELETE FROM impuestos WHERE ID_Impuesto='$IDImpuesto'";
+		$query = "DELETE FROM impuestos WHERE ID_Impuesto='$id'";
 		$error = $omodelo->_insertar($query);
 			
 		if ($error == "si") {
 			echo "Error: ".mysqli_error($omodelo->link);
 		}else{
 			echo "Correcto";
+
 			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
@@ -163,10 +130,12 @@ class impuestos {
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
+		$arreglo = array();
+
 		if ($tipo == "ConsultarImpuesto") {
 			$IDImpuesto =  $omodelo->link->real_escape_string($IDImpuesto);
 
-			$query = "SELECT ID_Impuesto, Nombre, Porcentaje, Clave_CFDI, Tipo_Factor, Clase, Ticket, Producto, Predeterminado FROM impuestos WHERE ID_Impuesto = '$IDImpuesto'";
+			$query = "SELECT ID_Impuesto, Nombre, Porcentaje, Clave_CFDI, Tipo_Factor, Clase FROM impuestos WHERE ID_Impuesto = '$IDImpuesto'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -174,20 +143,18 @@ class impuestos {
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
 				if($numerofilas > 0){
-					echo json_encode($row[0]);
+					$arreglo = array(
+						'ID_Impuesto' => $row[0]['ID_Impuesto'],
+						'Nombre' => $row[0]['Nombre'],
+						'Porcentaje' => $row[0]['Porcentaje'],
+						'Clave' => $row[0]['Clave_CFDI'],
+						'Tipo' => $row[0]['Tipo_Factor'],
+						'Clase' => $row[0]['Clase']
+					);
 				}
 			}
-		}else if($tipo == "ImpuestoPredeterminado"){
-			$IDImpuesto =  $omodelo->link->real_escape_string($IDImpuesto);
-			$Valor =  $omodelo->link->real_escape_string($Valor);
 
-			$query = "UPDATE impuestos SET Predeterminado = '$Valor' WHERE ID_Impuesto = '$IDImpuesto'";
-			$error = $omodelo->_insertar($query);
-			if($error == 'si'){
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				echo "Correcto";
-			}
+			echo json_encode($arreglo);
 		}
 	}
 
