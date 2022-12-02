@@ -1,5 +1,5 @@
-function v_compras() {
-	TablaReporteCompras();
+function v_ventas() {
+	TablaReporteVentas();
 }
 
 jQuery(document).ready(function($) {
@@ -31,7 +31,7 @@ jQuery(document).ready(function($) {
 							icon: 'success',
 							title: 'Compra eliminada correctamente'
 						});
-						TablaReporteCompras();
+						TablaReporteVentas();
 					}else{
 						Swal.fire({
 							icon: 'error',
@@ -146,26 +146,6 @@ jQuery(document).ready(function($) {
 			console.log("Error ajax");
 		});
 	});
-
-	$(document).on('click', '#VerHistorialPagos', function() {
-		var folio = $(this).attr("folio");
-		var id = $(this).attr("attrid");
-		$("#ModalVerHistorialPagos").modal("show");
-		$("#FolioCompraPagos").text(folio);
-
-		var data = "metodo=detalles&accion=compras&tipo=historialPagos&IDCompra="+id;
-		$.ajax({
-			url: 'index.php',
-			type: 'POST',
-			data: data,
-		})
-		.done(function(res) {
-			$("#tbodyVerHistorialPagos").html(res);
-		})
-		.fail(function() {
-			console.log("Error ajax");
-		});
-	});
 });
 
 $(document).on('click', '#PagoCompra', function() {
@@ -247,7 +227,7 @@ $(document).on('click', '#GuardarPago', function() {
 							icon: 'success',
 							title: 'Pago registrado correctamente'
 						});
-						TablaReporteCompras();
+						TablaReporteVentas();
                         $("#ModalPagoCompra").modal("hide");
                     }else{
 						Swal.fire({
@@ -266,19 +246,27 @@ $(document).on('click', '#GuardarPago', function() {
 	});
 });
 
-function TablaReporteCompras(){
+$(document).on('change', '#TipoDePago', function() {
+	if($('#TipoDePago').val()!='Efectivo'){
+		$('#Archivo').attr('hidden', false);
+	}else if($('#TipoDePago').val()=='Efectivo'){
+		$('#Archivo').attr('hidden', true);
+	}
+});
+
+function TablaReporteVentas(){
 	ajaxMyDatatable({
-		"table": $("#TablaReporteCompras"), 
+		"table": $("#TablaReporteVentas"), 
 		"colums": [
 			"Datos",
-			"Proveedor",
+			"Cliente",
 			"Total",
 			"Detalles",
 			"Acciones"
 		], 
 		"totals":[
 			"Datos",
-			"Proveedor",
+			"Cliente",
 			"Total",
 			"Detalles",
 			"Acciones"
@@ -290,7 +278,7 @@ function TablaReporteCompras(){
 		"url": "index.php", 
 		"params":{
 			"metodo": "consultar",
-			"accion": "compras"
+			"accion": "ventas"
 		}
 	});
 }

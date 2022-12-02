@@ -19,6 +19,7 @@ include "controladores/c_general.php";
 include "controladores/c_zonas.php";
 include "controladores/c_compras.php";
 include "controladores/c_hacerCompra.php";
+include "controladores/c_ventas.php";
 
 class controller {
 
@@ -453,6 +454,40 @@ class controller {
 			}
 
 			$pagina = str_replace('#sucursales#', $opciones, $pagina);
+		}else if($nombre == "v_hacerCompra"){
+			$query = "SELECT ID_Sucursal, sucursales.Nombre AS Nombre FROM sucursales, usuarios WHERE ID_Sucursal = FK_Sucursal AND ID_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$sucursal = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas == 1) {
+					$sucursal = '<h5 id="Sucursales" value="'.$row[0]['ID_Sucursal'].'">'.$row[0]['Nombre'].'</h5>';
+				}else if($numerofilas == 0){
+					$query2 = "SELECT ID_Sucursal, Nombre FROM sucursales";
+					$row2 = $omodelo->_consultar($query2);
+					$numerofilas2 = $omodelo->numerofilas;
+					$opciones = '';
+
+					if ($row2 == "si") {
+						echo "Error: " . mysqli_error($omodelo->link);
+					} else {
+						if ($numerofilas2 > 0) {
+							for ($i = 0; $i < $numerofilas2; $i++) {
+								$opciones .='<option value="' . $row2[$i]['ID_Sucursal'] . '" >' . $row2[$i]['Nombre']. '</option>';
+							}
+							$sucursal = '<select class="form-select" id="Sucursales" name="Sucursales">
+											<option value="" selected>-Seleccione una opción-</option>
+											'.$opciones.'
+										</select>';
+						}
+					}
+				}
+			}
+			$pagina = str_replace('#sucursal#', $sucursal, $pagina);
+                    
 		}
 		
 		return $pagina;

@@ -111,30 +111,6 @@
 		          </div>
 		        </div>
 	    		</div>
-	    		<hr>
-	    		<div class="row mb-3">
-		       	<div class="col-md-6 col-sm-12 text-start">
-		       		<b class="mb-3">Precios del producto</b>
-		       	</div>
-		       	<div class="col-md-6 col-sm-12 text-end">
-		       		<button type="button" class="btn btn-success" id="AgregarPrecioProducto" >Agregar precio <i class="fas fa-plus"></i></button>
-		      	</div>
-		      </div>
-		      <div class="col-md-12 col-sm-12">
-		      	<div class="table-responsive">
-		       		<table class="table table table-hover table-striped table-bordered text-center" id="TablaPreciosProductos" width="100%" style="font-size: 12px;">
-				        <thead>
-				          <th style="width: 20%;">Zona</th>
-				          <th style="width: 30%;">Nombre</th>
-				        	<th style="width: 20%;">Precio</th>
-				        	<th style="width: 20%;">Precio mayoreo</th>
-				        	<th style="width: 10%;">Acciones</th>
-				        </thead>
-				        <tbody>
-				        </tbody>
-				    	</table>
-		      	</div>
-		      </div>
 		      <hr>
 	    		<div class="row mb-3">
 		       	<div class="col-md-6 col-sm-12 text-start">
@@ -151,6 +127,31 @@
 				          <th style="width: 33%;">Nombre</th>
 				        	<th style="width: 33%;">Abreviatura</th>
 				        	<th style="width: 33%;">Acciones</th>
+				        </thead>
+				        <tbody>
+				        </tbody>
+				    	</table>
+		      	</div>
+		      </div>
+		      <hr>
+		      <div class="row mb-3">
+		       	<div class="col-md-6 col-sm-12 text-start">
+		       		<b class="mb-3">Precios del producto</b>
+		       	</div>
+		       	<div class="col-md-6 col-sm-12 text-end">
+		       		<button type="button" class="btn btn-success" id="AgregarPrecioProducto" >Agregar precio <i class="fas fa-plus"></i></button>
+		      	</div>
+		      </div>
+		      <div class="col-md-12 col-sm-12">
+		      	<div class="table-responsive">
+		       		<table class="table table table-hover table-striped table-bordered text-center" id="TablaPreciosProductos" width="100%" style="font-size: 12px;">
+				        <thead>
+				          <th style="width: 20%;">Zona</th>
+				          <th style="width: 30%;">Presentación</th>
+				          <th style="width: 30%;">Nombre</th>
+				        	<th style="width: 20%;">Precio</th>
+				        	<th style="width: 20%;">Mayoreo</th>
+				        	<th style="width: 10%;">Acciones</th>
 				        </thead>
 				        <tbody>
 				        </tbody>

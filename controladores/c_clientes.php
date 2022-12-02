@@ -18,7 +18,7 @@ class clientes {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'AND ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Cliente, clientes.Nombre, Foto, clientes.Telefono, Celular, Correo, Lim_Credito, clientes.RFC, Facturar, Titular, Banco, No_Cuenta, Fecha_Registro, sucursales.Nombre) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Cliente, clientes.Nombre, Foto, clientes.Telefono, Celular, Correo, Lim_Credito, clientes.RFC, Facturar, Titular, Banco, No_Cuenta, Fecha_Registro) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}

@@ -5,7 +5,7 @@
 			<nav aria-label="breadcrumb">
 			  <ol class="breadcrumb">
 			    <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
-			    <li class="breadcrumb-item active" aria-current="page">Compras</li>
+			    <li class="breadcrumb-item active" aria-current="page">Ventas</li>
 			  </ol>
 			</nav>
 		</div>
@@ -22,7 +22,7 @@
 			<div class="row">
 				<div class="col-12 text-end">
 					<!-- <button type="button" class="btn btn-success" id="botonNuevaArea" onclick="$('#ModalAreas').appendTo('body').modal('show')"><i class="fa fa-file"></i> Nueva</button> -->
-					<button type="button" class="btn btn-success botonNuevaCompra" onclick="$('#cargarHacerCompra').trigger('click')"><i class="fa fa-file"></i> Nueva</button>
+					<button type="button" class="btn btn-success botonNuevaVenta"><i class="fa fa-file"></i> Nueva</button>
                     <a href="javascript:void(0)" class="btn btn-light btn-reload cargarVista" carga="v_compras" titulo="Compras"><i class="fa fa-retweet"></i></a>
 				</div>
 			</div>
@@ -30,10 +30,10 @@
 			<div class="Principal">
 		    <div class="row mb-5">
 		      <div class="col-12">
-		        <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaReporteCompras" width="100%" style="font-size: 12px;">
+		        <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaReporteVentas" width="100%" style="font-size: 12px;">
                     <thead>
                         <th style="width: 20%;" orden="No">Datos</th>
-                        <th style="width: 25%;" orden="No">Proveedor</th>
+                        <th style="width: 25%;" orden="No">Cliente</th>
                         <th style="width: 25%;">Total</th>
                         <th style="width: 15%;" orden="No">Detalles</th>
                         <th style="width: 15%;" orden="No">Acciones</th>
@@ -56,24 +56,6 @@
 		  </div>
 		</div>
 	</div>
-</div>
-
-<div class="modal fade" id="ModalNuevaCompra" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Nueva compra</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary" tipo="insertar" attrid="" id="GuardarProveedor">Guardar</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="modal fade" id="ModalVerProductosCompra" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -106,50 +88,6 @@
                             </tr>
                         </thead>
                         <tbody id="tbodyVerProductosCompra">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="ModalVerHistorialPagos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Productos <span id="FolioCompraPagos"></span></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped text-center">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Fecha
-                                </th>
-                                <th>
-                                    Concepto
-                                </th>
-                                <th>
-                                    Tipo de pago
-                                </th>
-                                <th>
-                                    Monto
-                                </th>
-                                <th>
-                                    Detalles
-                                </th>
-                                <th>
-                                    Comprobante
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbodyVerHistorialPagos">
                         </tbody>
                     </table>
                 </div>
@@ -214,7 +152,7 @@
 		                <label for="DetallesPago">Detalles: </label>
 		            </div>
 		        </div>
-                <div class="col-md-12 col-sm-12 mb-3" id='Archivo'>
+                <div class="col-md-12 col-sm-12 mb-3" id='Archivo'hidden>
 		        	<div class="form-floating">
 		               	<input type="file" class="form-control" id="ComprobantePago" name="ComprobantePago" placeholder="Ingresa un comprobante de pago">
 		                <label for="CmprobantePago">Comprobante de pago</label>

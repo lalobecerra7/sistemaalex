@@ -57,7 +57,7 @@ function v_productos() {
                 var productos = '';
                 $("#TablaPreciosProductos tbody tr").each(function(index, el){
                     if ($(this).find("#ZonaPrecioProducto").val() != "" && $(this).find("#NombrePrecio").val() != "" && $(this).find("#PrecioProducto").val() != "" && $(this).find("#PrecioProducto").val() > 0) {
-                        productos += $(this).find("#ZonaPrecioProducto").val()+"~"+$(this).find("#NombrePrecio").val()+"~"+$(this).find("#PrecioProducto").val()+"~"+$(this).find("#PrecioProductoMayoreo").val()+",";
+                        productos += $(this).find("#ZonaPrecioProducto").val()+"~"+$(this).find("#PresentacionProdSelect").val()+"~"+$(this).find("#NombrePrecio").val()+"~"+$(this).find("#PrecioProducto").val()+"~"+$(this).find("#PrecioProductoMayoreo").val()+",";
                     }
                 });
 
@@ -236,6 +236,14 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('click', '#AgregarPrecioProducto', function() {
+        var opcionesSelect = "";
+        $("#TablaPresentacionProducto tbody tr").each(function(index, el){
+            if ($(this).find("#NombrePresentacion").val() != "") {
+                //presentaciones += $(this).find("#NombrePresentacion").val()+"~"+$(this).find("#AbreviaturaPresentacion").val()+",";
+                opcionesSelect += '<option value="'+$(this).find("#NombrePresentacion").val()+'">'+$(this).find("#NombrePresentacion").val()+'</option>';
+            }
+        });
+
         var zonas = '';
         var data = "metodo=detalles&accion=productos&tipo=ConsultarZonaProducto";
         $.ajax({
@@ -249,6 +257,12 @@ jQuery(document).ready(function($) {
                 <td>
                     <select class="form-select SelectProductosZona" name="ZonaPrecioProducto" id="ZonaPrecioProducto" >
                         `+res+`
+                    </select>
+                </td>
+                <td>
+                    <select class="form-select SelectPresentacionProd" name="PresentacionProdSelect" id="PresentacionProdSelect" >
+                        <option value="">Seleccione una opción</option>
+                        `+opcionesSelect+`   
                     </select>
                 </td>
                 <td>
@@ -445,35 +459,6 @@ jQuery(document).ready(function($) {
                 }
             });
             $("#CodigoBarras").trigger('keyup');
-            if (datos.Extras != null && datos.Extras.length > 0) {
-                for (var i = 0; i < datos.Extras.length; i++) {
-                    var Zona = datos.Extras[i].Zona;
-                    var Nombre = datos.Extras[i].Nombre;
-                    var Precio = datos.Extras[i].Precio;
-                    var Precio_Mayoreo = datos.Extras[i].Precio_Mayoreo;
-
-                    var tabla = `\
-                        <tr>
-                            <td>
-                                <select class="form-select SelectProductosZona" name="ZonaPrecioProducto" id="ZonaPrecioProducto" >
-                                    `+Zona+`
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" value="`+Nombre+`" id="NombrePrecio" name="NombrePrecio" placeholder="Ingresa el nombre del precio del producto">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" value="`+Precio+`" id="PrecioProducto" name="PrecioProducto" min="0" placeholder="$0.00">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" value="`+Precio_Mayoreo+`" id="PrecioProductoMayoreo" name="PrecioProductoMayoreo" min="0" placeholder="$0.00">
-                            </td>
-                            <td><button  type="button" class="btn btn-sm btn-danger" id="EliminarPrecio" attrid="`+datos.Extras[i].ID_Precio+`" nombre="`+Nombre+`"><i class="fas fa-trash"></i></button></td>
-                        </tr>`;
-                    $("#TablaPreciosProductos tbody").append(tabla);
-                }
-            }
-
             if (datos.Presentaciones != null && datos.Presentaciones.length > 0) {
                 for (var i = 0; i < datos.Presentaciones.length; i++) {
                     var Abreviatura = datos.Presentaciones[i].Abreviatura;
@@ -491,7 +476,56 @@ jQuery(document).ready(function($) {
                         </tr>`;
                     $("#TablaPresentacionProducto tbody").append(tabla);
                 }
-            }
+            }    
+
+            setTimeout(function(){ 
+                if (datos.Extras != null && datos.Extras.length > 0) {
+                    for (var i = 0; i < datos.Extras.length; i++) {
+                        var Zona = datos.Extras[i].Zona;
+                        var Presentacion = datos.Extras[i].Presentacion;
+                        var Nombre = datos.Extras[i].Nombre;
+                        var Precio = datos.Extras[i].Precio;
+                        var Precio_Mayoreo = datos.Extras[i].Precio_Mayoreo;
+
+                         var opcionesSelect = "";
+                        $("#TablaPresentacionProducto tbody tr").each(function(index, el){
+                            if ($(this).find("#NombrePresentacion").val() != "") {
+                                if ($(this).find("#NombrePresentacion").val() == Presentacion) {
+                                    opcionesSelect += '<option value="'+$(this).find("#NombrePresentacion").val()+'" selected>'+$(this).find("#NombrePresentacion").val()+'</option>';        
+                                }else{
+                                    opcionesSelect += '<option value="'+$(this).find("#NombrePresentacion").val()+'">'+$(this).find("#NombrePresentacion").val()+'</option>';
+                                }
+                            }
+                        });
+
+                        var tabla = `\
+                            <tr>
+                                <td>
+                                    <select class="form-select SelectProductosZona" name="ZonaPrecioProducto" id="ZonaPrecioProducto" >
+                                        `+Zona+`
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-select SelectPresentacionProd" name="PresentacionProdSelect" id="PresentacionProdSelect" disabled>
+                                        `+opcionesSelect+`   
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" value="`+Nombre+`" id="NombrePrecio" name="NombrePrecio" placeholder="Ingresa el nombre del precio del producto">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" value="`+Precio+`" id="PrecioProducto" name="PrecioProducto" min="0" placeholder="$0.00">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" value="`+Precio_Mayoreo+`" id="PrecioProductoMayoreo" name="PrecioProductoMayoreo" min="0" placeholder="$0.00">
+                                </td>
+                                <td><button  type="button" class="btn btn-sm btn-danger" id="EliminarPrecio" attrid="`+datos.Extras[i].ID_Precio+`" nombre="`+Nombre+`"><i class="fas fa-trash"></i></button></td>
+                            </tr>`;
+                        $("#TablaPreciosProductos tbody").append(tabla);
+                    }
+                }
+            }, 1000);
+
             $('#ModalProductos').modal('show');
         })
         .fail(function() {

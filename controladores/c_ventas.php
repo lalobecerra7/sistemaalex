@@ -1,5 +1,5 @@
 <?php
-class compras {
+class ventas {
 
 	public function _consultar(){
 		$omodelo = new m_modelo();
@@ -17,14 +17,15 @@ class compras {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(DATE_FORMAT(compras.Fecha_Registro, '%Y-%m-%d'), ID_Compra, FK_Proveedor, FK_Usuario, proveedores.Nombre, proveedores.Empresa, proveedores.Credito, Anticipo, Total, Estatus) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d'), ID_Venta, clientes.Nombre, Descuento, Total, Tipo_Pago, Notas, clientes.Correo) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Compra, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Proveedor, proveedores.Nombre AS Datos, proveedores.Empresa AS Empresa, proveedores.Telefono AS Telefono, proveedores.Razon_Social AS RazonSocial, proveedores.Credito as Credito, Anticipo, Total, Estatus, compras.Fecha_Registro AS Fecha_Registro, (SELECT COUNT(*) FROM compras) AS Num FROM compras INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Venta, ventas.FK_Usuario, FK_Caja, FK_Cliente, ventas.Descuento, Total, Tipo_Pago, Pago_efectivo, Pago_Tarjeta, Pago_Credito, Pago_Vale, Cambio, Notas, ventas.Fecha_Registro, Cancelada, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS Datos, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, cajas.Nombre AS NombreCaja, (SELECT COUNT(*) FROM ventas) AS Num FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente INNER JOIN cajas ON FK_Caja = ID_Caja $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		echo $query;
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -35,39 +36,23 @@ class compras {
 				$SumarCompras = 0;
 				for($i=0; $i<$numerofilas; $i++){
 					$tipoUsuario = "";$usuario="";$estatus="";$motivocancelada="";$botonCancelar="";$botonPagos="";
-					$folio = str_pad($row[$i]['ID_Compra'], 8, "0", STR_PAD_LEFT);
-
-					if ($row[$i]['Estatus'] == "1") {
-						$estatus = '<span class="badge rounded-pill bg-success">Completada</span>';
-						$botonCancelar = ' <button class="btn btn-warning btn-sm" id="CancelarCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i style="color: white;" class="fas fa-circle-xmark"></i></button> ';
-						$SumarCompras += $row[$i]['Total'];
-					}else if($row[$i]['Estatus'] == "2"){
-						$estatus = '<span class="badge rounded-pill bg-danger">Cancelada</span>';
-						//$motivocancelada="Fecha de cancelación: <b>".$row[$i]['Fecha_Cancelada']."</b><br>Motivo: ".$row[$i]['Motivo_Cancelada']; 
-					}else if ($row[$i]['Estatus'] == "0") {
-						$estatus = '<span class="badge rounded-pill bg-warning">Pendiente</span>';
-						$botonCancelar = ' <button class="btn btn-warning btn-sm" id="CancelarCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i style="color: white;" class="fas fa-circle-xmark"></i></button> ';
-						$SumarCompras += $row[$i]['Total'];
-						$botonPagos = '<button class="btn btn-primary btn-sm"  id="PagoCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i class="fa-solid fa-sack-dollar"></i></button>';
-					}
-
+					$folio = str_pad($row[$i]['ID_Venta'], 8, "0", STR_PAD_LEFT);
+					//NOS QUEDAMOS AQUI
 					$botonEliminar = "";
 					$botondeCancelar = "";
 					//$botonTicket = "";
-						$botonEliminar = '<button class="btn btn-danger btn-sm" id="EliminarCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i class="fas fa-trash"></i></button>';
+					$botonEliminar = '<button class="btn btn-danger btn-sm" id="EliminarVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'"><i class="fas fa-trash"></i></button>';
 
-						$botondeCancelar = $botonCancelar;
+					$botondeCancelar = '<button class="btn btn-danger btn-sm" id="CancelarVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'"><i class="fas fa-circle-xmark"></i></button>';
 
-						
-
-						//$botonTicket = '<button class="btn btn-success" id="ImprimirTicketVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'"><i class="fas fa-print"></i></button>';
+					$botonTicket = '<button class="btn btn-success" id="ImprimirTicketVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'"><i class="fas fa-print"></i></button>';
 
 					$arreglo['data'][$i] = array(
-						'ID' => $row[$i]['ID_Compra'],
-						'Datos' => "Fecha: <b>".$row[$i]['Fecha_Registro']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b>",
-						'Proveedor' => 'Nombre: <b>'.$row[$i]['Datos'].'</b><br>Empresa: <b>'.$row[$i]['Empresa'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Razón social: <b>'.$row[$i]['RazonSocial'].'</b>',
+						'ID' => $row[$i]['ID_Venta'],
+						'Datos' => "Fecha: <b>".$row[$i]['Fecha_Registro']."<br></b>Folio: <b>".$folio."</b><br>Caja: <b>".$row[$i]['NombreCaja']."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b>",
+						'Cliente' => 'Nombre: <b>'.$row[$i]['Datos'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Correo electrónico: <b>'.$row[$i]['CorreoCliente'].'</b><br>RFC: '.$row[$i]['RFCCliente'],
 						'Total' => 'Anticipo: <b>$'.number_format($row[$i]['Anticipo'], 2).'</b><br>Crédito: <b>$'.number_format($row[$i]['Credito'],2).'</b><br>Total: <b style="font-size: 15px;">$'.number_format($row[$i]['Total'],2 ).'</b><br>',
-						'Detalles' => $estatus.'<br>'.$motivocancelada.'<br><button class="btn btn-link btn-sm" id="VerProductosCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'">Ver productos</button><br><button class="btn btn-link btn-sm" id="VerHistorialPagos" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'">Ver pagos</button>',
+						'Detalles' => $estatus.'<br>'.$motivocancelada.'<br><button class="btn btn-link btn-sm" id="VerProductosCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'">Ver productos</button>',
 						'Acciones' => $botonEliminar.' '.$botondeCancelar .' '.$botonPagos,
 					);
 				}
@@ -75,7 +60,7 @@ class compras {
 				$arreglo['totales'] = array(
 					'NumRows' => $row[0]['Num'], 
 					'Datos' => "",
-					'Proveedor' => "Totales",
+					'Cliente' => "Totales",
 					'Total' => "<b>$".number_format($SumarCompras, 2)."</b>",
 					'Detalles' =>"",
 					'Acciones' => "");	
@@ -299,43 +284,6 @@ class compras {
 					echo json_encode($row[0]);
 				}
 			}
-		}else if($tipo == 'historialPagos'){
-			$IDCompra = $omodelo->link->real_escape_string($IDCompra);
-			$tabla = "";
-			$imagen = '';
-			$query = "SELECT ID_Pago, FK_Compra, Concepto, Monto, Tipo_Pago, Fecha, Detalles_Pago, Archivo FROM pagos WHERE FK_Compra = '$IDCompra'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-
-			if($row == 'si'){
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				if($numerofilas > 0){
-					for($i=0; $i<$numerofilas; $i++){
-						if ($row[$i]["Archivo"] != "") {
-							if($row[$i]["Archivo"] != "" && file_exists("vistas/assets/archivos/fotosPagos/".$row[$i]["Archivo"])){
-								$imagen = '<a href="vistas/assets/archivos/fotosPagos/'.$row[$i]["Archivo"].'" data-fancybox="images">
-										<div style="background-image: url('."'".'vistas/assets/archivos/fotosPagos/'.$row[$i]["Archivo"]."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer;">
-										</div>
-									</a><br>';
-							}	
-						}
-
-						$tabla .= "
-							<tr>
-								<td >".$row[$i]["Fecha"]."</td>
-								<td >".$row[$i]["Concepto"]."</td>
-								<td >".$row[$i]["Tipo_Pago"]."</td>
-								<td style='vertical-align: middle;'>$".number_format($row[$i]["Monto"], 2)."</td>
-								<td >".$row[$i]["Detalles_Pago"]."</td>
-								<td >".$imagen."</td>
-							</tr>
-						";
-					}
-				}
-			}
-
-			echo $tabla;
 		}
 	}
 }

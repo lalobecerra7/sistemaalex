@@ -60,8 +60,67 @@ jQuery(document).ready(function($) {
     });
 
 	$(document).on('click', '#AgregarProductoCodigoC', function() {
-    	$("#ModalVerProductosCompra").modal("show");
-		TablaProductoCodigo();
+    	//$("#ModalVerProductosCompra").modal("show");
+		//TablaProductoCodigo();
+		var Codigo = $("#CodigoProductoC").val(); 
+		var data = "metodo=consultar&accion=hacerCompra&tipo=ConsultarProductoCodigo&codigo="+Codigo;
+		$.ajax({
+			url: 'index.php',
+			type: 'POST',
+			data: data,
+		})
+		.done(function(res) {
+			console.log(res);
+			var datos = JSON.parse(res);
+			console.log(datos);
+			var idProducto = datos.ID_Producto;
+			var codigo = datos.Codigo;
+			var descripcion = datos.Descripcion;
+			var costo = datos.Costo;
+			var presentacion = datos.NombrePresentacion;
+			var sucursal = '';
+			var idPresentacion = datos.FK_Presentacion;
+			var idSucursal = '';
+			//var existencia = $(this).children("td:eq(3)").find(".ExistenciaProducto").text();
+			
+			var fila = "\
+				<tr attrid='"+idProducto+"' idPresentacion='"+idPresentacion+"' idSucursal='"+idSucursal+"'>\
+					<td>"+codigo+"</td>\
+					<td>"+descripcion+"</td>\
+					<td>"+presentacion+"</td>\
+					<td>"+sucursal+"</td>\
+					<td class='costoP'><input type='number' value='"+costo+"' min='1' step='any' class='form-control campoCosto'></td>\
+					<td><input type='number' value='1' min='1' step='any' class='form-control campoCantidad'></td>\
+					<td class='totalP'>"+(costo*1)+"</td>\
+					<td><button class='btn btn-danger btn-sm EliminarFila'><i class='fas fa-trash'></i></button></td>\
+				</tr>\
+			";
+
+			var encontrado = false;
+
+			$("#tbodyTablaProductosAgregados tr").each(function(){
+				if ($(this).attr("attrid") == idProducto && $(this).attr("idpresentacion") == idPresentacion && $(this).attr("idsucursal") == idSucursal) {
+					var cantidadAnterior = $(this).children("td:eq(5)").find(".campoCantidad").val();
+					$(this).children("td:eq(5)").find(".campoCantidad").val(parseFloat(cantidadAnterior)+1);
+					encontrado = true;
+					$(".campoCantidad").trigger("keyup");
+					return false;
+				}
+			});
+
+			if (encontrado == false) {
+				$("#tbodyTablaProductosAgregados").append(fila);
+			}
+			$("#CodigoProducto").val("");
+			$("#CodigoProducto").focus();
+			CalcularSubtotal();
+			$("#DescuentoCompraDinero").val($("#RealizarCompra").attr("cantidad"));
+			$("#DescuentoCompraDinero").trigger("change");
+			
+		})
+		.fail(function() {
+			console.log("Error ajax");
+		});
     });
 
 	$(document).on('click', '#TablaProductosCompra tbody tr', function() {
@@ -342,11 +401,12 @@ $(document).on('click', '#GuardarCompra', function() {
 		var productos = [];
 		$("#tbodyTablaProductosAgregados tr").each(function(){
 			var idProducto = $(this).attr("attrid");
-			var Sucursal = $(this).attr("idSucursal");
+			var Sucursal = $('#Sucursales').val();
 			var Presentacion = $(this).attr("idPresentacion");
 			var Costo = $(this).children("td:eq(4)").find(".campoCosto").val();
 			var Cantidad = $(this).children("td:eq(5)").find(".campoCantidad").val();
 			productos.push([idProducto,Costo,Cantidad,Presentacion,Sucursal])
+			console.log(Sucursal);
 		});
 
 		if(tipoCompra == 'Contado'){
@@ -403,8 +463,7 @@ function TablaProductosCompra(){
 			"Producto",
 			"Descripcion",
 			"Costo",
-			"Presentacion",
-			"Sucursal"
+			"Presentacion"
 		], 
 		"sort": [
 			1,
