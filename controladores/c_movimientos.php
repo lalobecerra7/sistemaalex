@@ -1,6 +1,6 @@
 
 <?php
-class zonas {
+class categorias {
 
 	public function _consultar(){
 		$omodelo = new m_modelo();
@@ -18,14 +18,14 @@ class zonas {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Zona, Nombre, Descripcion) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Categoria, Nombre, Descripcion) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Zona, Nombre, Descripcion, (SELECT COUNT(*) FROM zonas $busqueda) AS Num FROM zonas $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Categoria, Nombre, Descripcion, (SELECT COUNT(*) FROM categorias $busqueda) AS Num FROM categorias $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -41,17 +41,17 @@ class zonas {
 					}
 
 					$botonPermisosModificar = "";
-					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_zonas'][3] == '1') {
-						$botonPermisosModificar = '<button class="btn btn-primary btn-sm" id="ModificarZona" attrid="'.$row[$i]['ID_Zona'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button>';
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_categorias'][3] == '1') {
+						$botonPermisosModificar = '<button class="btn btn-primary btn-sm" id="ModificarCategoria" attrid="'.$row[$i]['ID_Categoria'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-edit"></i></button>';
 					}
 
 					$botonPermisosEliminar = "";
-					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_zonas'][4] == '1') {
-						$botonPermisosEliminar = '<button class="btn btn-danger btn-sm" id="EliminarZona" attrid="'.$row[$i]['ID_Zona'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>';
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_categorias'][4] == '1') {
+						$botonPermisosEliminar = '<button class="btn btn-danger btn-sm" id="EliminarCategoria" attrid="'.$row[$i]['ID_Categoria'].'" nombre="'.$row[$i]['Nombre'].'"><i class="fas fa-trash"></i></button>';
 					}
 					
 					$arreglo['data'][$i] = array(
-						'ID' => $row[$i]['ID_Zona'],
+						'ID' => $row[$i]['ID_Categoria'],
 						'Nombre' => $row[$i]['Nombre'],
 						'Descripcion' => $row[$i]['Descripcion'],
 						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,
@@ -73,14 +73,14 @@ class zonas {
 		$Nombre =  $omodelo->link->real_escape_string($Nombre);
 		$Descripcion =  $omodelo->link->real_escape_string($Descripcion);
 
-		$query = "INSERT INTO zona SET Nombre = '$Nombre', Descripcion = '$Descripcion'";
+		$query = "INSERT INTO categorias SET Nombre = '$Nombre', Descripcion = '$Descripcion'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
 			echo "Error: ".mysqli_error($omodelo->link);
 		}else{
 			echo "Correcto";
-			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			//$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
@@ -89,11 +89,11 @@ class zonas {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
-		$IDZona =  $omodelo->link->real_escape_string($IDZona);
+		$IDCategoria =  $omodelo->link->real_escape_string($IDCategoria);
 		$Nombre =  $omodelo->link->real_escape_string($Nombre);
 		$Descripcion =  $omodelo->link->real_escape_string($Descripcion);
 
-		$query = "UPDATE zona SET Nombre = '$Nombre', Descripcion = '$Descripcion' WHERE ID_Zona = '$IDZona'";
+		$query = "UPDATE categorias SET Nombre = '$Nombre', Descripcion = '$Descripcion' WHERE ID_categoria = '$IDCategoria'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -108,9 +108,9 @@ class zonas {
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$IDZona =  $omodelo->link->real_escape_string($IDZona);
+		$IDCategoria =  $omodelo->link->real_escape_string($IDCategoria);
 
-		$query = "DELETE FROM zonas WHERE ID_Zona = '$IDZona'";
+		$query = "DELETE FROM categorias WHERE ID_Categoria='$IDCategoria'";
 		$error = $omodelo->_insertar($query);
 			
 		if ($error == "si") {
@@ -125,9 +125,9 @@ class zonas {
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$IDZona =  $omodelo->link->real_escape_string($IDZona);
+		$IDCategoria =  $omodelo->link->real_escape_string($IDCategoria);
 
-		$query = "SELECT ID_Zona, Nombre, Descripcion FROM zonas WHERE ID_Zona = '$IDZona'";
+		$query = "SELECT ID_Categoria, Nombre, Descripcion FROM categorias WHERE ID_categoria = '$IDCategoria'";
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 

@@ -171,7 +171,51 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('click', '#EliminarDireccion', function() {
-        $(this).parent().parent().remove();
+        if ($(this).attr("attrid") != "" || $(this).attr("attrid") != null) {
+            var boton = $(this);
+            var id = $(this).attr("attrid");
+            var nombre = $(this).attr("nombre");
+            console.log(id);
+            Swal.fire({
+              title: '¿Estás a punto de eliminar la dirección '+nombre+'?',
+              text: "Una vez eliminado ya no podrá ser recuperado",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              cancelButtonText: 'No, cancelar',
+              confirmButtonText: 'Si, eliminar'
+            }).then((result) => {
+              if (result.value) {
+                var data = "metodo=eliminar&accion=clientes&tipo=EliminarDireccion&IDDireccion="+id;
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data
+                })
+                .done(function(res) {
+                    console.log(res);
+                    if ($.trim(res) == "Correcto") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Dirección eliminada correctamente'
+                        });
+                        TablaClientes();
+                        $(boton).parent().parent().remove();
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error inesperado al eliminar Dirección.'
+                        });
+                    }
+                })
+                .fail(function() {
+                    console.log("Error ajax");
+                });  
+              }
+            });
+        }
     });
 
     /*$(document).on('click', '#ModificarDireccion', function() {
@@ -246,7 +290,7 @@ jQuery(document).ready(function($) {
                 <label for="TelefonoContactoCliente">Teléfono</label>
                 <input type="text" class="form-control" id="TelefonoContactoCliente" name="TelefonoContactoCliente" placeholder="Ingresa el teléfono del contacto">
             </td>
-            <td><button class="btn btn-sm btn-danger" id="EliminarDireccion"><i class="fas fa-trash"></i></button></td>
+            <td><button type="button" class="btn btn-sm btn-danger" id="EliminarDireccion" attrid nombre><i class="fas fa-trash"></i></button></td>
         </tr>`;
         $("#TablaUbicacionClientes tbody").append(tabla);
     });
@@ -319,7 +363,7 @@ jQuery(document).ready(function($) {
           confirmButtonText: 'Si, eliminar'
         }).then((result) => {
           if (result.value) {
-            var data = "metodo=eliminar&accion=clientes&IDCliente="+id;
+            var data = "metodo=eliminar&accion=clientes&IDCliente="+id+"&tipo=EliminarCliente";
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
@@ -446,7 +490,7 @@ jQuery(document).ready(function($) {
                             <label for="TelefonoContactoCliente">Teléfono</label>
                             <input type="text" class="form-control" value="`+TelefonoContactoCliente+`" id="TelefonoContactoCliente" name="TelefonoContactoCliente" placeholder="Ingresa el teléfono del contacto">
                         </td>
-                        <td><button class="btn btn-sm btn-danger" id="EliminarDireccion"><i class="fas fa-trash"></i></button></td>
+                        <td><button type="button" class="btn btn-sm btn-danger" id="EliminarDireccion" attrid="`+datos.Extras[i].ID_Detalle_Cliente+`" nombre="`+datos.Extras[i].Calle+`"><i class="fas fa-trash"></i></button></td>
                     </tr>`;
                     $("#TablaUbicacionClientes tbody").append(tabla);
                 }

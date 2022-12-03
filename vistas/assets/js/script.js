@@ -30,42 +30,42 @@ jQuery(document).ready(function($) {
     setTimeout(function(){
       $("#cargarInicio").trigger("click");
     },100);
-    //permisos();
+   
+    
     $(document).on('click', '.cargarVista', function() {
-
         var nombre = $(this).attr('carga'), titulo = $(this).attr('titulo'), id = $(this).attr('id'), atri = $(this).attr('atri'), pesta = $(this).attr('pesta'); 
         var data = "metodo=cambiar&accion="+nombre+"&atri="+atri+"&pesta="+pesta;
         idVista = $(this).attr('id');
         var itemVista = $(this);
+        
         $.ajax({
-          url: 'index.php',
-          type: 'POST',
-          data: data,
-          beforeSend: function() {
-            //$("#carga").show();
-          }
+            url: 'index.php',
+            type: 'POST',
+            data: data,
+            beforeSend: function() {
+                //$("#carga").show();
+            }
         })
         .done(function(res) {
-          $("#verVista").html(res);
-          $("#vistaTitulo").html(titulo);
-          $(".cargarVista").removeClass("active");
-          itemVista.addClass("active");
-          if(nombre == "v_inicio"){
-           
-          }
-          crearDataTable();
-          
+            $("#verVista").html(res);
+            $("#vistaTitulo").html(titulo);
+            $(".cargarVista").removeClass("active");
+            itemVista.addClass("active");
+            
+            if(nombre == "v_inicio"){
+             
+            }
 
-          if(typeof window[nombre] === 'function') {
-            window[nombre]();
-            console.log(nombre);
-          }
+            crearDataTable();
 
+            if(typeof window[nombre] === 'function') {
+              window[nombre]();
+            }
         })
         .fail(function() {
-          console.log("Error ajax");
+            console.log("Error ajax");
         }).always(function() {
-          //$("#carga").hide();
+            //$("#carga").hide();
         }); 
     });
 

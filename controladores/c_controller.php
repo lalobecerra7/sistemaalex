@@ -6,7 +6,6 @@ include "controladores/c_sucursales.php";
 include "controladores/c_clientes.php";
 include "controladores/c_proveedores.php";
 include "controladores/c_areas.php";
-include "controladores/c_personal.php";
 include "controladores/c_hacerventa.php";
 include "controladores/c_categorias.php";
 include "controladores/c_usuarios.php";
@@ -18,30 +17,34 @@ include "controladores/c_impuestos.php";
 include "controladores/c_tickets.php";
 include "controladores/c_general.php";
 include "controladores/c_zonas.php";
+include "controladores/c_compras.php";
+include "controladores/c_hacerCompra.php";
+include "controladores/c_ventas.php";
 
 class controller {
 
 
 	function _layouts(){
-		$omodelo = new m_modelo();
-		$_SESSION['user_admin']['FechaFin'] = date('Y-m-d');
-		$_SESSION['user_admin']['FechaIni'] = date("Y-m-d", strtotime($_SESSION['user_admin']['FechaFin']."- 30 days")); 
+			$omodelo = new m_modelo();
+			$_SESSION['user_admin']['FechaFin'] = date('Y-m-d');
+			$_SESSION['user_admin']['FechaIni'] = date("Y-m-d", strtotime($_SESSION['user_admin']['FechaFin']."- 30 days")); 
 
-		$fechahoy = date('Y-m-d H:i:s');
-		$pagina = file_get_contents('vistas/v_html.php');
-		$pagina = str_replace('#NombreUsuario#',$_SESSION['user_admin']['Nombre'],$pagina);
-		$pagina = str_replace('#PermisosUsuario#',$_SESSION['user_admin']['Tipo_Usuario'],$pagina);
-		$pagina = str_replace('#IDUsuario#',$_SESSION['user_admin']['ID_Usuario'],$pagina);
-		$pagina = str_replace('#usuario#',$_SESSION['user_admin']['Nombre'],$pagina);
-		$pagina = str_replace('#prl#',substr($_SESSION['user_admin']['Nombre'], 0, 1),$pagina);
-		$pagina = str_replace('#fechahoy#',$fechahoy,$pagina);
-		$pagina = str_replace('#fechaIni#',$_SESSION['user_admin']['FechaIni'],$pagina);
-		$pagina = str_replace('#fechaFin#',$_SESSION['user_admin']['FechaFin'],$pagina);
-		if ($_SESSION['user_admin']['Foto'] == "") {
-			$pagina = str_replace('#ImagenPerfil#', 'vistas/assets/archivos/default.jpg', $pagina);
-		}else{
-			$pagina = str_replace('#ImagenPerfil#', 'vistas/assets/archivos/fotosUsuarios/'.$_SESSION['user_admin']['Foto'], $pagina);
-		}       
+			$fechahoy = date('Y-m-d H:i:s');
+			$pagina = file_get_contents('vistas/v_html.php');
+			$pagina = str_replace('#NombreUsuario#',$_SESSION['user_admin']['Nombre'],$pagina);
+			$pagina = str_replace('#PermisosUsuario#',$_SESSION['user_admin']['Tipo_Usuario'],$pagina);
+			$pagina = str_replace('#IDUsuario#',$_SESSION['user_admin']['ID_Usuario'],$pagina);
+			$pagina = str_replace('#usuario#',$_SESSION['user_admin']['Nombre'],$pagina);
+			$pagina = str_replace('#prl#',substr($_SESSION['user_admin']['Nombre'], 0, 1),$pagina);
+			$pagina = str_replace('#fechahoy#',$fechahoy,$pagina);
+			$pagina = str_replace('#fechaIni#',$_SESSION['user_admin']['FechaIni'],$pagina);
+			$pagina = str_replace('#fechaFin#',$_SESSION['user_admin']['FechaFin'],$pagina);
+			
+			if ($_SESSION['user_admin']['Foto'] == "") {
+					$pagina = str_replace('#ImagenPerfil#', 'vistas/assets/archivos/default.jpg', $pagina);
+			}else{
+					$pagina = str_replace('#ImagenPerfil#', 'vistas/assets/archivos/fotosUsuarios/'.$_SESSION['user_admin']['Foto'], $pagina);
+			}       
 
 		///************************* PERMISOS DEL MENU **************************///
 		$botonSucursales = '';
@@ -59,7 +62,7 @@ class controller {
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_proveedores'][1] == '1') {
 			$botonProveedores = '<li class="menu-item cargarVista" carga="v_proveedores" titulo="Proveedores" id="cargarProveedores">
               <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-suitcase"></i>
+                <i class="menu-icon fas fa-truck-fast"></i>
                 <div data-i18n="Proveedores">Proveedores</div>
               </a>
             </li>';
@@ -118,6 +121,17 @@ class controller {
 		}
 		$pagina = str_replace('#MenuInventario#', $botonInventario, $pagina);
 
+		$botonCompras = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_compras'][1] == '1') {
+			$botonCompras = '<li class="menu-item cargarVista" carga="v_compras" titulo="Compras" id="cargarCompras">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-basket-shopping"></i>
+                <div data-i18n="Compras">Compras</div>
+              </a>
+            </li>';
+		}
+		$pagina = str_replace('#MenuCompras#', $botonCompras, $pagina);
+
 		$botonCategorias = '';
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_categorias'][1] == '1') {
 			$botonCategorias = '<li class="menu-item cargarVista" carga="v_categorias" titulo="Categorias / familias" id="cargarCategorias">
@@ -131,20 +145,22 @@ class controller {
 		$botonCajas = '';
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cajas'][1] == '1') {
 			$botonCajas = '<li class="menu-item cargarVista" carga="v_cajas" titulo="Cajas" id="cargarCajas">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Cajas">Cajas</div>
-                  </a>
-                </li>';
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-cash-register"></i>
+                <div data-i18n="Cajas">Cajas</div>
+              </a>
+            </li>';
 		}
 		$pagina = str_replace('#MenuCajas#', $botonCajas, $pagina);
 
 		$botonImpuestos = '';
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_impuestos'][1] == '1') {
 			$botonImpuestos = '<li class="menu-item cargarVista" carga="v_impuestos" titulo="Impuestos" id="cargarImpuestos">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Impuestos">Impuestos</div>
-                  </a>
-                </li>';
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fa-solid fa-money-bill-transfer"></i>
+                <div data-i18n="Impuestos">Impuestos</div>
+              </a>
+            </li>';
 		}
 		$pagina = str_replace('#MenuImpuestos#', $botonImpuestos, $pagina);
 
@@ -340,7 +356,7 @@ class controller {
 
 			$pagina = str_replace('#usuarios#', $opciones, $pagina);
 
-			$query = "SELECT ID_Zona, Nombre FROM zona";
+			$query = "SELECT ID_Zona, Nombre FROM zonas";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			$opciones = "";
@@ -438,6 +454,40 @@ class controller {
 			}
 
 			$pagina = str_replace('#sucursales#', $opciones, $pagina);
+		}else if($nombre == "v_hacerCompra"){
+			$query = "SELECT ID_Sucursal, sucursales.Nombre AS Nombre FROM sucursales, usuarios WHERE ID_Sucursal = FK_Sucursal AND ID_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$sucursal = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas == 1) {
+					$sucursal = '<h5 id="Sucursales" value="'.$row[0]['ID_Sucursal'].'">'.$row[0]['Nombre'].'</h5>';
+				}else if($numerofilas == 0){
+					$query2 = "SELECT ID_Sucursal, Nombre FROM sucursales";
+					$row2 = $omodelo->_consultar($query2);
+					$numerofilas2 = $omodelo->numerofilas;
+					$opciones = '';
+
+					if ($row2 == "si") {
+						echo "Error: " . mysqli_error($omodelo->link);
+					} else {
+						if ($numerofilas2 > 0) {
+							for ($i = 0; $i < $numerofilas2; $i++) {
+								$opciones .='<option value="' . $row2[$i]['ID_Sucursal'] . '" >' . $row2[$i]['Nombre']. '</option>';
+							}
+							$sucursal = '<select class="form-select" id="Sucursales" name="Sucursales">
+											<option value="" selected>-Seleccione una opción-</option>
+											'.$opciones.'
+										</select>';
+						}
+					}
+				}
+			}
+			$pagina = str_replace('#sucursal#', $sucursal, $pagina);
+                    
 		}
 		
 		return $pagina;

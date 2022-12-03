@@ -5,10 +5,7 @@ class conexion {
     private $_host = "localhost";
     private $_username = "root";
     private $_password = "";
-    private $_database = "smartpoi_negocio";
-    /*private $_username = "smartpoi_smartpo";
-    private $_password = "*&EoeA6[^x~7";
-    private $_database = "prueba";*/
+    private $_database = "wits_sistemaalex";
 
     public function __construct()
     {

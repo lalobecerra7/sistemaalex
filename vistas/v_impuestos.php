@@ -1,3 +1,55 @@
+<br>
+<div class="mb-3 mt-2">
+	<div class="row">
+		<div class="col-12">
+			<nav aria-label="breadcrumb">
+			  <ol class="breadcrumb">
+			    <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
+			    <li class="breadcrumb-item" aria-current="page">Productos</li>
+			    <li class="breadcrumb-item active" aria-current="page">Impuestos</li>
+			  </ol>
+			</nav>
+		</div>
+	</div>
+	<br>
+	<div id="content" class="card">
+		<div class="card-body">
+			<div class="row">
+				<div class="col-12">
+					<h1 style="font-weight: bold;" id="vistaTitulo"></h1>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-12 text-end">
+					<button type="button" class="btn btn-success" id="botonNuevoImpuesto" data-bs-toggle="modal" data-bs-target="#ModalImpuestos"><i class="fa fa-file"></i> Nuevo</button>
+					<a href="javascript:void(0)" class="btn btn-light btn-reload cargarVista" carga="v_impuestos" titulo="Impuestos"><i class="fa fa-retweet"></i></a>
+				</div>
+			</div>
+			<br>
+			<div class="Principal">
+		    <div class="row mb-5">
+		      <div class="col-12">
+		        <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="tablaImpuestos" width="100%" style="font-size: 12px;">
+		          <thead>
+		            <th style="width: 20%;">Nombre</th>
+		            <th style="width: 20%;">Porcentaje</th>
+		            <th style="width: 20%;">Clave CFDI</th>
+		            <th style="width: 20%;">Tipo Factor</th>
+		            <th style="width: 10%;">Clase</th>
+		            <th style="width: 10%;" orden="No">Acciones</th>
+		          </thead>
+		          <tbody>                        
+		          </tbody>
+		        </table>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</div>
+</div>
+
+<!--//////////////////////////Modal////////////////////////////-->
 <div class="modal fade" id="ModalImpuestos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
     <div class="modal-content">
@@ -40,7 +92,7 @@
 				    	<div class="form-floating">
 								<select name="TipoFactorImpuesto" id="TipoFactorImpuesto" class="form-control" >
 									<option selected disabled value=""> - Seleccione - </option>
-									<option value="Taza">Taza</option>
+									<option value="Tasa">Tasa</option>
 									<option value="Cuota">Cuota</option>
 									<option value="Excento">Excento</option>
 								</select>
@@ -53,30 +105,6 @@
 				        <label for="PorcentajeImpuesto">Porcentaje</label>
 				      </div>
 				    </div>
-				    <br>
-				    <b>El impuesto aplica para: </b>
-				    <div class="col-md-12 col-sm-12 mb-3 mt-3">
-				    	<div class="table-responsive">
-				    		<table class="table table-hover text-center">
-				    			<thead>
-				    				<tr>
-				    					<th>Ticket</th>
-				    					<th>Productos</th>
-				    				</tr>
-				    			</thead>
-				    			<tbody class="text-center">
-				    				<tr>
-				    					<td>
-												  <input class="form-check-input" type="checkbox" id="ImpuestoTicket" name="ImpuestoTicket">
-				    					</td>
-				    					<td>
-												  <input class="form-check-input" type="checkbox" id="ImpuestoProducto" name="ImpuestoProducto">
-				    					</td>
-				    				</tr>
-				    			</tbody>
-				    		</table>			
-				    	</div>
-				   	</div>
 	      	</div>
 	      </div>
 	      <div class="modal-footer">
@@ -87,55 +115,3 @@
     </div>
   </div>
 </div> 
-
-
-<br>
-<div class="mb-3 mt-2">
-	<div class="row">
-		<div class="col-12">
-			<nav aria-label="breadcrumb">
-			  <ol class="breadcrumb">
-			    <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
-			    <li class="breadcrumb-item" aria-current="page">Productos</li>
-			    <li class="breadcrumb-item active" aria-current="page">Impuestos</li>
-			  </ol>
-			</nav>
-		</div>
-	</div>
-	<br>
-	<div id="content" class="card">
-		<div class="card-body">
-			<div class="row">
-				<div class="col-12">
-					<h1 style="font-weight: bold;" id="vistaTitulo"></h1>
-				</div>
-			</div>
-			<br>
-			<div class="row">
-				<div class="col-12 text-end">
-					<button type="button" class="btn btn-success" id="botonNuevoImpuesto" data-bs-toggle="modal" data-bs-target="#ModalImpuestos"><i class="fa fa-file"></i> Nuevo</button>
-					<a href="javascript:void(0)" class="btn btn-light btn-reload cargarVista" carga="v_impuestos" titulo="Impuestos"><i class="fa fa-retweet"></i></a>
-				</div>
-			</div>
-			<br>
-			<div class="Principal">
-		    <div class="row mb-5">
-		      <div class="col-12">
-		        <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaImpuestos" width="100%" style="font-size: 12px;">
-		          <thead>
-		            <th style="width: 20%;">Nombre</th>
-		            <th style="width: 20%;">Porcentaje</th>
-		            <th style="width: 20%;">Detalles</th>
-		            <th style="width: 20%;">Tipo de Impuesto</th>
-		            <th style="width: 10%;">Predeterminado</th>
-		            <th style="width: 10%;" orden="No">Acciones</th>
-		          </thead>
-		          <tbody>                        
-		          </tbody>
-		        </table>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-	</div>
-</div>

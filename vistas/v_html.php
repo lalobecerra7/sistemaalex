@@ -208,6 +208,41 @@
               </div>
           </div>
 
+          <!-- ///////////////////////////Modal Precios Producto/////////////////////////////////// -->  
+          <div class="modal fade" id="ModalPreciosProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Precios</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <form id="AgregarPrecioProducto">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-12 table-responsive" id="divTablaProductos">
+                                    <table class="table table-responsive table-striped text-center myDataTable" id="TablaPreciosProductos" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Precio</th>
+                                                <th>Precio Mayoreo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table> 
+                                </div>
+                            </div>    
+                        </div>
+                        <div class="modal-footer text-center">
+                            <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                            <button type="submit" class="btn btn-primary" id="bAgregarPrecioProducto"><i class="fa fa-check-circle"></i> <strong>Agregar</strong></button>
+                        </div>
+                      </form>
+                  </div>    
+              </div>
+          </div>
+
           <!-- ///////////////////////////Buscar Producto/////////////////////////////////// -->  
           <div class="modal fade" id="MBuscarProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
               <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
@@ -225,7 +260,6 @@
                                             <tr>
                                                 <th>Código</th>
                                                 <th>Descripción</th>
-                                                <th>Clase</th>
                                                 <th>Precio</th>
                                                 <th>Precio Mayoreo</th>
                                                 <th>Area</th>
@@ -518,7 +552,18 @@
 
             #MenuClientes#
 
-            
+            #MenuCompras#
+
+            <li class="menu-item cargarVista" carga="v_ventas" titulo="Ventas" id="cargarVentas">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-shopping-cart"></i>
+                <div data-i18n="Ventas">Ventas</div>
+              </a>
+            </li>
+
+           
+
+            #MenuCajas#
 
             <!-- Layouts -->
             <li class="menu-item">
@@ -533,19 +578,23 @@
                 #MenuInventario#
 
                 #MenuCategorias#
-                
-                <!-- #MenuCajas# -->
-                
-                <!-- #MenuImpuestos# -->
+
+                <li class="dropdown dropdown-list-toggle" hidden>
+                  <a class="nav-link notification-toggle nav-link-lg cargarVista" href="javascript:void(0)" carga="v_hacerCompra" titulo="Compra" id="cargarHacerCompra">
+                    </a>
+                </li>
 
                 #MenuZonas#
 
                 #MenuAreas#
-
+                
+                <!--#MenuMovimientos#-->
               </ul>
             </li>
 
-            <!-- <li class="menu-item">
+            #MenuImpuestos#
+
+            <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
               <i class="menu-icon fas fa-cogs"></i>
                 <div data-i18n="Layouts">Configuración</div>
@@ -562,7 +611,8 @@
                   </a>
                 </li>
               </ul>
-            </li> -->
+
+            </li>
 
             #MenuUsuarios#
 
@@ -586,7 +636,7 @@
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <div id="DivPedidosPendientes">
                 <a href="javascript:void(0)" style="font-size: 25x" id="cargarVenta" ><i class="fas fa-shopping-cart"></i></a>
-              </div>
+              </div> 
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -723,7 +773,6 @@
     <script type="text/javascript" src="vistas/assets/js/clientes.js"></script>
     <script type="text/javascript" src="vistas/assets/js/proveedores.js"></script>
     <script type="text/javascript" src="vistas/assets/js/areas.js"></script>
-    <script type="text/javascript" src="vistas/assets/js/personal.js"></script>
     <script type="text/javascript" src="vistas/assets/js/hacerventa.js"></script>
     <script type="text/javascript" src="vistas/assets/js/categorias.js"></script>
     <script type="text/javascript" src="vistas/assets/js/impuestos.js"></script>
@@ -734,7 +783,10 @@
     <script type="text/javascript" src="vistas/assets/js/cajas.js"></script>
     <script type="text/javascript" src="vistas/assets/js/perfil.js"></script>
     <script type="text/javascript" src="vistas/assets/js/tickets.js"></script>
-    <script type="text/javascript" src="vistas/assets/js/general.js"></script>
     <script type="text/javascript" src="vistas/assets/js/zonas.js"></script>
+    <!--<script type="text/javascript" src="vistas/assets/js/ventas.js"></script>-->
+    <script type="text/javascript" src="vistas/assets/js/compras.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/hacerCompra.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/ventas.js"></script>
   </body>
 </html>

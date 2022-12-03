@@ -6,7 +6,8 @@
 
 //$con = mysqli_connect('localhost','root','','smartpoi_negocio'.$_SESSION['user_smart']['cliente']['id_cliente']);
 date_default_timezone_set('America/Mexico_City');
-$con = mysqli_connect('localhost','root','','cremi');
+$con = mysqli_connect('localhost','root','','smartpoi_negocio');
+$arreglo = '';
 ?>
 
 <!DOCTYPE html>
@@ -123,26 +124,23 @@ $con = mysqli_connect('localhost','root','','cremi');
 <body>
   <?php 
     $FechaHoy = date('Y-m-d H:i:s');
-
-    $sql = "SELECT ID_Venta, LPAD(ID_Venta, 8, '0') AS Folio, FK_Vendedor, (SELECT CONCAT(vendedores.Nombre,' ',vendedores.Primer_Apellido,' ',vendedores.Segundo_Apellido) FROM vendedores WHERE ID_Vendedor = FK_Vendedor) AS NombreVendedor, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Cliente, ventas.Descuento, Subtotal, Total, Importe_Pagado, Cambio, Estatus, Regreso_Inventario, ventas.Fecha_Registro, Fecha_Cancelada, Motivo_Cancelada FROM ventas WHERE ID_Venta = '".$_GET["id"]."'";
-
+    
+    $sql = "SELECT ID_Compra, LPAD(ID_Compra, 8, '0') AS Folio, FK_Proveedor, (SELECT proveedores.Nombre FROM proveedores WHERE ID_Proveedor = FK_Proveedor) AS NombreProveedor, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, compras.Descuento, detalle_compras.Subtotal, compras.Total, compras.Anticipo, compras.Estatus, compras.Fecha FROM compras INNER JOIN detalle_compras ON FK_Compra = ID_Compra WHERE ID_Compra = '".$_GET["id"]."'";
+    
     if($res=$con->query($sql)){
       if ($res->num_rows > 0) {
         $row = $res->fetch_assoc();
         $arreglo = array(
-          'ID_Venta'=> $row['ID_Venta'], 
+          'ID_Compra'=> $row['ID_Compra'], 
           'Folio' => $row['Folio'], 
-          'Vendedor' => $row['NombreVendedor'],  //Si la venta la realizo un vendedor
-          'Usuario' => $row['NombreUsuario'], //Si la venta la realizo un administrador
+          'Proveedor' => $row['NombreProveedor'],  
+          'Usuario' => $row['NombreUsuario'], 
           'Descuento' => $row['Descuento'], 
           'Subtotal' => $row['Subtotal'], 
           'Total' => $row['Total'], 
-          'Importe_Pagado' => $row['Importe_Pagado'], 
-          'Cambio' => $row['Cambio'], 
+          'Anticipo' => $row['Anticipo'],
           'Estatus' => $row['Estatus'], 
-          'Fecha_Registro' => $row['Fecha_Registro'], 
-          'Fecha_Cancelada' => $row['Fecha_Cancelada'], 
-          'Motivo_Cancelada' => $row['Motivo_Cancelada']
+          'Fecha_Registro' => $row['Fecha']
         );
       }else{
         echo "No se encontraron resultados";
@@ -158,7 +156,7 @@ $con = mysqli_connect('localhost','root','','cremi');
       </p>
       <br class="oculto-impresion">
       <div class="centrado">
-        <?php echo "<h1>CREMI</h1>"; ?>
+        <?php echo "<h1>CREMASI</h1>"; ?>
         <?php  
           $FechaHoy = date('Y-m-d H:i:s');
           echo '<p>'.$FechaHoy.'</p>'; 
@@ -188,7 +186,7 @@ $con = mysqli_connect('localhost','root','','cremi');
         </thead>
         <tbody> 
           <?php 
-            $sql = "SELECT ID_Detalle_Venta, FK_Venta, FK_Producto, Nombre_Producto, detalles_venta.Precio, Cantidad, Subtotal, productos.Codigo FROM detalles_venta INNER JOIN productos ON FK_Producto = ID_Producto WHERE FK_Venta = '".$arreglo['ID_Venta']."'";
+            $sql = "SELECT ID_Detalle_Compra, FK_Compra, FK_Producto, productos.Descripcion AS NombreProducto, detalle_compras.Costo AS Costo, Cantidad, Subtotal, productos.Codigo FROM detalle_compras INNER JOIN productos ON FK_Producto = ID_Producto WHERE FK_Compra = '".$arreglo['ID_Compra']."'";
             $mostrar= "";
             $subtotal = 0;
             $contador = 0;
@@ -197,9 +195,9 @@ $con = mysqli_connect('localhost','root','','cremi');
                 while($row = $res->fetch_assoc()){
                     $mostrar .= "<tr>
                         <td class='codigo'>".$row["Codigo"]."</td>
-                        <td class='producto'>".$row["Nombre_Producto"]."</td>
+                        <td class='producto'>".$row["NombreProducto"]."</td>
                         <td class='cantidad'>".(round($row['Cantidad']*100)/100)."</td> 
-                        <td class='precio'>$".(round($row['Precio']*100)/100)."</td>
+                        <td class='precio'>$".(round($row['Costo']*100)/100)."</td>
                         <td class='precio'>$".(round($row['Subtotal']*100)/100)."</td>
                       </tr>";
 
@@ -219,19 +217,14 @@ $con = mysqli_connect('localhost','root','','cremi');
       <hr>
       <?php 
         echo '<p class="derecha">No. de Articulos: '.$contador.'</p>'; 
-        echo '<p class="derecha" style="font-size: 15px;">Subtotal: <b style="font-size: 15px;">$'.(round(($arreglo['Subtotal'])*100)/100).'</b></p>';  
+        echo '<p class="derecha" style="font-size: 15px;">Subtotal: <b style="font-size: 15px;">$'.(round(($subtotal)*100)/100).'</b></p>';  
         echo '<p class="derecha" style="font-size: 15px;">Descuento: <b style="font-size: 15px;">$'.(round($arreglo['Descuento']*100)/100).'</b></p>'; 
         echo "</br>
           <p class='derecha negra'><b>TOTAL: $".(round($arreglo['Total']*100)/100)."</b></p>
         ";
-        echo '<p class="derecha negra">Importe Pagado: $'.(round($arreglo['Importe_Pagado']*100)/100).'</p>';  
-
-        echo '<p class="derecha negra">Cambio: $'.(round($arreglo['Cambio']*100)/100).'</p>';  
-        if ($arreglo['Vendedor'] != "" && $arreglo['Usuario'] == "") {
-          echo '<p class="derecha">Vendedor: '.$arreglo['Vendedor'].'</p>';
-        }else if ($arreglo['Usuario'] != "" && $arreglo['Vendedor'] == "") {
-          echo '<p class="derecha">Administrador: '.$arreglo['Usuario'].'</p>';
-        }
+        echo '<p class="derecha negra">Importe Pagado: $'.(round($arreglo['Anticipo']*100)/100).'</p>'; 
+        
+        echo '<p class="derecha">Administrador: '.$arreglo['Usuario'].'</p>';
       ?>
       <br>
       <p class="centrado">***********************************************************</p>

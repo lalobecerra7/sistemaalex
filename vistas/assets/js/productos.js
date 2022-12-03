@@ -57,7 +57,7 @@ function v_productos() {
                 var productos = '';
                 $("#TablaPreciosProductos tbody tr").each(function(index, el){
                     if ($(this).find("#ZonaPrecioProducto").val() != "" && $(this).find("#NombrePrecio").val() != "" && $(this).find("#PrecioProducto").val() != "" && $(this).find("#PrecioProducto").val() > 0) {
-                        productos += $(this).find("#ZonaPrecioProducto").val()+"~"+$(this).find("#NombrePrecio").val()+"~"+$(this).find("#PrecioProducto").val()+"~"+$(this).find("#PrecioProductoMayoreo").val()+",";
+                        productos += $(this).find("#ZonaPrecioProducto").val()+"~"+$(this).find("#PresentacionProdSelect").val()+"~"+$(this).find("#NombrePrecio").val()+"~"+$(this).find("#PrecioProducto").val()+"~"+$(this).find("#PrecioProductoMayoreo").val()+",";
                     }
                 });
 
@@ -235,15 +235,15 @@ jQuery(document).ready(function($) {
         impuesto = [];
     });
 
-    $(document).on('click', '#EliminarPrecio', function() {
-        $(this).parent().parent().remove();
-    });
-
-    $(document).on('click', '#EliminarPresentacion', function() {
-        $(this).parent().parent().remove();
-    });
-
     $(document).on('click', '#AgregarPrecioProducto', function() {
+        var opcionesSelect = "";
+        $("#TablaPresentacionProducto tbody tr").each(function(index, el){
+            if ($(this).find("#NombrePresentacion").val() != "") {
+                //presentaciones += $(this).find("#NombrePresentacion").val()+"~"+$(this).find("#AbreviaturaPresentacion").val()+",";
+                opcionesSelect += '<option value="'+$(this).find("#NombrePresentacion").val()+'">'+$(this).find("#NombrePresentacion").val()+'</option>';
+            }
+        });
+
         var zonas = '';
         var data = "metodo=detalles&accion=productos&tipo=ConsultarZonaProducto";
         $.ajax({
@@ -260,6 +260,12 @@ jQuery(document).ready(function($) {
                     </select>
                 </td>
                 <td>
+                    <select class="form-select SelectPresentacionProd" name="PresentacionProdSelect" id="PresentacionProdSelect" >
+                        <option value="">Seleccione una opción</option>
+                        `+opcionesSelect+`   
+                    </select>
+                </td>
+                <td>
                     <input type="text" class="form-control" id="NombrePrecio" name="NombrePrecio" placeholder="Ingresa el nombre del precio del producto">
                 </td>
                 <td>
@@ -268,7 +274,7 @@ jQuery(document).ready(function($) {
                 <td>
                     <input type="number" class="form-control" id="PrecioProductoMayoreo" name="PrecioProductoMayoreo" min="0" placeholder="$0.00">
                 </td>
-                <td><button class="btn btn-sm btn-danger" id="EliminarPrecio"><i class="fas fa-trash"></i></button></td>
+                <td><button type="button" class="btn btn-sm btn-danger" id="EliminarPrecio" attrid nombre><i class="fas fa-trash"></i></button></td>
             </tr>`;
             $("#TablaPreciosProductos tbody").append(tabla);
         })
@@ -288,7 +294,7 @@ jQuery(document).ready(function($) {
                 <td>
                     <input type="text" class="form-control" id="AbreviaturaPresentacion" name="AbreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación">
                 </td>
-                <td><button class="btn btn-sm btn-danger" id="EliminarPresentacion"><i class="fas fa-trash"></i></button></td>
+                <td><button  type="button" class="btn btn-sm btn-danger" id="EliminarPresentacionProducto" attrid nombre><i class="fas fa-trash"></i></button></td>
             </tr>`;
         $("#TablaPresentacionProducto tbody").append(tabla);
     });
@@ -304,7 +310,7 @@ jQuery(document).ready(function($) {
                     <td>
                         <input type="text" class="form-control" id="AbreviaturaPresentacion" name="AbreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación">
                     </td>
-                    <td><button class="btn btn-sm btn-danger" id="EliminarPresentacion"><i class="fas fa-trash"></i></button></td>
+                    <td><button class="btn btn-sm btn-danger" id="EliminarPresentacionProducto"><i class="fas fa-trash"></i></button></td>
                 </tr>`;
             $("#TablaPresentacionProducto tbody").append(tabla);
             console.log("entro");
@@ -333,7 +339,7 @@ jQuery(document).ready(function($) {
           confirmButtonText: 'Si, eliminar'
         }).then((result) => {
           if (result.value) {
-            var data = "metodo=eliminar&accion=productos&IDProducto="+id;
+            var data = "metodo=eliminar&accion=productos&tipo=EliminarProducto&IDProducto="+id;
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
@@ -453,35 +459,6 @@ jQuery(document).ready(function($) {
                 }
             });
             $("#CodigoBarras").trigger('keyup');
-            if (datos.Extras != null && datos.Extras.length > 0) {
-                for (var i = 0; i < datos.Extras.length; i++) {
-                    var Zona = datos.Extras[i].Zona;
-                    var Nombre = datos.Extras[i].Nombre;
-                    var Precio = datos.Extras[i].Precio;
-                    var Precio_Mayoreo = datos.Extras[i].Precio_Mayoreo;
-
-                    var tabla = `\
-                        <tr>
-                            <td>
-                                <select class="form-select SelectProductosZona" name="ZonaPrecioProducto" id="ZonaPrecioProducto" >
-                                    `+Zona+`
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" value="`+Nombre+`" id="NombrePrecio" name="NombrePrecio" placeholder="Ingresa el nombre del precio del producto">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" value="`+Precio+`" id="PrecioProducto" name="PrecioProducto" min="0" placeholder="$0.00">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" value="`+Precio_Mayoreo+`" id="PrecioProductoMayoreo" name="PrecioProductoMayoreo" min="0" placeholder="$0.00">
-                            </td>
-                            <td><button class="btn btn-sm btn-danger" id="EliminarPrecio"><i class="fas fa-trash"></i></button></td>
-                        </tr>`;
-                    $("#TablaPreciosProductos tbody").append(tabla);
-                }
-            }
-
             if (datos.Presentaciones != null && datos.Presentaciones.length > 0) {
                 for (var i = 0; i < datos.Presentaciones.length; i++) {
                     var Abreviatura = datos.Presentaciones[i].Abreviatura;
@@ -495,16 +472,161 @@ jQuery(document).ready(function($) {
                             <td>
                                 <input type="text" class="form-control" value="`+Abreviatura+`" id="AbreviaturaPresentacion" name="AbreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación">
                             </td>
-                            <td><button class="btn btn-sm btn-danger" id="EliminarPresentacion"><i class="fas fa-trash"></i></button></td>
+                            <td><button type="button" class="btn btn-sm btn-danger" id="EliminarPresentacionProducto" nombre="`+Nombre+`" attrid="`+datos.Presentaciones[i].ID_Presentacion+`"><i class="fas fa-trash"></i></button></td>
                         </tr>`;
                     $("#TablaPresentacionProducto tbody").append(tabla);
                 }
-            }
+            }    
+
+            setTimeout(function(){ 
+                if (datos.Extras != null && datos.Extras.length > 0) {
+                    for (var i = 0; i < datos.Extras.length; i++) {
+                        var Zona = datos.Extras[i].Zona;
+                        var Presentacion = datos.Extras[i].Presentacion;
+                        var Nombre = datos.Extras[i].Nombre;
+                        var Precio = datos.Extras[i].Precio;
+                        var Precio_Mayoreo = datos.Extras[i].Precio_Mayoreo;
+
+                         var opcionesSelect = "";
+                        $("#TablaPresentacionProducto tbody tr").each(function(index, el){
+                            if ($(this).find("#NombrePresentacion").val() != "") {
+                                if ($(this).find("#NombrePresentacion").val() == Presentacion) {
+                                    opcionesSelect += '<option value="'+$(this).find("#NombrePresentacion").val()+'" selected>'+$(this).find("#NombrePresentacion").val()+'</option>';        
+                                }else{
+                                    opcionesSelect += '<option value="'+$(this).find("#NombrePresentacion").val()+'">'+$(this).find("#NombrePresentacion").val()+'</option>';
+                                }
+                            }
+                        });
+
+                        var tabla = `\
+                            <tr>
+                                <td>
+                                    <select class="form-select SelectProductosZona" name="ZonaPrecioProducto" id="ZonaPrecioProducto" >
+                                        `+Zona+`
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-select SelectPresentacionProd" name="PresentacionProdSelect" id="PresentacionProdSelect" disabled>
+                                        `+opcionesSelect+`   
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" value="`+Nombre+`" id="NombrePrecio" name="NombrePrecio" placeholder="Ingresa el nombre del precio del producto">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" value="`+Precio+`" id="PrecioProducto" name="PrecioProducto" min="0" placeholder="$0.00">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" value="`+Precio_Mayoreo+`" id="PrecioProductoMayoreo" name="PrecioProductoMayoreo" min="0" placeholder="$0.00">
+                                </td>
+                                <td><button  type="button" class="btn btn-sm btn-danger" id="EliminarPrecio" attrid="`+datos.Extras[i].ID_Precio+`" nombre="`+Nombre+`"><i class="fas fa-trash"></i></button></td>
+                            </tr>`;
+                        $("#TablaPreciosProductos tbody").append(tabla);
+                    }
+                }
+            }, 1000);
+
             $('#ModalProductos').modal('show');
         })
         .fail(function() {
             console.log("Error ajax");
         });
+    });
+
+    $(document).on('click', '#EliminarPresentacionProducto', function() {
+        if ($(this).attr("attrid") != "" || $(this).attr("attrid") != null) {
+            var boton = $(this);
+            var id = $(this).attr("attrid");
+            var nombre = $(this).attr("nombre");
+            console.log(id);
+            Swal.fire({
+              title: '¿Estás a punto de eliminar la presentación '+nombre+'?',
+              text: "Una vez eliminado ya no podrá ser recuperado",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              cancelButtonText: 'No, cancelar',
+              confirmButtonText: 'Si, eliminar'
+            }).then((result) => {
+              if (result.value) {
+                var data = "metodo=eliminar&accion=productos&tipo=EliminarPresentacion&IDPresentacion="+id;
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data
+                })
+                .done(function(res) {
+                    console.log(res);
+                    if ($.trim(res) == "Correcto") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Presentación eliminada correctamente'
+                        });
+                        TablaProductos();
+                        $(boton).parent().parent().remove();
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error inesperado al eliminar presentación.'
+                        });
+                    }
+                })
+                .fail(function() {
+                    console.log("Error ajax");
+                });  
+              }
+            });
+        }
+    });
+
+    $(document).on('click', '#EliminarPrecio', function() {
+        if ($(this).attr("attrid") != "" || $(this).attr("attrid") != null) {
+            var boton = $(this);
+            var id = $(this).attr("attrid");
+            var nombre = $(this).attr("nombre");
+            console.log(id);
+            Swal.fire({
+              title: '¿Estás a punto de eliminar el precio '+nombre+'?',
+              text: "Una vez eliminado ya no podrá ser recuperado",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              cancelButtonText: 'No, cancelar',
+              confirmButtonText: 'Si, eliminar'
+            }).then((result) => {
+              if (result.value) {
+                var data = "metodo=eliminar&accion=productos&tipo=EliminarPrecio&IDPrecio="+id;
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data
+                })
+                .done(function(res) {
+                    console.log(res);
+                    if ($.trim(res) == "Correcto") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Precio eliminado correctamente'
+                        });
+                        TablaProductos();
+                        $(boton).parent().parent().remove();
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error inesperado al eliminar precio.'
+                        });
+                    }
+                })
+                .fail(function() {
+                    console.log("Error ajax");
+                });  
+              }
+            });
+        }
     });
 
     $(document).on('click', '#AumentarExistencias', function() {

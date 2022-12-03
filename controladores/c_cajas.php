@@ -18,7 +18,7 @@ class cajas {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Caja, cajas.FK_Sucursal, sucursales.Nombre, cajas.Nombre, Detalles, cajas.Estado, FK_Usuario, usuarios.Nombre) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Caja, cajas.FK_Sucursal, cajas.Nombre, Detalles, cajas.Estado, FK_Usuario) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}

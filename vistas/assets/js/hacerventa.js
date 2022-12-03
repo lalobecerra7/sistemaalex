@@ -164,6 +164,7 @@ jQuery(document).ready(function($) {
             $("#ModalImpuestosVenta").modal('hide');
             $("#ModalAsignarCliente").modal('hide');
             $("#ModalCambiarTicket").modal('hide');
+            $("#ModalPreciosProd").modal('hide');
             //ir agregando las demas modales
         }
     });
@@ -173,6 +174,9 @@ jQuery(document).ready(function($) {
     ////////////////////////////////////////////////////////////////////////////
 
 
+    ////////////////////////////////////////////////////////////////////////////
+    /////////////////// EVENTOS QUE SE REALIZAN CON EL TECLADO /////////////////
+    ////////////////////////////////////////////////////////////////////////////
     document.onkeydown = function(evt) {
         evt = evt || window.event;
         if(evt.key === "F1"){
@@ -279,6 +283,8 @@ jQuery(document).ready(function($) {
                 $("#MBuscarProd").modal('show');
             }else if(event.altKey && evt.key === "q" || evt.key === "Q"){
                 $("#bPrecioMayoreo").trigger("click");
+            }else if(event.altKey && evt.key === "p" || evt.key === "P"){
+                $("#ModalPreciosProd").modal('show');
             }else if(event.altKey && evt.key === "i" || evt.key === "I"){
                 $("#bImpuestoProd").trigger("click");
             }else if(evt.key === "F7"){
@@ -351,7 +357,7 @@ jQuery(document).ready(function($) {
             }
         })
         .done(function(res) {
-            console.log(res);
+            console.log($.trim(res));
             $("#barCodeV").val("");
 
             if($.trim(res) == "No encontrado"){
@@ -392,18 +398,16 @@ jQuery(document).ready(function($) {
                     moneda();
                 }else{
                     $("#nav-tabContent .active #tablaCaja").children('tbody').children('tr').removeClass('activa');
-
-                    if($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').length > 0){
-                        var cantidad = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').children('td:eq(3)').children('span.cantidad').text().replace(',', ''));
-                        var descuento = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').children('td:eq(4)').children('span.dinero').text().replace('$', '').replace(',', ''));
+                    if($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').length > 0){                        var cantidad = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').children('td:eq(3)').children('span.cantidad').text().replace(',', ''));
+                        var descuento = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').children('td:eq(4)').children('span.dinero').text().replace('$', '').replace(',', ''));
                         var descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
                         if ($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').hasClass("mayoreo")) {
-                            var precio = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').attr("preciomayoreo"));
+                            var precio = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').attr("preciomayoreo"));
                             if(descuento > 0){
                                 descuHtml = '<span class="dinero">'+descuento+'</span>(<span class="porcentaje">'+((descuento / (precio * (cantidad))) * 100)+'</span>)';
                             }
                         }else{
-                            var precio = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').attr("precio").replace('$', '').replace(',', ''));   
+                            var precio = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').attr("precio").replace('$', '').replace(',', ''));   
                             if(descuento > 0){
                                 descuHtml = '<span class="dinero">'+descuento+'</span>(<span class="porcentaje">'+((descuento / (precio * (cantidad))) * 100)+'</span>)';
                             }
@@ -435,7 +439,7 @@ jQuery(document).ready(function($) {
                             }
                         }
 
-                        $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`"  precioMayoreo="`+precioMayoreo+`" impuestos="`+impuestos+`" class="activa normal">
+                        $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`"  precioMayoreo="`+precioMayoreo+`" impuestos="`+impuestos+`" class="activa normal"  idPresentacion="`+datos.IDPresentacion+`">
                             <td>`+datos.Codigo+`</td>
                             <td>`+datos.Descripcion+`</td>
                             <td><span class="dinero">`+precio+`</span></td>
@@ -517,9 +521,9 @@ jQuery(document).ready(function($) {
                 }else{
                     $("#nav-tabContent .active #tablaCaja").children('tbody').children('tr').removeClass('activa');
 
-                    if($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').length > 0){
-                        var cantidad = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').children('td:eq(3)').children('span.cantidad').text().replace(',', ''));
-                        var descuento = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').children('td:eq(4)').children('span.dinero').text().replace('$', '').replace(',', ''));
+                    if($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').length > 0){                        
+                        var cantidad = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').children('td:eq(3)').children('span.cantidad').text().replace(',', ''));
+                        var descuento = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').children('td:eq(4)').children('span.dinero').text().replace('$', '').replace(',', ''));
 
                         var descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
                         if(descuento > 0){
@@ -545,7 +549,7 @@ jQuery(document).ready(function($) {
                             }
                         }
 
-                        $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+precioMayoreo+`" impuestos="`+impuestos+`" class="activa normal">
+                        $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+precioMayoreo+`" impuestos="`+impuestos+`" class="activa normal" idPresentacion="`+datos.IDPresentacion+`">
                             <td>`+datos.Codigo+`</td>
                             <td>`+datos.Descripcion+`</td>
                             <td><span class="dinero">`+precio+`</span></td>
@@ -574,9 +578,10 @@ jQuery(document).ready(function($) {
         event.preventDefault();
         
         $("#carga").show(); 
-        var codigo = $(this).children("td:eq(0)").text();
+        var codigo = $(this).children("td:eq(0)").find("#CodigoProducto").text();
+        var presentacion = $(this).children("td:eq(0)").find("#IdPresentacionProd").text();
 
-        var data = "metodo=detalles&accion=hacerventa&tipo=AgregarProducto&codigo="+codigo+"&sucursal="+$("#vistaCaja").attr('attrSucursal');
+        var data = "metodo=detalles&accion=hacerventa&tipo=AgregarProducto&codigo="+codigo+"&sucursal="+$("#vistaCaja").attr('attrSucursal')+"&presentacion="+presentacion;
         $.ajax({
             url: 'index.php',
             type: 'POST',
@@ -627,26 +632,27 @@ jQuery(document).ready(function($) {
                     moneda();
                 }else{
                     $("#nav-tabContent .active #tablaCaja").children('tbody').children('tr').removeClass('activa');
-                    if($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').length > 0){
-                        var cantidad = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').children('td:eq(3)').children('span.cantidad').text().replace(',', ''));
-                        var descuento = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').children('td:eq(4)').children('span.dinero').text().replace('$', '').replace(',', ''));
+                    console.log("ID Presentacion = "+datos.IDPresentacion);
+                    if($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').length > 0){
+                        var cantidad = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').children('td:eq(3)').children('span.cantidad').text().replace(',', ''));
+                        var descuento = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').children('td:eq(4)').children('span.dinero').text().replace('$', '').replace(',', ''));
                         var descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
 
-                        if ($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').hasClass("mayoreo")) {
-                            var precio = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').attr("preciomayoreo"));
+                        if ($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').hasClass("mayoreo")) {
+                            var precio = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').attr("preciomayoreo"));
                             if(descuento > 0){
                                 descuHtml = '<span class="dinero">'+descuento+'</span>(<span class="porcentaje">'+((descuento / (precio * (cantidad))) * 100)+'</span>)';
                             }
                         }else{
-                            var precio = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').attr("precio").replace('$', '').replace(',', ''));   
+                            var precio = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').attr("precio").replace('$', '').replace(',', ''));   
                             if(descuento > 0){
                                 descuHtml = '<span class="dinero">'+descuento+'</span>(<span class="porcentaje">'+((descuento / (precio * (cantidad))) * 100)+'</span>)';
                             }
                         }
 
-                        $("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').addClass('activa');
+                        $("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').addClass('activa');
 
-                        $("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').html(`
+                        $("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').html(`
                             <td>`+datos.Codigo+`</td>
                             <td>`+datos.Descripcion+`</td>
                             <td><span class="dinero">`+precio+`</span></td>
@@ -662,7 +668,7 @@ jQuery(document).ready(function($) {
                                 impuestos += datos.Impuestos[i].Nombre+"-"+datos.Impuestos[i].Porcentaje+",";
                             }
                         }
-                        $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+precioMayoreo+`" impuestos="`+impuestos+`" class="activa normal">
+                        $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+precioMayoreo+`" impuestos="`+impuestos+`" class="activa normal" idPresentacion="`+datos.IDPresentacion+`">
                             <td>`+datos.Codigo+`</td>
                             <td>`+datos.Descripcion+`</td>
                             <td><span class="dinero">`+precio+`</span></td>
@@ -745,7 +751,7 @@ jQuery(document).ready(function($) {
             //$(".swal2-container").is(':visible') == false && 
             if($("#MBuscarProd").is(':visible')){
                $(".buscadorMyDataTable[tabla='TablaProductosVenta']").focus();
-            }else if($("#MIntVarios").is(':visible') == false && $("#MGranel").is(':visible') == false && $("#MProdComun").is(':visible') == false && $("#MBuscarProd").is(':visible') == false && $("#ModalDescuentoProd").is(':visible') == false && $("#ModalEntradaDinero").is(':visible') == false  && $("#ModalSalidaDinero").is(':visible') == false && $("#ModalImpuestosVenta").is(':visible') == false && $("#ModalAsignarCliente").is(':visible') == false && $(".swal2-container").is(':visible') == false && $("#ModalCambiarTicket").is(':visible') == false){
+            }else if($("#MIntVarios").is(':visible') == false && $("#MGranel").is(':visible') == false && $("#MProdComun").is(':visible') == false && $("#MBuscarProd").is(':visible') == false && $("#ModalDescuentoProd").is(':visible') == false && $("#ModalEntradaDinero").is(':visible') == false  && $("#ModalSalidaDinero").is(':visible') == false && $("#ModalImpuestosVenta").is(':visible') == false && $("#ModalAsignarCliente").is(':visible') == false && $(".swal2-container").is(':visible') == false && $("#ModalCambiarTicket").is(':visible') == false && $("#ModalPreciosProd").is(':visible') == false){
                 $("#barCodeV").focus();
             }
         }
@@ -837,7 +843,7 @@ jQuery(document).ready(function($) {
                     <td><span class="cantidad">`+$("#datosGranel").attr('attrExistencia')+`</span></td>
                 `);
             }else{
-                $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+$("#datosGranel").attr('attrID')+`"  precio="`+precio+`" precioMayoreo="`+$("#datosGranel").attr('precioMayoreo')+`" class="activa normal">
+                $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+$("#datosGranel").attr('attrID')+`"  precio="`+precio+`" precioMayoreo="`+$("#datosGranel").attr('precioMayoreo')+`" class="activa normal" idPresentacion="`+datos.IDPresentacion+`">
                     <td>`+$("#datosGranel").attr('attrCodigo')+`</td>
                     <td>`+$("#datosGranel").children('h4').text()+`</td>
                     <td><span class="dinero">`+precio+`</span></td>
@@ -947,9 +953,9 @@ jQuery(document).ready(function($) {
                             preciomayoreo = datos.Precio_Mayoreo;
                         }
 
-                        if($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').length > 0){
-                            var cantidad = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').children('td:eq(3)').children('span.cantidad').text().replace(',', ''));
-                            var descuento = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').children('td:eq(4)').children('span.dinero').text().replace('$', '').replace(',', ''));
+                        if($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').length > 0){                            
+                            var cantidad = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').children('td:eq(3)').children('span.cantidad').text().replace(',', ''));
+                            var descuento = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').children('td:eq(4)').children('span.dinero').text().replace('$', '').replace(',', ''));
 
                             var descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
                             if(descuento > 0){
@@ -959,9 +965,9 @@ jQuery(document).ready(function($) {
                             $("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').addClass('activa');
 
                             if ($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').hasClass("mayoreo")) {
-                                precio = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').attr("preciomayoreo"));
+                                precio = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').attr("preciomayoreo"));
                             }else{
-                                precio = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').attr("precio").replace('$', '').replace(',', ''));   
+                                precio = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').attr("precio").replace('$', '').replace(',', ''));   
                             }
 
 
@@ -982,7 +988,7 @@ jQuery(document).ready(function($) {
                                     impuestos += datos.Impuestos[i].Nombre+"-"+datos.Impuestos[i].Porcentaje+",";
                                 }
                             }
-                            $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+preciomayoreo+`" impuestos="`+impuestos+`" class="activa normal">
+                            $("#nav-tabContent .active #tablaCaja").children('tbody').prepend(`<tr attrID="`+datos.ID_Producto+`" precio="`+precio+`" precioMayoreo="`+preciomayoreo+`" impuestos="`+impuestos+`" class="activa normal" idPresentacion="`+datos.IDPresentacion+`">
                                 <td>`+datos.Codigo+`</td>
                                 <td>`+datos.Descripcion+`</td>
                                 <td><span class="dinero">`+precio+`</span></td>
@@ -1706,6 +1712,20 @@ jQuery(document).ready(function($) {
         $("#ModalCambiarTicket").modal("hide");
     });
 
+    $(document).on('click', '#bBuscarPrecios', function(){
+        $("#ModalPreciosProd").modal("show");
+    });
+
+    $(document).on('shown.bs.modal', '#ModalPreciosProd', function(){
+        var producto = $("#nav-tabContent .active #tablaCaja").children('tbody').children('tr.activa').attr("attrid");
+        var presentacion = $("#nav-tabContent .active #tablaCaja").children('tbody').children('tr.activa').attr("idpresentacion")
+        TablaPreciosProducto(producto,presentacion);
+    });
+
+    $(document).on('hidden.bs.modal', '#ModalPreciosProd', function(){
+        $("#barCodeV").focus();
+    });
+
 });
 
 /*function ComprobarNombreTicket(nombreTicket, id){
@@ -1751,6 +1771,7 @@ function verCajaAbierta(id, sucursal, detalle_caja) {
                     <button type="button" class="btn btn-outline-secondary" id="bIntVarios"><b>F2</b> <i class="fas fa-clipboard"></i> Insert. Varios</button>
                     <button type="button" class="btn btn-outline-secondary" id="bProdComun"><b>ALT + C</b> <i class="fas fa-file"></i> Prod. Común</button>
                     <button type="button" class="btn btn-outline-secondary" id="bBuscarProd"><b>F10</b> <i class="fas fa-search"></i> Buscar</button>
+                    <button type="button" class="btn btn-outline-secondary" id="bBuscarPrecios"><b>ALT + P</b> <i class="fas fa-search-dollar"></i> Precios</button>
                     <button type="button" class="btn btn-outline-secondary" id="bPrecioMayoreo"><b>ALT + Q</b> <i class="fas fa-certificate"></i> Mayoreo</button>
                     <button type="button" class="btn btn-outline-secondary" id="bImpuestoProd"><b>ALT + I</b> <i class="fas fa-dollar"></i> Impuestos</button>
                     <button type="button" class="btn btn-outline-secondary" id="bDescuentoProd"><b>ALT + D</b> <i class="fas fa-percent"></i> Descuento</button>
@@ -1874,7 +1895,6 @@ function TablaProductosVenta(){
         "colums": [
             "Codigo",
             "Descripcion",
-            "Clase",
             "Precio",
             "Precio Mayoreo",
             "Area",
@@ -1986,5 +2006,32 @@ function TablaTicketsActuales(){
     $("#DivTickets").html("");
     $("#navtabTickets button").each(function(index, el) {
         $("#DivTickets").append('<button type="button" class="btn btn-primary mb-3 botonCambiar" idTicket="'+$(this).attr("id")+'">'+$(this).html()+'</button><br>');
+    });
+}
+
+function TablaPreciosProducto(producto, presentacion){
+    if (presentacion == null) {
+        presentacion = 0;
+    }
+    ajaxMyDatatable({
+        "table": $("#TablaPreciosProductos"), 
+        "colums": [
+            "Nombre",
+            "Precio",
+            "Mayoreo",
+        ], 
+        "sort": [
+            1,
+            "desc"
+        ],
+        "url": "index.php", 
+        "params":{
+            "metodo": "detalles",
+            "accion": "hacerventa",
+            "tipo": "ConsultarPreciosProducto",
+            "Sucursal": $("#vistaCaja").attr('attrSucursal'),
+            "Producto": producto,
+            "Presentacion": presentacion,
+        }
     });
 }
