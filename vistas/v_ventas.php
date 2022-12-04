@@ -21,8 +21,7 @@
 			<br>
 			<div class="row">
 				<div class="col-12 text-end">
-					<!-- <button type="button" class="btn btn-success" id="botonNuevaArea" onclick="$('#ModalAreas').appendTo('body').modal('show')"><i class="fa fa-file"></i> Nueva</button> -->
-					<button type="button" class="btn btn-success botonNuevaVenta"><i class="fa fa-file"></i> Nueva</button>
+					<button type="button" class="btn btn-success cargarVista" id="BotonNuevaVenta" carga="v_hacerventa" titulo="Ventas"><i class="fa fa-file"></i> Nueva</button> 
                     <a href="javascript:void(0)" class="btn btn-light btn-reload cargarVista" carga="v_ventas" titulo="Ventas"><i class="fa fa-retweet"></i></a>
 				</div>
 			</div>
@@ -58,11 +57,11 @@
 	</div>
 </div>
 
-<div class="modal fade" id="ModalVerProductosCompra" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="ModalVerProductosVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Productos <span id="FolioCompraProductos"></span></h5>
+                <h5 class="modal-title" id="exampleModalLabel">Productos <span id="FolioVentasProductos"></span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -77,7 +76,7 @@
                                     Descripción
                                 </th>
                                 <th>
-                                    Costo
+                                    Precio
                                 </th>
                                 <th>
                                     Cantidad
@@ -87,7 +86,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody id="tbodyVerProductosCompra">
+                        <tbody id="tbodyVerProductosVenta">
                         </tbody>
                     </table>
                 </div>

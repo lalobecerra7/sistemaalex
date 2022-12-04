@@ -841,9 +841,7 @@ class productos {
 					echo "Error: ".mysqli_error($omodelo->link);
 				}else{
 					for($i=0; $i<$numerofilas; $i++){
-
 						$impuestos .= $row[$i]['Nombre'].', ';
-
 					}
 				}
 				$imp = substr($impuestos, 0, -1);
