@@ -4,10 +4,10 @@ function v_ventas() {
 
 jQuery(document).ready(function($) {
 
-	$(document).on('click', '#EliminarCompra', function() {
+	$(document).on('click', '#EliminarVenta', function() {
 		var btn = $(this);
 		Swal.fire({
-	        title: '¿Estás seguro que quieres eliminar la compra con el folio '+$(this).attr("folio")+'?',
+	        title: '¿Estás seguro que quieres eliminar la venta con el folio '+$(this).attr("folio")+'?',
 	        icon: 'warning',
 	        showCancelButton: true,
 	        confirmButtonColor: '#3085d6',
@@ -16,7 +16,7 @@ jQuery(document).ready(function($) {
 	        confirmButtonText: '¡Si, eliminar!'
 	    }).then((result) => {
 	        if (result.value) {
-	        	var data = "metodo=eliminar&accion=compras&IDCompra="+$(this).attr('attrid');
+	        	var data = "metodo=eliminar&accion=ventas&IDVenta="+$(this).attr('attrid');
 				$.ajax({
 					url: 'index.php',
 					type: 'POST',
@@ -29,14 +29,14 @@ jQuery(document).ready(function($) {
 					if ($.trim(res) == "Correcto") {
 						Swal.fire({
 							icon: 'success',
-							title: 'Compra eliminada correctamente'
+							title: 'Venta eliminada correctamente'
 						});
 						TablaReporteVentas();
 					}else{
 						Swal.fire({
 							icon: 'error',
 							title: 'Oops...',
-							text: 'Error inesperado al eliminar la compra.'
+							text: 'Error inesperado al eliminar la venta.'
 						});
 						console.log($.trim(res));
 					}

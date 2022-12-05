@@ -164,7 +164,8 @@ class inventario {
 			$Usuario = $_SESSION['user_admin']['ID_Usuario'];
 			$existencia= '';
 			$Costo = '';
-			$query2 = "SELECT Cantidad, (SELECT Costo FROM detalles_productos WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma') AS Costo, productos.Costo AS CostoGral FROM inventario INNER JOIN productos ON ID_Producto = FK_Producto WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma' AND FK_Presentacion = '$PresentacionProductoMerma'";
+			$query2 = "SELECT Cantidad, (SELECT Costo FROM detalles_productos WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma') AS Costo, productos.Costo AS CostoGral FROM inventario INNER JOIN productos ON ID_Producto = '$IDProducto' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma' AND FK_Presentacion = '$PresentacionProductoMerma'";
+
 			$row = $omodelo->_consultar($query2);
 			$numerofilas = $omodelo->numerofilas;
 

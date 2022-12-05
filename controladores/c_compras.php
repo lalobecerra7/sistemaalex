@@ -231,15 +231,8 @@ class compras {
 		if ($error == "si") {
 			echo "Error 1: ".mysqli_error($omodelo->link);
 		}else{
-			$query2 = "DELETE FROM detalle_compras WHERE FK_Compra = '$IDCompra'";
-			$error2 = $omodelo->_insertar($query2);
-
-			if ($error2 == "si") {
-				echo "Error 1: ".mysqli_error($omodelo->link);
-			}else{
-				echo "Correcto";
-				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
-			}
+			echo "Correcto";
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}	
 	}
 

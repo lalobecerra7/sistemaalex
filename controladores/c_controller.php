@@ -7,6 +7,7 @@ include "controladores/c_clientes.php";
 include "controladores/c_proveedores.php";
 include "controladores/c_areas.php";
 include "controladores/c_hacerventa.php";
+include "controladores/c_hacerventacaja.php";
 include "controladores/c_categorias.php";
 include "controladores/c_usuarios.php";
 include "controladores/c_productos.php";
@@ -487,6 +488,39 @@ class controller {
 				}
 			}
 			$pagina = str_replace('#sucursal#', $sucursal, $pagina);
+                    
+		}else if($nombre == "v_hacerventa"){
+			$query = "SELECT FK_Sucursal, sucursales.Nombre AS NombreSucursal FROM usuarios INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal  WHERE ID_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$sucursal = '';
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					$sucursal = 'Sucursal: <br><b id="SucursalVenta" attrid="'.$row[0]["FK_Sucursal"].'">'.$row[0]["NombreSucursal"].'</b>';
+				}else{
+					$query2 = "SELECT ID_Sucursal, Nombre FROM sucursales";
+					$row2 = $omodelo->_consultar($query2);
+					$numerofilas2 = $omodelo->numerofilas;
+					$opciones = "";
+					if ($row2 == "si") {
+						echo "Error: " . mysqli_error($omodelo->link);
+					} else {
+						for ($i=0; $i < $numerofilas2; $i++) { 
+							$opciones .= '<option value="'.$row2[$i]["ID_Sucursal"].'">'.$row2[$i]["Nombre"].'</option>';
+						}
+						$sucursal = '
+						<div class="form-floating">
+		         	<select class="form-select" id="SucursalVenta" name="SucursalVenta">
+		          	'.$opciones.'
+		          </select>
+		        	<label for="SucursalVenta">Sucursal</label>
+						</div>';
+					}
+				}
+			}
+			$pagina = str_replace('#MostrarSucursal#', $sucursal, $pagina);
                     
 		}
 		

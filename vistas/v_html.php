@@ -774,6 +774,7 @@
     <script type="text/javascript" src="vistas/assets/js/proveedores.js"></script>
     <script type="text/javascript" src="vistas/assets/js/areas.js"></script>
     <script type="text/javascript" src="vistas/assets/js/hacerventa.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/hacerventacaja.js"></script>
     <script type="text/javascript" src="vistas/assets/js/categorias.js"></script>
     <script type="text/javascript" src="vistas/assets/js/impuestos.js"></script>
     <script type="text/javascript" src="vistas/assets/js/usuarios.js"></script>
