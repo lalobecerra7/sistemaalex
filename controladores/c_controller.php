@@ -134,9 +134,9 @@ class controller {
 
 		$botonCategorias = '';
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_categorias'][1] == '1') {
-			$botonCategorias = '<li class="menu-item cargarVista" carga="v_categorias" titulo="Categorias / familias" id="cargarCategorias">
+			$botonCategorias = '<li class="menu-item cargarVista" carga="v_categorias" titulo="Familias" id="cargarCategorias">
                   <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Categorias">Categorias(familias)</div>
+                    <div data-i18n="Categorias">Familias (Categorias)</div>
                   </a>
                 </li>';
 		}
@@ -289,7 +289,7 @@ class controller {
 
 			$pagina = str_replace('#sucursales#', $opciones, $pagina);
 
-			$query = "SELECT ID_Unidad, Nombre FROM unidades";
+			$query = "SELECT ID_Zona, Nombre FROM zonas";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			$opciones = "";
@@ -299,12 +299,12 @@ class controller {
 			} else {
 				if ($numerofilas > 0) {
 					for ($i = 0; $i < $numerofilas; $i++) {
-						$opciones .= '<option value="' . $row[$i]['ID_Unidad'] . '" >' . $row[$i]['Nombre']. '</option>';
+						$opciones .= '<option value="'.$row[$i]['ID_Zona'].'">'.$row[$i]['Nombre'].'</option>';
 					}
 				}
 			}
 
-			$pagina = str_replace('#unidades#', $opciones, $pagina);
+			$pagina = str_replace('#zonas#', $opciones, $pagina);
 
 		}else if($nombre == "v_inventario"){
 

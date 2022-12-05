@@ -77,8 +77,8 @@
 		        </div>
 						<div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		          	<input type="text" class="form-control" id="PaisSucursal" name="PaisSucursal" placeholder="Ingresa pais de la sucursal">
-		            <label for="PaisSucursal">Pais</label>
+		          	<input type="text" class="form-control" id="PaisSucursal" name="PaisSucursal" placeholder="Ingresa pais de la sucursal" value="México">
+		            <label for="PaisSucursal">País</label>
 		          </div>
 		        </div>
 						<div class="col-md-4 col-sm-12 mb-3">

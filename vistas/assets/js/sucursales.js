@@ -5,7 +5,22 @@ function v_sucursales() {
             NombreSucursal: {
                 required: true
             },
-            EncargadoSucursal:{
+            CalleSucursal: {
+                required: true
+            },
+            NoExteriorSucursal: {
+                required: true
+            },
+            CPSucursal: {
+                required: true
+            },
+            CiudadSucursal: {
+                required: true
+            },
+            EstadoSucursal: {
+                required: true
+            },
+            PaisSucursal: {
                 required: true
             },
             ZonasSucursal:{
@@ -14,10 +29,25 @@ function v_sucursales() {
         },
         messages: {
             NombreSucursal: {
-                required: "El nombre de la sucursal es requerido"
+                required: "El nombre de la sucursal es requerido."
             },
-            EncargadoSucursal:{
-                required: "El gerente de la sucursal es requerido"
+            CalleSucursal: {
+                required: "La calle es requerida."
+            },
+            NoExteriorSucursal: {
+                required: "El no. exterior es requerido."
+            },
+            CPSucursal: {
+                required: "El código postal es requerido."
+            },
+            CiudadSucursal: {
+                required: "La ciudad es requerida."
+            },
+            EstadoSucursal: {
+                required: "El estado es requerido."
+            },
+            PaisSucursal: {
+                required: "El país es requerido"
             },
             ZonasSucursal:{
                 required: "La zona de la sucursal es requerida"
@@ -132,7 +162,7 @@ jQuery(document).ready(function($) {
             data: data
         })
         .done(function(res) {
-            //console.log(res);
+            //console.log($.trim(res));
             var res = JSON.parse(res);
             $("#bGuardarSucu").attr("attrid", id);
             $("#bGuardarSucu").attr("tipo", "modificar");
