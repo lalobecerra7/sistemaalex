@@ -57,13 +57,14 @@ jQuery(document).ready(function($) {
 	                        <td>`+datos.Codigo+`</td>
 	                        <td>`+datos.Descripcion+`</td>
 	                        <td>`+datos.Presentacion+`</td>
-	                        <td>`+datos.Precio_General+`</td>
+	                        <td><button class="btn btn-sm btn-primary cambiarPrecio dinero" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Precio_General+`</button></td>
 	                        <td><input type='number' value='1' min='1' step='any' class='form-control campoCantidadProducto'></td>
 	                        <td>`+datos.Impuestos+`</td>
 	                        <td></td>
 	                        <td></td>
 	                    </tr>`);
                  }
+                 moneda();
 
 
                

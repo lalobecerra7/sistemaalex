@@ -47,12 +47,6 @@ class productos {
 								</a><br>';
 						}	
 					}
-					$tipoProducto = '';
-					if($row[$i]['Tipo'] == '1'){
-						$tipoProducto = 'Producto';
-					}else if ($row[$i]['Tipo'] == '0'){
-						$tipoProducto = 'Materia';
-					}
 
 					if ($row[$i]['Nombre'] != "") {
 						$area .= "Area: ".$row[$i]['Nombre']."<br>";
@@ -93,14 +87,14 @@ class productos {
 						}
 					}
 
-					$EliminarProducto = '<button class="btn btn-danger btn-sm mb-1" id="EliminarProducto" title="Eliminar producto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-trash"></i></button>';
+					$EliminarProducto = '<button class="btn btn-danger btn-sm mb-1 EliminarProducto" title="Eliminar producto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-trash"></i></button>';
 					if ($row[$i]['numProd'] > 0) {
 						$EliminarProducto = '';
 					}
 
 					$botonPermisosModificar = "";
 					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_productos'][3] == '1') {
-						$botonPermisosModificar = '<button class="btn btn-primary btn-sm mb-1" id="ModificarProducto" title="Modificar producto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-edit"></i></button>';
+						$botonPermisosModificar = '<button class="btn btn-primary btn-sm mb-1 ModificarProducto" title="Modificar producto" attrid="'.$row[$i]['ID_Producto'].'" descripcion="'.$row[$i]['Descripcion'].'"><i class="fas fa-edit"></i></button>';
 					}
 
 					$botonPermisosEliminar = "";
@@ -110,9 +104,8 @@ class productos {
 
 					$botonAumentarExistencias = '';
 					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_productos'][5] == '1') {
-						$botonAumentarExistencias = '<button class="btn btn-warning btn-sm mb-1" id="AumentarExistencias" title="Aumentar existencias" attrid="'.$row[$i]['ID_Producto'].'"><i class="fas fa-plus"></i></button>';
+						$botonAumentarExistencias = '<button class="btn btn-warning btn-sm mb-1 AumentarExistencias" title="Aumentar existencias" attrid="'.$row[$i]['ID_Producto'].'"><i class="fas fa-plus"></i></button>';
 					}
-					
 					
 					
 					$arreglo['data'][$i] = array(
@@ -121,7 +114,7 @@ class productos {
 						'Descripcion' => $row[$i]['Descripcion'],
 						'Costo' => '<b class="dinero">$'.number_format($row[$i]['Costo'], 2).'</b>',
 						'Precio' => 'General: <b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b><br>'.$precios,
-						'Detalles' => $area."Detalles: ".$row[$i]['Detalles'].$tipoProducto."<br> Clase: <b>".$row[$i]['Clase']."</b><br> Minimo: <b>".$row[$i]['Minimo']."</b> <br> Maximo: <b>".$row[$i]['Maximo']."</b>".$presentacion,
+						'Detalles' => $area."Detalles: ".$row[$i]['Detalles']."<br> Clase: <b>".$row[$i]['Clase']."</b><br> Minimo: <b>".$row[$i]['Minimo']."</b> <br> Maximo: <b>".$row[$i]['Maximo']."</b>".$presentacion,
 						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar.' '.$botonAumentarExistencias,
 					);
 					
@@ -139,21 +132,24 @@ class productos {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$Fecha = date('Y-m-d H:i:s');
-		$CodigoBarras =  $omodelo->link->real_escape_string($CodigoBarras);
-		$Descripcion =  $omodelo->link->real_escape_string($Descripcion);
-		$Categoria =  $omodelo->link->real_escape_string($Categoria);
-		$Clase =  $omodelo->link->real_escape_string($ClaseProducto);
-		$Costo =  $omodelo->link->real_escape_string($CostoProducto);
-		$Precio =  $omodelo->link->real_escape_string($PrecioProducto);
-		$PrecioMayoreo =  $omodelo->link->real_escape_string($PrecioMayoreo);
-		$Area =  $omodelo->link->real_escape_string($Area);
-		$Detalles =  $omodelo->link->real_escape_string($DetallesProducto);
-		$Minimo =  $omodelo->link->real_escape_string($Minimo);
-		$Maximo =  $omodelo->link->real_escape_string($Maximo);
-		$detalle =  explode("~", $detalleProducto);
-		$impuesto =  explode(",", $impuestos);
+		$CodigoBarras = $omodelo->link->real_escape_string($CodigoBarras);
+		$Descripcion = $omodelo->link->real_escape_string($Descripcion);
+		$Categoria = $omodelo->link->real_escape_string($Categoria);
+		$Clase = $omodelo->link->real_escape_string($ClaseProducto);
+		$Costo = $omodelo->link->real_escape_string($CostoProducto);
+		$Precio = $omodelo->link->real_escape_string($PrecioProducto);
+		$PrecioMayoreo = $omodelo->link->real_escape_string($PrecioMayoreo);
+		$Area = $omodelo->link->real_escape_string($Area);
+		$Detalles = $omodelo->link->real_escape_string($DetallesProducto);
+		$Minimo = $omodelo->link->real_escape_string($Minimo);
+		$Maximo = $omodelo->link->real_escape_string($Maximo);
+		$claveProdServ = $omodelo->link->real_escape_string($claveProdServ);
+		$claveUnidadProd = $omodelo->link->real_escape_string($claveUnidadProd);
+		$unidadProd = $omodelo->link->real_escape_string($unidadProd);
+		$abreUnudadProd = $omodelo->link->real_escape_string($abreUnudadProd);
+		$objImProducto = $omodelo->link->real_escape_string($objImProducto);
 
-		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion',  FK_Categoria = '$Categoria', Tipo = '1', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha'";
+		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion',  FK_Categoria = '$Categoria', Tipo = '1', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -191,62 +187,52 @@ class productos {
 				}
 			}
 
-			$presentaciones = explode(",", $presentaciones);
-			for ($i=0; $i < sizeof($presentaciones) - 1; $i++) { 
-				$datospresentacion = explode("~", $presentaciones[$i]);
-				$queryPresentacionProducto = "INSERT INTO presentaciones SET FK_Producto = '$id', Nombre = '$datospresentacion[0]', Abreviatura = '$datospresentacion[1]'";
-				$errorPresentacion = $omodelo->_insertar($queryPresentacionProducto);	
 
-				if ($errorPresentacion == "si") {
+			$presentaciones = json_decode($presentaciones, true);
+			foreach ($presentaciones as $pres) {
+				$pres['Clave'] = $omodelo->link->real_escape_string($pres['Clave']);
+				$pres['Nombre'] = $omodelo->link->real_escape_string($pres['Nombre']);
+				$pres['Abreviatura'] = $omodelo->link->real_escape_string($pres['Abreviatura']);
+
+				$queryPresentacion = "INSERT INTO presentaciones SET FK_Producto = '$id', Nombre = '$pres[Nombre]', Abreviatura = '$pres[Abreviatura]', Clave_CFDI = '$pres[Clave]'";
+				$errorPresentacion = $omodelo->_insertar($queryPresentacion);	
+
+				if ($error == "si") {
 					echo "Error presentacion: ".mysqli_error($omodelo->link); 
 				}
 			}
 
-			$productos = explode(",", $productos);
-			for ($i=0; $i < sizeof($productos) - 1; $i++) { 
-				$datosproductos = explode("~", $productos[$i]);
-				$queryPreciosProductos = "INSERT INTO precios SET FK_Producto = '$id', Nombre = '$datosproductos[2]', FK_Presentacion = '$datosproductos[1]', FK_Zona = '$datosproductos[0]', Precio = '$datosproductos[3]', Precio_Mayoreo = '$datosproductos[4]'";
-				$errorPrecios = $omodelo->_insertar($queryPreciosProductos);	
+			$precios = json_decode($precios, true);
+			foreach ($precios as $pre) {
+				$pre['Zona'] = $omodelo->link->real_escape_string($pre['Zona']); 
+				$pre['Presentacion'] = $omodelo->link->real_escape_string($pre['Presentacion']); 
+				$pre['Nombre'] = $omodelo->link->real_escape_string($pre['Nombre']); 
+				$pre['Precio'] = $omodelo->link->real_escape_string($pre['Precio']); 
+				$pre['Precio_Mayoreo'] = $omodelo->link->real_escape_string($pre['Precio_Mayoreo']); 
 
-				if ($errorPrecios == "si") {
-					echo "Error productos precio: ".mysqli_error($omodelo->link); 
+				$queryPrecio = "INSERT INTO precios SET FK_Producto = '$id', FK_Zona = '$pre[Zona]', FK_Presentacion = IFNULL((SELECT ID_Presentacion FROM presentaciones WHERE Nombre = '$pre[Presentacion]'), 0), Nombre = '$pre[Nombre]', Precio = '$pre[Precio]', Precio_Mayoreo = '$pre[Precio_Mayoreo]'";
+				$error = $omodelo->_insertar($queryPrecio);	
+
+				if ($error == "si") {
+					echo "Error precio: ".mysqli_error($omodelo->link); 
 				}
 			}
 
-			for($i=1; $i<sizeOf($detalle); $i++){
-				$detallesucursal = explode(",", $detalle[$i]);
-				$query = "INSERT INTO detalles_productos SET FK_Producto = '$id', FK_Sucursal = '$detallesucursal[1]', Costo = '$detallesucursal[2]', Precio = '$detallesucursal[3]', Precio_Mayoreo = '$detallesucursal[4]', Minimo = '$detallesucursal[5]', Maximo = '$detallesucursal[6]'";
-				$row = $omodelo->_insertar($query);
+			$impuestos = json_decode($impuestos, true);
+			foreach ($impuestos as $im) {
+				$im['ID_Impuesto'] = $omodelo->link->real_escape_string($im['ID_Impuesto']);
 
-				if ($row == "si") {
-					echo "Error: ".mysqli_error($omodelo->link);
-				}
-
-				if ($detallesucursal[7] != "" && $detallesucursal[7] > "0") {
-					$queryInventario = "INSERT INTO inventario SET FK_Producto = '$id', FK_Sucursal = '$detallesucursal[1]', Cantidad = '$detallesucursal[7]'";
-					$error = $omodelo->_insertar($queryInventario);
-
-					if ($error == "si") {
-						echo "Error: ".mysqli_error($omodelo->link);
-					}
-				}
-
-			}
-
-			if(sizeOf($impuesto) > 1 ){
-				for($j=0; $j<sizeOf($impuesto); $j++){
-					$imp = explode("~", $impuesto[$j]);
-					$query = "INSERT INTO detalles_impuestos_productos SET FK_Producto = '$id', FK_Sucursal = '$imp[0]', FK_Impuesto = '$imp[1]'";
-					$row = $omodelo->_insertar($query);
+				$query1 = "INSERT INTO detalles_impuestos_productos SET FK_Producto = '$id', FK_Impuesto = '$im[ID_Impuesto]'";
+				$error = $omodelo->_insertar($query1);
 	
-					if ($row == "si") {
-						echo "Error: ".mysqli_error($omodelo->link);
-					}
+				if ($error == "si") {
+					echo "Error: ".mysqli_error($omodelo->link);
 				}
 			}
 			
 			echo "Correcto";
-			//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
@@ -255,20 +241,25 @@ class productos {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
-		$IDProducto =  $omodelo->link->real_escape_string($IDProducto);
-		$CodigoBarras =  $omodelo->link->real_escape_string($CodigoBarras);
-		$Descripcion =  $omodelo->link->real_escape_string($Descripcion);
-		$Categoria =  $omodelo->link->real_escape_string($Categoria);
-		$Clase =  $omodelo->link->real_escape_string($ClaseProducto);
-		$Costo =  $omodelo->link->real_escape_string($CostoProducto);
-		$Precio =  $omodelo->link->real_escape_string($PrecioProducto);
-		$PrecioMayoreo =  $omodelo->link->real_escape_string($PrecioMayoreo);
-		$Area =  $omodelo->link->real_escape_string($Area);
-		$Detalles =  $omodelo->link->real_escape_string($DetallesProducto);
-		$Minimo =  $omodelo->link->real_escape_string($Minimo);
-		$Maximo =  $omodelo->link->real_escape_string($Maximo);
+		$IDProducto = $omodelo->link->real_escape_string($IDProducto);
+		$CodigoBarras = $omodelo->link->real_escape_string($CodigoBarras);
+		$Descripcion = $omodelo->link->real_escape_string($Descripcion);
+		$Categoria = $omodelo->link->real_escape_string($Categoria) || 0;
+		$Clase = $omodelo->link->real_escape_string($ClaseProducto);
+		$Costo = $omodelo->link->real_escape_string($CostoProducto);
+		$Precio = $omodelo->link->real_escape_string($PrecioProducto);
+		$PrecioMayoreo = $omodelo->link->real_escape_string($PrecioMayoreo);
+		$Area = $omodelo->link->real_escape_string($Area);
+		$Detalles = $omodelo->link->real_escape_string($DetallesProducto);
+		$Minimo = $omodelo->link->real_escape_string($Minimo);
+		$Maximo = $omodelo->link->real_escape_string($Maximo);
+		$claveProdServ = $omodelo->link->real_escape_string($claveProdServ);
+		$claveUnidadProd = $omodelo->link->real_escape_string($claveUnidadProd);
+		$unidadProd = $omodelo->link->real_escape_string($unidadProd);
+		$abreUnudadProd = $omodelo->link->real_escape_string($abreUnudadProd);
+		$objImProducto = $omodelo->link->real_escape_string($objImProducto);
 
-		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', FK_Categoria = '$Categoria', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo' WHERE ID_Producto = '$IDProducto'";
+		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', FK_Categoria = '$Categoria', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto' WHERE ID_Producto = '$IDProducto'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -292,123 +283,6 @@ class productos {
 					$ruta = $carpeta;
 				}
 			}
-
-			$productos = explode(",", $productos);
-			for ($i=0; $i < sizeof($productos) - 1; $i++) { 
-				$datosproductos = explode("~", $productos[$i]);
-
-				$idPresentacion = "";
-				$queryNombrePrese = "SELECT ID_Presentacion, FK_Producto, Nombre, Abreviatura FROM presentaciones WHERE FK_Producto = '$IDProducto' AND Nombre = '$datosproductos[1]'";
-				$rowNombrePrese = $omodelo->_consultar($queryNombrePrese);
-				$numerofilasNombrePrese = $omodelo->numerofilas;
-
-				if ($rowNombrePrese == "si") {
-					echo "Error consultar archivo: ".mysqli_error($omodelo->link);
-				}else{
-					if($numerofilasNombrePrese > 0){
-						$idPresentacion = $rowNombrePrese[0]["ID_Presentacion"];
-					}
-				}
-				$queryIdPresentacion = "";
-				$queryAgregarPresentacion = "";
-				if ($idPresentacion != "" && $idPresentacion != "0") {
-					$queryIdPresentacion = "AND FK_Presentacion = '$idPresentacion'";
-					$queryAgregarPresentacion = ", FK_Presentacion = '$idPresentacion'";
-				}
-
-				$queryPrecio = "SELECT 	ID_Precio, FK_Producto, FK_Presentacion, FK_Zona, Nombre, Precio, Precio_Mayoreo FROM precios WHERE FK_Producto = '$IDProducto' AND FK_Zona = '$datosproductos[0]' AND Nombre = '$datosproductos[2]' $queryIdPresentacion";
-				$rowPrecio = $omodelo->_consultar($queryPrecio);
-				$numerofilasPrecio = $omodelo->numerofilas;
-
-				if ($rowPrecio == "si") {
-					echo "Error consultar archivo: ".mysqli_error($omodelo->link);
-				}else{
-					if($numerofilasPrecio > 0){
-						$queryPreciosProductos = "UPDATE precios SET Precio = '$datosproductos[3]', Precio_Mayoreo = '$datosproductos[4]' WHERE FK_Producto = '$IDProducto' AND Nombre = '$datosproductos[2]' AND FK_Zona = '$datosproductos[0]'";
-						$errorPrecios = $omodelo->_insertar($queryPreciosProductos);	
-
-						if ($errorPrecios == "si") {
-							echo "Error productos: ".mysqli_error($omodelo->link); 
-						}	
-					}else{
-						$queryPreciosProductos = "INSERT INTO precios SET FK_Producto = '$IDProducto', Nombre = '$datosproductos[2]', FK_Zona = '$datosproductos[0]', Precio = '$datosproductos[3]', Precio_Mayoreo = '$datosproductos[4]' $queryAgregarPresentacion";
-						$errorPrecios = $omodelo->_insertar($queryPreciosProductos);	
-
-						if ($errorPrecios == "si") {
-							echo "Error productos: ".mysqli_error($omodelo->link); 
-						}
-					}
-				}
-			}
-
-			/*$queryProd = "DELETE FROM precios WHERE FK_Producto = '$IDProducto'";
-			$errorDir = $omodelo->_insertar($queryProd);
-
-			if ($errorDir == "si") {
-				echo "Error Eliminar Productos: ".mysqli_error($omodelo->link);
-			}else{
-				$productos = explode(",", $productos);
-				for ($i=0; $i < sizeof($productos) - 1; $i++) { 
-					$datosproductos = explode("~", $productos[$i]);
-					$queryPreciosProductos = "INSERT INTO precios SET FK_Producto = '$IDProducto', Nombre = '$datosproductos[1]', FK_Zona = '$datosproductos[0]', Precio = '$datosproductos[2]', Precio_Mayoreo = '$datosproductos[3]'";
-					$errorPrecios = $omodelo->_insertar($queryPreciosProductos);	
-
-					if ($errorPrecios == "si") {
-						echo "Error productos: ".mysqli_error($omodelo->link); 
-					}
-				}
-			}*/
-
-
-			$presentaciones = explode(",", $presentaciones);
-			for ($i=0; $i < sizeof($presentaciones) - 1; $i++) { 
-				$datospresentacion = explode("~", $presentaciones[$i]);
-
-				$queryPrese = "SELECT ID_Presentacion, FK_Producto, Nombre, Abreviatura FROM presentaciones WHERE FK_Producto = '$IDProducto' AND Nombre = '$datospresentacion[0]'";
-				$rowPrese = $omodelo->_consultar($queryPrese);
-				$numerofilasPrese = $omodelo->numerofilas;
-
-				if ($rowPrese == "si") {
-					echo "Error consultar archivo: ".mysqli_error($omodelo->link);
-				}else{
-					if($numerofilasPrese > 0){
-						$queryPresentacionProducto = "UPDATE presentaciones SET Abreviatura = '$datospresentacion[1]' WHERE ID_Presentacion = '".$rowPrese[0]["ID_Presentacion"]."'";
-						$errorPresentacion = $omodelo->_insertar($queryPresentacionProducto);	
-
-						if ($errorPresentacion == "si") {
-							echo "Error presentacion: ".mysqli_error($omodelo->link); 
-						}
-					}else{
-						$queryPresentacionProducto = "INSERT INTO presentaciones SET FK_Producto = '$IDProducto', Nombre = '$datospresentacion[0]', Abreviatura = '$datospresentacion[1]'";
-						$errorPresentacion = $omodelo->_insertar($queryPresentacionProducto);	
-
-						if ($errorPresentacion == "si") {
-							echo "Error presentacion: ".mysqli_error($omodelo->link); 
-						}
-					}
-				}
-			}
-
-
-			
-
-			/*$queryProd = "DELETE FROM presentaciones WHERE FK_Producto = '$IDProducto'";
-			$errorDir = $omodelo->_insertar($queryProd);
-
-			if ($errorDir == "si") {
-				echo "Error Eliminar Productos Presentacion: ".mysqli_error($omodelo->link);
-			}else{
-				$presentaciones = explode(",", $presentaciones);
-				for ($i=0; $i < sizeof($presentaciones) - 1; $i++) { 
-					$datospresentacion = explode("~", $presentaciones[$i]);
-					$queryPresentacionProducto = "INSERT INTO presentaciones SET FK_Producto = '$IDProducto', Nombre = '$datospresentacion[0]', Abreviatura = '$datospresentacion[1]'";
-					$errorPresentacion = $omodelo->_insertar($queryPresentacionProducto);	
-
-					if ($errorPresentacion == "si") {
-						echo "Error presentacion: ".mysqli_error($omodelo->link); 
-					}
-				}
-			}*/
 			
 			if($status == 0){
 				$query1 = "SELECT Imagen FROM productos WHERE ID_Producto = '$IDProducto'";
@@ -424,6 +298,7 @@ class productos {
 					    }
 					}
 				}
+				
 				$query2 = "UPDATE productos SET Imagen = '".$IDProducto.'_'.$nombreDoc."' WHERE ID_Producto = '$IDProducto'";
 				$error3 = $omodelo->_insertar($query2);	
 
@@ -433,8 +308,71 @@ class productos {
 					move_uploaded_file($ruta_provisional,  $ruta.''.$IDProducto.'_'.$nombreDoc);
 				}
 			}
+
+			$query1 = "DELETE FROM presentaciones WHERE FK_Producto = '$IDProducto'";
+			$error = $omodelo->_insertar($query1);
+	
+			if ($error == "si") {
+				echo "Error 5: ".mysqli_error($omodelo->link);
+			}else{
+				$presentaciones = json_decode($presentaciones, true);
+				foreach ($presentaciones as $pres) {
+					$pres['Clave'] = $omodelo->link->real_escape_string($pres['Clave']);
+					$pres['Nombre'] = $omodelo->link->real_escape_string($pres['Nombre']);
+					$pres['Abreviatura'] = $omodelo->link->real_escape_string($pres['Abreviatura']);
+
+					$queryPresentacion = "INSERT INTO presentaciones SET FK_Producto = '$IDProducto', Nombre = '$pres[Nombre]', Abreviatura = '$pres[Abreviatura]', Clave_CFDI = '$pres[Clave]'";
+					$errorPresentacion = $omodelo->_insertar($queryPresentacion);	
+
+					if ($error == "si") {
+						echo "Error presentacion: ".mysqli_error($omodelo->link); 
+					}
+				}
+			}
+
+			$query1 = "DELETE FROM precios WHERE FK_Producto = '$IDProducto'";
+			$error = $omodelo->_insertar($query1);
+	
+			if ($error == "si") {
+				echo "Error 6: ".mysqli_error($omodelo->link);
+			}else{
+				$precios = json_decode($precios, true);
+				foreach ($precios as $pre) {
+					$pre['Zona'] = $omodelo->link->real_escape_string($pre['Zona']); 
+					$pre['Presentacion'] = $omodelo->link->real_escape_string($pre['Presentacion']); 
+					$pre['Nombre'] = $omodelo->link->real_escape_string($pre['Nombre']); 
+					$pre['Precio'] = $omodelo->link->real_escape_string($pre['Precio']); 
+					$pre['Precio_Mayoreo'] = $omodelo->link->real_escape_string($pre['Precio_Mayoreo']); 
+
+					$queryPrecio = "INSERT INTO precios SET FK_Producto = '$IDProducto', FK_Zona = '$pre[Zona]', FK_Presentacion = IFNULL((SELECT ID_Presentacion FROM presentaciones WHERE Nombre = '$pre[Presentacion]'), 0), Nombre = '$pre[Nombre]', Precio = '$pre[Precio]', Precio_Mayoreo = '$pre[Precio_Mayoreo]'";
+					$error = $omodelo->_insertar($queryPrecio);	
+
+					if ($error == "si") {
+						echo "Error precio: ".mysqli_error($omodelo->link); 
+					}
+				}
+			}
+
+			$query1 = "DELETE FROM detalles_impuestos_productos WHERE FK_Producto = '$IDProducto'";
+			$error = $omodelo->_insertar($query1);
+	
+			if ($error == "si") {
+				echo "Error 7: ".mysqli_error($omodelo->link);
+			}else{
+				$impuestos = json_decode($impuestos, true);
+				foreach ($impuestos as $im) {
+					$query2 = "INSERT INTO detalles_impuestos_productos SET FK_Producto = '$IDProducto', FK_Impuesto = '$im[ID_Impuesto]'";
+					$error1 = $omodelo->_insertar($query2);
+		
+					if ($error1 == "si") {
+						echo "Error 8: ".mysqli_error($omodelo->link);
+					}
+				}
+			}
+			
 			echo "Correcto";
-			//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
@@ -442,55 +380,34 @@ class productos {
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
+		$tipo =  $omodelo->link->real_escape_string($tipo);
+
 		if ($tipo == "EliminarProducto") {
 			$IDProducto =  $omodelo->link->real_escape_string($IDProducto);
+			
 			$query = "SELECT Imagen FROM productos WHERE ID_Producto = '$IDProducto'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
+
 			if ($row == "si") {
 				echo "Error: " . mysqli_error($omodelo->link);
 			} else {
 				if ($numerofilas > 0) {
-					if ($row[0]["Imagen"] !="" && file_exists("vistas/assets/archivos/fotosProductos/".$row[0]["Imagen"]."")) {
-						unlink("vistas/assets/archivos/fotosProductos/".$row[0]["Imagen"]."");
-					}
-					$query = "DELETE FROM productos WHERE ID_Producto='$IDProducto'";
-					$error = $omodelo->_insertar($query);
+					$query1 = "DELETE FROM productos WHERE ID_Producto='$IDProducto'";
+					$error = $omodelo->_insertar($query1);
+
 					if ($error == "si") {
 						echo "Error 1: " . mysqli_error($omodelo->link);
 					} else {
-						$query = "DELETE FROM detalles_productos WHERE FK_Producto='$IDProducto'";
-						$error = $omodelo->_insertar($query);
-						if ($error == "si") {
-							echo "Error 1: " . mysqli_error($omodelo->link);
-						} else {
-							echo "Correcto";
-							//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+						echo "Correcto";
+
+						if ($row[0]["Imagen"] !="" && file_exists("vistas/assets/archivos/fotosProductos/".$row[0]["Imagen"]."")) {
+							unlink("vistas/assets/archivos/fotosProductos/".$row[0]["Imagen"]."");
 						}
+
+						$omodelo->movimiento($query1, $_SESSION['user_admin']['ID_Usuario']);
 					}
 				}
-			}
-		}else if($tipo == "EliminarPresentacion"){
-			$IDPresentacion =  $omodelo->link->real_escape_string($IDPresentacion);
-
-			$query = "DELETE FROM presentaciones WHERE ID_Presentacion='$IDPresentacion'";
-			$error = $omodelo->_insertar($query);
-			if ($error == "si") {
-				echo "Error 1: " . mysqli_error($omodelo->link);
-			} else {
-				echo "Correcto";
-				//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
-			}
-		}else if($tipo == "EliminarPrecio"){
-			$IDPrecio =  $omodelo->link->real_escape_string($IDPrecio);
-
-			$query = "DELETE FROM precios WHERE ID_Precio = '$IDPrecio'";
-			$error = $omodelo->_insertar($query);
-			if ($error == "si") {
-				echo "Error 1: " . mysqli_error($omodelo->link);
-			} else {
-				echo "Correcto";
-				//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
 			}
 		}
 	}
@@ -499,6 +416,9 @@ class productos {
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
+		$tipo =  $omodelo->link->real_escape_string($tipo);
+		$arreglo = array();
+
 		if($tipo == 'modificarProducto'){
 			$IDProducto =  $omodelo->link->real_escape_string($IDProducto);
 
@@ -507,370 +427,273 @@ class productos {
 			$numerofilas = $omodelo->numerofilas;
 
 			if($row == 'si'){
-				echo "Error: ".mysqli_error($omodelo->link);
+				echo "Error 1: ".mysqli_error($omodelo->link);
 			}else{
 				if($numerofilas > 0){
-					$subarreglo = null; $subarreglo2 = null;
-					$queryPrecios = "SELECT ID_Precio, precios.FK_Producto, FK_Zona, presentaciones.Nombre AS NombrePresentacion, precios.Nombre, Precio, Precio_Mayoreo FROM precios LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE precios.FK_Producto = '".$row[0]['ID_Producto']."'";
-					$rowPrecios = $omodelo->_consultar($queryPrecios);
-					$numerofilasPrecios = $omodelo->numerofilas;
-					for ($x=0; $x < $numerofilasPrecios; $x++) { 
-
-						$queryZona = "SELECT ID_Zona, Nombre FROM zonas";
-						$rowZona = $omodelo->_consultar($queryZona);
-						$numerofilasZona = $omodelo->numerofilas;
-						$opciones = "";
-
-						if ($rowZona == "si") {
-							echo "Error: " . mysqli_error($omodelo->link);
-						} else {
-							if ($numerofilasZona > 0) {
-								for ($z = 0; $z < $numerofilasZona; $z++) {
-									if ($rowPrecios[$x]["FK_Zona"] == $rowZona[$z]['ID_Zona']) {
-										$opciones .= '<option value="' . $rowZona[$z]['ID_Zona'] . '" selected>' . $rowZona[$z]['Nombre']. '</option>';
-									}else{
-										$opciones .= '<option value="' . $rowZona[$z]['ID_Zona'] . '" >' . $rowZona[$z]['Nombre']. '</option>';
-									}
-									
-								}
-							}
-						}
-
-						$subarreglo[$x] = array(
-							'ID_Precio' => $rowPrecios[$x]["ID_Precio"],
-							'FK_Producto' => $rowPrecios[$x]["FK_Producto"],
-							'Zona' => $opciones,
-							'Presentacion' => $rowPrecios[$x]["NombrePresentacion"],
-							'Nombre' => $rowPrecios[$x]["Nombre"],
-							'Precio' => $rowPrecios[$x]["Precio"],
-							'Precio_Mayoreo' => $rowPrecios[$x]["Precio_Mayoreo"],
-						);
-					}
-
-					$queryPresentacion = "SELECT ID_Presentacion, Nombre, Abreviatura FROM presentaciones WHERE FK_Producto = '".$row[0]['ID_Producto']."'";
+					$presentaciones = null;
+					$queryPresentacion = "SELECT ID_Presentacion, Nombre, Abreviatura, Clave_CFDI FROM presentaciones WHERE FK_Producto = '$IDProducto'";
 					$rowPresentacion = $omodelo->_consultar($queryPresentacion);
 					$numerofilasPresentacion = $omodelo->numerofilas;
-					for ($z=0; $z < $numerofilasPresentacion; $z++) { 
-						$subarreglo2[$z] = array(
-							'ID_Presentacion' => $rowPresentacion[$z]["ID_Presentacion"],
-							'Nombre' => $rowPresentacion[$z]["Nombre"],
-							'Abreviatura' => $rowPresentacion[$z]["Abreviatura"],
-						);
+
+					if($rowPresentacion == 'si'){
+						echo "Error 2: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasPresentacion > 0){
+							for ($z=0; $z < $numerofilasPresentacion; $z++) { 
+								$presentaciones[$z] = array(
+									'ID_Presentacion' => $rowPresentacion[$z]["ID_Presentacion"],
+									'Nombre' => $rowPresentacion[$z]["Nombre"],
+									'Abreviatura' => $rowPresentacion[$z]["Abreviatura"],
+									'Clave_CFDI' => $rowPresentacion[$z]["Clave_CFDI"]
+								);
+							}
+						}
+					}
+
+					$precios = null;
+					$queryPrecio = "SELECT ID_Precio, FK_Zona, zonas.Nombre AS Zona, FK_Presentacion, IFNULL(presentaciones.Nombre, '') AS Presentacion, precios.Nombre AS Nombre, Precio, Precio_Mayoreo FROM precios INNER JOIN zonas ON FK_Zona = ID_Zona LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE precios.FK_Producto = '$IDProducto'";
+					$rowPrecio = $omodelo->_consultar($queryPrecio);
+					$numerofilasPrecios = $omodelo->numerofilas;
+
+					if($rowPrecio == 'si'){
+						echo "Error 3: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasPrecios > 0){
+							for ($z=0; $z < $numerofilasPrecios; $z++) { 
+								$precios[$z] = array(
+									'ID_Precio' => $rowPrecio[$z]["ID_Precio"],
+									'FK_Zona' => $rowPrecio[$z]["FK_Zona"],
+									'Zona' => $rowPrecio[$z]["Zona"],
+									'FK_Presentacion' => $rowPrecio[$z]["FK_Presentacion"],
+									'Presentacion' => $rowPrecio[$z]["Presentacion"],
+									'Nombre' => $rowPrecio[$z]["Nombre"],
+									'Precio' => $rowPrecio[$z]["Precio"],
+									'Precio_Mayoreo' => $rowPrecio[$z]["Precio_Mayoreo"]
+								);
+							}
+						}
+					}
+
+					$impuestos = null;
+					$queryImpuestos = "SELECT ID_Impuesto, Nombre, Porcentaje, Clave_CFDI, Tipo_Factor, Clase FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '$IDProducto'";
+					$rowIm = $omodelo->_consultar($queryImpuestos);
+					$numerofilasIm = $omodelo->numerofilas;
+
+					if($rowIm == 'si'){
+						echo "Error 4: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasIm > 0){
+							for ($z=0; $z < $numerofilasIm; $z++) { 
+								$impuestos[$z] = array(
+									'ID_Impuesto' => $rowIm[$z]['ID_Impuesto'],
+									'Nombre' => $rowIm[$z]['Nombre'],
+									'Porcentaje' => number_format($rowIm[$z]['Porcentaje'], 2).'%',
+									'Clave' => $rowIm[$z]['Clave_CFDI'],
+									'Tipo' => $rowIm[$z]['Tipo_Factor'],
+									'Clase' => $rowIm[$z]['Clase']	
+								);
+							}
+						}
 					}
 
 					$arreglo = array(
-							'ID_Producto' => $row[0]['ID_Producto'],
-							'Codigo' => $row[0]["Codigo"],
-							'Descripcion' => $row[0]["Descripcion"],
-							'FK_Categoria' => $row[0]["FK_Categoria"],
-							'Clase' => $row[0]["Clase"],
-							'Costo' => $row[0]["Costo"],
-							'Precio' => $row[0]["Precio"],
-							'Precio_Mayoreo' => $row[0]["Precio_Mayoreo"],
-							'FK_Area' => $row[0]["FK_Area"],
-							'Detalles' => $row[0]["Detalles"],
-							'Minimo' => $row[0]["Minimo"],
-							'Maximo' => $row[0]["Maximo"],
-							'Fecha_Registro' => $row[0]["Fecha_Registro"],
-							'Imagen' => $row[0]["Imagen"],
-							'Extras' => $subarreglo,
-							'Presentaciones' => $subarreglo2
+						'ID_Producto' => $row[0]['ID_Producto'],
+						'Codigo' => $row[0]["Codigo"],
+						'Descripcion' => $row[0]["Descripcion"],
+						'FK_Categoria' => $row[0]["FK_Categoria"],
+						'Clase' => $row[0]["Clase"],
+						'Costo' => $row[0]["Costo"],
+						'Precio' => $row[0]["Precio"],
+						'Precio_Mayoreo' => $row[0]["Precio_Mayoreo"],
+						'FK_Area' => $row[0]["FK_Area"],
+						'Detalles' => $row[0]["Detalles"],
+						'Minimo' => $row[0]["Minimo"],
+						'Maximo' => $row[0]["Maximo"],
+						'Fecha_Registro' => $row[0]["Fecha_Registro"],
+						'Imagen' => $row[0]["Imagen"],
+						'Presentaciones' => $presentaciones,
+						'Precios' => $precios, 
+						'Impuestos' => $impuestos
 					);
-
-					echo json_encode($arreglo);
 				}
 			}
-			/*$query = "SELECT * FROM productos WHERE ID_Producto = '$IDProducto'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
 
-			if($row == 'si'){
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				if($numerofilas > 0){
-					echo json_encode($row[0]);
-				}
-			}*/
-		} else if($tipo == 'detalle'){
-			$IDProducto =  $omodelo->link->real_escape_string($IDProducto);
-			$tabla = '';
-			$query = "SELECT ID_Detalle_Producto, FK_Sucursal, sucursales.Nombre AS NombreSucursal, Costo, Precio, Precio_Mayoreo, Minimo, Maximo FROM detalles_productos INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE FK_Producto = '$IDProducto'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-
-			if($row == 'si'){
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				if($numerofilas > 0){
-					for($i=0; $i<$numerofilas; $i++){
-						$impuestosNombres = '';
-						$sucursal = $row[$i]['FK_Sucursal'];
-						
-						$query2 = "SELECT Nombre FROM impuestos, detalles_impuestos_productos WHERE detalles_impuestos_productos.FK_Producto = '$IDProducto' AND detalles_impuestos_productos.FK_Sucursal = '$sucursal' AND detalles_impuestos_productos.FK_Impuesto = ID_Impuesto";
-						$row2 = $omodelo->_consultar($query2);
-						$numerofilasImpuestos = $omodelo->numerofilas;
-						
-						if ($row2 == "si") {
-							echo "Error: ".mysqli_error($omodelo->link);
-						}else{
-							if($numerofilasImpuestos > 0){
-								for($j=0; $j<$numerofilasImpuestos; $j++){
-
-									$impuestosNombres .= $row2[$j]['Nombre'].', ';
-	
-								}
-							}
-						}
-
-						$impuestosNombre= substr($impuestosNombres, 0, -1);
-
-						$tabla .= ' 
-						<tr>
-						<td>' . $row[$i]['NombreSucursal'] . '</td>
-						<td>' . $row[$i]['Costo'] . '</td>
-						<td>' . $row[$i]['Precio'] . '</td>
-						<td>' . $row[$i]['Precio_Mayoreo'] . '</td>
-						<td>' . $row[$i]['Minimo'] . '</td>
-						<td>' . $row[$i]['Maximo'] . '</td>
-						<td>' . $impuestosNombre . '</td>
-						<td><button class="btn btn-primary btn-sm mb-1" type= "button" id="EditarDetalle" attrid="'.$row[$i]['ID_Detalle_Producto'].'"><i class="fas fa-edit"></i></button> <button class="btn btn-danger btn-sm mb-1" type= "button" id="EliminarDetalle" attrid="'.$row[$i]['ID_Detalle_Producto'].'" ><i class="fas fa-trash"></i></button></td>
-						</tr>';
-					}
-					echo json_encode($tabla);
-				}else {
-					$tabla = 'No se encontraron resultados';
-					echo json_encode($tabla);
-				}
-			}
-		} else if($tipo == 'detalleSucursal'){
-			$IdDetalle =  $omodelo->link->real_escape_string($IdDetalle);
-
-			$query = "SELECT * FROM detalles_productos WHERE ID_Detalle_Producto = '$IdDetalle'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-
-			if($row == 'si'){
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				if($numerofilas > 0){
-					echo json_encode($row[0]);		
-				}
-			}
-		}else if($tipo == 'impuestosSucursalP'){
-			$IdSucursal =  $omodelo->link->real_escape_string($IdSucursal);
-			$IdProducto =  $omodelo->link->real_escape_string($IdProducto);
-			$arreglo = '';
-
-			$query = "SELECT ID_Detalle_Im_Producto, FK_Sucursal, FK_Producto, FK_Impuesto, impuestos.Nombre AS NombreImpuesto FROM detalles_impuestos_productos INNER JOIN impuestos ON ID_Impuesto = FK_Impuesto WHERE FK_Producto = '$IdProducto' AND FK_Sucursal = '$IdSucursal'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-			
-			if($row == 'si'){
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				if($numerofilas > 0){
-					for($i=0; $i<$numerofilas; $i++){
-						$arreglo .= 
-							$row[$i]['FK_Sucursal'].'~'.$row[$i]['FK_Impuesto'].','.$row[$i]['NombreImpuesto'].',';
-					}
-					echo json_encode($arreglo);	
-				}
-			}
-		} else if ($tipo == 'modificar'){
-			$omodelo = new m_modelo();
-			extract($_POST);
-			$fecha = date('Y-m-d H:i:s'); 
-			$IdProducto =  $omodelo->link->real_escape_string($IdProducto);
-			$IdDetalle =  $omodelo->link->real_escape_string($IdDetalle);
-			$Sucursal =  $omodelo->link->real_escape_string($Sucursal);
-			$Costo =  $omodelo->link->real_escape_string($CostoProductoE);
-			$Precio =  $omodelo->link->real_escape_string($PrecioProductoE);
-			$PrecioMayoreo =  $omodelo->link->real_escape_string($PrecioMayoreoE);
-			$Minimo =  $omodelo->link->real_escape_string($MinimoE);
-			$Maximo =  $omodelo->link->real_escape_string($MaximoE);
-			$impuesto = explode(",", $impuestos);
-
-			$query = "SELECT * FROM detalles_productos WHERE FK_Producto = '$IdProducto' AND FK_Sucursal = '$Sucursal' AND ID_Detalle_Producto != '$IdDetalle'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-
-			if($row == 'si'){
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				if($numerofilas > 0){
-					echo "Duplicado";
-				}else {
-					$query = "UPDATE detalles_productos SET FK_Sucursal = '$Sucursal', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', Minimo = '$Minimo', Maximo = '$Maximo' WHERE ID_Detalle_Producto = '$IdDetalle'";
-					$row = $omodelo->_insertar($query);
-
-					if ($row == "si") {
-						echo "Error: ".mysqli_error($omodelo->link);
-					}else{
-						$query = "DELETE FROM detalles_impuestos_productos WHERE FK_Producto='$IdProducto' AND FK_Sucursal = '$Sucursal'";
-						$error = $omodelo->_insertar($query);
-							
-						if ($error == "si") {
-							echo "Error: ".mysqli_error($omodelo->link);
-						}else{
-							if(sizeOf($impuesto) > 0){
-								for($j=0; $j<sizeOf($impuesto); $j++){
-									$imp = explode("~", $impuesto[$j]);
-									$query = "INSERT INTO detalles_impuestos_productos SET FK_Producto = '$IdProducto', FK_Sucursal = '$imp[0]', FK_Impuesto = '$imp[1]'";
-									$row = $omodelo->_insertar($query);
-					
-									if ($row == "si") {
-										echo "Error: ".mysqli_error($omodelo->link);
-									}
-								}
-							}
-							echo "Correcto";
-						}
-						//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
-					}
-				}
-			}
-			
-		}else if ($tipo == 'agregar'){
-			$omodelo = new m_modelo();
-			extract($_POST);
-			$fecha = date('Y-m-d H:i:s'); 
-			$IdProducto =  $omodelo->link->real_escape_string($IdProducto);
-			$Sucursal =  $omodelo->link->real_escape_string($Sucursal);
-			$Costo =  $omodelo->link->real_escape_string($CostoProductoE);
-			$Precio =  $omodelo->link->real_escape_string($PrecioProductoE);
-			$PrecioMayoreo =  $omodelo->link->real_escape_string($PrecioMayoreoE);
-			$Minimo =  $omodelo->link->real_escape_string($MinimoE);
-			$Maximo =  $omodelo->link->real_escape_string($MaximoE);
-			$impuesto = explode(",", $impuestos);
-
-			$query = "SELECT * FROM detalles_productos WHERE FK_Producto = '$IdProducto' AND FK_Sucursal = '$Sucursal'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-
-			if($row == 'si'){
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				if($numerofilas > 0){
-					echo "Duplicado";
-				}else {
-					$query = "INSERT INTO detalles_productos SET FK_Producto = '$IdProducto', FK_Sucursal = '$Sucursal', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', Minimo = '$Minimo', Maximo = '$Maximo'";
-					$row = $omodelo->_insertar($query);
-
-					if ($row == "si") {
-						echo "Error: ".mysqli_error($omodelo->link);
-					}else{
-						if(sizeOf($impuesto) > 0){
-							for($j=0; $j<sizeOf($impuesto); $j++){
-								$imp = explode("~", $impuesto[$j]);
-								$query = "INSERT INTO detalles_impuestos_productos SET FK_Producto = '$IdProducto', FK_Sucursal = '$imp[0]', FK_Impuesto = '$imp[1]'";
-								$row = $omodelo->_insertar($query);
-				
-								if ($row == "si") {
-									echo "Error: ".mysqli_error($omodelo->link);
-								}
-							}
-						}
-						echo "Correcto";
-						//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
-					}
-				}
-			}
-		}else if($tipo == 'eliminarPrecio'){
-			$IDPrecio =  $omodelo->link->real_escape_string($IDPrecio);
-
-			$query = "DELETE FROM detalles_productos WHERE ID_Detalle_Producto='$IDPrecio'";
-			$error = $omodelo->_insertar($query);
-				
-			if ($error == "si") {
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				$omodelo->movimiento($query, $_SESSION['user_admin']["ID_Usuario"]);
-				echo "Correcto";
-			}
+			echo json_encode($arreglo);
 		}else if($tipo == 'impuestos'){
-			$impuesto = explode(",", $impuestos); ;
-			$query = "SELECT * FROM impuestos";
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'WHERE ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(Nombre, Porcentaje, Clave_CFDI, Tipo_Factor, Clase) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+
+			$query = "SELECT ID_Impuesto, Nombre, Porcentaje, Clave_CFDI, Tipo_Factor, Clase, (SELECT COUNT(*) FROM impuestos $busqueda) AS Num FROM impuestos $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
-			$tabla = '';
-			$checked = '';
-			if ($row == "si") {
+
+			if($row == 'si'){
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
-				for($i=0; $i<$numerofilas; $i++){
-					if(sizeof($impuesto)>0){
-						for($j=0; $j<sizeof($impuesto); $j++){
-							if($impuesto[$j] == $row[$i]['ID_Impuesto']){
-								$checked = 'checked';
-								break;
-							}else {
-								$checked = '';
-							}
-						}
-					}
-					
-
-					$tabla .='
-
-					<tr>
-
-					<td><input type="checkbox" id="checkImpuesto" name="checkImpuesto" attrid = '. $row[$i]['ID_Impuesto'] .' '.$checked.'></td>
-
-					<td>' . $row[$i]['Nombre'] . '</td>
-
-					<td>' . $row[$i]['Clave_CFDI'] . '</td>
-
-					<td>' . $row[$i]['Porcentaje'] . '%</td>
-
-					</tr>';
-
-				}
-				
-				echo $tabla;
-			}
-		}else if($tipo == 'impuestosSeleccionados'){
-			$Impuestos =  $omodelo->link->real_escape_string($impuestos);
-			$Impuestos = trim($Impuestos, ',');
-			$impuestos = '';
-				
-				$query = "SELECT Nombre FROM impuestos WHERE ID_Impuesto IN ($Impuestos)";
-				$row = $omodelo->_consultar($query);
-				$numerofilas = $omodelo->numerofilas;
-				
-				if ($row == "si") {
-					echo "Error: ".mysqli_error($omodelo->link);
-				}else{
+				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
-						$impuestos .= $row[$i]['Nombre'].', ';
+						$arreglo['data'][$i] = array(
+							'ID' => $row[$i]['ID_Impuesto'],
+							'Nombre' => $row[$i]['Nombre'],
+							'Porcentaje' => number_format($row[$i]['Porcentaje'], 2)."%",
+							'Clave' => $row[$i]['Clave_CFDI'],
+							'Tipo' => $row[$i]['Tipo_Factor'],
+							'Clase' => $row[$i]['Clase'],
+							'Acciones' => '<button type="button" class="btn btn-primary btn-sm bSeleccionarIm" attrID="'.$row[$i]['ID_Impuesto'].'">Seleccionar</button>',
+						);
+						
+					}
+
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+				}
+			}
+
+			echo json_encode($arreglo);
+		}else if($tipo == 'clavesProdServ'){
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'WHERE ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(Clave, Descripcion, Palabras) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
 					}
 				}
-				$imp = substr($impuestos, 0, -1);
-			echo $imp;
-		}else if($tipo  == "ConsultarZonaProducto"){
-			$query = "SELECT ID_Zona, Nombre FROM zonas";
+			}
+
+			$query = "SELECT ID_Clave, Clave, Descripcion, Palabras, (SELECT COUNT(*) FROM claves_productos_cfdi $busqueda) AS Num FROM claves_productos_cfdi $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
-			$opciones = "";
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						$arreglo['data'][$i] = array(
+							'ID' => $row[$i]['ID_Clave'],
+							'Clave' => $row[$i]['Clave'],
+							'Descripcion' => utf8_encode($row[$i]['Descripcion']),
+							'Palabras' => utf8_encode($row[$i]['Palabras']),
+							'Acciones' => '<button type="button" class="btn btn-primary btn-sm bSeleccionarClaveProdServ" attrID="'.$row[$i]['ID_Clave'].'">Seleccionar</button>',
+						);
+						
+					}
+
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+				}
+			}
+
+			echo json_encode($arreglo);
+		}else if($tipo == 'clavesUnidades'){
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'WHERE ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(Clave, Nombre, Simbolo) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+
+			$query = "SELECT ID_Clave, Clave, Nombre, Simbolo, (SELECT COUNT(*) FROM claves_unidades_cfdi $busqueda) AS Num FROM claves_unidades_cfdi $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						$arreglo['data'][$i] = array(
+							'ID' => $row[$i]['ID_Clave'],
+							'Clave' => $row[$i]['Clave'],
+							'Nombre' => utf8_encode($row[$i]['Nombre']),
+							'Simbolo' => utf8_encode($row[$i]['Simbolo']),
+							'Acciones' => '<button type="button" class="btn btn-primary btn-sm bSeleccionarClaveUnidad" attrID="'.$row[$i]['ID_Clave'].'">Seleccionar</button>',
+						);
+						
+					}
+
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+				}
+			}
+
+			echo json_encode($arreglo);
+		}else if($tipo == 'AgregarExistenciaProducto'){
+			$IDProducto = $omodelo->link->real_escape_string($IDProducto);
+			$CantidadExistencia = $omodelo->link->real_escape_string($CantidadExistencia);
+			$PresentacionesProducto = $omodelo->link->real_escape_string($PresentacionesProducto);
+			$SucursalExistencia = $omodelo->link->real_escape_string($SucursalExistencia);
+
+			$query = "SELECT ID_Inventario FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalExistencia' AND FK_Presentacion = '$PresentacionesProducto'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
 
 			if ($row == "si") {
-				echo "Error: " . mysqli_error($omodelo->link);
+				echo "Error 1: " . mysqli_error($omodelo->link);
 			} else {
 				if ($numerofilas > 0) {
-					for ($i = 0; $i < $numerofilas; $i++) {
-						if (isset($IDZona) && $IDZona == $row[$i]['ID_Zona']) {
-							$opciones .= '<option value="' . $row[$i]['ID_Zona'] . '" selected>' . $row[$i]['Nombre']. '</option>';
-						}else{
-							$opciones .= '<option value="' . $row[$i]['ID_Zona'] . '" >' . $row[$i]['Nombre']. '</option>';
-						}
-						
+					$query1 = "UPDATE inventario SET Cantidad = (Cantidad + $CantidadExistencia) WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalExistencia' AND FK_Presentacion = '$PresentacionesProducto'";
+					$error = $omodelo->_insertar($query1);
+					
+					if ($error == "si") {
+						echo "Error 2: ".mysqli_error($omodelo->link);
+					}else{
+						echo "Correcto";
+
+						$omodelo->movimiento($query1, $_SESSION['user_admin']["ID_Usuario"]);
+					}
+				}else{
+					$query1 = "INSERT INTO inventario SET Cantidad = $CantidadExistencia, FK_Producto = '$IDProducto', FK_Sucursal = '$SucursalExistencia', FK_Presentacion = '$PresentacionesProducto'";
+					$error = $omodelo->_insertar($query1);
+					
+					if ($error == "si") {
+						echo "Error 3: ".mysqli_error($omodelo->link);
+					}else{
+						echo "Correcto";
+
+						$omodelo->movimiento($query1, $_SESSION['user_admin']["ID_Usuario"]);
 					}
 				}
-				echo $opciones;
 			}
 		}else if($tipo == "ConsultarPresentacionesExistencia"){
+			$IDProducto = $omodelo->link->real_escape_string($IDProducto);
+
 			$query = "SELECT ID_Presentacion, FK_Producto, Nombre, Abreviatura FROM presentaciones WHERE FK_Producto = '$IDProducto'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
+
 			$opciones = '<option value="">- Seleccione una opción -</option>';
 			if ($row == "si") {
 				echo "Error: " . mysqli_error($omodelo->link);
@@ -880,35 +703,9 @@ class productos {
 						$opciones .= '<option value="'.$row[$i]['ID_Presentacion'].'">' . $row[$i]['Nombre']. '</option>';
 					}
 				}
-				echo $opciones;
 			}
-		}else if($tipo == 'AgregarExistenciaProducto'){
-			$query = "SELECT * FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalExistencia' AND FK_Presentacion = '$PresentacionesProducto'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-			if ($row == "si") {
-				echo "Error: " . mysqli_error($omodelo->link);
-			} else {
-				if ($numerofilas > 0) {
-					$query = "UPDATE inventario SET Cantidad = (Cantidad + $CantidadExistencia) WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalExistencia' AND FK_Presentacion = '$PresentacionesProducto'";
-					$error = $omodelo->_insertar($query);
-					if ($error == "si") {
-						echo "Error: ".mysqli_error($omodelo->link);
-					}else{
-						$omodelo->movimiento($query, $_SESSION['user_admin']["ID_Usuario"]);
-						echo "Correcto";
-					}
-				}else{
-					$query = "INSERT INTO inventario SET Cantidad = $CantidadExistencia, FK_Producto = '$IDProducto', FK_Sucursal = '$SucursalExistencia', FK_Presentacion = '$PresentacionesProducto'";
-					$error = $omodelo->_insertar($query);
-					if ($error == "si") {
-						echo "Error: ".mysqli_error($omodelo->link);
-					}else{
-						$omodelo->movimiento($query, $_SESSION['user_admin']["ID_Usuario"]);
-						echo "Correcto";
-					}
-				}
-			}
+
+			echo $opciones;
 		}
 	}
 }

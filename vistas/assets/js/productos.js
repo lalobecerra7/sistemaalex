@@ -1,9 +1,10 @@
-var detallesProducto = [];
-var cont = 1;
-var impuesto = [];
 function v_productos() {
     
     TablaProductos(); 
+    tablaImpuestosProd();
+    tablaClavesProdServ();
+    tablaClavesUnidades();
+
     $('#FormProductos').validate({
         rules: {
             CodigoBarras: {
@@ -12,18 +13,12 @@ function v_productos() {
             Descripcion: {
                 required: true
             },
-            Area: {
-                required: true
-            },
-            Categoria: {
-                required: true
-            },
             ClaseProducto: {
                 required: true
             },
             PrecioProducto: {
                 required: true
-            },
+            }
         },
         messages: {
             CodigoBarras: {
@@ -37,13 +32,7 @@ function v_productos() {
             },
             PrecioProducto: {
                 required: "El precio del producto es obligatorio"
-            },
-            Area: {
-                required: "El campo de área es obligatorio"
-            },
-            Categoria: {
-                required: "El campo de categoría es obligatorio"
-            },
+            }
         },
         submitHandler: function(form) { 
             if($('#Maximo').val()!= '' && $('#Minimo').val() != '' && $('#Maximo').val() > '0' && $('#Minimo').val() > '0' && $('#Maximo').val()<=$('#Minimo').val()){
@@ -53,32 +42,31 @@ function v_productos() {
                     text: 'El stock máximo debe ser mayor al stock mínimo'
                 });
             }else {
-
-                var productos = '';
-                $("#TablaPreciosProductos tbody tr").each(function(index, el){
-                    if ($(this).find("#ZonaPrecioProducto").val() != "" && $(this).find("#NombrePrecio").val() != "" && $(this).find("#PrecioProducto").val() != "" && $(this).find("#PrecioProducto").val() > 0) {
-                        productos += $(this).find("#ZonaPrecioProducto").val()+"~"+$(this).find("#PresentacionProdSelect").val()+"~"+$(this).find("#NombrePrecio").val()+"~"+$(this).find("#PrecioProducto").val()+"~"+$(this).find("#PrecioProductoMayoreo").val()+",";
-                    }
+                var presentaciones = [];
+                $("#verPresentaciones").children('tr').each(function(index, el){
+                    presentaciones.push({'Clave': $.trim($(this).children('td:eq(0)').text()), 'Nombre': $.trim($(this).children('td:eq(1)').text()), 'Abreviatura': $.trim($(this).children('td:eq(2)').text())});
                 });
 
-                var presentaciones = '';
-                $("#TablaPresentacionProducto tbody tr").each(function(index, el){
-                    if ($(this).find("#NombrePresentacion").val() != "") {
-                        presentaciones += $(this).find("#NombrePresentacion").val()+"~"+$(this).find("#AbreviaturaPresentacion").val()+",";
-                    }
+                var precios = [];
+                $("#verPreciosProd").children('tr').each(function(index, el){
+                    precios.push({'Zona': $.trim($(this).children('td:eq(0)').attr('attrID')), 'Presentacion': $.trim($(this).children('td:eq(1)').text()), 'Nombre': $.trim($(this).children('td:eq(2)').text()), 'Precio': $.trim($(this).children('td:eq(3)').text()), 'Precio_Mayoreo': $.trim($(this).children('td:eq(4)').text())});
                 });
 
+                var impuestos = [];
+                if($("#verImpuetsosProd").children('tr').length > 0){
+                    $("#verImpuetsosProd").children('tr').each(function(index, el) {
+                        impuestos.push({'ID_Impuesto': $(this).attr('attrID')});
+                    });
+                }
 
                 var data = new FormData(document.getElementById('FormProductos'));
                 data.append('metodo', $('#GuardarProducto').attr('tipo'));
                 data.append('accion', 'productos');
                 data.append('IDProducto', $('#GuardarProducto').attr('attrid'));
-                data.append('detalleProducto', detallesProducto);
-                data.append('impuestos', impuesto);
-                data.append('productos', productos);
-                data.append('presentaciones', presentaciones);
-
-                var btn = $('#GuardarProducto');
+                data.append('presentaciones', JSON.stringify(presentaciones));
+                data.append('precios', JSON.stringify(precios));
+                data.append('impuestos', JSON.stringify(impuestos));
+                
                 $.ajax({
                     url: 'index.php',
                     type: 'POST',
@@ -100,6 +88,7 @@ function v_productos() {
                             icon: 'success',
                             title: 'Producto '+tipoAlerta+' correctamente'
                         });
+
                         TablaProductos(); 
                         $("#ModalProductos").modal("hide");
                         detallesProducto = [];
@@ -182,6 +171,7 @@ function v_productos() {
                         title: 'Oops...',
                         text: 'Error inesperado al agregar existencia.'
                     });
+
                     console.log($.trim(res));
                 }
             })
@@ -219,111 +209,91 @@ function TablaProductos(){
     });
 }
 
+function tablaImpuestosProd(){
+    ajaxMyDatatable({
+        "table": $("#tablaImpuestosProd"), 
+        "colums": [
+            "Nombre",
+            "Porcentaje",
+            "Clave",
+            "Tipo",
+            "Clase",
+            "Acciones"
+        ],
+        "sort": [
+            0,
+            "desc"
+        ],
+        "url": "index.php", 
+        "params":{
+            "metodo": "detalles",
+            "accion": "productos",
+            "tipo": "impuestos"
+        }
+    });
+}
+
+function tablaClavesProdServ(){
+    ajaxMyDatatable({
+        "table": $("#tablaClavesProdServ"), 
+        "colums": [
+            "Clave",
+            "Descripcion",
+            "Palabras",
+            "Acciones"
+        ],
+        "sort": [
+            0,
+            "asc"
+        ],
+        "url": "index.php", 
+        "params":{
+            "metodo": "detalles",
+            "accion": "productos",
+            "tipo": "clavesProdServ"
+        }
+    });
+}
+
+function tablaClavesUnidades(){
+    ajaxMyDatatable({
+        "table": $("#tablaClavesUnidades"), 
+        "colums": [
+            "Clave",
+            "Nombre",
+            "Simbolo",
+            "Acciones"
+        ],
+        "sort": [
+            0,
+            "asc"
+        ],
+        "url": "index.php", 
+        "params":{
+            "metodo": "detalles",
+            "accion": "productos",
+            "tipo": "clavesUnidades"
+        }
+    });
+}
+
 jQuery(document).ready(function($) {
 
     $(document).on('click', '#botonNuevoProductos', function() {
         $("#GuardarProducto").attr('tipo', "insertar");
         $("#GuardarProducto").attr('attrid', "");
-        $("#TablaPreciosProductos tbody").html("");
+        document.getElementById('formPreciosProd').reset();
+        $("#verPreciosProd").html("");
         $("#FormProductos").trigger('reset');
         $("#TituloModalProductos").text("Agregar nuevo");
-        $('#tbodyDetallesProducto').html('');
-        $("#TablaPresentacionProducto tbody").html("");
+        document.getElementById('formPresentaciones').reset();
+        $("#verPresentaciones").html("");
+        $("#verImpuetsosProd").html("");
         $('#verImagenProducto').html('<img src="vistas/assets/archivos/fotosProductos/default.jpg" style="width: 250px; height: 170px; cursor:pointer;border-radius:4px;border:2px solid grey;" class="img-thumbnail"><br>');
-        $('#PreciosSucursal').show();
         JsBarcode("#CodigoB", "CODIGO");
-        impuesto = [];
     });
 
-    $(document).on('click', '#AgregarPrecioProducto', function() {
-        var opcionesSelect = "";
-        $("#TablaPresentacionProducto tbody tr").each(function(index, el){
-            if ($(this).find("#NombrePresentacion").val() != "") {
-                //presentaciones += $(this).find("#NombrePresentacion").val()+"~"+$(this).find("#AbreviaturaPresentacion").val()+",";
-                opcionesSelect += '<option value="'+$(this).find("#NombrePresentacion").val()+'">'+$(this).find("#NombrePresentacion").val()+'</option>';
-            }
-        });
-
-        var zonas = '';
-        var data = "metodo=detalles&accion=productos&tipo=ConsultarZonaProducto";
-        $.ajax({
-            url: 'index.php',
-            type: 'POST',
-            data: data
-        })
-        .done(function(res) {
-            var tabla = `\
-            <tr>
-                <td>
-                    <select class="form-select SelectProductosZona" name="ZonaPrecioProducto" id="ZonaPrecioProducto" >
-                        `+res+`
-                    </select>
-                </td>
-                <td>
-                    <select class="form-select SelectPresentacionProd" name="PresentacionProdSelect" id="PresentacionProdSelect" >
-                        <option value="">Seleccione una opción</option>
-                        `+opcionesSelect+`   
-                    </select>
-                </td>
-                <td>
-                    <input type="text" class="form-control" id="NombrePrecio" name="NombrePrecio" placeholder="Ingresa el nombre del precio del producto">
-                </td>
-                <td>
-                    <input type="number" class="form-control" id="PrecioProducto" name="PrecioProducto" min="0" placeholder="$0.00">
-                </td>
-                <td>
-                    <input type="number" class="form-control" id="PrecioProductoMayoreo" name="PrecioProductoMayoreo" min="0" placeholder="$0.00">
-                </td>
-                <td><button type="button" class="btn btn-sm btn-danger" id="EliminarPrecio" attrid nombre><i class="fas fa-trash"></i></button></td>
-            </tr>`;
-            $("#TablaPreciosProductos tbody").append(tabla);
-        })
-        .fail(function() {
-            console.log("Error ajax");
-        }); 
-    });
-
-    $(document).on('click', '#AgregarPresentacionProducto', function() {
-        /*var UltimoNombre = $("#TablaPresentacionProducto tbody").find("tr:eq(0)").html();
-        console.log(UltimoNombre);*/
-        var tabla = `\
-            <tr>
-                <td>
-                    <input type="text" class="form-control" id="NombrePresentacion" name="NombrePresentacion" placeholder="Ingresa el nombre de la presentación">
-                </td>
-                <td>
-                    <input type="text" class="form-control" id="AbreviaturaPresentacion" name="AbreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación">
-                </td>
-                <td><button  type="button" class="btn btn-sm btn-danger" id="EliminarPresentacionProducto" attrid nombre><i class="fas fa-trash"></i></button></td>
-            </tr>`;
-        $("#TablaPresentacionProducto tbody").append(tabla);
-    });
-
-
-    /*$(document).on('click', '#AgregarExistenciaProducto', function() {
-        if ($("#TablaPresentacionProducto tbody tr").length > 0) {
-            /*var tabla = `\
-                <tr>
-                    <td>
-                        <input type="text" class="form-control" id="NombrePresentacion" name="NombrePresentacion" placeholder="Ingresa el nombre de la presentación">
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" id="AbreviaturaPresentacion" name="AbreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación">
-                    </td>
-                    <td><button class="btn btn-sm btn-danger" id="EliminarPresentacionProducto"><i class="fas fa-trash"></i></button></td>
-                </tr>`;
-            $("#TablaPresentacionProducto tbody").append(tabla);
-            console.log("entro");
-        }else{
-            Swal.fire({
-                icon: 'warning',
-                title: 'Oops...',
-                text: 'Tienes que ingresar al menos una presentación.'
-            });
-        }
-    });*/
-
-    $(document).on('click', '#EliminarProducto', function() {
+    $(document).on('click', '.EliminarProducto', function() {
         var boton = $(this);
         var id = $(this).attr("attrid");
         var nombre = $(this).attr("descripcion");
@@ -368,163 +338,93 @@ jQuery(document).ready(function($) {
         });
     });
 
-    $(document).on('click', '#EliminarDetalle', function() {
-        var boton = $(this);
-        var id = $(this).attr("attrid");
-        console.log(id);
-        Swal.fire({
-          title: '¿Estás a punto de eliminar el precio de esta sucursal?',
-          text: "Una vez eliminado ya no podrá ser recuperado",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          cancelButtonText: 'No, cancelar',
-          confirmButtonText: 'Si, eliminar'
-        }).then((result) => {
-          if (result.value) {
-            var data = "metodo=detalles&accion=productos&tipo=eliminarPrecio&IDPrecio="+id;
-            $.ajax({
-                url: 'index.php',
-                type: 'POST',
-                data: data
-            })
-            .done(function(res) {
-                console.log(res);
-                if ($.trim(res) == "Correcto") {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Precio eliminado correctamente'
-                    });
-                    var id = $('#PSucursal').attr('idProducto');
-                    var data = "metodo=detalles&accion=productos&tipo=detalle&IDProducto="+id;
-                        $.ajax({
-                            url: 'index.php',
-                            type: 'POST',
-                            data: data
-                        })
-                        .done(function(res) {
-                            console.log(res);
-                            var datos = JSON.parse($.trim(res));
-                            $('#tbodyPreciosSucursal').html(datos);
-                        })
-                        .fail(function() {
-                            console.log("Error ajax");
-                        });
-                }else{
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Error inesperado al eliminar el precio.'
-                    });
-                }
-            })
-            .fail(function() {
-                console.log("Error ajax");
-            });  
-          }
-        });
-    });
-
-    $(document).on('click', '#ModificarProducto', function() {
+    $(document).on('click', '.ModificarProducto', function() {
         var id = $(this).attr('attrid');
-        $("#TablaPreciosProductos tbody").html("");
-        $("#TablaPresentacionProducto tbody").html("");
+        $("#verPresentaciones").html("");
+        $("#verPreciosProd").html("");
+        $("#verImpuetsosProd").html("");
+        $("#GuardarProducto").attr('tipo', 'modificar');
+        $("#GuardarProducto").attr('attrid', id);
+        $("#TituloModalProductos").text("Modificar");
+        $("#presentacionProdSelect").html('<option value="">--Seleccione una opción--</option>');
+
         var data = "metodo=detalles&accion=productos&tipo=modificarProducto&IDProducto="+id;
+        
         $.ajax({
             url: 'index.php',
             type: 'POST',
             data: data
         })
         .done(function(res) {
-            $("#GuardarProducto").attr('tipo', 'modificar');
-            $("#GuardarProducto").attr('attrid', id);
-            $("#TituloModalProductos").text("Modificar");
+            //console.log($.trim(res));
             var datos = JSON.parse($.trim(res));
+
             $("#CodigoBarras").val(datos.Codigo);
             $("#Descripcion").val(datos.Descripcion);
             $("#ClaseProducto").val(datos.Clase);
+            if(datos.FK_Categoria == '0'){
+                datos.FK_Categoria = '';
+            }
             $("#Categoria").val(datos.FK_Categoria);
             $("#CostoProducto").val(datos.Costo);
             $("#PrecioProducto").val(datos.Precio);
             $("#PrecioMayoreo").val(datos.Precio_Mayoreo);
+            if(datos.FK_Area == '0'){
+                datos.FK_Area = '';
+            }
             $("#Area").val(datos.FK_Area);
             $("#Minimo").val(datos.Minimo);
             $("#Maximo").val(datos.Maximo);
             $("#DetallesProducto").val(datos.Detalles);
+            
             $('#verImagenProducto').html('<img src="vistas/assets/archivos/fotosProductos/' + datos.Imagen + '" width: 250px; height: 170px; cursor:pointer;border-radius:4px;border:2px solid grey;" class="img-thumbnail"><br>');
+            
             $('img').each(function(){
                 if($(this)[0].naturalHeight == 0){
-                $(this).attr('src','vistas/assets/archivos/fotosProductos/default.jpg');
+                    $(this).attr('src','vistas/assets/archivos/fotosProductos/default.jpg');
                 }
             });
+           
             $("#CodigoBarras").trigger('keyup');
-            if (datos.Presentaciones != null && datos.Presentaciones.length > 0) {
-                for (var i = 0; i < datos.Presentaciones.length; i++) {
-                    var Abreviatura = datos.Presentaciones[i].Abreviatura;
-                    var Nombre = datos.Presentaciones[i].Nombre;
+           
+            if(datos.Presentaciones != null){
+                datos.Presentaciones.forEach(presentacion => {
+                    $("#verPresentaciones").append(`<tr attrID="`+presentacion.Nombre+`">
+                        <td>`+presentacion.Clave_CFDI+`</td>
+                        <td>`+presentacion.Nombre+`</td>
+                        <td>`+presentacion.Abreviatura+`</td>
+                        <td><button type="button" class="btn btn-danger btn-sm bQuitarPresenta"><i class="fas fa-trash"></i></button></td>
+                    </tr>`);
 
-                    var tabla = `\
-                        <tr>
-                            <td>
-                                <input type="text" class="form-control" value="`+Nombre+`" id="NombrePresentacion" name="NombrePresentacion" placeholder="Ingresa el nombre de la presentación">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" value="`+Abreviatura+`" id="AbreviaturaPresentacion" name="AbreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación">
-                            </td>
-                            <td><button type="button" class="btn btn-sm btn-danger" id="EliminarPresentacionProducto" nombre="`+Nombre+`" attrid="`+datos.Presentaciones[i].ID_Presentacion+`"><i class="fas fa-trash"></i></button></td>
-                        </tr>`;
-                    $("#TablaPresentacionProducto tbody").append(tabla);
-                }
-            }    
+                    $("#presentacionProdSelect").append('<option value="'+presentacion.Nombre+'">'+presentacion.Nombre+'</option>');
+                });
+            }
 
-            setTimeout(function(){ 
-                if (datos.Extras != null && datos.Extras.length > 0) {
-                    for (var i = 0; i < datos.Extras.length; i++) {
-                        var Zona = datos.Extras[i].Zona;
-                        var Presentacion = datos.Extras[i].Presentacion;
-                        var Nombre = datos.Extras[i].Nombre;
-                        var Precio = datos.Extras[i].Precio;
-                        var Precio_Mayoreo = datos.Extras[i].Precio_Mayoreo;
-
-                         var opcionesSelect = "";
-                        $("#TablaPresentacionProducto tbody tr").each(function(index, el){
-                            if ($(this).find("#NombrePresentacion").val() != "") {
-                                if ($(this).find("#NombrePresentacion").val() == Presentacion) {
-                                    opcionesSelect += '<option value="'+$(this).find("#NombrePresentacion").val()+'" selected>'+$(this).find("#NombrePresentacion").val()+'</option>';        
-                                }else{
-                                    opcionesSelect += '<option value="'+$(this).find("#NombrePresentacion").val()+'">'+$(this).find("#NombrePresentacion").val()+'</option>';
-                                }
-                            }
-                        });
-
-                        var tabla = `\
-                            <tr>
-                                <td>
-                                    <select class="form-select SelectProductosZona" name="ZonaPrecioProducto" id="ZonaPrecioProducto" >
-                                        `+Zona+`
-                                    </select>
-                                </td>
-                                <td>
-                                    <select class="form-select SelectPresentacionProd" name="PresentacionProdSelect" id="PresentacionProdSelect" disabled>
-                                        `+opcionesSelect+`   
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" value="`+Nombre+`" id="NombrePrecio" name="NombrePrecio" placeholder="Ingresa el nombre del precio del producto">
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control" value="`+Precio+`" id="PrecioProducto" name="PrecioProducto" min="0" placeholder="$0.00">
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control" value="`+Precio_Mayoreo+`" id="PrecioProductoMayoreo" name="PrecioProductoMayoreo" min="0" placeholder="$0.00">
-                                </td>
-                                <td><button  type="button" class="btn btn-sm btn-danger" id="EliminarPrecio" attrid="`+datos.Extras[i].ID_Precio+`" nombre="`+Nombre+`"><i class="fas fa-trash"></i></button></td>
-                            </tr>`;
-                        $("#TablaPreciosProductos tbody").append(tabla);
-                    }
-                }
-            }, 1000);
+            if(datos.Precios != null){
+                datos.Precios.forEach(precio => {
+                    $("#verPreciosProd").append(`<tr>
+                        <td attrID="`+precio.FK_Zona+`">`+precio.Zona+`</td>
+                        <td attrID="`+precio.FK_Presentacion+`">`+precio.Presentacion+`</td>
+                        <td>`+precio.Nombre+`</td>
+                        <td>`+precio.Precio+`</td>
+                        <td>`+precio.Precio_Mayoreo+`</td>
+                        <td><button type="button" class="btn btn-danger btn-sm bQuitarPrecio"><i class="fas fa-trash"></i></button></td>
+                    </tr>`);
+                });
+            }
+            
+            if(datos.Impuestos != null){
+                datos.Impuestos.forEach(impuesto => {
+                    $("#verImpuetsosProd").append(`<tr attrID="`+impuesto.ID_Impuesto+`">
+                        <td>`+impuesto.Nombre+`</td>
+                        <td>`+impuesto.Porcentaje+`</td>
+                        <td>`+impuesto.Clave+`</td>
+                        <td>`+impuesto.Tipo+`</td>
+                        <td>`+impuesto.Clase+`</td>
+                        <td><button type="button" class="btn btn-danger btn-sm bQuitarImpu"><i class="fas fa-trash"></i></button></td>
+                    </tr>`);
+                });
+            }
 
             $('#ModalProductos').modal('show');
         })
@@ -533,106 +433,11 @@ jQuery(document).ready(function($) {
         });
     });
 
-    $(document).on('click', '#EliminarPresentacionProducto', function() {
-        if ($(this).attr("attrid") != "" || $(this).attr("attrid") != null) {
-            var boton = $(this);
-            var id = $(this).attr("attrid");
-            var nombre = $(this).attr("nombre");
-            console.log(id);
-            Swal.fire({
-              title: '¿Estás a punto de eliminar la presentación '+nombre+'?',
-              text: "Una vez eliminado ya no podrá ser recuperado",
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              cancelButtonText: 'No, cancelar',
-              confirmButtonText: 'Si, eliminar'
-            }).then((result) => {
-              if (result.value) {
-                var data = "metodo=eliminar&accion=productos&tipo=EliminarPresentacion&IDPresentacion="+id;
-                $.ajax({
-                    url: 'index.php',
-                    type: 'POST',
-                    data: data
-                })
-                .done(function(res) {
-                    console.log(res);
-                    if ($.trim(res) == "Correcto") {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Presentación eliminada correctamente'
-                        });
-                        TablaProductos();
-                        $(boton).parent().parent().remove();
-                    }else{
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Error inesperado al eliminar presentación.'
-                        });
-                    }
-                })
-                .fail(function() {
-                    console.log("Error ajax");
-                });  
-              }
-            });
-        }
-    });
-
-    $(document).on('click', '#EliminarPrecio', function() {
-        if ($(this).attr("attrid") != "" || $(this).attr("attrid") != null) {
-            var boton = $(this);
-            var id = $(this).attr("attrid");
-            var nombre = $(this).attr("nombre");
-            console.log(id);
-            Swal.fire({
-              title: '¿Estás a punto de eliminar el precio '+nombre+'?',
-              text: "Una vez eliminado ya no podrá ser recuperado",
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              cancelButtonText: 'No, cancelar',
-              confirmButtonText: 'Si, eliminar'
-            }).then((result) => {
-              if (result.value) {
-                var data = "metodo=eliminar&accion=productos&tipo=EliminarPrecio&IDPrecio="+id;
-                $.ajax({
-                    url: 'index.php',
-                    type: 'POST',
-                    data: data
-                })
-                .done(function(res) {
-                    console.log(res);
-                    if ($.trim(res) == "Correcto") {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Precio eliminado correctamente'
-                        });
-                        TablaProductos();
-                        $(boton).parent().parent().remove();
-                    }else{
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Error inesperado al eliminar precio.'
-                        });
-                    }
-                })
-                .fail(function() {
-                    console.log("Error ajax");
-                });  
-              }
-            });
-        }
-    });
-
-    $(document).on('click', '#AumentarExistencias', function() {
+    $(document).on('click', '.AumentarExistencias', function() {
         $("#PresentacionesProducto").html("");
         $("#GuardarExistenciaProducto").attr("attrid", "");
         $("#FormExistenciaProducto").trigger("reset");
+
         var id = $(this).attr('attrid');
         var data = "metodo=detalles&accion=productos&tipo=ConsultarPresentacionesExistencia&IDProducto="+id;
         $.ajax({
@@ -658,435 +463,139 @@ jQuery(document).ready(function($) {
         readURL(this, $("#verImagenProducto"));
     });
 
-});
-
-
-
-function readURL(input,ima) {
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-      reader.onload = function (e) {
-        $(ima).html("<img src='"+e.target.result+"' style='width: 250px; height: 170px; cursor:pointer;border-radius:4px;border:2px solid grey;' class='img-thumbnail'><br>");
-      }
-      reader.readAsDataURL(input.files[0]);
-    }
-}
-
-$(document).on('click', '#EliminarFila', function() {
-    $(this).parent().parent().remove();
-    detallesProducto.splice($(this).attr('fila')-1,2);
-    console.log(detallesProducto);
-});
-
-$(document).on('click', '#DetalleProductoSucursal', function () {
-    var sucursal = [];
-    var agregar = 'si';
-    if ($('#Sucursales').val() !='' && $('#PrecioProductoD').val() !=''){
-        console.log(detallesProducto);
-        if (detallesProducto != ''){
-            for (var i=0; i< detallesProducto.length; i++ ){
-                if(detallesProducto[i][0] == $('#Sucursales').val()){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'La sucursal seleccionada ya ha sido agregada, intenta con otra.'
-                    });
-                    agregar = 'no';
-                    break;
-                }else {
-                    agregar = 'si';
-                } 
-                console.log(i);
-            }
-        }
-        if(agregar == 'si'){
-            sucursal.push($('#Sucursales').val(), $('#CostoProductoD').val(), $('#PrecioProductoD').val(), $('#PrecioMayoreoD').val(), $('#MinimoD').val(), $('#MaximoD').val(), $('#ExistenciaProducto').val());
-            detallesProducto.push('~',sucursal);
-            console.log(detallesProducto);
-    
-            $('#tbodyDetallesProducto').append('\
-                <tr>\
-                    <td>' +$('select[name="Sucursales"] option:selected').text()+ '</td>\
-                    <td>' +$('#CostoProductoD').val()+ '</td>\
-                    <td>' +$('#PrecioProductoD').val()+ '</td>\
-                    <td>' +$('#PrecioMayoreoD').val()+ '</td>\
-                    <td>' +$('#MinimoD').val()+ '</td>\
-                    <td>' +$('#MaximoD').val()+ '</td>\
-                    <td>' +$('#impuestosProducto').val()+ '</td>\
-                    <td>' +$('#ExistenciaProducto').val()+ '</td>\
-                    <td><button class="btn btn-danger btn-sm" type="button" id="EliminarFila" fila="'+cont+'" class="borrar" value="Eliminar"><i class="fas fa-trash"></i></button></td>\
-                </tr>'
-            );
-    
-            $('#Sucursales').val('');
-            $('#CostoProductoD').val('');
-            $('#PrecioProductoD').val('');
-            $('#PrecioMayoreoD').val('');
-            $('#MinimoD').val('');
-            $('#MaximoD').val('');
-            $("#ExistenciaProducto").val('');
-            $('#impuestosProducto').val('Impuestos');
-        }
-        }else if($('#Sucursales').val() ==''){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Debes seleccionar una sucursal.'
-            });
-        }else if($('#PrecioProductoD').val() ==''){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Debes ingresar el precio del producto.'
-            });
-        }
-        cont+2;
-});
-
-$(document).on('click', '#PSucursal', function() {
-    console.log('entro');
-    $('#FormPrecios').validate({
-        rules: {
-            Sucursal: {
-                required: true
-            },
-            CostoProductoE: {
-                required: true
-            },
-            PrecioProductoE: {
-                required: true
-            },
-            PrecioMayoreoE: {
-                required: true
-            },
-            MinimoE: {
-                required: true
-            },
-            MaximoE: {
-                required: true
-            },
-        },
-        messages: {
-            Sucursal: {
-                required: "La sucursal es requerida"
-            },
-            CostoProductoE: {
-                required: "El costo del producto es requerido"
-            },
-            PrecioProductoE: {
-                required: "El precio del producto es requerido"
-            },
-            PrecioMayoreoE: {
-                required: "El precio de mayoreo del producto es requerido"
-            },
-            MinimoE: {
-                required: "El stock minimo del producto es requerido"
-            },
-            MaximoE: {
-                required: "El stock maximo del producto es requerido"
-            },
-        },
-        submitHandler: function(form) {
-            if($('#MaximoE').val()<=$('#MinimoE').val()){
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'El stock máximo debe ser mayor al stock mínimo'
-                });
-            }else{
-                var data = "metodo=detalles&accion=productos&tipo="+$('#PSucursal').attr('tipo')+"&IdDetalle=" + $('#PSucursal').attr('attrid') + "&IdProducto=" + $('#PSucursal').attr('idProducto') + "&Sucursal=" + $("#Sucursal").val() + "&CostoProductoE=" + $("#CostoProductoE").val() + "&PrecioProductoE=" + $("#PrecioProductoE").val() + "&PrecioMayoreoE=" + $("#PrecioMayoreoE").val() + "&MinimoE=" + $("#MinimoE").val() + "&MaximoE=" + $("#MaximoE").val()+"&impuestos="+impuesto;
-                console.log(data);
-                $.ajax({
-                    url: 'index.php',
-                    type: 'POST',
-                    data: data,
-                })
-                .done(function(res) {
-                    if ($.trim(res) == "Correcto") {
-                        console.log(res);
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Precio modificado correctamente'
-                        }); 
-                        $("#PSucursal").attr("tipo", 'agregar');
-                        $("#NombreBoton").text("Agregar");
-                        var id = $('#PSucursal').attr('idProducto');
-                        var data = "metodo=detalles&accion=productos&tipo=detalle&IDProducto="+id;
-                        $.ajax({
-                            url: 'index.php',
-                            type: 'POST',
-                            data: data
-                        })
-                        .done(function(res) {
-                            console.log(res);
-                            var datos = JSON.parse($.trim(res));
-                            $('#tbodyPreciosSucursal').html(datos);
-                            $('#Sucursal').val('');
-                            $('#CostoProductoE').val('');
-                            $('#PrecioProductoE').val('');
-                            $('#PrecioMayoreoE').val('');
-                            $('#MinimoE').val('');
-                            $('#MaximoE').val('');
-                            $("#ExistenciaProductoE").val("");
-                            $('#impuestosProductoE').val('Impuestos');
-                            impuesto = [];
-                        })
-                        .fail(function() {
-                            console.log("Error ajax");
-                        });
-                        
-                    } else if ($.trim(res) == "Duplicado"){
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'La sucursal que seleccionaste ya esta registrada, prueba con otra.'
-                        });
-                    }else{
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Error inesperado al modificar precio.'
-                        });
-                        console.log($.trim(res));
-                    }
-                })
-                .fail(function() {
-                    console.log("Error ajax");
-                })
-            }
-        }
+    $(document).on('click', '#bAgregarImpuestoProd', function() {
+        $("#modalImpuestosProducto").modal('show');
     });
-});
 
-$(document).on('click', '#EditarDetalle', function () {
-    var id = $(this).attr('attrid');
-    var data = "metodo=detalles&accion=productos&tipo=detalleSucursal&IdDetalle="+id;
-    $.ajax({
-        url: 'index.php',
-        type: 'POST',
-        data: data
-    })
-    .done(function(res) {
-        console.log(res);
-        var datos = JSON.parse($.trim(res));
-        $("#Sucursal").val(datos.FK_Sucursal);
-        $("#CostoProductoE").val(datos.Costo);
-        $("#PrecioProductoE").val(datos.Precio);
-        $("#PrecioMayoreoE").val(datos.Precio_Mayoreo);
-        $("#MinimoE").val(datos.Minimo);
-        $("#MaximoE").val(datos.Maximo);
-        $("#PSucursal").attr("tipo", 'modificar');
-        $("#PSucursal").attr("attrid", datos.ID_Detalle_Producto);
-        $("#PSucursal").attr("idProducto", datos.FK_Producto);
-        $("#NombreBoton").text("Guardar cambios");
+    $(document).on('click', '.bSeleccionarIm', function() {
+        if($("#verImpuetsosProd").children('tr[attrID='+$(this).attr('attrID')+']').length == 0){
+            var padre = $(this).parent().parent();
+            $("#verImpuetsosProd").append(`<tr attrID="`+$(this).attr('attrID')+`">
+                <td>`+$.trim(padre.children('td:eq(0)').text())+`</td>
+                <td>`+$.trim(padre.children('td:eq(1)').text())+`</td>
+                <td>`+$.trim(padre.children('td:eq(2)').text())+`</td>
+                <td>`+$.trim(padre.children('td:eq(3)').text())+`</td>
+                <td>`+$.trim(padre.children('td:eq(4)').text())+`</td>
+                <td><button type="button" class="btn btn-danger btn-sm bQuitarImpu"><i class="fas fa-trash"></i></button></td>
+            </tr>`);
+        }
 
-        var data = "metodo=detalles&accion=productos&tipo=impuestosSucursalP&IdSucursal="+datos.FK_Sucursal+"&IdProducto="+$('#PSucursal').attr('idproducto');
-        console.log(data);
-        $.ajax({
-            url: 'index.php',
-            type: 'POST',
-            data: data
-        })
-        .done(function(res) {
-            console.log($.trim(res));
-            var nombres = '';
-            if($.trim(res) != ''){
-                var dato = JSON.parse($.trim(res));
-                console.log(dato);
-                var separa = dato.split(',');
-                console.log(separa);
-                for(var i=0; i<separa.length; i++){
-                    impuesto.push(separa[i]);
-                    nombres += separa[i+1]+', ';
-                    i++;
-                }
-                console.log(impuesto);
-                console.log(nombres);
-                var nom = nombres.substring(0, nombres.length - 12);
-                console.log(nom);
-                impuesto.pop();
-                console.log(impuesto);
-                $('#impuestosProductoE').val(nom);
-            }else {
-                $('#impuestosProductoE').val('Impuestos');
-            }
-            
-        })
-        .fail(function() {
-            console.log("Error ajax");
-        });
-
-    })
-    .fail(function() {
-        console.log("Error ajax");
+        $("#modalImpuestosProducto").modal('hide');
     });
-});
 
-$(document).on('click', '#EditarPrecios', function () {
-    $('#TituloModalPrecios').text($(this).attr('descripcion'));
-    var id = $(this).attr('attrid');
-    var data = "metodo=detalles&accion=productos&tipo=detalle&IDProducto="+id;
-    $.ajax({
-        url: 'index.php',
-        type: 'POST',
-        data: data
-    })
-    .done(function(res) {
-        console.log(res);
-        var datos = JSON.parse($.trim(res));
-        $('#Sucursal').val('');
-        $('#CostoProductoE').val('');
-        $('#PrecioProductoE').val('');
-        $('#PrecioMayoreoE').val('');
-        $('#MinimoE').val('');
-        $('#MaximoE').val('');
-        impuesto = [];
-        $('#tbodyPreciosSucursal').html(datos);
-        $('#ModalPreciosSucursal').modal('show');
-        $("#NombreBoton").text("Agregar");
-        $("#PSucursal").attr("idProducto", id);
-        $('#impuestosProductoE').val('Impuestos');
-       
-    })
-    .fail(function() {
-        console.log("Error ajax");
+    $(document).on('click', '.bQuitarImpu', function() {
+        $(this).parent().parent().remove();
     });
-});
 
-$(document).on('keyup', '#CodigoBarras', function() {
-    JsBarcode("#CodigoB", $(this).val());
-});
-
-$(document).on('click', '#botonimpuestosProducto', function() {
-    var imp = '';
-    if(impuesto.length>0){
-        for(var i=0; i<impuesto.length; i++){
-             var separa = impuesto[i].split("~");
-             console.log(separa);
-             if ($('#Sucursales').val() != ''){
-                if (separa[0] == $('#Sucursales').val()){
-                    imp += separa[1]+',';
-                }
-             }else if ($('#Sucursal').val() != ''){
-                if (separa[0] == $('#Sucursal').val()){
-                    imp += separa[1]+',';
-                }
-             }
-            
+    function readURL(input,ima) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            $(ima).html("<img src='"+e.target.result+"' style='width: 250px; height: 170px; cursor:pointer;border-radius:4px;border:2px solid grey;' class='img-thumbnail'><br>");
+          }
+          reader.readAsDataURL(input.files[0]);
         }
     }
-    var data = "metodo=detalles&accion=productos&tipo=impuestos&impuestos="+imp;
-    $.ajax({
-        url: 'index.php',
-        type: 'POST',
-        data: data
-    })
-    .done(function(res) {
-            console.log(res);
-            $('#tbodyImpuestosProducto').html($.trim(res));
-            $('#ModalImpuestosProducto').modal('show');
 
-    })
-    .fail(function() {
-        console.log("Error ajax");
+    $(document).on('keyup', '#CodigoBarras', function() {
+        JsBarcode("#CodigoB", $(this).val());
     });
-});
 
-$(document).on('change', '#checkImpuesto', function() {
-    if (impuesto != ''){
-        if($(this).prop("checked")){
-            if($('#Sucursales').val() != ''){
-                impuesto.push($('#Sucursales').val()+'~'+$(this).attr('attrid'));
-            }else{
-                impuesto.push($('#Sucursal').val()+'~'+$(this).attr('attrid'));
+    $(document).on('click', '#bBuscarClaveProd', function() {
+        $("#modalClavesProdServ").modal('show');
+    });
+
+    var tipoClaveU = 'prod';
+    $(document).on('click', '#bBuscarUnidadProd', function() {
+        tipoClaveU = 'prod';
+        $("#modalClavesUnidades").modal('show');
+    });
+
+    $(document).on('click', '#bBuscarUnidadPres', function() {
+        tipoClaveU = 'pres';
+        $("#modalClavesUnidades").modal('show');
+    });
+
+    $(document).on('click', '.bSeleccionarClaveProdServ', function() {
+        $("#claveProdServ").val($.trim($(this).parent().parent().children('td:eq(0)').text()));        
+
+        $("#modalClavesProdServ").modal('hide');
+    });
+
+    $(document).on('click', '.bSeleccionarClaveUnidad', function() {
+        var padre = $(this).parent().parent();
+        if(tipoClaveU == 'prod'){
+            $("#claveUnidadProd").val($.trim(padre.children('td:eq(0)').text()));
+
+            if($.trim($("#unidadProd").val()) == ""){
+                $("#unidadProd").val($.trim(padre.children('td:eq(1)').text()));
             }
-            console.log(impuesto);
-        }else {
-            for (var i=0; i< impuesto.length; i++ ){
-                if($('#Sucursales').val() != ''){
-                    if(impuesto[i] == ($('#Sucursales').val()+'~'+$(this).attr('attrid'))){
-                        impuesto.splice(i,1);
-                        console.log(impuesto);
-                    }
-                }else{
-                    if(impuesto[i] == ($('#Sucursal').val()+'~'+$(this).attr('attrid'))){
-                        impuesto.splice(i,1);
-                        console.log(impuesto);
-                    }
-                }
+            if($.trim($("#abreUnudadProd").val()) == ""){
+                $("#abreUnudadProd").val($.trim(padre.children('td:eq(2)').text()));
             }
-        }
-    }else{
-        if($('#Sucursales').val() != ''){
-            impuesto.push($('#Sucursales').val()+'~'+$(this).attr('attrid'));
         }else{
-            impuesto.push($('#Sucursal').val()+'~'+$(this).attr('attrid'));
-        }
-        console.log(impuesto);
-    }
-});
+            $("#unidadPresentacion").val($.trim(padre.children('td:eq(0)').text()));
 
-$(document).on('change', '#Sucursal', function() {
-    if (impuesto != ''){
-        var imp = '';
-        var imp2 = [];
-        var suc = $(this).val();;
-        for(var i=0; i<impuesto.length; i++){
-            imp = impuesto[i].split('~');
-            imp2.push(imp[1]);
-        }
-        impuesto=[];
-        for(var j=0; j<imp2.length; j++){ 
-            impuesto.push(suc+'~'+imp2[j]);
-        }
-        
-    }
-});
-
-$(document).on('click', '#GuardarImpuestos', function() {
-        var imp = '';
-        if(impuesto.length>0){
-            for(var i=0; i<impuesto.length; i++){
-                var separa = impuesto[i].split("~");
-                console.log(separa);
-                if($('#Sucursales').val() != ''){
-                    if (separa[0] == $('#Sucursales').val()){
-                        imp += separa[1]+',';
-                    }
-                }else {
-                    if (separa[0] == $('#Sucursal').val()){
-                        imp += separa[1]+',';
-                    }
-                }
-                
+            if($.trim($("#nombrePresentacion").val()) == ""){
+                $("#nombrePresentacion").val($.trim(padre.children('td:eq(1)').text()));
+            }
+            if($.trim($("#abreviaturaPresentacion").val()) == ""){
+                $("#abreviaturaPresentacion").val($.trim(padre.children('td:eq(2)').text()));
             }
         }
-        if(imp != ''){
-            var data = "metodo=detalles&accion=productos&tipo=impuestosSeleccionados&impuestos="+imp;
-            $.ajax({
-                url: 'index.php',
-                type: 'POST',
-                data: data
-            })
-            .done(function(res) {
-                    console.log(res);
-                    if($('#Sucursales').val() != ''){
-                        $('#impuestosProducto').val($.trim(res));
-                    }else{
-                        $('#impuestosProductoE').val($.trim(res));
-                    }
-                    $('#ModalImpuestosProducto').modal('hide');
-            })
-            .fail(function() {
-                console.log("Error ajax");
-            });
+
+        $("#modalClavesUnidades").modal('hide');
+    });
+
+    $(document).on('click', '#bAgergarPresentacion', function() {
+        $("#bGuardarPres").trigger('click');
+    });
+
+    $(document).on('submit', '#formPresentaciones', function(event) {
+        event.preventDefault();
+        if($("#verPresentaciones").children('tr[attrID='+$.trim($("#nombrePresentacion").val())+']').length == 0){
+            $("#verPresentaciones").append(`<tr attrID="`+$.trim($("#nombrePresentacion").val())+`">
+                <td>`+$.trim($("#unidadPresentacion").val())+`</td>
+                <td>`+$.trim($("#nombrePresentacion").val())+`</td>
+                <td>`+$.trim($("#abreviaturaPresentacion").val())+`</td>
+                <td><button type="button" class="btn btn-danger btn-sm bQuitarPresenta"><i class="fas fa-trash"></i></button></td>
+            </tr>`);
+
+            $("#presentacionProdSelect").append('<option value="'+$.trim($("#nombrePresentacion").val())+'">'+$.trim($("#nombrePresentacion").val())+'</option>');
+
+            document.getElementById('formPresentaciones').reset();
         }else{
-            if($('#Sucursales').val() != ''){
-                $('#impuestosProducto').val('Impuestos');
-            }else{
-                $('#impuestosProductoE').val('Impuestos');
-            }
-            $('#ModalImpuestosProducto').modal('hide');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'La presentación ya existe, por favor utiliza otra.'
+            });
         }
-        
+    });
+
+    $(document).on('click', '.bQuitarPresenta', function() {
+        $(this).parent().parent().remove();
+    });
+
+    $(document).on('click', '#bAgergarPrecio', function() {
+        $("#bGuardarPrecio").trigger('click');
+    });
+
+    $(document).on('submit', '#formPreciosProd', function(event) {
+        event.preventDefault();
+        $("#verPreciosProd").append(`<tr>
+            <td attrID="`+$.trim($("#zonaPrecioProducto").val())+`">`+$.trim($('#zonaPrecioProducto option:selected').text())+`</td>
+            <td attrID="`+$.trim($("#presentacionProdSelect").val())+`">`+$.trim($('#presentacionProdSelect').val())+`</td>
+            <td>`+$.trim($("#nombrePrecio").val())+`</td>
+            <td>`+$.trim($("#precioProductoPres").val())+`</td>
+            <td>`+$.trim($("#precioProductoMayoreoPres").val())+`</td>
+            <td><button type="button" class="btn btn-danger btn-sm bQuitarPrecio"><i class="fas fa-trash"></i></button></td>
+        </tr>`);
+
+        document.getElementById('formPreciosProd').reset();
+    });
+
+    $(document).on('click', '.bQuitarPrecio', function() {
+        $(this).parent().parent().remove();
+    });
 });
