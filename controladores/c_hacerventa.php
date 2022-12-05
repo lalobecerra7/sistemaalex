@@ -410,23 +410,41 @@ class hacerventa {
 			}else{
 				if($numerofilas > 0){
 					$subarreglo = null;
-					$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."'";
-					$rowI = $omodelo->_consultar($queryI);
-					$numerofilasI = $omodelo->numerofilas;
+					$campoImpuestos = "";
+					$queryImpuestos = "SELECT ID_Impuesto, Nombre, Porcentaje FROM impuestos";
+					$rowImpuestos = $omodelo->_consultar($queryImpuestos);
+					$numerofilasImpuestos = $omodelo->numerofilas;
 
-					if($rowI == 'si'){
+					if($rowImpuestos == 'si'){
 						echo "Error: ".mysqli_error($omodelo->link);
 					}else{
-						if($numerofilasI > 0){
-							for ($i=0; $i < $numerofilasI; $i++) { 
-								$subarreglo[$i] = array(
-									'ID_Impuesto' => $rowI[$i]["FK_Impuesto"],
-									'Nombre' => $rowI[$i]["Nombre"],
-									'Porcentaje' => $rowI[$i]["Porcentaje"]
-								);
+						if($numerofilasImpuestos > 0){
+							for ($i=0; $i < $numerofilasImpuestos; $i++) { 
+								$seleccionado = "";
+								$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."' AND FK_Impuesto = '".$rowImpuestos[$i]["ID_Impuesto"]."'";
+								$rowI = $omodelo->_consultar($queryI);
+								$numerofilasI = $omodelo->numerofilas;
+
+								if($rowI == 'si'){
+									echo "Error: ".mysqli_error($omodelo->link);
+								}else{
+									if($numerofilasI > 0){
+										$seleccionado = "checked";
+									}
+								}
+
+								$campoImpuestos .= '
+								<div class="form-check">
+									<input class="form-check-input seleccionarImpuesto" '.$seleccionado.' type="checkbox" attrid="'.$rowImpuestos[$i]["ID_Impuesto"].'">
+								    <label class="form-check-label" for="flexCheckDefault">
+								    	'.$rowImpuestos[$i]["Nombre"].' ('.$rowImpuestos[$i]["Porcentaje"].'%)
+								    </label>
+								</div>
+								';
 							}
 						}
 					}
+
 					$NombrePresentacion = "";
 					if ($row[0]["Presentacion"] != "") {
 						$abreviatura = "";
@@ -456,7 +474,7 @@ class hacerventa {
 						'Costo' => $row[0]["Costo"],
 						'Minimo' => $row[0]["Minimo"],
 						'Maximo' => $row[0]["Maximo"],
-						'Impuestos' => $subarreglo
+						'Impuestos' => $campoImpuestos
 					);
 					echo json_encode($arreglo);
 				}else{

@@ -191,17 +191,6 @@ class productos {
 				}
 			}
 
-			$productos = explode(",", $productos);
-			for ($i=0; $i < sizeof($productos) - 1; $i++) { 
-				$datosproductos = explode("~", $productos[$i]);
-				$queryPreciosProductos = "INSERT INTO precios SET FK_Producto = '$id', Nombre = '$datosproductos[2]', FK_Presentacion = '$datosproductos[1]', FK_Zona = '$datosproductos[0]', Precio = '$datosproductos[3]', Precio_Mayoreo = '$datosproductos[4]'";
-				$errorPrecios = $omodelo->_insertar($queryPreciosProductos);	
-
-				if ($errorPrecios == "si") {
-					echo "Error productos precio: ".mysqli_error($omodelo->link); 
-				}
-			}
-
 			$presentaciones = explode(",", $presentaciones);
 			for ($i=0; $i < sizeof($presentaciones) - 1; $i++) { 
 				$datospresentacion = explode("~", $presentaciones[$i]);
@@ -210,6 +199,17 @@ class productos {
 
 				if ($errorPresentacion == "si") {
 					echo "Error presentacion: ".mysqli_error($omodelo->link); 
+				}
+			}
+
+			$productos = explode(",", $productos);
+			for ($i=0; $i < sizeof($productos) - 1; $i++) { 
+				$datosproductos = explode("~", $productos[$i]);
+				$queryPreciosProductos = "INSERT INTO precios SET FK_Producto = '$id', Nombre = '$datosproductos[2]', FK_Presentacion = '$datosproductos[1]', FK_Zona = '$datosproductos[0]', Precio = '$datosproductos[3]', Precio_Mayoreo = '$datosproductos[4]'";
+				$errorPrecios = $omodelo->_insertar($queryPreciosProductos);	
+
+				if ($errorPrecios == "si") {
+					echo "Error productos precio: ".mysqli_error($omodelo->link); 
 				}
 			}
 
