@@ -37,9 +37,9 @@
                                 <th style="width: 10%;">Codigo</th>
                                 <th style="width: 15%;">Descripción</th>
                                 <th style="width: 10%;">Presentación</th>
-                                <th style="width: 15%;">Impuestos</th>
                                 <th style="width: 15%;">Precio</th>
                                 <th style="width: 10%;">Cantidad</th>
+                                <th style="width: 15%;">Impuestos</th>
                                 <th style="width: 15%;">Total</th>
                                 <th style="width: 10%;"></th>
                             </thead>

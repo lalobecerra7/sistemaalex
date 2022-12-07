@@ -186,6 +186,7 @@ class productos {
 				}
 			}
 
+
 			$presentaciones = json_decode($presentaciones, true);
 			foreach ($presentaciones as $pres) {
 				$pres['Clave'] = $omodelo->link->real_escape_string($pres['Clave']);

@@ -25,8 +25,6 @@ jQuery(document).ready(function($) {
 
 	$(document).on('submit', '#FormAgregarProductoVenta', function(event) {
         event.preventDefault();
-        
-        $("#carga").show(); 
 
         var data = "metodo=detalles&accion=hacerventa&tipo=AgregarProducto&codigo="+$("#CodigoProductoVenta").val()+"&sucursal="+$("#SucursalVenta").val();
         $.ajax({
@@ -44,15 +42,7 @@ jQuery(document).ready(function($) {
             }else{       
             	var datos = JSON.parse($.trim(res));
             	console.log(datos);
-            	var precio = datos.Precio_General;
-                if(datos.Precio != null){
-                    precio = datos.Precio;
-                }
-
-                var precioMayoreo = datos.Precio_Mayoreo_General;
-                if(datos.Precio_Mayoreo != null){
-                    precioMayoreo = datos.Precio_Mayoreo;
-                }
+            
               
                 var existencia = 0;
                 if(datos.Existencia != null){
@@ -63,17 +53,18 @@ jQuery(document).ready(function($) {
                  	console.log("no");
                  }else{
                  	 $('#TablaProductosAgregadoVenta tbody').append(`
-	             		<tr attrid="`+datos.ID_Producto+`" precio="`+precio+`"  precioMayoreo="`+precioMayoreo+`" class="activa normal"  idPresentacion="`+datos.IDPresentacion+`">
+	             		<tr attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">
 	                        <td>`+datos.Codigo+`</td>
 	                        <td>`+datos.Descripcion+`</td>
 	                        <td>`+datos.Presentacion+`</td>
-	                        <td></td>
-	                        <td></td>
-	                        <td></td>
+	                        <td><button class="btn btn-sm btn-primary cambiarPrecio dinero" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Precio_General+`</button></td>
+	                        <td><input type='number' value='1' min='1' step='any' class='form-control campoCantidadProducto'></td>
+	                        <td>`+datos.Impuestos+`</td>
 	                        <td></td>
 	                        <td></td>
 	                    </tr>`);
                  }
+                 moneda();
 
 
                

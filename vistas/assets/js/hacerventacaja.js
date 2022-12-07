@@ -398,7 +398,8 @@ jQuery(document).ready(function($) {
                     moneda();
                 }else{
                     $("#nav-tabContent .active #tablaCaja").children('tbody').children('tr').removeClass('activa');
-                    if($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').length > 0){                        var cantidad = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').children('td:eq(3)').children('span.cantidad').text().replace(',', ''));
+                    if($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').length > 0){                        
+                        var cantidad = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').children('td:eq(3)').children('span.cantidad').text().replace(',', ''));
                         var descuento = parseFloat($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').children('td:eq(4)').children('span.dinero').text().replace('$', '').replace(',', ''));
                         var descuHtml = '<span class="dinero">0</span>(<span class="porcentaje">0</span>)';
                         if ($("#nav-tabContent .active #tablaCaja").children('tbody').children('tr[attrID='+datos.ID_Producto+']').hasClass("mayoreo")) {

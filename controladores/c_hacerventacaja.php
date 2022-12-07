@@ -168,7 +168,7 @@ class hacerventacaja {
 			}else{
 				if($numerofilas > 0){
 					$subarreglo = null;
-					$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Sucursal, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."' AND FK_Sucursal = '".$sucursal."'";
+					$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."'";
 					$rowI = $omodelo->_consultar($queryI);
 					$numerofilasI = $omodelo->numerofilas;
 
@@ -408,14 +408,14 @@ class hacerventacaja {
 				$separa = explode(' ', trim($buscar));
 				$busqueda = 'WHERE ';
 				for ($i=0; $i < count($separa); $i++) { 
-					$busqueda .= "CONCAT(ID_Cliente, Nombre, Direccion, Telefono, Foto) REGEXP '".$separa[$i]."'";
+					$busqueda .= "CONCAT(ID_Cliente, Nombre, Calle, No_Exterior, No_Interior, Telefono, Foto) REGEXP '".$separa[$i]."'";
 					if($i < (count($separa)-1)){
 						$busqueda .= ' AND ';
 					}
 				}
 			}
 
-			$query = "SELECT ID_Cliente, Nombre, Direccion, Telefono, Foto, (SELECT COUNT(*) FROM clientes $busqueda) AS Num FROM clientes $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Cliente, Nombre, Calle, No_Exterior, No_Interior, Telefono, Foto, (SELECT COUNT(*) FROM clientes $busqueda) AS Num FROM clientes $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
@@ -439,8 +439,8 @@ class hacerventacaja {
 							}	
 						}
 
-						if ($row[$i]['Direccion'] != "") {
-							$contacto .= "Dirección: ".$row[$i]['Direccion']."<br>";
+						if ($row[$i]['Calle'] != "") {
+							$contacto .= "Dirección: ".$row[$i]['Calle']." No. Ext: ".$row[$i]['No_Exterior']." No. Int: ".$row[$i]['No_Interior']."<br>";
 						}
 
 						if ($row[$i]['Telefono'] != "") {
