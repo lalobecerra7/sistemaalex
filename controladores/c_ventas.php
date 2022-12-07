@@ -24,7 +24,8 @@ class ventas {
 			}
 		}
 
-		$query = "SELECT ID_Venta, ventas.FK_Usuario, ventas.FK_Sucursal, FK_Caja, FK_Cliente, ventas.Descuento, Total, Tipo_Pago, Pago, Cambio, Notas, ventas.Fecha_Registro, Cancelada, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS Datos, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM ventas) AS Num FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Venta, Facturada, ventas.FK_Usuario, ventas.FK_Sucursal, FK_Caja, FK_Cliente, ventas.Descuento, Total, Tipo_Pago, Pago, Cambio, Notas, ventas.Fecha_Registro, Cancelada, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS Datos, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM ventas) AS Num FROM ventas LEFT JOIN clientes ON FK_Cliente = ID_Cliente $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -42,7 +43,13 @@ class ventas {
 
 					$botondeCancelar = '<button class="btn btn-warning btn-sm" id="CancelarVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'"><i class="fas fa-circle-xmark"></i></button>';
 
-					$botonTicket = '<button class="btn btn-success" id="ImprimirTicketVenta" attrid="'.$row[$i]['ID_Venta'].'" sucursal="'.$row[$i]['FK_Sucursal'].'" folio="'.$folio.'"><i class="fas fa-print"></i></button>';
+					$botonTicket = '<button class="btn btn-success btn-sm" id="ImprimirTicketVenta" attrid="'.$row[$i]['ID_Venta'].'" sucursal="'.$row[$i]['FK_Sucursal'].'" folio="'.$folio.'"><i class="fas fa-print"></i></button>';
+
+					if($row[$i]['Facturada'] == '0'){//agregar permisos
+						$botonFacturar = '<button class="btn btn-info btn-sm bFacturar" attrID="'.$row[$i]['ID_Venta'].'" title="Fcturar"><i class="fas fa-file-lines"></i></button>';
+					}else{
+						$botonFacturar = '<button class="btn btn-info btn-sm bImprimirFacPDF" attrID="'.$row[$i]['ID_Venta'].'" title="Fcturar"><i class="fas fa-file-pdf"></i></button> <button class="btn btn-info btn-sm bImprimirFacXml" attrID="'.$row[$i]['ID_Venta'].'" title="Fcturar"><i class="fas fa-file-excel"></i></button>';
+					}
 
 					if ($row[$i]['Cancelada'] == 1) {
 						$estatus='<span class="badge rounded-pill bg-danger">Cancelada</span>';
@@ -60,7 +67,7 @@ class ventas {
 						'Cliente' => 'Nombre: <b>'.$row[$i]['Datos'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Correo electrónico: <b>'.$row[$i]['CorreoCliente'].'</b><br>RFC: <b>'.$row[$i]['RFCCliente']."</b>",
 						'Total' => "Subtotal: <b>$".number_format(($row[$i]['Total'] + $row[$i]['Descuento']), 2)."</b><br>Descuento: <b>$".number_format($row[$i]['Descuento'], 2)."</b><br>Total: <b>$".number_format($row[$i]['Total'], 2)."</b>",
 						'Detalles' => $estatus."<br>".$motivocancelada.$fechacancelada.'<button class="btn btn-link btn-sm" id="VerProductosVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'">Ver productos</button>',
-						'Acciones' => $botonEliminar.' '.$botondeCancelar .' '.$botonPagos,
+						'Acciones' => $botonEliminar.' '.$botondeCancelar .' '.$botonPagos.' '.$botonFacturar,
 					);
 				}
 

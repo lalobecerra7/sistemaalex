@@ -209,7 +209,7 @@ class productos {
 				$pre['Precio'] = $omodelo->link->real_escape_string($pre['Precio']); 
 				$pre['Precio_Mayoreo'] = $omodelo->link->real_escape_string($pre['Precio_Mayoreo']); 
 
-				$queryPrecio = "INSERT INTO precios SET FK_Producto = '$id', FK_Zona = '$pre[Zona]', FK_Presentacion = IFNULL((SELECT ID_Presentacion FROM presentaciones WHERE Nombre = '$pre[Presentacion]'), 0), Nombre = '$pre[Nombre]', Precio = '$pre[Precio]', Precio_Mayoreo = '$pre[Precio_Mayoreo]'";
+				$queryPrecio = "INSERT INTO precios SET FK_Producto = '$id', FK_Zona = '$pre[Zona]', FK_Presentacion = IFNULL((SELECT ID_Presentacion FROM presentaciones WHERE Nombre = '$pre[Presentacion]' AND FK_Producto = '$id'), 0), Nombre = '$pre[Nombre]', Precio = '$pre[Precio]', Precio_Mayoreo = '$pre[Precio_Mayoreo]'";
 				$error = $omodelo->_insertar($queryPrecio);	
 
 				if ($error == "si") {
@@ -243,7 +243,7 @@ class productos {
 		$IDProducto = $omodelo->link->real_escape_string($IDProducto);
 		$CodigoBarras = $omodelo->link->real_escape_string($CodigoBarras);
 		$Descripcion = $omodelo->link->real_escape_string($Descripcion);
-		$Categoria = $omodelo->link->real_escape_string($Categoria) || 0;
+		$Categoria = $omodelo->link->real_escape_string($Categoria);
 		$Clase = $omodelo->link->real_escape_string($ClaseProducto);
 		$Costo = $omodelo->link->real_escape_string($CostoProducto);
 		$Precio = $omodelo->link->real_escape_string($PrecioProducto);
@@ -343,7 +343,7 @@ class productos {
 					$pre['Precio'] = $omodelo->link->real_escape_string($pre['Precio']); 
 					$pre['Precio_Mayoreo'] = $omodelo->link->real_escape_string($pre['Precio_Mayoreo']); 
 
-					$queryPrecio = "INSERT INTO precios SET FK_Producto = '$IDProducto', FK_Zona = '$pre[Zona]', FK_Presentacion = IFNULL((SELECT ID_Presentacion FROM presentaciones WHERE Nombre = '$pre[Presentacion]'), 0), Nombre = '$pre[Nombre]', Precio = '$pre[Precio]', Precio_Mayoreo = '$pre[Precio_Mayoreo]'";
+					$queryPrecio = "INSERT INTO precios SET FK_Producto = '$IDProducto', FK_Zona = '$pre[Zona]', FK_Presentacion = IFNULL((SELECT ID_Presentacion FROM presentaciones WHERE Nombre = '$pre[Presentacion]' AND FK_Producto = '$IDProducto'), 0), Nombre = '$pre[Nombre]', Precio = '$pre[Precio]', Precio_Mayoreo = '$pre[Precio_Mayoreo]'";
 					$error = $omodelo->_insertar($queryPrecio);	
 
 					if ($error == "si") {

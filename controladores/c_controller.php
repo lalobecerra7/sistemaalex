@@ -21,6 +21,7 @@ include "controladores/c_zonas.php";
 include "controladores/c_compras.php";
 include "controladores/c_hacerCompra.php";
 include "controladores/c_ventas.php";
+include "controladores/c_facturacion.php";
 
 class controller {
 
@@ -165,16 +166,6 @@ class controller {
 		}
 		$pagina = str_replace('#MenuImpuestos#', $botonImpuestos, $pagina);
 
-		$botonTickets = '';
-		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_tickets'][1] == '1') {
-			$botonTickets = '<li class="menu-item cargarVista" carga="v_tickets" titulo="Tickets" id="cargarTickets">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Tickets">Tickets</div>
-                  </a>
-                </li>';
-		}
-		$pagina = str_replace('#MenuTickets#', $botonTickets, $pagina);
-
 		$botonUsuarios = '';
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_usuarios'][1] == '1') {
 			$botonUsuarios = '<li class="menu-item cargarVista" carga="v_usuarios" titulo="Usuarios" id="cargarUsuarios">
@@ -185,6 +176,33 @@ class controller {
             </li>';
 		}
 		$pagina = str_replace('#MenuUsuarios#', $botonUsuarios, $pagina);
+
+		$botonConfiguracion = '';
+		if ($omodelo->permisos() == 'Administrador') {
+			$botonConfiguracion = '<li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon fas fa-cogs"></i>
+                <div data-i18n="Layouts">Configuración</div>
+              </a>
+
+              <ul class="menu-sub">
+                <li class="menu-item cargarVista" carga="v_tickets" titulo="Ticket" id="cargarTicket">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Tickets">Ticket</div>
+                  </a>
+                </li>
+              </ul>
+
+              <ul class="menu-sub">
+                <li class="menu-item cargarVista" carga="v_facturacion" titulo="Facturación 4.0" id="cargarFacturacion">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Facturación">Facturación 4.0</div>
+                  </a>
+                </li>
+              </ul>
+            </li>';
+		}
+		$pagina = str_replace('#MenuConfiguracion#', $botonConfiguracion, $pagina);
 
 		return $pagina;
 	}
@@ -520,8 +538,21 @@ class controller {
 					}
 				}
 			}
-			$pagina = str_replace('#MostrarSucursal#', $sucursal, $pagina);
-                    
+			$pagina = str_replace('#MostrarSucursal#', $sucursal, $pagina);            
+		}else if($nombre == "v_facturacion"){
+				$query = "SELECT RFC, Nombre, Regimen FROM general WHERE ID_General = '1'";
+				$row = $omodelo->_consultar($query);
+				$numerofilas = $omodelo->numerofilas;
+					
+				if ($row == "si") {
+						echo "Error: " . mysqli_error($omodelo->link);
+				}else{
+						if($numerofilas > 0){ 
+								$pagina = str_replace('#rfc#', $row[0]['RFC'], $pagina);
+								$pagina = str_replace('#nombre#', $row[0]['Nombre'], $pagina);
+								echo '<script>$("#regimenFacturacion").val('.$row[0]['Regimen'].');</script>';
+						}
+				}		
 		}
 		
 		return $pagina;

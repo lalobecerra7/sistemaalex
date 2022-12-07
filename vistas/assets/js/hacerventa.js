@@ -80,7 +80,8 @@ jQuery(document).ready(function($) {
 
     $(document).on('click', '#VentaTablaProductos tbody tr', function() {
     	var codigo = $(this).children("td:eq(0)").find("#CodigoProducto").text();
-    	var data = "metodo=detalles&accion=hacerventa&tipo=AgregarProducto&codigo="+codigo+"&sucursal="+$("#SucursalVenta").val();
+    	var presentacion = $(this).children("td:eq(1)").find("#IdPresentacionProd").text();
+    	var data = "metodo=detalles&accion=hacerventa&tipo=AgregarProducto&codigo="+codigo+"&sucursal="+$("#SucursalVenta").val()+"&presentacion="+presentacion;
         $.ajax({
             url: 'index.php',
             type: 'POST',
@@ -167,17 +168,23 @@ jQuery(document).ready(function($) {
 
 	$(document).on('click', '.eliminarFila', function() {
 		$(this).parent().parent().remove();
-		/*CalcularSubtotal();
-    		$("#DescuentoCompraDinero").val($("#RealizarCompra").attr("cantidad"));
+		CalcularSubtotalVenta();
+    		/*$("#DescuentoCompraDinero").val($("#RealizarCompra").attr("cantidad"));
     		$("#DescuentoCompraDinero").trigger("change");*/
 	});
 
 	function CalcularSubtotalVenta(){
+		if ($("#TablaProductosAgregadoVenta tbody tr").length > 0) {
+			$("#SucursalVenta").attr("disabled", true);
+		}else{
+			$("#SucursalVenta").attr("disabled", false);	
+		}
 		var subtotal = 0;
 		$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 			subtotal += parseFloat($(this).children("td:eq(6)").text().replace("$","").replace(",",""));
 		});
 		$("#MostrarSubtotalVenta").text(subtotal);
+		$("#cantidadProductosSpanVenta").text($("#TablaProductosAgregadoVenta tbody tr").length)
 		moneda();
 	}
 

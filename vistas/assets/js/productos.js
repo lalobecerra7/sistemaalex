@@ -91,7 +91,6 @@ function v_productos() {
 
                         TablaProductos(); 
                         $("#ModalProductos").modal("hide");
-                        detallesProducto = [];
                     } else if ($.trim(res) == "Error: Duplicate entry '"+$("#CodigoBarras").val()+"' for key 'Codigo'"){
                         Swal.fire({
                             icon: 'error',
@@ -119,9 +118,6 @@ function v_productos() {
 
     $('#FormExistenciaProducto').validate({
         rules: {
-            PresentacionesProducto: {
-                required: true
-            },
             SucursalExistencia: {
                 required: true
             },
@@ -130,9 +126,6 @@ function v_productos() {
             },
         },
         messages: {
-            PresentacionesProducto: {
-                required: "La presentación del producto es obligatoria"
-            },
             SucursalExistencia: {
                 required: "La sucursal es obligatoria"
             },

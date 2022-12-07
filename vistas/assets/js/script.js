@@ -43,7 +43,7 @@ jQuery(document).ready(function($) {
             type: 'POST',
             data: data,
             beforeSend: function() {
-                //$("#carga").show();
+                $("#carga").show();
             }
         })
         .done(function(res) {
@@ -57,7 +57,7 @@ jQuery(document).ready(function($) {
             }
 
             crearDataTable();
-
+            
             if(typeof window[nombre] === 'function') {
               window[nombre]();
             }
@@ -65,7 +65,7 @@ jQuery(document).ready(function($) {
         .fail(function() {
             console.log("Error ajax");
         }).always(function() {
-            //$("#carga").hide();
+            $("#carga").hide();
         }); 
     });
 

@@ -50,7 +50,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12 text-start">
-                        <span id="cantidadProductosSpan">0</span> productos en la compra actual
+                        <span id="cantidadProductosSpanVenta">0</span> productos en la venta actual
                     </div>
                 </div>
                 <div class="row mt-2">
