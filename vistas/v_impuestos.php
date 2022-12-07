@@ -94,7 +94,7 @@
 									<option selected disabled value=""> - Seleccione - </option>
 									<option value="Tasa">Tasa</option>
 									<option value="Cuota">Cuota</option>
-									<option value="Excento">Excento</option>
+									<option value="Excento">Exento</option>
 								</select>
 								<label for="TipoFactorImpuesto">Tipo de Factor</label>
 							</div>

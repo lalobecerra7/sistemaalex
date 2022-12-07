@@ -44,12 +44,12 @@ function v_productos() {
             }else {
                 var presentaciones = [];
                 $("#verPresentaciones").children('tr').each(function(index, el){
-                    presentaciones.push({'Clave': $.trim($(this).children('td:eq(0)').text()), 'Nombre': $.trim($(this).children('td:eq(1)').text()), 'Abreviatura': $.trim($(this).children('td:eq(2)').text())});
+                    presentaciones.push({'ID_Presentacion': $.trim($(this).attr('id')),'Clave': $.trim($(this).children('td:eq(0)').text()), 'Nombre': $.trim($(this).children('td:eq(1)').text()), 'Abreviatura': $.trim($(this).children('td:eq(2)').text())});
                 });
 
                 var precios = [];
                 $("#verPreciosProd").children('tr').each(function(index, el){
-                    precios.push({'Zona': $.trim($(this).children('td:eq(0)').attr('attrID')), 'Presentacion': $.trim($(this).children('td:eq(1)').text()), 'Nombre': $.trim($(this).children('td:eq(2)').text()), 'Precio': $.trim($(this).children('td:eq(3)').text()), 'Precio_Mayoreo': $.trim($(this).children('td:eq(4)').text())});
+                    precios.push({'ID_Precio': $.trim($(this).attr('id')),'Zona': $.trim($(this).children('td:eq(0)').attr('attrID')), 'Presentacion': $.trim($(this).children('td:eq(1)').text()), 'Nombre': $.trim($(this).children('td:eq(2)').text()), 'Precio': $.trim($(this).children('td:eq(3)').text()), 'Precio_Mayoreo': $.trim($(this).children('td:eq(4)').text())});
                 });
 
                 var impuestos = [];
@@ -388,7 +388,7 @@ jQuery(document).ready(function($) {
            
             if(datos.Presentaciones != null){
                 datos.Presentaciones.forEach(presentacion => {
-                    $("#verPresentaciones").append(`<tr attrID="`+presentacion.Nombre+`">
+                    $("#verPresentaciones").append(`<tr id="`+presentacion.ID_Presentacion+`" attrID="`+presentacion.Nombre+`">
                         <td>`+presentacion.Clave_CFDI+`</td>
                         <td>`+presentacion.Nombre+`</td>
                         <td>`+presentacion.Abreviatura+`</td>
@@ -401,7 +401,7 @@ jQuery(document).ready(function($) {
 
             if(datos.Precios != null){
                 datos.Precios.forEach(precio => {
-                    $("#verPreciosProd").append(`<tr>
+                    $("#verPreciosProd").append(`<tr id="`+precio.ID_Precio+`">
                         <td attrID="`+precio.FK_Zona+`">`+precio.Zona+`</td>
                         <td attrID="`+precio.FK_Presentacion+`">`+precio.Presentacion+`</td>
                         <td>`+precio.Nombre+`</td>

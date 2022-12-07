@@ -6,29 +6,71 @@ function v_clientes() {
             NombreCliente: {
                 required: true
             },
-            RFCCliente: {
-                required: true
-            },
             SucursalCliente: {
                 required: true
             },
-            CalleCliente: {
+            CalleClienteGeneral: {
                 required: true
             },
-            NombreContactoCliente: {
+            NoExteriorClienteGeneral: {
+                required: true
+            },
+            CPClienteGeneral: {
+                required: true
+            },
+            CiudadClienteGeneral: {
+                required: true
+            },
+            EstadoClienteGeneral: {
+                required: true
+            },
+            PaisClienteGeneral: {
+                required: true
+            },
+            RFCCliente: {
+                required: true
+            },
+            razonCliente: {
+                required: true
+            },
+            regimenCliente: {
                 required: true
             }
         },
         messages: {
             NombreCliente: {
-                required: "El nombre del cliente es obligatorio"
-            },
-            RFCCliente: {
-                required: "El RFC del cliente es obligatorio"
+                required: "El nombre del cliente es requerido."
             },
             SucursalCliente: {
-                required: "La sucursal es obligatoria"
+                required: "La sucursal es requerdia."
             },
+            CalleClienteGeneral: {
+                required: "La calle es requerida."
+            },
+            NoExteriorClienteGeneral: {
+                required: "El no. escterior es requerdio."
+            },
+            CPClienteGeneral: {
+                required: "El código postal es requerido."
+            },
+            CiudadClienteGeneral: {
+                required: "La ciudad es requerida."
+            },
+            EstadoClienteGeneral: {
+                required: "El estado es requerido."
+            },
+            PaisClienteGeneral: {
+                required: "El país es requerido."
+            },
+            RFCCliente: {
+                required: "El rfc es requerido."
+            },
+            razonCliente: {
+                required: "La razón social es requerida."
+            },
+            regimenCliente: {
+                required: "El régimen es requerido."
+            }
         },
         submitHandler: function(form) { 
             var direcciones = '';

@@ -1,10 +1,20 @@
 <?php
 class facturacion {
+	public function _consultar()
+	{
+		$omodelo = new m_modelo();
+		extract($_POST);
+		$id = trim($omodelo->link->real_escape_string($id));
+
+		$query = "SELECT ";
+
+	}
+
 	public function _insertar()
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$Fecha = date('Y-m-d H:i:s');
+		$fecha = date('Y-m-d H:i:s');
 		$rfcFacturacion = trim($omodelo->link->real_escape_string($rfcFacturacion));
 		$nombreFacturacion = trim($omodelo->link->real_escape_string($nombreFacturacion));
 		$regimenFacturacion = $omodelo->link->real_escape_string($regimenFacturacion);

@@ -47,7 +47,7 @@
 	</div>
 </div>
 
-
+<!--/////////////////////////////////modal/////////////////////////////////////-->
 <div class="modal fade" id="ModalCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content">
@@ -180,7 +180,7 @@
 		        </div>
 		        <div class="col-md-3 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		            <input type="text" class="form-control" id="PaisClienteGeneral" name="PaisClienteGeneral" placeholder="Ingresa el país del cliente">
+		            <input type="text" class="form-control" id="PaisClienteGeneral" name="PaisClienteGeneral" placeholder="Ingresa el país del cliente" value="México">
 		            <label for="PaisClienteGeneral">País</label>
 		          </div>
 		        </div>

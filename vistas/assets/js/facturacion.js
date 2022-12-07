@@ -92,15 +92,57 @@ function v_facturacion() {
 }
 
 function facturarVenta(id) {
-    // body...
+    $("#bTimbrarFactura").attr('attrID', id);
+    document.getElementById('formFacturar').reset();
+    $("#datosEmisorCFDI").html("");
+    $("#datosReceptoCFDI").html("");
+    $("#conceptosCFDI").html("");
+    $("#subtotalCFDI").html('0');
+    $("#totalDescuentoCFDI").html('0');
+    $("#impuetosTrasCFDI").html('0');
+    $("#impuestosRetCFDI").html('0');
+    $("#totalCFDI").html('0');
+
+    var data = "metodo=consultar&accion=facturacion&id="+id;
+
+    $.ajax({
+        url: 'index.php',
+        type: 'POST',
+        data: data,
+        beforeSend: function() {
+            $("#carga").show();
+        }
+    })
+    .done(function(res) {
+        console.log($.trim(res));
+        
+        if($.trim(res) != null){
+            var datos = JSON.parse($.trim(res));
+
+
+
+            moneda();
+            $("#modalFacturar").modal('show');
+        }else{
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'La venta ya ha sido facturada o cancelada.'
+            }); 
+        }
+    })
+    .fail(function() {
+        console.log("Error ajax");
+    })
+    .always(function() {
+        $("#carga").hide();
+    });    
 }
 
 jQuery(document).ready(function($) {
     //formFacturar
 	$(document).on('click', '.bFacturar', function() {
         facturarVenta($(this).attr('attrID'));
-
-        $("#modalFacturar").modal('show');
     }); 
     
     /*$(document).on('click', '.bImprimirFacPDF', function() {
