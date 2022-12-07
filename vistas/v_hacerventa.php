@@ -36,12 +36,12 @@
                             <thead>
                                 <th style="width: 10%;">Codigo</th>
                                 <th style="width: 15%;">Descripción</th>
-                                <th style="width: 10%;">Presentación</th>
                                 <th style="width: 15%;">Precio</th>
                                 <th style="width: 10%;">Cantidad</th>
                                 <th style="width: 15%;">Impuestos</th>
+                                <th style="width: 15%;">Descuento</th>
                                 <th style="width: 15%;">Total</th>
-                                <th style="width: 10%;"></th>
+                                <th style="width: 5%;"></th>
                             </thead>
                             <tbody id="tbodyTablaProductosAgregados">
                             </tbody>
@@ -56,13 +56,13 @@
                 <div class="row mt-2">
                     <div class="col-md-3 text-center">
                         <h5 style="font-weight: bold;">Subtotal</h5>
-                        <h4 style="font-weight: bold;" id="MostrarSubtotal">0.00</h4>
+                        <h4 style="font-weight: bold;" class="dinero" id="MostrarSubtotalVenta">0.00</h4>
                     </div>
                     <div class="col-md-3 text-center mb-2">
                         <h5 style="font-weight: bold;">Descuento</h5>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1"><b>$</b></span>
-                            <input type="number" min="0" value="0" step="any" class="form-control" id="DescuentoCompraDinero" name="DescuentoCompraDinero" placeholder="$0.00">
+                            <input type="number" min="0" value="0" step="any" class="form-control" id="DescuentoVentaDinero" name="DescuentoVentaDinero" placeholder="$0.00">
                         </div>
                     </div>
                     <div class="col-md-6 text-center mb-2">
@@ -82,6 +82,39 @@
 	</div>
 </div>
 
+<div class="modal fade" id="ModalPreciosProductoVenta" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Precios</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="AgregarPrecioProducto">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 table-responsive" id="divTablaProductos">
+                            <table class="table table-responsive table-striped text-center myDataTable" id="TablaPreciosProductosVenta" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Precio</th>
+                                        <th>Precio Mayoreo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table> 
+                        </div>
+                    </div>    
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                    <button type="submit" class="btn btn-primary" id="bAgregarPrecioProducto"><i class="fa fa-check-circle"></i> <strong>Agregar</strong></button>
+                </div>
+            </form>
+        </div>    
+    </div>
+</div>
 
 <div class="modal fade" id="ModalVerProductosVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
