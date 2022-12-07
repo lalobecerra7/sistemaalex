@@ -91,9 +91,15 @@ function v_facturacion() {
     });  
 }
 
+function facturarVenta(id) {
+    // body...
+}
+
 jQuery(document).ready(function($) {
     //formFacturar
 	$(document).on('click', '.bFacturar', function() {
+        facturarVenta($(this).attr('attrID'));
+
         $("#modalFacturar").modal('show');
     }); 
     
