@@ -316,11 +316,12 @@ class productos {
 			}else{
 				$presentaciones = json_decode($presentaciones, true);
 				foreach ($presentaciones as $pres) {
+					$pres['ID_Presentacion'] = $omodelo->link->real_escape_string($pres['ID_Presentacion']);
 					$pres['Clave'] = $omodelo->link->real_escape_string($pres['Clave']);
 					$pres['Nombre'] = $omodelo->link->real_escape_string($pres['Nombre']);
 					$pres['Abreviatura'] = $omodelo->link->real_escape_string($pres['Abreviatura']);
 
-					$queryPresentacion = "INSERT INTO presentaciones SET FK_Producto = '$IDProducto', Nombre = '$pres[Nombre]', Abreviatura = '$pres[Abreviatura]', Clave_CFDI = '$pres[Clave]'";
+					$queryPresentacion = "INSERT INTO presentaciones SET ID_Presentacion = '$pres[ID_Presentacion]',FK_Producto = '$IDProducto', Nombre = '$pres[Nombre]', Abreviatura = '$pres[Abreviatura]', Clave_CFDI = '$pres[Clave]'";
 					$errorPresentacion = $omodelo->_insertar($queryPresentacion);	
 
 					if ($error == "si") {
