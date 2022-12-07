@@ -692,7 +692,7 @@ class inventario {
 					}
 				}
 			}
-			$query = "SELECT ID_Inventario, inventario.FK_Producto, FK_Presentacion, Cantidad, FK_Sucursal, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS Abreviatura, (SELECT COUNT(*) FROM inventario WHERE inventario.FK_Producto = '$idProducto' AND FK_Sucursal = '$idSucursal' $busqueda) AS 'Num' FROM inventario INNER JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE inventario.FK_Producto = '$idProducto' AND FK_Sucursal = '$idSucursal' $busqueda GROUP BY FK_Presentacion ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Inventario, inventario.FK_Producto, FK_Presentacion, Cantidad, FK_Sucursal, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS Abreviatura, (SELECT COUNT(*) FROM inventario WHERE inventario.FK_Producto = '$idProducto' AND FK_Sucursal = '$idSucursal' $busqueda) AS 'Num' FROM inventario LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE inventario.FK_Producto = '$idProducto' AND FK_Sucursal = '$idSucursal' $busqueda GROUP BY FK_Presentacion ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
@@ -702,6 +702,15 @@ class inventario {
 			}else{
 				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
+
+						if ($row[$i]['Presentacion'] == null) {
+							$row[$i]['Presentacion'] = "NA";
+						}
+
+						if ($row[$i]['Abreviatura'] == null) {
+							$row[$i]['Abreviatura'] = "NA";
+						}
+
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Inventario'],
 							'Presentacion' => $row[$i]['Presentacion'],

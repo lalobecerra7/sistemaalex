@@ -23,7 +23,7 @@ class ventas {
 				}
 			}
 		}
-
+		
 		$query = "SELECT ID_Venta, Facturada, ventas.FK_Usuario, ventas.FK_Sucursal, FK_Caja, FK_Cliente, ventas.Descuento, Total, Tipo_Pago, Pago, Cambio, Notas, ventas.Fecha_Registro, Cancelada, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS Datos, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM ventas) AS Num FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;

@@ -357,7 +357,7 @@ class hacerventa {
 				}
 			}
 
-			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion  AS IDPresentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, Poner_Unidad, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, detalles_productos.Costo AS Costo, detalles_productos.Minimo AS Minimo, detalles_productos.Maximo AS Maximo, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos LEFT JOIN detalles_productos ON detalles_productos.FK_Producto = ID_Producto AND detalles_productos.FK_Sucursal = '$sucursal' LEFT JOIN areas ON FK_Area = ID_Area LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion  $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion  AS IDPresentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos LEFT JOIN areas ON FK_Area = ID_Area LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' INNER JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion  $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -378,7 +378,12 @@ class hacerventa {
 						$nombrePresentacion = "";
 						if ($row[$i]['Presentacion'] != "") {
 							$nombrePresentacion = $row[$i]['Presentacion']."(".$row[$i]['AbreviaturaPresentacion'].")";
+						}else{
+							$nombrePresentacion = "Sin presentación";
 						}
+
+						/*$precio = 0;
+						$precioMayoreo = 0;*/
 
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Producto'],
@@ -401,7 +406,7 @@ class hacerventa {
 			if (isset($presentacion) && $presentacion != "") {
 				$queryPresentacion = "AND inventario.FK_Presentacion = '$presentacion'";
 			}
-			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.Nombre AS Presentacion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, Clase, Poner_Unidad, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, detalles_productos.Costo AS Costo, detalles_productos.Minimo AS Minimo, detalles_productos.Maximo AS Maximo FROM productos LEFT JOIN detalles_productos ON detalles_productos.FK_Producto = ID_Producto AND detalles_productos.FK_Sucursal = '$sucursal' LEFT JOIN unidades ON FK_Unidad = ID_Unidad LEFT JOIN areas ON FK_Area = ID_Area LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion WHERE Tipo = 1 AND Codigo = '$codigo' $queryPresentacion";
+			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.Nombre AS Presentacion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, Clase, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia FROM productos LEFT JOIN areas ON FK_Area = ID_Area LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion WHERE Tipo = 1 AND Codigo = '$codigo' $queryPresentacion";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -411,39 +416,25 @@ class hacerventa {
 				if($numerofilas > 0){
 					$subarreglo = null;
 					$campoImpuestos = "";
-					$queryImpuestos = "SELECT ID_Impuesto, Nombre, Porcentaje FROM impuestos";
-					$rowImpuestos = $omodelo->_consultar($queryImpuestos);
-					$numerofilasImpuestos = $omodelo->numerofilas;
-
-					if($rowImpuestos == 'si'){
+					$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."'";
+					$rowI = $omodelo->_consultar($queryI);
+					$numerofilasI = $omodelo->numerofilas;
+					if($rowI == 'si'){
 						echo "Error: ".mysqli_error($omodelo->link);
 					}else{
-						if($numerofilasImpuestos > 0){
-							for ($i=0; $i < $numerofilasImpuestos; $i++) { 
-								$seleccionado = "";
-								$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."' AND FK_Impuesto = '".$rowImpuestos[$i]["ID_Impuesto"]."'";
-								$rowI = $omodelo->_consultar($queryI);
-								$numerofilasI = $omodelo->numerofilas;
-
-								if($rowI == 'si'){
-									echo "Error: ".mysqli_error($omodelo->link);
-								}else{
-									if($numerofilasI > 0){
-										$seleccionado = "checked";
-									}
-								}
-
+						if($numerofilasI > 0){
+							for ($i=0; $i < $numerofilasI; $i++) { 
 								$campoImpuestos .= '
-								<div class="form-check">
-									<input class="form-check-input seleccionarImpuesto" '.$seleccionado.' type="checkbox" attrid="'.$rowImpuestos[$i]["ID_Impuesto"].'">
-								    <label class="form-check-label" for="flexCheckDefault">
-								    	'.$rowImpuestos[$i]["Nombre"].' ('.$rowImpuestos[$i]["Porcentaje"].'%)
-								    </label>
-								</div>
+									<div class="form-check impuesto">
+										<input class="form-check-input seleccionarImpuesto" checked type="checkbox" porcentaje="'.$rowI[$i]["Porcentaje"].'" attrid="'.$rowI[$i]["FK_Impuesto"].'">
+										<label class="form-check-label" for="flexCheckDefault">
+											'.$rowI[$i]["Nombre"].' ('.$rowI[$i]["Porcentaje"].'%)
+										</label>
+									<div>
 								';
 							}
 						}
-					}
+					}				
 
 					$NombrePresentacion = "";
 					if ($row[0]["Presentacion"] != "") {
@@ -452,6 +443,8 @@ class hacerventa {
 							$abreviatura = "(".$row[0]["AbreviaturaPresentacion"].")";
 						}
 						$NombrePresentacion = $row[0]["Presentacion"].$abreviatura;
+					}else{
+						$NombrePresentacion = "Sin presentación";	
 					}
 
 					$arreglo = array(
@@ -461,7 +454,6 @@ class hacerventa {
 						'Presentacion' => $NombrePresentacion,
 						'Clase' => $row[0]["Clase"],
 						'IDPresentacion' => $row[0]["IDPresentacion"],
-						'Poner_Unidad' => $row[0]["Poner_Unidad"],
 						'Costo_General' => $row[0]["Costo_General"],
 						'Precio_General' => $row[0]["Precio_General"],
 						'Precio_Mayoreo_General' => $row[0]["Precio_Mayoreo_General"],
@@ -471,9 +463,6 @@ class hacerventa {
 						'Maximo_General' => $row[0]["Maximo_General"],
 						'Fecha_Registro' => $row[0]["Fecha_Registro"],
 						'Existencia' => $row[0]["Existencia"],
-						'Costo' => $row[0]["Costo"],
-						'Minimo' => $row[0]["Minimo"],
-						'Maximo' => $row[0]["Maximo"],
 						'Impuestos' => $campoImpuestos
 					);
 					echo json_encode($arreglo);

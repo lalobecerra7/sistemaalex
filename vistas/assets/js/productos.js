@@ -118,9 +118,6 @@ function v_productos() {
 
     $('#FormExistenciaProducto').validate({
         rules: {
-            PresentacionesProducto: {
-                required: true
-            },
             SucursalExistencia: {
                 required: true
             },
@@ -129,9 +126,6 @@ function v_productos() {
             },
         },
         messages: {
-            PresentacionesProducto: {
-                required: "La presentación del producto es obligatoria"
-            },
             SucursalExistencia: {
                 required: "La sucursal es obligatoria"
             },
