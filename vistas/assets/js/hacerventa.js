@@ -77,7 +77,7 @@ jQuery(document).ready(function($) {
             $("#carga").hide();
         }); 
     });
-
+	//NOS QUEDAMOS EN VER PORQUE NO AGREGA LOS PRODUCTOS EN VENTAS Y LAS CORRECCIONES DE JUANCHO
     $(document).on('click', '#VentaTablaProductos tbody tr', function() {
     	var codigo = $(this).children("td:eq(0)").find("#CodigoProducto").text();
     	var presentacion = $(this).children("td:eq(1)").find("#IdPresentacionProd").text();
@@ -234,6 +234,7 @@ function VentaTablaProductos(){
 		"colums": [
 			"Producto",
 			"Presentacion",
+			"Nombre",
 			"Precio",
 			"Mayoreo",
 			"Existencia"

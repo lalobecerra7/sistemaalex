@@ -129,6 +129,7 @@
                         <thead>
                             <th style="width: 20%;" orden="No">Producto</th>
                             <th style="width: 20%;">Presentación</th>
+                            <th style="width: 20%;">Nombre del precio</th>
                             <th style="width: 20%;">Precio</th>
                             <th style="width: 20%;">Mayoreo</th>
                             <th style="width: 20%;">Existencia</th>
