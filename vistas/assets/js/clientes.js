@@ -419,6 +419,8 @@ jQuery(document).ready(function($) {
             $("#BancoCliente").val(datos.Banco);
             $("#CuentaBancoCliente").val(datos.No_Cuenta);
             $("#SucursalCliente").val(datos.FK_Sucursal);
+            $("#razonCliente").val(datos.Razon_CFDI);
+            $("#regimenCliente").val(datos.Regimen_CFDI);
             if (datos.Foto != "") {
                 $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/fotosClientes/'+datos.Foto);
             }else{

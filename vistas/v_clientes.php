@@ -94,12 +94,6 @@
 		            </div>
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		            <input type="text" class="form-control" id="RFCCliente" name="RFCCliente" placeholder="Ingresa el RFC del cliente">
-		            <label for="RFCCliente">RFC</label>
-		          </div>
-		        </div>
-		        <div class="col-md-4 col-sm-12 mb-3">
             	<div class="form-floating">
               	<input type="number" min="0" step="any" class="form-control" id="DescuentoCliente" name="DescuentoCliente" placeholder="Ingresa el valor del descuento">
                 <label for="DescuentoCliente">Descuento (%)</label>
@@ -128,6 +122,16 @@
 							    	<option value="Femenino">Femenino</option>
 							  	</select>
 							 	<label for="SexoCliente">Sexo del cliente</label>
+							</div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+								<select class="form-select" id="FacturarCliente" name="FacturarCliente">
+							    	<option value="" selected> - Seleccione una opción - </option>
+							    	<option value="1">Si</option>
+							    	<option value="0">No</option>
+							  	</select>
+							 	<label for="FacturarCliente">Facturar ventas</label>
 							</div>
 		        </div>
 		        <hr>
@@ -181,31 +185,62 @@
 		          </div>
 		        </div>
 		        <hr>
-		        <b class="mb-3">Datos bancarios</b>   
-		        <br>
-		        <div class="col-md-3 col-sm-12 mb-3">
+		        <b class="mb-3">Datos de Facturación</b>   
+		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-								<select class="form-select" id="FacturarCliente" name="FacturarCliente">
-							    	<option value="" selected> - Seleccione una opción - </option>
-							    	<option value="1">Si</option>
-							    	<option value="0">No</option>
-							  	</select>
-							 	<label for="FacturarCliente">Facturar ventas</label>
+		            <input type="text" class="form-control" id="RFCCliente" name="RFCCliente" placeholder="Ingresa el RFC del cliente">
+		            <label for="RFCCliente">RFC</label>
+		          </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		            <input type="text" class="form-control" id="razonCliente" name="razonCliente" placeholder="Nombre / Régimen Fiscal">
+		            <label for="RFCCliente">Nombre / Razón Social</label>
+		          </div>
+		        </div>
+		        <div class="col-md-4 mb-3">
+							<div class="form-floating mb-3">
+								<select class="form-select" name="regimenCliente" id="regimenCliente">
+									<option value="">- Seleccione una opción -</option>
+									<option value="601">601 - General de Ley Personas Morales</option>
+									<option value="603">603 - Personas Morales con Fines no Lucrativos</option>
+									<option value="605">605 - Sueldos y Salarios e Ingresos Asimilados a Salarios</option>
+									<option value="606">606 - Arrendamiento</option>
+									<option value="607">607 - Régimen de Enajenación o Adquisición de Bienes</option>
+									<option value="608">608 - Demás ingresos</option>
+									<option value="610">610 - Residentes en el Extranjero sin Establecimiento Permanente en México</option>
+									<option value="611">611 - Ingresos por Dividendos (socios y accionistas)</option>
+									<option value="612">612 - Personas Físicas con Actividades Empresariales y Profesionales</option>
+									<option value="614">614 - Ingresos por intereses</option>
+									<option value="615">615 - Régimen de los ingresos por obtención de premios</option>
+									<option value="616">616 - Sin obligaciones fiscales</option>
+									<option value="620">620 - Sociedades Cooperativas de Producción que optan por diferir sus ingresos</option>
+									<option value="621">621 - Incorporación Fiscal</option>
+									<option value="622">622 - Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras</option>
+									<option value="623">623 - Opcional para Grupos de Sociedades</option>
+									<option value="624">624 - Coordinados</option>
+									<option value="625">625 - Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas</option>
+									<option value="626">626 - Régimen Simplificado de Confianza</option>
+								</select>
+								<label>Régimen Fiscal</label>
 							</div>
 		        </div>
-		        <div class="col-md-3 col-sm-12 mb-3">
+		        <hr>
+		        <b class="mb-3">Datos bancarios</b>   
+		        <br>
+		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		            <input type="text" class="form-control" id="TitularBancoCliente" name="TitularBancoCliente" placeholder="Ingresa el nombre del titular">
 		            <label for="TitularBancoCliente">Titular</label>
 		          </div>
 		        </div>
-		        <div class="col-md-3 col-sm-12 mb-3">
+		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		            <input type="text" class="form-control" id="BancoCliente" name="BancoCliente" placeholder="Ingresa el nombre del banco">
 		            <label for="BancoCliente">Banco</label>
 		          </div>
 		        </div>
-		        <div class="col-md-3 col-sm-12 mb-3">
+		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		            <input type="text" class="form-control" id="CuentaBancoCliente" name="CuentaBancoCliente" placeholder="Ingresa el número de cuenta o clabe">
 		            <label for="CuentaBancoCliente">No. Cuenta / CLABE</label>

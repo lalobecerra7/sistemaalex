@@ -35,7 +35,7 @@
         <div class="container" style="min-height: 100vh;">
             <div class="row align-items-center" style="min-height: 100vh;">
                 <div class="col-12 text-center">
-                    <div class="spinner-border text-danger" style="width: 8rem; height: 8rem;" role="status">
+                    <div class="spinner-border text-primary" style="width: 8rem; height: 8rem;" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div> 
                 </div>
@@ -594,25 +594,7 @@
 
             #MenuImpuestos#
 
-            <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-              <i class="menu-icon fas fa-cogs"></i>
-                <div data-i18n="Layouts">Configuración</div>
-              </a>
-
-              <ul class="menu-sub">
-                #MenuTickets#
-              </ul>
-
-              <ul class="menu-sub">
-                <li class="menu-item cargarVista" carga="v_general" titulo="General" id="cargarGeneral">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="General">General</div>
-                  </a>
-                </li>
-              </ul>
-
-            </li>
+            #MenuConfiguracion#
 
             #MenuUsuarios#
 
@@ -748,7 +730,26 @@
       </div>
     </div> 
 
-
+    <!--/////////////////////////Modal///////////////////////////////////-->
+    <div class="modal fade" id="modalFacturar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered" style="z-index: 9999 !important;">
+        <div class="modal-content">
+          <div class="modal-header bg-inverse bd-inverse-darken">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Facturar</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="formFacturar">
+            <div class="modal-body">
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+              <button type="submit" class="btn btn-primary" id="GuardarExistenciaProducto"><i class="fa fa-check-circle"></i> <strong>Facturar</strong></button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div> 
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
@@ -785,9 +786,9 @@
     <script type="text/javascript" src="vistas/assets/js/perfil.js"></script>
     <script type="text/javascript" src="vistas/assets/js/tickets.js"></script>
     <script type="text/javascript" src="vistas/assets/js/zonas.js"></script>
-    <!--<script type="text/javascript" src="vistas/assets/js/ventas.js"></script>-->
     <script type="text/javascript" src="vistas/assets/js/compras.js"></script>
     <script type="text/javascript" src="vistas/assets/js/hacerCompra.js"></script>
     <script type="text/javascript" src="vistas/assets/js/ventas.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/facturacion.js"></script>
   </body>
 </html>

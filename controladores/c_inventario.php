@@ -158,13 +158,20 @@ class inventario {
 	public function _insertar(){
 		$omodelo = new m_modelo();
 		extract($_POST);
+
 		if($tipo == 'agregarMerma'){
 			$fecha = date('Y-m-d H:i:s'); 
 			$IDProducto = $omodelo->link->real_escape_string($IDProducto);
+			$SucursalMerma = $omodelo->link->real_escape_string($SucursalMerma);
+			$CantidadMerma = $omodelo->link->real_escape_string($CantidadMerma);
+			$MotivoMerma = $omodelo->link->real_escape_string($MotivoMerma);
+			$PresentacionProductoMerma = $omodelo->link->real_escape_string($PresentacionProductoMerma);
+			$FechaMerma = $omodelo->link->real_escape_string($FechaMerma);
 			$Usuario = $_SESSION['user_admin']['ID_Usuario'];
-			$existencia= '';
-			$Costo = '';
-			$query2 = "SELECT Cantidad, (SELECT Costo FROM detalles_productos WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma') AS Costo, productos.Costo AS CostoGral FROM inventario INNER JOIN productos ON ID_Producto = '$IDProducto' WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma' AND FK_Presentacion = '$PresentacionProductoMerma'";
+			$existencia = 0;
+			$costo = 0;
+
+			$query2 = "SELECT IFNULL(Costo, 0), IFNULL(Cantidad, 0) FROM productos LEFT JOIN inventario ON FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalMerma' AND FK_Presentacion = '$PresentacionProductoMerma' WHERE ID_Producto = '$IDProducto'";
 
 			$row = $omodelo->_consultar($query2);
 			$numerofilas = $omodelo->numerofilas;
@@ -174,18 +181,15 @@ class inventario {
 			}else{
 				if($numerofilas > 0){
 					$existencia = $row[0]["Cantidad"];
+					$costo = $row[0]["Costo"];
 				}
+
 				if($existencia < $CantidadMerma){
 					echo "ErrorCantidad";
 				}else{
-					if($row[0]["Costo"] != '' || $row[0]["Costo"] != null){
-						$Costo = $row[0]["Costo"];
-					}else {
-						$Costo = $row[0]["CostoGral"];
-					}
 					$existenciaM = ($existencia-$CantidadMerma);
 				
-					$query = "INSERT INTO merma SET FK_Sucursal = '$SucursalMerma', FK_Producto = '$IDProducto', FK_Presentacion = '$PresentacionProductoMerma', Cantidad = '$CantidadMerma', Motivo = '$MotivoMerma', Fecha_Registro = '$fecha', Fecha_Merma = '$FechaMerma', FK_Usuario = '$Usuario'";
+					$query = "INSERT INTO merma SET FK_Sucursal = '$SucursalMerma', FK_Producto = '$IDProducto', FK_Presentacion = '$PresentacionProductoMerma', Cantidad = '$CantidadMerma', Motivo = '$MotivoMerma', Fecha_Registro = '$fecha', Fecha_Merma = '$FechaMerma', FK_Usuario = '$Usuario', Costo = '$costo'";
 					$error = $omodelo->_insertar($query);
 			
 					if ($error == "si") {
@@ -401,6 +405,7 @@ class inventario {
 	public function _detalles(){
 		$omodelo = new m_modelo();
 		extract($_POST);
+
 		if ($tipo == 'merma'){
 			$IDProducto = $omodelo->link->real_escape_string($id);
 			$buscar =  $omodelo->link->real_escape_string($buscar);

@@ -91,7 +91,6 @@ function v_productos() {
 
                         TablaProductos(); 
                         $("#ModalProductos").modal("hide");
-                        detallesProducto = [];
                     } else if ($.trim(res) == "Error: Duplicate entry '"+$("#CodigoBarras").val()+"' for key 'Codigo'"){
                         Swal.fire({
                             icon: 'error',
