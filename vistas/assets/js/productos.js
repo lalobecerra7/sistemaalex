@@ -461,7 +461,7 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('click', '.bSeleccionarIm', function() {
-        if($("#verImpuetsosProd").children('tr[attrID='+$(this).attr('attrID')+']').length == 0){
+        if($("#verImpuetsosProd").children('tr[attrID="'+$(this).attr('attrID')+'"]').length == 0){
             var padre = $(this).parent().parent();
             $("#verImpuetsosProd").append(`<tr attrID="`+$(this).attr('attrID')+`">
                 <td>`+$.trim(padre.children('td:eq(0)').text())+`</td>
@@ -546,7 +546,7 @@ jQuery(document).ready(function($) {
 
     $(document).on('submit', '#formPresentaciones', function(event) {
         event.preventDefault();
-        if($("#verPresentaciones").children('tr[attrID='+$.trim($("#nombrePresentacion").val())+']').length == 0){
+        if($("#verPresentaciones").children('tr[attrID="'+$.trim($("#nombrePresentacion").val())+'"]').length == 0){
             $("#verPresentaciones").append(`<tr attrID="`+$.trim($("#nombrePresentacion").val())+`">
                 <td>`+$.trim($("#unidadPresentacion").val())+`</td>
                 <td>`+$.trim($("#nombrePresentacion").val())+`</td>

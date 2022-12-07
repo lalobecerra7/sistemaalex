@@ -126,13 +126,13 @@
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		           	<input type="number" class="form-control" min='0' max='10000' id="PrecioProducto" name="PrecioProducto" placeholder="Ingresa el precio del producto">
+		           	<input type="number" class="form-control" step="any" min='0' max='10000' id="PrecioProducto" name="PrecioProducto" placeholder="Ingresa el precio del producto">
 		            <label for="PrecioProducto">Precio</label>
 		          </div>
 		        </div>
 	       		<div class="col-md-4 col-sm-12 mb-3">
 				   		<div class="form-floating">
-		           	<input type="number" class="form-control" min='0' max='10000' id="CostoProducto" name="CostoProducto" placeholder="Ingresa el costo del producto">
+		           	<input type="number" class="form-control" step="any" min='0' max='10000' id="CostoProducto" name="CostoProducto" placeholder="Ingresa el costo del producto">
 		            <label for="CostoProducto">Costo</label>
 		          </div>
 		        </div>
@@ -140,19 +140,19 @@
 					<div class="row">
 						<div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		            <input type="number" class="form-control" min='0' max='10000' id="PrecioMayoreo" name="PrecioMayoreo" placeholder="Ingresa el precio de mayoreo del producto">
+		            <input type="number" class="form-control" step="any" min='0' max='10000' id="PrecioMayoreo" name="PrecioMayoreo" placeholder="Ingresa el precio de mayoreo del producto">
 		            <label for="PrecioMayoreo">Precio de mayoreo</label>
 		          </div>
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		            <input type="number" class="form-control" id="Minimo" min='0' max='1000' name="Minimo" placeholder="Ingresa el mínimo de stock del producto">
+		            <input type="number" class="form-control" id="Minimo" step="any" min='0' max='1000' name="Minimo" placeholder="Ingresa el mínimo de stock del producto">
 		            <label for="Minimo">Stock Mínimo</label>
 		          </div>
 		        </div>
 						<div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		               	<input type="number" class="form-control" id="Maximo" min='0' max='1000' name="Maximo" placeholder="Ingresa el máximo de stock del producto">
+		               	<input type="number" class="form-control" id="Maximo" step="any" min='0' max='1000' name="Maximo" placeholder="Ingresa el máximo de stock del producto">
 		                <label for="Maximo">Stock Máximo</label>
 		            </div>
 		        </div>
@@ -292,10 +292,10 @@
 		                  <input type="text" form="formPreciosProd" class="form-control" id="nombrePrecio" name="nombrePrecio" placeholder="Ingresa el nombre del precio del producto" required>
 		                </td>
 		                <td>
-		                  <input type="number" form="formPreciosProd" class="form-control" id="precioProductoPres" name="precioProductoPres" step="0" min="0" placeholder="$0.00" required>
+		                  <input type="number" form="formPreciosProd" class="form-control" id="precioProductoPres" name="precioProductoPres" step="any" min="0" placeholder="$0.00" required>
 		                </td>
 		                <td>
-		                  <input type="number" form="formPreciosProd" class="form-control" id="precioProductoMayoreoPres" name="precioProductoMayoreoPres" step="0" min="0" placeholder="$0.00">
+		                  <input type="number" form="formPreciosProd" class="form-control" id="precioProductoMayoreoPres" name="precioProductoMayoreoPres" step="any" min="0" placeholder="$0.00">
 		                </td>
 		                <td>
 		                	<button type="button" class="btn btn-sm btn-success" id="bAgergarPrecio" attrid nombre><i class="fas fa-plus"></i></button>
@@ -366,7 +366,7 @@
 								<label for="SucursalExistencia">Sucursal</label>
 							</div>
 							<div class="form-floating mb-3">
-								<input type="number" class="form-control" min='0' id="CantidadExistencia" name="CantidadExistencia" placeholder="Ingresa la cantidad">
+								<input type="number" class="form-control" step="any" min='0' id="CantidadExistencia" name="CantidadExistencia" placeholder="Ingresa la cantidad">
 								<label for="CantidadExistencia">Cantidad</label>
 							</div>
 				   	</div>
