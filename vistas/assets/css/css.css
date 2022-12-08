@@ -17,6 +17,7 @@ html, body{
 
 *::-webkit-scrollbar-thumb {
   background-color: #0090AA;
+  border-radius: 10px;
 }
 
 .oculto{
@@ -765,4 +766,12 @@ footer .breadcrumb .breadcrumb-item a:hover{
 	    left: -5.7rem !important;
     	width: 275px;
     }
+}*/
+
+#datosEmisorCFDI p{
+	margin: 1px;
+}
+
+#datosReceptoCFDI p{
+	margin: 1px;
 }

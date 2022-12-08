@@ -1,3 +1,5 @@
+var filasPre = null;
+
 function v_productos() {
     
     TablaProductos(); 
@@ -176,7 +178,45 @@ function v_productos() {
             });    
         }              
     });  
-  
+    
+    $('#formModiPresentacion').validate({
+        rules: {
+            nombrePresentacionM: {
+                required: true
+            },
+            abreviaturaPresentacionM: {
+                required: true
+            }
+        },
+        messages: {
+            nombrePresentacionM: {
+                required: "El nombre es requerido."
+            },
+            abreviaturaPresentacionM: {
+                required: "La abreviatura de es requerida."
+            }
+        },
+        submitHandler: function(form) {
+            var filas = $("#verPresentaciones").children('tr[attrID="'+$.trim($("#nombrePresentacion").val())+'"]'); 
+            if(filas.length <= 1){
+                var nombre = $.trim(filaPre.attr('attrID'));
+                filaPre.attr('attrID', $.trim($("#nombrePresentacionM").val()));
+                filaPre.children('td:eq(0)').html($.trim($("#unidadPresentacionM").val()));
+                filaPre.children('td:eq(1)').html($.trim($("#nombrePresentacionM").val()));
+                filaPre.children('td:eq(2)').html($.trim($("#abreviaturaPresentacionM").val()));
+
+                $("#presentacionProdSelect").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
+                $("#presentacionProdSelect").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
+                $("#modalPresentaciones").modal('hide');
+            }else{
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'La presentación ya existe, por favor utiliza otra.'
+                });
+            }
+        }              
+    });
 }
 
 function TablaProductos(){
@@ -382,11 +422,16 @@ jQuery(document).ready(function($) {
            
             if(datos.Presentaciones != null){
                 datos.Presentaciones.forEach(presentacion => {
+                    var botonEli = '';
+                    if(parseInt(presentacion.NumProd) == 0){
+                        botonEli = '<button type="button" class="btn btn-danger btn-sm bQuitarPresenta"><i class="fas fa-trash"></i></button>';
+                    }
+
                     $("#verPresentaciones").append(`<tr id="`+presentacion.ID_Presentacion+`" attrID="`+presentacion.Nombre+`">
                         <td>`+presentacion.Clave_CFDI+`</td>
                         <td>`+presentacion.Nombre+`</td>
                         <td>`+presentacion.Abreviatura+`</td>
-                        <td><button type="button" class="btn btn-danger btn-sm bQuitarPresenta"><i class="fas fa-trash"></i></button></td>
+                        <td>`+botonEli+` <button type="button" class="btn btn-warning btn-sm bModificarPresenta" attrID="`+presentacion.ID_Presentacion+`"><i class="fas fa-pencil"></i></button></td>
                     </tr>`);
 
                     $("#presentacionProdSelect").append('<option value="'+presentacion.Nombre+'">'+presentacion.Nombre+'</option>');
@@ -509,6 +554,11 @@ jQuery(document).ready(function($) {
         $("#modalClavesUnidades").modal('show');
     });
 
+    $(document).on('click', '#bBuscarUnidadPresM', function() {
+        tipoClaveU = 'presM';
+        $("#modalClavesUnidades").modal('show');
+    });
+
     $(document).on('click', '.bSeleccionarClaveProdServ', function() {
         $("#claveProdServ").val($.trim($(this).parent().parent().children('td:eq(0)').text()));        
 
@@ -526,7 +576,7 @@ jQuery(document).ready(function($) {
             if($.trim($("#abreUnudadProd").val()) == ""){
                 $("#abreUnudadProd").val($.trim(padre.children('td:eq(2)').text()));
             }
-        }else{
+        }else if(tipoClaveU == 'pres'){
             $("#unidadPresentacion").val($.trim(padre.children('td:eq(0)').text()));
 
             if($.trim($("#nombrePresentacion").val()) == ""){
@@ -534,6 +584,15 @@ jQuery(document).ready(function($) {
             }
             if($.trim($("#abreviaturaPresentacion").val()) == ""){
                 $("#abreviaturaPresentacion").val($.trim(padre.children('td:eq(2)').text()));
+            }
+        }else{
+            $("#unidadPresentacionM").val($.trim(padre.children('td:eq(0)').text()));
+
+            if($.trim($("#nombrePresentacionM").val()) == ""){
+                $("#nombrePresentacionM").val($.trim(padre.children('td:eq(1)').text()));
+            }
+            if($.trim($("#abreviaturaPresentacionM").val()) == ""){
+                $("#abreviaturaPresentacionM").val($.trim(padre.children('td:eq(2)').text()));
             }
         }
 
@@ -551,7 +610,7 @@ jQuery(document).ready(function($) {
                 <td>`+$.trim($("#unidadPresentacion").val())+`</td>
                 <td>`+$.trim($("#nombrePresentacion").val())+`</td>
                 <td>`+$.trim($("#abreviaturaPresentacion").val())+`</td>
-                <td><button type="button" class="btn btn-danger btn-sm bQuitarPresenta"><i class="fas fa-trash"></i></button></td>
+                <td><button type="button" class="btn btn-danger btn-sm bQuitarPresenta"><i class="fas fa-trash"></i></button> <button type="button" class="btn btn-warning btn-sm bModificarPresenta"><i class="fas fa-pencil"></i></button></td>
             </tr>`);
 
             $("#presentacionProdSelect").append('<option value="'+$.trim($("#nombrePresentacion").val())+'">'+$.trim($("#nombrePresentacion").val())+'</option>');
@@ -590,5 +649,14 @@ jQuery(document).ready(function($) {
 
     $(document).on('click', '.bQuitarPrecio', function() {
         $(this).parent().parent().remove();
+    });
+
+    $(document).on('click', '.bModificarPresenta', function() {
+        filaPre = $(this).parent().parent();
+        $("#unidadPresentacionM").val($.trim(filaPre.children('td:eq(0)').text()));
+        $("#nombrePresentacionM").val($.trim(filaPre.children('td:eq(1)').text()));
+        $("#abreviaturaPresentacionM").val($.trim(filaPre.children('td:eq(2)').text()));
+        $("#bGuardarPresenta").attr('attrID', $(this).attr('attrID'));
+        $("#modalPresentaciones").modal('show');
     });
 });

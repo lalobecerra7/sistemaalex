@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-12-2022 a las 02:06:21
+-- Tiempo de generación: 08-12-2022 a las 05:57:25
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.3
 
@@ -55186,6 +55186,7 @@ CREATE TABLE `clientes` (
 --
 
 INSERT INTO `clientes` (`ID_Cliente`, `Nombre`, `Calle`, `No_Exterior`, `No_Interior`, `Colonia`, `Ciudad`, `Codigo_Postal`, `Estado`, `Pais`, `Telefono`, `Celular`, `Descuento`, `Correo`, `Fecha_Nacimiento`, `Sexo`, `Fecha_Registro`, `Foto`, `RFC`, `Facturar`, `No_Cuenta`, `Banco`, `Titular`, `FK_Sucursal`, `Razon_CFDI`, `Regimen_CFDI`) VALUES
+(1, 'PUBLICO EN GENERAL', '', '', '', '', '', '01000', '', '', '', '', 0, '', '0000-00-00', '', '0000-00-00 00:00:00', '', 'XAXX010101000', 0, '', '', '', 0, 'PUBLICO EN GENERAL', '616'),
 (2, 'Arturo Iturbide', '', '', '', '', '', '', '', '', '015556278345', '5532375991', 10, 'iturbide.jastrow@me.com', '0000-00-00', '', '2019-06-30 14:02:11', '', 'YBI140401LJ3', 0, '', '', '', 0, '', ''),
 (3, 'Amelia Mena Vazquez', '', '', '', '', '', '', '', '', '01 55 55 35 02 23', '', 0, 'holaropainfantil@yahoo.com.mx', '0000-00-00', '', '2019-06-30 14:01:16', '', 'MEVA2705309G5', 0, '', '', '', 0, '', ''),
 (5, 'Angelica Gutierrez', '', '', '', '', '', '', '', '', '01 34 14 14 10 83', ' 14 14 03 88', 0, 'lika_2891@hotmail.com', '0000-00-00', '', '2019-06-30 14:01:47', '', 'GUMA530910QR1', 0, '', '', '', 0, '', ''),
@@ -55196,7 +55197,7 @@ INSERT INTO `clientes` (`ID_Cliente`, `Nombre`, `Calle`, `No_Exterior`, `No_Inte
 (17, 'Ma. De Lourdes Portilla Calderon', '', '', '', '', '', '', '', '', '01 89 99 22 06 65, 8999221322', '', 0, 'latiendanuevareynosa@hotmail.com', '0000-00-00', '', '2019-06-30 14:07:29', '', 'POCL351007JV7', 0, '', '', '', 0, '', ''),
 (24, 'Sr. Manuel Yanez 2', '', '', '', '', '', '', '', '', '01 63 94 72 03 98, 6394745148', '', 0, 'novia2003@gmail.com', '0000-00-00', '', '2019-06-30 14:08:17', '', 'CMN84080213', 0, '', '', '', 0, '', ''),
 (26, 'Manuel Emilio Torres Sanchez', '', '', '', '', '', '', '', '', '34 87 84 64 64', '', 0, 'replamex@hotmail.com', '0000-00-00', '', '2016-07-13 12:07:44', '', 'TOSM860124SH5', 0, '', '', '', 0, '', ''),
-(27, 'Ejemplo', '', '', '', '', '', '06470', '', '', '', '', 0, '', '0000-00-00', '', '2022-12-05 20:52:47', '', 'SSF1103037F1', 0, '', '', '', 0, 'SCAFANDRA SOFTWARE FACTORY', '601');
+(27, 'Ejemplo', 'dfdf', '', '', '', '', '06470', '', '', '', '', 0, '', '0000-00-00', '', '2022-12-05 20:52:47', '', 'SSF1103037F1', 0, '', '', '', 0, 'SCAFANDRA SOFTWARE FACTORY', '601');
 
 -- --------------------------------------------------------
 
@@ -55314,20 +55315,7 @@ CREATE TABLE `detalles_impuestos_productos` (
 --
 
 INSERT INTO `detalles_impuestos_productos` (`ID_Detalle_Im_Producto`, `FK_Producto`, `FK_Impuesto`) VALUES
-(1, 10, 1),
-(2, 11, 1),
-(3, 11, 2),
-(4, 13, 1),
-(5, 13, 2),
-(6, 14, 0),
-(7, 14, 0),
-(8, 28, 0),
-(9, 28, 0),
-(10, 32, 1),
-(11, 32, 0),
-(17, 0, 1),
-(18, 0, 2),
-(32, 35, 1);
+(35, 35, 1);
 
 -- --------------------------------------------------------
 
@@ -55339,12 +55327,18 @@ CREATE TABLE `detalles_impuestos_ventas` (
   `ID_Impuesto` int(11) NOT NULL,
   `FK_Detalle_Venta` int(11) NOT NULL,
   `Tipo_Impuesto_CFDI` varchar(60) NOT NULL,
-  `Base_CFDI` double NOT NULL,
   `Impuesto_CFDI` varchar(60) NOT NULL,
+  `Clave_CFDI` varchar(30) NOT NULL,
   `Tipo_Factor_CFDI` varchar(60) NOT NULL,
-  `Tasa_Cuota_CFDI` varchar(60) NOT NULL,
-  `Importe_CFDI` double NOT NULL
+  `Tasa_Cuota_CFDI` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `detalles_impuestos_ventas`
+--
+
+INSERT INTO `detalles_impuestos_ventas` (`ID_Impuesto`, `FK_Detalle_Venta`, `Tipo_Impuesto_CFDI`, `Impuesto_CFDI`, `Clave_CFDI`, `Tipo_Factor_CFDI`, `Tasa_Cuota_CFDI`) VALUES
+(1, 2, 'Trasladado', 'IVA', '002', 'Tasa', '0.16');
 
 -- --------------------------------------------------------
 
@@ -55357,6 +55351,8 @@ CREATE TABLE `detalles_ventas` (
   `FK_Venta` int(11) NOT NULL,
   `FK_Producto` int(11) NOT NULL,
   `FK_Presentacion` int(11) NOT NULL,
+  `Nombre_Presentacion` tinytext NOT NULL,
+  `Abreviacion_Presentacion` tinytext NOT NULL,
   `Descripcion` tinytext NOT NULL,
   `Precio` double NOT NULL,
   `Cantidad` double NOT NULL,
@@ -55375,8 +55371,8 @@ CREATE TABLE `detalles_ventas` (
 -- Volcado de datos para la tabla `detalles_ventas`
 --
 
-INSERT INTO `detalles_ventas` (`ID_Detalle_Venta`, `FK_Venta`, `FK_Producto`, `FK_Presentacion`, `Descripcion`, `Precio`, `Cantidad`, `Descuento`, `Total`, `Devuelto`, `Fecha_Devolucion`, `Regreso_Inventario`, `Clave_ProdServ_CFDI`, `Clave_Unidad_CFDI`, `Unidad_CFDI`, `Objeto_Impuesto_CFDI`) VALUES
-(2, 1, 35, 0, 'Caja de fresas', 55, 8, 40, 400, 0, '0000-00-00 00:00:00', 0, '', '', '', '');
+INSERT INTO `detalles_ventas` (`ID_Detalle_Venta`, `FK_Venta`, `FK_Producto`, `FK_Presentacion`, `Nombre_Presentacion`, `Abreviacion_Presentacion`, `Descripcion`, `Precio`, `Cantidad`, `Descuento`, `Total`, `Devuelto`, `Fecha_Devolucion`, `Regreso_Inventario`, `Clave_ProdServ_CFDI`, `Clave_Unidad_CFDI`, `Unidad_CFDI`, `Objeto_Impuesto_CFDI`) VALUES
+(2, 1, 35, 0, '', '', 'Caja de fresas', 55, 8, 40, 464, 0, '0000-00-00 00:00:00', 0, '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -55388,6 +55384,7 @@ CREATE TABLE `detalle_compras` (
   `ID_Detalle_Compra` int(11) NOT NULL,
   `FK_Compra` int(11) NOT NULL,
   `FK_Producto` int(11) NOT NULL,
+  `FK_Presentacion` int(11) NOT NULL,
   `Costo` double NOT NULL,
   `Cantidad` double NOT NULL,
   `Subtotal` double NOT NULL
@@ -55487,8 +55484,7 @@ CREATE TABLE `impuestos` (
 --
 
 INSERT INTO `impuestos` (`ID_Impuesto`, `Nombre`, `Porcentaje`, `Clave_CFDI`, `Tipo_Factor`, `Clase`) VALUES
-(1, 'IVA', 16, '002', 'Tasa', 'Trasladado'),
-(2, 'ISR', 5, '001', 'Tasa', 'Trasladado');
+(1, 'IVA', 16, '002', 'Tasa', 'Trasladado');
 
 -- --------------------------------------------------------
 
@@ -58764,7 +58760,18 @@ INSERT INTO `movimientos` (`ID_Movimiento`, `Descripcion`, `IP`, `Pais`, `Estado
 (3166, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'1\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-06 12:21:32', '', 2),
 (3167, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'1\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-06 12:22:59', '', 2),
 (3168, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'1\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-06 12:23:29', '', 2),
-(3169, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-06 12:24:34', '', 2);
+(3169, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-06 12:24:34', '', 2),
+(3170, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-06 20:11:13', '', 2),
+(3171, 'Admin: DELETE FROM impuestos WHERE ID_Impuesto=\'2\'', '', '', '', '', '', '2022-12-06 21:39:45', '', 2),
+(3172, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-07 12:14:20', '', 0),
+(3173, 'Admin: UPDATE sucursales SET Nombre = \'General 1\', FK_Encargado = \'2\', Calle = \'Ejemplo\', No_Exterior = \'54\', No_Interior = \'\', Colonia = \'\', CP = \'47190\', Ciudad = \'Aranadas\', Estado = \'Jalisco\', Pais = \'MÃ©xico \', Email = \'\', Telefono = \'\', Segundo_Telefono  = \'\', FK_Zona = \'2\' WHERE ID_Sucursal = \'1\'', '', '', '', '', '', '2022-12-07 13:50:15', '', 2),
+(3174, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-07 14:15:16', '', 2),
+(3175, 'Admin: UPDATE sucursales SET Nombre = \'General 1\', FK_Encargado = \'2\', Calle = \'Ejemplo\', No_Exterior = \'54\', No_Interior = \'\', Colonia = \'\', CP = \'47190\', Ciudad = \'Aranadas\', Estado = \'Jalisco\', Pais = \'MÃ©xico    \', Email = \'\', Telefono = \'\', Segundo_Telefono  = \'\', FK_Zona = \'2\' WHERE ID_Sucursal = \'1\'', '', '', '', '', '', '2022-12-07 15:27:17', '', 2),
+(3176, 'Admin: UPDATE sucursales SET Nombre = \'Tienda Dionisio\', FK_Encargado = \'2\', Calle = \'Dionisio Rodriguez\', No_Exterior = \'3868\', No_Interior = \'\', Colonia = \'Jardines de San Francisco\', CP = \'44790\', Ciudad = \'Guadalajara\', Estado = \'Jalisco\', Pais = \'MÃ©xico \', Email = \'\', Telefono = \'3336051454\', Segundo_Telefono  = \'3323018720\', FK_Zona = \'3\' WHERE ID_Sucursal = \'8\'', '', '', '', '', '', '2022-12-07 15:27:40', '', 2),
+(3177, 'Admin: UPDATE sucursales SET Nombre = \'Tienda Dionisio\', FK_Encargado = \'2\', Calle = \'Dionisio Rodriguez\', No_Exterior = \'3868\', No_Interior = \'\', Colonia = \'Jardines de San Francisco\', CP = \'44790\', Ciudad = \'Guadalajara\', Estado = \'Jalisco\', Pais = \'MÃ©xico\', Email = \'\', Telefono = \'3336051454\', Segundo_Telefono  = \'3323018720\', FK_Zona = \'3\' WHERE ID_Sucursal = \'8\'', '', '', '', '', '', '2022-12-07 15:28:44', '', 2),
+(3178, 'Admin: UPDATE sucursales SET Nombre = \'General 1\', FK_Encargado = \'2\', Calle = \'Ejemplo\', No_Exterior = \'54\', No_Interior = \'\', Colonia = \'\', CP = \'47190\', Ciudad = \'Aranadas\', Estado = \'Jalisco\', Pais = \'MÃ©xico\', Email = \'\', Telefono = \'\', Segundo_Telefono  = \'\', FK_Zona = \'2\' WHERE ID_Sucursal = \'1\'', '', '', '', '', '', '2022-12-07 15:28:48', '', 2),
+(3179, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'dfdf\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'06470\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'SSF1103037F1\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'SCAFANDRA SOFTWARE FACTORY\', Regimen_CFDI = \'601\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-07 21:25:09', '', 2),
+(3180, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-07 22:53:45', '', 2);
 
 -- --------------------------------------------------------
 
@@ -58816,7 +58823,8 @@ CREATE TABLE `precios` (
 
 INSERT INTO `precios` (`ID_Precio`, `FK_Producto`, `FK_Zona`, `FK_Presentacion`, `Nombre`, `Precio`, `Precio_Mayoreo`) VALUES
 (17, 26, 3, 1, 'gATIÃ‘O', 1, 1),
-(30, 35, 2, 0, 'dfdf', 50, 0);
+(35, 35, 2, 0, 'dfdf', 50, 0),
+(36, 35, 3, 19, 'dcd', 60, 0);
 
 -- --------------------------------------------------------
 
@@ -58840,7 +58848,9 @@ INSERT INTO `presentaciones` (`ID_Presentacion`, `FK_Producto`, `Nombre`, `Abrev
 (1, 26, 'Gato', '12', ''),
 (2, 26, 'Perro', 'Pe', ''),
 (4, 26, 'Elefante', 'Ele', ''),
-(17, 35, 'fdfd', 'dfdf', '');
+(18, 35, 'fdfd', 'dfdf', ''),
+(19, 35, 'dsds dfd', 'dfdf', ''),
+(20, 35, 'ejemplo', 'ej', '05');
 
 -- --------------------------------------------------------
 
@@ -58942,7 +58952,6 @@ CREATE TABLE `sucursales` (
   `Email` text NOT NULL,
   `Telefono` tinytext NOT NULL,
   `Segundo_Telefono` tinytext NOT NULL,
-  `RFC` varchar(50) NOT NULL,
   `FK_Zona` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -58950,9 +58959,9 @@ CREATE TABLE `sucursales` (
 -- Volcado de datos para la tabla `sucursales`
 --
 
-INSERT INTO `sucursales` (`ID_Sucursal`, `Nombre`, `FK_Encargado`, `Calle`, `No_Exterior`, `No_Interior`, `Colonia`, `CP`, `Ciudad`, `Estado`, `Pais`, `Email`, `Telefono`, `Segundo_Telefono`, `RFC`, `FK_Zona`) VALUES
-(1, 'General 1', 2, '', '', '', '', '', '', '', '', '', '', '', '', 2),
-(8, 'Tienda Dionisio', 2, 'Dionisio Rodriguez', '3868', '', 'Jardines de San Francisco', '44790', 'Guadalajara', 'Jalisco', 'Mexico ', '', '3336051454', '3323018720', '', 3);
+INSERT INTO `sucursales` (`ID_Sucursal`, `Nombre`, `FK_Encargado`, `Calle`, `No_Exterior`, `No_Interior`, `Colonia`, `CP`, `Ciudad`, `Estado`, `Pais`, `Email`, `Telefono`, `Segundo_Telefono`, `FK_Zona`) VALUES
+(1, 'General 1', 2, 'Ejemplo', '54', '', '', '47190', 'Aranadas', 'Jalisco', 'MÃ©xico', '', '', '', 2),
+(8, 'Tienda Dionisio', 2, 'Dionisio Rodriguez', '3868', '', 'Jardines de San Francisco', '44790', 'Guadalajara', 'Jalisco', 'MÃ©xico', '', '3336051454', '3323018720', 3);
 
 --
 -- Disparadores `sucursales`
@@ -59048,7 +59057,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`ID_Usuario`, `Nombre`, `Primer_Apellido`, `Segundo_Apellido`, `Correo`, `Contrasena`, `Tipo_Usuario`, `Permisos`, `BD`, `Estatus`, `Intentos`, `Ultimo_Intento`, `Tiempo_Inicio`, `Tiempo_Final`, `Foto`, `Temporal`, `Activo`, `Tipo_Login`, `Conectado`, `Fecha_Alta`, `FK_Sucursal`) VALUES
-(2, 'Admin', 'cremasi', '', 'admin@gmail.com', '$2y$12$lhPLfk6dsc6TdYE5fnes2OfWuBPlqUQhh8JF9ujg0iNNmSGQC74Xe', 'Administrador', '', 0, 0, 0, '2022-12-06 11:37:22', '2022-12-06 11:37:22', '2022-12-01 08:43:01', '2_anuncio.png', 0, 1, 1, 0, '2022-09-21 18:52:42', 0),
+(2, 'Admin', 'cremasi', '', 'admin@gmail.com', '$2y$12$lhPLfk6dsc6TdYE5fnes2OfWuBPlqUQhh8JF9ujg0iNNmSGQC74Xe', 'Administrador', '', 0, 0, 0, '2022-12-07 12:14:19', '2022-12-07 12:14:19', '2022-12-01 08:43:01', '2_anuncio.png', 0, 1, 1, 0, '2022-09-21 18:52:42', 0),
 (10, 'Lalo', 'bECERRA', '', 'lalo@gmail.com', '$2y$12$ACrdPWFFaSDrOmehjwt0MuIgTfsCmuxpWnDwf8TCoRAwzC8C50QsK', 'Normal', 'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_areas,0,0,0,0~v_categorias,0,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0~v_cajas,0,0,0,0~v_impuestos,0,0,0,0~v_tickets,0~v_general,0~v_usuarios,0,0,0,0,0~', 0, 0, 0, '2022-09-22 18:51:43', '2022-09-22 18:51:43', '2022-09-22 19:02:18', '', 0, 0, 1, 0, '2022-09-22 18:51:31', 0),
 (11, 'Ejemplo', 'sdesde', 'dds', 'ejemplo@gmail.com', '$2y$12$ks7YsxZ13IARNevWP1q4X.Lh8KF0TeogNzNxukBbsnOe4KU5mm0qi', 'Normal', '', 0, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 1, 1, 0, '2022-09-22 18:49:49', 0),
 (14, 'Antonio de Jesus', 'Torres', 'Vazquez', 'antonioudgarandas@gmal.com', '$2y$12$36ZKO7frlfjtaKpoP4K5CumUm/lOK6S7niuUrVNhVrWkIX7D/PKHy', 'Administrador', '', 0, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 1, 1, 0, '2022-11-05 15:25:49', 1);
@@ -59109,7 +59118,7 @@ CREATE TABLE `ventas` (
 --
 
 INSERT INTO `ventas` (`ID_Venta`, `FK_Usuario`, `FK_Caja`, `FK_Sucursal`, `FK_Cliente`, `Descuento`, `Total`, `Tipo_Pago`, `Pago`, `Cambio`, `Notas`, `Fecha_Registro`, `Cancelada`, `Fecha_Cancelacion`, `Regreso_Inventario`, `Facturada`, `Version_CFDI`, `Fecha_Expedicion_CFDI`, `Sello_CFDI`, `Forma_Pago_CFDI`, `No_Certificado_CFDI`, `Certificado_CFDI`, `Moneda_CFDI`, `Tipo_Comprobante_CFDI`, `Exportacion_CFDI`, `Metodo_Pago_CFDI`, `Lugar_Expedicion_CFDI`, `Confirmacion_CFDI`, `Emisor_RFC_CFDI`, `Emisor_Nombre_CFDI`, `Emisor_Regimen_Fiscal_CFDI`, `Receptor_RFC_CFDI`, `Receptor_Nombre_CFDI`, `Receptot_Domicilio_CFDI`, `Receptor_Regimen_Fiscal_CFDI`, `Receptor_Uso_CFDI`, `UUID_CFDI`, `Fecha_Timbrado_CFDI`, `Rfc_ProvCertif_CFDI`, `Sello_CFD_CFDI`, `No_Certificado_SAT_CFDI`, `Sello_SAT_CFDI`) VALUES
-(1, 2, 0, 1, 0, 100, 300, 'Efectivo', 300, 0, '', '2022-12-06 00:00:00', 0, '0000-00-00 00:00:00', 0, 0, '', '0000-00-00', '', '', '', '', 0, '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '0000-00-00', '', '', '', '');
+(1, 2, 0, 1, 1, 40, 464, 'Efectivo', 500, 36, '', '2022-12-06 00:00:00', 0, '0000-00-00 00:00:00', 0, 0, '', '0000-00-00', '', '', '', '', 0, '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '0000-00-00', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -59262,8 +59271,7 @@ ALTER TABLE `impuestos`
 ALTER TABLE `inventario`
   ADD PRIMARY KEY (`ID_Inventario`),
   ADD KEY `FK_Sucursal` (`FK_Sucursal`),
-  ADD KEY `FK_Producto` (`FK_Producto`),
-  ADD KEY `FK_Presentacion` (`FK_Presentacion`);
+  ADD KEY `FK_Producto` (`FK_Producto`);
 
 --
 -- Indices de la tabla `merma`
@@ -59348,7 +59356,8 @@ ALTER TABLE `usuarios`
 --
 ALTER TABLE `ventas`
   ADD PRIMARY KEY (`ID_Venta`),
-  ADD KEY `FK_Sucursal` (`FK_Sucursal`);
+  ADD KEY `FK_Sucursal` (`FK_Sucursal`),
+  ADD KEY `FK_Cliente` (`FK_Cliente`);
 
 --
 -- Indices de la tabla `zonas`
@@ -59424,13 +59433,13 @@ ALTER TABLE `detalles_clientes`
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_productos`
 --
 ALTER TABLE `detalles_impuestos_productos`
-  MODIFY `ID_Detalle_Im_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `ID_Detalle_Im_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_ventas`
 --
 ALTER TABLE `detalles_impuestos_ventas`
-  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_ventas`
@@ -59466,7 +59475,7 @@ ALTER TABLE `historial_caja`
 -- AUTO_INCREMENT de la tabla `impuestos`
 --
 ALTER TABLE `impuestos`
-  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario`
@@ -59484,7 +59493,7 @@ ALTER TABLE `merma`
 -- AUTO_INCREMENT de la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
-  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3170;
+  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3181;
 
 --
 -- AUTO_INCREMENT de la tabla `pagos`
@@ -59496,13 +59505,13 @@ ALTER TABLE `pagos`
 -- AUTO_INCREMENT de la tabla `precios`
 --
 ALTER TABLE `precios`
-  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT de la tabla `presentaciones`
 --
 ALTER TABLE `presentaciones`
-  MODIFY `ID_Presentacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `ID_Presentacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
@@ -59575,6 +59584,13 @@ ALTER TABLE `detalles_clientes`
   ADD CONSTRAINT `detalles_clientes_ibfk_1` FOREIGN KEY (`FK_Cliente`) REFERENCES `clientes` (`ID_Cliente`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `detalles_impuestos_productos`
+--
+ALTER TABLE `detalles_impuestos_productos`
+  ADD CONSTRAINT `detalles_impuestos_productos_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`),
+  ADD CONSTRAINT `detalles_impuestos_productos_ibfk_2` FOREIGN KEY (`FK_Impuesto`) REFERENCES `impuestos` (`ID_Impuesto`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `detalles_impuestos_ventas`
 --
 ALTER TABLE `detalles_impuestos_ventas`
@@ -59590,8 +59606,7 @@ ALTER TABLE `detalles_ventas`
 -- Filtros para la tabla `inventario`
 --
 ALTER TABLE `inventario`
-  ADD CONSTRAINT `inventario_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `inventario_ibfk_2` FOREIGN KEY (`FK_Presentacion`) REFERENCES `presentaciones` (`ID_Presentacion`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `inventario_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `precios`
@@ -59616,7 +59631,8 @@ ALTER TABLE `sucursales`
 -- Filtros para la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  ADD CONSTRAINT `ventas_ibfk_1` FOREIGN KEY (`FK_Sucursal`) REFERENCES `sucursales` (`ID_Sucursal`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `ventas_ibfk_1` FOREIGN KEY (`FK_Sucursal`) REFERENCES `sucursales` (`ID_Sucursal`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ventas_ibfk_2` FOREIGN KEY (`FK_Cliente`) REFERENCES `clientes` (`ID_Cliente`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

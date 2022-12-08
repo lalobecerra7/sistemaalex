@@ -1009,16 +1009,73 @@
               </div>  
               <hr>
               <div class="row">
+                <div class="col-12">
+                  <h5>CFDI Relacionados</h5>
+                </div>
+              </div>
+              <div class="row">
+                <table class="table table table-hover table-striped table-bordered text-center" id="tablaPresentacionProducto" width="100%" style="font-size: 12px;">
+                  <thead>
+                    <tr>
+                      <th>Folio fiscal (UUID) del CFDI</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="verFoliosCFDI">
+                    
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td>
+                        <input type="text" form="formFoliosCFDI" class="form-control" id="uuidCFDI" name="uuidCFDI" placeholder="Folio fiscal (UUID)">
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-sm btn-success" id="bAgergarFolioCFDI"><i class="fas fa-plus"></i></button>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12 mb-3">
+                  <div class="form-floating mb-3">
+                    <select class="form-select" name="relacionCFDI" id="relacionCFDI" disabled>
+                      <option value="PUE">--Selecciona una opción--</option>
+                      <option value="01">01 - Nota de crédito de los documentos relacionados</option>
+                      <option value="02">02 - Nota de débito de los documentos relacionados</option>
+                      <option value="03">03 - Devolución de mercancía sobre facturas o traslados previos</option>
+                      <option value="04">04 - Sustitución de los CFDI previos</option>
+                      <option value="05">05 - Traslados de mercancías facturados previamente</option>
+                      <option value="06">06 - Factura generada por los traslados previos</option>
+                      <option value="07">07 - CFDI por aplicación de anticipo</option>
+                    </select>
+                    <label>Tipo de relación</label>
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-12">
+                  <h5>Emisor</h5>
+                </div>
+              </div>
+              <div class="row">
                 <div class="col-12" id="datosEmisorCFDI">
                   
                 </div>
               </div>
               <hr>
               <div class="row">
+                <div class="col-12">
+                  <h5>Receptor</h5>
+                </div>
+              </div>
+              <div class="row">
                 <div class="col-12" id="datosReceptoCFDI">
                   
                 </div>
               </div>
+              <br>
               <div class="row">
                 <div class="col-md-3 col-sm-12 mb-3">
                   <div class="form-floating mb-3">
@@ -1053,6 +1110,10 @@
                   </div>
                 </div>
               </div>
+              <br>
+              <div class="row" id="verNodoGlobal">
+                
+              </div>
               <hr>
               <div class="row">
                 <div class="col-12 table-responsive">
@@ -1077,23 +1138,23 @@
                     </tbody>
                     <tfoot>
                       <tr>
-                        <th colspan="7" class="text-end">Subtotal</th>
+                        <th colspan="8" class="text-end">Subtotal</th>
                         <td colspan="3" class="dinero" id="subtotalCFDI">0</td>
                       </tr>
                       <tr>
-                        <th colspan="7" class="text-end">Descuento</th>
+                        <th colspan="8" class="text-end">Descuento</th>
                         <td colspan="3" class="dinero" id="totalDescuentoCFDI">0</td>
                       </tr>
                       <tr>
-                        <th colspan="7" class="text-end">Total Impuestos Trasladados</th>
+                        <th colspan="8" class="text-end">Total Impuestos Trasladados</th>
                         <td colspan="3" class="dinero" id="impuetosTrasCFDI">0</td>
                       </tr>
                       <tr>
-                        <th colspan="7" class="text-end">Total Impuestos Retenidos</th>
+                        <th colspan="8" class="text-end">Total Impuestos Retenidos</th>
                         <td colspan="3" class="dinero" id="impuestosRetCFDI">0</td>
                       </tr>
                       <tr>
-                        <th colspan="7" class="text-end">Total</th>
+                        <th colspan="8" class="text-end">Total</th>
                         <td colspan="3" class="dinero" id="totalCFDI">0</td>
                       </tr>
                     </tfoot>
