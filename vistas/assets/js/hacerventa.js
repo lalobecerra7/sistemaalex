@@ -139,22 +139,22 @@ jQuery(document).ready(function($) {
 		var precio = $(this).parent().parent().children("td:eq(2)").find(".cambiarPrecio").attr("precio");
 		var cantidad = $(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val();
 		var subtotal = parseFloat(precio) * parseFloat(cantidad);
+		var descuento = parseFloat($(this).parent().parent().children("td:eq(5)").find(".campoDescuentoProducto").val()) / 100;
+		if (isNaN(descuento)) {
+			descuento = 0;
+		}
+		var montoDescuento = parseFloat(descuento) * parseFloat(subtotal);
+		var total =(parseFloat(subtotal) - parseFloat(montoDescuento));
 		var totalImpuestos = 0;
 		$(this).parent().parent().children("td:eq(4)").find(".impuesto").each(function(index, el) {
 			var impuesto = $(this).find(".seleccionarImpuesto");
 			if (impuesto.prop("checked") == true) {
 				var porcentaje = parseFloat(impuesto.attr("porcentaje")) / 100;
-				totalImpuestos += parseFloat(subtotal) * parseFloat(porcentaje);
+				totalImpuestos += parseFloat(total) * parseFloat(porcentaje);
 			}
 		});
-
-		var descuento = parseFloat($(this).parent().parent().children("td:eq(5)").find(".campoDescuentoProducto").val()) / 100;
-		if (isNaN(descuento)) {
-			descuento = 0;
-		}
-		var total =(parseFloat(subtotal) + parseFloat(totalImpuestos));
-		var montoDescuento = parseFloat(descuento) * parseFloat(total);
-		$(this).parent().parent().children("td:eq(6)").text(parseFloat(total) - parseFloat(montoDescuento));
+		
+		$(this).parent().parent().children("td:eq(6)").text(parseFloat(total) + parseFloat(totalImpuestos));
 		CalcularSubtotalVenta();
 	});
 
