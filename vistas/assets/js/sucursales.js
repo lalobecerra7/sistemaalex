@@ -54,9 +54,8 @@ function v_sucursales() {
             },
         },
         submitHandler: function(form) { 
-            var data = "metodo="+$("#bGuardarSucu").attr("tipo")+"&accion=sucursales&IDSucursal="+$("#bGuardarSucu").attr("attrid")+"&NombreSucursal="+$("#NombreSucursal").val()+"&EncargadoSucursal="+$("#EncargadoSucursal").val()+"&CalleSucursal="+$("#CalleSucursal").val()+"&NoExteriorSucursal="+$("#NoExteriorSucursal").val()+"&NoInteriorSucursal="+$("#NoInteriorSucursal").val()+"&ColoniaSucursal="+$("#ColoniaSucursal").val()+"&CPSucursal="+$("#CPSucursal").val()+"&CiudadSucursal="+$("#CiudadSucursal").val()+"&EstadoSucursal="+$("#EstadoSucursal").val()+"&PaisSucursal="+$("#PaisSucursal").val()+"&EmailSucursal="+$("#EmailSucursal").val()+"&TelefonoSucursal="+$("#TelefonoSucursal").val()+"&Telefono2Sucursal="+$("#telefono2Sucursal").val()+"&Zona="+$("#ZonasSucursal").val();
-           console.log(data);
-            var btn = $('#bGuardarSucu');
+            var data = "metodo="+$("#bGuardarSucu").attr("tipo")+"&accion=sucursales&IDSucursal="+$("#bGuardarSucu").attr("attrid")+"&NombreSucursal="+$.trim($("#NombreSucursal").val())+"&EncargadoSucursal="+$.trim($("#EncargadoSucursal").val())+"&CalleSucursal="+$.trim($("#CalleSucursal").val())+"&NoExteriorSucursal="+$.trim($("#NoExteriorSucursal").val())+"&NoInteriorSucursal="+$.trim($("#NoInteriorSucursal").val())+"&ColoniaSucursal="+$.trim($("#ColoniaSucursal").val())+"&CPSucursal="+$.trim($("#CPSucursal").val())+"&CiudadSucursal="+$.trim($("#CiudadSucursal").val())+"&EstadoSucursal="+$.trim($("#EstadoSucursal").val())+"&PaisSucursal="+$.trim($("#PaisSucursal").val())+"&EmailSucursal="+$.trim($("#EmailSucursal").val())+"&TelefonoSucursal="+$.trim($("#TelefonoSucursal").val())+"&Telefono2Sucursal="+$.trim($("#telefono2Sucursal").val())+"&Zona="+$.trim($("#ZonasSucursal").val());
+           
             $.ajax({
                 url: 'index.php',
                 type: 'POST',

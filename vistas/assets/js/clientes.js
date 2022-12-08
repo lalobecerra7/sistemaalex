@@ -8,33 +8,6 @@ function v_clientes() {
             },
             SucursalCliente: {
                 required: true
-            },
-            CalleClienteGeneral: {
-                required: true
-            },
-            NoExteriorClienteGeneral: {
-                required: true
-            },
-            CPClienteGeneral: {
-                required: true
-            },
-            CiudadClienteGeneral: {
-                required: true
-            },
-            EstadoClienteGeneral: {
-                required: true
-            },
-            PaisClienteGeneral: {
-                required: true
-            },
-            RFCCliente: {
-                required: true
-            },
-            razonCliente: {
-                required: true
-            },
-            regimenCliente: {
-                required: true
             }
         },
         messages: {
@@ -43,33 +16,6 @@ function v_clientes() {
             },
             SucursalCliente: {
                 required: "La sucursal es requerdia."
-            },
-            CalleClienteGeneral: {
-                required: "La calle es requerida."
-            },
-            NoExteriorClienteGeneral: {
-                required: "El no. escterior es requerdio."
-            },
-            CPClienteGeneral: {
-                required: "El código postal es requerido."
-            },
-            CiudadClienteGeneral: {
-                required: "La ciudad es requerida."
-            },
-            EstadoClienteGeneral: {
-                required: "El estado es requerido."
-            },
-            PaisClienteGeneral: {
-                required: "El país es requerido."
-            },
-            RFCCliente: {
-                required: "El rfc es requerido."
-            },
-            razonCliente: {
-                required: "La razón social es requerida."
-            },
-            regimenCliente: {
-                required: "El régimen es requerido."
             }
         },
         submitHandler: function(form) { 
@@ -443,11 +389,12 @@ jQuery(document).ready(function($) {
             data: data
         })
         .done(function(res) {
-            console.log(res);
+            //console.log($.trim(res));
             $("#GuardarCliente").attr('tipo', 'modificar');
             $("#GuardarCliente").attr('attrid', id);
             $("#TituloModalCliente").text("Modificar");
             var datos = JSON.parse($.trim(res));
+
             $("#NombreCliente").val(datos.Nombre);
             $("#TelefonoCliente").val(datos.Telefono);
             $("#CelularCliente").val(datos.Celular);
@@ -463,6 +410,14 @@ jQuery(document).ready(function($) {
             $("#SucursalCliente").val(datos.FK_Sucursal);
             $("#razonCliente").val(datos.Razon_CFDI);
             $("#regimenCliente").val(datos.Regimen_CFDI);
+            $("#CalleClienteGeneral").val(datos.Calle);
+            $("#NoExteriorClienteGeneral").val(datos.No_Exterior);
+            $("#NoInteriorClienteGeneral").val(datos.No_Interior);
+            $("#CPClienteGeneral").val(datos.Codigo_Postal);
+            $("#ColoniaClienteGeneral").val(datos.Colonia);
+            $("#CiudadClienteGeneral").val(datos.Ciudad);
+            $("#EstadoClienteGeneral").val(datos.Estado);
+            $("#PaisClienteGeneral").val(datos.Pais);
             if (datos.Foto != "") {
                 $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/fotosClientes/'+datos.Foto);
             }else{

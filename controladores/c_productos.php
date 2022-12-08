@@ -24,7 +24,7 @@ class productos {
 			}
 		}
 
-		$query = "SELECT ID_Producto, Codigo, productos.Descripcion, Tipo, Clase, Costo, Precio, Precio_Mayoreo, Detalles, Minimo, Maximo, Imagen, areas.Nombre, areas.Descripcion AS DescripcionArea, areas.Nivel, (SELECT COUNT(*) FROM productos $busqueda) AS Num, ((SELECT COUNT(*) FROM detalles_ventas INNER JOIN ventas ON FK_Venta = ID_Venta WHERE detalles_ventas.FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras INNER JOIN compras ON FK_Compra = ID_Compra WHERE FK_Producto = ID_Producto)) AS numProd FROM productos LEFT JOIN areas ON FK_Area = ID_Area $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Producto, Codigo, productos.Descripcion, Tipo, Clase, Costo, Precio, Precio_Mayoreo, Detalles, Minimo, Maximo, Imagen, areas.Nombre, areas.Descripcion AS DescripcionArea, areas.Nivel, (SELECT COUNT(*) FROM productos $busqueda) AS Num, ((SELECT COUNT(*) FROM detalles_ventas WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras WHERE FK_Producto = ID_Producto)) AS numProd FROM productos LEFT JOIN areas ON FK_Area = ID_Area $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -431,7 +431,7 @@ class productos {
 			}else{
 				if($numerofilas > 0){
 					$presentaciones = null;
-					$queryPresentacion = "SELECT ID_Presentacion, Nombre, Abreviatura, Clave_CFDI FROM presentaciones WHERE FK_Producto = '$IDProducto'";
+					$queryPresentacion = "SELECT ID_Presentacion, Nombre, Abreviatura, Clave_CFDI, IFNULL((SELECT COUNT(*) FROM detalles_ventas WHERE FK_Presentacion = ID_Presentacion) + (SELECT COUNT(*) FROM detalle_compras WHERE FK_Presentacion = ID_Presentacion), 0) AS NumProd FROM presentaciones WHERE FK_Producto = '$IDProducto'";
 					$rowPresentacion = $omodelo->_consultar($queryPresentacion);
 					$numerofilasPresentacion = $omodelo->numerofilas;
 
@@ -441,10 +441,11 @@ class productos {
 						if($numerofilasPresentacion > 0){
 							for ($z=0; $z < $numerofilasPresentacion; $z++) { 
 								$presentaciones[$z] = array(
-									'ID_Presentacion' => $rowPresentacion[$z]["ID_Presentacion"],
-									'Nombre' => $rowPresentacion[$z]["Nombre"],
-									'Abreviatura' => $rowPresentacion[$z]["Abreviatura"],
-									'Clave_CFDI' => $rowPresentacion[$z]["Clave_CFDI"]
+									'ID_Presentacion' => $rowPresentacion[$z]['ID_Presentacion'],
+									'Nombre' => $rowPresentacion[$z]['Nombre'],
+									'Abreviatura' => $rowPresentacion[$z]['Abreviatura'],
+									'Clave_CFDI' => $rowPresentacion[$z]['Clave_CFDI'],
+									'NumProd' => $rowPresentacion[$z]['NumProd']
 								);
 							}
 						}

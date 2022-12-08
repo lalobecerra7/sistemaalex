@@ -22,7 +22,7 @@
 			<br>
 			<div class="row">
 				<div class="col-12 text-end">
-					<button type="button" class="btn btn-success" id="botonNuevoProductos" data-bs-toggle="modal" data-bs-target="#ModalProductos"><i class="fa fa-file"></i> Nueva</button>
+					<button type="button" class="btn btn-success" id="botonNuevoProductos" data-bs-toggle="modal" data-bs-target="#ModalProductos"><i class="fa fa-file"></i> Nuevo</button>
 					<a href="javascript:void(0)" class="btn btn-light btn-reload cargarVista" carga="v_productos" titulo="Productos"><i class="fa fa-retweet"></i></a>
 				</div>
 			</div>
@@ -447,6 +447,38 @@
 	    <div class="modal-footer">
 				<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
 	    </div>
+    </div>
+  </div>
+</div> 
+
+<!--/////////////////////////Modal///////////////////////////////////-->
+<div class="modal fade" id="modalPresentaciones" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+    <div class="modal-content">
+      <div class="modal-header bg-inverse bd-inverse-darken">
+        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Presetación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="formModiPresentacion">
+	      <div class="modal-body">
+	      	<div class="mb-3">
+		      	<div class="input-group">
+							<input type="text" form="formPresentaciones" class="form-control" id="unidadPresentacionM" name="unidadPresentacionM" placeholder="Ingresa la clave de la unidad" readonly>
+							<button type="button" class="btn btn-outline-secondary" id="bBuscarUnidadPresM"><i class="fas fa-search"></i></button>
+						</div>
+					</div>
+					<div class="mb-3">
+						<input type="text" form="formPresentaciones" class="form-control" id="nombrePresentacionM" name="nombrePresentacionM" placeholder="Ingresa el nombre de la presentación/unidad">
+					</div>	
+					<div class="mb-3">
+						<input type="text" form="formPresentaciones" class="form-control" id="abreviaturaPresentacionM" name="abreviaturaPresentacionM" placeholder="Ingresa la abreviatura de la presentación/unidad"> 	
+					</div>	
+	      </div>
+	      <div class="modal-footer">
+	        <button type="submit" class="btn btn-primary" id="bGuardarPresenta"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+	      </div>
+  		</form>
     </div>
   </div>
 </div> 
