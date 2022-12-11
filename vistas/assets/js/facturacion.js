@@ -91,6 +91,194 @@ function v_facturacion() {
     });  
 }
 
+if($('#formFacturar').length > 0){
+    $('#formFacturar').validate({
+        rules: {
+            serieCFDI: {
+                required: true
+            },
+            folioCFDI: {
+                required: true
+            },
+            formaPagoCFDI: {
+                required: true
+            },
+            monedaCFDI: {
+                required: true
+            },
+            tipoCFDI: {
+                required: true
+            },
+            exportacionCFDI: {
+                required: true
+            },
+            metodoCFDI: {
+                required: true
+            },
+            lugarCFDI: {
+                required: true
+            },
+            relacionCFDI: {
+                required: true
+            },
+            usoCFDI: {
+                required: true
+            },
+            periodicidadCFDI: {
+                required: true
+            },
+            mesesCFDI: {
+                required: true
+            },
+            anoCFDI: {
+                required: true
+            }
+        },
+        messages: {
+            serieCFDI: {
+                required: "El no. de serie es requerido."
+            },
+            folioCFDI: {
+                required: "El folio es requerido."
+            },
+            formaPagoCFDI: {
+                required: "La forma de pago es requerido."
+            },
+            monedaCFDI: {
+                required: "La moneda es requerida."
+            },
+            tipoCFDI: {
+                required: "El tipo de comprobante es requerido."
+            },
+            exportacionCFDI: {
+                required: "La exportación es requerida."
+            },
+            metodoCFDI: {
+                required: "El método de pago es requerido."
+            },
+            lugarCFDI: {
+                required: "El lugar de expedición es requerido."
+            },
+            relacionCFDI: {
+                required: "El tipo de relación es requerida."
+            },
+            usoCFDI: {
+                required: "El uso del CFDI es requerido."
+            },
+            periodicidadCFDI: {
+                required: "La periodicidad es requerida."
+            },
+            mesesCFDI: {
+                required: "El mes es requerido."
+            },
+            anoCFDI: {
+                required: "El año es requerido."
+            }
+        },
+        submitHandler: function(form) { 
+            var relaciones = [];
+            $("#verFoliosCFDI").children('tr').each(function(index, el){
+                relaciones.push({'UUID': $.trim($(this).children('td:eq(0)').text())});
+            });
+
+            var data = 'metodo=modificar&accion=facturacion&id='+$.trim($("#bTimbrarFactura").attr('attrID'))+'&formaPagoCFDI='+$("#formaPagoCFDI").val()+'&relacionCFDI='+$("#relacionCFDI").val()+'&usoCFDI='+$("#usoCFDI").val()+'&periodicidadCFDI='+$("#periodicidadCFDI").val()+'&mesesCFDI='+$("#mesesCFDI").val()+'&anoCFDI='+$.trim($("#anoCFDI").val())+'&relaciones='+JSON.stringify(relaciones);
+
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+                beforeSend: function() {
+                    $("#carga").show();
+                }
+            })
+            .done(function(res) {
+                if ($.trim(res) == "Correcto") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'La factura ha sido timbrada correctamente'
+                    });
+
+                    TablaReporteVentas();
+                    $("#modalFacturar").modal('hide');
+                    var ventana1 = window.open("controladores/pdf/factura.php?id="+$.trim($("#bTimbrarFactura").attr('attrID')));
+                    var ventana2 = window.open("controladores/xml/xml.php?id="+$.trim($("#bTimbrarFactura").attr('attrID')));
+                }else if($.trim(res) == "Error 2 Datos Facturacion"){
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'Por favor llena todos los datos del menú facturación 4.0.'
+                    }); 
+                }else if($.trim(res) == "Error 12 Tabla datos generales"){
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'Hay un problema con los datos del menú facturación 4.0, contacta con los desarrolladores.'
+                    }); 
+                }else if($.trim(res) == 'Error 4 Razon y Regimen Cliente'){
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'La razón social y el régimen fiscal del cliente son requeridos, por favor llena los datos.'
+                    });
+                }else if($.trim(res) == 'Error 5 Domicilio Cliente'){
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'El domicilio fiscal del cliente es requerido, por favor llena los datos.'
+                    });
+                }else if($.trim(res) == 'Error 6 Domicilio Sucursal'){
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'El domicilio de la sucursal es requerido, por favor llena los datos.'
+                    });
+                }else if($.trim(res) == "Error 13 No encontro"){
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'La venta ha sido cancelada o ya fue facturada.'
+                    });
+                }else{
+                    var separa = $.trim(res).split('~');
+                    if(separa[0] == 'Error 7 Codigo'){
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops...',
+                            text: 'El código del producto '+separa[1]+' es requerido.'
+                        });
+                    }else if(separa[0] == 'Error 8 Clave y Unidad'){
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops...',
+                            text: 'La clave de unidad y el nombre de la unidad del producto '+separa[1]+' son requeridas.'
+                        });
+                    }else if(separa[0] == 'Error 9 Clave producto y Objeto Impuesto'){
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops...',
+                            text: 'La clave y el objeto de impuesto del producto '+separa[1]+' son requeridos.'
+                        });
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error inesperado al crear la factura: '+$.trim(res)
+                        });
+                        
+                        console.log($.trim(res));
+                    }
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            })
+            .always(function() {
+                $("#carga").hide();
+            });          
+        }
+    });
+}
+
 function facturarVenta(id) {
     $("#bTimbrarFactura").attr('attrID', id);
     document.getElementById('formFacturar').reset();
@@ -120,15 +308,14 @@ function facturarVenta(id) {
         }
     })
     .done(function(res) {
-        console.log($.trim(res));
-        
+        //console.log($.trim(res));
         if($.trim(res) == "Error 2 Datos Facturacion"){
             Swal.fire({
                 icon: 'warning',
                 title: 'Oops...',
                 text: 'Por favor llena todos los datos del menú facturación 4.0.'
             }); 
-        }else if($.trim(res) == "Error 5 Tabla datos generales"){
+        }else if($.trim(res) == "Error 6 Tabla datos generales"){
             Swal.fire({
                 icon: 'warning',
                 title: 'Oops...',
@@ -268,7 +455,49 @@ function facturarVenta(id) {
                 </div>
             </div>`);
 
-            //agregar productos/conceptos
+            var subtotal = 0, descuentos = 0, trasladados = 0, retenidos = 0, total = 0;
+            datos.Productos.forEach(prod => {
+                var impuestos = '';
+                prod.Impuestos.forEach(imp => {
+                    if(imp.Tipo_Factor_CFDI != "Exento"){ 
+                        if(imp.Tipo_Impuesto_CFDI == 'Trasladado'){
+                            trasladados += ((parseFloat(prod.Cantidad) * parseFloat(prod.Precio)) - parseFloat(prod.Descuento)) * (imp.Tasa_Cuota_CFDI / 100);
+                        }else{
+                            retenidos += ((parseFloat(prod.Cantidad) * parseFloat(prod.Precio)) - parseFloat(prod.Descuento)) * (imp.Tasa_Cuota_CFDI / 100);
+                        }
+                    }
+
+                    if(imp.Tipo_Factor_CFDI != "Exento"){
+                        impuestos += '<p>(<span class="dinero">0</span>) '+imp.Impuesto_CFDI+' <span class="cantidad">'+imp.Tasa_Cuota_CFDI+'</span>%</p>';
+                    }else{
+                        impuestos += '<p>(<span class="dinero">'+(((parseFloat(prod.Cantidad) * parseFloat(prod.Precio)) - parseFloat(prod.Descuento)) * (imp.Tasa_Cuota_CFDI / 100))+'</span>) '+imp.Impuesto_CFDI+' <span class="cantidad">'+imp.Tasa_Cuota_CFDI+'</span>%</p>';
+                    }
+                });
+
+                $("#conceptosCFDI").append(`<tr>
+                    <td>`+prod.Clave_ProdServ_CFDI+`</td> 
+                    <td>`+prod.Codigo+`</td> 
+                    <td>`+prod.Descripcion+`</td>  
+                    <td>`+prod.Clave_Unidad_CFDI+`</td> 
+                    <td>`+prod.Nombre_Presentacion+`</td> 
+                    <td><span class="cantidad">`+prod.Cantidad+`</span></td> 
+                    <td><span class="dinero">`+prod.Precio+`</span></td>  
+                    <td><span class="dinero">`+(parseFloat(prod.Cantidad) * parseFloat(prod.Precio))+`</span></td>
+                    <td><span class="dinero">`+prod.Descuento+`</span></td>
+                    <td>`+impuestos+`</td> 
+                    <td><span class="dinero">`+prod.Total+`</span></td>
+                </tr>`);  
+
+                subtotal += (parseFloat(prod.Cantidad) * parseFloat(prod.Precio));
+                descuentos += parseFloat(prod.Descuento);
+                total += parseFloat(prod.Total);
+            });
+
+            $("#subtotalCFDI").html(subtotal);
+            $("#totalDescuentoCFDI").html(descuentos);
+            $("#impuetosTrasCFDI").html(trasladados);
+            $("#impuestosRetCFDI").html(retenidos);
+            $("#totalCFDI").html(total);
 
             moneda();
             $("#modalFacturar").modal('show');
@@ -288,11 +517,43 @@ jQuery(document).ready(function($) {
         facturarVenta($.trim($(this).attr('attrID')));
     }); 
     
-    /*$(document).on('click', '.bImprimirFacPDF', function() {
-    
+    $(document).on('click', '.bImprimirFacPDF', function() {
+        window.open("controladores/pdf/factura.php?id="+$.trim($(this).attr('attrID')));
     }); 
     
     $(document).on('click', '.bImprimirFacXml', function() {
-       
-    }); */
+       window.open("controladores/xml/xml.php?id="+$.trim($(this).attr('attrID')));
+    });
+
+    $(document).on('submit', '#formFoliosCFDI', function(event) {
+        event.preventDefault();
+        $("#verFoliosCFDI").append(`<tr>
+            <td>`+$.trim($("#uuidCFDI").val())+`</td>
+            <td><button type="button" class="btn btn-danger btn-sm bQuitarUUID"><i class="fas fa-trash"></i></button></td>
+        </tr>`);
+
+        if($("#verFoliosCFDI").children('tr').length == 0){
+            $("#relacionCFDI").val();
+            $("#relacionCFDI").prop('disabled', true);
+        }else{
+            $("#relacionCFDI").prop('disabled', false);
+        }
+
+        document.getElementById('formFoliosCFDI').reset();
+    });
+
+    $(document).on('click', '#bAgergarFolioCFDI', function() {
+        $("#bGuardarUUID").trigger('click');
+    });
+
+    $(document).on('click', '.bQuitarUUID', function() {
+        $(this).parent().parent().remove();
+
+        if($("#verFoliosCFDI").children('tr').length == 0){
+            $("#relacionCFDI").val("");
+            $("#relacionCFDI").prop('disabled', true);
+        }else{
+            $("#relacionCFDI").prop('disabled', false);
+        }
+    });
 });
