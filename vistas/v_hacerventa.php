@@ -8,8 +8,13 @@
 						#MostrarSucursal#
 					</div>
                     <div class="col-md-3 d-grid mb-2">
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ModalVerClientesVenta" id="CargarClientesModalVentas">
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ModalVerClientesVenta" id="CargarClientesModalVentas" attrid="">
                             <i class="fas fa-user"></i> Seleccionar cliente
+                        </button>
+                    </div>
+                    <div class="offset-md-3 col-md-3 text-end d-grid mb-2">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ModalVerPedidosVenta" id="CargaPedidosModalVentas">
+                            <i class="fas fa-arrow-down"></i> Seleccionar pedido
                         </button>
                     </div>
 			    </div>
@@ -55,24 +60,23 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-3 text-center">
-                        <h5 style="font-weight: bold;">Subtotal</h5>
+                        <h5 style="font-weight: bold;">Subtotal (Sin impuestos)</h5>
                         <h4 style="font-weight: bold;" class="dinero" id="MostrarSubtotalVenta">0.00</h4>
                     </div>
-                    <div class="col-md-3 text-center mb-2">
-                        <h5 style="font-weight: bold;">Descuento</h5>
-                        <div class="input-group">
-                            <span class="input-group-text" id="basic-addon1"><b>$</b></span>
-                            <input type="number" min="0" value="0" step="any" class="form-control" id="DescuentoVentaDinero" name="DescuentoVentaDinero" placeholder="$0.00">
-                        </div>
-                    </div>
-                    <div class="col-md-6 text-center mb-2">
+                    <div class="col-md-9 text-center mb-2">
                         <div class="row" style="vertical-align: middle;">
-                            <div class="col-md-6 d-grid">
-                                <button class="btn btn-secondary" id="RealizarVenta" idProveedor="2" style="font-size: 25px;"><i style="font-size: 25px;" class="fas fa-cart-plus"></i> <b>Cobrar</b></button>
+                            <div class="col-md-3 d-grid">
+                                <button class="btn btn-outline-primary" id="GuardarPedido" total="" style="font-size: 15px;"><b>Guardar como pedido</b></button>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3 d-grid">
+                                <button class="btn btn-outline-primary" id="CobrarFacturar" total="" style="font-size: 15px;"><b>Cobrar y facturar</b></button>
+                            </div>
+                            <div class="col-md-3 d-grid">
+                                <button class="btn btn-outline-primary" id="RealizarVenta" total="" style="font-size: 15px;"><b>Finalizar venta</b></button>
+                            </div>
+                            <div class="col-md-3">
                                 <h5 style="font-weight: bold;">Total</h5>
-                                <h4 style="font-weight: bold;" id="TotalCompra">0.00</h4>
+                                <h4 style="font-weight: bold;" id="TotalVentaFinal" class="dinero">0.00</h4>
                             </div>
                         </div>
                     </div>
@@ -98,7 +102,6 @@
                                     <tr>
                                         <th>Nombre</th>
                                         <th>Precio</th>
-                                        <th>Precio Mayoreo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -108,8 +111,7 @@
                     </div>    
                 </div>
                 <div class="modal-footer text-center">
-                    <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-                    <button type="submit" class="btn btn-primary" id="bAgregarPrecioProducto"><i class="fa fa-check-circle"></i> <strong>Agregar</strong></button>
+                    <button type="button" class="btn BotonDatosPrecio" producto="" presentacion=""  data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
                 </div>
             </form>
         </div>    
@@ -147,22 +149,23 @@
     </div>
 </div>
 
-
-<div class="modal fade" id="ModalVerClientesVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="ModalVerPedidos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Clientes</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Pedidos</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaClienteVenta" width="100%" style="font-size: 12px;">
+                    <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="VentaTablaProductos" width="100%" style="font-size: 12px;">
                         <thead>
-                            <th style="width: 25%;">Nombre</th>
-                            <th style="width: 25%;" orden="no">Dirección</th>
-                            <th style="width: 25%;" orden="no">RFC</th>
-                            <th style="width: 25%;" orden="no">Contacto</th>
+                            <th style="width: 20%;" orden="No">Producto</th>
+                            <th style="width: 20%;">Presentación</th>
+                            <th style="width: 20%;">Nombre del precio</th>
+                            <th style="width: 20%;">Precio</th>
+                            <th style="width: 20%;">Mayoreo</th>
+                            <th style="width: 20%;">Existencia</th>
                         </thead>
                         <tbody>
                                
@@ -178,66 +181,72 @@
 </div>
 
 
-<div class="modal fade" id="ModalCobrarCompra" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<div class="modal fade" id="ModalVerClientesVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Clientes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaClienteVenta" width="100%" style="font-size: 12px;">
+                        <thead>
+                            <th style="width: 20%;">Nombre</th>
+                            <th style="width: 20%;" orden="no">Dirección</th>
+                            <th style="width: 20%;" orden="no">RFC</th>
+                            <th style="width: 20%;" orden="no">Contacto</th>
+                            <th style="width: 20%;" orden="no">Facturar</th>
+                        </thead>
+                        <tbody>
+                               
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="ModalRealizarVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
     <div class="modal-content">
-      <div class="modal-header bg-inverse bd-inverse-darken">
-        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Cobrar compra</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="FormCobrarCompra">
-	      <div class="modal-body">
+        <div class="modal-header bg-inverse bd-inverse-darken">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Finalizar venta</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+	    <div class="modal-body">
 	       	<div class="row">
-                <div class="col-md-12 col-sm-12 mb-1" id='SubtotalCompra'hidden>
-                    <center><h4 style="font-weight: bold;">Subtotal: <br><span id="Subtotal"></span></h4></center>
-		        </div>
-                <div class="col-md-12 col-sm-12 mb-1" id='CreditoCompra' hidden>
-                    <center><h4 style="font-weight: bold;">Credito disponible: <br><span id="Credito"></span></h4></center>
-                </div>
-                <div class="col-md-12 col-sm-12 mb-1" id='DescuentoCompra'hidden>
-                    <center><h4 style="font-weight: bold;">Descuento: <br><span id="Descuento"></span></h4></center>
-		        </div>
-                <div class="col-md-12 col-sm-12 mb-1" id='TotalDeCompra'hidden>
-                    <center><h4 style="font-weight: bold;">Total: <br><span id="Total"></span></h4></center>
-		        </div>
-	       		<div class="col-md-12 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		               	<input type="number" class="form-control" min='1' step="any" id="ImportePagadoCompra" name="ImportePagadoCompra" placeholder="Ingresa el importe a pagar">
-		                <label for="ImportePagadoCompra">Importe pagado</label>
-		            </div>
-		        </div>
                 <div class="col-md-12 col-sm-12 mb-3">
                     <div class="form-floating">
-                        <select class="form-select" id="TipoPago" name="TipoPago">
-                            <option value="" selected>--Seleccione una opción--</option>
+                        <select class="form-select" id="TipoPagoVenta" name="TipoPagoVenta">
                             <option value="Efectivo">Efectivo</option>
                             <option value="Deposito">Depósito</option>
                             <option value="Cheque">Cheque</option>
                             <option value="TransferenciaBancaria">Transferencia bancaria</option>
                             <option value="TarjetaCreditoDebito">Tarjeta de crédito o débito</option>
+                            <option value="PagoOnline">Pago online</option>
                         </select>
-                        <label for="TipoPago">Tipo de pago</label>
+                        <label for="TipoPagoVenta">Tipo de pago</label>
                     </div>
                 </div>
-		        <div class="col-md-12 col-sm-12 mb-3" id='Detalles'>
-		        	<div class="form-floating">
-		               	<input type="text" class="form-control" id="DetallesPago" name="DetallesPago" placeholder="Ingresa los datos del pago">
-		                <label for="DetallesPago">Detalles</label>
-		            </div>
-		        </div>
-                <div class="col-md-12 col-sm-12 mb-3" id='Archivo'>
-		        	<div class="form-floating">
-		               	<input type="file" class="form-control" id="ComprobantePago" name="ComprobantePago" placeholder="Ingresa un comprobante de pago">
-		                <label for="CmprobantePago">Comprobante de pago</label>
-		            </div>
-		        </div>
+                <div class="col-md-12 col-sm-12 mb-3">
+                    <div class="form-floating">
+                        <input type="number" class="form-control" min='1' step="any" id="ImportePagadoVenta" name="ImportePagadoVenta" placeholder="Ingresa el importe a pagar">
+                        <label for="ImportePagadoVenta">Importe pagado</label>
+                    </div>
+                </div>
 	       	</div>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-primary" id="GuardarCompra" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
+	    </div>
+	    <div class="modal-footer">
 			<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-	      </div>
-  		</form>
+            <button type="button" class="btn btn-primary" id="GuardarVenta" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
+	    </div>
     </div>
   </div>
 </div> 

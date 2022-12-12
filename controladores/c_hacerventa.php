@@ -89,8 +89,117 @@ class hacerventa {
 	public function _insertar(){
 		$omodelo = new m_modelo();
 		extract($_POST);
+		$fecha = date('Y-m-d H:i:s'); 
+		if ($tipo == "GuardarPedido") {
+			if (!isset($cliente) || $cliente == "") {
+				$cliente = 1;
+			}
+			$query = "INSERT INTO pedidos SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Sucursal = '$idsucursal', FK_Cliente = '$cliente', Descuento = '$sumadescuento', Total = '$total', Fecha_Registro = '$fecha', Fecha_Entrega = '$fechaEntrega'";
+			$error = $omodelo->_insertar($query);
+
+			if ($error == "si") {
+				echo "Error 1: ".mysqli_error($omodelo->link);
+			}else{
+				$idPedido = mysqli_insert_id($omodelo->link);
+
+				$productos = json_decode($productos, true);
+				foreach ($productos as $fila) {
+
+					$nombreProducto = '';
+					$query2 = "SELECT Descripcion FROM productos WHERE ID_Producto = '$fila[0]'";
+					$row2 = $omodelo->_consultar($query2);
+					$numerofilas2 = $omodelo->numerofilas;
+
+					if($row2 == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilas2 > 0){
+							$nombreProducto = $row2[0]["Descripcion"];
+						}
+					}
+					$query = "INSERT INTO detalles_pedidos SET FK_Pedido = '$idPedido', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]'";
+					$error = $omodelo->_insertar($query);
+
+					if ($error == "si") {
+						echo "Error 1: ".mysqli_error($omodelo->link);
+					}
+
+					$idDetallePedido = mysqli_insert_id($omodelo->link);
+
+					$separar = explode("~", $fila[5]);
+					for ($i=0; $i < sizeof($separar) - 1; $i++) { 
+						$datos = explode(",", $separar[$i]);
+
+						$queryImp = "INSERT INTO detalles_impuestos_pedidos SET FK_Detalle_Pedido = '$idDetallePedido', Tipo_Impuesto_CFDI = '$datos[5]', Impuesto_CFDI = '$datos[1]', Clave_CFDI = '$datos[3]',	Tipo_Factor_CFDI = '$datos[4]', Tasa_Cuota_CFDI = '".($datos[2] / 100)."'";
+						$errorImp = $omodelo->_insertar($queryImp);
+
+						if ($errorImp == "si") {
+							echo "Error impuestos: ".mysqli_error($omodelo->link);
+						}
+
+					}
+				}
+				echo "Correcto";
+			}
+		}else if ($tipo == "RealizarVenta") {
+			if (!isset($cliente) || $cliente == "") {
+				$cliente = 1;
+			}
+			if ($Importe == "") {
+				$Importe = 0;
+			}
+			$cambio = abs($total - $Importe);
+			$query = "INSERT INTO ventas SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Sucursal = '$idsucursal', FK_Cliente = '$cliente', Descuento = '$sumadescuento', Total = '$total', Tipo_Pago = '$TipoPago', Pago = '$Importe', Cambio = '$cambio', Fecha_Registro = '$fecha'";
+			$error = $omodelo->_insertar($query);
+
+			if ($error == "si") {
+				echo "Error 1: ".mysqli_error($omodelo->link);
+			}else{
+				$idVenta = mysqli_insert_id($omodelo->link);
+
+				$productos = json_decode($productos, true);
+				foreach ($productos as $fila) {
+
+					$nombreProducto = '';
+					$query2 = "SELECT Descripcion FROM productos WHERE ID_Producto = '$fila[0]'";
+					$row2 = $omodelo->_consultar($query2);
+					$numerofilas2 = $omodelo->numerofilas;
+
+					if($row2 == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilas2 > 0){
+							$nombreProducto = $row2[0]["Descripcion"];
+						}
+					}
+					$query = "INSERT INTO detalles_ventas SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]'";
+					$error = $omodelo->_insertar($query);
+
+					if ($error == "si") {
+						echo "Error 1: ".mysqli_error($omodelo->link);
+					}
+
+					$idDetalleVenta = mysqli_insert_id($omodelo->link);
+
+					$separar = explode("~", $fila[5]);
+					for ($i=0; $i < sizeof($separar) - 1; $i++) { 
+						$datos = explode(",", $separar[$i]);
+
+						$queryImp = "INSERT INTO detalles_impuestos_ventas SET FK_Detalle_Venta = '$idDetalleVenta', Tipo_Impuesto_CFDI = '$datos[5]', Impuesto_CFDI = '$datos[1]', Clave_CFDI = '$datos[3]',	Tipo_Factor_CFDI = '$datos[4]', Tasa_Cuota_CFDI = '".($datos[2] / 100)."'";
+						$errorImp = $omodelo->_insertar($queryImp);
+
+						if ($errorImp == "si") {
+							echo "Error impuestos: ".mysqli_error($omodelo->link);
+						}
+
+					}
+				}
+				echo "Correcto";
+			}
+		}
+
 		
-		$ImportePago=  $omodelo->link->real_escape_string($ImportePagoCompra);
+		/*$ImportePago=  $omodelo->link->real_escape_string($ImportePagoCompra);
 		$Concepto =  $omodelo->link->real_escape_string($ConceptoPago);
 		$TipoPago =  $omodelo->link->real_escape_string($TipoDePago);
 		$Detalles =  $omodelo->link->real_escape_string($DetallesPago);
@@ -157,7 +266,7 @@ class hacerventa {
 				}
 			}
 			echo ('Correcto');
-		}
+		}*/
 	}
 	
 	public function _modificar(){
@@ -259,7 +368,7 @@ class hacerventa {
 				}
 			}
 
-			$query = "SELECT ID_Cliente, Nombre, Calle, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais, Telefono, Celular, Correo, RFC, (SELECT COUNT(*) FROM clientes) AS Num FROM clientes $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Cliente, Nombre, Calle, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais, Telefono, Celular, Correo, RFC, Facturar, (SELECT COUNT(*) FROM clientes) AS Num FROM clientes $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -269,7 +378,7 @@ class hacerventa {
 				if($numerofilas > 0){
 					$SumarCompras = 0;
 					for($i=0; $i<$numerofilas; $i++){
-						$contacto = "";$direccion="";
+						$contacto = "";$direccion=""; $facturar = "No";
 						
 						if ($row[$i]["Calle"] != "") {
 							$direccion="Calle: ".$row[$i]["Calle"]."<br>";
@@ -323,14 +432,17 @@ class hacerventa {
 							$contacto = "No hay datos registrados";
 						}
 
-						
+						if ($row[$i]["Facturar"] == "1") {
+							$facturar = "Si";
+						}
 
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Cliente'],
 							'Nombre' => $row[$i]['Nombre'],
 							'Direccion' => $direccion,
 							'RFC' => $row[$i]['RFC'],
-							'Contacto' => $contacto
+							'Contacto' => $contacto,
+							'Facturar' => $facturar
 						);
 					}
 				}
@@ -398,8 +510,7 @@ class hacerventa {
 
 			///////////////////////////////////////////////////////////////////////////////////
 
-			$query2 = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN precios ON precios.FK_Presentacion = ID_Presentacion GROUP BY ID_Presentacion $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
-
+			$query2 = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Mayoreo, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN precios ON precios.FK_Presentacion = ID_Presentacion $busqueda GROUP BY ID_Presentacion ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row2 = $omodelo->_consultar($query2);
 			$numerofilas2 = $omodelo->numerofilas;
 
@@ -435,7 +546,7 @@ class hacerventa {
 						if ($row2[$x]['PrecioMayPresentacion'] != "") {
 							$precioMayoreo = $row2[$x]['PrecioMayPresentacion'];
 						}else{
-							$precioMayoreo = $row2[$x]['Precio_Mayoreo_General'];
+							$precioMayoreo = $row2[$x]['Mayoreo'];
 						}
 
 						if ($row2[$x]['NombrePrecio'] == "") {
@@ -479,7 +590,7 @@ class hacerventa {
 				if($numerofilas > 0){
 					$subarreglo = null;
 					$campoImpuestos = "";
-					$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."'";
+					$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje, impuestos.Clave_CFDI, impuestos.Tipo_Factor, impuestos.Clase FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."'";
 					$rowI = $omodelo->_consultar($queryI);
 					$numerofilasI = $omodelo->numerofilas;
 					if($rowI == 'si'){
@@ -489,7 +600,7 @@ class hacerventa {
 							for ($i=0; $i < $numerofilasI; $i++) { 
 								$campoImpuestos .= '
 									<div class="form-check impuesto">
-										<input class="form-check-input seleccionarImpuesto" checked type="checkbox" porcentaje="'.$rowI[$i]["Porcentaje"].'" attrid="'.$rowI[$i]["FK_Impuesto"].'">
+										<input class="form-check-input seleccionarImpuesto" checked type="checkbox" nombre="'.$rowI[$i]["Nombre"].'" porcentaje="'.$rowI[$i]["Porcentaje"].'" attrid="'.$rowI[$i]["FK_Impuesto"].'" clavecfdi="'.$rowI[$i]["Clave_CFDI"].'" tipofactor="'.$rowI[$i]["Tipo_Factor"].'" clase="'.$rowI[$i]["Clase"].'">
 										<label class="form-check-label" for="flexCheckDefault">
 											'.$rowI[$i]["Nombre"].' ('.$rowI[$i]["Porcentaje"].'%)
 										</label>
@@ -547,6 +658,119 @@ class hacerventa {
 					echo "No encontrado";
 				}
 			}
+		}else if($tipo == "ConsultarPrecios"){
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(ID_Precio, Nombre) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+			$numerofilas = 0;
+			$numerofilas2 = 0;
+			$numerofilas3 = 0;
+			$numerofilas4 = 0;
+			if (isset($presentacion) && $presentacion != "") {
+				$query = "SELECT ID_Precio, Nombre, Precio, (SELECT COUNT(*) FROM precios $busqueda) AS Num FROM precios WHERE FK_Presentacion = '$presentacion' AND FK_Producto = '$idproducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+
+				$row = $omodelo->_consultar($query);
+				$numerofilas = $omodelo->numerofilas;
+
+				if($row == 'si'){
+					echo "Error: ".mysqli_error($omodelo->link);
+				}else{
+					if($numerofilas > 0){
+						for($x=0; $x<$numerofilas; $x++){
+
+							$arreglo['data'][] = array(
+								'ID' => $row[$x]['ID_Precio'],
+								'Nombre' => $row[$x]['Nombre'],
+								'Precio' => $row[$x]['Precio'],
+							);
+							
+						}	
+					}
+				}
+
+				$query2 = "SELECT ID_Precio, Nombre, Precio_Mayoreo AS Precio, (SELECT COUNT(*) FROM precios $busqueda) AS Num FROM precios WHERE FK_Presentacion = '$presentacion' AND FK_Producto = '$idproducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+
+				$row2 = $omodelo->_consultar($query2);
+				$numerofilas2 = $omodelo->numerofilas;
+
+				if($row2 == 'si'){
+					echo "Error: ".mysqli_error($omodelo->link);
+				}else{
+					if($numerofilas2 > 0){
+						for($x=0; $x<$numerofilas2; $x++){
+
+							$arreglo['data'][] = array(
+								'ID' => $row2[$x]['ID_Precio'],
+								'Nombre' => $row2[$x]['Nombre'],
+								'Precio' => $row2[$x]['Precio'],
+							);
+							
+						}	
+					}
+				}		
+			}
+
+
+			$query3 = "SELECT 0 AS ID_Precio, 'General' AS Nombre, Precio, (SELECT COUNT(*) FROM precios $busqueda) AS Num FROM productos WHERE ID_Producto = '$idproducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+
+			$row3 = $omodelo->_consultar($query3);
+			$numerofilas3 = $omodelo->numerofilas;
+
+			if($row3 == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas3 > 0){
+					for($x=0; $x<$numerofilas3; $x++){
+
+						$arreglo['data'][] = array(
+							'ID' => $row3[$x]['ID_Precio'],
+							'Nombre' => $row3[$x]['Nombre'],
+							'Precio' => $row3[$x]['Precio'],
+						);
+						
+					}	
+				}
+			}
+
+			$query4 = "SELECT 0 AS ID_Precio, 'General Mayoreo' AS Nombre, Precio_Mayoreo AS Precio, (SELECT COUNT(*) FROM precios $busqueda) AS Num FROM productos WHERE ID_Producto = '$idproducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+
+			$row4 = $omodelo->_consultar($query4);
+			$numerofilas4 = $omodelo->numerofilas;
+
+			if($row4 == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas4 > 0){
+					for($x=0; $x<$numerofilas4; $x++){
+
+						$arreglo['data'][] = array(
+							'ID' => $row4[$x]['ID_Precio'],
+							'Nombre' => $row4[$x]['Nombre'],
+							'Precio' => $row4[$x]['Precio'],
+						);
+						
+					}	
+				}
+			}
+			$numerofilasTotal = $numerofilas + $numerofilas2 + $numerofilas3 + $numerofilas4;
+			$arreglo['totales'] = array('NumRows' => $numerofilasTotal);
+
+			echo json_encode($arreglo);
 		}
 		/*if($tipo == 'productos'){
 			$IDCompra = $omodelo->link->real_escape_string($IDCompra);

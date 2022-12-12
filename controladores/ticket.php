@@ -6,7 +6,7 @@
 
 //$con = mysqli_connect('localhost','root','','smartpoi_negocio'.$_SESSION['user_smart']['cliente']['id_cliente']);
 date_default_timezone_set('America/Mexico_City');
-$con = mysqli_connect('localhost','root','','smartpoi_negocio');
+$con = mysqli_connect('localhost','root','','wits_sistemaalex');
 $arreglo = '';
 ?>
 

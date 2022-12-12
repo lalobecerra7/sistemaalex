@@ -584,6 +584,11 @@
                     </a>
                 </li>
 
+                <li class="dropdown dropdown-list-toggle" hidden>
+                  <a class="nav-link notification-toggle nav-link-lg cargarVista" href="javascript:void(0)" carga="v_hacerventa" titulo="Ventas" id="cargarHacerVenta">
+                    </a>
+                </li>
+
                 #MenuZonas#
 
                 #MenuAreas#
