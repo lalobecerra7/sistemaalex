@@ -743,6 +743,7 @@
             <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Factura 4.0</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
+          <form id="formFoliosCFDI"><button type="sumbit" id="bGuardarUUID" hidden></button></form>
           <form id="formFacturar">
             <div class="modal-body">
               <div class="row">
@@ -999,8 +1000,8 @@
                 <div class="col-md-3 col-sm-12 mb-3">
                   <div class="form-floating mb-3">
                     <select class="form-select" name="metodoCFDI" id="metodoCFDI" disabled>
-                       <option value="PUE">PUE - Pago en una sola exhibición</option>
-                       <option value="PPD">PPD - Pago en parcialidades o diferido</option>
+                      <option value="PUE">PUE - Pago en una sola exhibición</option>
+                      <option value="PPD">PPD - Pago en parcialidades o diferido</option>
                     </select>
                     <label>Método de Pago</label>
                   </div>
@@ -1032,7 +1033,7 @@
                   <tfoot>
                     <tr>
                       <td>
-                        <input type="text" form="formFoliosCFDI" class="form-control" id="uuidCFDI" name="uuidCFDI" placeholder="Folio fiscal (UUID)">
+                        <input type="text" form="formFoliosCFDI" class="form-control" id="uuidCFDI" name="uuidCFDI" placeholder="Folio fiscal (UUID)" required>
                       </td>
                       <td>
                         <button type="button" class="btn btn-sm btn-success" id="bAgergarFolioCFDI"><i class="fas fa-plus"></i></button>
@@ -1044,8 +1045,8 @@
               <div class="row">
                 <div class="col-md-6 col-sm-12 mb-3">
                   <div class="form-floating mb-3">
-                    <select class="form-select" name="relacionCFDI" id="relacionCFDI" disabled>
-                      <option value="PUE">--Selecciona una opción--</option>
+                    <select class="form-select" name="relacionCFDI" id="relacionCFDI">
+                      <option value="">--Selecciona una opción--</option>
                       <option value="01">01 - Nota de crédito de los documentos relacionados</option>
                       <option value="02">02 - Nota de débito de los documentos relacionados</option>
                       <option value="03">03 - Devolución de mercancía sobre facturas o traslados previos</option>
@@ -1084,7 +1085,7 @@
               <div class="row">
                 <div class="col-md-3 col-sm-12 mb-3">
                   <div class="form-floating mb-3">
-                    <select class="form-select" name="usoCFDI" id="usoCFDI">
+                    <select class="form-select" name="usoCFDI" id="usoCFDI" disabled>
                       <option value="">--Selecciona una opción--</option>
                       <option value="G01">G01 - Adquisición de mercancías.</option>
                       <option value="G02">G02 - Devoluciones, descuentos o bonificaciones.</option>
@@ -1108,8 +1109,8 @@
                       <option value="D09">D09 - Depósitos en cuentas para el ahorro, primas que tengan como base planes de pensiones.</option>
                       <option value="D10">D10 - Pagos por servicios educativos (colegiaturas).</option>
                       <option value="S01">S01 - Sin efectos fiscales.</option>  
-                      <option value="CP0">CP0 -1  Pagos</option>
-                      <option value="CN0">CN0 -1  Nómina</option>
+                      <option value="CP01">CP01 - Pagos</option>
+                      <option value="CN01">CN01 -  Nómina</option>
                     </select>
                     <label>Uso de CFDI</label>
                   </div>
@@ -1147,7 +1148,7 @@
                         <td colspan="3" class="dinero" id="subtotalCFDI">0</td>
                       </tr>
                       <tr>
-                        <th colspan="8" class="text-end">Descuento</th>
+                        <th colspan="8" class="text-end">Total Descuentos</th>
                         <td colspan="3" class="dinero" id="totalDescuentoCFDI">0</td>
                       </tr>
                       <tr>
