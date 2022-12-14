@@ -116,18 +116,19 @@ jQuery(document).ready(function($) {
 		});	  
 	});
 
-	$(document).on('click', '#ImprimirTicketVenta', function() {
+	$(document).on('click', '#ImprimirTicketVentaSinCaja', function() {
 		var idVenta = $(this).attr("attrid");
+		var sucursal = $(this).attr("sucursal");
 		var altura=50;
         var anchura=310;
 
         var y= parseInt((window.screen.height/2)-(altura/2));
         var x= parseInt((window.screen.width/2)-(anchura/2));
-
-		window.open("controladores/ticket.php?id="+idVenta, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
+        console.log(sucursal);
+		window.open("controladores/ticket.php?id="+idVenta+"&idSucursal="+sucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
 	});
 
-	$(document).on('click', '#VerProductosCompra', function() {
+	$(document).on('click', '#VerProductosVenta', function() {
 		var folio = $(this).attr("folio");
 		var id = $(this).attr("attrid");
 		$("#ModalVerProductosCompra").modal("show");

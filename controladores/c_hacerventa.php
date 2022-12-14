@@ -145,10 +145,10 @@ class hacerventa {
 			if (!isset($cliente) || $cliente == "") {
 				$cliente = 1;
 			}
-			if ($Importe == "") {
-				$Importe = 0;
+			if ($Importe == "" || $Importe == 0) {
+				$Importe = $total;
 			}
-			$cambio = abs($total - $Importe);
+			$cambio = $total - $Importe;
 			$query = "INSERT INTO ventas SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Sucursal = '$idsucursal', FK_Cliente = '$cliente', Descuento = '$sumadescuento', Total = '$total', Tipo_Pago = '$TipoPago', Pago = '$Importe', Cambio = '$cambio', Fecha_Registro = '$fecha'";
 			$error = $omodelo->_insertar($query);
 
@@ -194,7 +194,7 @@ class hacerventa {
 
 					}
 				}
-				echo "Correcto";
+				echo "Correcto~".$idVenta;
 			}
 		}
 

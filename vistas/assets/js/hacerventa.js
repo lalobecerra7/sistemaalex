@@ -372,6 +372,7 @@ jQuery(document).ready(function($) {
 			    }
 			})
 			.done(function(res) {
+				var datos = res.split("~");
 				if ($.trim(res) == "Correcto") {
 					$("#ModalRealizarVenta").modal("hide");
 			    	Swal.fire({
@@ -379,7 +380,14 @@ jQuery(document).ready(function($) {
 						title: 'Venta realizada correctamente',
 					});
 					$("#cargarHacerVenta").trigger("click");
-					
+					var idVenta = datos[1];
+					var altura=50;
+			        var anchura=310;
+
+			        var y= parseInt((window.screen.height/2)-(altura/2));
+			        var x= parseInt((window.screen.width/2)-(anchura/2));
+
+					window.open("controladores/ticket.php?id="+idVenta+"&idSucursal="+idsucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
 			    }else{
 			    	Swal.fire({
 	                	icon: 'error',

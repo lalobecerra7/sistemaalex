@@ -125,7 +125,8 @@ $arreglo = '';
   <?php 
     $FechaHoy = date('Y-m-d H:i:s');
     
-    $sql = "SELECT ID_Compra, LPAD(ID_Compra, 8, '0') AS Folio, FK_Proveedor, (SELECT proveedores.Nombre FROM proveedores WHERE ID_Proveedor = FK_Proveedor) AS NombreProveedor, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, compras.Descuento, detalle_compras.Subtotal, compras.Total, compras.Anticipo, compras.Estatus, compras.Fecha FROM compras INNER JOIN detalle_compras ON FK_Compra = ID_Compra WHERE ID_Compra = '".$_GET["id"]."'";
+    $sql = "SELECT ID_Ticket, FK_Sucursal, Imagen, Ruta_Imagen, tickets.Nombre AS MostrarNombre, Domicilio, tickets.Telefono AS MostrarTelefono, tickets.Email AS MostrarEmail, Total_Letras, Incluir_Mensaje, Mensaje, Moneda, Simbolo, Origen, sucursales.Nombre AS NombreSucursal, FK_Encargado, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, sucursales.Email AS CorreoSucursal, sucursales.Telefono, Segundo_Telefono, FK_Zona FROM tickets INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE FK_Sucursal = '".$_GET["idSucursal"]."'";
+    echo  $sql;
     
     if($res=$con->query($sql)){
       if ($res->num_rows > 0) {
