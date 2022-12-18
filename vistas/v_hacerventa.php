@@ -13,7 +13,7 @@
                         </button>
                     </div>
                     <div class="offset-md-3 col-md-3 text-end d-grid mb-2">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ModalVerPedidosVenta" id="CargaPedidosModalVentas" attrid="">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ModalVerPedidosVenta" id="CargaPedidosModalVentas" folio="" attrid="">
                             <i class="fas fa-arrow-down"></i> Seleccionar pedido
                         </button>
                     </div>

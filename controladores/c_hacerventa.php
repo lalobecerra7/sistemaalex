@@ -285,7 +285,13 @@ class hacerventa {
 			if ($error == "si") {
 				echo "Error 1: ".mysqli_error($omodelo->link);
 			}else{
-				$idPedido = mysqli_insert_id($omodelo->link);
+
+				$queryEliminar = "DELETE FROM detalles_pedidos WHERE FK_Pedido = '$IDPedido'";
+				$errorEliminar = $omodelo->_insertar($queryEliminar);
+
+				if ($errorEliminar == "si") {
+					echo "Error Eliminar: ".mysqli_error($omodelo->link);
+				}
 
 				$productos = json_decode($productos, true);
 				foreach ($productos as $fila) {
@@ -302,7 +308,7 @@ class hacerventa {
 							$nombreProducto = $row2[0]["Descripcion"];
 						}
 					}
-					$query = "INSERT INTO detalles_pedidos SET FK_Pedido = '$idPedido', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]'";
+					$query = "INSERT INTO detalles_pedidos SET FK_Pedido = '$IDPedido', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]'";
 					$error = $omodelo->_insertar($query);
 
 					if ($error == "si") {
@@ -755,7 +761,7 @@ class hacerventa {
 				}
 			}
 			
-			$query = "SELECT ID_Pedido, pedidos.FK_Usuario, pedidos.FK_Sucursal, FK_Caja, FK_Cliente, pedidos.Descuento, Total, Tipo_Pago, Pago, Cambio, Notas, pedidos.Fecha_Registro, Cancelada, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = pedidos.FK_Usuario) AS NombreUsuario, clientes.Nombre AS Datos, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM pedidos WHERE pedidos.FK_Sucursal = '$sucursal') AS Num FROM pedidos INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE pedidos.FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Pedido, pedidos.FK_Usuario, pedidos.FK_Sucursal, FK_Caja, FK_Cliente, pedidos.Descuento, Total, Tipo_Pago, Pago, Cambio, Notas, pedidos.Fecha_Registro AS Datos, Cancelada, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = pedidos.FK_Usuario) AS NombreUsuario, clientes.Nombre AS NombreCliente, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM pedidos WHERE pedidos.FK_Sucursal = '$sucursal') AS Num FROM pedidos INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE pedidos.FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -772,8 +778,8 @@ class hacerventa {
 
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Pedido'],
-							'Datos' => "Fecha: <b>".$row[$i]['Fecha_Registro']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b>",
-							'Cliente' => 'Nombre: <b>'.$row[$i]['Datos'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Correo electrónico: <b>'.$row[$i]['CorreoCliente'].'</b><br>RFC: <b>'.$row[$i]['RFCCliente']."</b>",
+							'Datos' => "Fecha: <b>".$row[$i]['Datos']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b>",
+							'Cliente' => 'Nombre: <b>'.$row[$i]['NombreCliente'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Correo electrónico: <b>'.$row[$i]['CorreoCliente'].'</b><br>RFC: <b>'.$row[$i]['RFCCliente']."</b>",
 							'Total' => "Subtotal: <b>$".number_format(($row[$i]['Total'] + $row[$i]['Descuento']), 2)."</b><br>Descuento: <b>$".number_format($row[$i]['Descuento'], 2)."</b><br>Total: <b>$".number_format($row[$i]['Total'], 2)."</b>",
 							'Detalles' => '<button class="btn btn-link btn-sm" id="VerProductosPedido" attrid="'.$row[$i]['ID_Pedido'].'" folio="'.$folio.'">Ver productos</button>',
 							'Acciones' => '<button type="button" class="btn btn-primary btn-sm SeleccionarPedido" attrid="'.$row[$i]['ID_Pedido'].'" folio="'.$folio.'">Seleccionar</button> <br> <br> <button type="button" class="btn btn-danger btn-sm EliminarPedido" attrid="'.$row[$i]['ID_Pedido'].'" folio="'.$folio.'"><i class="fas fa-trash"></i></button>',
@@ -914,32 +920,58 @@ class hacerventa {
 					}else{
 						if($numerofilas2 > 0){
 							for ($i=0; $i < $numerofilas2; $i++) { 
-								$query3 = "SELECT ID_Impuesto, FK_Detalle_Pedido, Tipo_Impuesto_CFDI, Impuesto_CFDI, Clave_CFDI, Tipo_Factor_CFDI, Tasa_Cuota_CFDI FROM detalles_impuestos_pedidos WHERE FK_Detalle_Pedido = '".$row2[$i]["ID_Detalle_Pedido"]."'";
-								$row3 = $omodelo->_consultar($query3); 
-								$numerofilas3 = $omodelo->numerofilas;
-
-								if($row3 == 'si'){
-									echo "Error 3: ".mysqli_error($omodelo->link);
+								$campoImpuestos = "";
+								$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje, impuestos.Clave_CFDI, impuestos.Tipo_Factor, impuestos.Clase FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row2[$i]["FK_Producto"]."'";
+								$rowI = $omodelo->_consultar($queryI);
+								$numerofilasI = $omodelo->numerofilas;
+								if($rowI == 'si'){
+									echo "Error: ".mysqli_error($omodelo->link);
 								}else{
-									if($numerofilas3 > 0){
-										for ($x=0; $x < $numerofilas3; $x++) { 
+									if($numerofilasI > 0){
+										for ($a=0; $a < $numerofilasI; $a++) { 
+											$checked = "";
+											$query3 = "SELECT ID_Impuesto, FK_Detalle_Pedido, Tipo_Impuesto_CFDI, Impuesto_CFDI, Clave_CFDI, Tipo_Factor_CFDI, Tasa_Cuota_CFDI FROM detalles_impuestos_pedidos WHERE FK_Detalle_Pedido = '".$row2[$i]["ID_Detalle_Pedido"]."' AND Impuesto_CFDI = '".$rowI[$a]["Nombre"]."' AND Tasa_Cuota_CFDI = '".$rowI[$a]["Porcentaje"]."' AND Clave_CFDI = '".$rowI[$a]["Clave_CFDI"]."'";
+											$row3 = $omodelo->_consultar($query3); 
+											$numerofilas3 = $omodelo->numerofilas;
 
-											$campoImpuestos = "";
-											$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje, impuestos.Clave_CFDI, impuestos.Tipo_Factor, impuestos.Clase FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row2[$i]["FK_Producto"]."'";
-											$rowI = $omodelo->_consultar($queryI);
-											$numerofilasI = $omodelo->numerofilas;
-											if($rowI == 'si'){
-												echo "Error: ".mysqli_error($omodelo->link);
+											if($row3 == 'si'){
+												echo "Error 3: ".mysqli_error($omodelo->link);
 											}else{
-												if($numerofilasI > 0){
-													for ($a=0; $a < $numerofilasI; $a++) { 
+												if($numerofilas3 > 0){
+													$checked = "checked";
+												}else{
+													$checked = "";
+												}
+											}
 
-														if ($rowI[$a]["Nombre"] == $row3[$x]["Impuesto_CFDI"] && $rowI[$a]["Porcentaje"] == $row3[$x]["Tasa_Cuota_CFDI"] && $rowI[$a]["Tipo_Factor"] == $row3[$x]["Tipo_Factor_CFDI"] && $rowI[$a]["Clave_CFDI"] == $row3[$x]["Clave_CFDI"] && $rowI[$a]["Clase"] == $row3[$x]["Tipo_Impuesto_CFDI"]) {
+											$campoImpuestos .= '
+												<div class="form-check impuesto">
+													<input class="form-check-input seleccionarImpuesto" '.$checked.' type="checkbox" nombre="'.$rowI[$a]["Nombre"].'" porcentaje="'.$rowI[$a]["Porcentaje"].'" attrid="'.$rowI[$a]["FK_Impuesto"].'" clavecfdi="'.$rowI[$a]["Clave_CFDI"].'" tipofactor="'.$rowI[$a]["Tipo_Factor"].'" clase="'.$rowI[$a]["Clase"].'">
+													<label class="form-check-label" for="flexCheckDefault">
+														'.$rowI[$a]["Nombre"].' ('.$rowI[$a]["Porcentaje"].'%)
+													</label>
+												</div>
+											';
+											/*$query3 = "SELECT ID_Impuesto, FK_Detalle_Pedido, Tipo_Impuesto_CFDI, Impuesto_CFDI, Clave_CFDI, Tipo_Factor_CFDI, Tasa_Cuota_CFDI FROM detalles_impuestos_pedidos WHERE FK_Detalle_Pedido = '".$row2[0]["ID_Detalle_Pedido"]."'";
+											$row3 = $omodelo->_consultar($query3); 
+											$numerofilas3 = $omodelo->numerofilas;
+
+											if($row3 == 'si'){
+												echo "Error 3: ".mysqli_error($omodelo->link);
+											}else{
+												if($numerofilas3 > 0){
+
+														($rowI[$a]["Nombre"] == $row3[0]["Impuesto_CFDI"] && 
+															$rowI[$a]["Porcentaje"] == $row3[0]["Tasa_Cuota_CFDI"] && 
+															$rowI[$a]["Tipo_Factor"] == $row3[0]["Tipo_Factor_CFDI"] && 
+															$rowI[$a]["Clave_CFDI"] == $row3[0]["Clave_CFDI"] && 
+															$rowI[$a]["Clase"] == $row3[0]["Tipo_Impuesto_CFDI"]
+														) {
 															$campoImpuestos .= '
 																<div class="form-check impuesto">
 																	<input class="form-check-input seleccionarImpuesto" checked type="checkbox" nombre="'.$rowI[$a]["Nombre"].'" porcentaje="'.$rowI[$a]["Porcentaje"].'" attrid="'.$rowI[$a]["FK_Impuesto"].'" clavecfdi="'.$rowI[$a]["Clave_CFDI"].'" tipofactor="'.$rowI[$a]["Tipo_Factor"].'" clase="'.$rowI[$a]["Clase"].'">
 																	<label class="form-check-label" for="flexCheckDefault">
-																		'.$rowI[$a]["Nombre"].' ('.$rowI[$a]["Porcentaje"].'%)
+																					'.$rowI[$a]["Nombre"].' ('.$rowI[$a]["Porcentaje"].'%)
 																	</label>
 																</div>
 															';	
@@ -953,25 +985,28 @@ class hacerventa {
 																</div>
 															';
 														}
-													}
+
+														// ///////////////////////////////////////////
+														// $impuestos['data'][0] = array(
+														// 	'ID_Impuesto' => $row3[$x]["ID_Impuesto"],
+														// 	'FK_Detalle_Pedido' => $row3[$x]["FK_Detalle_Pedido"],
+														// 	'Tipo_Impuesto_CFDI' => $row3[$x]["Tipo_Impuesto_CFDI"],
+														// 	'Impuesto_CFDI' => $row3[$x]["Impuesto_CFDI"],
+														// 	'Clave_CFDI' => $row3[$x]["Clave_CFDI"],
+														// 	'Tipo_Factor_CFDI' => $row3[$x]["Tipo_Factor_CFDI"],
+														// 	'Tasa_Cuota_CFDI' => $row3[$x]["Tasa_Cuota_CFDI"]
+														// );
+													
+
 												}
-											}	
+											}*/
 
-
-											///////////////////////////////////////////
-											/*$impuestos['data'][$x] = array(
-												'ID_Impuesto' => $row3[$x]["ID_Impuesto"],
-												'FK_Detalle_Pedido' => $row3[$x]["FK_Detalle_Pedido"],
-												'Tipo_Impuesto_CFDI' => $row3[$x]["Tipo_Impuesto_CFDI"],
-												'Impuesto_CFDI' => $row3[$x]["Impuesto_CFDI"],
-												'Clave_CFDI' => $row3[$x]["Clave_CFDI"],
-												'Tipo_Factor_CFDI' => $row3[$x]["Tipo_Factor_CFDI"],
-												'Tasa_Cuota_CFDI' => $row3[$x]["Tasa_Cuota_CFDI"]
-											);*/
+										//
 										}
 
 									}
-								}
+								}	
+
 
 								$nombrePresentacion = "";
 								if ($row2[$i]['Presentacion'] != "") {
