@@ -225,9 +225,9 @@ class ventas {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		if($tipo == 'productos'){
-			$IDCompra = $omodelo->link->real_escape_string($IDCompra);
+			$IDVenta = $omodelo->link->real_escape_string($IDVenta);
 			$tabla = "";
-			$query = "SELECT ID_Detalle_Compra, FK_Compra, FK_Producto, productos.Codigo, productos.Descripcion, productos.Imagen, detalle_compras.Costo AS Costo, Cantidad, Subtotal FROM detalle_compras INNER JOIN productos ON FK_Producto = ID_Producto WHERE FK_Compra = '$IDCompra'";
+			$query = "SELECT ID_Detalle_Venta, FK_Venta, detalles_ventas.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, Descripcion, Precio, Cantidad, Descuento, Total, Devuelto, Fecha_Devolucion, Regreso_Inventario, Clave_Unidad_CFDI, Unidad_CFDI, Objeto_Impuesto_CFDI FROM detalles_ventas LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '$IDVenta'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -236,27 +236,56 @@ class ventas {
 			}else{
 				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
+						$sumaImpuestos=0; $subtotal = 0;
 
-						$imagen = '<a href="vistas/assets/archivos/fotosProductos/default.jpg" data-fancybox="images">
-										<div style="background-image: url('."'".'vistas/assets/archivos/fotosProductos/default.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
-										</div>
-									</a><br>';
-						if ($row[$i]["Imagen"] != "") {
-							if($row[$i]["Imagen"] != "" && file_exists("vistas/assets/archivos/fotosProductos/".$row[$i]["Imagen"])){
-								$imagen = '<a href="vistas/assets/archivos/fotosProductos/'.$row[$i]["Imagen"].'" data-fancybox="images">
-										<div style="background-image: url('."'".'vistas/assets/archivos/fotosProductos/'.$row[$i]["Imagen"]."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
-										</div>
-									</a><br>';
-							}	
+						$query2 = "SELECT ID_Impuesto, FK_Detalle_Venta, Tipo_Impuesto_CFDI, Impuesto_CFDI, Clave_CFDI, Tipo_Factor_CFDI, Tasa_Cuota_CFDI FROM detalles_impuestos_ventas WHERE FK_Detalle_Venta = '".$row[$i]["ID_Detalle_Venta"]."'";
+						$row2 = $omodelo->_consultar($query2);
+						$numerofilas2 = $omodelo->numerofilas;
+
+						if($row2 == 'si'){
+							echo "Error: ".mysqli_error($omodelo->link);
+						}else{
+							if($numerofilas2 > 0){
+								for($x=0; $x<$numerofilas2; $x++){
+									$totalProducto=0; $descuento=0; $totalFinal=0;
+									$totalProducto = $row[$i]["Precio"]*$row[$i]["Cantidad"];
+									$descuento = ($row[$i]["Descuento"] / 100);
+									$totalFinal = $totalProducto - ($totalProducto * $descuento);
+									if ($row2[$x]["Tipo_Impuesto_CFDI"] == "Trasladado") { //Se suma al total
+										$sumaImpuestos += $totalFinal * ($row2[$x]["Tasa_Cuota_CFDI"] / 100);
+									}else if($row2[$x]["Tipo_Impuesto_CFDI"] == "Retenido" && $row2[$x]["Tipo_Factor_CFDI"] != "Exento"){ //Se resta al total
+										$sumaImpuestos -= $totalFinal * ($row2[$x]["Tasa_Cuota_CFDI"] / 100);
+									}else if($row2[$x]["Tipo_Impuesto_CFDI"] == "Retenido" && $row2[$x]["Tipo_Factor_CFDI"] == "Exento"){ ////No se suma ni se resta
+										$sumaImpuestos += 0;
+									}
+								}
+							}
 						}
 
+
+						$presentacion = "";
+						$nombrepresentacion = "";
+						if ($row[$i]["NombrePresentacion"] != "") {
+							$presentacion = "<br>".$row[$i]["NombrePresentacion"];
+							$nombrepresentacion = " / ".$row[$i]["NombrePresentacion"];
+							if ($row[$i]["AbreviaturaPresentacion"] != "") {
+								$presentacion .= " (".$row[$i]["AbreviaturaPresentacion"].")";
+								$nombrepresentacion .= " (".$row[$i]["AbreviaturaPresentacion"].")";
+							} 
+						}
+
+						$subtotal = ($row[$i]["Precio"] * $row[$i]["Cantidad"]) ;
+						$descuento = $subtotal * ($row[$i]["Descuento"] / 100);
+						$subtotal = $subtotal - $descuento;
 						$tabla .= "
 							<tr>
-								<td >".$imagen.$row[$i]["Codigo"]."</td>
-								<td >".$row[$i]["Descripcion"]."</td>
-								<td style='vertical-align: middle;'>$".number_format($row[$i]["Costo"], 2)."</td>
+								<td >".$row[$i]["Descripcion"].$presentacion."</td>
+								<td style='vertical-align: middle;'>$".number_format($row[$i]["Precio"], 2)."</td>
 								<td style='vertical-align: middle;'>".number_format($row[$i]["Cantidad"], 2)."</td>
-								<td style='vertical-align: middle;'>$".number_format($row[$i]["Subtotal"], 2)."</td>
+								<td style='vertical-align: middle;'>".$row[$i]["Descuento"]."%</td>
+								<td style='vertical-align: middle;'>$".number_format($subtotal, 2)."</td>
+								<td><button class='btn btn-primary btn-sm verImpuestosProducto' nombre='".$row[$i]["Descripcion"].$nombrepresentacion."' attrid='".$row[$i]["ID_Detalle_Venta"]."'>$".number_format($sumaImpuestos, 2)."</button></td>
+								<td>$".number_format($row[$i]["Total"], 2)."</td>
 							</tr>
 						";
 					}
@@ -264,18 +293,34 @@ class ventas {
 			}
 
 			echo $tabla;
-		}else if($tipo == 'pago'){
-			$IDCompra = $omodelo->link->real_escape_string($IDCompra);
-			$query = "SELECT FK_Proveedor, proveedores.Nombre AS Proveedor, compras.Total AS Total, (SELECT SUM(Monto) FROM pagos WHERE FK_Compra = '$IDCompra') AS TotalPagos FROM compras INNER JOIN proveedores ON ID_Proveedor = FK_Proveedor INNER JOIN pagos ON FK_Compra = ID_Compra WHERE ID_Compra = '$IDCompra'";
+		}else if($tipo == "impuestos"){
+			$query = "SELECT ID_Impuesto, FK_Detalle_Venta, Tipo_Impuesto_CFDI, Impuesto_CFDI, Clave_CFDI, Tipo_Factor_CFDI, Tasa_Cuota_CFDI FROM detalles_impuestos_ventas WHERE FK_Detalle_Venta = '".$IDDetalle."'";
 			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-
+			$numerofilas2 = $omodelo->numerofilas;
+			$tabla ="";
 			if($row == 'si'){
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
-				if($numerofilas > 0){
-					echo json_encode($row[0]);
+				if($numerofilas2 > 0){
+					for ($i=0; $i < $numerofilas2; $i++) { 
+						$tabla .= "
+							<tr>
+								<td >".$row[$i]["Impuesto_CFDI"]."</td>
+								<td >".$row[$i]["Clave_CFDI"]."</td>
+								<td >".$row[$i]["Tasa_Cuota_CFDI"]."</td>
+								<td >".$row[$i]["Tipo_Factor_CFDI"]."</td>
+								<td >".$row[$i]["Tipo_Impuesto_CFDI"]."</td>
+							</tr>
+						";
+					}
+				}else{
+					$tabla = "
+						<tr>
+							<td style='vertical-align: middle;' colspan='6'>No hay impuestos registrados</td>
+						</tr>
+					";
 				}
+				echo $tabla;
 			}
 		}
 	}

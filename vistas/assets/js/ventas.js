@@ -131,22 +131,43 @@ jQuery(document).ready(function($) {
 	$(document).on('click', '#VerProductosVenta', function() {
 		var folio = $(this).attr("folio");
 		var id = $(this).attr("attrid");
-		$("#ModalVerProductosCompra").modal("show");
-		$("#FolioCompraProductos").text(folio);
+		$("#ModalVerProductosReporteVenta").modal("show");
+		$("#FolioVentasProductos").text(folio);
 
-		var data = "metodo=detalles&accion=compras&tipo=productos&IDCompra="+id;
+		var data = "metodo=detalles&accion=ventas&tipo=productos&IDVenta="+id;
 		$.ajax({
 			url: 'index.php',
 			type: 'POST',
 			data: data,
 		})
 		.done(function(res) {
-			$("#tbodyVerProductosCompra").html(res);
+			$("#tbodyVerProductosVenta").html(res);
 		})
 		.fail(function() {
 			console.log("Error ajax");
 		});
 	});
+
+	$(document).on('click', '.verImpuestosProducto', function() {
+		var id = $(this).attr("attrid");
+		var nombre = $(this).attr("nombre");
+		$("#ModalVerImpuestosProducto").modal("show");
+		$("#NombreProductoImpuesto").text(nombre);
+		var data = "metodo=detalles&accion=ventas&tipo=impuestos&IDDetalle="+id;
+		$.ajax({
+			url: 'index.php',
+			type: 'POST',
+			data: data,
+		})
+		.done(function(res) {
+			$("#tbodyVerImpuestosProducto").html(res);
+		})
+		.fail(function() {
+			console.log("Error ajax");
+		});
+	});
+
+
 });
 
 $(document).on('click', '#PagoCompra', function() {

@@ -57,7 +57,7 @@
 	</div>
 </div>
 
-<div class="modal fade" id="ModalVerProductosVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="ModalVerProductosReporteVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -73,16 +73,22 @@
                                     Producto
                                 </th>
                                 <th>
-                                    Descripción
-                                </th>
-                                <th>
                                     Precio
                                 </th>
                                 <th>
                                     Cantidad
                                 </th>
                                 <th>
+                                    Descuento
+                                </th>
+                                <th>
                                     Subtotal
+                                </th>
+                                <th>
+                                    Impuestos
+                                </th>
+                                <th>
+                                    Total
                                 </th>
                             </tr>
                         </thead>
@@ -98,72 +104,43 @@
     </div>
 </div>
 
-<div class="modal fade" id="ModalPagoCompra" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
-    <div class="modal-content">
-      <div class="modal-header bg-inverse bd-inverse-darken">
-        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Hacer pago</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="FormPagoCompra">
-	      <div class="modal-body">
-	       	<div class="row">
-                <div class="col-md-12 col-sm-12 mb-1">
-                    <center><h4 style="font-weight: bold;">Proveedor: <br><span id="Proveedor"></span></h4></center>
-		        </div>
-                <div class="col-md-12 col-sm-12 mb-1">
-                    <center><h4 style="font-weight: bold;">Total de la compra: <br><span id="TotalCompra"></span></h4></center>
+<div class="modal fade" id="ModalVerImpuestosProducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Impuestos <span id="NombreProductoImpuesto"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Impuesto
+                                </th>
+                                <th>
+                                    Clave
+                                </th>
+                                <th>
+                                    Tasa
+                                </th>
+                                <th>
+                                    Tipo de factor
+                                </th>
+                                <th>
+                                    Tipo de impuesto
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyVerImpuestosProducto">
+                        </tbody>
+                    </table>
                 </div>
-                <div class="col-md-12 col-sm-12 mb-1">
-                    <center><h4 style="font-weight: bold;">Total de pagos: <br><span id="Pagos"></span></h4></center>
-		        </div>
-                <div class="col-md-12 col-sm-12 mb-1">
-                    <center><h4 style="font-weight: bold;">Restante: <br><span id="Restante"></span></h4></center>
-		        </div>
-	       		<div class="col-md-12 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		               	<input type="number" class="form-control" min='1' step="any" id="ImportePagoCompra" name="ImportePagoCompra" placeholder="Ingresa el importe a pagar">
-		                <label for="ImportePagoCompra">Importe a pagar: </label>
-		            </div>
-		        </div>
-                <div class="col-md-12 col-sm-12 mb-3" id='Concepto'>
-		        	<div class="form-floating">
-		               	<input type="text" class="form-control" id="ConceptoPago" name="ConceptoPago" placeholder="Ingresa el concepto del pago">
-		                <label for="ConceptoPago">Concepto: </label>
-		            </div>
-		        </div>
-                <div class="col-md-12 col-sm-12 mb-3">
-                    <div class="form-floating">
-                        <select class="form-select" id="TipoDePago" name="TipoDePago">
-                            <option value="" selected>--Seleccione una opción--</option>
-                            <option value="Efectivo">Efectivo</option>
-                            <option value="Deposito">Depósito</option>
-                            <option value="Cheque">Cheque</option>
-                            <option value="TransferenciaBancaria">Transferencia bancaria</option>
-                            <option value="TarjetaCreditoDebito">Tarjeta de crédito o débito</option>
-                        </select>
-                        <label for="TipoDePago">Tipo de pago</label>
-                    </div>
-                </div>
-		        <div class="col-md-12 col-sm-12 mb-3" id='Detalles'>
-		        	<div class="form-floating">
-		               	<input type="text" class="form-control" id="DetallesPago" name="DetallesPago" placeholder="Ingresa los datos del pago">
-		                <label for="DetallesPago">Detalles: </label>
-		            </div>
-		        </div>
-                <div class="col-md-12 col-sm-12 mb-3" id='Archivo'hidden>
-		        	<div class="form-floating">
-		               	<input type="file" class="form-control" id="ComprobantePago" name="ComprobantePago" placeholder="Ingresa un comprobante de pago">
-		                <label for="CmprobantePago">Comprobante de pago</label>
-		            </div>
-		        </div>
-	       	</div>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="submit" class="btn btn-primary" id="GuardarPago" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
-					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-	      </div>
-  		</form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
     </div>
-  </div>
-</div> 
+</div>

@@ -13,7 +13,7 @@
                         </button>
                     </div>
                     <div class="offset-md-3 col-md-3 text-end d-grid mb-2">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ModalVerPedidosVenta" id="CargaPedidosModalVentas">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ModalVerPedidosVenta" id="CargaPedidosModalVentas" attrid="">
                             <i class="fas fa-arrow-down"></i> Seleccionar pedido
                         </button>
                     </div>
@@ -149,7 +149,9 @@
     </div>
 </div>
 
-<div class="modal fade" id="ModalVerPedidos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+
+<div class="modal fade" id="ModalVerPedidosVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -158,14 +160,13 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="VentaTablaProductos" width="100%" style="font-size: 12px;">
+                    <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaCargarPedidos" width="100%" style="font-size: 12px;">
                         <thead>
-                            <th style="width: 20%;" orden="No">Producto</th>
-                            <th style="width: 20%;">Presentación</th>
-                            <th style="width: 20%;">Nombre del precio</th>
-                            <th style="width: 20%;">Precio</th>
-                            <th style="width: 20%;">Mayoreo</th>
-                            <th style="width: 20%;">Existencia</th>
+                            <th style="width: 20%;" orden="No">Datos</th>
+                            <th style="width: 25%;" orden="No">Cliente</th>
+                            <th style="width: 25%;">Total</th>
+                            <th style="width: 15%;" orden="No">Detalles</th>
+                            <th style="width: 15%;" orden="No">Acciones</th>
                         </thead>
                         <tbody>
                                
@@ -180,6 +181,93 @@
     </div>
 </div>
 
+<div class="modal fade" id="ModalVerProductosReportePedido" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Productos <span id="FolioPedidoProductos"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Producto
+                                </th>
+                                <th>
+                                    Precio
+                                </th>
+                                <th>
+                                    Cantidad
+                                </th>
+                                <th>
+                                    Descuento
+                                </th>
+                                <th>
+                                    Subtotal
+                                </th>
+                                <th>
+                                    Impuestos
+                                </th>
+                                <th>
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyVerProductosPedido">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalVerImpuestosProductoPedido" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Impuestos <span id="NombreProductoImpuestoPedido"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Impuesto
+                                </th>
+                                <th>
+                                    Clave
+                                </th>
+                                <th>
+                                    Tasa
+                                </th>
+                                <th>
+                                    Tipo de factor
+                                </th>
+                                <th>
+                                    Tipo de impuesto
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyVerImpuestosProducto">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div class="modal fade" id="ModalVerClientesVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

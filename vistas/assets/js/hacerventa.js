@@ -82,7 +82,7 @@ jQuery(document).ready(function($) {
             console.log("Error ajax");
         }); 
     });
-	//NOS QUEDAMOS EN VER PORQUE NO AGREGA LOS PRODUCTOS EN VENTAS Y LAS CORRECCIONES DE JUANCHO
+
     $(document).on('click', '#VentaTablaProductos tbody tr', function() {
     	var codigo = $(this).children("td:eq(0)").find("#CodigoProducto").text();
     	var presentacion = $(this).children("td:eq(1)").find("#IdPresentacionProd").text();
@@ -171,7 +171,20 @@ jQuery(document).ready(function($) {
 			var impuesto = $(this).find(".seleccionarImpuesto");
 			if (impuesto.prop("checked") == true) {
 				var porcentaje = parseFloat(impuesto.attr("porcentaje")) / 100;
-				totalImpuestos += parseFloat(total) * parseFloat(porcentaje);
+
+				if (impuesto.attr("clase") == "Trasladado") { //Se suma al total
+					console.log("Trasladado");
+					totalImpuestos += parseFloat(total) * parseFloat(porcentaje);
+				}else if(impuesto.attr("clase") == "Retenido" && impuesto.attr("tipofactor") != "Exento"){ //Se resta al total
+					console.log("retenido no exento");
+					totalImpuestos -= parseFloat(total) * parseFloat(porcentaje);
+				}else if(impuesto.attr("clase") == "Retenido" && impuesto.attr("tipofactor") == "Exento"){ //No se suma ni se resta
+					console.log("retenido exento");
+					totalImpuestos += parseFloat(0);
+				}else{
+					console.log("NINGUNO");
+					totalImpuestos += parseFloat(total) * parseFloat(porcentaje);
+				}
 			}
 		});
 		
@@ -217,10 +230,11 @@ jQuery(document).ready(function($) {
 
 	$(document).on('click', '#TablaPreciosProductosVenta tbody tr', function() {
 		var precio = $(this).children("td:eq(1)").text();
-		console.log(precio);
 		var producto = $(".BotonDatosPrecio").attr("producto");
 		var presentacion = $(".BotonDatosPrecio").attr("presentacion");
-		console.log($("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+producto+'][idPresentacion='+presentacion+']').length);
+		if (presentacion == 0) {
+			presentacion = null;
+		}
 		if($("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+producto+'][idPresentacion='+presentacion+']').length > 0){    
 			$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+producto+'][idPresentacion='+presentacion+']').children("td:eq(2)").find(".cambiarPrecio").html(precio);
 			$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+producto+'][idPresentacion='+presentacion+']').children("td:eq(2)").find(".cambiarPrecio").attr("precio", precio);
@@ -231,22 +245,15 @@ jQuery(document).ready(function($) {
 	});
 
 	$(document).on('click', '#GuardarPedido', function() {
-		if ($("#TablaProductosAgregadoVenta tbody tr").length == 0) {
+		if ($("#CargaPedidosModalVentas").attr("attrid") != "") {
 			Swal.fire({
-			    icon: 'error',
-			    title: 'No se puede guardar un pedido sin productos',
-			    timer: 1000
-			});
-		}else{
-			Swal.fire({
-	            title: 'Selecciona la fecha de entrega del pedido',
-	            html: '<input type="date" class="form-control" id="FechaEntregaPedido">',
+	            title: 'Tienes cargado el pedido con el folio '+$(this).attr("folio")+', los datos de este pedido se actualizarán',
 	            icon:  'info',
 	            showCancelButton: true,
 	            confirmButtonColor: '#3085d6',
 	            cancelButtonColor: '#d33',
-	            confirmButtonText: 'Continuar',
-	            cancelButtonText: 'Cancelar',
+	            confirmButtonText: 'Modificar pedido',
+	            cancelButtonText: 'Guardar como nuevo pedido',
 	        }).then((result) => {
 	            if (result.value) {
 	            	var idsucursal = $("#SucursalVenta").attr("attrid");
@@ -271,45 +278,127 @@ jQuery(document).ready(function($) {
 						$(this).children("td:eq(4)").find(".impuesto").each(function(index, el) {
 							var impuesto = $(this).find(".seleccionarImpuesto");
 							if (impuesto.prop("checked") == true) {
+								console.log("entro"+impuesto.attr("nombre"));
 								impuestos += impuesto.attr("attrid")+","+impuesto.attr("nombre")+","+impuesto.attr("porcentaje")+","+impuesto.attr("clavecfdi")+","+impuesto.attr("tipofactor")+","+impuesto.attr("clase")+"~";
 							}
 						});
 						productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto]);
 					});
 
-					var data = "metodo=insertar&accion=hacerventa&tipo=GuardarPedido&idsucursal="+idsucursal+"&cliente="+cliente+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&fechaEntrega="+fechaEntrega;
-			        $.ajax({
-			            url: 'index.php',
-			            type: 'POST',
-			            data: data,
-			            beforeSend: function() {
-			                $("#carga").show();
-			            }
-			        })
-			        .done(function(res) {
-			        	if ($.trim(res) == "Correcto") {
-			        		Swal.fire({
-							  icon: 'success',
-							  title: 'Pedido guardado correctamente',
+					var data = "metodo=modificar&accion=hacerventa&tipo=ModificarPedido&idsucursal="+idsucursal+"&cliente="+cliente+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&fechaEntrega="+fechaEntrega+"&IDPedido="+$("#CargaPedidosModalVentas").attr("attrid");
+					$.ajax({
+						url: 'index.php',
+						type: 'POST',
+						data: data,
+						beforeSend: function() {
+							$("#carga").show();
+						}
+					})
+					.done(function(res) {
+						if ($.trim(res) == "Correcto") {
+							Swal.fire({
+								icon: 'success',
+								title: 'Pedido modificado correctamente',
 							});
 							$("#cargarHacerVenta").trigger("click");
-			        	}else{
-			        		Swal.fire({
-	                            icon: 'error',
-	                            title: 'Oops...',
-	                            text: 'Error al guardar pedido.'
-	                        });
-	                        console.log(res);
-			        	}	
+						}else{
+							Swal.fire({
+				            	icon: 'error',
+				                title: 'Oops...',
+				                text: 'Error al guardar pedido.'
+				            });
+				            console.log(res);
+						}	
 					})
-			        .fail(function() {
-			            console.log("Error ajax");
-			        })
-			        .always(function() {
-			            $("#carga").hide();
-			        });	
+					.fail(function() {
+						console.log("Error ajax");
+					})
+					.always(function() {
+						$("#carga").hide();
+					});
+	            }else{
+	            	if ($("#TablaProductosAgregadoVenta tbody tr").length == 0) {
+						Swal.fire({
+						    icon: 'error',
+						    title: 'No se puede guardar un pedido sin productos',
+						    timer: 1000
+						});
+					}else{
+						Swal.fire({
+				            title: 'Selecciona la fecha de entrega del pedido',
+				            html: '<input type="date" class="form-control" id="FechaEntregaPedido">',
+				            icon:  'info',
+				            showCancelButton: true,
+				            confirmButtonColor: '#3085d6',
+				            cancelButtonColor: '#d33',
+				            confirmButtonText: 'Continuar',
+				            cancelButtonText: 'Cancelar',
+				        }).then((result) => {
+				            if (result.value) {
+				            	var idsucursal = $("#SucursalVenta").attr("attrid");
+								if ($("#CargarClientesModalVentas").attr("attrid") == "") {
+									var cliente = 1;
+								}else{
+									var cliente = $("#CargarClientesModalVentas").attr("attrid");
+								}
+								var productos = new Array();
+								var sumadescuento = 0;
+								var total = $(this).attr("total");
+								var fechaEntrega = $("#FechaEntregaPedido").val();
+								$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
+									var idProducto = $(this).attr("attrid");
+									var Presentacion = $(this).attr("idpresentacion");
+									var cantidad = $(this).children("td:eq(3)").find(".campoCantidadProducto").val();
+									var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
+									var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProducto").val();
+									var totalproducto = $(this).children("td:eq(6)").text().replace("$","").replace(",","")
+									sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
+									var impuestos = "";
+									$(this).children("td:eq(4)").find(".impuesto").each(function(index, el) {
+										var impuesto = $(this).find(".seleccionarImpuesto");
+										if (impuesto.prop("checked") == true) {
+											impuestos += impuesto.attr("attrid")+","+impuesto.attr("nombre")+","+impuesto.attr("porcentaje")+","+impuesto.attr("clavecfdi")+","+impuesto.attr("tipofactor")+","+impuesto.attr("clase")+"~";
+										}
+									});
+									productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto]);
+								});
+
+								var data = "metodo=insertar&accion=hacerventa&tipo=GuardarPedido&idsucursal="+idsucursal+"&cliente="+cliente+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&fechaEntrega="+fechaEntrega;
+						        $.ajax({
+						            url: 'index.php',
+						            type: 'POST',
+						            data: data,
+						            beforeSend: function() {
+						                $("#carga").show();
+						            }
+						        })
+						        .done(function(res) {
+						        	if ($.trim(res) == "Correcto") {
+						        		Swal.fire({
+										  icon: 'success',
+										  title: 'Pedido guardado correctamente',
+										});
+										$("#cargarHacerVenta").trigger("click");
+						        	}else{
+						        		Swal.fire({
+				                            icon: 'error',
+				                            title: 'Oops...',
+				                            text: 'Error al guardar pedido.'
+				                        });
+				                        console.log(res);
+						        	}	
+								})
+						        .fail(function() {
+						            console.log("Error ajax");
+						        })
+						        .always(function() {
+						            $("#carga").hide();
+						        });	
+				            }
+				        });	
+					}
 	            }
-	        });	
+	        });
 		}
 	});
 
@@ -373,7 +462,7 @@ jQuery(document).ready(function($) {
 			})
 			.done(function(res) {
 				var datos = res.split("~");
-				if ($.trim(res) == "Correcto") {
+				if ($.trim(datos[0]) == "Correcto") {
 					$("#ModalRealizarVenta").modal("hide");
 			    	Swal.fire({
 						icon: 'success',
@@ -427,7 +516,6 @@ jQuery(document).ready(function($) {
 		$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 			total += parseFloat($(this).children("td:eq(6)").text().replace("$","").replace(",",""));
 		});
-		console.log(total);
 		$("#TotalVentaFinal").text(total);
 		$("#GuardarPedido").attr("total", total);
 		$("#RealizarVenta").attr("total", total);
@@ -446,9 +534,201 @@ jQuery(document).ready(function($) {
         moneda();
     }*/
 
+    $(document).on('click', '#CargaPedidosModalVentas', function() {
+    	TablaVerPedidosGuardados();
+    });
+
+    $(document).on('click', '#VerProductosPedido', function() {
+		var id = $(this).attr("attrid");
+		var folio = $(this).attr("attrid");
+		$("#ModalVerProductosReportePedido").modal("show");
+		$("#FolioPedidoProductos").text(folio);
+
+		var data = "metodo=detalles&accion=hacerventa&tipo=productos&IDPedido="+id;
+		$.ajax({
+			url: 'index.php',
+			type: 'POST',
+			data: data,
+		})
+		.done(function(res) {
+			$("#tbodyVerProductosPedido").html(res);
+		})
+		.fail(function() {
+			console.log("Error ajax");
+		});
+	});
+
+	$(document).on('click', '.verImpuestosProductoPedido', function() {
+		var id = $(this).attr("attrid");
+		var nombre = $(this).attr("nombre");
+		$("#ModalVerImpuestosProductoPedido").modal("show");
+		$("#NombreProductoImpuestoPedido").text(nombre);
+		var data = "metodo=detalles&accion=hacerventa&tipo=impuestos&IDDetalle="+id;
+		$.ajax({
+			url: 'index.php',
+			type: 'POST',
+			data: data,
+		})
+		.done(function(res) {
+			$("#tbodyVerImpuestosProducto").html(res);
+		})
+		.fail(function() {
+			console.log("Error ajax");
+		});
+	});
+
+	$(document).on('change', '#SucursalVenta', function() {
+		if ($(this).val() !="") {
+			$(this).attr("attrid", $(this).val());
+		}
+	});
+
+	$(document).on('click', '.SeleccionarPedido', function() {
+		var id = $(this).attr("attrid");
+		var folio = $(this).attr("folio");
+		var data = "metodo=detalles&accion=hacerventa&tipo=AgregarPedido&IDPedido="+id;
+		$.ajax({
+			url: 'index.php',
+			type: 'POST',
+			data: data,
+		})
+		.done(function(res) {
+			var datos = JSON.parse($.trim(res));
+			$("#CargarClientesModalVentas").html("Cliente: "+datos.data.NombreCliente+"<br>RFC: "+datos.data.RFCCliente);
+			$("#CargarClientesModalVentas").attr("attrid", datos.data.FK_Cliente);
+			$("#ModalVerPedidosVenta").modal("hide");
+			for (var i = 0; i < datos.data.Productos.data.length; i++) {
+				/*var impuestos = "";
+				for (var x = 0; x < datos.data.Productos.data[i].Impuestos.data.length; x++) {
+					impuestos += '\
+					<div class="form-check impuesto">\
+						<input class="form-check-input seleccionarImpuesto" checked type="checkbox" nombre="'+datos.data.Productos.data[i].Impuestos.data[x].Impuesto_CFDI+'" porcentaje="'+datos.data.Productos.data[i].Impuestos.data[x].Tasa_Cuota_CFDI+'" attrid="'+datos.data.Productos.data[i].Impuestos.data[x].ID_Impuesto+'" clavecfdi="'+datos.data.Productos.data[i].Impuestos.data[x].Clave_CFDI+'" tipofactor="'+datos.data.Productos.data[i].Impuestos.data[x].Tipo_Factor_CFDI+'" clase="'+datos.data.Productos.data[i].Impuestos.data[x].Tipo_Impuesto_CFDI+'">\
+						<label class="form-check-label" for="flexCheckDefault">\
+							'+datos.data.Productos.data[i].Impuestos.data[x].Impuesto_CFDI+' ('+datos.data.Productos.data[i].Impuestos.data[x].Tasa_Cuota_CFDI+'%)\
+						</label>\
+					</div>'
+				}*/
+				var presentacion = null;
+
+				if (datos.data.Productos.data[i].FK_Presentacion != 0) {
+					presentacion = datos.data.Productos.data[i].FK_Presentacion;
+				}else{
+					presentacion = null;
+				}
+				$('#TablaProductosAgregadoVenta tbody').append(`
+		        <tr attrid="`+datos.data.Productos.data[i].FK_Producto+`" idPresentacion="`+presentacion+`">
+		        	<td>`+datos.data.Productos.data[i].Codigo+`</td>
+		            <td>`+datos.data.Productos.data[i].Descripcion+` <br>`+datos.data.Productos.data[i].NombrePresentacion+`</td>
+		            <td><button class="btn btn-sm btn-primary cambiarPrecio dinero" precio="`+datos.data.Productos.data[i].Precio+`" attrid="`+datos.data.Productos.data[i].FK_Producto+`" idPresentacion="`+datos.data.Productos.data[i].FK_Presentacion+`">`+datos.data.Productos.data[i].Precio+`</button></td>
+		            <td><input type='number' value='`+datos.data.Productos.data[i].Cantidad+`' min='1' step='any' class='form-control form-control-sm campoCantidadProducto'></td>
+		            <td>`+datos.data.Productos.data[i].Impuestos+`</td>
+		            <td>
+			        	<div class="input-group">
+			            	<span class="input-group-text" id="basic-addon1"><i class="fas fa-percentage"></i></span>
+			                <input type="number" value="`+datos.data.Productos.data[i].Descuento+`" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProducto">
+			            </div>
+			            <br>
+			            <div class="input-group">
+			            	<span class="input-group-text" id="basic-addon1"><i class="fas fa-dollar-sign"></i></span>
+			                <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProductoCantidad">
+			            </div>
+		            </td>
+		            <td class="dinero"></td>
+		            <td><button class="btn btn-sm btn-danger eliminarFila"><i class="fas fa-trash"></i></button></td>
+		        </tr>`);
+
+				$(".campoCantidadProducto").trigger("keyup");
+
+				$("#CargaPedidosModalVentas").text("Pedido: "+folio);
+				$("#CargaPedidosModalVentas").attr("attrid", id);
+				$("#CargaPedidosModalVentas").attr("folio", folio);
+			}
+		})
+		.fail(function() {
+			console.log("Error ajax");
+		});
+	});
+
+	$(document).on('click', '.EliminarPedido', function() {
+		var btn = $(this);
+		Swal.fire({
+	        title: '¿Estás seguro que quieres eliminar el pedido con el folio '+$(this).attr("folio")+'?',
+	        icon: 'warning',
+	        showCancelButton: true,
+	        confirmButtonColor: '#3085d6',
+	        cancelButtonColor: '#d33',
+	        cancelButtonText: '¡No, cancelar!',
+	        confirmButtonText: '¡Si, eliminar!'
+	    }).then((result) => {
+	        if (result.value) {
+	        	var data = "metodo=eliminar&accion=hacerventa&IDPedido="+$(this).attr('attrid');
+				$.ajax({
+					url: 'index.php',
+					type: 'POST',
+					data: data,
+					beforeSend: function() {
+					    progressBoton(btn);
+					}
+				})
+				.done(function(res) {
+					if ($.trim(res) == "Correcto") {
+						Swal.fire({
+							icon: 'success',
+							title: 'Pedido eliminado correctamente'
+						});
+						TablaVerPedidosGuardados();
+					}else{
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Error inesperado al eliminar el pedido.'
+						});
+						console.log($.trim(res));
+					}
+				})
+				.fail(function() {
+					console.log("Error ajax");
+				})
+				.always(function() {
+					unprogressBoton(btn);
+				});
+			}    
+		});	  
+	});
 
 	
 });
+
+function TablaVerPedidosGuardados(){
+	ajaxMyDatatable({
+		"table": $("#TablaCargarPedidos"), 
+		"colums": [
+			"Datos",
+			"Cliente",
+			"Total",
+			"Detalles",
+			"Acciones"
+		], 
+		"totals":[
+			"Datos",
+			"Cliente",
+			"Total",
+			"Detalles",
+			"Acciones"
+		],
+		"sort": [
+			2,
+			"desc"
+		],
+		"url": "index.php", 
+		"params":{
+			"metodo": "detalles",
+			"accion": "hacerventa",
+			"tipo": "CargarPedidos",
+			"sucursal": $("#SucursalVenta").attr("attrid")
+		}
+	});
+}
 
 function TablaClienteVenta(){ 
 	ajaxMyDatatable({
