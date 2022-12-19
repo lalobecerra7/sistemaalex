@@ -1223,5 +1223,6 @@
     <script type="text/javascript" src="vistas/assets/js/hacerCompra.js"></script>
     <script type="text/javascript" src="vistas/assets/js/ventas.js"></script>
     <script type="text/javascript" src="vistas/assets/js/facturacion.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/importes.js"></script>
   </body>
 </html>
