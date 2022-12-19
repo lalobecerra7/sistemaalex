@@ -586,21 +586,15 @@
 
                 #MenuCategorias#
 
-                <li class="dropdown dropdown-list-toggle" hidden>
-                  <a class="nav-link notification-toggle nav-link-lg cargarVista" href="javascript:void(0)" carga="v_hacerCompra" titulo="Compra" id="cargarHacerCompra">
-                    </a>
-                </li>
-
-                <li class="dropdown dropdown-list-toggle" hidden>
-                  <a class="nav-link notification-toggle nav-link-lg cargarVista" href="javascript:void(0)" carga="v_hacerventa" titulo="Ventas" id="cargarHacerVenta">
-                    </a>
-                </li>
-
                 #MenuZonas#
 
                 #MenuAreas#
-                
-                <!--#MenuMovimientos#-->
+
+                <li class="menu-item cargarVista" carga="v_precios" titulo="Precios" id="cargarPrecios">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Precios">Precios</div>
+                  </a>
+                </li>
               </ul>
             </li>
 
@@ -609,6 +603,8 @@
             #MenuConfiguracion#
 
             #MenuUsuarios#
+
+            <!--#MenuMovimientos#-->
 
           </ul>
         </aside>
@@ -1224,5 +1220,6 @@
     <script type="text/javascript" src="vistas/assets/js/ventas.js"></script>
     <script type="text/javascript" src="vistas/assets/js/facturacion.js"></script>
     <script type="text/javascript" src="vistas/assets/js/importes.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/precios.js"></script>
   </body>
 </html>
