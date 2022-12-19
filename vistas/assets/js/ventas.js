@@ -64,6 +64,7 @@ jQuery(document).ready(function($) {
 	        confirmButtonText: '¡Si, continuar!'
 	    }).then((result) => {
 	        if (result.value) {
+	        	alert("entro 1");
 	        	var motivocancelar = $("#MotivoCancelarVenta").val();
 	        	Swal.fire({
 			        title: '¿Que deseas hacer con la existencia de los productos?',
@@ -74,13 +75,15 @@ jQuery(document).ready(function($) {
 			        cancelButtonText: 'Nada',
 			        confirmButtonText: 'Regresar a inventario'
 			    }).then((result) => {
+			    	alert("entro 2");
 			    	var regresarInventario = "No";
 			        if (result.value) {
 			        	regresarInventario = "Si";
 			        }else{
 			        	regresarInventario = "No";
 			        }
-			        var data = "metodo=modificar&accion=ventas&IDVenta="+$(this).attr('attrid')+"&Regresar="+regresarInventario+"&Motivo="+motivocancelar;
+			        var data = "metodo=modificar&accion=ventas&IDVenta="+$(btn).attr('attrid')+"&Regresar="+regresarInventario+"&Motivo="+motivocancelar+"&IDSucursal="+btn.attr("sucursal");
+					alert(data);
 					$.ajax({
 						url: 'index.php',
 						type: 'POST',

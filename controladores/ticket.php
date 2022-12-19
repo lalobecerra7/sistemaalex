@@ -454,7 +454,7 @@ $arregloVenta = '';
         echo '<p class="centrado">FOLIO: '.$arreglo['Folio'].'</p>';
         if ($arregloVenta['Cancelada'] == "1") {
           echo '<p class="centrado">ESTATUS: CANCELADA</p>';
-          echo '<p class="centrado">MOTIVO: '.$arreglo['Notas'].'</p>';
+          echo '<p class="centrado">MOTIVO: '.$arregloVenta['Notas'].'</p>';
         }else{
           echo '<p class="centrado">ESTATUS: COMPLETADA</p>';
         }
@@ -601,8 +601,8 @@ $arregloVenta = '';
                   <tr>
                    <th>'.$rowI["Descripcion"].'</th>
                    <th>'.$rowI["Cantidad"].'</th>
-                   <th>'.$rowI["Importe"].'</th>  
-                   <th>'.$rowI["Total"].'</th> 
+                   <th>$'.number_format($rowI["Importe"], 2).'</th>  
+                   <th>$'.number_format($rowI["Total"], 2).'</th> 
                    <th>'.$rowI["Estatus"].'</th>
                   </tr>';
             }

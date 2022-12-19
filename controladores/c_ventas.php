@@ -40,7 +40,7 @@ class ventas {
 					$botondeCancelar = "";
 					$botonEliminar = '<button class="btn btn-danger btn-sm" id="EliminarVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'"><i class="fas fa-trash"></i></button>';
 
-					$botondeCancelar = '<button class="btn btn-warning btn-sm" id="CancelarVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'"><i class="fas fa-circle-xmark"></i></button>';
+					$botondeCancelar = '<button class="btn btn-warning btn-sm" id="CancelarVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'" sucursal="'.$row[$i]['FK_Sucursal'].'"><i class="fas fa-circle-xmark"></i></button>';
 
 					$botonTicket = '<button class="btn btn-success btn-sm" id="ImprimirTicketVentaSinCaja" attrid="'.$row[$i]['ID_Venta'].'" sucursal="'.$row[$i]['FK_Sucursal'].'" folio="'.$folio.'"><i class="fas fa-print"></i></button>';
 
@@ -169,7 +169,7 @@ class ventas {
 		$queryRegresar = ', Regreso_Inventario = "0"';
 		if ($Regresar == "Si") {
 			$queryRegresar = ', Regreso_Inventario = "1"';
-			$query = "SELECT ID_Detalle_Venta, FK_Producto, FK_Presentacion, Cantidad FROM detalles_venta WHERE FK_Venta = '$IDVenta'";
+			$query = "SELECT ID_Detalle_Venta, FK_Producto, FK_Presentacion, Cantidad FROM detalles_ventas WHERE FK_Venta = '$IDVenta'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -179,12 +179,12 @@ class ventas {
 				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
 
-						$query1 = "UPDATE inventario SET Cantidad = (Cantidad + '".$row[$i]["Cantidad"]."') WHERE ID_Producto = '".$row[$i]["FK_Producto"]."' AND FK_Presentacion = '".$row[$i]["FK_Presentacion"]."' AND FK_Sucursal = '".$IDSucursal."'";
+						$query1 = "UPDATE inventario SET Cantidad = (Cantidad + '".$row[$i]["Cantidad"]."') WHERE FK_Producto = '".$row[$i]["FK_Producto"]."' AND FK_Presentacion = '".$row[$i]["FK_Presentacion"]."' AND FK_Sucursal = '".$IDSucursal."'";
 						$error1 = $omodelo->_insertar($query1);
 						if ($error1 == "si") {
 							echo "Error 2: ".mysqli_error($omodelo->link);
 						}else{
-							$query2 = "UPDATE detalles_venta SET Regreso_Inventario = '1' WHERE ID_Detalle_Venta = '".$row[$i]["ID_Detalle_Venta"]."'";
+							$query2 = "UPDATE detalles_ventas SET Regreso_Inventario = '1' WHERE ID_Detalle_Venta = '".$row[$i]["ID_Detalle_Venta"]."'";
 							$error2 = $omodelo->_insertar($query2);
 							if ($error2 == "si") {
 								echo "Error 3: ".mysqli_error($omodelo->link);
@@ -194,7 +194,7 @@ class ventas {
 				}
 			}
 		}
-		$query = "UPDATE ventas SET Estatus = 'Cancelada', Notas = '$Motivo', Fecha_Cancelada = '$fecha' $queryRegresar WHERE ID_Venta = '$IDVenta'";
+		$query = "UPDATE ventas SET Cancelada = '1', Notas = '$Motivo', Fecha_Cancelacion = '$fecha' $queryRegresar WHERE ID_Venta = '$IDVenta'";
 		$error = $omodelo->_insertar($query);
 		if ($error == "si") {
 			echo "Error 5: ".mysqli_error($omodelo->link);
