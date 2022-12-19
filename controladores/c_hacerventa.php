@@ -161,7 +161,7 @@ class hacerventa {
 				foreach ($productos as $fila) {
 
 					$nombreProducto = '';
-					$query2 = "SELECT Descripcion FROM productos WHERE ID_Producto = '$fila[0]'";
+					$query2 = "SELECT Descripcion, importe FROM productos WHERE ID_Producto = '$fila[0]'";
 					$row2 = $omodelo->_consultar($query2);
 					$numerofilas2 = $omodelo->numerofilas;
 
@@ -172,14 +172,25 @@ class hacerventa {
 							$nombreProducto = $row2[0]["Descripcion"];
 						}
 					}
+					$idDetalleVenta = "";
 					$query = "INSERT INTO detalles_ventas SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]'";
 					$error = $omodelo->_insertar($query);
 
 					if ($error == "si") {
 						echo "Error 1: ".mysqli_error($omodelo->link);
+					}else{
+						$idDetalleVenta = mysqli_insert_id($omodelo->link);
 					}
 
-					$idDetalleVenta = mysqli_insert_id($omodelo->link);
+					if ($row2[0]["importe"] > 0) {
+						$totalImporte = $fila[2] * $row2[0]["importe"];
+						$queryImportes = "INSERT INTO importes SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', Cantidad = '$fila[2]', Importe = '".$row2[0]["importe"]."', Total = '$totalImporte', Estatus = 'Se debe'";
+						$errorImportes = $omodelo->_insertar($queryImportes);
+
+						if ($errorImportes == "si") {
+							echo "Error importes: ".mysqli_error($omodelo->link);
+						}	
+					}
 
 					$separar = explode("~", $fila[5]);
 					for ($i=0; $i < sizeof($separar) - 1; $i++) { 
@@ -479,7 +490,7 @@ class hacerventa {
 
 			///////////////////////////////////////////////////////////////////////////////////
 
-			$query2 = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Mayoreo, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN precios ON precios.FK_Presentacion = ID_Presentacion $busqueda GROUP BY ID_Presentacion ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query2 = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, IFNULL(presentaciones.ID_Presentacion, CONCAT('NA',Codigo)) AS IDPresentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Mayoreo, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN precios ON precios.FK_Presentacion = ID_Presentacion $busqueda GROUP BY IDPresentacion ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row2 = $omodelo->_consultar($query2);
 			$numerofilas2 = $omodelo->numerofilas;
 

@@ -164,6 +164,12 @@
 		            <label for="DetallesProducto">Detalles adicionales</label>
 		          </div>
 		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<input type="number" class="form-control" step="any" min='0' max='10000' id="ImporteProducto" name="ImporteProducto" placeholder="Ingresa el precio del importe">
+		            <label for="ImporteProducto">Importe</label>
+		          </div>
+		        </div>
 	    		</div>
 	    		<hr>
 		      <div class="row mb-3">
