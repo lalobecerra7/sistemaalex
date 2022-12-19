@@ -200,8 +200,8 @@ if($('#formFacturar').length > 0){
 
                     TablaReporteVentas();
                     $("#modalFacturar").modal('hide');
-                    var ventana1 = window.open("controladores/pdf/factura.php?id="+$.trim($("#bTimbrarFactura").attr('attrID')));
-                    var ventana2 = window.open("controladores/xml/xml.php?id="+$.trim($("#bTimbrarFactura").attr('attrID')));
+                    window.open("controladores/pdf/factura.php?id="+$.trim($("#bTimbrarFactura").attr('attrID')));
+                    window.open("controladores/xml/xml.php?id="+$.trim($("#bTimbrarFactura").attr('attrID')));
                 }else if($.trim(res) == "Error 2 Datos Facturacion"){
                     Swal.fire({
                         icon: 'warning',

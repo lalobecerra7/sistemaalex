@@ -22,6 +22,7 @@ include "controladores/c_compras.php";
 include "controladores/c_hacerCompra.php";
 include "controladores/c_ventas.php";
 include "controladores/c_facturacion.php";
+include "controladores/c_precios.php";
 
 class controller {
 
@@ -553,6 +554,23 @@ class controller {
 								echo '<script>$("#regimenFacturacion").val('.$row[0]['Regimen'].');</script>';
 						}
 				}		
+		}else if($nombre == "v_precios"){
+				$query = "SELECT ID_Zona, Nombre, Descripcion FROM zonas";
+				$row = $omodelo->_consultar($query);
+				$numerofilas = $omodelo->numerofilas;
+				
+				$zonas = '';	
+				if ($row == "si") {
+						echo "Error: " . mysqli_error($omodelo->link);
+				}else{
+						if($numerofilas > 0){ 
+								for ($i=0; $i < $numerofilas; $i++) { 
+										$zonas .= '<option value="'.$row[$i]['ID_Zona'].'">'.$row[$i]['Nombre'].'</option>';
+								}
+						}
+				}			
+
+				$pagina = str_replace('#zonas#', $zonas, $pagina);
 		}
 		
 		return $pagina;

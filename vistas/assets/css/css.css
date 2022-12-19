@@ -775,3 +775,13 @@ footer .breadcrumb .breadcrumb-item a:hover{
 #datosReceptoCFDI p{
 	margin: 1px;
 }
+
+.inputPrecio{
+	border: 1px solid #CCC;
+	border-radius: 5px;
+}
+
+.inputPrecio:focus{
+	border-color: #C0C0C0;
+	outline: none;
+}
