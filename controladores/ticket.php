@@ -6,8 +6,211 @@
 
 //$con = mysqli_connect('localhost','root','','smartpoi_negocio'.$_SESSION['user_smart']['cliente']['id_cliente']);
 date_default_timezone_set('America/Mexico_City');
-$con = mysqli_connect('localhost','root','','smartpoi_negocio');
+$con = mysqli_connect('localhost','root','','wits_sistemaalex');
 $arreglo = '';
+$arregloVenta = '';
+
+  function _valorEnLetras($x, $mos){ 
+    if ($x<0) { 
+      $signo = "menos ";
+    } 
+    else      { $signo = "";} 
+    $x = abs ($x); 
+    $C1 = $x; 
+
+    $G6 = floor($x/(1000000));  // 7 y mas 
+
+    $E7 = floor($x/(100000)); 
+    $G7 = $E7-$G6*10;   // 6 
+
+    $E8 = floor($x/1000); 
+    $G8 = $E8-$E7*100;   // 5 y 4 
+
+    $E9 = floor($x/100); 
+    $G9 = $E9-$E8*10;  //  3 
+
+    $E10 = floor($x); 
+    $G10 = $E10-$E9*100;  // 2 y 1 
+
+
+    $G11 = round(($x-$E10)*100,0);  // Decimales 
+    ////////////////////// 
+
+    $H6 = unidades($G6); 
+
+    if($G7==1 AND $G8==0) { 
+      $H7 = "Cien "; 
+    } 
+    else {    $H7 = decenas($G7); } 
+
+    $H8 = unidades($G8); 
+
+    if($G9==1 AND $G10==0) { 
+      $H9 = "Cien ";
+    } 
+    else {    $H9 = decenas($G9); } 
+
+    $H10 = unidades($G10); 
+
+    if($G11 < 10) { $H11 = "0".$G11; } 
+    else { $H11 = $G11; } 
+
+    ///////////////////////////// 
+        if($G6==0) { $I6=" "; } 
+    elseif($G6==1) {
+      $I6="Millón "; 
+    } 
+    else { 
+      $I6="Millones ";      
+    } 
+              
+    if ($G8==0 AND $G7==0) { $I8=" "; } 
+            else { 
+          $I8="Mil "; 
+            } 
+              
+    if($mos == 1){
+      $I10 = "PESOS "; 
+      $I11 = "/100 MONEDA NACIONAL DE MÉXICO";  
+    }else{
+      $I10 = ""; 
+      $I11 = "";
+      $H11 = "";
+    }
+
+    $C3 = $signo.$H6.$I6.$H7.$H8.$I8.$H9.$H10.$I10.$H11.$I11; 
+
+    return $C3; //Retornar el resultado 
+  } 
+
+  function decenas($d){   
+    if ($d==0)  {$rd = "";} 
+    elseif ($d==1)  {$rd = "Ciento ";} 
+    elseif ($d==2)  {$rd = "Doscientos ";} 
+    elseif ($d==3)  {$rd = "Trescientos ";} 
+    elseif ($d==4)  {$rd = "Cuatrocientos ";} 
+    elseif ($d==5)  {$rd = "Quinientos ";} 
+    elseif ($d==6)  {$rd = "Seiscientos ";} 
+    elseif ($d==7)  {$rd = "Setecientos ";} 
+    elseif ($d==8)  {$rd = "Ochocientos ";} 
+    else            {$rd = "Novecientos ";} 
+
+    return $rd; //Retornar el resultado 
+  }
+
+  function unidades($u){
+    if ($u==0)  {$ru = " ";} 
+    elseif ($u==1)  {$ru = "Un ";} 
+    elseif ($u==2)  {$ru = "Dos ";} 
+    elseif ($u==3)  {$ru = "Tres ";} 
+    elseif ($u==4)  {$ru = "Cuatro ";} 
+    elseif ($u==5)  {$ru = "Cinco ";} 
+    elseif ($u==6)  {$ru = "Seis ";} 
+    elseif ($u==7)  {$ru = "Siete ";} 
+    elseif ($u==8)  {$ru = "Ocho ";} 
+    elseif ($u==9)  {$ru = "Nueve ";} 
+    elseif ($u==10) {$ru = "Diez ";} 
+
+    elseif ($u==11) {$ru = "Once ";} 
+    elseif ($u==12) {$ru = "Doce ";} 
+    elseif ($u==13) {$ru = "Trece ";} 
+    elseif ($u==14) {$ru = "Catorce ";} 
+    elseif ($u==15) {$ru = "Quince ";} 
+    elseif ($u==16) {$ru = "Dieciseis ";} 
+    elseif ($u==17) {$ru = "Decisiete ";} 
+    elseif ($u==18) {$ru = "Dieciocho ";} 
+    elseif ($u==19) {$ru = "Diecinueve ";} 
+    elseif ($u==20) {$ru = "Veinte ";} 
+    elseif ($u==21) {$ru = "Veintiun ";} 
+    elseif ($u==22) {$ru = "Veintidos ";} 
+    elseif ($u==23) {$ru = "Veintitres ";} 
+    elseif ($u==24) {$ru = "Veinticuatro ";} 
+    elseif ($u==25) {$ru = "Veinticinco ";} 
+    elseif ($u==26) {$ru = "Veintiseis ";} 
+    elseif ($u==27) {$ru = "Veintisiente ";} 
+    elseif ($u==28) {$ru = "Veintiocho ";} 
+    elseif ($u==29) {$ru = "Veintinueve ";} 
+    elseif ($u==30) {$ru = "Treinta";} 
+
+    elseif ($u==31) {$ru = "Treinta y un ";} 
+    elseif ($u==32) {$ru = "Treinta y dos ";} 
+    elseif ($u==33) {$ru = "Treinta y tres ";} 
+    elseif ($u==34) {$ru = "Treinta y cuatro ";} 
+    elseif ($u==35) {$ru = "Treinta y cinco ";} 
+    elseif ($u==36) {$ru = "Treinta y seis ";} 
+    elseif ($u==37) {$ru = "Treinta y siete ";} 
+    elseif ($u==38) {$ru = "Treinta y ocho ";} 
+    elseif ($u==39) {$ru = "Treinta y nueve ";} 
+    elseif ($u==40) {$ru = "Cuarenta ";} 
+
+    elseif ($u==41) {$ru = "Cuarenta y un ";} 
+    elseif ($u==42) {$ru = "Cuarenta y dos ";} 
+    elseif ($u==43) {$ru = "Cuarenta y tres ";} 
+    elseif ($u==44) {$ru = "Cuarenta y cuatro ";} 
+    elseif ($u==45) {$ru = "Cuarenta y cinco ";} 
+    elseif ($u==46) {$ru = "Cuarenta y seis ";} 
+    elseif ($u==47) {$ru = "Cuarenta y siete ";} 
+    elseif ($u==48) {$ru = "Cuarenta y ocho ";} 
+    elseif ($u==49) {$ru = "Cuarenta y nueve ";} 
+    elseif ($u==50) {$ru = "Cincuenta ";} 
+
+    elseif ($u==51) {$ru = "Cincuenta y un ";} 
+    elseif ($u==52) {$ru = "Cincuenta y dos ";} 
+    elseif ($u==53) {$ru = "Cincuenta y tres ";} 
+    elseif ($u==54) {$ru = "Cincuenta y cuatro ";} 
+    elseif ($u==55) {$ru = "Cincuenta y cinco ";} 
+    elseif ($u==56) {$ru = "Cincuenta y seis ";} 
+    elseif ($u==57) {$ru = "Cincuenta y siete ";} 
+    elseif ($u==58) {$ru = "Cincuenta y ocho ";} 
+    elseif ($u==59) {$ru = "Cincuenta y nueve ";} 
+    elseif ($u==60) {$ru = "Sesenta ";} 
+
+    elseif ($u==61) {$ru = "Sesenta y un ";} 
+    elseif ($u==62) {$ru = "Sesenta y dos ";} 
+    elseif ($u==63) {$ru = "Sesenta y tres ";} 
+    elseif ($u==64) {$ru = "Sesenta y cuatro ";} 
+    elseif ($u==65) {$ru = "Sesenta y cinco ";} 
+    elseif ($u==66) {$ru = "Sesenta y seis ";} 
+    elseif ($u==67) {$ru = "Sesenta y siete ";} 
+    elseif ($u==68) {$ru = "Sesenta y ocho ";} 
+    elseif ($u==69) {$ru = "Sesenta y nueve ";} 
+    elseif ($u==70) {$ru = "Setenta ";} 
+
+    elseif ($u==71) {$ru = "Setenta y un ";} 
+    elseif ($u==72) {$ru = "Setenta y dos ";} 
+    elseif ($u==73) {$ru = "Setenta y tres ";} 
+    elseif ($u==74) {$ru = "Setenta y cuatro ";} 
+    elseif ($u==75) {$ru = "Setenta y cinco ";} 
+    elseif ($u==76) {$ru = "Setenta y seis ";} 
+    elseif ($u==77) {$ru = "Setenta y siete ";} 
+    elseif ($u==78) {$ru = "Setenta y ocho ";} 
+    elseif ($u==79) {$ru = "Setenta y nueve ";} 
+    elseif ($u==80) {$ru = "Ochenta ";} 
+
+    elseif ($u==81) {$ru = "Ochenta y un ";} 
+    elseif ($u==82) {$ru = "Ochenta y dos ";} 
+    elseif ($u==83) {$ru = "Ochenta y tres ";} 
+    elseif ($u==84) {$ru = "Ochenta y cuatro ";} 
+    elseif ($u==85) {$ru = "Ochenta y cinco ";} 
+    elseif ($u==86) {$ru = "Ochenta y seis ";} 
+    elseif ($u==87) {$ru = "Ochenta y siete ";} 
+    elseif ($u==88) {$ru = "Ochenta y ocho ";} 
+    elseif ($u==89) {$ru = "Ochenta y nueve ";} 
+    elseif ($u==90) {$ru = "Noventa ";} 
+
+    elseif ($u==91) {$ru = "Noventa y un ";} 
+    elseif ($u==92) {$ru = "Noventa y dos ";} 
+    elseif ($u==93) {$ru = "Noventa y tres ";} 
+    elseif ($u==94) {$ru = "Noventa y cuatro ";} 
+    elseif ($u==95) {$ru = "Noventa y cinco ";} 
+    elseif ($u==96) {$ru = "Noventa y seis ";} 
+    elseif ($u==97) {$ru = "Noventa y siete ";} 
+    elseif ($u==98) {$ru = "Noventa y ocho ";} 
+    else            {$ru = "Noventa y nueve ";} 
+
+    return $ru; //Retornar el resultado 
+  } 
+
 ?>
 
 <!DOCTYPE html>
@@ -125,22 +328,72 @@ $arreglo = '';
   <?php 
     $FechaHoy = date('Y-m-d H:i:s');
     
-    $sql = "SELECT ID_Compra, LPAD(ID_Compra, 8, '0') AS Folio, FK_Proveedor, (SELECT proveedores.Nombre FROM proveedores WHERE ID_Proveedor = FK_Proveedor) AS NombreProveedor, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, compras.Descuento, detalle_compras.Subtotal, compras.Total, compras.Anticipo, compras.Estatus, compras.Fecha FROM compras INNER JOIN detalle_compras ON FK_Compra = ID_Compra WHERE ID_Compra = '".$_GET["id"]."'";
-    
+    $sql = "SELECT ID_Ticket, FK_Sucursal, Imagen, Ruta_Imagen, tickets.Nombre AS MostrarNombre, Domicilio, tickets.Telefono AS MostrarTelefono, tickets.Email AS MostrarEmail, Total_Letras, Incluir_Mensaje, Mensaje, Moneda, Simbolo, Origen, sucursales.Nombre AS NombreSucursal, FK_Encargado, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, sucursales.Email AS CorreoSucursal, sucursales.Telefono AS TelefonoSucursal, Segundo_Telefono, FK_Zona FROM tickets INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE FK_Sucursal = '".$_GET["idSucursal"]."'";
     if($res=$con->query($sql)){
       if ($res->num_rows > 0) {
         $row = $res->fetch_assoc();
+
+        $folio = str_pad($_GET["id"], 8, "0", STR_PAD_LEFT);
+
         $arreglo = array(
-          'ID_Compra'=> $row['ID_Compra'], 
-          'Folio' => $row['Folio'], 
-          'Proveedor' => $row['NombreProveedor'],  
-          'Usuario' => $row['NombreUsuario'], 
-          'Descuento' => $row['Descuento'], 
-          'Subtotal' => $row['Subtotal'], 
-          'Total' => $row['Total'], 
-          'Anticipo' => $row['Anticipo'],
-          'Estatus' => $row['Estatus'], 
-          'Fecha_Registro' => $row['Fecha']
+          'ID_Ticket' => $row["ID_Ticket"],
+          'FK_Sucursal' => $row["FK_Sucursal"],
+          'MostrarNombre' => $row["MostrarNombre"],
+          'Domicilio' => $row["Domicilio"],
+          'MostrarTelefono' => $row["MostrarTelefono"],
+          'MostrarEmail' => $row["MostrarEmail"],
+          'Total_Letras' => $row["Total_Letras"],
+          'Incluir_Mensaje' => $row["Incluir_Mensaje"],
+          'Mensaje' => $row["Mensaje"],
+          'Moneda' => $row["Moneda"],
+          'Simbolo' => $row["Simbolo"],
+          'Origen' => $row["Origen"],
+          'NombreSucursal' => $row["NombreSucursal"],
+          'Calle' => $row["Calle"],
+          'No_Exterior' => $row["No_Exterior"],
+          'No_Interior' => $row["No_Interior"],
+          'Colonia' => $row["Colonia"],
+          'CP' => $row["CP"],
+          'Ciudad' => $row["Ciudad"],
+          'Estado' => $row["Estado"],
+          'Pais' => $row["Pais"],
+          'TelefonoSucursal' => $row["TelefonoSucursal"],
+          'CorreoSucursal' => $row["CorreoSucursal"],
+          'Segundo_Telefono' => $row["Segundo_Telefono"],
+          'FK_Zona' => $row["FK_Zona"],
+          'Folio' => $folio
+        );
+      }else{
+        echo "No se encontraron resultados";
+      }
+    }
+
+    $sql2 = "SELECT ID_Venta, FK_Usuario, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal) AS NombreSucursal, FK_Cliente, (SELECT Nombre FROM clientes WHERE ID_Cliente = FK_Cliente) AS NombreCliente, Descuento, Total, Tipo_Pago, Pago, Cambio, Notas, Fecha_Registro, Cancelada, Fecha_Cancelacion, Regreso_Inventario FROM ventas WHERE ID_Venta = '".$_GET["id"]."'";
+    if($res=$con->query($sql2)){
+      if ($res->num_rows > 0) {
+        $row = $res->fetch_assoc();
+
+        $folio = str_pad($_GET["id"], 8, "0", STR_PAD_LEFT);
+
+        $arregloVenta = array(
+          'ID_Venta' => $row["ID_Venta"],
+          'FK_Usuario' => $row["FK_Usuario"],
+          'NombreUsuario' => $row["NombreUsuario"],
+          'FK_Sucursal' => $row["FK_Sucursal"],
+          'NombreSucursal' => $row["NombreSucursal"],
+          'FK_Cliente' => $row["FK_Cliente"],
+          'NombreCliente' => $row["NombreCliente"],
+          'Descuento' => $row["Descuento"],
+          'Total' => $row["Total"],
+          'Tipo_Pago' => $row["Tipo_Pago"],
+          'Pago' => $row["Pago"],
+          'Cambio' => $row["Cambio"],
+          'Notas' => $row["Notas"],
+          'Fecha_Registro' => $row["Fecha_Registro"],
+          'Cancelada' => $row["Cancelada"],
+          'Fecha_Cancelacion' => $row["Fecha_Cancelacion"],
+          'Regreso_Inventario' => $row["Regreso_Inventario"],
+          
         );
       }else{
         echo "No se encontraron resultados";
@@ -160,15 +413,50 @@ $arreglo = '';
         <?php  
           $FechaHoy = date('Y-m-d H:i:s');
           echo '<p>'.$FechaHoy.'</p>'; 
-          echo '<p>FRANCISCO MORA #740</p>'; 
-          echo '<p>TEL: 348 783 0300</p>'; 
+          if ($arreglo["Domicilio"] == 1) {
+            if ($arreglo["Calle"] != "") {
+              echo $arreglo["Calle"]." ";
+            }
+            if ($arreglo["No_Exterior"] != "") {
+              echo "Ext: #".$arreglo["No_Exterior"]." ";
+            }
+            if ($arreglo["No_Interior"] != "") {
+              echo "Int: # ".$arreglo["No_Interior"]." ";
+            }
+            if ($arreglo["Colonia"] != "") {
+              echo "<p>".$arreglo["Colonia"]."</p>";
+            }
+            if ($arreglo["CP"] != "") {
+              echo "<p>".$arreglo["CP"]."</p>";
+            }
+            if ($arreglo["Ciudad"] != "") {
+              echo "<p>".$arreglo["Ciudad"]."</p>";
+            }
+            if ($arreglo["Estado"] != "") {
+              echo "<p>".$arreglo["Estado"]."</p>";
+            }
+            if ($arreglo["Pais"] != "") {
+              echo "<p>".$arreglo["Pais"]."</p>";
+            }
+          }
+
+          if ($arreglo["MostrarTelefono"] == 1) {
+            echo "<p>".$arreglo["TelefonoSucursal"]."</p>";
+          }
+
+          if ($arreglo["MostrarEmail"] == 1) {
+            echo "<p>".$arreglo["CorreoSucursal"]."</p>";
+          }
+
         ?>
       </div>
       <?php  
         echo '<p class="centrado">FOLIO: '.$arreglo['Folio'].'</p>';
-        echo '<p class="centrado">ESTATUS: '.$arreglo['Estatus'].'</p>';
-        if ($arreglo['Estatus'] == "Cancelada") {
-          echo '<p class="centrado">MOTIVO: '.$arreglo['Motivo_Cancelada'].'</p>';
+        if ($arregloVenta['Cancelada'] == "1") {
+          echo '<p class="centrado">ESTATUS: CANCELADA</p>';
+          echo '<p class="centrado">MOTIVO: '.$arreglo['Notas'].'</p>';
+        }else{
+          echo '<p class="centrado">ESTATUS: COMPLETADA</p>';
         }
       ?>
       <br>
@@ -176,41 +464,96 @@ $arreglo = '';
         <thead>
           <tr>
             <?php  
-              echo '<th class="codigo">Cód.</th>';  
-              echo '<th class="producto">Producto</th>
+              echo '<th class="codigo">Cod.</th>';  
+              echo '<th class="producto">Prod.</th>
               <th class="cantidad">Cant.</th>';
-              echo '<th class="precio">Prec. Unit.</th>';  
+              echo '<th class="precio">Prec.</th>';  
+              echo '<th class="impuestos">Impu.</th>'; 
               echo '<th class="precio">Importe</th>';
             ?>
           </tr>
         </thead>
         <tbody> 
           <?php 
-            $sql = "SELECT ID_Detalle_Compra, FK_Compra, FK_Producto, productos.Descripcion AS NombreProducto, detalle_compras.Costo AS Costo, Cantidad, Subtotal, productos.Codigo FROM detalle_compras INNER JOIN productos ON FK_Producto = ID_Producto WHERE FK_Compra = '".$arreglo['ID_Compra']."'";
             $mostrar= "";
             $subtotal = 0;
             $contador = 0;
-            if($res=$con->query($sql)){
-              if ($res->num_rows > 0) {
-                while($row = $res->fetch_assoc()){
-                    $mostrar .= "<tr>
-                        <td class='codigo'>".$row["Codigo"]."</td>
-                        <td class='producto'>".$row["NombreProducto"]."</td>
-                        <td class='cantidad'>".(round($row['Cantidad']*100)/100)."</td> 
-                        <td class='precio'>$".(round($row['Costo']*100)/100)."</td>
-                        <td class='precio'>$".(round($row['Subtotal']*100)/100)."</td>
+            $sumaTotalImpuestos = 0;
+            $sumaTotalDescuentos = 0;
+            $sql1 = "SELECT productos.FK_Categoria, categorias.Nombre FROM detalles_ventas LEFT JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion LEFT JOIN categorias ON productos.FK_Categoria = ID_Categoria WHERE FK_Venta = '".$arregloVenta['ID_Venta']."' GROUP BY FK_Categoria";
+            if($res1=$con->query($sql1)){
+              if ($res1->num_rows > 0) {
+                while($row1 = $res1->fetch_assoc()){
+                    if ($row1["Nombre"] == "") {
+                      $mostrar .= "<tr class='negra'>
+                        <td colspan='6'>SIN FAMILIA</td>
                       </tr>";
+                    }else{
+                      $mostrar .= "<tr class='negra'>
+                        <td colspan='6'>".$row1["Nombre"]."</td>
+                      </tr>";
+                    }
 
-                    $subtotal += $row['Subtotal'];
-                    $contador++;
+                    //CONSULTAR PRODUCTOS POR CATEGORIA
+                    $sql = "SELECT ID_Detalle_Venta, FK_Venta, detalles_ventas.FK_Producto, productos.FK_Categoria AS IDCategoria, categorias.Nombre AS NombreCategoria, Codigo, FK_Presentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS Abreviatura, detalles_ventas.Descripcion, detalles_ventas.Precio, Cantidad, detalles_ventas.Descuento, Total, Devuelto, Fecha_Devolucion, Regreso_Inventario FROM detalles_ventas LEFT JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion LEFT JOIN categorias ON productos.FK_Categoria = ID_Categoria WHERE FK_Venta = '".$arregloVenta['ID_Venta']."' AND FK_Categoria = '".$row1["FK_Categoria"]."' ORDER BY IDCategoria";
+                    if($res=$con->query($sql)){
+                      if ($res->num_rows > 0) {
+                        while($row = $res->fetch_assoc()){
+                            $subtotalProducto = 0;
+                            $mostrarImpuestos = "";
+                            $sql2 = "SELECT ID_Impuesto, FK_Detalle_Venta, Tipo_Impuesto_CFDI, Impuesto_CFDI, Clave_CFDI, Tipo_Factor_CFDI, Tasa_Cuota_CFDI FROM detalles_impuestos_ventas WHERE FK_Detalle_Venta = '".$row["ID_Detalle_Venta"]."'"; 
+                            if($res2=$con->query($sql2)){
+                              if ($res2->num_rows > 0) {
+                                while($row2 = $res2->fetch_assoc()){
+                                  $sumaImpuestos = 0;
+                                  $totalProducto=0; $descuento=0; $totalFinal=0; $totalImpuesto = 0;
+                                  $totalProducto = $row["Precio"]*$row["Cantidad"];
+                                  $descuento = ($row["Descuento"] / 100);
+                                  $totalFinal = $totalProducto - ($totalProducto * $descuento);
+                                  if ($row2["Tipo_Impuesto_CFDI"] == "Trasladado") { //Se suma al total
+                                    $sumaImpuestos += $totalFinal * ($row2["Tasa_Cuota_CFDI"] / 100);
+                                  }else if($row2["Tipo_Impuesto_CFDI"] == "Retenido" && $row2["Tipo_Factor_CFDI"] != "Exento"){ //Se resta al total
+                                    $sumaImpuestos -= $totalFinal * ($row2["Tasa_Cuota_CFDI"] / 100);
+                                  }else if($row2["Tipo_Impuesto_CFDI"] == "Retenido" && $row2["Tipo_Factor_CFDI"] == "Exento"){ ////No se suma ni se resta
+                                    $sumaImpuestos += 0;
+                                  }
+                                  $sumaTotalImpuestos += $sumaImpuestos;
+                                  $totalImpuesto = $totalFinal * ($row2["Tasa_Cuota_CFDI"] / 100);
+                                  $mostrarImpuestos .= $row2["Impuesto_CFDI"]."(".$row2["Tasa_Cuota_CFDI"]."%) $".number_format($totalImpuesto, 2)."<br>";
+                                }
+                              }
+                            }
+
+                            $nombrePresentacion = "";
+                            if ($row['Presentacion'] != "") {
+                              $nombrePresentacion = " ".$row['Presentacion']." (".$row['Abreviatura'].")";
+                            }else{
+                              $nombrePresentacion = "";
+                            }
+                            $subtotalProducto = ($row['Cantidad'] * $row['Precio']);
+                            $mostrar .= "<tr>
+                                <td class='codigo'>".$row["Codigo"]."</td>
+                                <td class='producto'>".$row["Descripcion"]. $nombrePresentacion."</td>
+                                <td class='cantidad'>".(round($row['Cantidad']*100)/100)."</td> 
+                                <td class='precio'>$".(round($row['Precio']*100)/100)."</td>
+                                <td class='impuestos'>".$mostrarImpuestos."</td>
+                                <td class=''>$".$subtotalProducto."<br>Desc: ".(round($row['Descuento']*100)/100)."% <br>$".(round($row['Total']*100)/100)."</td>
+                              </tr>";
+
+                            $subtotal += ($row['Cantidad'] * $row['Precio']);
+                            $sumaTotalDescuentos += $subtotalProducto * ($row['Descuento'] / 100);
+                            $contador++;
+                        }
+                      }else{
+                        echo "No se encontraron resultados";
+                      }
+                    }else{
+                      echo "Error: ".mysqli_error($con);
+                    } 
                 }
-                  echo $mostrar;
-              }else{
-                echo "No se encontraron resultados";
               }
-            }else{
-              echo "Error: ".mysqli_error($con);
-            } 
+            }
+            echo $mostrar;
            ?>
         </tbody>
       </table>
@@ -218,22 +561,61 @@ $arreglo = '';
       <?php 
         echo '<p class="derecha">No. de Articulos: '.$contador.'</p>'; 
         echo '<p class="derecha" style="font-size: 15px;">Subtotal: <b style="font-size: 15px;">$'.(round(($subtotal)*100)/100).'</b></p>';  
-        echo '<p class="derecha" style="font-size: 15px;">Descuento: <b style="font-size: 15px;">$'.(round($arreglo['Descuento']*100)/100).'</b></p>'; 
+        echo '<p class="derecha" style="font-size: 15px;">Descuento: <b style="font-size: 15px;">$'.(round($sumaTotalDescuentos*100)/100).'</b></p>'; 
+        echo '<p class="derecha" style="font-size: 15px;">Impuestos: <b style="font-size: 15px;">$'.(round(($sumaTotalImpuestos)*100)/100).'</b></p>'; 
         echo "</br>
-          <p class='derecha negra'><b>TOTAL: $".(round($arreglo['Total']*100)/100)."</b></p>
+          <p class='derecha negra'><b>TOTAL: $".(round($arregloVenta['Total']*100)/100)."</b></p>
         ";
-        echo '<p class="derecha negra">Importe Pagado: $'.(round($arreglo['Anticipo']*100)/100).'</p>'; 
+        echo '<p class="derecha negra">Tipo de pago: '.$arregloVenta['Tipo_Pago'].'</p>'; 
         
-        echo '<p class="derecha">Administrador: '.$arreglo['Usuario'].'</p>';
+        echo '<p class="derecha">Administrador: '.$arregloVenta['NombreUsuario'].'</p>';
       ?>
       <br>
       <p class="centrado">***********************************************************</p>
       <p class="centrado">***********************************************************</p>
       <br>
-      <p class="centrado">¡GRACIAS POR TU COMPRA!</p>
+      <p class="centrado"><?php echo $arreglo['Mensaje'] ?></p>
       <br>
       <p class="centrado">***********************************************************</p>
       <p class="centrado">***********************************************************</p>
+      <?php 
+
+        $sqlImporte = "SELECT ID_Importe, FK_Venta, FK_Producto, productos.Descripcion, Cantidad, importes.Importe, Total, Estatus FROM importes INNER JOIN productos ON FK_Producto = ID_Producto WHERE FK_Venta = '".$arregloVenta['ID_Venta']."'";
+        if($resImporte=$con->query($sqlImporte)){
+          if ($resImporte->num_rows > 0) {
+            echo ' <p class="centrado negra">IMPORTES</p>';
+            echo '
+              <table class="centrado" width="100%">
+                <thead>
+                  <tr>
+                   <th>Prod.</th>
+                   <th>Cant.</th>
+                   <th>Impor.</th>  
+                   <th>Total.</th> 
+                   <th>Estatus</th>
+                  </tr>
+                </thead>
+                <tbody>';
+            while($rowI = $resImporte->fetch_assoc()){
+               echo '
+                  <tr>
+                   <th>'.$rowI["Descripcion"].'</th>
+                   <th>'.$rowI["Cantidad"].'</th>
+                   <th>'.$rowI["Importe"].'</th>  
+                   <th>'.$rowI["Total"].'</th> 
+                   <th>'.$rowI["Estatus"].'</th>
+                  </tr>';
+            }
+            echo '
+                  </tbody>
+            </table>';
+          }
+        }
+
+       ?>
+     
+
+
     </div>
   <script>
     window.print();

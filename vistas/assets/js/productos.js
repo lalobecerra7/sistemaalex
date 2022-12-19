@@ -409,6 +409,7 @@ jQuery(document).ready(function($) {
             $("#Minimo").val(datos.Minimo);
             $("#Maximo").val(datos.Maximo);
             $("#DetallesProducto").val(datos.Detalles);
+            $("#ImporteProducto").val(datos.Importe);
             
             $('#verImagenProducto').html('<img src="vistas/assets/archivos/fotosProductos/' + datos.Imagen + '" width: 250px; height: 170px; cursor:pointer;border-radius:4px;border:2px solid grey;" class="img-thumbnail"><br>');
             

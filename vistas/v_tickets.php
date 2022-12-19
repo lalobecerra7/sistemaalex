@@ -56,7 +56,7 @@
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="CalleSucTicket" name="CalleSucTicket" placeholder="Ingresa la calle de la sucursal">
+										<input type="text" class="form-control" id="CalleSucTicket" name="CalleSucTicket" placeholder="Ingresa la calle de la sucursal" disabled>
 										<label for="CalleSucTicket">Calle</label>
 									</div>
 								</div>
@@ -67,7 +67,7 @@
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="NoExtTicket" name="NoExtTicket" placeholder="Ingresa el número exterior de la sucursal">
+										<input type="text" class="form-control" id="NoExtTicket" name="NoExtTicket" placeholder="Ingresa el número exterior de la sucursal" disabled>
 										<label for="NoExtTicket">No. Exterior</label>
 									</div>
 								</div>
@@ -78,7 +78,7 @@
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="NoIntTicket" name="NoIntTicket" placeholder="Ingresa el número interior de la sucursal">
+										<input type="text" class="form-control" id="NoIntTicket" name="NoIntTicket" placeholder="Ingresa el número interior de la sucursal" disabled>
 										<label for="NoIntTicket">No. Interior</label>
 									</div>
 								</div>
@@ -89,7 +89,7 @@
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="ColoniaTicket" name="ColoniaTicket" placeholder="Ingresa la colonia de la sucursal">
+										<input type="text" class="form-control" id="ColoniaTicket" name="ColoniaTicket" placeholder="Ingresa la colonia de la sucursal" disabled>
 										<label for="ColoniaTicket">Colonia</label>
 									</div>
 								</div>
@@ -100,7 +100,7 @@
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="CPTicket" name="CPTicket" placeholder="Ingresa el código postal">
+										<input type="text" class="form-control" id="CPTicket" name="CPTicket" placeholder="Ingresa el código postal" disabled>
 										<label for="CPTicket">Código Postal</label>
 									</div>
 								</div>
@@ -111,7 +111,7 @@
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="CiudadTicket" name="CiudadTicket" placeholder="Ingresa la ciudad de la sucursal">
+										<input type="text" class="form-control" id="CiudadTicket" name="CiudadTicket" placeholder="Ingresa la ciudad de la sucursal" disabled>
 										<label for="CiudadTicket">Ciudad</label>
 									</div>
 								</div>
@@ -122,7 +122,7 @@
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="EstadoTicket" name="EstadoTicket" placeholder="Ingresa el estado ">
+										<input type="text" class="form-control" id="EstadoTicket" name="EstadoTicket" placeholder="Ingresa el estado" disabled>
 										<label for="EstadoTicket">Estado</label>
 									</div>
 								</div>
@@ -133,7 +133,7 @@
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="PaisTicket" name="PaisTicket" placeholder="Ingresa el pais">
+										<input type="text" class="form-control" id="PaisTicket" name="PaisTicket" placeholder="Ingresa el pais" disabled>
 										<label for="PaisTicket">Pais</label>
 									</div>
 								</div>
@@ -144,7 +144,7 @@
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
 									<div class="form-floating">
-										<input type="phone" class="form-control" id="TelefonoTicket" name="TelefonoTicket" placeholder="Ingresa el telefono de la sucursal">
+										<input type="phone" class="form-control" id="TelefonoTicket" name="TelefonoTicket" placeholder="Ingresa el telefono de la sucursal" disabled>
 										<label for="TelefonoTicket">Telefono</label>
 									</div>
 								</div>
@@ -155,7 +155,7 @@
 							<div class="row">
 								<div class="col-md-10 col-sm-12 mb-3">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="EmailTicket" name="EmailTicket" placeholder="Ingresa el email de la sucursal">
+										<input type="text" class="form-control" id="EmailTicket" name="EmailTicket" placeholder="Ingresa el email de la sucursal" disabled>
 										<label for="EmailTicket">Correo</label>
 									</div>
 								</div>
@@ -189,19 +189,6 @@
 					</div>
 				</div>
 				<div class="col-sm-6" style="padding: 50px; border: dashed; box-sizing: border-box;">
-					<br>
-					<div class="row">
-						<div class="col-sm-12 text-center" id="imgTicket" style="padding: 30px 60px; box-sizing: border-box;">
-							<p><img src="" style="max-width: 100%; max-height: 200px;"></p>
-						</div>
-					</div>
-					<div class="row">
-						<form enctype="multipart/form-data" id="formImgTicket">
-							<div class="col-sm-12">
-								<input type="file" class="form-control" name='imagenTicket' id="imagenTicket" idRegistro="">
-							</div>
-						</form>
-					</div>
 					<div class="row" id="datosTicket">
 							
 					</div>

@@ -142,13 +142,14 @@ class productos {
 		$Detalles = $omodelo->link->real_escape_string($DetallesProducto);
 		$Minimo = $omodelo->link->real_escape_string($Minimo);
 		$Maximo = $omodelo->link->real_escape_string($Maximo);
+		$ImporteProducto = $omodelo->link->real_escape_string($ImporteProducto);
 		$claveProdServ = $omodelo->link->real_escape_string($claveProdServ);
 		$claveUnidadProd = $omodelo->link->real_escape_string($claveUnidadProd);
 		$unidadProd = $omodelo->link->real_escape_string($unidadProd);
 		$abreUnudadProd = $omodelo->link->real_escape_string($abreUnudadProd);
 		$objImProducto = $omodelo->link->real_escape_string($objImProducto);
 
-		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion',  FK_Categoria = '$Categoria', Tipo = '1', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto'";
+		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion',  FK_Categoria = '$Categoria', Tipo = '1', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto', importe = '$ImporteProducto'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -258,7 +259,7 @@ class productos {
 		$abreUnudadProd = $omodelo->link->real_escape_string($abreUnudadProd);
 		$objImProducto = $omodelo->link->real_escape_string($objImProducto);
 
-		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', FK_Categoria = '$Categoria', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto' WHERE ID_Producto = '$IDProducto'";
+		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', FK_Categoria = '$Categoria', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto', importe = '$ImporteProducto' WHERE ID_Producto = '$IDProducto'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -422,7 +423,7 @@ class productos {
 		if($tipo == 'modificarProducto'){
 			$IDProducto =  $omodelo->link->real_escape_string($IDProducto);
 
-			$query = "SELECT ID_Producto, Codigo, Descripcion, FK_Categoria, Clase, Costo, Precio, Precio_Mayoreo, FK_Area, Detalles, Minimo, Maximo, Fecha_Registro, Imagen FROM productos WHERE ID_Producto = '$IDProducto'";
+			$query = "SELECT ID_Producto, Codigo, Descripcion, FK_Categoria, Clase, Costo, Precio, Precio_Mayoreo, FK_Area, Detalles, Minimo, Maximo, Fecha_Registro, Imagen, importe FROM productos WHERE ID_Producto = '$IDProducto'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -505,6 +506,7 @@ class productos {
 						'Clase' => $row[0]["Clase"],
 						'Costo' => $row[0]["Costo"],
 						'Precio' => $row[0]["Precio"],
+						'Importe' => $row[0]["importe"],
 						'Precio_Mayoreo' => $row[0]["Precio_Mayoreo"],
 						'FK_Area' => $row[0]["FK_Area"],
 						'Detalles' => $row[0]["Detalles"],

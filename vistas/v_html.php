@@ -561,6 +561,13 @@
               </a>
             </li>
 
+            <li class="menu-item cargarVista" carga="v_importes" titulo="Importes" id="cargarImportes">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-money-check"></i>
+                <div data-i18n="Importes">Importes</div>
+              </a>
+            </li>
+
            
 
             #MenuCajas#

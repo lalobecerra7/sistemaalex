@@ -531,7 +531,7 @@ class controller {
 						}
 						$sucursal = '
 						<div class="form-floating">
-		         	<select class="form-select" id="SucursalVenta" name="SucursalVenta">
+		         	<select class="form-select" id="SucursalVenta" name="SucursalVenta" attrid="'.$row2[0]["ID_Sucursal"].'">
 		          	'.$opciones.'
 		          </select>
 		        	<label for="SucursalVenta">Sucursal</label>

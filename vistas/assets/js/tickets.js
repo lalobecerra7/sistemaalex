@@ -1,6 +1,6 @@
 function v_tickets() { 
-    console.log('entro a la funcion');
-        consultarDatosGeneral();
+    
+        //consultarDatosGeneral();
 
     $('#formTickets').validate({
         rules: {
