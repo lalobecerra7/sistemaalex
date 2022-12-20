@@ -554,6 +554,13 @@
 
             #MenuCompras#
 
+            <li class="menu-item cargarVista oculto" carga="v_hacerCompra" titulo="Compras" id="cargarHacerCompra">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-shopping-cart"></i>
+                <div data-i18n="Compras">Compras</div>
+              </a>
+            </li>
+
             <li class="menu-item cargarVista" carga="v_ventas" titulo="Ventas" id="cargarVentas">
               <a href="javascript:void(0)"  class="menu-link">
                 <i class="menu-icon fas fa-shopping-cart"></i>
