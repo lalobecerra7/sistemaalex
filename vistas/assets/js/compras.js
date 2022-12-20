@@ -92,6 +92,67 @@ jQuery(document).ready(function($) {
 	});
 });
 
+$(document).on('click', '#ImprimirTicketCompra', function() {
+	var idCompra = $(this).attr("attrid");
+	var sucursal = $(this).attr("idSucursal");
+	var altura=50;
+	var anchura=310;
+	console.log(idCompra);
+	var y= parseInt((window.screen.height/2)-(altura/2));
+	var x= parseInt((window.screen.width/2)-(anchura/2));
+	
+	window.open("controladores/ticketCompra.php?id="+idCompra+"&idSucursal="+sucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
+});
+
+$(document).on('click', '#CancelarCompra', function() {
+	var btn = $(this);
+	Swal.fire({
+		title: '¿Estás seguro que quieres cancelar la compra?',
+		icon: 'warning',
+		html: '',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		cancelButtonText: '¡No, cancelar!',
+		confirmButtonText: '¡Si, continuar!'
+	}).then((result) => {
+		if (result.value) {
+				var data = "metodo=modificar&accion=compras&IDCompra="+$(btn).attr('attrid');
+				
+				$.ajax({
+					url: 'index.php',
+					type: 'POST',
+					data: data,
+					beforeSend: function() {
+						progressBoton(btn);
+					}
+				})
+				.done(function(res) {
+					if ($.trim(res) == "Correcto") {
+						Swal.fire({
+							icon: 'success',
+							title: 'Compra cancelada correctamente'
+						});
+						TablaReporteCompras();
+					}else{
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Error inesperado al cancelar la compra.'
+						});
+						console.log($.trim(res));
+					}
+				})
+				.fail(function() {
+					console.log("Error ajax");
+				})
+				.always(function() {
+					unprogressBoton(btn);
+				});
+		}    
+	});	  
+});
+
 $(document).on('click', '#PagoCompra', function() {
 	var id = $(this).attr("attrid");
 

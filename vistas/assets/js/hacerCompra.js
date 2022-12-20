@@ -24,7 +24,10 @@ jQuery(document).ready(function($) {
     		cantidad = 0;
     	}
     	var costo = $(this).parent().parent().find(".campoCosto").val();
-    	var total = parseFloat(costo) * parseFloat(cantidad);
+    	var total = 0;
+		if(costo != ''){
+			total = parseFloat(costo) * parseFloat(cantidad);
+		}
     	$(this).parent().parent().find('.totalP').text(parseFloat(total.toFixed(2)));
     	CalcularSubtotal();
     	$("#DescuentoCompraDinero").trigger("change");
@@ -37,7 +40,10 @@ jQuery(document).ready(function($) {
     		cantidad = 0;
     	}
     	var costo = $(this).val();
-    	var total = parseFloat(costo) * parseFloat(cantidad);
+    	var total = 0;
+		if(costo != ''){
+			total = parseFloat(costo) * parseFloat(cantidad);
+		}
     	$(this).parent().parent().find('.totalP').text(parseFloat(total.toFixed(2)));
     	CalcularSubtotal();
     	$("#DescuentoCompraDinero").trigger("change");
@@ -77,18 +83,18 @@ jQuery(document).ready(function($) {
 			var codigo = datos.Codigo;
 			var descripcion = datos.Descripcion;
 			var costo = datos.Costo;
-			var presentacion = datos.NombrePresentacion;
-			var sucursal = '';
+			var presentacion = 'Sin presentación';
+			if(datos.NombrePresentacion != null){
+				presentacion = datos.NombrePresentacion;
+			}
 			var idPresentacion = datos.FK_Presentacion;
-			var idSucursal = '';
 			//var existencia = $(this).children("td:eq(3)").find(".ExistenciaProducto").text();
 			
 			var fila = "\
-				<tr attrid='"+idProducto+"' idPresentacion='"+idPresentacion+"' idSucursal='"+idSucursal+"'>\
+				<tr attrid='"+idProducto+"' idPresentacion='"+idPresentacion+"'>\
 					<td>"+codigo+"</td>\
 					<td>"+descripcion+"</td>\
 					<td>"+presentacion+"</td>\
-					<td>"+sucursal+"</td>\
 					<td class='costoP'><input type='number' value='"+costo+"' min='1' step='any' class='form-control campoCosto'></td>\
 					<td><input type='number' value='1' min='1' step='any' class='form-control campoCantidad'></td>\
 					<td class='totalP'>"+(costo*1)+"</td>\
@@ -99,9 +105,9 @@ jQuery(document).ready(function($) {
 			var encontrado = false;
 
 			$("#tbodyTablaProductosAgregados tr").each(function(){
-				if ($(this).attr("attrid") == idProducto && $(this).attr("idpresentacion") == idPresentacion && $(this).attr("idsucursal") == idSucursal) {
-					var cantidadAnterior = $(this).children("td:eq(5)").find(".campoCantidad").val();
-					$(this).children("td:eq(5)").find(".campoCantidad").val(parseFloat(cantidadAnterior)+1);
+				if ($(this).attr("attrid") == idProducto && $(this).attr("idpresentacion") == idPresentacion) {
+					var cantidadAnterior = $(this).children("td:eq(4)").find(".campoCantidad").val();
+					$(this).children("td:eq(4)").find(".campoCantidad").val(parseFloat(cantidadAnterior)+1);
 					encontrado = true;
 					$(".campoCantidad").trigger("keyup");
 					return false;
@@ -129,18 +135,20 @@ jQuery(document).ready(function($) {
 		var codigo = $(this).children("td:eq(0)").find(".codigo").text();
 		var descripcion = $(this).children("td:eq(1)").find(".NombreProducto").text();
 		var costo = $(this).children("td:eq(2)").find(".CostoProducto").text().replace("$","").replace(",", "");
-		var presentacion = $(this).children("td:eq(3)").find(".Presentacion").text();
-		var sucursal = $(this).children("td:eq(4)").find(".Sucursal").text();
 		var idPresentacion = $(this).children("td:eq(3)").find(".Presentacion").attr('presentacion');
-		var idSucursal = $(this).children("td:eq(4)").find(".Sucursal").attr('sucursal');
+		var presentacion = '';
+		if ($(this).children("td:eq(3)").find(".Presentacion").text() != ''){
+			presentacion = $(this).children("td:eq(3)").find(".Presentacion").text();
+		}else{
+			presentacion = 'Sin presentación';
+		}
 		//var existencia = $(this).children("td:eq(3)").find(".ExistenciaProducto").text();
 		console.log();
 		var fila = "\
-			<tr attrid='"+idProducto+"' idPresentacion='"+idPresentacion+"' idSucursal='"+idSucursal+"'>\
+			<tr attrid='"+idProducto+"' idPresentacion='"+idPresentacion+"'>\
                 <td>"+codigo+"</td>\
                 <td>"+descripcion+"</td>\
                 <td>"+presentacion+"</td>\
-                <td>"+sucursal+"</td>\
                 <td class='costoP'><input type='number' value='"+costo+"' min='1' step='any' class='form-control campoCosto'></td>\
                 <td><input type='number' value='1' min='1' step='any' class='form-control campoCantidad'></td>\
                 <td class='totalP'>"+(costo*1)+"</td>\
@@ -151,9 +159,9 @@ jQuery(document).ready(function($) {
 		var encontrado = false;
 
 		$("#tbodyTablaProductosAgregados tr").each(function(){
-			if ($(this).attr("attrid") == idProducto && $(this).attr("idpresentacion") == idPresentacion && $(this).attr("idsucursal") == idSucursal) {
-				var cantidadAnterior = $(this).children("td:eq(5)").find(".campoCantidad").val();
-				$(this).children("td:eq(5)").find(".campoCantidad").val(parseFloat(cantidadAnterior)+1);
+			if ($(this).attr("attrid") == idProducto && $(this).attr("idpresentacion") == idPresentacion) {
+				var cantidadAnterior = $(this).children("td:eq(4)").find(".campoCantidad").val();
+				$(this).children("td:eq(4)").find(".campoCantidad").val(parseFloat(cantidadAnterior)+1);
 				encontrado = true;
 				$(".campoCantidad").trigger("keyup");
 				return false;
@@ -185,7 +193,7 @@ jQuery(document).ready(function($) {
 		//var tipodescuento = $(this).children("td:eq(3)").find(".tipoDescuentoCliente").text();
 		//var cantidaddescuento = $(this).children("td:eq(3)").find(".cantidadDescuentoCliente").text(); 
 		$("#RealizarCompra").attr("idProveedor", idProveedor);
-		$("#MostrarNombreProveedor").text(nombre);
+		$("#CargarProveedoresModalC").html('Proveedor: '+nombre);
 		$("#ModalVerProveedoresC").modal("hide");
 		if($('#TipoCompra').val() == 'Credito'){
 			$("#TipoCompra").trigger('change');
@@ -279,7 +287,7 @@ function CalcularSubtotal(){
 	$("#cantidadProductosSpan").text($("#tbodyTablaProductosAgregados tr").length);
 	var total = 0;
 	$("#tbodyTablaProductosAgregados tr").each(function(){
-		var totalFilas = parseFloat($(this).children("td:eq(6)").text());
+		var totalFilas = parseFloat($(this).children("td:eq(5)").text());
 		total += totalFilas;
 	});
 	$("#MostrarSubtotal").text("$"+total.toFixed(2));
@@ -403,8 +411,8 @@ $(document).on('click', '#GuardarCompra', function() {
 			var idProducto = $(this).attr("attrid");
 			var Sucursal = $('#Sucursales').val();
 			var Presentacion = $(this).attr("idPresentacion");
-			var Costo = $(this).children("td:eq(4)").find(".campoCosto").val();
-			var Cantidad = $(this).children("td:eq(5)").find(".campoCantidad").val();
+			var Costo = $(this).children("td:eq(3)").find(".campoCosto").val();
+			var Cantidad = $(this).children("td:eq(4)").find(".campoCantidad").val();
 			productos.push([idProducto,Costo,Cantidad,Presentacion,Sucursal])
 			console.log(Sucursal);
 		});
@@ -414,8 +422,9 @@ $(document).on('click', '#GuardarCompra', function() {
 		}else if(tipoCompra == 'Credito'){
 			estatus = '0';
 		}
+		console.log(idProveedor);
 		
-		var data = "metodo=insertar&accion=hacerCompra&Importe="+ImportePagadoCompra+"&idProveedor="+idProveedor+"&FechaCredito="+fechaCredito+"&Productos="+JSON.stringify(productos)+"&subtotal="+subtotal+"&total="+total+"&TipoCompra="+tipoCompra+"&Descuento="+descuento+"&TipoPago="+tipoPago+"&Detalles="+detalles;
+		var data = "metodo=insertar&accion=hacerCompra&Importe="+ImportePagadoCompra+"&idProveedor="+idProveedor+"&FechaCredito="+fechaCredito+"&Productos="+JSON.stringify(productos)+"&subtotal="+subtotal+"&total="+total+"&TipoCompra="+tipoCompra+"&Descuento="+descuento+"&TipoPago="+tipoPago+"&Detalles="+detalles+"&Sucursal="+$('#Sucursales').val();
 		$.ajax({
 			url: 'index.php',
 			type: 'POST',
@@ -430,15 +439,17 @@ $(document).on('click', '#GuardarCompra', function() {
 				});
 				$("#ModalCobrarCompra").modal("hide");
 				$('#cargarHacerCompra').trigger('click');
+				$("#RealizarCompra").attr("idProveedor", '1');
 				console.log(datos[1]);
 				var idCompra = datos[1];
+				var sucursal = datos[2];
 				var altura=50;
 				var anchura=310;
 
 				var y= parseInt((window.screen.height/2)-(altura/2));
 				var x= parseInt((window.screen.width/2)-(anchura/2));
 
-				window.open("controladores/ticket.php?id="+idCompra, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
+				window.open("controladores/ticketCompra.php?id="+idCompra+"&idSucursal="+sucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
 				
 			}else{
 				Swal.fire({

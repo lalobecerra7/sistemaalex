@@ -4,11 +4,14 @@
         <div class="section">
             <div class="Principal">
                 <div class="row">
-					<div class="col-md-6">
-						<label>Sucursal: <label>
+					<div class="col-md-3 text-center">
                         #sucursal#
-                        
 					</div>
+                    <div class="col-md-4 d-grid mb-2">
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ModalVerProveedoresC" id="CargarProveedoresModalC">
+                            <i class="fas fa-user"></i> Proveedor
+                        </button>
+                    </div>
 			    </div>
                 <br>
                 <form id="FormAgregarProductoC" class="row">
@@ -28,12 +31,7 @@
                     </div>
                 </form>
                 <div class="row">
-                    <div class="col-md-4 d-grid mb-2">
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ModalVerProveedoresC" id="CargarProveedoresModalC">
-                            <i class="fas fa-user"></i> Proveedor
-                        </button>
-                    </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-floating">
                             <select class="form-select" id="TipoCompra" name="TipoCompra">
                                 <option value="Contado" selected>Contado</option>
@@ -42,34 +40,33 @@
                             <label for="TipoCompra">Tipo</label>
                         </div>
                     </div>
-                    <div class="col-md-4" id='FechaLimiteCredito' hidden>
+                    <div class="col-md-3" id='FechaLimiteCredito' hidden>
                         <div class="form-floating">
                             <input type="date" class="form-control" id="fechaCredito" name="fechaCredito" placeholder="Ingresa la fecha límite del crédito">
                             <label for="fechaCredito">Fecha límite de crédito</label>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        Nombre del proveedor: <h5 id="MostrarNombreProveedor" style="font-weight: bold;">Proveedor General</h5>
-                    </div>
-                    <div class="col-md-4" id="LimiteCredito" hidden>
+                    <div class="col-md-3" id="LimiteCredito" hidden>
                         Límite de crédito: <h5 id="MostrarCreditoProveedor" style="font-weight: bold;">No ofrece crédito</h5>
                     </div>
-                    <div class="col-md-4" id="LimiteCreditoRestante" hidden>
+                    <div class="col-md-3" id="LimiteCreditoRestante" hidden>
                         Crédito restante: <h5 id="MostrarCreditoRestante" style="font-weight: bold;">$0</h5>
                     </div>
                 </div>
+                <!-- <div class="row">
+                    <div class="col-md-4">
+                        Nombre del proveedor: <h5 id="MostrarNombreProveedor" style="font-weight: bold;">Proveedor General</h5>
+                    </div>
+                </div> -->
                 <div class="row mt-3">
                     <div class="table-responsive" style="height: 300px; overflow-y: scroll;">
                         <table class="table table table-hover table-striped table-bordered text-center" id="TablaProductosAgregados" width="100%" style="font-size: 12px; vertical-align: middle;">
                             <thead>
-                                <th style="width: 10%;">Codigo</th>
+                                <th style="width: 15%;">Codigo</th>
                                 <th style="width: 15%;">Descripción</th>
-                                <th style="width: 10%;">Presentación</th>
-                                <th style="width: 15%;">Sucursal</th>
+                                <th style="width: 15%;">Presentación</th>
                                 <th style="width: 15%;">Costo</th>
-                                <th style="width: 10%;">Cantidad</th>
+                                <th style="width: 15%;">Cantidad</th>
                                 <th style="width: 15%;">Total</th>
                                 <th style="width: 10%;"></th>
                             </thead>

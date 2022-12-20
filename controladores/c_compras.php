@@ -24,7 +24,7 @@ class compras {
 			}
 		}
 
-		$query = "SELECT ID_Compra, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Proveedor, proveedores.Nombre AS Datos, proveedores.Empresa AS Empresa, proveedores.Telefono AS Telefono, proveedores.Razon_Social AS RazonSocial, proveedores.Credito as Credito, Anticipo, Total, Estatus, compras.Fecha_Registro AS Fecha_Registro, (SELECT COUNT(*) FROM compras) AS Num FROM compras INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Compra, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Proveedor, proveedores.Nombre AS Datos, proveedores.Empresa AS Empresa, proveedores.Telefono AS Telefono, proveedores.Razon_Social AS RazonSocial, proveedores.Credito as Credito, Anticipo, Total, Estatus, compras.Fecha_Registro AS Fecha_Registro, FK_Sucursal, (SELECT COUNT(*) FROM compras) AS Num FROM compras INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -59,8 +59,7 @@ class compras {
 						$botondeCancelar = $botonCancelar;
 
 						
-
-						//$botonTicket = '<button class="btn btn-success" id="ImprimirTicketVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'"><i class="fas fa-print"></i></button>';
+						$botonTicket = '<button class="btn btn-success btn-sm" id="ImprimirTicketCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'" idSucursal="'.$row[$i]['FK_Sucursal'].'"><i class="fas fa-print"></i></button>';
 
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Compra'],
@@ -68,7 +67,7 @@ class compras {
 						'Proveedor' => 'Nombre: <b>'.$row[$i]['Datos'].'</b><br>Empresa: <b>'.$row[$i]['Empresa'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Razón social: <b>'.$row[$i]['RazonSocial'].'</b>',
 						'Total' => 'Anticipo: <b>$'.number_format($row[$i]['Anticipo'], 2).'</b><br>Crédito: <b>$'.number_format($row[$i]['Credito'],2).'</b><br>Total: <b style="font-size: 15px;">$'.number_format($row[$i]['Total'],2 ).'</b><br>',
 						'Detalles' => $estatus.'<br>'.$motivocancelada.'<br><button class="btn btn-link btn-sm" id="VerProductosCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'">Ver productos</button><br><button class="btn btn-link btn-sm" id="VerHistorialPagos" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'">Ver pagos</button>',
-						'Acciones' => $botonEliminar.' '.$botondeCancelar .' '.$botonPagos,
+						'Acciones' => $botonEliminar.' '.$botondeCancelar.' '.$botonPagos.' '.$botonTicket,
 					);
 				}
 
@@ -165,51 +164,9 @@ class compras {
 		extract($_POST); 
 		$fecha = date('Y-m-d H:i:s'); 
 
-		$IDVenta = $omodelo->link->real_escape_string($IDVenta);
-		$Regresar = $omodelo->link->real_escape_string($Regresar);
-		$Motivo = $omodelo->link->real_escape_string($Motivo);
-		$queryRegresar = ', Regreso_Inventario = ""';
-		if ($Regresar == "Si") {
-			$queryRegresar = ', Regreso_Inventario = "Inventario"';
-			$query = "SELECT FK_Producto, Cantidad FROM detalles_venta WHERE FK_Venta = '$IDVenta'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-
-			if($row == 'si'){
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				if($numerofilas > 0){
-					for($i=0; $i<$numerofilas; $i++){
-
-						$query1 = "UPDATE productos SET Existencia = (Existencia + '".$row[$i]["Cantidad"]."') WHERE ID_Producto = '".$row[$i]["FK_Producto"]."'";
-						$error1 = $omodelo->_insertar($query1);
-						if ($error1 == "si") {
-							echo "Error 2: ".mysqli_error($omodelo->link);
-						}else{
-
-							$CostoProducto = 0;
-							$queryCosto = "SELECT Costo FROM productos WHERE ID_Producto = '".$row[$i]["FK_Producto"]."'";
-							$rowCosto = $omodelo->_consultar($queryCosto);
-							$numerofilasCosto = $omodelo->numerofilas;
-
-							if($rowCosto == 'si'){
-								echo "Error: 3".mysqli_error($omodelo->link);
-							}else{
-								if($numerofilasCosto > 0){
-									$CostoProducto = $rowCosto[0]["Costo"];
-								}
-							}
-							$query2 = "INSERT INTO entradas_inventario SET Fecha_Registro = '$fecha', 	FK_producto = '".$row[$i]["FK_Producto"]."', Costo = '$CostoProducto', Cantidad = '".$row[$i]["Cantidad"]."', FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', Motivo = 'VentaCancelada'";
-							$error2 = $omodelo->_insertar($query2);
-							if ($error2 == "si") {
-								echo "Error 4: ".mysqli_error($omodelo->link);
-							}
-						}
-					}
-				}
-			}
-		}
-		$query = "UPDATE ventas SET Estatus = 'Cancelada', Motivo_Cancelada = '$Motivo', Fecha_Cancelada = '$fecha' $queryRegresar WHERE ID_Venta = '$IDVenta'";
+		$IDCompra = $omodelo->link->real_escape_string($IDCompra);
+		
+		$query = "UPDATE compras SET Estatus = '2' WHERE ID_Compra = '$IDCompra'";
 		$error = $omodelo->_insertar($query);
 		if ($error == "si") {
 			echo "Error 5: ".mysqli_error($omodelo->link);
