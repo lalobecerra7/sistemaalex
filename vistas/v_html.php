@@ -575,7 +575,11 @@
               </a>
             </li>
 
-           
+            <li class="menu-item cargarVista" carga="v_hacerCompra" titulo="Hacer compra" id="cargarHacerCompra" hidden>
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-money-check"></i>
+              </a>
+            </li>
 
             #MenuCajas#
 

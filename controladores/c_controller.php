@@ -485,7 +485,7 @@ class controller {
 				echo "Error: " . mysqli_error($omodelo->link);
 			} else {
 				if ($numerofilas == 1) {
-					$sucursal = '<h5 id="Sucursales" value="'.$row[0]['ID_Sucursal'].'">'.$row[0]['Nombre'].'</h5>';
+					$sucursal = 'Sucursal: <br><b id="Sucursales" value="'.$row[0]["ID_Sucursal"].'">'.$row[0]["Nombre"].'</b>';
 				}else if($numerofilas == 0){
 					$query2 = "SELECT ID_Sucursal, Nombre FROM sucursales";
 					$row2 = $omodelo->_consultar($query2);
@@ -499,10 +499,12 @@ class controller {
 							for ($i = 0; $i < $numerofilas2; $i++) {
 								$opciones .='<option value="' . $row2[$i]['ID_Sucursal'] . '" >' . $row2[$i]['Nombre']. '</option>';
 							}
-							$sucursal = '<select class="form-select" id="Sucursales" name="Sucursales">
-											<option value="" selected>-Seleccione una opción-</option>
+							$sucursal = '<div class="form-floating">
+										<select class="form-select" id="Sucursales" name="Sucursales">
 											'.$opciones.'
-										</select>';
+										</select>
+										<label for="Sucursales">Sucursal</label>
+										</div>';
 						}
 					}
 				}
