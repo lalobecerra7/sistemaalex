@@ -219,8 +219,8 @@
 		        </div>
                 <div class="col-md-12 col-sm-12 mb-3" id='Archivo'>
 		        	<div class="form-floating">
-		               	<input type="file" class="form-control" id="ComprobantePago" name="ComprobantePago" placeholder="Ingresa un comprobante de pago">
-		                <label for="CmprobantePago">Comprobante de pago</label>
+		               	<input type="file" class="form-control" id="ComprobantePagoHC" name="ComprobantePagoHC" placeholder="Ingresa un comprobante de pago">
+		                <label for="ComprobantePagoHC">Comprobante de pago</label>
 		            </div>
 		        </div>
 	       	</div>

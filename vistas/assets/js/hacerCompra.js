@@ -28,7 +28,7 @@ jQuery(document).ready(function($) {
 		if(costo != ''){
 			total = parseFloat(costo) * parseFloat(cantidad);
 		}
-    	$(this).parent().parent().find('.totalP').text(parseFloat(total.toFixed(2)));
+    	$(this).parent().parent().find('.totalP').text(parseFloat(total).toFixed(2));
     	CalcularSubtotal();
     	$("#DescuentoCompraDinero").trigger("change");
     });
@@ -44,7 +44,7 @@ jQuery(document).ready(function($) {
 		if(costo != ''){
 			total = parseFloat(costo) * parseFloat(cantidad);
 		}
-    	$(this).parent().parent().find('.totalP').text(parseFloat(total.toFixed(2)));
+    	$(this).parent().parent().find('.totalP').text(parseFloat(total).toFixed(2));
     	CalcularSubtotal();
     	$("#DescuentoCompraDinero").trigger("change");
     });
@@ -190,10 +190,11 @@ jQuery(document).ready(function($) {
 	$(document).on('click', '#TablaProveedoresCompra tbody tr', function() {
 		var idProveedor = $(this).attr("id");
 		var nombre = $(this).children("td:eq(0)").find(".NombreProveedor").text();
+		var razonSocial = $(this).children("td:eq(2)").find(".razonSocial").text();
 		//var tipodescuento = $(this).children("td:eq(3)").find(".tipoDescuentoCliente").text();
 		//var cantidaddescuento = $(this).children("td:eq(3)").find(".cantidadDescuentoCliente").text(); 
 		$("#RealizarCompra").attr("idProveedor", idProveedor);
-		$("#CargarProveedoresModalC").html('Proveedor: '+nombre);
+		$("#CargarProveedoresModalC").html('Proveedor: '+nombre+'<br>Razon social: '+razonSocial);
 		$("#ModalVerProveedoresC").modal("hide");
 		if($('#TipoCompra').val() == 'Credito'){
 			$("#TipoCompra").trigger('change');
@@ -423,12 +424,27 @@ $(document).on('click', '#GuardarCompra', function() {
 			estatus = '0';
 		}
 		console.log(idProveedor);
-		
-		var data = "metodo=insertar&accion=hacerCompra&Importe="+ImportePagadoCompra+"&idProveedor="+idProveedor+"&FechaCredito="+fechaCredito+"&Productos="+JSON.stringify(productos)+"&subtotal="+subtotal+"&total="+total+"&TipoCompra="+tipoCompra+"&Descuento="+descuento+"&TipoPago="+tipoPago+"&Detalles="+detalles+"&Sucursal="+$('#Sucursales').val();
+
+		var data = new FormData(document.getElementById('FormCobrarCompra'));
+		data.append('metodo', 'insertar');
+		data.append('accion', 'hacerCompra');
+		data.append('Importe', ImportePagadoCompra);
+		data.append('idProveedor', idProveedor);
+		data.append('FechaCredito', fechaCredito);
+		data.append('Productos', JSON.stringify(productos));
+		data.append('subtotal', subtotal);
+		data.append('total', total);
+		data.append('TipoCompra', tipoCompra);
+		data.append('Descuento', descuento);
+		data.append('TipoPago', tipoPago);
+		data.append('Sucursal', $('#Sucursales').val());
+
 		$.ajax({
 			url: 'index.php',
 			type: 'POST',
 			data: data,
+			processData: false,
+			contentType: false
 		})
 		.done(function(res) {
 			var datos = res.split("~");

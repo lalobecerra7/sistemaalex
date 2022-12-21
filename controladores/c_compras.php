@@ -48,7 +48,7 @@ class compras {
 						$estatus = '<span class="badge rounded-pill bg-warning">Pendiente</span>';
 						$botonCancelar = ' <button class="btn btn-warning btn-sm" id="CancelarCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i style="color: white;" class="fas fa-circle-xmark"></i></button> ';
 						$SumarCompras += $row[$i]['Total'];
-						$botonPagos = '<button class="btn btn-primary btn-sm"  id="PagoCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i class="fa-solid fa-sack-dollar"></i></button>';
+						$botonPagos = '<button class="btn btn-primary btn-sm PagoCom"  id="PagoCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i class="fa-solid fa-sack-dollar"></i></button>';
 					}
 
 					$botonEliminar = "";
@@ -125,13 +125,13 @@ class compras {
 			}
 			
 			if($status == 0){
-				$query2 = "UPDATE pagos SET Archivo = '".$id.'_'.$nombreDoc."' WHERE ID_Pago = '$ID'";
+				$query2 = "UPDATE pagos SET Archivo = '".$ID.'_'.$nombreDoc."' WHERE ID_Pago = '$ID'";
 				$error3 = $omodelo->_insertar($query2);	
 
 				if ($error3 == "si") {
 					echo "Error 4: ".mysqli_error($omodelo->link); 
 				}else{
-					move_uploaded_file($ruta_provisional,  $ruta.''.$id.'_'.$nombreDoc);
+					move_uploaded_file($ruta_provisional,  $ruta.''.$ID.'_'.$nombreDoc);
 
 					$query3 = "SELECT compras.Total AS Total, (SELECT SUM(Monto) FROM pagos WHERE FK_Compra = '$IdCompra') AS TotalPagos FROM compras INNER JOIN pagos ON FK_Compra = ID_Compra WHERE ID_Compra = '$IdCompra'";
 					$row3 = $omodelo->_consultar($query3);
@@ -250,10 +250,32 @@ class compras {
 				}
 			}
 		}else if($tipo == 'historialPagos'){
+			$omodelo = new m_modelo();
+			extract($_POST);
+
 			$IDCompra = $omodelo->link->real_escape_string($IDCompra);
-			$tabla = "";
 			$imagen = '';
-			$query = "SELECT ID_Pago, FK_Compra, Concepto, Monto, Tipo_Pago, Fecha, Detalles_Pago, Archivo FROM pagos WHERE FK_Compra = '$IDCompra'";
+
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(ID_Pago, FK_Compra, Concepto, Monto, Tipo_Pago, Fecha, Detalles_Pago) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+			
+			$query = "SELECT ID_Pago, FK_Compra, Concepto, Monto, Tipo_Pago, Fecha, Detalles_Pago, Archivo, (SELECT COUNT(*) FROM pagos WHERE FK_Compra = '$IDCompra' $busqueda) AS Num FROM pagos WHERE FK_Compra = '$IDCompra' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -271,21 +293,55 @@ class compras {
 							}	
 						}
 
-						$tabla .= "
-							<tr>
-								<td >".$row[$i]["Fecha"]."</td>
-								<td >".$row[$i]["Concepto"]."</td>
-								<td >".$row[$i]["Tipo_Pago"]."</td>
-								<td style='vertical-align: middle;'>$".number_format($row[$i]["Monto"], 2)."</td>
-								<td >".$row[$i]["Detalles_Pago"]."</td>
-								<td >".$imagen."</td>
-							</tr>
-						";
+						$botonEliminar = "";
+						$botonEliminar = '<button class="btn btn-danger btn-sm" id="EliminarPago" attrid="'.$row[$i]['ID_Pago'].'" idCompra="'.$row[$i]['FK_Compra'].'"><i class="fas fa-trash"></i></button>';
+						
+						$arreglo['data'][$i] = array(
+							'ID' => $row[$i]['ID_Pago'],
+							'Fecha' => $row[$i]["Fecha"],
+							'Concepto' => $row[$i]["Concepto"],
+							'TipoPago' => $row[$i]["Tipo_Pago"],
+							'Monto' => '$'.number_format($row[$i]["Monto"], 2),
+							'Detalles' => $row[$i]["Detalles_Pago"],
+							'Comprobante' => $imagen,
+							'Accion' => $botonEliminar
+						);
 					}
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);
 				}
 			}
 
-			echo $tabla;
+			echo json_encode($arreglo);
+		}else if($tipo == 'eliminarPago'){
+			$omodelo = new m_modelo();
+			extract($_POST);
+			
+			$IDPago = $omodelo->link->real_escape_string($IDPago);	
+
+			$query = "SELECT Archivo FROM pagos WHERE ID_Pago = '$IDPago'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					$query1 = "DELETE FROM pagos WHERE ID_Pago='$IDPago'";
+					$error = $omodelo->_insertar($query1);
+
+					if ($error == "si") {
+						echo "Error 1: " . mysqli_error($omodelo->link);
+					} else {
+						echo "Correcto";
+
+						if ($row[0]["Archivo"] !="" && file_exists("vistas/assets/archivos/fotosPagos/".$row[0]["Archivo"]."")) {
+							unlink("vistas/assets/archivos/fotosPagos/".$row[0]["Archivo"]."");
+						}
+
+						$omodelo->movimiento($query1, $_SESSION['user_admin']['ID_Usuario']);
+					}
+				}
+			}
 		}
 	}
 }

@@ -72,23 +72,11 @@ jQuery(document).ready(function($) {
 	});
 
 	$(document).on('click', '#VerHistorialPagos', function() {
-		var folio = $(this).attr("folio");
 		var id = $(this).attr("attrid");
+		var folio = $(this).attr("folio");
 		$("#ModalVerHistorialPagos").modal("show");
 		$("#FolioCompraPagos").text(folio);
-
-		var data = "metodo=detalles&accion=compras&tipo=historialPagos&IDCompra="+id;
-		$.ajax({
-			url: 'index.php',
-			type: 'POST',
-			data: data,
-		})
-		.done(function(res) {
-			$("#tbodyVerHistorialPagos").html(res);
-		})
-		.fail(function() {
-			console.log("Error ajax");
-		});
+		TablaVerHistorialPagos(id);
 	});
 });
 
@@ -102,6 +90,54 @@ $(document).on('click', '#ImprimirTicketCompra', function() {
 	var x= parseInt((window.screen.width/2)-(anchura/2));
 	
 	window.open("controladores/ticketCompra.php?id="+idCompra+"&idSucursal="+sucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
+});
+
+$(document).on('click', '#EliminarPago', function() {
+	var btn = $(this);
+	Swal.fire({
+		title: '¿Estás seguro que quieres eliminar el pago?',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		cancelButtonText: '¡No, cancelar!',
+		confirmButtonText: '¡Si, eliminar!'
+	}).then((result) => {
+		if (result.value) {
+			var id = $(this).attr('idCompra');
+			var data = "metodo=detalles&accion=compras&tipo=eliminarPago&IDPago="+$(this).attr('attrid');
+			$.ajax({
+				url: 'index.php',
+				type: 'POST',
+				data: data,
+				beforeSend: function() {
+					progressBoton(btn);
+				}
+			})
+			.done(function(res) {
+				if ($.trim(res) == "Correcto") {
+					Swal.fire({
+						icon: 'success',
+						title: 'Pago eliminado correctamente'
+					});
+					TablaVerHistorialPagos(id);
+				}else{
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Error inesperado al eliminar el pago.'
+					});
+					console.log($.trim(res));
+				}
+			})
+			.fail(function() {
+				console.log("Error ajax");
+			})
+			.always(function() {
+				unprogressBoton(btn);
+			});
+		}    
+	});	  
 });
 
 $(document).on('click', '#CancelarCompra', function() {
@@ -153,9 +189,9 @@ $(document).on('click', '#CancelarCompra', function() {
 	});	  
 });
 
-$(document).on('click', '#PagoCompra', function() {
+$(document).on('click', '.PagoCom', function() {
 	var id = $(this).attr("attrid");
-
+	console.log('Pago Compra');
 	var data = "metodo=detalles&accion=compras&tipo=pago&IDCompra="+id;
 	$.ajax({
 		url: 'index.php',
@@ -276,6 +312,32 @@ function TablaReporteCompras(){
 		"params":{
 			"metodo": "consultar",
 			"accion": "compras"
+		}
+	});
+}
+
+function TablaVerHistorialPagos(id){
+	ajaxMyDatatable({
+		"table": $("#TablaVerHistorialPagos"), 
+		"colums": [
+			"Fecha",
+			"Concepto",
+			"TipoPago",
+			"Monto",
+			"Detalles",
+			"Comprobante",
+			"Accion"
+		], 
+		"sort": [
+			0,
+			"desc"
+		],
+		"url": "index.php", 
+		"params":{
+			"metodo": "detalles",
+			"accion": "compras",
+			"tipo": "historialPagos",
+			"IDCompra": id
 		}
 	});
 }

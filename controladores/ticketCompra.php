@@ -239,11 +239,11 @@ $arreglo2 = '';
       </div>
       <?php  
         echo '<p class="centrado">FOLIO: '.$arreglo2['Folio'].'</p>';
-        if ($arreglo['Estatus'] == 0) {
+        if ($arreglo['Estatus'] == '0') {
           echo '<p class="centrado">Estatus: PENDIENTE</p>';
-        }else if ($arreglo['Estatus'] == 1) {
+        }else if ($arreglo['Estatus'] == '1') {
           echo '<p class="centrado">Estatus: COMPLETADA</p>';
-        }else if ($arreglo['Estatus'] == 2) {
+        }else if ($arreglo['Estatus'] == '2') {
           echo '<p class="centrado">Estatus: CANCELADA</p>';
         }
       ?>
