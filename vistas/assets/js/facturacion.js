@@ -458,21 +458,23 @@ function facturarVenta(id) {
             var subtotal = 0, descuentos = 0, trasladados = 0, retenidos = 0, total = 0;
             datos.Productos.forEach(prod => {
                 var impuestos = '';
-                prod.Impuestos.forEach(imp => {
-                    if(imp.Tipo_Factor_CFDI != "Exento"){ 
-                        if(imp.Tipo_Impuesto_CFDI == 'Trasladado'){
-                            trasladados += ((parseFloat(prod.Cantidad) * parseFloat(prod.Precio)) - parseFloat(prod.Descuento)) * (imp.Tasa_Cuota_CFDI / 100);
-                        }else{
-                            retenidos += ((parseFloat(prod.Cantidad) * parseFloat(prod.Precio)) - parseFloat(prod.Descuento)) * (imp.Tasa_Cuota_CFDI / 100);
+                if(prod.Impuestos != null) {
+                    prod.Impuestos.forEach(imp => {
+                        if(imp.Tipo_Factor_CFDI != "Exento"){ 
+                            if(imp.Tipo_Impuesto_CFDI == 'Trasladado'){
+                                trasladados += ((parseFloat(prod.Cantidad) * parseFloat(prod.Precio)) - parseFloat(prod.Descuento)) * (imp.Tasa_Cuota_CFDI / 100);
+                            }else{
+                                retenidos += ((parseFloat(prod.Cantidad) * parseFloat(prod.Precio)) - parseFloat(prod.Descuento)) * (imp.Tasa_Cuota_CFDI / 100);
+                            }
                         }
-                    }
 
-                    if(imp.Tipo_Factor_CFDI != "Exento"){
-                        impuestos += '<p>(<span class="dinero">0</span>) '+imp.Impuesto_CFDI+' <span class="cantidad">'+imp.Tasa_Cuota_CFDI+'</span>%</p>';
-                    }else{
-                        impuestos += '<p>(<span class="dinero">'+(((parseFloat(prod.Cantidad) * parseFloat(prod.Precio)) - parseFloat(prod.Descuento)) * (imp.Tasa_Cuota_CFDI / 100))+'</span>) '+imp.Impuesto_CFDI+' <span class="cantidad">'+imp.Tasa_Cuota_CFDI+'</span>%</p>';
-                    }
-                });
+                        if(imp.Tipo_Factor_CFDI != "Exento"){
+                            impuestos += '<p>(<span class="dinero">0</span>) '+imp.Impuesto_CFDI+' <span class="cantidad">'+imp.Tasa_Cuota_CFDI+'</span>%</p>';
+                        }else{
+                            impuestos += '<p>(<span class="dinero">'+(((parseFloat(prod.Cantidad) * parseFloat(prod.Precio)) - parseFloat(prod.Descuento)) * (imp.Tasa_Cuota_CFDI / 100))+'</span>) '+imp.Impuesto_CFDI+' <span class="cantidad">'+imp.Tasa_Cuota_CFDI+'</span>%</p>';
+                        }
+                    });
+                }
 
                 $("#conceptosCFDI").append(`<tr>
                     <td>`+prod.Clave_ProdServ_CFDI+`</td> 
