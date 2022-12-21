@@ -35,7 +35,7 @@ jQuery(document).ready(function($) {
 
 	$(document).on('keyup change', '.campoCosto', function() {
     	var cantidad = $(this).parent().parent().find('.campoCantidad').val();
-		console.log(cantidad);
+		
     	if (cantidad == "") {
     		cantidad = 0;
     	}
@@ -76,53 +76,63 @@ jQuery(document).ready(function($) {
 			data: data,
 		})
 		.done(function(res) {
-			console.log(res);
+			//console.log($.trim(res));
 			var datos = JSON.parse(res);
-			console.log(datos);
-			var idProducto = datos.ID_Producto;
-			var codigo = datos.Codigo;
-			var descripcion = datos.Descripcion;
-			var costo = datos.Costo;
-			var presentacion = 'Sin presentación';
-			if(datos.NombrePresentacion != null){
-				presentacion = datos.NombrePresentacion;
-			}
-			var idPresentacion = datos.FK_Presentacion;
-			//var existencia = $(this).children("td:eq(3)").find(".ExistenciaProducto").text();
-			
-			var fila = "\
-				<tr attrid='"+idProducto+"' idPresentacion='"+idPresentacion+"'>\
-					<td>"+codigo+"</td>\
-					<td>"+descripcion+"</td>\
-					<td>"+presentacion+"</td>\
-					<td class='costoP'><input type='number' value='"+costo+"' min='1' step='any' class='form-control campoCosto'></td>\
-					<td><input type='number' value='1' min='1' step='any' class='form-control campoCantidad'></td>\
-					<td class='totalP'>"+(costo*1)+"</td>\
-					<td><button class='btn btn-danger btn-sm EliminarFila'><i class='fas fa-trash'></i></button></td>\
-				</tr>\
-			";
+			//console.log(datos);
 
-			var encontrado = false;
-
-			$("#tbodyTablaProductosAgregados tr").each(function(){
-				if ($(this).attr("attrid") == idProducto && $(this).attr("idpresentacion") == idPresentacion) {
-					var cantidadAnterior = $(this).children("td:eq(4)").find(".campoCantidad").val();
-					$(this).children("td:eq(4)").find(".campoCantidad").val(parseFloat(cantidadAnterior)+1);
-					encontrado = true;
-					$(".campoCantidad").trigger("keyup");
-					return false;
+			if(datos == null){
+				Swal.fire({
+				  icon: 'error',
+				  title: 'Producto no encontrado',
+				  timer: 1200
+				});
+			}else{
+				var idProducto = datos.ID_Producto;
+				var codigo = datos.Codigo;
+				var descripcion = datos.Descripcion;
+				var costo = datos.Costo;
+				var presentacion = 'Sin presentación';
+				if(datos.NombrePresentacion != null){
+					presentacion = datos.NombrePresentacion;
 				}
-			});
+				var idPresentacion = datos.FK_Presentacion;
+				//var existencia = $(this).children("td:eq(3)").find(".ExistenciaProducto").text();
+				
+				var fila = "\
+					<tr attrid='"+idProducto+"' idPresentacion='"+idPresentacion+"'>\
+						<td>"+codigo+"</td>\
+						<td>"+descripcion+"</td>\
+						<td>"+presentacion+"</td>\
+						<td class='costoP'><input type='number' value='"+costo+"' min='1' step='any' class='form-control campoCosto'></td>\
+						<td><input type='number' value='1' min='1' step='any' class='form-control campoCantidad'></td>\
+						<td class='totalP'>"+(costo*1)+"</td>\
+						<td><button class='btn btn-danger btn-sm EliminarFila'><i class='fas fa-trash'></i></button></td>\
+					</tr>\
+				";
 
-			if (encontrado == false) {
-				$("#tbodyTablaProductosAgregados").append(fila);
-			}
-			$("#CodigoProducto").val("");
-			$("#CodigoProducto").focus();
-			CalcularSubtotal();
-			$("#DescuentoCompraDinero").val($("#RealizarCompra").attr("cantidad"));
-			$("#DescuentoCompraDinero").trigger("change");
-			
+				var encontrado = false;
+
+				$("#tbodyTablaProductosAgregados tr").each(function(){
+					if ($(this).attr("attrid") == idProducto && $(this).attr("idpresentacion") == idPresentacion) {
+						var cantidadAnterior = $(this).children("td:eq(4)").find(".campoCantidad").val();
+						$(this).children("td:eq(4)").find(".campoCantidad").val(parseFloat(cantidadAnterior)+1);
+						encontrado = true;
+						$(".campoCantidad").trigger("keyup");
+						return false;
+					}
+				});
+
+				if (encontrado == false) {
+					$("#tbodyTablaProductosAgregados").append(fila);
+				}
+				$("#CodigoProducto").val("");
+				$("#CodigoProducto").focus();
+				CalcularSubtotal();
+				$("#DescuentoCompraDinero").val($("#RealizarCompra").attr("cantidad"));
+				$("#DescuentoCompraDinero").trigger("change");
+
+				$("#CodigoProductoC").val("");
+			}	
 		})
 		.fail(function() {
 			console.log("Error ajax");
@@ -143,7 +153,7 @@ jQuery(document).ready(function($) {
 			presentacion = 'Sin presentación';
 		}
 		//var existencia = $(this).children("td:eq(3)").find(".ExistenciaProducto").text();
-		console.log();
+		
 		var fila = "\
 			<tr attrid='"+idProducto+"' idPresentacion='"+idPresentacion+"'>\
                 <td>"+codigo+"</td>\
@@ -306,7 +316,6 @@ function CalcularTotal() {
 
 $(document).on('click', '#TipoCompra', function() {
 	if ($("#TipoCompra").val() == "Credito") {
-		console.log("credito");
 		id = $("#RealizarCompra").attr('idproveedor'); 
 		var data = "metodo=consultar&accion=hacerCompra&tipo=creditoProveedor&IDProveedor="+id;
 		$.ajax({
@@ -315,7 +324,7 @@ $(document).on('click', '#TipoCompra', function() {
 			data: data,
 		})
 		.done(function(res) {
-			console.log(res);
+			//console.log(res);
 			var datos = JSON.parse(res)
 			var credito = '';
 			if (datos.data.Credito == 'NO' || datos.data.Credito == '' || datos.data.Credito == null){
@@ -345,7 +354,6 @@ $(document).on('click', '#TipoCompra', function() {
 
 $(document).on('change', '#TipoCompra', function() {
 	if ($("#TipoCompra").val() == "Credito") {
-		console.log("credito");
 		id = $("#RealizarCompra").attr('idproveedor'); 
 		var data = "metodo=consultar&accion=hacerCompra&tipo=creditoProveedor&IDProveedor="+id;
 		$.ajax({
@@ -354,7 +362,7 @@ $(document).on('change', '#TipoCompra', function() {
 			data: data,
 		})
 		.done(function(res) {
-			console.log(res);
+			//console.log(res);
 			var datos = JSON.parse(res)
 			var credito = '';
 			if (datos.data.Credito == 'NO' || datos.data.Credito == '' || datos.data.Credito == null){
@@ -376,7 +384,6 @@ $(document).on('change', '#TipoCompra', function() {
 			console.log("Error ajax");
 		});
 	}else if($("#TipoCompra").val() == "Contado"){
-		console.log("contado");
 		$("#LimiteCredito").attr("hidden", true);
 		$("#FechaLimiteCredito").attr("hidden", true);
 	}
@@ -414,7 +421,6 @@ $(document).on('click', '#GuardarCompra', function() {
 			var Costo = $(this).children("td:eq(3)").find(".campoCosto").val();
 			var Cantidad = $(this).children("td:eq(4)").find(".campoCantidad").val();
 			productos.push([idProducto,Costo,Cantidad,Presentacion,Sucursal])
-			console.log(Sucursal);
 		});
 
 		if(tipoCompra == 'Contado'){
@@ -422,7 +428,6 @@ $(document).on('click', '#GuardarCompra', function() {
 		}else if(tipoCompra == 'Credito'){
 			estatus = '0';
 		}
-		console.log(idProveedor);
 		
 		var data = "metodo=insertar&accion=hacerCompra&Importe="+ImportePagadoCompra+"&idProveedor="+idProveedor+"&FechaCredito="+fechaCredito+"&Productos="+JSON.stringify(productos)+"&subtotal="+subtotal+"&total="+total+"&TipoCompra="+tipoCompra+"&Descuento="+descuento+"&TipoPago="+tipoPago+"&Detalles="+detalles+"&Sucursal="+$('#Sucursales').val();
 		$.ajax({
@@ -440,7 +445,7 @@ $(document).on('click', '#GuardarCompra', function() {
 				$("#ModalCobrarCompra").modal("hide");
 				$('#cargarHacerCompra').trigger('click');
 				$("#RealizarCompra").attr("idProveedor", '1');
-				console.log(datos[1]);
+				
 				var idCompra = datos[1];
 				var sucursal = datos[2];
 				var altura=50;
