@@ -13,7 +13,7 @@
  -->
 <!-- beautify ignore:start -->
 <html
-  lang="en"
+  lang="es"
   class="light-style customizer-hide"
   dir="ltr"
   data-theme="theme-default"
