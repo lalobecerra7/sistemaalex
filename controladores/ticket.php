@@ -368,7 +368,7 @@ $arregloVenta = '';
       }
     }
 
-    $sql2 = "SELECT ID_Venta, FK_Usuario, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal) AS NombreSucursal, FK_Cliente, (SELECT Nombre FROM clientes WHERE ID_Cliente = FK_Cliente) AS NombreCliente, Descuento, Total, Tipo_Pago, Pago, Cambio, Notas, Fecha_Registro, Cancelada, Fecha_Cancelacion, Regreso_Inventario FROM ventas WHERE ID_Venta = '".$_GET["id"]."'";
+    $sql2 = "SELECT ID_Venta, Estatus, FK_Usuario, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal) AS NombreSucursal, FK_Cliente, (SELECT Nombre FROM clientes WHERE ID_Cliente = FK_Cliente) AS NombreCliente, Descuento, Total, Tipo_Pago, Pago, Cambio, Notas, Fecha_Registro, Cancelada, Fecha_Cancelacion, Regreso_Inventario FROM ventas WHERE ID_Venta = '".$_GET["id"]."'";
     if($res=$con->query($sql2)){
       if ($res->num_rows > 0) {
         $row = $res->fetch_assoc();
@@ -378,6 +378,7 @@ $arregloVenta = '';
         $arregloVenta = array(
           'ID_Venta' => $row["ID_Venta"],
           'FK_Usuario' => $row["FK_Usuario"],
+          'Estatus' => $row["Estatus"],
           'NombreUsuario' => $row["NombreUsuario"],
           'FK_Sucursal' => $row["FK_Sucursal"],
           'NombreSucursal' => $row["NombreSucursal"],
@@ -452,9 +453,11 @@ $arregloVenta = '';
       </div>
       <?php  
         echo '<p class="centrado">FOLIO: '.$arreglo['Folio'].'</p>';
-        if ($arregloVenta['Cancelada'] == "1") {
+        if ($arregloVenta['Estatus'] == "Cancelada") {
           echo '<p class="centrado">ESTATUS: CANCELADA</p>';
           echo '<p class="centrado">MOTIVO: '.$arregloVenta['Notas'].'</p>';
+        }else if ($arregloVenta['Estatus'] == "Devuelta") {
+          echo '<p class="centrado">ESTATUS: DEVUELTA</p>';
         }else{
           echo '<p class="centrado">ESTATUS: COMPLETADA</p>';
         }

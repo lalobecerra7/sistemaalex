@@ -561,6 +561,13 @@
               </a>
             </li>
 
+            <li class="menu-item cargarVista oculto" carga="v_hacerventa" titulo="Ventas" id="cargarHacerVenta">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-shopping-cart"></i>
+                <div data-i18n="Venta">Hacer venta</div>
+              </a>
+            </li>
+
             <li class="menu-item cargarVista" carga="v_ventas" titulo="Ventas" id="cargarVentas">
               <a href="javascript:void(0)"  class="menu-link">
                 <i class="menu-icon fas fa-shopping-cart"></i>

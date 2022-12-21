@@ -31,7 +31,7 @@
 		      <div class="col-12">
 		        <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaReporteVentas" width="100%" style="font-size: 12px;">
                     <thead>
-                        <th style="width: 20%;" orden="No">Datos</th>
+                        <th style="width: 20%;">Datos</th>
                         <th style="width: 25%;" orden="No">Cliente</th>
                         <th style="width: 25%;">Total</th>
                         <th style="width: 15%;" orden="No">Detalles</th>
