@@ -32,11 +32,11 @@
 		      <div class="col-12">
 		        <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaReporteCompras" width="100%" style="font-size: 12px;">
                     <thead>
-                        <th style="width: 20%;" orden="No">Datos</th>
-                        <th style="width: 25%;" orden="No">Proveedor</th>
-                        <th style="width: 25%;">Total</th>
-                        <th style="width: 15%;" orden="No">Detalles</th>
-                        <th style="width: 15%;" orden="No">Acciones</th>
+                        <th>Datos</th>
+                        <th>Proveedor</th>
+                        <th>Total</th>
+                        <th orden="No">Detalles</th>
+                        <th orden="No">Acciones</th>
                     </thead>
                     <tbody>
                            
@@ -126,7 +126,7 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped text-center">
+                    <!-- <table class="table table-bordered table-striped text-center">
                         <thead>
                             <tr>
                                 <th>
@@ -151,7 +151,22 @@
                         </thead>
                         <tbody id="tbodyVerHistorialPagos">
                         </tbody>
-                    </table>
+                    </table> -->
+                    <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaVerHistorialPagos" width="100%" style="font-size: 12px;">
+                        <thead>
+                            <th style="width: 15%;">Fecha</th>
+                            <th style="width: 20%;">Concepto</th>
+                            <th style="width: 20%;">Tipo de pago</th>
+                            <th style="width: 10%;">Monto</th>
+                            <th style="width: 15%;" orden="No">Detalles</th>
+                            <th style="width: 10%;" orden="No">Comprobante</th>
+                            <th style="width: 10%;" orden="No">Acción</th>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+		            </table>
+
                 </div>
             </div>
             <div class="modal-footer">

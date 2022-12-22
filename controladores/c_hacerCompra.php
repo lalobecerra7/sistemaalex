@@ -13,7 +13,7 @@ class hacerCompra {
 		$tipoCompra =  $omodelo->link->real_escape_string($TipoCompra);
 		$descuento =  $omodelo->link->real_escape_string($Descuento);
 		$tipoPago =  $omodelo->link->real_escape_string($TipoPago);
-		$detalles =  $omodelo->link->real_escape_string($Detalles);
+		$detalles =  $omodelo->link->real_escape_string($DetallesPago);
 		$sucursal =  $omodelo->link->real_escape_string($Sucursal);
 		$datos = json_decode($Productos);
 		$fecha = date('Y-m-d H:i:s'); 
@@ -44,42 +44,48 @@ class hacerCompra {
 
 				if ($errorDetalles == "si") {
 					echo "Error detalles: ".mysqli_error($omodelo->link);
-				}else{
-					// $querySumar = "UPDATE inventario SET Cantidad = (Cantidad + ".$fila[2].") WHERE FK_Producto = '".$fila[0]."' AND FK_Sucursal = '".$fila[4]."' AND FK_Presentacion = '".$fila[3]."'";
-					// $errorSumar = $omodelo->_insertar($querySumar);
-					
-					// if ($errorSumar == "si") {
-					// 	echo "Error sumar: ".mysqli_error($omodelo->link);
-					// }else {
-						$usuario = $_SESSION['user_admin']['ID_Usuario'];
-						$queryPago = "INSERT INTO pagos SET FK_Compra = '$IDCompra', Monto = '$ImportePagadoCompra', Concepto = 'Anticipo', Tipo_Pago = '$tipoPago', Fecha = '$fecha', FK_Usuario = '$usuario', Detalles_Pago = '$detalles'";
-						$errorPago = $omodelo->_insertar($queryPago);
-						if ($errorPago == "si") {
-							echo "Error pagos: ".mysqli_error($omodelo->link);
-						}else{
-							echo "Correcto~".$IDCompra.'~'.$sucursal;
-							$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+				}
+			}
+			$usuario = $_SESSION['user_admin']['ID_Usuario'];
+			$queryPago = "INSERT INTO pagos SET FK_Compra = '$IDCompra', Monto = '$ImportePagadoCompra', Concepto = 'Anticipo', Tipo_Pago = '$tipoPago', Fecha = '$fecha', FK_Usuario = '$usuario', Detalles_Pago = '$detalles'";
+			$errorPago = $omodelo->_insertar($queryPago);
+			if ($errorPago == "si") {
+				echo "Error pagos: ".mysqli_error($omodelo->link);
+			}else{
+				$ID = mysqli_insert_id($omodelo->link);
 
-							// $usuario = $_SESSION['user_admin']['ID_Usuario'];
-							// $queryPago = "INSERT INTO pagos SET FK_Compra = '$IDCompra', Monto = '$ImportePagadoCompra', Concepto = 'Anticipo', Tipo_Pago = '$tipoPago', Fecha = '$fecha', FK_Usuario = '$usuario', Detalles_Pago = '$detalles'";
-							// $errorPago = $omodelo->_insertar($queryPago);
-							// if ($errorPago == "si") {
-							// 	echo "Error pagos: ".mysqli_error($omodelo->link);
-							// }else{
-							// 	echo "Correcto~".$IDCompra;
-							// 	$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
-							// }
+				$status = 1;
+				if ($_FILES['ComprobantePagoHC']['size'] > 0 && $_FILES['ComprobantePagoHC']['error'] == 0) {
+					$file = $_FILES["ComprobantePagoHC"];
+					$nombreDoc = $file["name"];
+					$tipo = $file["type"];
+					$ruta_provisional = $file["tmp_name"];
+					$size = $file["size"];
+					$carpeta = "vistas/assets/archivos/fotosPagos/";
 
-							// // $querySumar = "UPDATE inventario SET Cantidad = (Cantidad + ".$fila[2].") WHERE FK_Producto = '".$fila[0]."' AND FK_Presentacion = '".$fila[3]."' AND FK_Sucursal = '".$fila[4]."'";
-							// // $errorSumar = $omodelo->_insertar($querySumar);
-							// // if ($errorSumar == "si") {
-							// // 	echo "Error sumar: ".mysqli_error($omodelo->link);
-							// // }else {
-								
-							// // }
-						//}
+					if ($tipo != 'image/jpeg' && $tipo != 'image/jpg' && $tipo != 'image/png' && $tipo != 'application/pdf' && $tipo != ''){
+						echo "Error 2 Formato";
+					}else if ($size > (1024*1024*10)){
+						echo "Error 3 Peso";
+					}else{
+						$status = 0;
+						$ruta = $carpeta;
 					}
-				}	
+				}
+							
+				if($status == 0){
+					$query2 = "UPDATE pagos SET Archivo = '".$ID.'_'.$nombreDoc."' WHERE ID_Pago = '$ID'";
+					$error3 = $omodelo->_insertar($query2);	
+
+					if ($error3 == "si") {
+						echo "Error 4: ".mysqli_error($omodelo->link); 
+					}else{
+						move_uploaded_file($ruta_provisional,  $ruta.''.$ID.'_'.$nombreDoc);
+					}
+				}
+
+				echo "Correcto~".$IDCompra.'~'.$sucursal;
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 			}
 		}
 	}
@@ -107,7 +113,7 @@ class hacerCompra {
 				}
 			}
 					  
-			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, IFNULL(presentaciones.ID_Presentacion, CONCAT('NA',Codigo)) AS IDPresentacion, presentaciones.Nombre AS NombrePresentacion, inventario.FK_Presentacion AS FK_Presentacion, presentaciones.Abreviatura AS Abreviatura, productos.Costo AS Costo, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos INNER JOIN inventario ON inventario.FK_Producto = ID_Producto LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion $busqueda GROUP BY IDPresentacion ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, IFNULL(presentaciones.ID_Presentacion, CONCAT('NA',Codigo)) AS IDPresentacion, presentaciones.Nombre AS NombrePresentacion, inventario.FK_Presentacion AS FK_Presentacion, presentaciones.Abreviatura AS Abreviatura, productos.Costo AS Costo, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion $busqueda GROUP BY IDPresentacion ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -193,7 +199,7 @@ class hacerCompra {
 						}
 
 						if ($row[$i]['Razon_Social'] != "") {
-							$empresa .= "Razón social: <b>".$row[$i]['Razon_Social']."</b><br>";
+							$empresa .= "Razón social: <b class= razonSocial>".$row[$i]['Razon_Social']."</b><br>";
 						}
 
 						if ($row[$i]['Credito'] == "SI") {
