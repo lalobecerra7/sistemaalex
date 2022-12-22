@@ -65,7 +65,7 @@ jQuery(document).ready(function($) {
 		if($(this).children('span.dinero').text() != ""){
 			const searchRegExp = new RegExp(',', 'g'); 
 
-			$(this).html('<input type="number" class="inputPrecio" value="'+$(this).text().replace('$', '').replace(searchRegExp, '')+'">');
+			$(this).html('<input type="number" style="width: 100px;" class="inputPrecio" value="'+$(this).text().replace('$', '').replace(searchRegExp, '')+'">');
 			$(this).children('input.inputPrecio').focus();
 		}
 	});

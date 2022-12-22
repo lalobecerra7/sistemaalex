@@ -38,7 +38,7 @@ class precios{
 			if($busqueda == ''){
 				$busqueda = 'WHERE ';
 			}else{
-				$busqueda = 'AND ';
+				$busqueda .= 'AND ';
 			}
 
 			for ($i=0; $i < count($separa); $i++) { 

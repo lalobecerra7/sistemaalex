@@ -279,7 +279,7 @@ class facturacion {
 												$error = true;
 												break;
 											}else{
-												$query5 = "UPDATE detalles_ventas SET Clave_ProdServ_CFDI = '".$row2[$i]['Clave_ProdServ_CFDI']."', Indetificacion_CFDI = '".$row2[$i]['Codigo']."', Clave_Unidad_CFDI = '$claveUnidad', Unidad_CFDI = '$presentacion', Objeto_Impuesto_CFDI = '".$row2[$i]['Objeto_Impuesto_CFDI']."' WHERE ID_Detalle_Venta = '".$row2[$i]['ID_Detalle_Venta']."'";
+												$query5 = "UPDATE detalles_ventas SET Clave_ProdServ_CFDI = '".$row2[$i]['Clave_ProdServ_CFDI']."', Identificacion_CFDI = '".$row2[$i]['Codigo']."', Clave_Unidad_CFDI = '$claveUnidad', Unidad_CFDI = '$presentacion', Objeto_Impuesto_CFDI = '".$row2[$i]['Objeto_Impuesto_CFDI']."' WHERE ID_Detalle_Venta = '".$row2[$i]['ID_Detalle_Venta']."'";
 												$error3 = $omodelo->_insertar($query5);
 
 												if($error3 == 'si'){

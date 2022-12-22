@@ -12,7 +12,12 @@
                             <i class="fas fa-user"></i> Seleccionar cliente
                         </button>
                     </div>
-                    <div class="offset-md-3 col-md-3 text-end d-grid mb-2">
+                    <div class="col-md-1 BotonLimpiarCliente oculto">
+                        <button type="button" class="btn btn-outline-danger btn-sm" id="LimpiarClienteSeleccionado" attrid="">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="offset-md-3 col-md-3 text-end d-grid mb-2 BotonSeleccionarPedido">
                         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ModalVerPedidosVenta" id="CargaPedidosModalVentas" folio="" attrid="">
                             <i class="fas fa-arrow-down"></i> Seleccionar pedido
                         </button>

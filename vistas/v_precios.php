@@ -60,8 +60,8 @@
 								<th>Producto</th>
 								<th>Presentación</th>
 								<th>Nombre</th>
-								<th>Precio</th>
-								<th>Mayoreo</th>
+								<th style="width: 15%;">Precio</th>
+								<th style="width: 15%;">Mayoreo</th>
 							</tr>
 						</thead>
 						<tbody>

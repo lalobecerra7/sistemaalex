@@ -16,6 +16,17 @@ jQuery(document).ready(function($) {
 		$("#ModalVerClientesVenta").modal("hide");
 		$("#CargarClientesModalVentas").html("Cliente: "+nombre+"<br>RFC: "+RFC);
 		$("#CargarClientesModalVentas").attr("attrid", idcliente);
+		$(".BotonLimpiarCliente").removeClass("oculto");
+		$(".BotonSeleccionarPedido").addClass("offset-md-2");
+		$(".BotonSeleccionarPedido").removeClass("offset-md-3");
+	});
+
+	$(document).on('click', '#LimpiarClienteSeleccionado', function() {
+		$(".BotonLimpiarCliente").addClass("oculto");
+		$(".BotonSeleccionarPedido").removeClass("offset-md-2");
+		$(".BotonSeleccionarPedido").addClass("offset-md-3");
+		$("#CargarClientesModalVentas").html('<i class="fas fa-user"></i> Seleccionar cliente');
+		$("#CargarClientesModalVentas").attr("attrid", "");
 	});
 
 	$(document).on('click', '#CargarProductosModalVentas', function() {
@@ -266,13 +277,14 @@ jQuery(document).ready(function($) {
 					var sumadescuento = 0;
 					var total = $(this).attr("total");
 					var fechaEntrega = $("#FechaEntregaPedido").val();
+					const searchRegExp = new RegExp(',', 'g');
 					$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 						var idProducto = $(this).attr("attrid");
 						var Presentacion = $(this).attr("idpresentacion");
 						var cantidad = $(this).children("td:eq(3)").find(".campoCantidadProducto").val();
 						var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
 						var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProducto").val();
-						var totalproducto = $(this).children("td:eq(6)").text().replace("$","").replace(",","")
+						var totalproducto = $(this).children("td:eq(6)").text().replace("$","").replace(searchRegExp, '');
 						sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
 						var impuestos = "";
 						$(this).children("td:eq(4)").find(".impuesto").each(function(index, el) {
@@ -346,13 +358,14 @@ jQuery(document).ready(function($) {
 								var sumadescuento = 0;
 								var total = $(this).attr("total");
 								var fechaEntrega = $("#FechaEntregaPedido").val();
+								const searchRegExp = new RegExp(',', 'g');
 								$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 									var idProducto = $(this).attr("attrid");
 									var Presentacion = $(this).attr("idpresentacion");
 									var cantidad = $(this).children("td:eq(3)").find(".campoCantidadProducto").val();
 									var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
 									var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProducto").val();
-									var totalproducto = $(this).children("td:eq(6)").text().replace("$","").replace(",","")
+									var totalproducto = $(this).children("td:eq(6)").text().replace("$","").replace(searchRegExp, '');
 									sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
 									var impuestos = "";
 									$(this).children("td:eq(4)").find(".impuesto").each(function(index, el) {
@@ -429,13 +442,14 @@ jQuery(document).ready(function($) {
 						var sumadescuento = 0;
 						var total = $(this).attr("total");
 						var fechaEntrega = $("#FechaEntregaPedido").val();
+						const searchRegExp = new RegExp(',', 'g');
 						$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 							var idProducto = $(this).attr("attrid");
 							var Presentacion = $(this).attr("idpresentacion");
 							var cantidad = $(this).children("td:eq(3)").find(".campoCantidadProducto").val();
 							var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
 							var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProducto").val();
-							var totalproducto = $(this).children("td:eq(6)").text().replace("$","").replace(",","")
+							var totalproducto = $(this).children("td:eq(6)").text().replace("$","").replace(searchRegExp, '');
 							sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
 							var impuestos = "";
 							$(this).children("td:eq(4)").find(".impuesto").each(function(index, el) {
@@ -518,13 +532,14 @@ jQuery(document).ready(function($) {
 			var total = $("#RealizarVenta").attr("total");
 			var tipopago = $("#TipoPagoVenta").val();
 			var pago = $("#ImportePagadoVenta").val();
+			const searchRegExp = new RegExp(',', 'g');
 			$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 				var idProducto = $(this).attr("attrid");
 				var Presentacion = $(this).attr("idpresentacion");
 				var cantidad = $(this).children("td:eq(3)").find(".campoCantidadProducto").val();
 				var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
 				var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProducto").val();
-				var totalproducto = $(this).children("td:eq(6)").text().replace("$","").replace(",","")
+				var totalproducto = $(this).children("td:eq(6)").text().replace("$","").replace(searchRegExp, '');
 				sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
 				var impuestos = "";
 				$(this).children("td:eq(4)").find(".impuesto").each(function(index, el) {
@@ -662,7 +677,8 @@ jQuery(document).ready(function($) {
 	function CalcularTotal(){
 		var total = 0;
 		$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
-			total += parseFloat($(this).children("td:eq(6)").text().replace("$","").replace(",",""));
+			const searchRegExp = new RegExp(',', 'g');
+			total += parseFloat($(this).children("td:eq(6)").text().replace("$","").replace(searchRegExp, ''));
 		});
 		$("#TotalVentaFinal").text(total);
 		$("#GuardarPedido").attr("total", total);
