@@ -193,7 +193,6 @@ jQuery(document).ready(function($) {
 					console.log("retenido exento");
 					totalImpuestos += parseFloat(0);
 				}else{
-					console.log("NINGUNO");
 					totalImpuestos += parseFloat(total) * parseFloat(porcentaje);
 				}
 			}
@@ -283,7 +282,7 @@ jQuery(document).ready(function($) {
 						var Presentacion = $(this).attr("idpresentacion");
 						var cantidad = $(this).children("td:eq(3)").find(".campoCantidadProducto").val();
 						var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
-						var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProducto").val();
+						var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val();
 						var totalproducto = $(this).children("td:eq(6)").text().replace("$","").replace(searchRegExp, '');
 						sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
 						var impuestos = "";
@@ -364,7 +363,7 @@ jQuery(document).ready(function($) {
 									var Presentacion = $(this).attr("idpresentacion");
 									var cantidad = $(this).children("td:eq(3)").find(".campoCantidadProducto").val();
 									var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
-									var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProducto").val();
+									var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val();
 									var totalproducto = $(this).children("td:eq(6)").text().replace("$","").replace(searchRegExp, '');
 									sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
 									var impuestos = "";
@@ -448,7 +447,7 @@ jQuery(document).ready(function($) {
 							var Presentacion = $(this).attr("idpresentacion");
 							var cantidad = $(this).children("td:eq(3)").find(".campoCantidadProducto").val();
 							var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
-							var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProducto").val();
+							var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val();
 							var totalproducto = $(this).children("td:eq(6)").text().replace("$","").replace(searchRegExp, '');
 							sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
 							var impuestos = "";
@@ -538,7 +537,7 @@ jQuery(document).ready(function($) {
 				var Presentacion = $(this).attr("idpresentacion");
 				var cantidad = $(this).children("td:eq(3)").find(".campoCantidadProducto").val();
 				var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
-				var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProducto").val();
+				var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val();
 				var totalproducto = $(this).children("td:eq(6)").text().replace("$","").replace(searchRegExp, '');
 				sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
 				var impuestos = "";
