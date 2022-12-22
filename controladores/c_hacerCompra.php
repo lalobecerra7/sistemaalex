@@ -235,7 +235,8 @@ class hacerCompra {
 			echo json_encode($arreglo);
 		}else if($tipo == "ConsultarProductoCodigo"){
 			$Codigo =  $omodelo->link->real_escape_string($codigo);
-					  
+			$arreglo = null;	
+
 			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, IFNULL(presentaciones.ID_Presentacion, CONCAT('NA',Codigo)) AS IDPresentacion, inventario.FK_Presentacion AS FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Abreviatura AS Abreviatura, productos.Costo AS Costo FROM productos INNER JOIN inventario ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion WHERE Codigo = '$Codigo' LIMIT 1 ";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
@@ -244,7 +245,7 @@ class hacerCompra {
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
 				if($numerofilas > 0){
-						$arreglo = $row[0];
+					$arreglo = $row[0];
 				}
 			}
 

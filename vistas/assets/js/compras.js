@@ -85,7 +85,7 @@ $(document).on('click', '#ImprimirTicketCompra', function() {
 	var sucursal = $(this).attr("idSucursal");
 	var altura=50;
 	var anchura=310;
-	console.log(idCompra);
+	
 	var y= parseInt((window.screen.height/2)-(altura/2));
 	var x= parseInt((window.screen.width/2)-(anchura/2));
 	
@@ -199,7 +199,7 @@ $(document).on('click', '.PagoCom', function() {
 		data: data,
 	})
 	.done(function(res) {
-		console.log(res);
+		//console.log(res);
 		var datos = JSON.parse(res);
 		var restante = (parseFloat(datos.Total)-parseFloat(datos.TotalPagos));
 		$('#Proveedor').text(datos.Proveedor);
@@ -216,7 +216,7 @@ $(document).on('click', '.PagoCom', function() {
 
 $(document).on('click', '#GuardarPago', function() {
 	var id = $(this).attr("attrid");
-	console.log(id);
+	
 	$('#FormPagoCompra').validate({
         rules: {
             ImportePagoCompra: {
@@ -241,7 +241,6 @@ $(document).on('click', '#GuardarPago', function() {
             }
         },
         submitHandler: function(form) { 
-			console.log('pagooooo');
             if($('#ImportePagoCompra').val() == '' || $('#ImportePagoCompra').val() == 0){
                 Swal.fire({
                     icon: 'error',
@@ -305,7 +304,7 @@ function TablaReporteCompras(){
 			"Acciones"
 		],
 		"sort": [
-			2,
+			0,
 			"desc"
 		],
 		"url": "index.php", 
