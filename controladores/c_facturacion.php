@@ -38,8 +38,9 @@ class facturacion {
 								echo "Error 4: ".mysqli_error($omodelo->link);
 							}else{
 								if($numerofilas2 > 0){
+									$impuestos = null;
 									for ($i=0; $i < $numerofilas2; $i++) { 
-										$impuestos = null;
+										//$impuestos = null;
 										$query3 = "SELECT ID_Impuesto, Tipo_Impuesto_CFDI, Impuesto_CFDI, Clave_CFDI, Tipo_Factor_CFDI, Tasa_Cuota_CFDI FROM detalles_impuestos_ventas WHERE FK_Detalle_Venta = '".$row2[$i]['ID_Detalle_Venta']."'";
 										$row3 = $omodelo->_consultar($query3);
 										$numerofilas3 = $omodelo->numerofilas;

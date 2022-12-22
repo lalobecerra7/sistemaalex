@@ -69,7 +69,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
                 <button type="submit" class="btn btn-primary" tipo="insertar" attrid="" id="GuardarProveedor">Guardar</button>
             </div>
         </div>
@@ -111,7 +111,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
             </div>
         </div>
     </div>
@@ -170,7 +170,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
             </div>
         </div>
     </div>
@@ -239,7 +239,7 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="submit" class="btn btn-primary" id="GuardarPago" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
-					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+			<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
 	      </div>
   		</form>
     </div>
