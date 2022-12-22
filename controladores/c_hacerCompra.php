@@ -113,7 +113,7 @@ class hacerCompra {
 				}
 			}
 					  
-			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, IFNULL(presentaciones.ID_Presentacion, CONCAT('NA',Codigo)) AS IDPresentacion, presentaciones.Nombre AS NombrePresentacion, inventario.FK_Presentacion AS FK_Presentacion, presentaciones.Abreviatura AS Abreviatura, productos.Costo AS Costo, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion $busqueda GROUP BY IDPresentacion ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, ID_Presentacion, presentaciones.Nombre AS NombrePresentacion, inventario.FK_Presentacion AS FK_Presentacion, presentaciones.Abreviatura AS Abreviatura, productos.Costo AS Costo, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto LEFT JOIN presentaciones ON presentaciones.FK_Producto = ID_Producto $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 

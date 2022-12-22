@@ -17,7 +17,7 @@
 	}else{
 		if($numerofilas > 0){
 			$productos = ''; $subtotal = 0; $totalImTras = 0; $totalImRete = 0; $imAgrupadosTras = []; $imAgrupadosRete = []; $error = false;
-			$query1 = "SELECT ID_Detalle_Venta, Indetificacion_CFDI, Clave_ProdServ_CFDI, Clave_Unidad_CFDI, Unidad_CFDI, Objeto_Impuesto_CFDI, Descripcion, Precio, Cantidad, Descuento, Total FROM detalles_ventas WHERE FK_Venta = '$id'";
+			$query1 = "SELECT ID_Detalle_Venta, Identificacion_CFDI, Clave_ProdServ_CFDI, Clave_Unidad_CFDI, Unidad_CFDI, Objeto_Impuesto_CFDI, Descripcion, Precio, Cantidad, Descuento, Total FROM detalles_ventas WHERE FK_Venta = '$id'";
 			$row1 = $omodelo->_consultar($query1);
 			$numerofilas1 = $omodelo->numerofilas;
 
@@ -57,7 +57,7 @@
 
 						$productos .= '<tr>
 							<td>'.$row1[$i]['Clave_ProdServ_CFDI'].'</td>
-							<td>'.$row1[$i]['Indetificacion_CFDI'].'</td>
+							<td>'.$row1[$i]['Identificacion_CFDI'].'</td>
 							<td>'.$row1[$i]['Descripcion'].'</td>
 							<td>'.$row1[$i]['Clave_Unidad_CFDI'].'</td>
 							<td>'.$row1[$i]['Unidad_CFDI'].'</td>

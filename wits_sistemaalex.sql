@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-12-2022 a las 22:42:22
+-- Tiempo de generación: 22-12-2022 a las 03:07:19
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.3
 
@@ -55153,7 +55153,7 @@ INSERT INTO `claves_unidades_cfdi` (`ID_Clave`, `Clave`, `Nombre`, `Simbolo`) VA
 --
 
 CREATE TABLE `clientes` (
-  `ID_Cliente` int(11) NOT NULL COMMENT 'Clave Ãºnica de registro de cada cliente',
+  `ID_Cliente` int(11) NOT NULL,
   `Nombre` varchar(150) CHARACTER SET latin1 NOT NULL COMMENT 'Nombre completo del cliente',
   `Calle` varchar(300) COLLATE latin1_spanish_ci NOT NULL,
   `No_Exterior` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
@@ -55163,13 +55163,13 @@ CREATE TABLE `clientes` (
   `Codigo_Postal` varchar(300) COLLATE latin1_spanish_ci NOT NULL,
   `Estado` varchar(300) COLLATE latin1_spanish_ci NOT NULL,
   `Pais` varchar(300) COLLATE latin1_spanish_ci NOT NULL,
-  `Telefono` varchar(200) CHARACTER SET latin1 NOT NULL COMMENT 'TelÃ©fono de localizaciÃ³n del cliente',
+  `Telefono` varchar(200) CHARACTER SET latin1 NOT NULL,
   `Celular` varchar(200) CHARACTER SET latin1 NOT NULL,
   `Descuento` double NOT NULL COMMENT 'Descuento que le aplica a cada cliente en sus compras',
-  `Correo` varchar(100) CHARACTER SET latin1 NOT NULL COMMENT 'Correo electrÃ³nico de localizaciÃ³n del cliente',
-  `Fecha_Nacimiento` date NOT NULL COMMENT 'Fecha de nacimiento del cliente',
-  `Sexo` varchar(10) CHARACTER SET latin1 NOT NULL COMMENT 'Sexo del cliente',
-  `Fecha_Registro` datetime NOT NULL COMMENT 'Fecha de registro del cliente',
+  `Correo` varchar(100) CHARACTER SET latin1 NOT NULL,
+  `Fecha_Nacimiento` date NOT NULL,
+  `Sexo` varchar(10) CHARACTER SET latin1 NOT NULL,
+  `Fecha_Registro` datetime NOT NULL,
   `Foto` varchar(300) CHARACTER SET latin1 NOT NULL,
   `RFC` varchar(50) CHARACTER SET latin1 NOT NULL,
   `Facturar` tinyint(1) NOT NULL COMMENT '1 Si, 0 No',
@@ -55186,10 +55186,9 @@ CREATE TABLE `clientes` (
 --
 
 INSERT INTO `clientes` (`ID_Cliente`, `Nombre`, `Calle`, `No_Exterior`, `No_Interior`, `Colonia`, `Ciudad`, `Codigo_Postal`, `Estado`, `Pais`, `Telefono`, `Celular`, `Descuento`, `Correo`, `Fecha_Nacimiento`, `Sexo`, `Fecha_Registro`, `Foto`, `RFC`, `Facturar`, `No_Cuenta`, `Banco`, `Titular`, `FK_Sucursal`, `Razon_CFDI`, `Regimen_CFDI`) VALUES
-(1, 'Mostrador', '', '', '', '', '', '', '', '', '', '', 0, '', '0000-00-00', '', '0000-00-00 00:00:00', '', '', 0, '', '', '', 0, '', ''),
+(1, 'PUBLICO EN GENERAL', '', '', '', '', '', '01000', '', '', '', '', 0, '', '0000-00-00', '', '0000-00-00 00:00:00', '', 'XAXX010101000', 0, '', '', '', 0, 'PUBLICO EN GENERAL', '616'),
 (2, 'Arturo Iturbide', '', '', '', '', '', '', '', '', '015556278345', '5532375991', 10, 'iturbide.jastrow@me.com', '0000-00-00', '', '2019-06-30 14:02:11', '', 'YBI140401LJ3', 0, '', '', '', 0, '', ''),
 (3, 'Amelia Mena Vazquez', '', '', '', '', '', '', '', '', '01 55 55 35 02 23', '', 0, 'holaropainfantil@yahoo.com.mx', '0000-00-00', '', '2019-06-30 14:01:16', '', 'MEVA2705309G5', 0, '', '', '', 0, '', ''),
-(4, 'Ana Laura Campos', '', '', '', '', '', '', '', '', '01 49 28 99 16 75', '', 0, 'noviaslaurys@hotmail.com', '0000-00-00', '', '2016-07-13 11:06:29', '', 'CME120705S74', 0, '', '', '', 0, '', ''),
 (5, 'Angelica Gutierrez', '', '', '', '', '', '', '', '', '01 34 14 14 10 83', ' 14 14 03 88', 0, 'lika_2891@hotmail.com', '0000-00-00', '', '2019-06-30 14:01:47', '', 'GUMA530910QR1', 0, '', '', '', 0, '', ''),
 (8, 'Coral Navarro Mascarel', '', '', '', '', '', '', '', '', '01 46 16 12 86 10', ' 01 46 16 14 95 58', 0, 'macoral@hotmaill.com', '0000-00-00', '', '2019-06-30 14:03:05', '', 'NAMC750717JS4', 0, '', '', '', 0, '', ''),
 (9, 'Estefany', '', '', '', '', '', '', '', '', '01 34 87 84 46 66', '', 0, 'compras@bolsadelosaltos.com', '0000-00-00', '', '2016-07-13 11:26:59', '', 'BAL020930EL9', 0, '', '', '', 0, '', ''),
@@ -55197,7 +55196,8 @@ INSERT INTO `clientes` (`ID_Cliente`, `Nombre`, `Calle`, `No_Exterior`, `No_Inte
 (16, 'Luz Rebeca Gonzalez Gonzalez', '', '', '', '', '', '', '', '', '3787090598', '3787090598', 0, 'deazaharesexclusivos@hotmail.com', '0000-00-00', '', '2016-07-13 11:47:40', '', 'GOGL691210FS8', 0, '', '', '', 0, '', ''),
 (17, 'Ma. De Lourdes Portilla Calderon', '', '', '', '', '', '', '', '', '01 89 99 22 06 65, 8999221322', '', 0, 'latiendanuevareynosa@hotmail.com', '0000-00-00', '', '2019-06-30 14:07:29', '', 'POCL351007JV7', 0, '', '', '', 0, '', ''),
 (24, 'Sr. Manuel Yanez 2', '', '', '', '', '', '', '', '', '01 63 94 72 03 98, 6394745148', '', 0, 'novia2003@gmail.com', '0000-00-00', '', '2019-06-30 14:08:17', '', 'CMN84080213', 0, '', '', '', 0, '', ''),
-(26, 'Manuel Emilio Torres Sanchez', '', '', '', '', '', '', '', '', '34 87 84 64 64', '', 0, 'replamex@hotmail.com', '0000-00-00', '', '2016-07-13 12:07:44', '', 'TOSM860124SH5', 0, '', '', '', 0, '', '');
+(26, 'Manuel Emilio Torres Sanchez', '', '', '', '', '', '', '', '', '34 87 84 64 64', '', 0, 'replamex@hotmail.com', '0000-00-00', '', '2016-07-13 12:07:44', '', 'TOSM860124SH5', 0, '', '', '', 0, '', ''),
+(27, 'Ejemplo', 'dfdf', '', '', '', '', '06470', '', '', '', '', 0, '', '0000-00-00', '', '2022-12-05 20:52:47', '', 'SSF1103037F1', 0, '', '', '', 0, 'SCAFANDRA SOFTWARE FACTORY', '601');
 
 -- --------------------------------------------------------
 
@@ -55228,7 +55228,8 @@ CREATE TABLE `compras` (
 --
 
 INSERT INTO `compras` (`ID_Compra`, `Fecha_Registro`, `FK_Usuario`, `FK_Proveedor`, `Total`, `Estatus`, `Clase`, `Dias_Pagar`, `Tipo_Compra`, `Fecha_Credito`, `FK_Caja`, `FK_Sucursal`, `Descuento`, `Impuestos`, `Anticipo`) VALUES
-(4, '2022-11-29 14:12:47', 2, 2, 25, '0', 0, 0, 'Credito', '2022-12-03 00:00:00', 0, 0, 0, '', 0);
+(4, '2022-11-29 14:12:47', 2, 2, 25, '0', 0, 0, 'Credito', '2022-12-03 00:00:00', 0, 0, 0, '', 0),
+(7, '2022-12-21 19:21:19', 2, 2, 50, '1', 0, 0, 'Contado', '0000-00-00 00:00:00', 0, 1, 0, '', 50);
 
 -- --------------------------------------------------------
 
@@ -55301,31 +55302,6 @@ CREATE TABLE `detalles_clientes` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `detalles_impuestos_pedidos`
---
-
-CREATE TABLE `detalles_impuestos_pedidos` (
-  `ID_Impuesto` int(11) NOT NULL,
-  `FK_Detalle_Pedido` int(11) NOT NULL,
-  `Tipo_Impuesto_CFDI` varchar(60) NOT NULL,
-  `Impuesto_CFDI` varchar(60) NOT NULL,
-  `Clave_CFDI` varchar(30) NOT NULL,
-  `Tipo_Factor_CFDI` varchar(60) NOT NULL,
-  `Tasa_Cuota_CFDI` varchar(60) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `detalles_impuestos_pedidos`
---
-
-INSERT INTO `detalles_impuestos_pedidos` (`ID_Impuesto`, `FK_Detalle_Pedido`, `Tipo_Impuesto_CFDI`, `Impuesto_CFDI`, `Clave_CFDI`, `Tipo_Factor_CFDI`, `Tasa_Cuota_CFDI`) VALUES
-(1, 1, 'Trasladado', 'IVA', '002', 'Cuota', '16'),
-(2, 1, 'Retenido', 'ISR', '001', 'Cuota', '5'),
-(3, 1, 'Retenido', 'IE', '003', 'Exento', '10');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `detalles_impuestos_productos`
 --
 
@@ -55340,17 +55316,7 @@ CREATE TABLE `detalles_impuestos_productos` (
 --
 
 INSERT INTO `detalles_impuestos_productos` (`ID_Detalle_Im_Producto`, `FK_Producto`, `FK_Impuesto`) VALUES
-(1, 10, 1),
-(2, 11, 1),
-(3, 11, 2),
-(4, 13, 1),
-(5, 13, 2),
-(6, 14, 0),
-(7, 14, 0),
-(28, 27, 1),
-(29, 27, 2),
-(30, 27, 3),
-(31, 26, 1);
+(37, 35, 1);
 
 -- --------------------------------------------------------
 
@@ -55373,80 +55339,7 @@ CREATE TABLE `detalles_impuestos_ventas` (
 --
 
 INSERT INTO `detalles_impuestos_ventas` (`ID_Impuesto`, `FK_Detalle_Venta`, `Tipo_Impuesto_CFDI`, `Impuesto_CFDI`, `Clave_CFDI`, `Tipo_Factor_CFDI`, `Tasa_Cuota_CFDI`) VALUES
-(19, 12, 'Trasladado', 'IVA', '002', 'Cuota', '16'),
-(20, 12, 'Retenido', 'ISR', '001', 'Cuota', '5'),
-(21, 12, 'Retenido', 'IE', '003', 'Exento', '10'),
-(22, 13, 'Trasladado', 'IVA', '002', 'Cuota', '16'),
-(23, 13, 'Retenido', 'ISR', '001', 'Cuota', '5'),
-(24, 13, 'Retenido', 'IE', '003', 'Exento', '10'),
-(25, 14, 'Trasladado', 'IVA', '002', 'Cuota', '16'),
-(26, 14, 'Retenido', 'ISR', '001', 'Cuota', '5'),
-(27, 14, 'Retenido', 'IE', '003', 'Exento', '10'),
-(28, 15, 'Trasladado', 'IVA', '002', 'Cuota', '16'),
-(29, 15, 'Retenido', 'ISR', '001', 'Cuota', '5'),
-(30, 15, 'Retenido', 'IE', '003', 'Exento', '10'),
-(31, 16, 'Trasladado', 'IVA', '002', 'Cuota', '16'),
-(32, 16, 'Retenido', 'ISR', '001', 'Cuota', '5'),
-(33, 16, 'Retenido', 'IE', '003', 'Exento', '10'),
-(34, 17, 'Trasladado', 'IVA', '002', 'Cuota', '16'),
-(35, 17, 'Retenido', 'ISR', '001', 'Cuota', '5'),
-(36, 17, 'Retenido', 'IE', '003', 'Exento', '10'),
-(37, 19, 'Trasladado', 'IVA', '002', 'Cuota', '16'),
-(38, 19, 'Retenido', 'ISR', '001', 'Cuota', '5'),
-(39, 19, 'Retenido', 'IE', '003', 'Exento', '10'),
-(40, 20, 'Trasladado', 'IVA', '002', 'Cuota', '16'),
-(41, 23, 'Trasladado', 'IVA', '002', 'Cuota', '16'),
-(42, 24, 'Trasladado', 'IVA', '002', 'Cuota', '16'),
-(43, 24, 'Retenido', 'ISR', '001', 'Cuota', '5'),
-(44, 24, 'Retenido', 'IE', '003', 'Exento', '10'),
-(45, 25, 'Trasladado', 'IVA', '002', 'Cuota', '16'),
-(46, 26, 'Trasladado', 'IVA', '002', 'Cuota', '16'),
-(47, 26, 'Retenido', 'ISR', '001', 'Cuota', '5'),
-(48, 26, 'Retenido', 'IE', '003', 'Exento', '10'),
-(49, 27, 'Trasladado', 'IVA', '002', 'Cuota', '16');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `detalles_pedidos`
---
-
-CREATE TABLE `detalles_pedidos` (
-  `ID_Detalle_Pedido` int(11) NOT NULL,
-  `FK_Pedido` int(11) NOT NULL,
-  `FK_Producto` int(11) NOT NULL,
-  `FK_Presentacion` int(11) NOT NULL,
-  `Descripcion` tinytext NOT NULL,
-  `Precio` double NOT NULL,
-  `Cantidad` double NOT NULL,
-  `Descuento` double NOT NULL,
-  `Total` double NOT NULL,
-  `Devuelto` tinyint(1) NOT NULL,
-  `Fecha_Devolucion` datetime NOT NULL,
-  `Regreso_Inventario` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `detalles_pedidos`
---
-
-INSERT INTO `detalles_pedidos` (`ID_Detalle_Pedido`, `FK_Pedido`, `FK_Producto`, `FK_Presentacion`, `Descripcion`, `Precio`, `Cantidad`, `Descuento`, `Total`, `Devuelto`, `Fecha_Devolucion`, `Regreso_Inventario`) VALUES
-(1, 1, 27, 0, 'Prueba 2', 60, 1, 0, 66.6, 0, '0000-00-00 00:00:00', 0);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `detalles_productos`
---
-
-CREATE TABLE `detalles_productos` (
-  `ID_Detalle_Producto` int(11) NOT NULL,
-  `FK_Producto` int(11) NOT NULL,
-  `FK_Sucursal` int(11) NOT NULL,
-  `Costo` double NOT NULL,
-  `Minimo` double NOT NULL,
-  `Maximo` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+(2, 6, 'Trasladado', 'IVA', '002', 'Tasa', '16');
 
 -- --------------------------------------------------------
 
@@ -55468,6 +55361,7 @@ CREATE TABLE `detalles_ventas` (
   `Fecha_Devolucion` datetime NOT NULL,
   `Regreso_Inventario` tinyint(1) NOT NULL,
   `Clave_ProdServ_CFDI` tinytext NOT NULL,
+  `Identificacion_CFDI` varchar(100) NOT NULL,
   `Clave_Unidad_CFDI` varchar(60) NOT NULL,
   `Unidad_CFDI` varchar(60) NOT NULL,
   `Objeto_Impuesto_CFDI` varchar(60) NOT NULL
@@ -55477,24 +55371,9 @@ CREATE TABLE `detalles_ventas` (
 -- Volcado de datos para la tabla `detalles_ventas`
 --
 
-INSERT INTO `detalles_ventas` (`ID_Detalle_Venta`, `FK_Venta`, `FK_Producto`, `FK_Presentacion`, `Descripcion`, `Precio`, `Cantidad`, `Descuento`, `Total`, `Devuelto`, `Fecha_Devolucion`, `Regreso_Inventario`, `Clave_ProdServ_CFDI`, `Clave_Unidad_CFDI`, `Unidad_CFDI`, `Objeto_Impuesto_CFDI`) VALUES
-(12, 10, 27, 0, 'Prueba 2', 60, 1, 0, 66.6, 0, '0000-00-00 00:00:00', 1, '', '', '', ''),
-(13, 10, 27, 22, 'Prueba 2', 23, 1, 0, 25.53, 0, '0000-00-00 00:00:00', 1, '', '', '', ''),
-(14, 10, 27, 21, 'Prueba 2', 15, 1, 0, 16.65, 0, '0000-00-00 00:00:00', 1, '', '', '', ''),
-(15, 11, 27, 0, 'Prueba 2', 60, 1, 0, 66.6, 0, '0000-00-00 00:00:00', 0, '', '', '', ''),
-(16, 11, 27, 22, 'Prueba 2', 23, 1, 0, 25.53, 0, '0000-00-00 00:00:00', 0, '', '', '', ''),
-(17, 11, 27, 21, 'Prueba 2', 15, 1, 0, 16.65, 0, '0000-00-00 00:00:00', 0, '', '', '', ''),
-(18, 11, 26, 0, 'No lo se', 1, 100, 0, 100, 0, '0000-00-00 00:00:00', 0, '', '', '', ''),
-(19, 12, 27, 0, 'Prueba 2', 60, 2, 0, 133.2, 0, '0000-00-00 00:00:00', 0, '', '', '', ''),
-(20, 12, 26, 0, 'No lo se', 1, 1, 0, 1.16, 0, '0000-00-00 00:00:00', 0, '', '', '', ''),
-(21, 12, 28, 0, 'Prueba 4', 1, 1, 0, 1, 0, '0000-00-00 00:00:00', 0, '', '', '', ''),
-(22, 13, 28, 0, 'Prueba 4', 1, 11, 50, 5.5, 0, '0000-00-00 00:00:00', 0, '', '', '', ''),
-(23, 13, 27, 22, 'Prueba 2', 23, 10, 50, 133.4, 0, '0000-00-00 00:00:00', 0, '', '', '', ''),
-(24, 13, 27, 21, 'Prueba 2', 15, 1, 0, 16.65, 0, '0000-00-00 00:00:00', 0, '', '', '', ''),
-(25, 13, 26, 0, 'No lo se', 1, 1, 0, 1.16, 0, '0000-00-00 00:00:00', 0, '', '', '', ''),
-(26, 14, 27, 0, 'Prueba 2', 60, 1, 0, 66.6, 0, '0000-00-00 00:00:00', 1, '', '', '', ''),
-(27, 14, 26, 0, 'No lo se', 1, 1, 0, 1.16, 0, '0000-00-00 00:00:00', 1, '', '', '', ''),
-(28, 14, 28, 0, 'Prueba 4', 1, 1, 0, 1, 0, '0000-00-00 00:00:00', 1, '', '', '', '');
+INSERT INTO `detalles_ventas` (`ID_Detalle_Venta`, `FK_Venta`, `FK_Producto`, `FK_Presentacion`, `Descripcion`, `Precio`, `Cantidad`, `Descuento`, `Total`, `Devuelto`, `Fecha_Devolucion`, `Regreso_Inventario`, `Clave_ProdServ_CFDI`, `Identificacion_CFDI`, `Clave_Unidad_CFDI`, `Unidad_CFDI`, `Objeto_Impuesto_CFDI`) VALUES
+(4, 3, 36, 0, 'Ejemplo', 50, 1, 5, 45, 0, '0000-00-00 00:00:00', 0, '01010101', 'ejemplo', '11', 'Equipos', '01'),
+(6, 5, 35, 20, 'Caja de fresas', 50, 1, 2.5, 55.1, 0, '0000-00-00 00:00:00', 0, '70141902', 'Prueba', '05', 'ejemplo', '02');
 
 -- --------------------------------------------------------
 
@@ -55517,7 +55396,9 @@ CREATE TABLE `detalle_compras` (
 --
 
 INSERT INTO `detalle_compras` (`ID_Detalle_Compra`, `FK_Compra`, `FK_Producto`, `FK_Presentacion`, `Costo`, `Cantidad`, `Subtotal`) VALUES
-(1, 5, 27, 0, 25, 1, 25);
+(1, 5, 26, 1, 4, 20, 80),
+(2, 6, 26, 1, 20, 1, 20),
+(3, 7, 26, 1, 50, 1, 50);
 
 -- --------------------------------------------------------
 
@@ -55609,15 +55490,6 @@ CREATE TABLE `importes` (
   `Estatus` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `importes`
---
-
-INSERT INTO `importes` (`ID_Importe`, `FK_Venta`, `FK_Producto`, `Cantidad`, `Importe`, `Total`, `Estatus`) VALUES
-(1, 14, 27, 1, 50, 50, 'Pagado'),
-(2, 14, 26, 1, 10, 10, 'Pagado'),
-(3, 14, 28, 1, 5, 5, 'Pagado');
-
 -- --------------------------------------------------------
 
 --
@@ -55638,9 +55510,7 @@ CREATE TABLE `impuestos` (
 --
 
 INSERT INTO `impuestos` (`ID_Impuesto`, `Nombre`, `Porcentaje`, `Clave_CFDI`, `Tipo_Factor`, `Clase`) VALUES
-(1, 'IVA', 16, '002', 'Cuota', 'Trasladado'),
-(2, 'ISR', 5, '001', 'Cuota', 'Retenido'),
-(3, 'IE', 10, '003', 'Exento', 'Retenido');
+(1, 'IVA', 16, '002', 'Tasa', 'Trasladado');
 
 -- --------------------------------------------------------
 
@@ -55661,12 +55531,9 @@ CREATE TABLE `inventario` (
 --
 
 INSERT INTO `inventario` (`ID_Inventario`, `FK_Producto`, `FK_Presentacion`, `Cantidad`, `FK_Sucursal`) VALUES
-(5, 27, 21, 5, 1),
-(6, 27, 22, 6, 1),
-(7, 27, 0, 12, 1),
-(8, 27, 0, 50, 8),
-(9, 26, 0, 62, 1),
-(10, 28, 0, 52, 1);
+(1, 26, 1, 5, 1),
+(2, 36, 0, 50, 1),
+(3, 35, 20, 100, 1);
 
 -- --------------------------------------------------------
 
@@ -58887,93 +58754,88 @@ INSERT INTO `movimientos` (`ID_Movimiento`, `Descripcion`, `IP`, `Pais`, `Estado
 (3133, 'Admin: LOGIN ADMIN prueba@gmail.com', '', '', '', '', '', '2022-11-30 15:21:07', '', 0),
 (3134, 'Admin: LOGIN ADMIN lalobecerra7@gmail.com', '', '', '', '', '', '2022-11-30 15:21:11', '', 0),
 (3135, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-11-30 15:21:44', '', 0),
-(3136, 'Admin: LOGIN ADMIN prueba@gmail.com', '', '', '', '', '', '2022-12-05 13:53:36', '', 0),
-(3137, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-05 13:53:41', '', 0),
-(3138, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'1\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-06 12:00:27', '', 2),
-(3139, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-06 12:10:24', '', 2),
-(3140, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'1\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-06 12:11:18', '', 2),
-(3141, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-06 12:14:13', '', 2),
-(3142, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'1\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-06 12:14:53', '', 2),
-(3143, 'Admin: UPDATE productos SET Codigo = \'123\', Descripcion = \'No lo se\', FK_Categoria = \'1\', Clase = \'Pieza\', Costo = \'0\', Precio = \'1\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'26\'', '', '', '', '', '', '2022-12-06 12:51:23', '', 2),
-(3144, 'Admin: UPDATE productos SET Codigo = \'123\', Descripcion = \'No lo se\', FK_Categoria = \'1\', Clase = \'Pieza\', Costo = \'0\', Precio = \'1\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'26\'', '', '', '', '', '', '2022-12-06 12:52:19', '', 2),
-(3145, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'1\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-06 12:52:58', '', 2),
-(3146, 'Admin: INSERT INTO inventario SET Cantidad = 10, FK_Producto = \'27\', FK_Sucursal = \'1\', FK_Presentacion = \'8\'', '', '', '', '', '', '2022-12-06 12:56:50', '', 2),
-(3147, 'Admin: INSERT INTO inventario SET Cantidad = 10, FK_Producto = \'26\', FK_Sucursal = \'1\', FK_Presentacion = \'7\'', '', '', '', '', '', '2022-12-06 12:56:58', '', 2),
-(3148, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-06 19:33:48', '', 2),
-(3149, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-06 19:33:59', '', 2);
+(3136, 'Admin: UPDATE impuestos SET Nombre = \'IVA\', Porcentaje = \'16\', Clave_CFDI = \'002\', Tipo_Factor = \'Tasa\', Clase = \'Trasladado\' WHERE ID_Impuesto = \'1\'', '', '', '', '', '', '2022-12-02 17:36:02', '', 2),
+(3137, 'Admin: UPDATE impuestos SET Nombre = \'ISR\', Porcentaje = \'5\', Clave_CFDI = \'001\', Tipo_Factor = \'Tasa\', Clase = \'Trasladado\' WHERE ID_Impuesto = \'2\'', '', '', '', '', '', '2022-12-02 17:36:07', '', 2),
+(3138, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-03 12:14:45', '', 0),
+(3139, 'Admin: INSERT INTO productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\',  FK_Categoria = \'\', Tipo = \'1\', Clase = \'Pieza\', Costo = \'\', Precio = \'50\', Precio_Mayoreo = \'\', FK_Area = \'\', Detalles = \'\', Minimo = \'\', Maximo = \'\', Fecha_Registro = \'2022-12-03 17:25:14\'', '', '', '', '', '', '2022-12-03 17:25:14', '', 2),
+(3140, 'Admin: INSERT INTO productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\',  FK_Categoria = \'\', Tipo = \'1\', Clase = \'Pieza\', Costo = \'\', Precio = \'50\', Precio_Mayoreo = \'\', FK_Area = \'\', Detalles = \'\', Minimo = \'\', Maximo = \'\', Fecha_Registro = \'2022-12-03 17:27:56\'', '', '', '', '', '', '2022-12-03 17:27:56', '', 2),
+(3141, 'Admin: INSERT INTO productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\',  FK_Categoria = \'\', Tipo = \'1\', Clase = \'Pieza\', Costo = \'\', Precio = \'50\', Precio_Mayoreo = \'\', FK_Area = \'\', Detalles = \'\', Minimo = \'\', Maximo = \'\', Fecha_Registro = \'2022-12-03 17:30:20\'', '', '', '', '', '', '2022-12-03 17:30:20', '', 2),
+(3142, 'Admin: INSERT INTO productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\',  FK_Categoria = \'\', Tipo = \'1\', Clase = \'Pieza\', Costo = \'\', Precio = \'50\', Precio_Mayoreo = \'\', FK_Area = \'\', Detalles = \'\', Minimo = \'\', Maximo = \'\', Fecha_Registro = \'2022-12-03 17:32:21\'', '', '', '', '', '', '2022-12-03 17:32:21', '', 2),
+(3143, 'Admin: INSERT INTO productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\',  FK_Categoria = \'\', Tipo = \'1\', Clase = \'Pieza\', Costo = \'\', Precio = \'50\', Precio_Mayoreo = \'\', FK_Area = \'\', Detalles = \'\', Minimo = \'\', Maximo = \'\', Fecha_Registro = \'2022-12-03 17:32:51\'', '', '', '', '', '', '2022-12-03 17:32:51', '', 2),
+(3144, 'Admin: INSERT INTO productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\',  FK_Categoria = \'\', Tipo = \'1\', Clase = \'Pieza\', Costo = \'\', Precio = \'50\', Precio_Mayoreo = \'\', FK_Area = \'\', Detalles = \'\', Minimo = \'\', Maximo = \'\', Fecha_Registro = \'2022-12-03 17:34:42\'', '', '', '', '', '', '2022-12-03 17:34:42', '', 2),
+(3145, 'Admin: INSERT INTO productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\',  FK_Categoria = \'\', Tipo = \'1\', Clase = \'Pieza\', Costo = \'\', Precio = \'50\', Precio_Mayoreo = \'\', FK_Area = \'\', Detalles = \'\', Minimo = \'\', Maximo = \'\', Fecha_Registro = \'2022-12-03 17:35:01\'', '', '', '', '', '', '2022-12-03 17:35:01', '', 2),
+(3146, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-03 19:23:00', '', 2),
+(3147, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-03 19:24:36', '', 2),
+(3148, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-03 19:25:18', '', 2),
+(3149, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-03 19:30:36', '', 2),
+(3150, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-03 19:32:07', '', 2),
+(3151, 'Admin: DELETE FROM precios WHERE ID_Precio = \'\'', '', '', '', '', '', '2022-12-03 22:32:56', '', 2),
+(3152, 'Admin: DELETE FROM precios WHERE ID_Precio = \'\'', '', '', '', '', '', '2022-12-03 22:37:07', '', 2),
+(3153, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-04 11:40:13', '', 0),
+(3154, 'Admin: INSERT INTO inventario SET Cantidad = 5, FK_Producto = \'26\', FK_Sucursal = \'1\', FK_Presentacion = \'1\'', '', '', '', '', '', '2022-12-04 13:44:36', '', 2);
 INSERT INTO `movimientos` (`ID_Movimiento`, `Descripcion`, `IP`, `Pais`, `Estado`, `Navegador`, `SO`, `Fecha`, `Access`, `FK_Usuario`) VALUES
-(3150, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-06 19:34:14', '', 2),
-(3151, 'Admin: INSERT INTO inventario SET Cantidad = 10, FK_Producto = \'27\', FK_Sucursal = \'1\', FK_Presentacion = \'11\'', '', '', '', '', '', '2022-12-06 19:40:59', '', 2),
-(3152, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-06 19:52:53', '', 2),
-(3153, 'Admin: INSERT INTO inventario SET Cantidad = 10, FK_Producto = \'26\', FK_Sucursal = \'1\', FK_Presentacion = \'\'', '', '', '', '', '', '2022-12-06 20:00:30', '', 2),
-(3154, 'Admin: UPDATE inventario SET Cantidad = (Cantidad + 50) WHERE FK_Producto = \'26\' AND FK_Sucursal = \'1\' AND FK_Presentacion = \'\'', '', '', '', '', '', '2022-12-06 20:00:46', '', 2),
-(3155, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-06 20:32:23', '', 2),
-(3156, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-07 11:44:14', '', 2),
-(3157, 'Admin: INSERT INTO inventario SET Cantidad = 50, FK_Producto = \'27\', FK_Sucursal = \'1\', FK_Presentacion = \'17\'', '', '', '', '', '', '2022-12-07 13:47:07', '', 2),
-(3158, 'Admin: INSERT INTO inventario SET Cantidad = 40, FK_Producto = \'27\', FK_Sucursal = \'1\', FK_Presentacion = \'\'', '', '', '', '', '', '2022-12-07 13:47:23', '', 2),
-(3159, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'75\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-07 13:55:32', '', 2),
-(3160, 'Admin: INSERT INTO inventario SET Cantidad = 10, FK_Producto = \'27\', FK_Sucursal = \'1\', FK_Presentacion = \'19\'', '', '', '', '', '', '2022-12-07 13:56:40', '', 2),
-(3161, 'Admin: INSERT INTO inventario SET Cantidad = 5, FK_Producto = \'27\', FK_Sucursal = \'1\', FK_Presentacion = \'\'', '', '', '', '', '', '2022-12-07 13:56:46', '', 2),
-(3162, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'75\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-07 13:57:19', '', 2),
-(3163, 'Admin: INSERT INTO inventario SET Cantidad = 5, FK_Producto = \'27\', FK_Sucursal = \'1\', FK_Presentacion = \'21\'', '', '', '', '', '', '2022-12-07 14:46:10', '', 2),
-(3164, 'Admin: INSERT INTO inventario SET Cantidad = 6, FK_Producto = \'27\', FK_Sucursal = \'1\', FK_Presentacion = \'22\'', '', '', '', '', '', '2022-12-07 14:46:17', '', 2),
-(3165, 'Admin: INSERT INTO inventario SET Cantidad = 10, FK_Producto = \'27\', FK_Sucursal = \'1\', FK_Presentacion = \'\'', '', '', '', '', '', '2022-12-07 14:46:21', '', 2),
-(3166, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'75\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-07 14:48:20', '', 2),
-(3167, 'Admin: LOGIN ADMIN prueba@gmail.com', '', '', '', '', '', '2022-12-08 09:53:44', '', 0),
-(3168, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-08 09:53:50', '', 0),
-(3169, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-09 13:08:08', '', 0),
-(3170, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-13 21:45:08', '', 0),
-(3171, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'75\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-14 20:01:26', '', 2),
-(3172, 'Admin: UPDATE impuestos SET Nombre = \'ISR\', Porcentaje = \'5\', Clave_CFDI = \'001\', Tipo_Factor = \'Cuota\', Clase = \'Retenido\' WHERE ID_Impuesto = \'2\'', '', '', '', '', '', '2022-12-14 20:02:41', '', 2),
-(3173, 'Admin: INSERT INTO impuestos SET Nombre = \'IE\', Porcentaje = \'10\', Clave_CFDI = \'003\', Tipo_Factor = \'Excento\', Clase = \'Retenido\'', '', '', '', '', '', '2022-12-14 20:04:58', '', 2),
-(3174, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'75\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-14 20:05:20', '', 2),
-(3175, 'Admin: INSERT INTO inventario SET Cantidad = 50, FK_Producto = \'27\', FK_Sucursal = \'8\', FK_Presentacion = \'\'', '', '', '', '', '', '2022-12-14 21:21:51', '', 2),
-(3176, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'2\'', '', '', '', '', '', '2022-12-17 11:53:32', '', 2),
-(3177, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'4\'', '', '', '', '', '', '2022-12-17 16:33:17', '', 2),
-(3178, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'5\'', '', '', '', '', '', '2022-12-17 16:33:19', '', 2),
-(3179, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'6\'', '', '', '', '', '', '2022-12-17 16:33:21', '', 2),
-(3180, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-17 19:53:03', '', 0),
-(3181, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'7\'', '', '', '', '', '', '2022-12-17 20:57:11', '', 2),
-(3182, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'8\'', '', '', '', '', '', '2022-12-18 13:07:16', '', 2),
-(3183, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'9\'', '', '', '', '', '', '2022-12-18 13:17:32', '', 2),
-(3184, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'3\'', '', '', '', '', '', '2022-12-18 13:17:34', '', 2),
-(3185, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'12\'', '', '', '', '', '', '2022-12-18 14:35:54', '', 2),
-(3186, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'10\'', '', '', '', '', '', '2022-12-18 14:35:56', '', 2),
-(3187, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'14\'', '', '', '', '', '', '2022-12-18 14:37:49', '', 2),
-(3188, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'13\'', '', '', '', '', '', '2022-12-18 14:37:51', '', 2),
-(3189, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'11\'', '', '', '', '', '', '2022-12-18 14:37:55', '', 2),
-(3190, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'17\'', '', '', '', '', '', '2022-12-18 14:54:16', '', 2),
-(3191, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'16\'', '', '', '', '', '', '2022-12-18 14:54:19', '', 2),
-(3192, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'15\'', '', '', '', '', '', '2022-12-18 14:54:21', '', 2),
-(3193, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'18\'', '', '', '', '', '', '2022-12-18 15:10:12', '', 2),
-(3194, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'20\'', '', '', '', '', '', '2022-12-18 15:18:31', '', 2),
-(3195, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'19\'', '', '', '', '', '', '2022-12-18 15:40:36', '', 2),
-(3196, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'2\'', '', '', '', '', '', '2022-12-18 15:41:29', '', 2),
-(3197, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'8\'', '', '', '', '', '', '2022-12-18 15:41:31', '', 2),
-(3198, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'9\'', '', '', '', '', '', '2022-12-18 15:41:33', '', 2),
-(3199, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'1\'', '', '', '', '', '', '2022-12-18 15:41:35', '', 2),
-(3200, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'3\'', '', '', '', '', '', '2022-12-18 15:41:38', '', 2),
-(3201, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'5\'', '', '', '', '', '', '2022-12-18 15:41:39', '', 2),
-(3202, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'6\'', '', '', '', '', '', '2022-12-18 15:41:41', '', 2),
-(3203, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'4\'', '', '', '', '', '', '2022-12-18 15:41:43', '', 2),
-(3204, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'7\'', '', '', '', '', '', '2022-12-18 15:41:45', '', 2),
-(3205, 'Admin: UPDATE sucursales SET Nombre = \'General 1\', FK_Encargado = \'2\', Calle = \'Ocampo\', No_Exterior = \'25\', No_Interior = \'0\', Colonia = \'Centro\', CP = \'47180\', Ciudad = \'Arandas\', Estado = \'Jalisco\', Pais = \'Mexico\', Email = \'general@gmail.com\', Telefono = \'3481254785\', Segundo_Telefono  = \'3481257859\', FK_Zona = \'2\' WHERE ID_Sucursal = \'1\'', '', '', '', '', '', '2022-12-18 17:55:21', '', 2),
-(3206, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'25.00\', Anticipo= \'NaN\', Estatus= \'1\', Fecha_Registro = \'2022-12-18 18:07:29\', Fecha_Credito = \'\', Tipo_Compra = \'Contado\', Descuento = \'0.00\'', '', '', '', '', '', '2022-12-18 18:07:29', '', 2),
-(3207, 'Admin: DELETE FROM compras WHERE ID_Compra = \'5\'', '', '', '', '', '', '2022-12-18 18:07:51', '', 2),
-(3208, 'Admin: INSERT INTO inventario SET Cantidad = 60, FK_Producto = \'26\', FK_Sucursal = \'1\', FK_Presentacion = \'\'', '', '', '', '', '', '2022-12-18 19:36:01', '', 2),
-(3209, 'Admin: UPDATE productos SET Codigo = \'123\', Descripcion = \'No lo se\', FK_Categoria = \'9\', Clase = \'Pieza\', Costo = \'0\', Precio = \'1\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'26\'', '', '', '', '', '', '2022-12-18 19:36:13', '', 2),
-(3210, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'75\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-18 19:36:22', '', 2),
-(3211, 'Admin: DELETE FROM pedidos WHERE ID_Pedido = \'21\'', '', '', '', '', '', '2022-12-18 19:36:45', '', 2),
-(3212, 'Admin: INSERT INTO productos SET Codigo = \'11\', Descripcion = \'Prueba 4\',  FK_Categoria = \'\', Tipo = \'1\', Clase = \'Pieza\', Costo = \'\', Precio = \'1\', Precio_Mayoreo = \'\', FK_Area = \'34\', Detalles = \'\', Minimo = \'\', Maximo = \'\', Fecha_Registro = \'2022-12-18 20:25:06\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\'', '', '', '', '', '', '2022-12-18 20:25:06', '', 2),
-(3213, 'Admin: INSERT INTO inventario SET Cantidad = 50, FK_Producto = \'28\', FK_Sucursal = \'1\', FK_Presentacion = \'\'', '', '', '', '', '', '2022-12-18 20:25:14', '', 2),
-(3214, 'Admin: UPDATE productos SET Codigo = \'1234\', Descripcion = \'Prueba 2\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'75\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', importe = \'50\' WHERE ID_Producto = \'27\'', '', '', '', '', '', '2022-12-18 22:31:17', '', 2),
-(3215, 'Admin: UPDATE productos SET Codigo = \'123\', Descripcion = \'No lo se\', FK_Categoria = \'9\', Clase = \'Pieza\', Costo = \'0\', Precio = \'1\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', importe = \'10\' WHERE ID_Producto = \'26\'', '', '', '', '', '', '2022-12-18 22:42:51', '', 2),
-(3216, 'Admin: UPDATE productos SET Codigo = \'11\', Descripcion = \'Prueba 4\', FK_Categoria = \'\', Clase = \'Pieza\', Costo = \'0\', Precio = \'1\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', importe = \'5\' WHERE ID_Producto = \'28\'', '', '', '', '', '', '2022-12-18 22:42:58', '', 2),
-(3217, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-19 09:24:18', '', 0),
-(3218, 'Admin: UPDATE ventas SET Cancelada = \'1\', Notas = \'jojo\', Fecha_Cancelacion = \'2022-12-19 13:35:39\' , Regreso_Inventario = \"1\" WHERE ID_Venta = \'14\'', '', '', '', '', '', '2022-12-19 13:35:39', '', 2),
-(3219, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-19 14:09:02', '', 0),
-(3220, 'Admin: UPDATE importes SET Estatus = \'Pagado\' WHERE ID_Importe = \'2\'', '', '', '', '', '', '2022-12-19 15:37:51', '', 2),
-(3221, 'Admin: UPDATE importes SET Estatus = \'Pagado\' WHERE ID_Importe = \'3\'', '', '', '', '', '', '2022-12-19 15:37:56', '', 2);
+(3155, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'\', Clase = \'\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-04 21:31:28', '', 2),
+(3156, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'\', Clase = \'\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-04 21:43:50', '', 2),
+(3157, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'\', Clase = \'\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-04 21:49:37', '', 2),
+(3158, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-04 21:55:10', '', 2),
+(3159, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-04 21:55:23', '', 2),
+(3160, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'10101500\', Clave_Unidad_CFDI = \'10\', Nombre_Unidad = \'Grupos\', Abreviatura_Unidad = \'fdfd\', Objeto_Impuesto_CFDI = \'02\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-04 22:07:03', '', 2),
+(3161, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-05 12:34:55', '', 0),
+(3162, 'Admin: INSERT INTO clientes SET Nombre = \'Ejemplo\', Calle = \'\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'06470\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Descuento = \'\', Correo = \'\', Fecha_Nacimiento = \'\', Sexo = \'\', Fecha_Registro = \'2022-12-05 20:52:47\', RFC = \'SSF1103037F1\', Facturar = \'\',  No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'SCAFANDRA SOFTWARE FACTORY\', Regimen_CFDI = \'601\'', '', '', '', '', '', '2022-12-05 20:52:47', '', 2),
+(3163, 'Admin: DELETE FROM clientes WHERE ID_Cliente = \'4\'', '', '', '', '', '', '2022-12-05 20:52:56', '', 2),
+(3164, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-06 11:37:22', '', 0),
+(3165, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'1\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-06 12:17:55', '', 2),
+(3166, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'1\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-06 12:21:32', '', 2),
+(3167, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'1\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-06 12:22:59', '', 2),
+(3168, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'1\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-06 12:23:29', '', 2),
+(3169, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-06 12:24:34', '', 2),
+(3170, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-06 20:11:13', '', 2),
+(3171, 'Admin: DELETE FROM impuestos WHERE ID_Impuesto=\'2\'', '', '', '', '', '', '2022-12-06 21:39:45', '', 2),
+(3172, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-07 12:14:20', '', 0),
+(3173, 'Admin: UPDATE sucursales SET Nombre = \'General 1\', FK_Encargado = \'2\', Calle = \'Ejemplo\', No_Exterior = \'54\', No_Interior = \'\', Colonia = \'\', CP = \'47190\', Ciudad = \'Aranadas\', Estado = \'Jalisco\', Pais = \'MÃ©xico \', Email = \'\', Telefono = \'\', Segundo_Telefono  = \'\', FK_Zona = \'2\' WHERE ID_Sucursal = \'1\'', '', '', '', '', '', '2022-12-07 13:50:15', '', 2),
+(3174, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-07 14:15:16', '', 2),
+(3175, 'Admin: UPDATE sucursales SET Nombre = \'General 1\', FK_Encargado = \'2\', Calle = \'Ejemplo\', No_Exterior = \'54\', No_Interior = \'\', Colonia = \'\', CP = \'47190\', Ciudad = \'Aranadas\', Estado = \'Jalisco\', Pais = \'MÃ©xico    \', Email = \'\', Telefono = \'\', Segundo_Telefono  = \'\', FK_Zona = \'2\' WHERE ID_Sucursal = \'1\'', '', '', '', '', '', '2022-12-07 15:27:17', '', 2),
+(3176, 'Admin: UPDATE sucursales SET Nombre = \'Tienda Dionisio\', FK_Encargado = \'2\', Calle = \'Dionisio Rodriguez\', No_Exterior = \'3868\', No_Interior = \'\', Colonia = \'Jardines de San Francisco\', CP = \'44790\', Ciudad = \'Guadalajara\', Estado = \'Jalisco\', Pais = \'MÃ©xico \', Email = \'\', Telefono = \'3336051454\', Segundo_Telefono  = \'3323018720\', FK_Zona = \'3\' WHERE ID_Sucursal = \'8\'', '', '', '', '', '', '2022-12-07 15:27:40', '', 2),
+(3177, 'Admin: UPDATE sucursales SET Nombre = \'Tienda Dionisio\', FK_Encargado = \'2\', Calle = \'Dionisio Rodriguez\', No_Exterior = \'3868\', No_Interior = \'\', Colonia = \'Jardines de San Francisco\', CP = \'44790\', Ciudad = \'Guadalajara\', Estado = \'Jalisco\', Pais = \'MÃ©xico\', Email = \'\', Telefono = \'3336051454\', Segundo_Telefono  = \'3323018720\', FK_Zona = \'3\' WHERE ID_Sucursal = \'8\'', '', '', '', '', '', '2022-12-07 15:28:44', '', 2),
+(3178, 'Admin: UPDATE sucursales SET Nombre = \'General 1\', FK_Encargado = \'2\', Calle = \'Ejemplo\', No_Exterior = \'54\', No_Interior = \'\', Colonia = \'\', CP = \'47190\', Ciudad = \'Aranadas\', Estado = \'Jalisco\', Pais = \'MÃ©xico\', Email = \'\', Telefono = \'\', Segundo_Telefono  = \'\', FK_Zona = \'2\' WHERE ID_Sucursal = \'1\'', '', '', '', '', '', '2022-12-07 15:28:48', '', 2),
+(3179, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'dfdf\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'06470\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'SSF1103037F1\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'SCAFANDRA SOFTWARE FACTORY\', Regimen_CFDI = \'601\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-07 21:25:09', '', 2),
+(3180, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Prueba\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-07 22:53:45', '', 2),
+(3181, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-08 17:53:34', '', 0),
+(3182, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-09 12:34:07', '', 0),
+(3183, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Caja de fresas\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-09 19:27:24', '', 2),
+(3184, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Caja de fresas\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'70141902\', Clave_Unidad_CFDI = \'EA\', Nombre_Unidad = \'Elemento\', Abreviatura_Unidad = \'Ele.\', Objeto_Impuesto_CFDI = \'02\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-09 19:29:26', '', 2),
+(3185, 'Admin: UPDATE ventas SET Facturada = \'1\', Version_CFDI = \'4.0\', Fecha_Expedicion_CFDI = \'2022-12-10 00:06:42\', Sello_CFDI = \'OBh4MaV5uXT8SPfh26Pw2fTTfd8ZKl28uc1l66OThC/r8HVJxEhMR0OS0PO/PsYndElrbSgmpUAgooRqmKIMP8C//mrwu7e70Hyo1XvwKDJ5boqQ2E+PmfzUSrKs0AeZfj4lZFlBVhys7hL0QYWFTALO1ug5Ku+SxsocJONbq0d1e3uDJlfyWlRXF9mYh/EopkuERZG+NI2j2uHG5wXb6uMRjFQrtWQ8i/DOFWl5P8b/4pseXiwIHiuxP3Xo4nteKUR/Bw2jL9CGnhx2wOMQbIezTELurpXnWPJ1oOeBgH+ri3bbtikAk6zileA+t0GnV5qOMjAKBcXB5hkJHDZrdg==\', Forma_Pago_CFDI = \'01\', No_Certificado_CFDI = \'30001000000400002434\', Certificado_CFDI = \'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==\', Moneda_CFDI = \'MXN\', Tipo_Comprobante_CFDI = \'I\', Exportacion_CFDI = \'01\', Metodo_Pago_CFDI = \'PUE\', Lugar_Expedicion_CFDI = \'47190\', Confirmacion_CFDI = \'\', Emisor_RFC_CFDI = \'EKU9003173C9\', Emisor_Nombre_CFDI = \'ESCUELA KEMPER URGATE\', Emisor_Regimen_Fiscal_CFDI = \'601\', Receptor_RFC_CFDI = \'XAXX010101000\', Receptor_Nombre_CFDI = \'PUBLICO EN GENERAL\', Receptor_Domicilio_CFDI = \'47190\', Receptor_Regimen_Fiscal_CFDI = \'616\', Receptor_Uso_CFDI = \'S01\', UUID_CFDI = \'145064c1-7006-4a5d-b603-09f82ec20c41\', Fecha_Timbrado_CFDI = \'2022-12-10 00:06:52\', Rfc_ProvCertif_CFDI = \'SPR190613I52\', Sello_CFD_CFDI = \'OBh4MaV5uXT8SPfh26Pw2fTTfd8ZKl28uc1l66OThC/r8HVJxEhMR0OS0PO/PsYndElrbSgmpUAgooRqmKIMP8C//mrwu7e70Hyo1XvwKDJ5boqQ2E+PmfzUSrKs0AeZfj4lZFlBVhys7hL0QYWFTALO1ug5Ku+SxsocJONbq0d1e3uDJlfyWlRXF9mYh/EopkuERZG+NI2j2uHG5wXb6uMRjFQrtWQ8i/DOFWl5P8b/4pseXiwIHiuxP3Xo4nteKUR/Bw2jL9CGnhx2wOMQbIezTELurpXnWPJ1oOeBgH+ri3bbtikAk6zileA+t0GnV5qOMjAKBcXB5hkJHDZrdg==\', No_Certificado_SAT_CFDI = \'30001000000400002495\', Sello_SAT_CFDI = \'UdqQ9s37kBjb++jH8kVrb7Kjuex/r2DovsYIcqYKV2bzYh4nYaTXWLkJPMEl46nld+ECuCGmBy2TCICSV9xvcWUWPWipIX6eBNZHi7yJSxet28Xevta/aRCG+n7T58U8kwIljorUCjXgPGKH1CXbt1udUmLm1KWRQDeV4EXzmyJ3cAoqpbftJjS38qQPCv5Xeb/hNjAsLzPI6cpYfhHU61cFOje0vtAVFnlzbjK/5DHmBOOSUf/GvScFcbhzbNzEl2g4f9TcYXhdlI9colqAcgiOJGj+iU1inq8l0ox2RuFTHOVMGEc5RxwZwjZEY8fY8Oq9kCblu1DpcLXpFjscXg==\' WHERE ID_Venta = \'1\'', '', '', '', '', '', '2022-12-10 00:06:50', '', 2),
+(3186, 'Admin: UPDATE ventas SET Facturada = \'1\', Version_CFDI = \'4.0\', Fecha_Expedicion_CFDI = \'2022-12-10 00:46:32\', Sello_CFDI = \'TI0wSJWFeB6zBeyGYziHSYfpS8cfdVhFy1caTy99t11scIUf/pmNujAv9+lr7DoBsU83lMn1hlV6VlY/ygVzhkUB9WNq9wSz+DrKHq5ZqTWixT1Lcg3HTuULVF3AwuyyCoQmhrZ39Gn7GkKos6VaYoySZ1VLI8XZBLJMFyunRRm5eOIdT8IHuwJnzyPPLTU3ULED/qAVl3WgyXC0chH/5Skz/0ZZ9shH7GKXIv2+oFuHUSb5kLq6dGTwiu2ju+c0vXG8yvxBWUg/nN/7fWM+WRzg+rC/ukJBvRkEqXbXgGH+7HQhQ2cufUyIpRWGoQ2+PgPbV9BrTcI8PRkpUx9wKA==\', Forma_Pago_CFDI = \'01\', No_Certificado_CFDI = \'30001000000400002434\', Certificado_CFDI = \'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==\', Moneda_CFDI = \'MXN\', Tipo_Comprobante_CFDI = \'I\', Exportacion_CFDI = \'01\', Metodo_Pago_CFDI = \'PUE\', Lugar_Expedicion_CFDI = \'47190\', Confirmacion_CFDI = \'\', Emisor_RFC_CFDI = \'EKU9003173C9\', Emisor_Nombre_CFDI = \'ESCUELA KEMPER URGATE\', Emisor_Regimen_Fiscal_CFDI = \'601\', Receptor_RFC_CFDI = \'XAXX010101000\', Receptor_Nombre_CFDI = \'PUBLICO EN GENERAL\', Receptor_Domicilio_CFDI = \'47190\', Receptor_Regimen_Fiscal_CFDI = \'616\', Receptor_Uso_CFDI = \'S01\', UUID_CFDI = \'fcaf08b0-efaa-41cf-9eef-4efddb448eeb\', Fecha_Timbrado_CFDI = \'2022-12-10 00:46:40\', Rfc_ProvCertif_CFDI = \'SPR190613I52\', Sello_CFD_CFDI = \'TI0wSJWFeB6zBeyGYziHSYfpS8cfdVhFy1caTy99t11scIUf/pmNujAv9+lr7DoBsU83lMn1hlV6VlY/ygVzhkUB9WNq9wSz+DrKHq5ZqTWixT1Lcg3HTuULVF3AwuyyCoQmhrZ39Gn7GkKos6VaYoySZ1VLI8XZBLJMFyunRRm5eOIdT8IHuwJnzyPPLTU3ULED/qAVl3WgyXC0chH/5Skz/0ZZ9shH7GKXIv2+oFuHUSb5kLq6dGTwiu2ju+c0vXG8yvxBWUg/nN/7fWM+WRzg+rC/ukJBvRkEqXbXgGH+7HQhQ2cufUyIpRWGoQ2+PgPbV9BrTcI8PRkpUx9wKA==\', No_Certificado_SAT_CFDI = \'30001000000400002495\', Sello_SAT_CFDI = \'Bf7BBLs32J292WbLpAKG1WpBCyFaJwz/KAJc/j1WR3X67k0hIKwDycufUfr11x3GFLTqMtDJvS9YDL6GUBB+PzQELUZS/p68STqlVJKYN38JOypuMt5+gU4qpE2JDgYncOkg1+udhSrj8yHJCCFoAc5G0eJD9Y+hwFhe4Pb/NQ3vWWHhOLI5uavT7LUAkjWl04eC2asybAj6u1FPKVBvfZD56dc6G9WSS+4rhfW2hQdWocNWkzZohhfh2NhLzXBipRabWVQo+zhqFum/tkAApTIIch3fTDIvU52i3EhLvHJuAsaUeTQ44h9l+hwyw+yDxzpesaIQUHEaRTM0DzwHDw==\', Periodicidad_CFDI = \'04\', Meses_CFDI = \'12\', Ano_CFDI = \'2022\', Relacion_CFDI = \'\' WHERE ID_Venta = \'1\'', '', '', '', '', '', '2022-12-10 00:46:38', '', 2),
+(3187, 'Admin: UPDATE ventas SET Facturada = \'1\', Version_CFDI = \'4.0\', Fecha_Expedicion_CFDI = \'2022-12-10 00:47:56\', Sello_CFDI = \'FrvdF4FRTFYI75/vwdeoB/dl7b5KySzhKEfnOkUCQuU+izrVBc+ATs+H6NDeENwUmT6QYCK+OYGczgRv+VeA9MkBD2uFDqTNgfVXJWFFoDd//ybs9tNM+4khkhzoaObHQeYthF1Gvmc1zwhhNqWh1UaTElU/t+MX79qZexGNVPAUOGem/FV9hRQ9E/kRdEyAo+GkTKESqANlekWCZ0qWTwM9+sCuLEqBZ5MW1POUJFecVnnVYRkgglRi/i8mrr33xyMFJ07oiSmWODX2db4hSwSmUqsMOCKRKnEPTCajbm00BEsQOcNj0nI2WE3SG5wiMctcRgWPPfSWa+1zL0Ovig==\', Forma_Pago_CFDI = \'01\', No_Certificado_CFDI = \'30001000000400002434\', Certificado_CFDI = \'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==\', Moneda_CFDI = \'MXN\', Tipo_Comprobante_CFDI = \'I\', Exportacion_CFDI = \'01\', Metodo_Pago_CFDI = \'PUE\', Lugar_Expedicion_CFDI = \'47190\', Confirmacion_CFDI = \'\', Emisor_RFC_CFDI = \'EKU9003173C9\', Emisor_Nombre_CFDI = \'ESCUELA KEMPER URGATE\', Emisor_Regimen_Fiscal_CFDI = \'601\', Receptor_RFC_CFDI = \'XAXX010101000\', Receptor_Nombre_CFDI = \'PUBLICO EN GENERAL\', Receptor_Domicilio_CFDI = \'47190\', Receptor_Regimen_Fiscal_CFDI = \'616\', Receptor_Uso_CFDI = \'S01\', UUID_CFDI = \'0149eed8-91ab-4f71-a7b2-c6027c3157c4\', Fecha_Timbrado_CFDI = \'2022-12-10 00:48:00\', Rfc_ProvCertif_CFDI = \'SPR190613I52\', Sello_CFD_CFDI = \'FrvdF4FRTFYI75/vwdeoB/dl7b5KySzhKEfnOkUCQuU+izrVBc+ATs+H6NDeENwUmT6QYCK+OYGczgRv+VeA9MkBD2uFDqTNgfVXJWFFoDd//ybs9tNM+4khkhzoaObHQeYthF1Gvmc1zwhhNqWh1UaTElU/t+MX79qZexGNVPAUOGem/FV9hRQ9E/kRdEyAo+GkTKESqANlekWCZ0qWTwM9+sCuLEqBZ5MW1POUJFecVnnVYRkgglRi/i8mrr33xyMFJ07oiSmWODX2db4hSwSmUqsMOCKRKnEPTCajbm00BEsQOcNj0nI2WE3SG5wiMctcRgWPPfSWa+1zL0Ovig==\', No_Certificado_SAT_CFDI = \'30001000000400002495\', Sello_SAT_CFDI = \'D451itmVW0z+QsCvgg2P90VnPPmHgtdMAOqHIR+yit2HVt/rMgQck7/QsbjXtcuzSV71FoubNLKGgaefVxn3yBQIv23Jv2LSRGTi+F7crgKHiRYUd+9/ZcTTgLaXuc6sQR9Fp7eApiDLrLzeSMDopRt/Sme40jWxEg+Q26xbZtVoUpMZ8MpQrGhi4gGSgNBMJKcHBeHXZ81amYoTXAyYWAaWI22irMunFwNgLyigBrCcVJFMc6mT+CflLvvnnBgnrCzFsmwVCB9zGvWCRWe4azquQaIV2Q8sCsC9JOjVKzuMtCJtpLg7SUsX5avByjrOnkldAqygF0zBcD/x9K89YA==\', Periodicidad_CFDI = \'04\', Meses_CFDI = \'12\', Ano_CFDI = \'2022\', Relacion_CFDI = \'\' WHERE ID_Venta = \'1\'', '', '', '', '', '', '2022-12-10 00:47:57', '', 2),
+(3188, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-10 16:07:10', '', 0),
+(3189, 'Admin: UPDATE ventas SET Facturada = \'1\', Version_CFDI = \'4.0\', Fecha_Expedicion_CFDI = \'2022-12-10 17:56:15\', Sello_CFDI = \'EIspqvvWX3Un8TRU0GI/ESWqaXySItKxcP80wfN5tIP4aU99p2JW16eXlZrPVhS34Cye4tv1wDl/QLGpL7vcnBV3Uaiak5rXEig9X6jBtZqJvxQg/Lx4zq2X7Y+Ibl1HJCmWEh5BAXa1WoNsCtuBITZksLnnapvV48NNe1LVl7o80RFIQWCS4WzOcuKb8CXa+kC7hM1z/tXwNRHUdryb1GY94I3FL8OIWMo3Vcc6rDFyurSKjGFnPMURsKZHn6X90kc1NIRlxD2tK73e9bnJ1TGjyWPg6XkORmYlvxXf5V+Bq7UE8ySHLar0Q6PM1MZRj1vWB1m4kYriyr4FYS+5xw==\', Forma_Pago_CFDI = \'01\', No_Certificado_CFDI = \'30001000000400002434\', Certificado_CFDI = \'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==\', Moneda_CFDI = \'MXN\', Tipo_Comprobante_CFDI = \'I\', Exportacion_CFDI = \'01\', Metodo_Pago_CFDI = \'PUE\', Lugar_Expedicion_CFDI = \'47190\', Confirmacion_CFDI = \'\', Emisor_RFC_CFDI = \'EKU9003173C9\', Emisor_Nombre_CFDI = \'ESCUELA KEMPER URGATE\', Emisor_Regimen_Fiscal_CFDI = \'601\', Receptor_RFC_CFDI = \'XAXX010101000\', Receptor_Nombre_CFDI = \'PUBLICO EN GENERAL\', Receptor_Domicilio_CFDI = \'47190\', Receptor_Regimen_Fiscal_CFDI = \'616\', Receptor_Uso_CFDI = \'S01\', UUID_CFDI = \'f60dd23b-5eca-49f8-9a24-e4a1f13b15e8\', Fecha_Timbrado_CFDI = \'2022-12-10 17:56:24\', Rfc_ProvCertif_CFDI = \'SPR190613I52\', Sello_CFD_CFDI = \'EIspqvvWX3Un8TRU0GI/ESWqaXySItKxcP80wfN5tIP4aU99p2JW16eXlZrPVhS34Cye4tv1wDl/QLGpL7vcnBV3Uaiak5rXEig9X6jBtZqJvxQg/Lx4zq2X7Y+Ibl1HJCmWEh5BAXa1WoNsCtuBITZksLnnapvV48NNe1LVl7o80RFIQWCS4WzOcuKb8CXa+kC7hM1z/tXwNRHUdryb1GY94I3FL8OIWMo3Vcc6rDFyurSKjGFnPMURsKZHn6X90kc1NIRlxD2tK73e9bnJ1TGjyWPg6XkORmYlvxXf5V+Bq7UE8ySHLar0Q6PM1MZRj1vWB1m4kYriyr4FYS+5xw==\', No_Certificado_SAT_CFDI = \'30001000000400002495\', Sello_SAT_CFDI = \'A8VOYFXNQaPqOBgAgOfNMl5XcISzgHS25mpsVhtfr7A/nQBxc/aD3YycVoyj8Kfe/8QS1MrGGPVPTObtKXckJcNDRPA+yaabfHI/JEFb2r2zqD/IFl0sbhw1eVEsgRUCQc2+kf2PQOelFiozBGaqFkpiNC8QtFpOUyAKfACJ1Mj6NfHdc/1QlwexPk1GRDYeh6ciKRqfCnr7PlYwmu0jPghYPdDCLmTU3iTjRBL2KlC17hpRL3azG3j+h1QFUUwpEfhvzv8i91GZJsC89z4w504Wb0TGosz100lMGPuQxlbOMbJ7GV9xm6FXYDrneiGbBq50NL8AXoiTNbGDj6c9Hw==\', Periodicidad_CFDI = \'04\', Meses_CFDI = \'12\', Ano_CFDI = \'2022\', Relacion_CFDI = \'\', Cadena_CFDI = \'||1.1|f60dd23b-5eca-49f8-9a24-e4a1f13b15e8|2022-12-10T17:56:24|SPR190613I52|EIspqvvWX3Un8TRU0GI/ESWqaXySItKxcP80wfN5tIP4aU99p2JW16eXlZrPVhS34Cye4tv1wDl/QLGpL7vcnBV3Uaiak5rXEig9X6jBtZqJvxQg/Lx4zq2X7Y+Ibl1HJCmWEh5BAXa1WoNsCtuBITZksLnnapvV48NNe1LVl7o80RFIQWCS4WzOcuKb8CXa+kC7hM1z/tXwNRHUdryb1GY94I3FL8OIWMo3Vcc6rDFyurSKjGFnPMURsKZHn6X90kc1NIRlxD2tK73e9bnJ1TGjyWPg6XkORmYlvxXf5V+Bq7UE8ySHLar0Q6PM1MZRj1vWB1m4kYriyr4FYS+5xw==|30001000000400002495||\' WHERE ID_Venta = \'1\'', '', '', '', '', '', '2022-12-10 17:56:21', '', 2),
+(3190, 'Admin: UPDATE ventas SET Facturada = \'1\', Version_CFDI = \'4.0\', Fecha_Expedicion_CFDI = \'2022-12-10 17:57:13\', Sello_CFDI = \'UGvlXrqoOIKz0d5Z6jwAOKhmNDFtqKCfz6jsLsXyCq9DoV3OJAI9xnzdRXTfCGHIBde0Evzm+A08S+BA8cqWgf9wpZzsdG3G3TFBTNMKAuSsrzAtaCvy28Ccn47PZTrchjfJuN98sKEzJ3jfBr0ttQix7o8+9gR8mZK3fY9YHdvht6VIy7uhfwxGuV/Izj+UvBQzYVvpeadM81gjSvuPPYyGOvXHdq2pjrMDlYXfL/38MkI/LPYSFoyiKQGZSUdnRjkTizAoAkZn6ntLSPgiCg/IwheK3jFe+cLKLt5nNKKOGKZSFF8QF85Fe6YZ9yxqjAK+p9bwbXnvDvafMVGr8A==\', Forma_Pago_CFDI = \'01\', No_Certificado_CFDI = \'30001000000400002434\', Certificado_CFDI = \'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==\', Moneda_CFDI = \'MXN\', Tipo_Comprobante_CFDI = \'I\', Exportacion_CFDI = \'01\', Metodo_Pago_CFDI = \'PUE\', Lugar_Expedicion_CFDI = \'47190\', Confirmacion_CFDI = \'\', Emisor_RFC_CFDI = \'EKU9003173C9\', Emisor_Nombre_CFDI = \'ESCUELA KEMPER URGATE\', Emisor_Regimen_Fiscal_CFDI = \'601\', Receptor_RFC_CFDI = \'XAXX010101000\', Receptor_Nombre_CFDI = \'PUBLICO EN GENERAL\', Receptor_Domicilio_CFDI = \'47190\', Receptor_Regimen_Fiscal_CFDI = \'616\', Receptor_Uso_CFDI = \'S01\', UUID_CFDI = \'d40440eb-f540-4148-b62f-a868760142a5\', Fecha_Timbrado_CFDI = \'2022-12-10 17:57:17\', Rfc_ProvCertif_CFDI = \'SPR190613I52\', Sello_CFD_CFDI = \'UGvlXrqoOIKz0d5Z6jwAOKhmNDFtqKCfz6jsLsXyCq9DoV3OJAI9xnzdRXTfCGHIBde0Evzm+A08S+BA8cqWgf9wpZzsdG3G3TFBTNMKAuSsrzAtaCvy28Ccn47PZTrchjfJuN98sKEzJ3jfBr0ttQix7o8+9gR8mZK3fY9YHdvht6VIy7uhfwxGuV/Izj+UvBQzYVvpeadM81gjSvuPPYyGOvXHdq2pjrMDlYXfL/38MkI/LPYSFoyiKQGZSUdnRjkTizAoAkZn6ntLSPgiCg/IwheK3jFe+cLKLt5nNKKOGKZSFF8QF85Fe6YZ9yxqjAK+p9bwbXnvDvafMVGr8A==\', No_Certificado_SAT_CFDI = \'30001000000400002495\', Sello_SAT_CFDI = \'FTfiJYXa0XzYl7Evxw3pEmhyp8nVtjyRqoeeJBh/lq5Zwgo2o4MYr9yb7GdB6DPnXj5kA9YVoFCc/tQxGUNKDrP3aMhXZX3soy0mqeuQz+3dr4i+PYqcXvFDBdO7TXNLkMfBL0MTtkBFeigOKeiZ3nBSN9t7bE5nppqG8jLQZKvDl/lJgBUwbCRsz4hkeoYx338MyXyb5FpbIqu0S1SMXZoSbPOHRblFgVXRbHF+9VxNPMwiUkw2V4QgOb58U5A9nlI02GLl/ykPvukLUSQsokH7eXcRISVFPS9lIa/fcr9YXujXu3+GTbvS03Mn+2zSN4mBUa9OM0NYmV9W8tT03A==\', Periodicidad_CFDI = \'04\', Meses_CFDI = \'12\', Ano_CFDI = \'2022\', Relacion_CFDI = \'\', Cadena_CFDI = \'||1.1|d40440eb-f540-4148-b62f-a868760142a5|2022-12-10T17:57:17|SPR190613I52|UGvlXrqoOIKz0d5Z6jwAOKhmNDFtqKCfz6jsLsXyCq9DoV3OJAI9xnzdRXTfCGHIBde0Evzm+A08S+BA8cqWgf9wpZzsdG3G3TFBTNMKAuSsrzAtaCvy28Ccn47PZTrchjfJuN98sKEzJ3jfBr0ttQix7o8+9gR8mZK3fY9YHdvht6VIy7uhfwxGuV/Izj+UvBQzYVvpeadM81gjSvuPPYyGOvXHdq2pjrMDlYXfL/38MkI/LPYSFoyiKQGZSUdnRjkTizAoAkZn6ntLSPgiCg/IwheK3jFe+cLKLt5nNKKOGKZSFF8QF85Fe6YZ9yxqjAK+p9bwbXnvDvafMVGr8A==|30001000000400002495||\' WHERE ID_Venta = \'1\'', '', '', '', '', '', '2022-12-10 17:57:14', '', 2),
+(3191, 'Admin: UPDATE ventas SET Facturada = \'1\', Version_CFDI = \'4.0\', Fecha_Expedicion_CFDI = \'2022-12-10 18:14:44\', Sello_CFDI = \'HT9MDIy63eN6thCviGgPy0VRru/vJmAq6l0HvZ0qWJRWplwbJseOZPr6whWPrCSbEQYU3c2wyCOCAgqiDiuS+sX0TTxgSXAT5bxDci9FxzOqwg1W9GGFL4t5RtK5ZaNZ5mZ90ffsm8f379L9RIKL2wPsfwI2E1Ws3LvNB0dTHJ6iV/CTuBVKBgTp6W20HnngKHeTGr1INdvfdm/DUV+0ZIYZvdpVnuQyLp7V9j58my3N/qm51lmadrdcWA2Y3ZDOCbZjzujtAWaC1w4qWNMhtCmx0+vjXHnN2CWFpzXuwxLh23pJ0RTl/S4XN81kx1G7NytC3NKIcme9M6Bh2LP4gQ==\', Forma_Pago_CFDI = \'01\', No_Certificado_CFDI = \'30001000000400002434\', Certificado_CFDI = \'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==\', Moneda_CFDI = \'MXN\', Tipo_Comprobante_CFDI = \'I\', Exportacion_CFDI = \'01\', Metodo_Pago_CFDI = \'PUE\', Lugar_Expedicion_CFDI = \'47190\', Confirmacion_CFDI = \'\', Emisor_RFC_CFDI = \'EKU9003173C9\', Emisor_Nombre_CFDI = \'ESCUELA KEMPER URGATE\', Emisor_Regimen_Fiscal_CFDI = \'601\', Receptor_RFC_CFDI = \'XAXX010101000\', Receptor_Nombre_CFDI = \'PUBLICO EN GENERAL\', Receptor_Domicilio_CFDI = \'47190\', Receptor_Regimen_Fiscal_CFDI = \'616\', Receptor_Uso_CFDI = \'S01\', UUID_CFDI = \'38492575-710b-463d-a321-b81e721bb2c6\', Fecha_Timbrado_CFDI = \'2022-12-10 18:14:51\', Rfc_ProvCertif_CFDI = \'SPR190613I52\', Sello_CFD_CFDI = \'HT9MDIy63eN6thCviGgPy0VRru/vJmAq6l0HvZ0qWJRWplwbJseOZPr6whWPrCSbEQYU3c2wyCOCAgqiDiuS+sX0TTxgSXAT5bxDci9FxzOqwg1W9GGFL4t5RtK5ZaNZ5mZ90ffsm8f379L9RIKL2wPsfwI2E1Ws3LvNB0dTHJ6iV/CTuBVKBgTp6W20HnngKHeTGr1INdvfdm/DUV+0ZIYZvdpVnuQyLp7V9j58my3N/qm51lmadrdcWA2Y3ZDOCbZjzujtAWaC1w4qWNMhtCmx0+vjXHnN2CWFpzXuwxLh23pJ0RTl/S4XN81kx1G7NytC3NKIcme9M6Bh2LP4gQ==\', No_Certificado_SAT_CFDI = \'30001000000400002495\', Sello_SAT_CFDI = \'CgV49+bBFbktwoykPYUdBQYmCOrULVwnEqiNchnwbGh7eQ1o13TP3pbGjlf5BHzf3/YnQoVuSSO4lOu1/R5RHREIXVO8Ks6dQaBCvd0lAUAyc5+xFJ6xyB1KZadu+j9hODjapUjU8RQmRuceiS5rMOk/HZlASWN7xs6Hzt58CubkNB7E9aJBlxci2Y5hDHBtMuWRuIU8v2bTNmo6aUiLvYgxnyHHQlBDXEqaEpRxcGD+muWjZweZhdQnjHzGUfB+aUhTQtUaeAW+2JDevS4JKftppn4KFADw5NHjVelXcR+ozh6dGliQaCCR3mtls0564JfbEzksCkqGDH4OdsKSIw==\', Periodicidad_CFDI = \'04\', Meses_CFDI = \'12\', Ano_CFDI = \'2022\', Relacion_CFDI = \'\', Cadena_CFDI = \'||1.1|38492575-710b-463d-a321-b81e721bb2c6|2022-12-10T18:14:51|SPR190613I52|HT9MDIy63eN6thCviGgPy0VRru/vJmAq6l0HvZ0qWJRWplwbJseOZPr6whWPrCSbEQYU3c2wyCOCAgqiDiuS+sX0TTxgSXAT5bxDci9FxzOqwg1W9GGFL4t5RtK5ZaNZ5mZ90ffsm8f379L9RIKL2wPsfwI2E1Ws3LvNB0dTHJ6iV/CTuBVKBgTp6W20HnngKHeTGr1INdvfdm/DUV+0ZIYZvdpVnuQyLp7V9j58my3N/qm51lmadrdcWA2Y3ZDOCbZjzujtAWaC1w4qWNMhtCmx0+vjXHnN2CWFpzXuwxLh23pJ0RTl/S4XN81kx1G7NytC3NKIcme9M6Bh2LP4gQ==|30001000000400002495||\' WHERE ID_Venta = \'1\'', '', '', '', '', '', '2022-12-10 18:14:49', '', 2),
+(3192, 'Admin: UPDATE ventas SET Facturada = \'1\', Version_CFDI = \'4.0\', Fecha_Expedicion_CFDI = \'2022-12-10 18:19:00\', Sello_CFDI = \'W8GAdgbebfTodTVTB/3CAhzQb6jeEzAZqimdVz0ckHKZF9MrWOTHuYo7cYVhv/4PLGUpLIqzlRM433ae4jEByvD5FPkmowZAYuHTlSvwwNuHlrkwJFP6DTvFEL6ExqfC72Cau0WscRurF0Vt2c0ml9QASWDLVZ20DhVfWtABFSkMMdUqkBluslbjJ8as1IEFYGgO0mV7h+2q3fN3tkgwbEpBYtK23MMTvWmkhrBZYiEzVCFOlob1Fka/qVAykd2T8dlg7B9xiFkuRbgDkqt5oGIewv3p2WCK9+9BFsVPECrEknkMoE1UkfBU5C73KqJK51ZcSDCCr1rJ5R5i70VesQ==\', Forma_Pago_CFDI = \'01\', No_Certificado_CFDI = \'30001000000400002434\', Certificado_CFDI = \'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==\', Moneda_CFDI = \'MXN\', Tipo_Comprobante_CFDI = \'I\', Exportacion_CFDI = \'01\', Metodo_Pago_CFDI = \'PUE\', Lugar_Expedicion_CFDI = \'47190\', Confirmacion_CFDI = \'\', Emisor_RFC_CFDI = \'EKU9003173C9\', Emisor_Nombre_CFDI = \'ESCUELA KEMPER URGATE\', Emisor_Regimen_Fiscal_CFDI = \'601\', Receptor_RFC_CFDI = \'XAXX010101000\', Receptor_Nombre_CFDI = \'PUBLICO EN GENERAL\', Receptor_Domicilio_CFDI = \'47190\', Receptor_Regimen_Fiscal_CFDI = \'616\', Receptor_Uso_CFDI = \'S01\', UUID_CFDI = \'8a783b90-c302-4fec-a1d0-3e06c2002736\', Fecha_Timbrado_CFDI = \'2022-12-10 18:19:05\', Rfc_ProvCertif_CFDI = \'SPR190613I52\', Sello_CFD_CFDI = \'W8GAdgbebfTodTVTB/3CAhzQb6jeEzAZqimdVz0ckHKZF9MrWOTHuYo7cYVhv/4PLGUpLIqzlRM433ae4jEByvD5FPkmowZAYuHTlSvwwNuHlrkwJFP6DTvFEL6ExqfC72Cau0WscRurF0Vt2c0ml9QASWDLVZ20DhVfWtABFSkMMdUqkBluslbjJ8as1IEFYGgO0mV7h+2q3fN3tkgwbEpBYtK23MMTvWmkhrBZYiEzVCFOlob1Fka/qVAykd2T8dlg7B9xiFkuRbgDkqt5oGIewv3p2WCK9+9BFsVPECrEknkMoE1UkfBU5C73KqJK51ZcSDCCr1rJ5R5i70VesQ==\', No_Certificado_SAT_CFDI = \'30001000000400002495\', Sello_SAT_CFDI = \'ReLEO7nOb9zsPCefQIrex4hu/Xly7fL5lllE28VCDaZnHKt5XrSKDXg8dppXHLZXI+HzaPECPQp2iFKVw8WsGraQbxZ4Ji1gbp65qNzHsuG/dnD0f/hVbR9sp2SkJ+o790EPlTxd2Sf/4WD56yG2Gqp9iPS39nS/PrE+ztCkrz+iDmKtrjeedJw/1rDefeUtV0t/RSeGM/gAVZTD3fULO7VA6r2HVS0KhAC4ppmEpOhykT9uLxm0IAEGIub8ZeerCVbhR8JPDNAyOoHPsRv3MzqH72XGrRMWsC9WzAYJqYPdEowagIsnlhNLFdZo4XzXd+Y4HpZ+b4OhDbY8gxkfAA==\', Periodicidad_CFDI = \'04\', Meses_CFDI = \'12\', Ano_CFDI = \'2022\', Relacion_CFDI = \'\', Cadena_CFDI = \'||1.1|8a783b90-c302-4fec-a1d0-3e06c2002736|2022-12-10T18:19:05|SPR190613I52|W8GAdgbebfTodTVTB/3CAhzQb6jeEzAZqimdVz0ckHKZF9MrWOTHuYo7cYVhv/4PLGUpLIqzlRM433ae4jEByvD5FPkmowZAYuHTlSvwwNuHlrkwJFP6DTvFEL6ExqfC72Cau0WscRurF0Vt2c0ml9QASWDLVZ20DhVfWtABFSkMMdUqkBluslbjJ8as1IEFYGgO0mV7h+2q3fN3tkgwbEpBYtK23MMTvWmkhrBZYiEzVCFOlob1Fka/qVAykd2T8dlg7B9xiFkuRbgDkqt5oGIewv3p2WCK9+9BFsVPECrEknkMoE1UkfBU5C73KqJK51ZcSDCCr1rJ5R5i70VesQ==|30001000000400002495||\' WHERE ID_Venta = \'1\'', '', '', '', '', '', '2022-12-10 18:19:02', '', 2),
+(3193, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-12 11:17:21', '', 0),
+(3194, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-13 11:25:08', '', 0),
+(3195, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-14 15:53:34', '', 0),
+(3196, 'Admin: UPDATE ventas SET Facturada = \'1\', Version_CFDI = \'4.0\', Fecha_Expedicion_CFDI = \'2022-12-14 17:45:04\', Sello_CFDI = \'Q5nb5OErH9bjReNhwTAuDBrx5mHiKM6Jka8EvKkj1ybduzS0dXCVnvPQln0T4BEcPTM4fk/gyIvnHM5aaOmxPZ/dmXfIDt31BNtBHe/D7tXfWMfQnAjr7vWT/w4QhwpHsDNrte7ZJinB+uCjZlWn9H4W7Q7Igg06BrfqIjkjIwj7s0STFCWsOTnm7szUjVeOZ7IbMpeNwQCfEULY1e2mFrf27J3m/L3IbP8QDyBw3IS5Uhy8VGgMHI6CyFxJaFIYLWjEDdN0+gc8bwR7sv2qq91qGZr4wtFG7zcZQjV06Thm332zaj8DyoD6y+49Bq28iMLlumMN0QLHWBZuBnzguw==\', Forma_Pago_CFDI = \'01\', No_Certificado_CFDI = \'30001000000400002434\', Certificado_CFDI = \'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==\', Moneda_CFDI = \'MXN\', Tipo_Comprobante_CFDI = \'I\', Exportacion_CFDI = \'01\', Metodo_Pago_CFDI = \'PUE\', Lugar_Expedicion_CFDI = \'47190\', Confirmacion_CFDI = \'\', Emisor_RFC_CFDI = \'EKU9003173C9\', Emisor_Nombre_CFDI = \'ESCUELA KEMPER URGATE\', Emisor_Regimen_Fiscal_CFDI = \'601\', Receptor_RFC_CFDI = \'XAXX010101000\', Receptor_Nombre_CFDI = \'PUBLICO EN GENERAL\', Receptor_Domicilio_CFDI = \'47190\', Receptor_Regimen_Fiscal_CFDI = \'616\', Receptor_Uso_CFDI = \'S01\', UUID_CFDI = \'0a1ef255-dbd4-46e4-874c-ee7f9d51357d\', Fecha_Timbrado_CFDI = \'2022-12-14 17:45:11\', Rfc_ProvCertif_CFDI = \'SPR190613I52\', Sello_CFD_CFDI = \'Q5nb5OErH9bjReNhwTAuDBrx5mHiKM6Jka8EvKkj1ybduzS0dXCVnvPQln0T4BEcPTM4fk/gyIvnHM5aaOmxPZ/dmXfIDt31BNtBHe/D7tXfWMfQnAjr7vWT/w4QhwpHsDNrte7ZJinB+uCjZlWn9H4W7Q7Igg06BrfqIjkjIwj7s0STFCWsOTnm7szUjVeOZ7IbMpeNwQCfEULY1e2mFrf27J3m/L3IbP8QDyBw3IS5Uhy8VGgMHI6CyFxJaFIYLWjEDdN0+gc8bwR7sv2qq91qGZr4wtFG7zcZQjV06Thm332zaj8DyoD6y+49Bq28iMLlumMN0QLHWBZuBnzguw==\', No_Certificado_SAT_CFDI = \'30001000000400002495\', Sello_SAT_CFDI = \'HjFJClC3KR+9yXEQeOSwNLnF4+rhQEiQbN7wqWhUFQvlI22uhUCYoi8Af+QLeNSO9jW+geZ5CWl0R8tNR77Ff2+/HDC2VD3+8MzjfdiqsWJG5LWKEz2/e4+dNIQ0YBwzUIpYROeyEIbyJmMJWImYKbTZjE3DsE5daJAUUjVyKRgZCtlVvLw3LixbWCwXKe73XTq7NnbAKGjWyb6ga/CmfMv5jW1KXrkIEhZdjXVrim77sXmpIwfYP6Q9zmWuWeh96gr7Xs9GFMUTQlN6d0PtGLHFN/j9qU198fgtwG3eGciKNLDQ0KonIM5mgGQHWGLKRj8yKBQzFu6+ThFayCZWJg==\', Periodicidad_CFDI = \'04\', Meses_CFDI = \'12\', Ano_CFDI = \'2022\', Relacion_CFDI = \'\', Cadena_CFDI = \'||1.1|0a1ef255-dbd4-46e4-874c-ee7f9d51357d|2022-12-14T17:45:11|SPR190613I52|Q5nb5OErH9bjReNhwTAuDBrx5mHiKM6Jka8EvKkj1ybduzS0dXCVnvPQln0T4BEcPTM4fk/gyIvnHM5aaOmxPZ/dmXfIDt31BNtBHe/D7tXfWMfQnAjr7vWT/w4QhwpHsDNrte7ZJinB+uCjZlWn9H4W7Q7Igg06BrfqIjkjIwj7s0STFCWsOTnm7szUjVeOZ7IbMpeNwQCfEULY1e2mFrf27J3m/L3IbP8QDyBw3IS5Uhy8VGgMHI6CyFxJaFIYLWjEDdN0+gc8bwR7sv2qq91qGZr4wtFG7zcZQjV06Thm332zaj8DyoD6y+49Bq28iMLlumMN0QLHWBZuBnzguw==|30001000000400002495||\' WHERE ID_Venta = \'1\'', '', '', '', '', '', '2022-12-14 17:45:10', '', 2),
+(3197, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-17 19:29:23', '', 0),
+(3198, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-18 19:30:49', '', 0),
+(3199, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-21 12:01:22', '', 0),
+(3200, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-21 16:43:22', '', 0),
+(3201, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'80.00\', Anticipo= \'NaN\', Estatus= \'1\', Fecha_Registro = \'2022-12-21 17:02:57\', Fecha_Credito = \'\', Tipo_Compra = \'Contado\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2022-12-21 17:02:57', '', 2),
+(3202, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'20.00\', Anticipo= \'50\', Estatus= \'1\', Fecha_Registro = \'2022-12-21 17:06:04\', Fecha_Credito = \'\', Tipo_Compra = \'Contado\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2022-12-21 17:06:04', '', 2),
+(3203, 'Admin: UPDATE compras SET Estatus = \'2\' WHERE ID_Compra = \'6\'', '', '', '', '', '', '2022-12-21 17:27:33', '', 2),
+(3204, 'Admin: DELETE FROM pagos WHERE ID_Pago=\'6\'', '', '', '', '', '', '2022-12-21 19:19:48', '', 2),
+(3205, 'Admin: DELETE FROM compras WHERE ID_Compra = \'6\'', '', '', '', '', '', '2022-12-21 19:19:51', '', 2),
+(3206, 'Admin: DELETE FROM compras WHERE ID_Compra = \'5\'', '', '', '', '', '', '2022-12-21 19:19:56', '', 2),
+(3207, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'50\', Anticipo= \'50\', Estatus= \'1\', Fecha_Registro = \'2022-12-21 19:21:19\', Fecha_Credito = \'\', Tipo_Compra = \'Contado\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2022-12-21 19:21:19', '', 2),
+(3208, 'Admin: INSERT INTO productos SET Codigo = \'ejemplo\', Descripcion = \'Ejemplo\',  FK_Categoria = \'\', Tipo = \'1\', Clase = \'Pieza\', Costo = \'\', Precio = \'50\', Precio_Mayoreo = \'\', FK_Area = \'\', Detalles = \'\', Minimo = \'\', Maximo = \'\', Fecha_Registro = \'2022-12-21 19:23:18\', Clave_ProdServ_CFDI = \'01010101\', Clave_Unidad_CFDI = \'11\', Nombre_Unidad = \'Equipos\', Abreviatura_Unidad = \'Eq\', Objeto_Impuesto_CFDI = \'01\', importe = \'\'', '', '', '', '', '', '2022-12-21 19:23:18', '', 2),
+(3209, 'Admin: INSERT INTO inventario SET Cantidad = 50, FK_Producto = \'36\', FK_Sucursal = \'1\', FK_Presentacion = \'\'', '', '', '', '', '', '2022-12-21 19:23:43', '', 2),
+(3210, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'1\'', '', '', '', '', '', '2022-12-21 19:25:51', '', 2),
+(3211, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'2\'', '', '', '', '', '', '2022-12-21 19:26:34', '', 2),
+(3212, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'4\'', '', '', '', '', '', '2022-12-21 19:34:14', '', 2);
+INSERT INTO `movimientos` (`ID_Movimiento`, `Descripcion`, `IP`, `Pais`, `Estado`, `Navegador`, `SO`, `Fecha`, `Access`, `FK_Usuario`) VALUES
+(3213, 'Admin: UPDATE ventas SET Facturada = \'1\', Version_CFDI = \'4.0\', Fecha_Expedicion_CFDI = \'2022-12-21 19:35:09\', Sello_CFDI = \'QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==\', Forma_Pago_CFDI = \'01\', No_Certificado_CFDI = \'30001000000400002434\', Certificado_CFDI = \'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==\', Moneda_CFDI = \'MXN\', Tipo_Comprobante_CFDI = \'I\', Exportacion_CFDI = \'01\', Metodo_Pago_CFDI = \'PUE\', Lugar_Expedicion_CFDI = \'47190\', Confirmacion_CFDI = \'\', Emisor_RFC_CFDI = \'EKU9003173C9\', Emisor_Nombre_CFDI = \'ESCUELA KEMPER URGATE\', Emisor_Regimen_Fiscal_CFDI = \'601\', Receptor_RFC_CFDI = \'XAXX010101000\', Receptor_Nombre_CFDI = \'PUBLICO EN GENERAL\', Receptor_Domicilio_CFDI = \'47190\', Receptor_Regimen_Fiscal_CFDI = \'616\', Receptor_Uso_CFDI = \'S01\', UUID_CFDI = \'e2e52d70-18a0-41c6-b2a8-23e7193a5e4b\', Fecha_Timbrado_CFDI = \'2022-12-21 19:35:13\', Rfc_ProvCertif_CFDI = \'SPR190613I52\', Sello_CFD_CFDI = \'QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==\', No_Certificado_SAT_CFDI = \'30001000000400002495\', Sello_SAT_CFDI = \'M3Xm7jJ688eImfZ+3OHqAhy7aKdg66VTwbf+w2v8PNl3nyfLU42ChxwL2bo3DXoeqXch6RJrPgFflNGqG3q2l8LKRb9ndP1j+w8sx2NXLbDHOMqAvmyYwSKF+L9dPRDrxKi2oIrBsWEfZZJFk82/gv3emY9GtEXDOz3CiVhQccHoLMamkSuSY1+5triUkAB/q5ohfOM5PFnyqUdGzlrLjLcwsZxk1c07TlhpkSm5ow+PUSE9hWdTUNHva0/rZOIrZ69lzSBIDcogSrQKth8N/yM6AZdrRcmx9ci4DVv8qitaesOD52zl3isBrbsImV+mlbioCGQn3j6+wPs5wGKQbQ==\', Periodicidad_CFDI = \'04\', Meses_CFDI = \'12\', Ano_CFDI = \'2022\', Relacion_CFDI = \'\', Cadena_CFDI = \'||1.1|e2e52d70-18a0-41c6-b2a8-23e7193a5e4b|2022-12-21T19:35:13|SPR190613I52|QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==|30001000000400002495||\' WHERE ID_Venta = \'3\'', '', '', '', '', '', '2022-12-21 19:35:10', '', 2),
+(3214, 'Admin: INSERT INTO inventario SET Cantidad = 100, FK_Producto = \'35\', FK_Sucursal = \'1\', FK_Presentacion = \'20\'', '', '', '', '', '', '2022-12-21 19:56:44', '', 2),
+(3215, 'Admin: UPDATE ventas SET Facturada = \'1\', Version_CFDI = \'4.0\', Fecha_Expedicion_CFDI = \'2022-12-21 19:58:31\', Sello_CFDI = \'TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==\', Forma_Pago_CFDI = \'03\', No_Certificado_CFDI = \'30001000000400002434\', Certificado_CFDI = \'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==\', Moneda_CFDI = \'MXN\', Tipo_Comprobante_CFDI = \'I\', Exportacion_CFDI = \'01\', Metodo_Pago_CFDI = \'PUE\', Lugar_Expedicion_CFDI = \'47190\', Confirmacion_CFDI = \'\', Emisor_RFC_CFDI = \'EKU9003173C9\', Emisor_Nombre_CFDI = \'ESCUELA KEMPER URGATE\', Emisor_Regimen_Fiscal_CFDI = \'601\', Receptor_RFC_CFDI = \'XAXX010101000\', Receptor_Nombre_CFDI = \'PUBLICO EN GENERAL\', Receptor_Domicilio_CFDI = \'47190\', Receptor_Regimen_Fiscal_CFDI = \'616\', Receptor_Uso_CFDI = \'S01\', UUID_CFDI = \'a97fbaad-01ce-4bfd-ad50-63ee62991ac4\', Fecha_Timbrado_CFDI = \'2022-12-21 19:58:37\', Rfc_ProvCertif_CFDI = \'SPR190613I52\', Sello_CFD_CFDI = \'TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==\', No_Certificado_SAT_CFDI = \'30001000000400002495\', Sello_SAT_CFDI = \'l/0OQhKeXsDlkeXGQabKQyGXgIrpVBbXbCd8BYEsiV8rmmSlcT2FO+ok3xEvGYxHU25rNXFD5TX6hpG7/3Zq+0ZoiR/A0C+PN+SEPHAOFferolzEqfd5W1KwNrcgoFjt9B2wmW2BhAw9HZqRNBwcCOM4CgkZKfBbX9Fe5BNLAbjZRsNqAUqAYo1usH6cmkUZgZSIofWqOPtgP53N0DIMhqH6b00JOYev0bwb9KejnsI9GY9ufg8OTRwF8A76OADkznV/uTYEfvw7l0o2YFgCPWLB4Hdsgsc6guALKvgKKltJM/YDRdaSu2mFsfmMbbu3BEBPCgWwlMh94RnXhUqE5w==\', Periodicidad_CFDI = \'04\', Meses_CFDI = \'12\', Ano_CFDI = \'2022\', Relacion_CFDI = \'\', Cadena_CFDI = \'||1.1|a97fbaad-01ce-4bfd-ad50-63ee62991ac4|2022-12-21T19:58:37|SPR190613I52|TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==|30001000000400002495||\' WHERE ID_Venta = \'5\'', '', '', '', '', '', '2022-12-21 19:58:35', '', 2);
 
 -- --------------------------------------------------------
 
@@ -59002,39 +58864,8 @@ CREATE TABLE `pagos` (
 INSERT INTO `pagos` (`ID_Pago`, `FK_Compra`, `Concepto`, `Monto`, `Tipo_Pago`, `Fecha`, `FK_Usuario`, `Archivo`, `Clase`, `FK_Caja`, `Detalles_Pago`) VALUES
 (1, 13, 'Anticipo', 30, 'Efectivo', '2022-11-29 20:59:12', 2, '', 0, 0, '111'),
 (3, 14, 'Anticipo', 5, 'Efectivo', '2022-11-29 21:02:07', 2, '', 0, 0, '1'),
-(5, 5, 'Anticipo', 0, '', '2022-12-18 18:07:29', 2, '', 0, 0, '');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `pedidos`
---
-
-CREATE TABLE `pedidos` (
-  `ID_Pedido` int(11) NOT NULL,
-  `FK_Usuario` int(11) NOT NULL COMMENT 'Usuario que hizo la venta',
-  `FK_Caja` int(11) NOT NULL,
-  `FK_Sucursal` int(11) NOT NULL,
-  `FK_Cliente` int(11) NOT NULL,
-  `Descuento` double NOT NULL,
-  `Total` double NOT NULL,
-  `Tipo_Pago` varchar(60) NOT NULL,
-  `Pago` double NOT NULL,
-  `Cambio` double NOT NULL,
-  `Notas` text NOT NULL,
-  `Fecha_Entrega` date NOT NULL,
-  `Fecha_Registro` datetime NOT NULL,
-  `Cancelada` tinyint(1) NOT NULL,
-  `Fecha_Cancelacion` datetime NOT NULL,
-  `Regreso_Inventario` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `pedidos`
---
-
-INSERT INTO `pedidos` (`ID_Pedido`, `FK_Usuario`, `FK_Caja`, `FK_Sucursal`, `FK_Cliente`, `Descuento`, `Total`, `Tipo_Pago`, `Pago`, `Cambio`, `Notas`, `Fecha_Entrega`, `Fecha_Registro`, `Cancelada`, `Fecha_Cancelacion`, `Regreso_Inventario`) VALUES
-(1, 2, 0, 8, 1, 0, 66.6, '', 0, 0, '', '2022-12-31', '2022-12-14 22:37:48', 0, '0000-00-00 00:00:00', 0);
+(5, 5, 'Anticipo', 0, '', '2022-12-21 17:02:57', 2, '', 0, 0, ''),
+(7, 7, 'Anticipo', 50, 'Efectivo', '2022-12-21 19:21:19', 2, '7_1.png', 0, 0, '');
 
 -- --------------------------------------------------------
 
@@ -59047,7 +58878,7 @@ CREATE TABLE `precios` (
   `FK_Producto` int(11) NOT NULL,
   `FK_Zona` int(11) NOT NULL,
   `FK_Presentacion` int(11) NOT NULL,
-  `Nombre` varchar(300) NOT NULL,
+  `Nombre` varchar(60) NOT NULL,
   `Precio` double NOT NULL,
   `Precio_Mayoreo` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -59057,9 +58888,9 @@ CREATE TABLE `precios` (
 --
 
 INSERT INTO `precios` (`ID_Precio`, `FK_Producto`, `FK_Zona`, `FK_Presentacion`, `Nombre`, `Precio`, `Precio_Mayoreo`) VALUES
-(31, 27, 2, 21, 'Local', 15, 10),
-(32, 27, 2, 21, 'Foraneo', 20, 15),
-(33, 27, 3, 22, 'Local', 23, 22);
+(17, 26, 3, 1, 'gATIÃ‘O', 1, 1),
+(39, 35, 2, 0, 'dfdf', 49, 0),
+(40, 35, 3, 19, 'dcd', 59, 10);
 
 -- --------------------------------------------------------
 
@@ -59080,8 +58911,12 @@ CREATE TABLE `presentaciones` (
 --
 
 INSERT INTO `presentaciones` (`ID_Presentacion`, `FK_Producto`, `Nombre`, `Abreviatura`, `Clave_CFDI`) VALUES
-(21, 27, 'Ascensor', 'Asc', '05'),
-(22, 27, 'PequeÃ±o aerosol', 'Aero', '06');
+(1, 26, 'Gato', '12', ''),
+(2, 26, 'Perro', 'Pe', ''),
+(4, 26, 'Elefante', 'Ele', ''),
+(18, 35, 'fdfd', 'dfdf', ''),
+(19, 35, 'dsds dfd', 'dfdf', ''),
+(20, 35, 'ejemplo', 'ej', '05');
 
 -- --------------------------------------------------------
 
@@ -59091,7 +58926,7 @@ INSERT INTO `presentaciones` (`ID_Presentacion`, `FK_Producto`, `Nombre`, `Abrev
 
 CREATE TABLE `productos` (
   `ID_Producto` int(11) NOT NULL,
-  `Codigo` varchar(300) NOT NULL,
+  `Codigo` varchar(100) NOT NULL,
   `Descripcion` tinytext NOT NULL,
   `Tipo` int(11) NOT NULL COMMENT 'Producto(1) - Materia(2)',
   `FK_Categoria` int(11) NOT NULL,
@@ -59103,7 +58938,7 @@ CREATE TABLE `productos` (
   `Detalles` text NOT NULL,
   `Minimo` double NOT NULL COMMENT 'General',
   `Maximo` double NOT NULL COMMENT 'General',
-  `importe` double NOT NULL,
+  `Importe` double NOT NULL,
   `Fecha_Registro` datetime NOT NULL,
   `Imagen` varchar(300) NOT NULL,
   `Clave_ProdServ_CFDI` varchar(60) NOT NULL,
@@ -59117,10 +58952,11 @@ CREATE TABLE `productos` (
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`ID_Producto`, `Codigo`, `Descripcion`, `Tipo`, `FK_Categoria`, `Clase`, `Costo`, `Precio`, `Precio_Mayoreo`, `FK_Area`, `Detalles`, `Minimo`, `Maximo`, `importe`, `Fecha_Registro`, `Imagen`, `Clave_ProdServ_CFDI`, `Clave_Unidad_CFDI`, `Nombre_Unidad`, `Abreviatura_Unidad`, `Objeto_Impuesto_CFDI`) VALUES
-(26, '123', 'No lo se', 1, 9, 'Pieza', 0, 1, 0, 34, '', 0, 0, 10, '2022-11-28 19:17:40', '', '', '', '', '', ''),
-(27, '1234', 'Prueba 2', 1, 4, 'Pieza', 0, 60, 75, 34, '', 0, 0, 50, '2022-11-28 19:18:09', '', '', '', '', '', ''),
-(28, '11', 'Prueba 4', 1, 0, 'Pieza', 0, 1, 0, 34, '', 0, 0, 5, '2022-12-18 20:25:06', '', '', '', '', '', '');
+INSERT INTO `productos` (`ID_Producto`, `Codigo`, `Descripcion`, `Tipo`, `FK_Categoria`, `Clase`, `Costo`, `Precio`, `Precio_Mayoreo`, `FK_Area`, `Detalles`, `Minimo`, `Maximo`, `Importe`, `Fecha_Registro`, `Imagen`, `Clave_ProdServ_CFDI`, `Clave_Unidad_CFDI`, `Nombre_Unidad`, `Abreviatura_Unidad`, `Objeto_Impuesto_CFDI`) VALUES
+(26, '123', 'No lo se', 0, 4, 'Pieza', 0, 1, 0, 34, '', 0, 0, 0, '2022-11-28 19:17:40', '', '', '', '', '', ''),
+(27, '1234', 'Prueba 2', 0, 4, 'Pieza', 0, 0, 0, 34, '', 0, 0, 0, '2022-11-28 19:18:09', '', '', '', '', '', ''),
+(35, 'Prueba', 'Caja de fresas', 1, 4, 'Pieza', 0, 50, 0, 0, '', 0, 0, 0, '2022-12-03 17:35:01', '', '70141902', 'EA', 'Elemento', 'Ele.', '02'),
+(36, 'ejemplo', 'Ejemplo', 1, 0, 'Pieza', 0, 50, 0, 0, '', 0, 0, 0, '2022-12-21 19:23:18', '', '01010101', '11', 'Equipos', 'Eq', '01');
 
 -- --------------------------------------------------------
 
@@ -59165,6 +59001,18 @@ INSERT INTO `proveedores` (`ID_Proveedor`, `Nombre`, `Calle`, `No_Exterior`, `No
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `relacionados_cfdi`
+--
+
+CREATE TABLE `relacionados_cfdi` (
+  `ID_Relacion` int(11) NOT NULL,
+  `FK_Venta` int(11) NOT NULL,
+  `UUID` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `sucursales`
 --
 
@@ -59191,8 +59039,8 @@ CREATE TABLE `sucursales` (
 --
 
 INSERT INTO `sucursales` (`ID_Sucursal`, `Nombre`, `FK_Encargado`, `Calle`, `No_Exterior`, `No_Interior`, `Colonia`, `CP`, `Ciudad`, `Estado`, `Pais`, `Email`, `Telefono`, `Segundo_Telefono`, `FK_Zona`) VALUES
-(1, 'General 1', 2, 'Ocampo', '25', '0', 'Centro', '47180', 'Arandas', 'Jalisco', 'Mexico', 'general@gmail.com', '3481254785', '3481257859', 2),
-(8, 'Tienda Dionisio', 2, 'Dionisio Rodriguez', '3868', '', 'Jardines de San Francisco', '44790', 'Guadalajara', 'Jalisco', 'Mexico ', '', '3336051454', '3323018720', 3);
+(1, 'General 1', 2, 'Ejemplo', '54', '', '', '47190', 'Aranadas', 'Jalisco', 'MÃ©xico', '', '', '', 2),
+(8, 'Tienda Dionisio', 2, 'Dionisio Rodriguez', '3868', '', 'Jardines de San Francisco', '44790', 'Guadalajara', 'Jalisco', 'MÃ©xico', '', '3336051454', '3323018720', 3);
 
 --
 -- Disparadores `sucursales`
@@ -59232,7 +59080,7 @@ CREATE TABLE `tickets` (
 --
 
 INSERT INTO `tickets` (`ID_Ticket`, `FK_Sucursal`, `Imagen`, `Ruta_Imagen`, `Nombre`, `Domicilio`, `Telefono`, `Email`, `Total_Letras`, `Incluir_Mensaje`, `Mensaje`, `Moneda`, `Simbolo`, `Origen`) VALUES
-(1, 1, 1, '\r\n', 1, 1, 1, 1, 1, 1, '-- Prueba --', '', '', ''),
+(1, 1, 1, '', 1, 1, 1, 1, 1, 1, '-- !Gracias por tu compra! --', '', '', ''),
 (8, 8, 1, '', 1, 1, 1, 1, 1, 1, '-- !Gracias por tu compra! --', '', '', '');
 
 -- --------------------------------------------------------
@@ -59288,7 +59136,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`ID_Usuario`, `Nombre`, `Primer_Apellido`, `Segundo_Apellido`, `Correo`, `Contrasena`, `Tipo_Usuario`, `Permisos`, `BD`, `Estatus`, `Intentos`, `Ultimo_Intento`, `Tiempo_Inicio`, `Tiempo_Final`, `Foto`, `Temporal`, `Activo`, `Tipo_Login`, `Conectado`, `Fecha_Alta`, `FK_Sucursal`) VALUES
-(2, 'Admin', 'cremasi', '', 'admin@gmail.com', '$2y$12$lhPLfk6dsc6TdYE5fnes2OfWuBPlqUQhh8JF9ujg0iNNmSGQC74Xe', 'Administrador', '', 0, 0, 0, '2022-12-19 14:09:02', '2022-12-19 14:09:02', '2022-12-19 13:53:12', '2_anuncio.png', 0, 1, 1, 0, '2022-09-21 18:52:42', 0),
+(2, 'Admin', 'cremasi', '', 'admin@gmail.com', '$2y$12$lhPLfk6dsc6TdYE5fnes2OfWuBPlqUQhh8JF9ujg0iNNmSGQC74Xe', 'Administrador', '', 0, 0, 0, '2022-12-21 16:43:22', '2022-12-21 16:43:22', '2022-12-01 08:43:01', '2_anuncio.png', 0, 1, 1, 0, '2022-09-21 18:52:42', 0),
 (10, 'Lalo', 'bECERRA', '', 'lalo@gmail.com', '$2y$12$ACrdPWFFaSDrOmehjwt0MuIgTfsCmuxpWnDwf8TCoRAwzC8C50QsK', 'Normal', 'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_areas,0,0,0,0~v_categorias,0,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0~v_cajas,0,0,0,0~v_impuestos,0,0,0,0~v_tickets,0~v_general,0~v_usuarios,0,0,0,0,0~', 0, 0, 0, '2022-09-22 18:51:43', '2022-09-22 18:51:43', '2022-09-22 19:02:18', '', 0, 0, 1, 0, '2022-09-22 18:51:31', 0),
 (11, 'Ejemplo', 'sdesde', 'dds', 'ejemplo@gmail.com', '$2y$12$ks7YsxZ13IARNevWP1q4X.Lh8KF0TeogNzNxukBbsnOe4KU5mm0qi', 'Normal', '', 0, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 1, 1, 0, '2022-09-22 18:49:49', 0),
 (14, 'Antonio de Jesus', 'Torres', 'Vazquez', 'antonioudgarandas@gmal.com', '$2y$12$36ZKO7frlfjtaKpoP4K5CumUm/lOK6S7niuUrVNhVrWkIX7D/PKHy', 'Administrador', '', 0, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 1, 1, 0, '2022-11-05 15:25:49', 1);
@@ -59313,47 +59161,50 @@ CREATE TABLE `ventas` (
   `Notas` text NOT NULL,
   `Fecha_Registro` datetime NOT NULL,
   `Cancelada` tinyint(1) NOT NULL,
+  `Estatus` varchar(50) NOT NULL COMMENT 'Completada, Cancelada, Devuelta',
   `Fecha_Cancelacion` datetime NOT NULL,
   `Regreso_Inventario` tinyint(1) NOT NULL,
   `Facturada` tinyint(1) NOT NULL,
   `Version_CFDI` varchar(30) NOT NULL,
-  `Fecha_Expedicion_CFDI` date NOT NULL,
+  `Fecha_Expedicion_CFDI` datetime NOT NULL,
   `Sello_CFDI` text NOT NULL,
   `Forma_Pago_CFDI` varchar(30) NOT NULL,
   `No_Certificado_CFDI` text NOT NULL,
   `Certificado_CFDI` text NOT NULL,
-  `Moneda_CFDI` int(11) NOT NULL,
+  `Moneda_CFDI` varchar(30) NOT NULL,
   `Tipo_Comprobante_CFDI` varchar(30) NOT NULL,
   `Exportacion_CFDI` varchar(30) NOT NULL,
   `Metodo_Pago_CFDI` varchar(30) NOT NULL,
   `Lugar_Expedicion_CFDI` varchar(30) NOT NULL,
   `Confirmacion_CFDI` varchar(30) NOT NULL,
-  `Emisor_RFC_CFDI` int(11) NOT NULL,
-  `Emisor_Nombre_CFDI` int(11) NOT NULL,
-  `Emisor_Regimen_Fiscal_CFDI` int(11) NOT NULL,
-  `Receptor_RFC_CFDI` int(11) NOT NULL,
-  `Receptor_Nombre_CFDI` int(11) NOT NULL,
-  `Receptot_Domicilio_CFDI` int(11) NOT NULL,
-  `Receptor_Regimen_Fiscal_CFDI` int(11) NOT NULL,
-  `Receptor_Uso_CFDI` int(11) NOT NULL,
+  `Emisor_RFC_CFDI` varchar(60) NOT NULL,
+  `Emisor_Nombre_CFDI` tinytext NOT NULL,
+  `Emisor_Regimen_Fiscal_CFDI` varchar(30) NOT NULL,
+  `Receptor_RFC_CFDI` varchar(60) NOT NULL,
+  `Receptor_Nombre_CFDI` tinytext NOT NULL,
+  `Receptor_Domicilio_CFDI` varchar(30) NOT NULL,
+  `Receptor_Regimen_Fiscal_CFDI` varchar(30) NOT NULL,
+  `Receptor_Uso_CFDI` varchar(30) NOT NULL,
   `UUID_CFDI` text NOT NULL,
-  `Fecha_Timbrado_CFDI` date NOT NULL,
+  `Fecha_Timbrado_CFDI` datetime NOT NULL,
   `Rfc_ProvCertif_CFDI` varchar(60) NOT NULL,
   `Sello_CFD_CFDI` text NOT NULL,
   `No_Certificado_SAT_CFDI` text NOT NULL,
-  `Sello_SAT_CFDI` text NOT NULL
+  `Sello_SAT_CFDI` text NOT NULL,
+  `Periodicidad_CFDI` varchar(30) NOT NULL,
+  `Meses_CFDI` varchar(30) NOT NULL,
+  `Ano_CFDI` varchar(30) NOT NULL,
+  `Relacion_CFDI` varchar(30) NOT NULL,
+  `Cadena_CFDI` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `ventas`
 --
 
-INSERT INTO `ventas` (`ID_Venta`, `FK_Usuario`, `FK_Caja`, `FK_Sucursal`, `FK_Cliente`, `Descuento`, `Total`, `Tipo_Pago`, `Pago`, `Cambio`, `Notas`, `Fecha_Registro`, `Cancelada`, `Fecha_Cancelacion`, `Regreso_Inventario`, `Facturada`, `Version_CFDI`, `Fecha_Expedicion_CFDI`, `Sello_CFDI`, `Forma_Pago_CFDI`, `No_Certificado_CFDI`, `Certificado_CFDI`, `Moneda_CFDI`, `Tipo_Comprobante_CFDI`, `Exportacion_CFDI`, `Metodo_Pago_CFDI`, `Lugar_Expedicion_CFDI`, `Confirmacion_CFDI`, `Emisor_RFC_CFDI`, `Emisor_Nombre_CFDI`, `Emisor_Regimen_Fiscal_CFDI`, `Receptor_RFC_CFDI`, `Receptor_Nombre_CFDI`, `Receptot_Domicilio_CFDI`, `Receptor_Regimen_Fiscal_CFDI`, `Receptor_Uso_CFDI`, `UUID_CFDI`, `Fecha_Timbrado_CFDI`, `Rfc_ProvCertif_CFDI`, `Sello_CFD_CFDI`, `No_Certificado_SAT_CFDI`, `Sello_SAT_CFDI`) VALUES
-(10, 2, 0, 1, 1, 0, 108.78, 'Efectivo', 200, -91.22, '', '2022-12-18 15:42:09', 0, '0000-00-00 00:00:00', 0, 0, '', '0000-00-00', '', '', '', '', 0, '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '0000-00-00', '', '', '', ''),
-(11, 2, 0, 1, 1, 0, 208.78, 'Efectivo', 500, -291.22, '', '2022-12-18 19:36:42', 0, '0000-00-00 00:00:00', 0, 0, '', '0000-00-00', '', '', '', '', 0, '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '0000-00-00', '', '', '', ''),
-(12, 2, 0, 1, 1, 0, 135.35999999999999, 'Efectivo', 200, -64.64, '', '2022-12-18 20:26:18', 0, '0000-00-00 00:00:00', 0, 0, '', '0000-00-00', '', '', '', '', 0, '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '0000-00-00', '', '', '', ''),
-(13, 2, 0, 1, 1, 120.5, 156.71, 'Efectivo', 200, -43.29, '', '2022-12-18 21:22:59', 0, '0000-00-00 00:00:00', 0, 0, '', '0000-00-00', '', '', '', '', 0, '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '0000-00-00', '', '', '', ''),
-(14, 2, 0, 1, 1, 0, 68.75999999999999, 'Efectivo', 70, -1.24, 'jojo', '2022-12-18 22:43:14', 1, '2022-12-19 13:35:39', 1, 0, '', '0000-00-00', '', '', '', '', 0, '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '0000-00-00', '', '', '', '');
+INSERT INTO `ventas` (`ID_Venta`, `FK_Usuario`, `FK_Caja`, `FK_Sucursal`, `FK_Cliente`, `Descuento`, `Total`, `Tipo_Pago`, `Pago`, `Cambio`, `Notas`, `Fecha_Registro`, `Cancelada`, `Estatus`, `Fecha_Cancelacion`, `Regreso_Inventario`, `Facturada`, `Version_CFDI`, `Fecha_Expedicion_CFDI`, `Sello_CFDI`, `Forma_Pago_CFDI`, `No_Certificado_CFDI`, `Certificado_CFDI`, `Moneda_CFDI`, `Tipo_Comprobante_CFDI`, `Exportacion_CFDI`, `Metodo_Pago_CFDI`, `Lugar_Expedicion_CFDI`, `Confirmacion_CFDI`, `Emisor_RFC_CFDI`, `Emisor_Nombre_CFDI`, `Emisor_Regimen_Fiscal_CFDI`, `Receptor_RFC_CFDI`, `Receptor_Nombre_CFDI`, `Receptor_Domicilio_CFDI`, `Receptor_Regimen_Fiscal_CFDI`, `Receptor_Uso_CFDI`, `UUID_CFDI`, `Fecha_Timbrado_CFDI`, `Rfc_ProvCertif_CFDI`, `Sello_CFD_CFDI`, `No_Certificado_SAT_CFDI`, `Sello_SAT_CFDI`, `Periodicidad_CFDI`, `Meses_CFDI`, `Ano_CFDI`, `Relacion_CFDI`, `Cadena_CFDI`) VALUES
+(3, 2, 0, 1, 1, 5, 45, 'Efectivo', 50, -5, '', '2022-12-21 19:26:06', 0, 'Completada', '0000-00-00 00:00:00', 0, 1, '4.0', '2022-12-21 19:35:09', 'QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==', '01', '30001000000400002434', 'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==', 'MXN', 'I', '01', 'PUE', '47190', '', 'EKU9003173C9', 'ESCUELA KEMPER URGATE', '601', 'XAXX010101000', 'PUBLICO EN GENERAL', '47190', '616', 'S01', 'e2e52d70-18a0-41c6-b2a8-23e7193a5e4b', '2022-12-21 19:35:13', 'SPR190613I52', 'QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==', '30001000000400002495', 'M3Xm7jJ688eImfZ+3OHqAhy7aKdg66VTwbf+w2v8PNl3nyfLU42ChxwL2bo3DXoeqXch6RJrPgFflNGqG3q2l8LKRb9ndP1j+w8sx2NXLbDHOMqAvmyYwSKF+L9dPRDrxKi2oIrBsWEfZZJFk82/gv3emY9GtEXDOz3CiVhQccHoLMamkSuSY1+5triUkAB/q5ohfOM5PFnyqUdGzlrLjLcwsZxk1c07TlhpkSm5ow+PUSE9hWdTUNHva0/rZOIrZ69lzSBIDcogSrQKth8N/yM6AZdrRcmx9ci4DVv8qitaesOD52zl3isBrbsImV+mlbioCGQn3j6+wPs5wGKQbQ==', '04', '12', '2022', '', '||1.1|e2e52d70-18a0-41c6-b2a8-23e7193a5e4b|2022-12-21T19:35:13|SPR190613I52|QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==|30001000000400002495||'),
+(5, 2, 0, 1, 1, 2.5, 55.1, 'Efectivo', 60, -4.9, '', '2022-12-21 19:57:17', 0, 'Completada', '0000-00-00 00:00:00', 0, 1, '4.0', '2022-12-21 19:58:31', 'TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==', '03', '30001000000400002434', 'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==', 'MXN', 'I', '01', 'PUE', '47190', '', 'EKU9003173C9', 'ESCUELA KEMPER URGATE', '601', 'XAXX010101000', 'PUBLICO EN GENERAL', '47190', '616', 'S01', 'a97fbaad-01ce-4bfd-ad50-63ee62991ac4', '2022-12-21 19:58:37', 'SPR190613I52', 'TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==', '30001000000400002495', 'l/0OQhKeXsDlkeXGQabKQyGXgIrpVBbXbCd8BYEsiV8rmmSlcT2FO+ok3xEvGYxHU25rNXFD5TX6hpG7/3Zq+0ZoiR/A0C+PN+SEPHAOFferolzEqfd5W1KwNrcgoFjt9B2wmW2BhAw9HZqRNBwcCOM4CgkZKfBbX9Fe5BNLAbjZRsNqAUqAYo1usH6cmkUZgZSIofWqOPtgP53N0DIMhqH6b00JOYev0bwb9KejnsI9GY9ufg8OTRwF8A76OADkznV/uTYEfvw7l0o2YFgCPWLB4Hdsgsc6guALKvgKKltJM/YDRdaSu2mFsfmMbbu3BEBPCgWwlMh94RnXhUqE5w==', '04', '12', '2022', '', '||1.1|a97fbaad-01ce-4bfd-ad50-63ee62991ac4|2022-12-21T19:58:37|SPR190613I52|TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==|30001000000400002495||');
 
 -- --------------------------------------------------------
 
@@ -59446,13 +59297,6 @@ ALTER TABLE `detalles_clientes`
   ADD KEY `FK_Cliente` (`FK_Cliente`);
 
 --
--- Indices de la tabla `detalles_impuestos_pedidos`
---
-ALTER TABLE `detalles_impuestos_pedidos`
-  ADD PRIMARY KEY (`ID_Impuesto`),
-  ADD KEY `FK_Detalle_Pedido` (`FK_Detalle_Pedido`);
-
---
 -- Indices de la tabla `detalles_impuestos_productos`
 --
 ALTER TABLE `detalles_impuestos_productos`
@@ -59466,21 +59310,6 @@ ALTER TABLE `detalles_impuestos_productos`
 ALTER TABLE `detalles_impuestos_ventas`
   ADD PRIMARY KEY (`ID_Impuesto`),
   ADD KEY `FK_Detalle_Venta` (`FK_Detalle_Venta`);
-
---
--- Indices de la tabla `detalles_pedidos`
---
-ALTER TABLE `detalles_pedidos`
-  ADD PRIMARY KEY (`ID_Detalle_Pedido`),
-  ADD KEY `FK_Pedido` (`FK_Pedido`);
-
---
--- Indices de la tabla `detalles_productos`
---
-ALTER TABLE `detalles_productos`
-  ADD PRIMARY KEY (`ID_Detalle_Producto`),
-  ADD KEY `FK_Producto` (`FK_Producto`),
-  ADD KEY `FK_Sucursal` (`FK_Sucursal`);
 
 --
 -- Indices de la tabla `detalles_ventas`
@@ -59535,8 +59364,7 @@ ALTER TABLE `impuestos`
 ALTER TABLE `inventario`
   ADD PRIMARY KEY (`ID_Inventario`),
   ADD KEY `FK_Sucursal` (`FK_Sucursal`),
-  ADD KEY `FK_Producto` (`FK_Producto`),
-  ADD KEY `FK_Presentacion` (`FK_Presentacion`);
+  ADD KEY `FK_Producto` (`FK_Producto`);
 
 --
 -- Indices de la tabla `merma`
@@ -59559,20 +59387,12 @@ ALTER TABLE `pagos`
   ADD PRIMARY KEY (`ID_Pago`);
 
 --
--- Indices de la tabla `pedidos`
---
-ALTER TABLE `pedidos`
-  ADD PRIMARY KEY (`ID_Pedido`),
-  ADD KEY `FK_Sucursal` (`FK_Sucursal`);
-
---
 -- Indices de la tabla `precios`
 --
 ALTER TABLE `precios`
   ADD PRIMARY KEY (`ID_Precio`),
   ADD KEY `FK_Producto` (`FK_Producto`),
-  ADD KEY `FK_Zona` (`FK_Zona`),
-  ADD KEY `precios_ibfk_3` (`FK_Presentacion`);
+  ADD KEY `FK_Zona` (`FK_Zona`);
 
 --
 -- Indices de la tabla `presentaciones`
@@ -59593,6 +59413,13 @@ ALTER TABLE `productos`
 --
 ALTER TABLE `proveedores`
   ADD PRIMARY KEY (`ID_Proveedor`);
+
+--
+-- Indices de la tabla `relacionados_cfdi`
+--
+ALTER TABLE `relacionados_cfdi`
+  ADD PRIMARY KEY (`ID_Relacion`),
+  ADD KEY `FK_Venta` (`FK_Venta`);
 
 --
 -- Indices de la tabla `sucursales`
@@ -59629,7 +59456,8 @@ ALTER TABLE `usuarios`
 --
 ALTER TABLE `ventas`
   ADD PRIMARY KEY (`ID_Venta`),
-  ADD KEY `FK_Sucursal` (`FK_Sucursal`);
+  ADD KEY `FK_Sucursal` (`FK_Sucursal`),
+  ADD KEY `FK_Cliente` (`FK_Cliente`);
 
 --
 -- Indices de la tabla `zonas`
@@ -59675,13 +59503,13 @@ ALTER TABLE `claves_unidades_cfdi`
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `ID_Cliente` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave Ãºnica de registro de cada cliente', AUTO_INCREMENT=27;
+  MODIFY `ID_Cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
-  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `conversiones`
@@ -59702,46 +59530,28 @@ ALTER TABLE `detalles_clientes`
   MODIFY `ID_Detalle_Cliente` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `detalles_impuestos_pedidos`
---
-ALTER TABLE `detalles_impuestos_pedidos`
-  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_productos`
 --
 ALTER TABLE `detalles_impuestos_productos`
-  MODIFY `ID_Detalle_Im_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `ID_Detalle_Im_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_ventas`
 --
 ALTER TABLE `detalles_impuestos_ventas`
-  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
-
---
--- AUTO_INCREMENT de la tabla `detalles_pedidos`
---
-ALTER TABLE `detalles_pedidos`
-  MODIFY `ID_Detalle_Pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT de la tabla `detalles_productos`
---
-ALTER TABLE `detalles_productos`
-  MODIFY `ID_Detalle_Producto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_ventas`
 --
 ALTER TABLE `detalles_ventas`
-  MODIFY `ID_Detalle_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `ID_Detalle_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_compras`
 --
 ALTER TABLE `detalle_compras`
-  MODIFY `ID_Detalle_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_Detalle_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `dinero`
@@ -59765,19 +59575,19 @@ ALTER TABLE `historial_caja`
 -- AUTO_INCREMENT de la tabla `importes`
 --
 ALTER TABLE `importes`
-  MODIFY `ID_Importe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_Importe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `impuestos`
 --
 ALTER TABLE `impuestos`
-  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario`
 --
 ALTER TABLE `inventario`
-  MODIFY `ID_Inventario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ID_Inventario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `merma`
@@ -59789,43 +59599,43 @@ ALTER TABLE `merma`
 -- AUTO_INCREMENT de la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
-  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3222;
+  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3216;
 
 --
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `ID_Pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT de la tabla `pedidos`
---
-ALTER TABLE `pedidos`
-  MODIFY `ID_Pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_Pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `precios`
 --
 ALTER TABLE `precios`
-  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT de la tabla `presentaciones`
 --
 ALTER TABLE `presentaciones`
-  MODIFY `ID_Presentacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `ID_Presentacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `ID_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `ID_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
   MODIFY `ID_Proveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `relacionados_cfdi`
+--
+ALTER TABLE `relacionados_cfdi`
+  MODIFY `ID_Relacion` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `sucursales`
@@ -59855,7 +59665,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `ID_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `ID_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `zonas`
@@ -59886,22 +59696,17 @@ ALTER TABLE `detalles_clientes`
   ADD CONSTRAINT `detalles_clientes_ibfk_1` FOREIGN KEY (`FK_Cliente`) REFERENCES `clientes` (`ID_Cliente`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `detalles_impuestos_pedidos`
+-- Filtros para la tabla `detalles_impuestos_productos`
 --
-ALTER TABLE `detalles_impuestos_pedidos`
-  ADD CONSTRAINT `detalles_impuestos_pedidos_ibfk_1` FOREIGN KEY (`FK_Detalle_Pedido`) REFERENCES `detalles_pedidos` (`ID_Detalle_Pedido`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `detalles_impuestos_productos`
+  ADD CONSTRAINT `detalles_impuestos_productos_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`),
+  ADD CONSTRAINT `detalles_impuestos_productos_ibfk_2` FOREIGN KEY (`FK_Impuesto`) REFERENCES `impuestos` (`ID_Impuesto`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `detalles_impuestos_ventas`
 --
 ALTER TABLE `detalles_impuestos_ventas`
   ADD CONSTRAINT `detalles_impuestos_ventas_ibfk_1` FOREIGN KEY (`FK_Detalle_Venta`) REFERENCES `detalles_ventas` (`ID_Detalle_Venta`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `detalles_pedidos`
---
-ALTER TABLE `detalles_pedidos`
-  ADD CONSTRAINT `detalles_pedidos_ibfk_1` FOREIGN KEY (`FK_Pedido`) REFERENCES `pedidos` (`ID_Pedido`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `detalles_ventas`
@@ -59922,12 +59727,6 @@ ALTER TABLE `inventario`
   ADD CONSTRAINT `inventario_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `pedidos`
---
-ALTER TABLE `pedidos`
-  ADD CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`FK_Sucursal`) REFERENCES `sucursales` (`ID_Sucursal`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Filtros para la tabla `precios`
 --
 ALTER TABLE `precios`
@@ -59935,10 +59734,29 @@ ALTER TABLE `precios`
   ADD CONSTRAINT `precios_ibfk_2` FOREIGN KEY (`FK_Zona`) REFERENCES `zonas` (`ID_Zona`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `presentaciones`
+--
+ALTER TABLE `presentaciones`
+  ADD CONSTRAINT `presentaciones_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `relacionados_cfdi`
+--
+ALTER TABLE `relacionados_cfdi`
+  ADD CONSTRAINT `relacionados_cfdi_ibfk_1` FOREIGN KEY (`FK_Venta`) REFERENCES `ventas` (`ID_Venta`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `sucursales`
+--
+ALTER TABLE `sucursales`
+  ADD CONSTRAINT `sucursales_ibfk_1` FOREIGN KEY (`FK_Zona`) REFERENCES `zonas` (`ID_Zona`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  ADD CONSTRAINT `ventas_ibfk_1` FOREIGN KEY (`FK_Sucursal`) REFERENCES `sucursales` (`ID_Sucursal`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `ventas_ibfk_1` FOREIGN KEY (`FK_Sucursal`) REFERENCES `sucursales` (`ID_Sucursal`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ventas_ibfk_2` FOREIGN KEY (`FK_Cliente`) REFERENCES `clientes` (`ID_Cliente`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
