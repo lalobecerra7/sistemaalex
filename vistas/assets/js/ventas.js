@@ -297,7 +297,7 @@ function TablaReporteVentas(){
 			"Acciones"
 		],
 		"sort": [
-			2,
+			0,
 			"desc"
 		],
 		"url": "index.php", 

@@ -160,6 +160,7 @@ function v_productos() {
                         title: 'Existencia agregada correctamente'
                     });
                     $("#FormExistenciaProducto").trigger("reset");
+                    $("#ModalExistenciasProducto").modal("hide");
                 }else{
                     Swal.fire({
                         icon: 'error',
