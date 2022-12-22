@@ -14,7 +14,7 @@
 	}else{
 		if($numerofilas > 0){
 			$productos = ''; $subtotal = 0; $totalImTras = 0; $totalImRete = 0; $imAgrupadosTras = []; $imAgrupadosRete = []; $error = false;
-			$query1 = "SELECT ID_Detalle_Venta, Indetificacion_CFDI, Clave_ProdServ_CFDI, Clave_Unidad_CFDI, Unidad_CFDI, Objeto_Impuesto_CFDI, Descripcion, Precio, Cantidad, Descuento, Total FROM detalles_ventas WHERE FK_Venta = '$id'";
+			$query1 = "SELECT ID_Detalle_Venta, Identificacion_CFDI, Clave_ProdServ_CFDI, Clave_Unidad_CFDI, Unidad_CFDI, Objeto_Impuesto_CFDI, Descripcion, Precio, Cantidad, Descuento, Total FROM detalles_ventas WHERE FK_Venta = '$id'";
 			$row1 = $omodelo->_consultar($query1);
 			$numerofilas1 = $omodelo->numerofilas;
 
@@ -88,17 +88,18 @@
 							}
 						}
 
-						$impuestos = '';
-						if(trim($impuestosTras) != '' || trim($impuestosRet) != ''){
-						$impuestos .= '<cfdi:Impuestos>';
-													
+					$impuestos = '';
+					if(trim($impuestosTras) != '' || trim($impuestosRet) != ''){
+						$impuestos .= '
+						<cfdi:Impuestos>';
+														
 						if(trim($impuestosTras) != ''){
 							$impuestos .= '
 							<cfdi:Traslados>
 								'.trim($impuestosTras).'
 							</cfdi:Traslados>';
 						}
-													
+														
 						if(trim($impuestosRet) != ''){
 							$impuestos .= '
 							<cfdi:Retenciones>
@@ -108,13 +109,11 @@
 
 						$impuestos .= '
 						</cfdi:Impuestos>';
-
-						$productos .= '<cfdi:Concepto ClaveProdServ="'.$row1[$i]['Clave_ProdServ_CFDI'].'" NoIdentificacion="'.$row1[$i]['Indetificacion_CFDI'].'" Cantidad="'.number_format($row1[$i]['Cantidad'], 2).'" ClaveUnidad="'.$row1[$i]['Clave_Unidad_CFDI'].'" Unidad="'.$row1[$i]['Unidad_CFDI'].'" Descripcion="'.$row1[$i]['Descripcion'].'" ValorUnitario="'.number_format($row1[$i]['Precio'], 2).'" Importe="'.number_format(($row1[$i]['Cantidad'] * $row1[$i]['Precio']), 2).'" Descuento="'.number_format($row1[$i]['Descuento'], 2).'" ObjetoImp="'.$row1[$i]['Objeto_Impuesto_CFDI'].'">
-							'.$impuestos.'
-						</cfdi:Concepto>';
-
-						$subtotal += $row1[$i]['Cantidad'] * $row1[$i]['Precio'];
 					}
+
+					$productos .= '<cfdi:Concepto ClaveProdServ="'.$row1[$i]['Clave_ProdServ_CFDI'].'" NoIdentificacion="'.$row1[$i]['Identificacion_CFDI'].'" Cantidad="'.number_format($row1[$i]['Cantidad'], 2).'" ClaveUnidad="'.$row1[$i]['Clave_Unidad_CFDI'].'" Unidad="'.$row1[$i]['Unidad_CFDI'].'" Descripcion="'.$row1[$i]['Descripcion'].'" ValorUnitario="'.number_format($row1[$i]['Precio'], 2).'" Importe="'.number_format(($row1[$i]['Cantidad'] * $row1[$i]['Precio']), 2).'" Descuento="'.number_format($row1[$i]['Descuento'], 2).'" ObjetoImp="'.$row1[$i]['Objeto_Impuesto_CFDI'].'">'.$impuestos.'</cfdi:Concepto>';
+
+					$subtotal += $row1[$i]['Cantidad'] * $row1[$i]['Precio'];
 				}
 			}
 		}
