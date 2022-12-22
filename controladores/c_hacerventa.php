@@ -580,7 +580,7 @@ class hacerventa {
 							for ($i=0; $i < $numerofilasI; $i++) { 
 								$campoImpuestos .= '
 									<div class="form-check impuesto">
-										<input class="form-check-input seleccionarImpuesto" checked type="checkbox" nombre="'.$rowI[$i]["Nombre"].'" porcentaje="'.$rowI[$i]["Porcentaje"].'" attrid="'.$rowI[$i]["FK_Impuesto"].'" clavecfdi="'.$rowI[$i]["Clave_CFDI"].'" tipofactor="'.$rowI[$i]["Tipo_Factor"].'" clase="'.$rowI[$i]["Clase"].'">
+										<input class="form-check-input seleccionarImpuesto oculto" checked type="checkbox" nombre="'.$rowI[$i]["Nombre"].'" porcentaje="'.$rowI[$i]["Porcentaje"].'" attrid="'.$rowI[$i]["FK_Impuesto"].'" clavecfdi="'.$rowI[$i]["Clave_CFDI"].'" tipofactor="'.$rowI[$i]["Tipo_Factor"].'" clase="'.$rowI[$i]["Clase"].'">
 										<label class="form-check-label" for="flexCheckDefault">
 											'.$rowI[$i]["Nombre"].' ('.$rowI[$i]["Porcentaje"].'%)
 										</label>
@@ -957,7 +957,7 @@ class hacerventa {
 
 											$campoImpuestos .= '
 												<div class="form-check impuesto">
-													<input class="form-check-input seleccionarImpuesto" '.$checked.' type="checkbox" nombre="'.$rowI[$a]["Nombre"].'" porcentaje="'.$rowI[$a]["Porcentaje"].'" attrid="'.$rowI[$a]["FK_Impuesto"].'" clavecfdi="'.$rowI[$a]["Clave_CFDI"].'" tipofactor="'.$rowI[$a]["Tipo_Factor"].'" clase="'.$rowI[$a]["Clase"].'">
+													<input class="form-check-input oculto seleccionarImpuesto" '.$checked.' type="checkbox" nombre="'.$rowI[$a]["Nombre"].'" porcentaje="'.$rowI[$a]["Porcentaje"].'" attrid="'.$rowI[$a]["FK_Impuesto"].'" clavecfdi="'.$rowI[$a]["Clave_CFDI"].'" tipofactor="'.$rowI[$a]["Tipo_Factor"].'" clase="'.$rowI[$a]["Clase"].'">
 													<label class="form-check-label" for="flexCheckDefault">
 														'.$rowI[$a]["Nombre"].' ('.$rowI[$a]["Porcentaje"].'%)
 													</label>
