@@ -53,7 +53,6 @@ jQuery(document).ready(function($) {
 				});
             }else{       
             	var datos = JSON.parse($.trim(res));
-            	console.log(datos);
                 var existencia = 0;
                 if(datos.Existencia != null){
                     existencia = datos.Existencia;
@@ -67,7 +66,7 @@ jQuery(document).ready(function($) {
                     $('#TablaProductosAgregadoVenta tbody').append(`
 	             		<tr attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">
 	                        <td>`+datos.Codigo+`</td>
-	                        <td>`+datos.Descripcion+` <br>`+datos.Presentacion+`</td>
+	                        <td>`+datos.Descripcion+` <br><button class="btn btn-secondary btn-sm CambiarPresentacion" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Presentacion+`</button></td>
 	                        <td><button class="btn btn-sm btn-primary cambiarPrecio dinero" precio="`+datos.Precio_General+`" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Precio_General+`</button></td>
 	                        <td><input type='number' value='1' min='1' step='any' class='form-control form-control-sm campoCantidadProducto'></td>
 	                        <td>`+datos.Impuestos+`</td>
@@ -81,6 +80,7 @@ jQuery(document).ready(function($) {
 		                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-dollar-sign"></i></span>
 		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProductoCantidad">
 		                        </div>
+		                    </td>
 	                        <td class="dinero"></td>
 	                        <td><button class="btn btn-sm btn-danger eliminarFila"><i class="fas fa-trash"></i></button></td>
 	                    </tr>`);
@@ -130,7 +130,7 @@ jQuery(document).ready(function($) {
                     $('#TablaProductosAgregadoVenta tbody').append(`
 	             		<tr attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">
 	                        <td>`+datos.Codigo+`</td>
-	                        <td>`+datos.Descripcion+` <br>`+datos.Presentacion+`</td>
+	                        <td>`+datos.Descripcion+` <br> <button class="btn btn-secondary btn-sm CambiarPresentacion" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Presentacion+`</button></td>
 	                        <td><button class="btn btn-sm btn-primary cambiarPrecio dinero" precio="`+datos.Precio_General+`" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Precio_General+`</button></td>
 	                        <td><input type='number' value='1' min='1' step='any' class='form-control form-control-sm campoCantidadProducto'></td>
 	                        <td>`+datos.Impuestos+`</td>
@@ -184,13 +184,10 @@ jQuery(document).ready(function($) {
 				var porcentaje = parseFloat(impuesto.attr("porcentaje")) / 100;
 
 				if (impuesto.attr("clase") == "Trasladado") { //Se suma al total
-					console.log("Trasladado");
 					totalImpuestos += parseFloat(total) * parseFloat(porcentaje);
 				}else if(impuesto.attr("clase") == "Retenido" && impuesto.attr("tipofactor") != "Exento"){ //Se resta al total
-					console.log("retenido no exento");
 					totalImpuestos -= parseFloat(total) * parseFloat(porcentaje);
 				}else if(impuesto.attr("clase") == "Retenido" && impuesto.attr("tipofactor") == "Exento"){ //No se suma ni se resta
-					console.log("retenido exento");
 					totalImpuestos += parseFloat(0);
 				}else{
 					totalImpuestos += parseFloat(total) * parseFloat(porcentaje);
@@ -229,8 +226,8 @@ jQuery(document).ready(function($) {
 	});
 
 	$(document).on('click', '.cambiarPrecio', function() {
-		var idproducto = $(this).attr("attrid");
-		var presentacion = $(this).attr("idpresentacion");
+		var idproducto = $(this).parent().parent().attr("attrid");
+		var presentacion = $(this).parent().parent().attr("idpresentacion");
 		var precio = $(this).attr("precio");
 		VentaTablaPreciosProducto(idproducto, presentacion);
 		$(".BotonDatosPrecio").attr("producto", idproducto);
@@ -289,11 +286,9 @@ jQuery(document).ready(function($) {
 						$(this).children("td:eq(4)").find(".impuesto").each(function(index, el) {
 							var impuesto = $(this).find(".seleccionarImpuesto");
 							if (impuesto.prop("checked") == true) {
-								console.log("entro"+impuesto.attr("nombre"));
 								impuestos += impuesto.attr("attrid")+","+impuesto.attr("nombre")+","+impuesto.attr("porcentaje")+","+impuesto.attr("clavecfdi")+","+impuesto.attr("tipofactor")+","+impuesto.attr("clase")+"~";
 							}
 						});
-						console.log(impuestos);
 						productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto]);
 					});
 
@@ -457,7 +452,6 @@ jQuery(document).ready(function($) {
 									impuestos += impuesto.attr("attrid")+","+impuesto.attr("nombre")+","+impuesto.attr("porcentaje")+","+impuesto.attr("clavecfdi")+","+impuesto.attr("tipofactor")+","+impuesto.attr("clase")+"~";
 								}
 							});
-							console.log(impuestos);
 							productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto]);
 						});
 
@@ -791,26 +785,26 @@ jQuery(document).ready(function($) {
 				$('#TablaProductosAgregadoVenta tbody').append(`
 		        <tr attrid="`+datos.data.Productos.data[i].FK_Producto+`" idPresentacion="`+presentacion+`">
 		        	<td>`+datos.data.Productos.data[i].Codigo+`</td>
-		            <td>`+datos.data.Productos.data[i].Descripcion+` <br>`+datos.data.Productos.data[i].NombrePresentacion+`</td>
+		            <td>`+datos.data.Productos.data[i].Descripcion+` <br> <button class="btn btn-secondary btn-sm CambiarPresentacion" attrid="`+datos.data.Productos.data[i].FK_Producto+`" idPresentacion="`+presentacion+`">`+datos.data.Productos.data[i].NombrePresentacion+`</button>
 		            <td><button class="btn btn-sm btn-primary cambiarPrecio dinero" precio="`+datos.data.Productos.data[i].Precio+`" attrid="`+datos.data.Productos.data[i].FK_Producto+`" idPresentacion="`+datos.data.Productos.data[i].FK_Presentacion+`">`+datos.data.Productos.data[i].Precio+`</button></td>
 		            <td><input type='number' value='`+datos.data.Productos.data[i].Cantidad+`' min='1' step='any' class='form-control form-control-sm campoCantidadProducto'></td>
 		            <td>`+datos.data.Productos.data[i].Impuestos+`</td>
 		            <td>
 			        	<div class="input-group">
 			            	<span class="input-group-text" id="basic-addon1"><i class="fas fa-percentage"></i></span>
-			                <input type="number" value="`+datos.data.Productos.data[i].Descuento+`" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProducto">
+			                <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProducto">
 			            </div>
 			            <br>
 			            <div class="input-group">
 			            	<span class="input-group-text" id="basic-addon1"><i class="fas fa-dollar-sign"></i></span>
-			                <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProductoCantidad">
+			                <input type="number" value="`+datos.data.Productos.data[i].Descuento+`" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProductoCantidad">
 			            </div>
 		            </td>
 		            <td class="dinero"></td>
 		            <td><button class="btn btn-sm btn-danger eliminarFila"><i class="fas fa-trash"></i></button></td>
 		        </tr>`);
 
-				$(".campoCantidadProducto").trigger("keyup");
+				$(".campoDescuentoProductoCantidad").trigger("keyup");
 
 				$("#CargaPedidosModalVentas").text("Pedido: "+folio);
 				$("#CargaPedidosModalVentas").attr("attrid", id);
@@ -867,6 +861,49 @@ jQuery(document).ready(function($) {
 				});
 			}    
 		});	  
+	});
+
+	$(document).on('click', '.CambiarPresentacion', function() {
+		var id = $(this).attr("attrid");
+		var idsucursal = $("#SucursalVenta").attr("attrid");
+		var idpresentacion = $(this).attr("idPresentacion");
+		TablaPresentacionesProducto(id, idsucursal, idpresentacion);
+		$("#ModalPresentacionesProducto").modal("show");
+	});
+
+	$(document).on('click', '.SeleccionarPresentacion', function() {
+		var idpresentacion = $(this).parent().parent().attr("id");
+		var idproducto = $(this).attr("producto");
+		var presentacionanterior = $(this).attr("presentacionactual");
+		var nombre = $(this).attr("nombre");
+		var abreviatura = $(this).attr("abreviatura");
+		var precio = $(this).attr("precio");
+		if (idpresentacion == 0) {
+			idpresentacion = null;
+		}
+		$("#ModalPresentacionesProducto").modal("hide");
+		
+		if($("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').length > 0){                 
+          	var cantidad = $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+presentacionanterior+']').children("td:eq(3)").find(".campoCantidadProducto").val();
+           	var cantidadactual = $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(3)").find(".campoCantidadProducto").val();
+            $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(3)").find(".campoCantidadProducto").val(parseFloat(cantidad) + parseFloat(cantidadactual));
+            $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+presentacionanterior+']').remove();
+            $(".campoCantidadProducto").trigger("change");
+        }else{
+	    	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+presentacionanterior+']').attr("idPresentacion", idpresentacion);
+	    	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(1)").find(".CambiarPresentacion").attr("idpresentacion", idpresentacion);
+	    	if (abreviatura == "") {
+	    		$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(1)").find(".CambiarPresentacion").text(nombre);
+	    	}else{
+	    		$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(1)").find(".CambiarPresentacion").text(nombre+"("+abreviatura+")");
+	    	}
+
+	    	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(2)").find(".cambiarPrecio").attr("precio", precio);
+	    	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(2)").find(".cambiarPrecio").text(precio);
+	    }
+	    $(".campoCantidadProducto").trigger("change");
+		moneda();
+
 	});
 
 	
@@ -970,6 +1007,31 @@ function VentaTablaPreciosProducto(idproducto, presentacion){
 			"accion": "hacerventa",
 			"idproducto": idproducto,
 			"presentacion": presentacion
+		}
+	});
+}
+
+function TablaPresentacionesProducto(idproducto, idsucursal, idpresentacion){
+	ajaxMyDatatable({
+		"table": $("#TablaPresentacionesProducto"), 
+		"colums": [
+			"Nombre", 
+			"Abreviatura", 
+			"Existencia",
+			"Accion"
+		], 
+		"sort": [
+			1,
+			"desc"
+		],
+		"url": "index.php", 
+		"params":{
+			"metodo": "detalles",
+			"tipo": "ConsultarPresentacionesProducto",
+			"accion": "hacerventa",
+			"idproducto": idproducto,
+			"sucursal": idsucursal,
+			"presentacion": idpresentacion
 		}
 	});
 }

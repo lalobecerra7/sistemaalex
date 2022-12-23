@@ -17,6 +17,11 @@ jQuery(document).ready(function($) {
 		TablaProveedoresCompra();
 	});
 
+	$(document).on('click', '#LimpiarProveedorSeleccionado', function() {
+		$(".BotonLimpiarProveedor").addClass("oculto");
+		$("#CargarProveedoresModalC").html('<i class="fas fa-user"></i> Proveedor');
+	});
+
 
     $(document).on('keyup change', '.campoCantidad', function() {
     	var cantidad = $(this).val();
@@ -198,6 +203,7 @@ jQuery(document).ready(function($) {
 	});
 
 	$(document).on('click', '#TablaProveedoresCompra tbody tr', function() {
+		$(".BotonLimpiarProveedor").removeClass("oculto");
 		var idProveedor = $(this).attr("id");
 		var nombre = $(this).children("td:eq(0)").find(".NombreProveedor").text();
 		var razonSocial = $(this).children("td:eq(2)").find(".razonSocial").text();

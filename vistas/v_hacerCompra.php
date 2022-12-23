@@ -12,6 +12,11 @@
                             <i class="fas fa-user"></i> Proveedor
                         </button>
                     </div>
+                    <div class="col-md-1 BotonLimpiarProveedor oculto">
+                        <button type="button" class="btn btn-outline-danger btn-sm" id="LimpiarProveedorSeleccionado" attrid="">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
 			    </div>
                 <br>
                 <form id="FormAgregarProductoC" class="row">
