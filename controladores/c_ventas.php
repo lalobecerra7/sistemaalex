@@ -52,6 +52,30 @@ class ventas {
 						$botonFacturar = '<button class="btn btn-info btn-sm bImprimirFacPDF" attrID="'.$row[$i]['ID_Venta'].'" title="Factura PDF"><i class="fas fa-file-pdf"></i></button> <button class="btn btn-info btn-sm bImprimirFacXml" attrID="'.$row[$i]['ID_Venta'].'" title="XML"><i class="fas fa-file-excel"></i></button>';
 					}
 
+					$TotalDevolucion = 0;
+					$query2 = "SELECT SUM(Total) AS TotalDevolucion FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE FK_Venta = '".$row[$i]['ID_Venta']."'";
+					$row2 = $omodelo->_consultar($query2);
+					$numerofilas2 = $omodelo->numerofilas;
+
+					if($row2 == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilas2 > 0){
+							$TotalDevolucion = $row2[0]["TotalDevolucion"];
+						}
+					}
+
+					$MostrarDevolucion = "";
+					$totalFinal = 0;
+					if ($TotalDevolucion > 0) {
+						$totalFinal = $row[$i]['Total'] - $TotalDevolucion;
+						$MostrarDevolucion = "<br>Devuelto: <b>$".number_format($TotalDevolucion, 2)."</b><br>
+						Total final: <b>$".number_format($totalFinal, 2)."</b>";
+						$SumarVentas += $totalFinal;
+					}else{
+						$SumarVentas += $row[$i]['Total'];
+					}
+
 					if ($row[$i]['Estatus'] == "Cancelada") {
 						$botondeCancelar = '';
 						$estatus='<span class="badge rounded-pill bg-danger">Cancelada</span>';
@@ -64,13 +88,19 @@ class ventas {
 						$estatus='<span class="badge rounded-pill bg-success">Completada</span>';
 					}
 
-					$SumarVentas += $row[$i]['Total'];
 
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Venta'],
 						'Datos' => "Fecha: <b>".$row[$i]['Datos']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b>",
 						'Cliente' => 'Nombre: <b>'.$row[$i]['NombreCliente'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Correo electrónico: <b>'.$row[$i]['CorreoCliente'].'</b><br>RFC: <b>'.$row[$i]['RFCCliente']."</b>",
-						'Total' => "Subtotal: <b>$".number_format(($row[$i]['Total'] + $row[$i]['Descuento']), 2)."</b><br>Descuento: <b>$".number_format($row[$i]['Descuento'], 2)."</b><br>Total: <b>$".number_format($row[$i]['Total'], 2)."</b>",
+
+
+						'Total' => "
+						Subtotal: <b>$".number_format(($row[$i]['Total'] + $row[$i]['Descuento']), 2)."</b><br>
+						Descuento: <b>$".number_format($row[$i]['Descuento'], 2)."</b><br>
+						Total: <b>$".number_format($row[$i]['Total'], 2)."</b>".$MostrarDevolucion,
+
+
 						'Detalles' => $estatus."<br>".$motivocancelada.$fechacancelada.'<button class="btn btn-link btn-sm" id="VerProductosVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'">Ver productos</button>',
 						'Acciones' => $botonEliminar.' '.$botondeCancelar .' '.$botonTicket.' '.$botonFacturar.' '.$botonDevolucion,
 					);
@@ -298,31 +328,44 @@ class ventas {
 							$nombrePresentacion = "<br>Sin presentación";
 						}
 
-						$cantidadActual = $row[$i]['Cantidad'];
-						$query2 = "SELECT ID_Detalle_Devolucion, FK_Devolucion, FK_Detalle_Venta, detalles_devolucion.Cantidad, detalles_devolucion.Total FROM detalles_devolucion INNER JOIN detalles_ventas ON FK_Detalle_Venta = ID_Detalle_Venta WHERE detalles_ventas.FK_Venta = '$idventa' AND FK_Detalle_Venta = '".$row[$i]['ID_Detalle_Venta']."'";
+						
+						$query2 = "SELECT ID_Detalle_Devolucion, FK_Devolucion, FK_Detalle_Venta, SUM(detalles_devolucion.Cantidad) AS Cantidad, SUM(detalles_devolucion.Total) AS Total FROM detalles_devolucion INNER JOIN detalles_ventas ON FK_Detalle_Venta = ID_Detalle_Venta WHERE detalles_ventas.FK_Venta = '$idventa' AND FK_Detalle_Venta = '".$row[$i]['ID_Detalle_Venta']."' GROUP BY FK_Detalle_Venta";
 						$row2 = $omodelo->_consultar($query2);
 						$numerofilas2 = $omodelo->numerofilas;
 						$cantidadDevuelto = 0;
+						$total = 0; $totalVenta = 0;
+						$cantidadActual = $row[$i]['Cantidad'];
 						if($row2 == 'si'){
 							echo "Error 2: ".mysqli_error($omodelo->link);
 						}else{
 							if($numerofilas2 > 0){
 								$cantidadActual = $row[$i]['Cantidad'] - (double)$row2[0]["Cantidad"];
 								$cantidadDevuelto = (double)$row2[0]["Cantidad"];
+								$total = $row2[0]["Total"];
 							}
 						}
 
 						$campoDevolver = "";
 						if ($cantidadActual > 0) {
-							$campoDevolver = '<input class="form-control devolverProducto" attrid="'.$row[$i]['ID_Detalle_Venta'].'" value="0" min="0" max="'.$cantidadActual.'">';
-						}						
+							$campoDevolver = '<input class="form-control devolverProducto" type="number" attrid="'.$row[$i]['ID_Detalle_Venta'].'" value="0" min="0" max="'.$cantidadActual.'">';
+						}	
+
+						$totalVenta = $row[$i]['Total'] - $total;
+						$precio = 0;
+						if ($totalVenta <= 0) {
+							$precio = $total / $cantidadDevuelto;
+						}else{
+							$precio = ($totalVenta / $cantidadActual);
+						}
 
 						$arreglo['data'][] = array(
 							'ID' => $row[$i]['ID_Detalle_Venta'],
 							'Producto' => $row[$i]['Producto']." ".$nombrePresentacion,
 							'Cantidad' => $cantidadActual,
+							'Precio' => '<b class="dinero">'.$precio.'</b>',
+							'TotalVenta' => '<b class="dinero">'.$totalVenta.'</b>',
 							'Devuelto' => $cantidadDevuelto,
-							'Total' => '<b class="dinero">0</b>',
+							'Total' => '<b class="dinero">'.$total.'</b>',
 							'Devolver' => $campoDevolver,
 						);
 						
@@ -332,8 +375,11 @@ class ventas {
 			//$numerofilasTotal = $numerofilas + $numerofilas2;
 			$arreglo['totales'] = array('NumRows' => $row[0]["Num"]);
 			echo json_encode($arreglo);
-		}else if($tipo == "GuardarDevolucion"){
+		}else if($tipo == "GuardarDevolucionProductos"){
 			$idventa =  $omodelo->link->real_escape_string($idventa);
+			$folio = str_pad($idventa, 8, "0", STR_PAD_LEFT);
+			$sucursal =  $omodelo->link->real_escape_string($sucursal);
+			$acciones =  $omodelo->link->real_escape_string($acciones);
 			$fecha = date('Y-m-d H:i:s'); 
 			$query = "INSERT INTO devoluciones SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."' , FK_Venta = '$idventa', Toda = '0', Fecha_Registro = '$fecha'";
 			$error = $omodelo->_insertar($query);
@@ -342,7 +388,7 @@ class ventas {
 			}else{
 				$idDevolucion = mysqli_insert_id($omodelo->link);
 
-				$productos = json_decode($productos, true);
+				$productos = json_decode($producto, true);
 				foreach ($productos as $fila) {
 					$individual = 0;
 					$total = 0;
@@ -355,7 +401,7 @@ class ventas {
 						if($numerofilas2 > 0){
 							$individual = $row2[0]["Total"] / $row2[0]["Cantidad"];
 							$total = $fila[1] * $individual;
-							$query3 = "INSERT INTO devoluciones SET FK_Devolucion = '$idDevolucion', FK_Detalle_Venta = '".$row2[0]["ID_Detalle_Venta"]."', Cantidad = '$fila[1]', Total = '$total'";
+							$query3 = "INSERT INTO detalles_devolucion SET FK_Devolucion = '$idDevolucion', FK_Detalle_Venta = '".$row2[0]["ID_Detalle_Venta"]."', Cantidad = '$fila[1]', Total = '$total', Destino = '$acciones'";
 							$error3 = $omodelo->_insertar($query3);
 							if ($error3 == "si") {
 								echo "Error 3: ".mysqli_error($omodelo->link);
@@ -363,11 +409,22 @@ class ventas {
 						}
 					}
 
-
-
+					if ($acciones == "Inventario") {
+						$query4 = "UPDATE inventario SET Cantidad = (Cantidad + $fila[1]) WHERE FK_Producto = '".$row2[0]["FK_Producto"]."' AND FK_Presentacion = '".$row2[0]["FK_Presentacion"]."' AND FK_Sucursal = '$sucursal'";
+							$error4 = $omodelo->_insertar($query4);
+						if ($error4 == "si") {
+							echo "Error inventario: ".mysqli_error($omodelo->link);
+						}	
+					}else if($acciones == "Merma"){
+						$query4 = "INSERT INTO merma SET FK_Producto = '".$row2[0]["FK_Producto"]."', FK_Presentacion = '".$row2[0]["FK_Presentacion"]."', Costo = '0', FK_Sucursal = '$sucursal', Cantidad = '$fila[1]', Fecha_Merma = '$fecha', Fecha_Registro = '$fecha', Motivo = 'Devolución de la venta $folio', Foto = '', FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
+							$error4 = $omodelo->_insertar($query4);
+						if ($error4 == "si") {
+							echo "Error inventario: ".mysqli_error($omodelo->link);
+						}
+					}
 
 				}
-
+				echo "Correcto";
 			}
 		}
 	}

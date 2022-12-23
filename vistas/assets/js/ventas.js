@@ -173,6 +173,9 @@ jQuery(document).ready(function($) {
 	$(document).on('click', '#DevolverVenta', function() {
 		var idventa = $(this).attr("attrid");
 		$("#GuardarDevolucion").attr("attrid", idventa);
+		$("#GuardarDevolucion").attr("sucursal", $(this).attr("sucursal"));
+		$("#DevolverTodaVenta").attr("attrid", idventa);
+		$("#DevolverTodaVenta").attr("sucursal", $(this).attr("sucursal"));
 		$("#FolioVentaDevolucion").text($(this).attr("folio"));
 		TablaProductosDevolucion(idventa);
 		moneda();
@@ -181,52 +184,150 @@ jQuery(document).ready(function($) {
 	$(document).on('click', '#GuardarDevolucion', function() {
 		var productos = new Array();
 		var idventa = $(this).attr("attrid");
+		var idsucursal = $(this).attr("sucursal");
 		$("#TablaProductosDevolucion tbody tr").each(function(index, el) {
-			var iddetalle = $(this).children("td:eq(4)").find(".devolverProducto").attr("attrid");
-			var cantidad = $(this).children("td:eq(4)").find(".devolverProducto").val();
+			var iddetalle = $(this).children("td:eq(6)").find(".devolverProducto").attr("attrid");
+			var cantidad = $(this).children("td:eq(6)").find(".devolverProducto").val();
 			var maximo = $(this).children("td:eq(1)").text();
 			if (parseFloat(cantidad) > 0 && parseFloat(cantidad) <= parseFloat(maximo)) {
 				productos.push([iddetalle, cantidad]);
 			}else{
-				$(this).children("td:eq(4)").find(".devolverProducto").val(0);
+				$(this).children("td:eq(6)").find(".devolverProducto").val(0);
 			}
 		});
 		if (productos.length > 0) {
-			var data = "metodo=detalles&accion=ventas&tipo=GuardarDevolucion&idventa="+idventa+"&producto="+JSON.stringify(productos);
-			$.ajax({
-				url: 'index.php',
-				type: 'POST',
-				data: data,
-				beforeSend: function() {
-					$("#carga").show();
+			Swal.fire({
+			    title: '¿Que quieres hacer con estos productos?',
+			    html: `
+			    <select name="AccionesDevolucion" id="AccionesDevolucion" class="form-control">
+			    	<option value="Nada">Nada</option>
+	                <option value="Inventario">Devolver a inventario</option>
+	                <option value="Merma">Registrar como merma</option>
+            	</select>`,
+				icon:  'info',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Continuar',
+				cancelButtonText: 'Cancelar',
+			}).then((result) => {
+				if (result.value) {
+					var acciones = $("#AccionesDevolucion").val(); 
+					var data = "metodo=detalles&accion=ventas&tipo=GuardarDevolucionProductos&idventa="+idventa+"&producto="+JSON.stringify(productos)+"&acciones="+acciones+"&sucursal="+idsucursal;
+					$.ajax({
+						url: 'index.php',
+						type: 'POST',
+						data: data,
+						beforeSend: function() {
+							$("#carga").show();
+						}
+					})
+					.done(function(res) {
+						if ($.trim(res) == "Correcto") {
+							Swal.fire({
+								icon: 'success',
+								title: 'Devolución registrada correctamente',
+							});
+							$("#ModalDevolucionVenta").modal("hide");
+							TablaReporteVentas();
+						}else{
+							Swal.fire({
+								icon: 'error',
+						        title: 'Oops...',
+							    text: 'Error al guardar devolución.'
+							});
+							console.log(res);
+						}	
+					})
+					.fail(function() {
+						console.log("Error ajax");
+					})
+					.always(function() {
+						$("#carga").hide();
+					});
 				}
-			})
-			.done(function(res) {
-				if ($.trim(res) == "Correcto") {
-					Swal.fire({
-						icon: 'success',
-						title: 'Devolución registrada correctamente',
-					});
-				}else{
-					Swal.fire({
-						icon: 'error',
-				        title: 'Oops...',
-					    text: 'Error al guardar devolución.'
-					});
-					console.log(res);
-				}	
-			})
-			.fail(function() {
-				console.log("Error ajax");
-			})
-			.always(function() {
-				$("#carga").hide();
 			});
 		}else{
 			Swal.fire({
 				icon: 'error',
 				title: 'No se puede guardar una devolución sin productos',
-				timer: 1000
+				timer: 1300
+			});
+		}
+	});
+
+
+	$(document).on('click', '#DevolverTodaVenta', function() {
+		var productos = new Array();
+		var idventa = $(this).attr("attrid");
+		var idsucursal = $(this).attr("sucursal");
+		$("#TablaProductosDevolucion tbody tr").each(function(index, el) {
+			var iddetalle = $(this).children("td:eq(6)").find(".devolverProducto").attr("attrid");
+			var cantidad = $(this).children("td:eq(6)").find(".devolverProducto").attr("max");
+			var maximo = $(this).children("td:eq(1)").text();
+			if (parseFloat(cantidad) > 0 && parseFloat(cantidad) <= parseFloat(maximo)) {
+				productos.push([iddetalle, cantidad]);
+			}else{
+				$(this).children("td:eq(6)").find(".devolverProducto").val(0);
+			}
+		});
+		if (productos.length > 0) {
+			Swal.fire({
+			    title: '¿Que quieres hacer con estos productos?',
+			    html: `
+			    <select name="AccionesDevolucion" id="AccionesDevolucion" class="form-control">
+			    	<option value="Nada">Nada</option>
+	                <option value="Inventario">Devolver a inventario</option>
+	                <option value="Merma">Registrar como merma</option>
+            	</select>`,
+				icon:  'info',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Continuar',
+				cancelButtonText: 'Cancelar',
+			}).then((result) => {
+				if (result.value) {
+					var acciones = $("#AccionesDevolucion").val(); 
+					var data = "metodo=detalles&accion=ventas&tipo=GuardarDevolucionProductos&idventa="+idventa+"&producto="+JSON.stringify(productos)+"&acciones="+acciones+"&sucursal="+idsucursal;
+					$.ajax({
+						url: 'index.php',
+						type: 'POST',
+						data: data,
+						beforeSend: function() {
+							$("#carga").show();
+						}
+					})
+					.done(function(res) {
+						if ($.trim(res) == "Correcto") {
+							Swal.fire({
+								icon: 'success',
+								title: 'Devolución registrada correctamente',
+							});
+							$("#ModalDevolucionVenta").modal("hide");
+							TablaReporteVentas();
+						}else{
+							Swal.fire({
+								icon: 'error',
+						        title: 'Oops...',
+							    text: 'Error al guardar devolución.'
+							});
+							console.log(res);
+						}	
+					})
+					.fail(function() {
+						console.log("Error ajax");
+					})
+					.always(function() {
+						$("#carga").hide();
+					});
+				}
+			});
+		}else{
+			Swal.fire({
+				icon: 'error',
+				title: 'No se puede guardar una devolución sin productos',
+				timer: 1300
 			});
 		}
 	});
@@ -269,6 +370,8 @@ function TablaProductosDevolucion(idventa){
 		"colums": [
 			"Producto",
 			"Cantidad",
+			"Precio",
+			"TotalVenta",
 			"Devuelto",
 			"Total",
 			"Devolver",

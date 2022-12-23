@@ -160,9 +160,11 @@
                                 <tr>
                                     <th>Producto</th>
                                     <th>Cantidad</th>
-                                    <th>Devuelto</th>
-                                    <th>Total (Devuelto)</th>
-                                    <th style="width: 15%">Devolver</th>
+                                    <th orden="No">Precio</th>
+                                    <th orden="No">Total (Venta)</th>
+                                    <th orden="No">Devuelto</th>
+                                    <th orden="No">Total (Devuelto)</th>
+                                    <th orden="No" style="width: 15%">Devolver</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -171,9 +173,11 @@
                     </div>
                 </div> 
             </div>
+
             <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="DevolverTodaVenta" attrid=""><i class="fa fa-times-circle"></i> <strong>Devolver todo</strong></button>
                 <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-                <button type="button" class="btn btn-primary" id="GuardarDevolucion" attrid=""><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+                <button type="button" class="btn btn-primary" id="GuardarDevolucion" attrid=""><i class="fa fa-check-circle"></i> <strong>Devolver productos</strong></button>
             </div>
         </div>
     </div>

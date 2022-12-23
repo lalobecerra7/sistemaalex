@@ -70,7 +70,7 @@ class hacerventa {
 			if ($Importe == "" || $Importe == 0) {
 				$Importe = $total;
 			}
-			$cambio = $total - $Importe;
+			$cambio = $Importe - $total;
 			$query = "INSERT INTO ventas SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Sucursal = '$idsucursal', FK_Cliente = '$cliente', Descuento = '$sumadescuento', Total = '$total', Tipo_Pago = '$TipoPago', Pago = '$Importe', Cambio = '$cambio', Fecha_Registro = '$fecha', Estatus = 'Completada'";
 			$error = $omodelo->_insertar($query);
 
