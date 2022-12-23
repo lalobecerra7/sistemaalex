@@ -39,27 +39,27 @@ class compras {
 
 					if ($row[$i]['Estatus'] == "1") {
 						$estatus = '<span class="badge rounded-pill bg-success">Completada</span>';
-						$botonCancelar = ' <button class="btn btn-warning btn-sm CancelarCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i style="color: white;" class="fas fa-circle-xmark"></i></button> ';
+						$botonCancelar = ' <button class="btn btn-warning btn-sm CancelarCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'" title="Cancelar"><i style="color: white;" class="fas fa-circle-xmark"></i></button> ';
 						$SumarCompras += $row[$i]['Total'];
 					}else if($row[$i]['Estatus'] == "2"){
 						$estatus = '<span class="badge rounded-pill bg-danger">Cancelada</span>';
 						//$motivocancelada="Fecha de cancelación: <b>".$row[$i]['Fecha_Cancelada']."</b><br>Motivo: ".$row[$i]['Motivo_Cancelada']; 
 					}else if ($row[$i]['Estatus'] == "0") {
 						$estatus = '<span class="badge rounded-pill bg-warning">Pendiente</span>';
-						$botonCancelar = ' <button class="btn btn-warning btn-sm CancelarCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i style="color: white;" class="fas fa-circle-xmark"></i></button> ';
+						$botonCancelar = ' <button class="btn btn-warning btn-sm CancelarCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'" title="Cancelar"><i style="color: white;" class="fas fa-circle-xmark"></i></button> ';
 						$SumarCompras += $row[$i]['Total'];
-						$botonPagos = '<button class="btn btn-primary btn-sm PagoCom" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i class="fa-solid fa-sack-dollar"></i></button>';
+						$botonPagos = '<button class="btn btn-primary btn-sm PagoCom" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i class="fa-solid fa-sack-dollar" title="Realizar Pago"></i></button>';
 					}
 
 					$botonEliminar = "";
 					$botondeCancelar = "";
 					//$botonTicket = "";
-						$botonEliminar = '<button class="btn btn-danger btn-sm" id="EliminarCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i class="fas fa-trash"></i></button>';
+						$botonEliminar = '<button class="btn btn-danger btn-sm" id="EliminarCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i class="fas fa-trash" title="Eliminar Venta"></i></button>';
 
 						$botondeCancelar = $botonCancelar;
 
 						
-						$botonTicket = '<button class="btn btn-success btn-sm" id="ImprimirTicketCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'" idSucursal="'.$row[$i]['FK_Sucursal'].'"><i class="fas fa-print"></i></button>';
+						$botonTicket = '<button class="btn btn-success btn-sm" id="ImprimirTicketCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'" idSucursal="'.$row[$i]['FK_Sucursal'].'" title="Imprimir Ticket"><i class="fas fa-print"></i></button>';
 
 					$favor = 0;
 					$restante = $row[$i]['Total'] - $row[$i]['Pagado'];
