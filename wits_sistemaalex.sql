@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-12-2022 a las 22:06:16
+-- Tiempo de generación: 23-12-2022 a las 07:35:00
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.3
 
@@ -55326,7 +55326,7 @@ CREATE TABLE `detalles_impuestos_productos` (
 --
 
 INSERT INTO `detalles_impuestos_productos` (`ID_Detalle_Im_Producto`, `FK_Producto`, `FK_Impuesto`) VALUES
-(37, 35, 1);
+(38, 35, 1);
 
 -- --------------------------------------------------------
 
@@ -55418,7 +55418,7 @@ INSERT INTO `detalles_ventas` (`ID_Detalle_Venta`, `FK_Venta`, `FK_Producto`, `F
 --
 DELIMITER $$
 CREATE TRIGGER `inventario_ventas` AFTER INSERT ON `detalles_ventas` FOR EACH ROW BEGIN 
-	UPDATE inventario SET Cantidad = Cantidad - New.Cantidad WHERE FK_Producto = New.FK_Producto AND FK_Presentacion = New.FK_Presentacion;
+	UPDATE inventario SET Cantidad = Cantidad - New.Cantidad WHERE FK_Producto = New.FK_Producto AND FK_Presentacion = New.FK_Presentacion AND FK_Sucursal = (SELECT FK_Sucursal FROM ventas WHERE ID_Venta = New.FK_Venta);
 END
 $$
 DELIMITER ;
@@ -55454,7 +55454,7 @@ INSERT INTO `detalle_compras` (`ID_Detalle_Compra`, `FK_Compra`, `FK_Producto`, 
 DELIMITER $$
 CREATE TRIGGER `inventario_compras` AFTER INSERT ON `detalle_compras` FOR EACH ROW BEGIN
 	IF (SELECT COUNT(*) FROM inventario WHERE FK_Producto = New.FK_Producto AND FK_Presentacion = New.FK_Presentacion) > 0 THEN
-    	UPDATE inventario SET Cantidad = Cantidad + New.Cantidad WHERE ID_Inventario = (SELECT ID_Inventario FROM inventario WHERE FK_Producto = New.FK_Producto AND FK_Presentacion = New.FK_Presentacion LIMIT 1);
+    	UPDATE inventario SET Cantidad = Cantidad + New.Cantidad WHERE ID_Inventario = (SELECT ID_Inventario FROM inventario WHERE FK_Producto = New.FK_Producto AND FK_Presentacion = New.FK_Presentacion AND FK_Sucursal = (SELECT FK_Sucursal FROM compras WHERE ID_Compra = New.FK_Compra));
     ELSE
     	INSERT INTO inventario SET FK_Producto = New.FK_Producto,  FK_Presentacion = New.FK_Presentacion, Cantidad = New.Cantidad, FK_Sucursal = (SELECT FK_Sucursal FROM compras WHERE ID_Compra = New.FK_Compra);
     END IF;
@@ -58917,7 +58917,10 @@ INSERT INTO `movimientos` (`ID_Movimiento`, `Descripcion`, `IP`, `Pais`, `Estado
 (3229, 'Admin: INSERT INTO inventario SET Cantidad = 100, FK_Producto = \'26\', FK_Sucursal = \'1\', FK_Presentacion = \'\'', '', '', '', '', '', '2022-12-22 14:36:32', '', 2),
 (3230, 'Admin: UPDATE compras SET Estatus = \'2\' WHERE ID_Compra = \'11\'', '', '', '', '', '', '2022-12-22 14:37:33', '', 2),
 (3231, 'Admin: UPDATE compras SET Estatus = \'2\' WHERE ID_Compra = \'11\'', '', '', '', '', '', '2022-12-22 15:03:25', '', 2),
-(3232, 'Admin: UPDATE compras SET Estatus = \'2\' WHERE ID_Compra = \'11\'', '', '', '', '', '', '2022-12-22 15:04:03', '', 2);
+(3232, 'Admin: UPDATE compras SET Estatus = \'2\' WHERE ID_Compra = \'11\'', '', '', '', '', '', '2022-12-22 15:04:03', '', 2),
+(3233, 'Admin: LOGIN ADMIN admin@gmmail.com', '', '', '', '', '', '2022-12-22 16:34:23', '', 0),
+(3234, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-22 16:34:29', '', 0),
+(3235, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Caja de fresas\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', importe = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-22 21:39:51', '', 2);
 
 -- --------------------------------------------------------
 
@@ -59014,8 +59017,9 @@ CREATE TABLE `precios` (
 
 INSERT INTO `precios` (`ID_Precio`, `FK_Producto`, `FK_Zona`, `FK_Presentacion`, `Nombre`, `Precio`, `Precio_Mayoreo`) VALUES
 (17, 26, 3, 1, 'gATIÃ‘O', 1, 1),
-(39, 35, 2, 0, 'dfdf', 49, 0),
-(40, 35, 3, 19, 'dcd', 59, 10);
+(41, 35, 2, 0, 'dfdf', 49, 0),
+(42, 35, 3, 19, 'dcd', 59, 10),
+(43, 35, 2, 19, 'kkk', 50, 0);
 
 -- --------------------------------------------------------
 
@@ -59028,6 +59032,7 @@ CREATE TABLE `presentaciones` (
   `FK_Producto` int(11) NOT NULL,
   `Nombre` varchar(300) NOT NULL,
   `Abreviatura` varchar(50) NOT NULL,
+  `Costo` double NOT NULL,
   `Clave_CFDI` tinytext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -59035,13 +59040,14 @@ CREATE TABLE `presentaciones` (
 -- Volcado de datos para la tabla `presentaciones`
 --
 
-INSERT INTO `presentaciones` (`ID_Presentacion`, `FK_Producto`, `Nombre`, `Abreviatura`, `Clave_CFDI`) VALUES
-(1, 26, 'Gato', '12', ''),
-(2, 26, 'Perro', 'Pe', ''),
-(4, 26, 'Elefante', 'Ele', ''),
-(18, 35, 'fdfd', 'dfdf', ''),
-(19, 35, 'dsds dfd', 'dfdf', ''),
-(20, 35, 'ejemplo', 'ej', '05');
+INSERT INTO `presentaciones` (`ID_Presentacion`, `FK_Producto`, `Nombre`, `Abreviatura`, `Costo`, `Clave_CFDI`) VALUES
+(1, 26, 'Gato', '12', 0, ''),
+(2, 26, 'Perro', 'Pe', 0, ''),
+(4, 26, 'Elefante', 'Ele', 0, ''),
+(18, 35, 'fdfd', 'dfdf', 0, ''),
+(19, 35, 'dsds dfd', 'dfdf', 0, ''),
+(20, 35, 'ejemplo', 'ej', 50, '05'),
+(21, 35, 'lol', 'j', 100, '');
 
 -- --------------------------------------------------------
 
@@ -59080,7 +59086,7 @@ CREATE TABLE `productos` (
 INSERT INTO `productos` (`ID_Producto`, `Codigo`, `Descripcion`, `Tipo`, `FK_Categoria`, `Clase`, `Costo`, `Precio`, `Precio_Mayoreo`, `FK_Area`, `Detalles`, `Minimo`, `Maximo`, `Importe`, `Fecha_Registro`, `Imagen`, `Clave_ProdServ_CFDI`, `Clave_Unidad_CFDI`, `Nombre_Unidad`, `Abreviatura_Unidad`, `Objeto_Impuesto_CFDI`) VALUES
 (26, '123', 'No lo se', 0, 4, 'Pieza', 0, 1, 0, 34, '', 0, 0, 0, '2022-11-28 19:17:40', '', '', '', '', '', ''),
 (27, '1234', 'Prueba 2', 0, 4, 'Pieza', 0, 0, 0, 34, '', 0, 0, 0, '2022-11-28 19:18:09', '', '', '', '', '', ''),
-(35, 'Prueba', 'Caja de fresas', 1, 4, 'Pieza', 0, 50, 0, 0, '', 0, 0, 0, '2022-12-03 17:35:01', '', '70141902', 'EA', 'Elemento', 'Ele.', '02'),
+(35, 'Prueba', 'Caja de fresas', 1, 4, 'Pieza', 0, 50, 0, 0, '', 0, 0, 0, '2022-12-03 17:35:01', '', '', '', '', '', ''),
 (36, 'ejemplo', 'Ejemplo', 1, 0, 'Pieza', 0, 50, 0, 0, '', 0, 0, 0, '2022-12-21 19:23:18', '', '01010101', '11', 'Equipos', 'Eq', '01');
 
 -- --------------------------------------------------------
@@ -59261,7 +59267,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`ID_Usuario`, `Nombre`, `Primer_Apellido`, `Segundo_Apellido`, `Correo`, `Contrasena`, `Tipo_Usuario`, `Permisos`, `BD`, `Estatus`, `Intentos`, `Ultimo_Intento`, `Tiempo_Inicio`, `Tiempo_Final`, `Foto`, `Temporal`, `Activo`, `Tipo_Login`, `Conectado`, `Fecha_Alta`, `FK_Sucursal`) VALUES
-(2, 'Admin', 'cremasi', '', 'admin@gmail.com', '$2y$12$lhPLfk6dsc6TdYE5fnes2OfWuBPlqUQhh8JF9ujg0iNNmSGQC74Xe', 'Administrador', '', 0, 0, 0, '2022-12-22 10:29:34', '2022-12-22 10:29:34', '2022-12-01 08:43:01', '2_anuncio.png', 0, 1, 1, 0, '2022-09-21 18:52:42', 0),
+(2, 'Admin', 'cremasi', '', 'admin@gmail.com', '$2y$12$lhPLfk6dsc6TdYE5fnes2OfWuBPlqUQhh8JF9ujg0iNNmSGQC74Xe', 'Administrador', '', 0, 0, 0, '2022-12-22 16:34:29', '2022-12-22 16:34:29', '2022-12-01 08:43:01', '2_anuncio.png', 0, 1, 1, 0, '2022-09-21 18:52:42', 0),
 (10, 'Lalo', 'bECERRA', '', 'lalo@gmail.com', '$2y$12$ACrdPWFFaSDrOmehjwt0MuIgTfsCmuxpWnDwf8TCoRAwzC8C50QsK', 'Normal', 'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_areas,0,0,0,0~v_categorias,0,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0~v_cajas,0,0,0,0~v_impuestos,0,0,0,0~v_tickets,0~v_general,0~v_usuarios,0,0,0,0,0~', 0, 0, 0, '2022-09-22 18:51:43', '2022-09-22 18:51:43', '2022-09-22 19:02:18', '', 0, 0, 1, 0, '2022-09-22 18:51:31', 0),
 (11, 'Ejemplo', 'sdesde', 'dds', 'ejemplo@gmail.com', '$2y$12$ks7YsxZ13IARNevWP1q4X.Lh8KF0TeogNzNxukBbsnOe4KU5mm0qi', 'Normal', '', 0, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 1, 1, 0, '2022-09-22 18:49:49', 0),
 (14, 'Antonio de Jesus', 'Torres', 'Vazquez', 'antonioudgarandas@gmal.com', '$2y$12$36ZKO7frlfjtaKpoP4K5CumUm/lOK6S7niuUrVNhVrWkIX7D/PKHy', 'Administrador', '', 0, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 1, 1, 0, '2022-11-05 15:25:49', 1);
@@ -59687,7 +59693,7 @@ ALTER TABLE `detalles_impuestos_pedidos`
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_productos`
 --
 ALTER TABLE `detalles_impuestos_productos`
-  MODIFY `ID_Detalle_Im_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `ID_Detalle_Im_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_ventas`
@@ -59759,7 +59765,7 @@ ALTER TABLE `merma`
 -- AUTO_INCREMENT de la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
-  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3233;
+  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3236;
 
 --
 -- AUTO_INCREMENT de la tabla `pagos`
@@ -59777,13 +59783,13 @@ ALTER TABLE `pedidos`
 -- AUTO_INCREMENT de la tabla `precios`
 --
 ALTER TABLE `precios`
-  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT de la tabla `presentaciones`
 --
 ALTER TABLE `presentaciones`
-  MODIFY `ID_Presentacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `ID_Presentacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
