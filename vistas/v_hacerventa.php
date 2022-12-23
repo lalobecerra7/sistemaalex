@@ -45,8 +45,8 @@
                         <table class="table table table-hover table-striped table-bordered text-center" id="TablaProductosAgregadoVenta" width="100%" style="font-size: 12px; vertical-align: middle;">
                             <thead>
                                 <th style="width: 10%;">Codigo</th>
-                                <th style="width: 15%;">Descripción</th>
-                                <th style="width: 15%;">Precio</th>
+                                <th style="width: 20%;">Descripción</th>
+                                <th style="width: 10%;">Precio</th>
                                 <th style="width: 10%;">Cantidad</th>
                                 <th style="width: 15%;">Impuestos</th>
                                 <th style="width: 15%;">Descuento</th>
@@ -122,6 +122,41 @@
         </div>    
     </div>
 </div>
+
+<div class="modal fade" id="ModalPresentacionesProducto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Presentaciones</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="AgregarPrecioProducto">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 table-responsive" id="divTablaProductos">
+                            <table class="table table-responsive table-striped text-center myDataTable" id="TablaPresentacionesProducto" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Abreviatura</th>
+                                        <th>Existencia</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table> 
+                        </div>
+                    </div>    
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                </div>
+            </form>
+        </div>    
+    </div>
+</div>
+
 
 <div class="modal fade" id="ModalVerProductosVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
