@@ -140,7 +140,7 @@ $(document).on('click', '#EliminarPago', function() {
 	});	  
 });
 
-$(document).on('click', '#CancelarCompra', function() {
+$(document).on('click', '.CancelarCompra', function() {
 	var btn = $(this);
 	Swal.fire({
 		title: '¿Estás seguro que quieres cancelar la compra?',
@@ -153,54 +153,102 @@ $(document).on('click', '#CancelarCompra', function() {
 		confirmButtonText: '¡Si, continuar!'
 	}).then((result) => {
 		if (result.value) {
-				var data = "metodo=modificar&accion=compras&IDCompra="+$(btn).attr('attrid');
+			var data = "metodo=modificar&accion=compras&IDCompra="+btn.attr('attrid');
 				
-				$.ajax({
-					url: 'index.php',
-					type: 'POST',
-					data: data,
-					beforeSend: function() {
-						progressBoton(btn);
-					}
-				})
-				.done(function(res) {
-					if ($.trim(res) == "Correcto") {
-						Swal.fire({
-							icon: 'success',
-							title: 'Compra cancelada correctamente'
-						});
-						TablaReporteCompras();
-					}else{
-						Swal.fire({
-							icon: 'error',
-							title: 'Oops...',
-							text: 'Error inesperado al cancelar la compra.'
-						});
-						console.log($.trim(res));
-					}
-				})
-				.fail(function() {
-					console.log("Error ajax");
-				})
-				.always(function() {
-					unprogressBoton(btn);
-				});
+			$.ajax({
+				url: 'index.php',
+				type: 'POST',
+				data: data,
+				beforeSend: function() {
+					progressBoton(btn);
+				}
+			})
+			.done(function(res) {
+				if ($.trim(res) == "Correcto") {
+					Swal.fire({
+						icon: 'success',
+						title: 'Compra cancelada correctamente'
+					});
+
+					TablaReporteCompras();
+
+					Swal.fire({
+						title: '¿Quieres restar los productos del inventario?',
+						icon: 'warning',
+						html: '',
+						showCancelButton: true,
+						confirmButtonColor: '#3085d6',
+						cancelButtonColor: '#d33',
+						cancelButtonText: '¡No, cancelar!',
+						confirmButtonText: '¡Si, continuar!'
+					}).then((result) => {
+						if (result.value) {
+							var data = "metodo=detalles&accion=compras&tipo=inventario&id="+btn.attr('attrid');
+								
+							$.ajax({
+								url: 'index.php',
+								type: 'POST',
+								data: data,
+								beforeSend: function() {
+									progressBoton(btn);
+								}
+							})
+							.done(function(res) {
+								if ($.trim(res) == "Correcto") {
+									Swal.fire({
+										icon: 'success',
+										title: 'Los productos han sido restados del inventario'
+									});
+								}else{
+									Swal.fire({
+										icon: 'error',
+										title: 'Oops...',
+										text: 'Error inesperado al realizar la resta.'
+									});
+
+									console.log($.trim(res));
+								}
+							})
+							.fail(function() {
+								console.log("Error ajax");
+							})
+							.always(function() {
+								unprogressBoton(btn);
+							});
+						}    
+					});	  
+				}else{
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Error inesperado al cancelar la compra.'
+					});
+					console.log($.trim(res));
+				}
+			})
+			.fail(function() {
+				console.log("Error ajax");
+			})
+			.always(function() {
+				unprogressBoton(btn);
+			});
 		}    
 	});	  
 });
 
 $(document).on('click', '.PagoCom', function() {
 	var id = $(this).attr("attrid");
-	console.log('Pago Compra');
 	var data = "metodo=detalles&accion=compras&tipo=pago&IDCompra="+id;
+	
 	$.ajax({
 		url: 'index.php',
 		type: 'POST',
 		data: data,
 	})
 	.done(function(res) {
-		//console.log(res);
-		var datos = JSON.parse(res);
+		//console.log($.trim(res));
+		var datos = JSON.parse($.trim(res));
+
 		var restante = (parseFloat(datos.Total)-parseFloat(datos.TotalPagos));
 		$('#Proveedor').text(datos.Proveedor);
 		$('#TotalCompra').text(new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(datos.Total));

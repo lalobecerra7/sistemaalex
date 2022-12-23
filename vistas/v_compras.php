@@ -58,6 +58,7 @@
 	</div>
 </div>
 
+<!--//////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalNuevaCompra" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -76,6 +77,7 @@
     </div>
 </div>
 
+<!--//////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalVerProductosCompra" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -117,6 +119,7 @@
     </div>
 </div>
 
+<!--//////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalVerHistorialPagos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -126,32 +129,6 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <!-- <table class="table table-bordered table-striped text-center">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Fecha
-                                </th>
-                                <th>
-                                    Concepto
-                                </th>
-                                <th>
-                                    Tipo de pago
-                                </th>
-                                <th>
-                                    Monto
-                                </th>
-                                <th>
-                                    Detalles
-                                </th>
-                                <th>
-                                    Comprobante
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbodyVerHistorialPagos">
-                        </tbody>
-                    </table> -->
                     <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaVerHistorialPagos" width="100%" style="font-size: 12px;">
                         <thead>
                             <th style="width: 15%;">Fecha</th>
@@ -176,6 +153,7 @@
     </div>
 </div>
 
+<!--//////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalPagoCompra" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
     <div class="modal-content">
