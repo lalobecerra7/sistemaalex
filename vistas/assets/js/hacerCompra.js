@@ -499,6 +499,7 @@ jQuery(document).ready(function($) {
 		.done(function(res) {
 			//console.log($.trim(res));
 			$("#verTablaPrese").html($.trim(res));
+			moneda();
 			$("#modalVerPresentaciones").modal('show');
 		})
 		.fail(function() {
@@ -510,6 +511,7 @@ jQuery(document).ready(function($) {
 	});
 
 	$(document).on('click', '.bSeleCamPres', function() {
+		const searchRegExp = new RegExp(',', 'g');
 		var padre = $(this).parent().parent();
 		var fila = btnCambio.parent().parent();
 
@@ -519,7 +521,7 @@ jQuery(document).ready(function($) {
 			texto = padre.children('td:eq(0)').text()+' ('+padre.children('td:eq(1)').text()+')';
 		}
 		fila.children('td:eq(2)').children('button').html(texto);
-		fila.children('td:eq(3)').children('input').val(padre.children('td:eq(2)').text());
+		fila.children('td:eq(3)').children('input').val(padre.children('td:eq(2)').text().replace('$', '').replace(searchRegExp, ''));
 
 		var total = parseFloat(fila.children('td:eq(3)').children('input').val()) * parseFloat(fila.children('td:eq(4)').children('input').val());
 		fila.children('td:eq(5)').children('span').html(Math.round(total * 100) / 100);

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-12-2022 a las 07:35:00
+-- Tiempo de generación: 23-12-2022 a las 08:18:13
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.3
 
@@ -55216,7 +55216,8 @@ CREATE TABLE `compras` (
 
 INSERT INTO `compras` (`ID_Compra`, `Fecha_Registro`, `FK_Usuario`, `FK_Proveedor`, `Total`, `Estatus`, `Clase`, `Dias_Pagar`, `Tipo_Compra`, `Fecha_Credito`, `FK_Caja`, `FK_Sucursal`, `Descuento`, `Impuestos`, `Anticipo`) VALUES
 (10, '2022-12-22 12:01:44', 2, 2, 150, '1', 0, 0, 'Contado', '0000-00-00 00:00:00', 0, 1, 0, '', 150),
-(11, '2022-12-22 12:03:02', 2, 2, 6000, '2', 0, 0, 'Credito', '2022-12-23 00:00:00', 0, 1, 0, '', 1000);
+(11, '2022-12-22 12:03:02', 2, 2, 6000, '2', 0, 0, 'Credito', '2022-12-23 00:00:00', 0, 1, 0, '', 1000),
+(15, '2022-12-23 01:08:39', 2, 2, 50, '0', 0, 0, 'Credito', '2022-12-24 00:00:00', 0, 1, 0, '', 10);
 
 -- --------------------------------------------------------
 
@@ -55284,6 +55285,21 @@ CREATE TABLE `detalles_clientes` (
   `Puesto_Contacto` varchar(100) NOT NULL,
   `Email_Contacto` varchar(300) NOT NULL,
   `Telefono_Contacto` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detalles_devolucion`
+--
+
+CREATE TABLE `detalles_devolucion` (
+  `ID_Detalle_Devolucion` int(11) NOT NULL,
+  `FK_Devolucion` int(11) NOT NULL,
+  `FK_Detalle_Venta` int(11) NOT NULL,
+  `Cantidad` double NOT NULL,
+  `Total` double NOT NULL,
+  `Destino` varchar(50) NOT NULL COMMENT 'Nada, Inventario, Merma'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -55446,21 +55462,36 @@ CREATE TABLE `detalle_compras` (
 INSERT INTO `detalle_compras` (`ID_Detalle_Compra`, `FK_Compra`, `FK_Producto`, `FK_Presentacion`, `Costo`, `Cantidad`, `Subtotal`) VALUES
 (8, 10, 26, 0, 100, 1, 100),
 (9, 10, 36, 0, 50, 1, 50),
-(10, 11, 26, 0, 20, 300, 6000);
+(10, 11, 26, 0, 20, 300, 6000),
+(14, 15, 35, 20, 50, 1, 50);
 
 --
 -- Disparadores `detalle_compras`
 --
 DELIMITER $$
 CREATE TRIGGER `inventario_compras` AFTER INSERT ON `detalle_compras` FOR EACH ROW BEGIN
-	IF (SELECT COUNT(*) FROM inventario WHERE FK_Producto = New.FK_Producto AND FK_Presentacion = New.FK_Presentacion) > 0 THEN
-    	UPDATE inventario SET Cantidad = Cantidad + New.Cantidad WHERE ID_Inventario = (SELECT ID_Inventario FROM inventario WHERE FK_Producto = New.FK_Producto AND FK_Presentacion = New.FK_Presentacion AND FK_Sucursal = (SELECT FK_Sucursal FROM compras WHERE ID_Compra = New.FK_Compra));
+	IF (SELECT COUNT(*) FROM inventario WHERE FK_Producto = New.FK_Producto AND FK_Presentacion = New.FK_Presentacion AND FK_Sucursal = (SELECT FK_Sucursal FROM compras WHERE ID_Compra = New.FK_Compra)) > 0 THEN
+    	UPDATE inventario SET Cantidad = Cantidad + New.Cantidad WHERE FK_Producto = New.FK_Producto AND FK_Presentacion = New.FK_Presentacion AND FK_Sucursal = (SELECT FK_Sucursal FROM compras WHERE ID_Compra = New.FK_Compra);
     ELSE
     	INSERT INTO inventario SET FK_Producto = New.FK_Producto,  FK_Presentacion = New.FK_Presentacion, Cantidad = New.Cantidad, FK_Sucursal = (SELECT FK_Sucursal FROM compras WHERE ID_Compra = New.FK_Compra);
     END IF;
 END
 $$
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `devoluciones`
+--
+
+CREATE TABLE `devoluciones` (
+  `ID_Devolucion` int(11) NOT NULL,
+  `FK_Usuario` int(11) NOT NULL,
+  `FK_Venta` int(11) NOT NULL,
+  `Toda` tinyint(1) NOT NULL COMMENT '0 regresaron productos, 1 regresaron toda la venta',
+  `Fecha_Registro` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -55595,10 +55626,10 @@ CREATE TABLE `inventario` (
 INSERT INTO `inventario` (`ID_Inventario`, `FK_Producto`, `FK_Presentacion`, `Cantidad`, `FK_Sucursal`) VALUES
 (1, 26, 1, 5, 1),
 (2, 36, 0, 50, 1),
-(3, 35, 20, 100, 1),
+(3, 35, 20, 101, 1),
 (4, 35, 18, 10, 1),
 (5, 35, 0, 10, 1),
-(6, 26, 0, -200, 1);
+(6, 26, 0, -190, 1);
 
 -- --------------------------------------------------------
 
@@ -58920,7 +58951,14 @@ INSERT INTO `movimientos` (`ID_Movimiento`, `Descripcion`, `IP`, `Pais`, `Estado
 (3232, 'Admin: UPDATE compras SET Estatus = \'2\' WHERE ID_Compra = \'11\'', '', '', '', '', '', '2022-12-22 15:04:03', '', 2),
 (3233, 'Admin: LOGIN ADMIN admin@gmmail.com', '', '', '', '', '', '2022-12-22 16:34:23', '', 0),
 (3234, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-22 16:34:29', '', 0),
-(3235, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Caja de fresas\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', importe = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-22 21:39:51', '', 2);
+(3235, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Caja de fresas\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', importe = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-22 21:39:51', '', 2),
+(3236, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'50\', Anticipo= \'10\', Estatus= \'0\', Fecha_Registro = \'2022-12-23 00:52:12\', Fecha_Credito = \'2022-12-24\', Tipo_Compra = \'Credito\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2022-12-23 00:52:12', '', 2),
+(3237, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'50\', Anticipo= \'10\', Estatus= \'0\', Fecha_Registro = \'2022-12-23 00:57:39\', Fecha_Credito = \'2022-12-24\', Tipo_Compra = \'Credito\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2022-12-23 00:57:39', '', 2),
+(3238, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'50\', Anticipo= \'10\', Estatus= \'0\', Fecha_Registro = \'2022-12-23 01:08:30\', Fecha_Credito = \'2022-12-24\', Tipo_Compra = \'Credito\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2022-12-23 01:08:30', '', 2),
+(3239, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'50\', Anticipo= \'10\', Estatus= \'0\', Fecha_Registro = \'2022-12-23 01:08:39\', Fecha_Credito = \'2022-12-24\', Tipo_Compra = \'Credito\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2022-12-23 01:08:39', '', 2),
+(3240, 'Admin: DELETE FROM compras WHERE ID_Compra = \'14\'', '', '', '', '', '', '2022-12-23 01:08:45', '', 2),
+(3241, 'Admin: DELETE FROM compras WHERE ID_Compra = \'13\'', '', '', '', '', '', '2022-12-23 01:08:49', '', 2),
+(3242, 'Admin: DELETE FROM compras WHERE ID_Compra = \'12\'', '', '', '', '', '', '2022-12-23 01:08:54', '', 2);
 
 -- --------------------------------------------------------
 
@@ -58949,7 +58987,8 @@ CREATE TABLE `pagos` (
 INSERT INTO `pagos` (`ID_Pago`, `FK_Compra`, `Concepto`, `Monto`, `Tipo_Pago`, `Fecha`, `FK_Usuario`, `Archivo`, `Clase`, `FK_Caja`, `Detalles_Pago`) VALUES
 (1, 10, 'Pago', 150, 'Deposito', '2022-12-22 12:01:44', 2, '', 0, 0, ''),
 (2, 11, 'Abono', 1000, 'TransferenciaBancaria', '2022-12-22 12:03:02', 2, '', 0, 0, ''),
-(3, 11, 'Abono', 500, 'Efectivo', '2022-12-22 12:04:21', 2, '', 0, 0, '');
+(3, 11, 'Abono', 500, 'Efectivo', '2022-12-22 12:04:21', 2, '', 0, 0, ''),
+(7, 15, 'Abono', 10, 'Cheque', '2022-12-23 01:08:39', 2, '', 0, 0, '');
 
 --
 -- Disparadores `pagos`
@@ -59427,6 +59466,14 @@ ALTER TABLE `detalles_clientes`
   ADD KEY `FK_Cliente` (`FK_Cliente`);
 
 --
+-- Indices de la tabla `detalles_devolucion`
+--
+ALTER TABLE `detalles_devolucion`
+  ADD PRIMARY KEY (`ID_Detalle_Devolucion`),
+  ADD KEY `FK_Devolucion` (`FK_Devolucion`),
+  ADD KEY `FK_Detalle_Venta` (`FK_Detalle_Venta`);
+
+--
 -- Indices de la tabla `detalles_impuestos_pedidos`
 --
 ALTER TABLE `detalles_impuestos_pedidos`
@@ -59470,6 +59517,13 @@ ALTER TABLE `detalle_compras`
   ADD PRIMARY KEY (`ID_Detalle_Compra`),
   ADD KEY `compra` (`FK_Compra`,`FK_Producto`),
   ADD KEY `FK_Producto` (`FK_Producto`);
+
+--
+-- Indices de la tabla `devoluciones`
+--
+ALTER TABLE `devoluciones`
+  ADD PRIMARY KEY (`ID_Devolucion`),
+  ADD KEY `FK_Venta` (`FK_Venta`);
 
 --
 -- Indices de la tabla `dinero`
@@ -59663,7 +59717,7 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
-  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `conversiones`
@@ -59682,6 +59736,12 @@ ALTER TABLE `detalles_caja`
 --
 ALTER TABLE `detalles_clientes`
   MODIFY `ID_Detalle_Cliente` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `detalles_devolucion`
+--
+ALTER TABLE `detalles_devolucion`
+  MODIFY `ID_Detalle_Devolucion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_pedidos`
@@ -59717,7 +59777,13 @@ ALTER TABLE `detalles_ventas`
 -- AUTO_INCREMENT de la tabla `detalle_compras`
 --
 ALTER TABLE `detalle_compras`
-  MODIFY `ID_Detalle_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ID_Detalle_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT de la tabla `devoluciones`
+--
+ALTER TABLE `devoluciones`
+  MODIFY `ID_Devolucion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `dinero`
@@ -59765,13 +59831,13 @@ ALTER TABLE `merma`
 -- AUTO_INCREMENT de la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
-  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3236;
+  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3243;
 
 --
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `ID_Pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_Pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `pedidos`
@@ -59874,6 +59940,13 @@ ALTER TABLE `detalles_clientes`
   ADD CONSTRAINT `detalles_clientes_ibfk_1` FOREIGN KEY (`FK_Cliente`) REFERENCES `clientes` (`ID_Cliente`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `detalles_devolucion`
+--
+ALTER TABLE `detalles_devolucion`
+  ADD CONSTRAINT `detalles_devolucion_ibfk_1` FOREIGN KEY (`FK_Devolucion`) REFERENCES `devoluciones` (`ID_Devolucion`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `detalles_devolucion_ibfk_2` FOREIGN KEY (`FK_Detalle_Venta`) REFERENCES `detalles_ventas` (`ID_Detalle_Venta`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `detalles_impuestos_pedidos`
 --
 ALTER TABLE `detalles_impuestos_pedidos`
@@ -59911,6 +59984,12 @@ ALTER TABLE `detalles_ventas`
 ALTER TABLE `detalle_compras`
   ADD CONSTRAINT `detalle_compras_ibfk_1` FOREIGN KEY (`FK_Compra`) REFERENCES `compras` (`ID_Compra`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `detalle_compras_ibfk_2` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `devoluciones`
+--
+ALTER TABLE `devoluciones`
+  ADD CONSTRAINT `devoluciones_ibfk_1` FOREIGN KEY (`FK_Venta`) REFERENCES `ventas` (`ID_Venta`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `importes`

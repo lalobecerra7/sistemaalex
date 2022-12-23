@@ -317,7 +317,7 @@ class hacerCompra {
 					$tabla .= '<tr>
 						<td>'.$row[0]['Nombre_Unidad'].'</td>
 						<td>'.$row[0]['Abreviatura_Unidad'].'</td>
-						<td>'.$row[0]['Costo'].'</td>
+						<td><span class="dinero">'.$row[0]['Costo'].'</span></td>
 						<td><button type="button" class="btn btn-sm btn-primary bSeleCamPres" attrID="0">Seleccionar</button></td>
 					</tr>';
 				}
@@ -335,7 +335,7 @@ class hacerCompra {
 						$tabla .= '<tr>
 							<td>'.$row[$i]['Nombre'].'</td>
 							<td>'.$row[$i]['Abreviatura'].'</td>
-							<td>'.$row[$i]['Costo'].'</td>
+							<td><span class="dinero">'.$row[$i]['Costo'].'</span></td>
 							<td><button type="button" class="btn btn-sm btn-primary bSeleCamPres" attrID="'.$row[$i]['ID_Presentacion'].'">Seleccionar</button></td>
 						</tr>';
 					}
