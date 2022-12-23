@@ -70,7 +70,7 @@ class hacerventa {
 			if ($Importe == "" || $Importe == 0) {
 				$Importe = $total;
 			}
-			$cambio = $total - $Importe;
+			$cambio = $Importe - $total;
 			$query = "INSERT INTO ventas SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Sucursal = '$idsucursal', FK_Cliente = '$cliente', Descuento = '$sumadescuento', Total = '$total', Tipo_Pago = '$TipoPago', Pago = '$Importe', Cambio = '$cambio', Fecha_Registro = '$fecha', Estatus = 'Completada'";
 			$error = $omodelo->_insertar($query);
 
@@ -106,12 +106,31 @@ class hacerventa {
 
 					if ($row2[0]["importe"] > 0) {
 						$totalImporte = $fila[2] * $row2[0]["importe"];
-						$queryImportes = "INSERT INTO importes SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', Cantidad = '$fila[2]', Importe = '".$row2[0]["importe"]."', Total = '$totalImporte', Estatus = 'Se debe'";
-						$errorImportes = $omodelo->_insertar($queryImportes);
 
-						if ($errorImportes == "si") {
-							echo "Error importes: ".mysqli_error($omodelo->link);
-						}	
+						$query3 = "SELECT Cantidad FROM importes WHERE FK_Producto = '$fila[0]' AND FK_Venta = '".$idVenta."'";
+						$row3 = $omodelo->_consultar($query3);
+						$numerofilas3 = $omodelo->numerofilas;
+
+						if($row3 == 'si'){
+							echo "Error 3: ".mysqli_error($omodelo->link);
+						}else{
+							if($numerofilas3 > 0){
+								$CalculoTotalImporte = ($row3[0]["Cantidad"] + $fila[2]) * $row2[0]["importe"];
+								$queryImportes = "UPDATE importes SET Cantidad = (Cantidad + $fila[2]), Total = '$CalculoTotalImporte' WHERE FK_Venta = '$idVenta' AND FK_Producto = '$fila[0]'";
+								$errorImportes = $omodelo->_insertar($queryImportes);
+
+								if ($errorImportes == "si") {
+									echo "Error importes: ".mysqli_error($omodelo->link);
+								}		
+							}else{
+								$queryImportes = "INSERT INTO importes SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', Cantidad = '$fila[2]', Importe = '".$row2[0]["importe"]."', Total = '$totalImporte', Estatus = 'Se debe'";
+								$errorImportes = $omodelo->_insertar($queryImportes);
+
+								if ($errorImportes == "si") {
+									echo "Error importes: ".mysqli_error($omodelo->link);
+								}	
+							}
+						}
 					}
 
 					$separar = explode("~", $fila[5]);

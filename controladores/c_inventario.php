@@ -427,10 +427,10 @@ class inventario {
 				}
 			}
 		
-			$query = "SELECT ID_Merma, merma.FK_Producto AS 'ID_Producto', sucursales.Nombre AS 'Sucursal', merma.Cantidad, presentaciones.Nombre AS NombrePresentacion, (merma.Cantidad*merma.Costo) AS 'Costo', 
+			$query = "SELECT ID_Merma, merma.FK_Producto AS 'ID_Producto', sucursales.Nombre AS 'Sucursal', merma.Cantidad, IFNULL(presentaciones.Nombre, 'Sin presentacion') AS NombrePresentacion, (merma.Cantidad*merma.Costo) AS 'Costo', 
 				DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r') AS Fecha_Merma, Motivo, (SELECT COUNT(*) FROM merma $busqueda) AS 'Num', Foto FROM `merma` INNER JOIN sucursales 
 				ON sucursales.ID_Sucursal=merma.FK_Sucursal INNER JOIN productos 
-				ON productos.ID_Producto=merma.FK_Producto INNER JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE merma.FK_Producto='$IDProducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+				ON productos.ID_Producto=merma.FK_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE merma.FK_Producto='$IDProducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 	

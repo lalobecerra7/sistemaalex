@@ -498,7 +498,7 @@ $arregloVenta = '';
                     }
 
                     //CONSULTAR PRODUCTOS POR CATEGORIA
-                    $sql = "SELECT ID_Detalle_Venta, FK_Venta, detalles_ventas.FK_Producto, productos.FK_Categoria AS IDCategoria, categorias.Nombre AS NombreCategoria, Codigo, FK_Presentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS Abreviatura, detalles_ventas.Descripcion, detalles_ventas.Precio, Cantidad, detalles_ventas.Descuento, Total, Devuelto, Fecha_Devolucion, Regreso_Inventario FROM detalles_ventas LEFT JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion LEFT JOIN categorias ON productos.FK_Categoria = ID_Categoria WHERE FK_Venta = '".$arregloVenta['ID_Venta']."' AND FK_Categoria = '".$row1["FK_Categoria"]."' ORDER BY IDCategoria";
+                    $sql = "SELECT ID_Detalle_Venta, FK_Venta, detalles_ventas.FK_Producto, productos.FK_Categoria AS IDCategoria, categorias.Nombre AS NombreCategoria, Codigo, FK_Presentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS Abreviatura, detalles_ventas.Descripcion, detalles_ventas.Precio, Cantidad, detalles_ventas.Descuento, Total, Regreso_Inventario FROM detalles_ventas LEFT JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion LEFT JOIN categorias ON productos.FK_Categoria = ID_Categoria WHERE FK_Venta = '".$arregloVenta['ID_Venta']."' AND FK_Categoria = '".$row1["FK_Categoria"]."' ORDER BY IDCategoria";
                     if($res=$con->query($sql)){
                       if ($res->num_rows > 0) {
                         while($row = $res->fetch_assoc()){
