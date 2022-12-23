@@ -193,8 +193,9 @@ class productos {
 				$pres['Clave'] = $omodelo->link->real_escape_string($pres['Clave']);
 				$pres['Nombre'] = $omodelo->link->real_escape_string($pres['Nombre']);
 				$pres['Abreviatura'] = $omodelo->link->real_escape_string($pres['Abreviatura']);
+				$pres['Costo'] = $omodelo->link->real_escape_string($pres['Costo']);
 
-				$queryPresentacion = "INSERT INTO presentaciones SET FK_Producto = '$id', Nombre = '$pres[Nombre]', Abreviatura = '$pres[Abreviatura]', Clave_CFDI = '$pres[Clave]'";
+				$queryPresentacion = "INSERT INTO presentaciones SET FK_Producto = '$id', Nombre = '$pres[Nombre]', Abreviatura = '$pres[Abreviatura]', Clave_CFDI = '$pres[Clave]', Costo = '$pres[Costo]'";
 				$errorPresentacion = $omodelo->_insertar($queryPresentacion);	
 
 				if ($error == "si") {
@@ -321,8 +322,9 @@ class productos {
 					$pres['Clave'] = $omodelo->link->real_escape_string($pres['Clave']);
 					$pres['Nombre'] = $omodelo->link->real_escape_string($pres['Nombre']);
 					$pres['Abreviatura'] = $omodelo->link->real_escape_string($pres['Abreviatura']);
+					$pres['Costo'] = $omodelo->link->real_escape_string($pres['Costo']);
 
-					$queryPresentacion = "INSERT INTO presentaciones SET ID_Presentacion = '$pres[ID_Presentacion]',FK_Producto = '$IDProducto', Nombre = '$pres[Nombre]', Abreviatura = '$pres[Abreviatura]', Clave_CFDI = '$pres[Clave]'";
+					$queryPresentacion = "INSERT INTO presentaciones SET ID_Presentacion = '$pres[ID_Presentacion]',FK_Producto = '$IDProducto', Nombre = '$pres[Nombre]', Abreviatura = '$pres[Abreviatura]', Clave_CFDI = '$pres[Clave]', Costo = '$pres[Costo]'";
 					$errorPresentacion = $omodelo->_insertar($queryPresentacion);	
 
 					if ($error == "si") {
@@ -432,7 +434,7 @@ class productos {
 			}else{
 				if($numerofilas > 0){
 					$presentaciones = null;
-					$queryPresentacion = "SELECT ID_Presentacion, Nombre, Abreviatura, Clave_CFDI, IFNULL((SELECT COUNT(*) FROM detalles_ventas WHERE FK_Presentacion = ID_Presentacion) + (SELECT COUNT(*) FROM detalle_compras WHERE FK_Presentacion = ID_Presentacion), 0) AS NumProd FROM presentaciones WHERE FK_Producto = '$IDProducto'";
+					$queryPresentacion = "SELECT ID_Presentacion, Nombre, Abreviatura, Costo, Clave_CFDI, IFNULL((SELECT COUNT(*) FROM detalles_ventas WHERE FK_Presentacion = ID_Presentacion) + (SELECT COUNT(*) FROM detalle_compras WHERE FK_Presentacion = ID_Presentacion), 0) AS NumProd FROM presentaciones WHERE FK_Producto = '$IDProducto'";
 					$rowPresentacion = $omodelo->_consultar($queryPresentacion);
 					$numerofilasPresentacion = $omodelo->numerofilas;
 
@@ -446,7 +448,8 @@ class productos {
 									'Nombre' => $rowPresentacion[$z]['Nombre'],
 									'Abreviatura' => $rowPresentacion[$z]['Abreviatura'],
 									'Clave_CFDI' => $rowPresentacion[$z]['Clave_CFDI'],
-									'NumProd' => $rowPresentacion[$z]['NumProd']
+									'NumProd' => $rowPresentacion[$z]['NumProd'],
+									'Costo' => $rowPresentacion[$z]['Costo']
 								);
 							}
 						}

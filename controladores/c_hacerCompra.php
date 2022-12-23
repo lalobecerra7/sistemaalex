@@ -23,10 +23,11 @@ class hacerCompra {
 			$Cambio = 0;
 		}
 
+		$tipoPagoA = 'Pago';
+		$estatus = '1';
 		if($tipoCompra == 'Credito'){
 			$estatus = '0';
-		}else{
-			$estatus = '1';
+			$tipoPagoA = 'Abono';
 		}
 
 		$query = "INSERT INTO compras SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Proveedor= '$idProveedor', Total= '$total', Anticipo= '$ImportePagadoCompra', Estatus= '$estatus', Fecha_Registro = '$fecha', Fecha_Credito = '$fechaCredito', Tipo_Compra = '$tipoCompra', Descuento = '$descuento', FK_Sucursal = '$sucursal'";
@@ -47,7 +48,7 @@ class hacerCompra {
 				}
 			}
 			$usuario = $_SESSION['user_admin']['ID_Usuario'];
-			$queryPago = "INSERT INTO pagos SET FK_Compra = '$IDCompra', Monto = '$ImportePagadoCompra', Concepto = 'Anticipo', Tipo_Pago = '$tipoPago', Fecha = '$fecha', FK_Usuario = '$usuario', Detalles_Pago = '$detalles'";
+			$queryPago = "INSERT INTO pagos SET FK_Compra = '$IDCompra', Monto = '$ImportePagadoCompra', Concepto = '$tipoPagoA', Tipo_Pago = '$tipoPago', Fecha = '$fecha', FK_Usuario = '$usuario', Detalles_Pago = '$detalles'";
 			$errorPago = $omodelo->_insertar($queryPago);
 			if ($errorPago == "si") {
 				echo "Error pagos: ".mysqli_error($omodelo->link);
@@ -113,28 +114,42 @@ class hacerCompra {
 				}
 			}
 					  
-			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, ID_Presentacion, presentaciones.Nombre AS NombrePresentacion, inventario.FK_Presentacion AS FK_Presentacion, presentaciones.Abreviatura AS Abreviatura, productos.Costo AS Costo, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto LEFT JOIN presentaciones ON presentaciones.FK_Producto = ID_Producto $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Producto, Codigo, Descripcion, Nombre_Unidad AS NombrePresentacion, Abreviatura_Unidad AS Abreviatura, Costo, IFNULL((SELECT Cantidad FROM inventario WHERE FK_Presentacion = 0 AND inventario.FK_Producto = ID_Producto), 0) AS Existencia, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
 			if($row == 'si'){
-				echo "Error: ".mysqli_error($omodelo->link);
+				echo "Error 1: ".mysqli_error($omodelo->link);
 			}else{
 				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
-						$Presentacion = "";
-						if($row[$i]['NombrePresentacion'] != '' || $row[$i]['NombrePresentacion'] != null){
-							$Presentacion = "<b class='Presentacion' presentacion='".$row[$i]['FK_Presentacion']."'>".$row[$i]['NombrePresentacion']."(".$row[$i]['Abreviatura'].")</b>";
-						}else {
-							$Presentacion = "<b class='Presentacion' presentacion='".$row[$i]['FK_Presentacion']."'>Sin Presentación</b>";
+						$presentacion = '';
+						if($row[$i]['NombrePresentacion'] != '' || $row[$i]['Abreviatura'] != ''){
+							$presentacion .= '<button style="margin: 2px;" type="button" class="btn btn-sm btn-primary bSelePresCom" presentacion="0" costo="'.$row[$i]['Costo'].'">Ex. '.number_format($row[$i]['Existencia'], 2).' - <span>'.$row[$i]['NombrePresentacion'].'('.$row[$i]['Abreviatura'].')</span></button>';
+						}else{
+							$presentacion .= '<button style="margin: 2px;" type="button" class="btn btn-sm btn-primary bSelePresCom" presentacion="0" costo="'.$row[$i]['Costo'].'"><span>Sin presentación</span></button>';
 						}
 
+						$query1 = "SELECT ID_Presentacion, Nombre, Abreviatura, Clave_CFDI, Costo, IFNULL((SELECT Cantidad FROM inventario WHERE FK_Presentacion = ID_Presentacion AND inventario.FK_Producto = FK_Producto), 0) AS Existencia FROM presentaciones WHERE FK_Producto = '".$row[$i]['ID_Producto']."' ORDER BY Nombre";
+						$row1 = $omodelo->_consultar($query1);
+						$numerofilas1 = $omodelo->numerofilas;
+
+						if($row1 == 'si'){
+							echo "Error 2: ".mysqli_error($omodelo->link);
+						}else{
+							if($numerofilas1 > 0){
+								for($x=0; $x < $numerofilas1; $x++){
+									$presentacion .= '<button style="margin: 2px;" type="button" class="btn btn-sm btn-primary bSelePresCom" presentacion="'.$row1[$x]['ID_Presentacion'].'" costo="'.$row1[$x]['Costo'].'">Ex. '.number_format($row1[$x]['Existencia'], 2).' - <span>'.$row1[$x]['Nombre'].'('.$row1[$x]['Abreviatura'].')</span></button>';
+								}
+							}
+						}
+						
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Producto'],
-							'Producto' => "Codigo: <b class='codigo'>".$row[$i]['Codigo']."</b>",
+							'Codigo' => "<b class='codigo'>".$row[$i]['Codigo']."</b>",
 							'Descripcion' => "<b class='NombreProducto'>".$row[$i]['Descripcion']."</b>",
 							'Costo' => "<b class='CostoProducto'>$".number_format($row[$i]['Costo'], 2)."</b>",
-							'Presentacion' => $Presentacion,
+							'Presentacion' => $presentacion,
 						);
 						
 					}
@@ -237,7 +252,7 @@ class hacerCompra {
 			$Codigo =  $omodelo->link->real_escape_string($codigo);
 			$arreglo = null;	
 
-			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, IFNULL(presentaciones.ID_Presentacion, CONCAT('NA',Codigo)) AS IDPresentacion, inventario.FK_Presentacion AS FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Abreviatura AS Abreviatura, productos.Costo AS Costo FROM productos INNER JOIN inventario ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion WHERE Codigo = '$Codigo' LIMIT 1 ";
+			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, CONCAT(Nombre_Unidad, ' (', Abreviatura_Unidad, ')') AS NombrePresentacion, Costo FROM productos WHERE Codigo = '$Codigo'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -279,5 +294,54 @@ class hacerCompra {
 			}
 		}
 	}	
+
+	public function _detalles(){
+		$omodelo = new m_modelo();
+		extract($_POST);
+		$tipo =  $omodelo->link->real_escape_string($tipo);
+
+		if ($tipo == "consultarPrese") {
+			$id =  $omodelo->link->real_escape_string($id);
+			$tabla = '';
+
+			$query = "SELECT Nombre_Unidad, Abreviatura_Unidad, Costo FROM productos WHERE ID_Producto = '$id'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					$tabla .= '<tr>
+						<td>'.$row[0]['Nombre_Unidad'].'</td>
+						<td>'.$row[0]['Abreviatura_Unidad'].'</td>
+						<td>'.$row[0]['Costo'].'</td>
+						<td><button type="button" class="btn btn-sm btn-primary bSeleCamPres" attrID="0">Seleccionar</button></td>
+					</tr>';
+				}
+			}
+
+			$query = "SELECT ID_Presentacion, Nombre, Abreviatura, Costo FROM presentaciones WHERE FK_Producto = '$id'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for ($i=0; $i < $numerofilas; $i++) { 
+						$tabla .= '<tr>
+							<td>'.$row[$i]['Nombre'].'</td>
+							<td>'.$row[$i]['Abreviatura'].'</td>
+							<td>'.$row[$i]['Costo'].'</td>
+							<td><button type="button" class="btn btn-sm btn-primary bSeleCamPres" attrID="'.$row[$i]['ID_Presentacion'].'">Seleccionar</button></td>
+						</tr>';
+					}
+				}
+			}
+
+			echo $tabla;
+		}
+	}
 }
 ?>

@@ -44,14 +44,15 @@ function v_productos() {
                     text: 'El stock máximo debe ser mayor al stock mínimo'
                 });
             }else {
+                const searchRegExp = new RegExp(',', 'g');
                 var presentaciones = [];
                 $("#verPresentaciones").children('tr').each(function(index, el){
-                    presentaciones.push({'ID_Presentacion': $.trim($(this).attr('id')),'Clave': $.trim($(this).children('td:eq(0)').text()), 'Nombre': $.trim($(this).children('td:eq(1)').text()), 'Abreviatura': $.trim($(this).children('td:eq(2)').text())});
+                    presentaciones.push({'ID_Presentacion': $.trim($(this).attr('id')),'Clave': $.trim($(this).children('td:eq(0)').text()), 'Nombre': $.trim($(this).children('td:eq(1)').text()), 'Abreviatura': $.trim($(this).children('td:eq(2)').text()), 'Costo': $.trim($(this).children('td:eq(3)').text().replace('$', '').replace(searchRegExp, ''))});
                 });
 
                 var precios = [];
                 $("#verPreciosProd").children('tr').each(function(index, el){
-                    precios.push({'ID_Precio': $.trim($(this).attr('id')),'Zona': $.trim($(this).children('td:eq(0)').attr('attrID')), 'Presentacion': $.trim($(this).children('td:eq(1)').text()), 'Nombre': $.trim($(this).children('td:eq(2)').text()), 'Precio': $.trim($(this).children('td:eq(3)').text()), 'Precio_Mayoreo': $.trim($(this).children('td:eq(4)').text())});
+                    precios.push({'ID_Precio': $.trim($(this).attr('id')),'Zona': $.trim($(this).children('td:eq(0)').attr('attrID')), 'Presentacion': $.trim($(this).children('td:eq(1)').text()), 'Nombre': $.trim($(this).children('td:eq(2)').text()), 'Precio': $.trim($(this).children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')), 'Precio_Mayoreo': $.trim($(this).children('td:eq(4)').text().replace('$', '').replace(searchRegExp, ''))});
                 });
 
                 var impuestos = [];
@@ -205,10 +206,13 @@ function v_productos() {
                 filaPre.children('td:eq(0)').html($.trim($("#unidadPresentacionM").val()));
                 filaPre.children('td:eq(1)').html($.trim($("#nombrePresentacionM").val()));
                 filaPre.children('td:eq(2)').html($.trim($("#abreviaturaPresentacionM").val()));
+                filaPre.children('td:eq(3)').html('<span class="dinero">'+$.trim($("#costoPresentacionM").val())+'</span>');
 
                 $("#presentacionProdSelect").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
                 $("#presentacionProdSelect").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
                 $("#modalPresentaciones").modal('hide');
+
+                moneda();
             }else{
                 Swal.fire({
                     icon: 'warning',
@@ -433,6 +437,7 @@ jQuery(document).ready(function($) {
                         <td>`+presentacion.Clave_CFDI+`</td>
                         <td>`+presentacion.Nombre+`</td>
                         <td>`+presentacion.Abreviatura+`</td>
+                        <td><span class="dinero">`+presentacion.Costo+`</span></td>
                         <td>`+botonEli+` <button type="button" class="btn btn-warning btn-sm bModificarPresenta" attrID="`+presentacion.ID_Presentacion+`"><i class="fas fa-pencil"></i></button></td>
                     </tr>`);
 
@@ -446,8 +451,8 @@ jQuery(document).ready(function($) {
                         <td attrID="`+precio.FK_Zona+`">`+precio.Zona+`</td>
                         <td attrID="`+precio.FK_Presentacion+`">`+precio.Presentacion+`</td>
                         <td>`+precio.Nombre+`</td>
-                        <td>`+precio.Precio+`</td>
-                        <td>`+precio.Precio_Mayoreo+`</td>
+                        <td><span class="dinero">`+precio.Precio+`</span></td>
+                        <td><span class="dinero">`+precio.Precio_Mayoreo+`</span></td>
                         <td><button type="button" class="btn btn-danger btn-sm bQuitarPrecio"><i class="fas fa-trash"></i></button></td>
                     </tr>`);
                 });
@@ -466,6 +471,7 @@ jQuery(document).ready(function($) {
                 });
             }
 
+            moneda();
             $('#ModalProductos').modal('show');
         })
         .fail(function() {
@@ -612,12 +618,14 @@ jQuery(document).ready(function($) {
                 <td>`+$.trim($("#unidadPresentacion").val())+`</td>
                 <td>`+$.trim($("#nombrePresentacion").val())+`</td>
                 <td>`+$.trim($("#abreviaturaPresentacion").val())+`</td>
+                <td><span class="dinero">`+$.trim($("#costoPresentacion").val())+`</span></td>
                 <td><button type="button" class="btn btn-danger btn-sm bQuitarPresenta"><i class="fas fa-trash"></i></button> <button type="button" class="btn btn-warning btn-sm bModificarPresenta"><i class="fas fa-pencil"></i></button></td>
             </tr>`);
 
             $("#presentacionProdSelect").append('<option value="'+$.trim($("#nombrePresentacion").val())+'">'+$.trim($("#nombrePresentacion").val())+'</option>');
 
             document.getElementById('formPresentaciones').reset();
+            moneda();
         }else{
             Swal.fire({
                 icon: 'warning',
@@ -641,12 +649,13 @@ jQuery(document).ready(function($) {
             <td attrID="`+$.trim($("#zonaPrecioProducto").val())+`">`+$.trim($('#zonaPrecioProducto option:selected').text())+`</td>
             <td attrID="`+$.trim($("#presentacionProdSelect").val())+`">`+$.trim($('#presentacionProdSelect').val())+`</td>
             <td>`+$.trim($("#nombrePrecio").val())+`</td>
-            <td>`+$.trim($("#precioProductoPres").val())+`</td>
-            <td>`+$.trim($("#precioProductoMayoreoPres").val())+`</td>
+            <td><span class="dinero">`+$.trim($("#precioProductoPres").val())+`</span></td>
+            <td><span class="dinero">`+$.trim($("#precioProductoMayoreoPres").val())+`</span></td>
             <td><button type="button" class="btn btn-danger btn-sm bQuitarPrecio"><i class="fas fa-trash"></i></button></td>
         </tr>`);
 
         document.getElementById('formPreciosProd').reset();
+        moneda();
     });
 
     $(document).on('click', '.bQuitarPrecio', function() {
@@ -655,9 +664,11 @@ jQuery(document).ready(function($) {
 
     $(document).on('click', '.bModificarPresenta', function() {
         filaPre = $(this).parent().parent();
+        const searchRegExp = new RegExp(',', 'g');
         $("#unidadPresentacionM").val($.trim(filaPre.children('td:eq(0)').text()));
         $("#nombrePresentacionM").val($.trim(filaPre.children('td:eq(1)').text()));
         $("#abreviaturaPresentacionM").val($.trim(filaPre.children('td:eq(2)').text()));
+        $("#costoPresentacionM").val($.trim(filaPre.children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')));
         $("#bGuardarPresenta").attr('attrID', $(this).attr('attrID'));
         $("#modalPresentaciones").modal('show');
     });

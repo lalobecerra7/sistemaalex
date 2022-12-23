@@ -17,14 +17,14 @@ class compras {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(DATE_FORMAT(compras.Fecha_Registro, '%Y-%m-%d'), ID_Compra, proveedores.Nombre, proveedores.Empresa, Anticipo, Total, Estatus) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(DATE_FORMAT(compras.Fecha_Registro, '%Y-%m-%d'), ID_Compra, proveedores.Nombre, proveedores.Empresa, Anticipo, Total, Estatus, Tipo_Compra) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Compra, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Proveedor, proveedores.Nombre AS Proveedor, proveedores.Empresa AS Empresa, proveedores.Telefono AS Telefono, proveedores.Razon_Social AS RazonSocial, proveedores.Credito as Credito, Anticipo, Total, Estatus, compras.Fecha_Registro AS Datos, FK_Sucursal, (SELECT COUNT(*) FROM compras) AS Num FROM compras INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Compra, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Proveedor, proveedores.Nombre AS Proveedor, proveedores.Empresa AS Empresa, proveedores.Telefono AS Telefono, proveedores.Razon_Social AS RazonSocial, Tipo_Compra, proveedores.Credito as Credito, Anticipo, Total, Estatus, compras.Fecha_Registro AS Datos, sucursales.Nombre AS Sucursal, FK_Sucursal, IFNULL((SELECT SUM(Monto) FROM pagos WHERE FK_Compra = ID_Compra), 0) AS Pagado, (SELECT COUNT(*) FROM compras INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal $busqueda) AS Num FROM compras INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -39,16 +39,16 @@ class compras {
 
 					if ($row[$i]['Estatus'] == "1") {
 						$estatus = '<span class="badge rounded-pill bg-success">Completada</span>';
-						$botonCancelar = ' <button class="btn btn-warning btn-sm" id="CancelarCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i style="color: white;" class="fas fa-circle-xmark"></i></button> ';
+						$botonCancelar = ' <button class="btn btn-warning btn-sm CancelarCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i style="color: white;" class="fas fa-circle-xmark"></i></button> ';
 						$SumarCompras += $row[$i]['Total'];
 					}else if($row[$i]['Estatus'] == "2"){
 						$estatus = '<span class="badge rounded-pill bg-danger">Cancelada</span>';
 						//$motivocancelada="Fecha de cancelación: <b>".$row[$i]['Fecha_Cancelada']."</b><br>Motivo: ".$row[$i]['Motivo_Cancelada']; 
 					}else if ($row[$i]['Estatus'] == "0") {
 						$estatus = '<span class="badge rounded-pill bg-warning">Pendiente</span>';
-						$botonCancelar = ' <button class="btn btn-warning btn-sm" id="CancelarCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i style="color: white;" class="fas fa-circle-xmark"></i></button> ';
+						$botonCancelar = ' <button class="btn btn-warning btn-sm CancelarCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i style="color: white;" class="fas fa-circle-xmark"></i></button> ';
 						$SumarCompras += $row[$i]['Total'];
-						$botonPagos = '<button class="btn btn-primary btn-sm PagoCom"  id="PagoCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i class="fa-solid fa-sack-dollar"></i></button>';
+						$botonPagos = '<button class="btn btn-primary btn-sm PagoCom" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'"><i class="fa-solid fa-sack-dollar"></i></button>';
 					}
 
 					$botonEliminar = "";
@@ -61,11 +61,18 @@ class compras {
 						
 						$botonTicket = '<button class="btn btn-success btn-sm" id="ImprimirTicketCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'" idSucursal="'.$row[$i]['FK_Sucursal'].'"><i class="fas fa-print"></i></button>';
 
+					$favor = 0;
+					$restante = $row[$i]['Total'] - $row[$i]['Pagado'];
+					if($restante < 0){
+						$favor = $restante * -1;
+						$restante = 0;
+					}
+
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Compra'],
-						'Datos' => "Fecha: <b>".$row[$i]['Datos']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b>",
+						'Datos' => "Fecha: <b>".$row[$i]['Datos']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b><br>Sucursal: <b>".$row[$i]['Sucursal']."</b>",
 						'Proveedor' => 'Nombre: <b>'.$row[$i]['Proveedor'].'</b><br>Empresa: <b>'.$row[$i]['Empresa'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Razón social: <b>'.$row[$i]['RazonSocial'].'</b>',
-						'Total' => 'Anticipo: <b>$'.number_format($row[$i]['Anticipo'], 2).'</b><br>Crédito: <b>$'.number_format($row[$i]['Credito'],2).'</b><br>Total: <b style="font-size: 15px;">$'.number_format($row[$i]['Total'],2 ).'</b><br>',
+						'Total' => 'Total: <b style="font-size: 15px;">$'.number_format($row[$i]['Total'],2 ).'</b><br>Tipo: <b>'.$row[$i]['Tipo_Compra'].'</b><br> Pago: <b>$'.number_format($row[$i]['Pagado'], 2).'</b><br>Restante: <b>$'.number_format($restante,2).'</b><br>A favor: <b>$'.number_format($favor,2).'</b>',
 						'Detalles' => $estatus.'<br>'.$motivocancelada.'<br><button class="btn btn-link btn-sm" id="VerProductosCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'">Ver productos</button><br><button class="btn btn-link btn-sm" id="VerHistorialPagos" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'">Ver pagos</button>',
 						'Acciones' => $botonEliminar.' '.$botondeCancelar.' '.$botonPagos.' '.$botonTicket,
 					);
@@ -132,30 +139,11 @@ class compras {
 					echo "Error 4: ".mysqli_error($omodelo->link); 
 				}else{
 					move_uploaded_file($ruta_provisional,  $ruta.''.$ID.'_'.$nombreDoc);
-
-					$query3 = "SELECT compras.Total AS Total, (SELECT SUM(Monto) FROM pagos WHERE FK_Compra = '$IdCompra') AS TotalPagos FROM compras INNER JOIN pagos ON FK_Compra = ID_Compra WHERE ID_Compra = '$IdCompra'";
-					$row3 = $omodelo->_consultar($query3);
-					$numerofilas3 = $omodelo->numerofilas;
-
-					if($row3 == 'si'){
-						echo "Error: ".mysqli_error($omodelo->link);
-					}else{
-						if($numerofilas3 > 0){
-							if($row3[0]['Total'] <= $row3[0]['TotalPagos']){
-								$query4 = "UPDATE compras SET Estatus = '1' WHERE ID_Compra = '$IDCompra'";
-								$error4 = $omodelo->_insertar($query4);
-								if ($error4 == "si") {
-									echo "Error 5: ".mysqli_error($omodelo->link);
-								}else{
-									echo "Correcto";
-									$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
-								}
-							}
-						}
-					}
 				}
 			}
-			echo ('Correcto');
+
+			echo 'Correcto';
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 	
@@ -196,10 +184,13 @@ class compras {
 	public function _detalles(){
 		$omodelo = new m_modelo();
 		extract($_POST);
+		$tipo = $omodelo->link->real_escape_string($tipo);
+		
 		if($tipo == 'productos'){
 			$IDCompra = $omodelo->link->real_escape_string($IDCompra);
 			$tabla = "";
-			$query = "SELECT ID_Detalle_Compra, FK_Compra, FK_Producto, productos.Codigo, productos.Descripcion, productos.Imagen, detalle_compras.Costo AS Costo, Cantidad, Subtotal FROM detalle_compras INNER JOIN productos ON FK_Producto = ID_Producto WHERE FK_Compra = '$IDCompra'";
+
+			$query = "SELECT ID_Detalle_Compra, FK_Compra, FK_Presentacion, Codigo, Descripcion, Imagen, detalle_compras.Costo AS Costo, Cantidad, Subtotal, Nombre_Unidad, Abreviatura_Unidad, presentaciones.Nombre AS Presentacion, Abreviatura FROM detalle_compras INNER JOIN productos ON detalle_compras.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Compra = '$IDCompra'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -222,10 +213,19 @@ class compras {
 							}	
 						}
 
+						$presentacion = 'Sin presentación';
+						if($row[$i]['FK_Presentacion'] == '0'){
+							if($row[$i]['Nombre_Unidad'] != '' || $row[$i]['Abreviatura_Unidad'] != ''){
+								$presentacion = $row[$i]['Nombre_Unidad'].' ('.$row[$i]['Abreviatura_Unidad'].')';
+							}
+						}else{
+							$presentacion = $row[$i]['Presentacion'].' ('.$row[$i]['Abreviatura'].')';
+						}
+
 						$tabla .= "
 							<tr>
-								<td >".$imagen.$row[$i]["Codigo"]."</td>
-								<td >".$row[$i]["Descripcion"]."</td>
+								<td>".$imagen.$row[$i]["Codigo"]."</td>
+								<td>".$row[$i]["Descripcion"]."<br>Presentación: <b>".$presentacion."</b></td>
 								<td style='vertical-align: middle;'>$".number_format($row[$i]["Costo"], 2)."</td>
 								<td style='vertical-align: middle;'>".number_format($row[$i]["Cantidad"], 2)."</td>
 								<td style='vertical-align: middle;'>$".number_format($row[$i]["Subtotal"], 2)."</td>
@@ -238,7 +238,8 @@ class compras {
 			echo $tabla;
 		}else if($tipo == 'pago'){
 			$IDCompra = $omodelo->link->real_escape_string($IDCompra);
-			$query = "SELECT FK_Proveedor, proveedores.Nombre AS Proveedor, compras.Total AS Total, (SELECT SUM(Monto) FROM pagos WHERE FK_Compra = '$IDCompra') AS TotalPagos FROM compras INNER JOIN proveedores ON ID_Proveedor = FK_Proveedor INNER JOIN pagos ON FK_Compra = ID_Compra WHERE ID_Compra = '$IDCompra'";
+
+			$query = "SELECT FK_Proveedor, proveedores.Nombre AS Proveedor, compras.Total AS Total, IFNULL((SELECT SUM(Monto) FROM pagos WHERE FK_Compra = '$IDCompra'), 0) AS TotalPagos FROM compras LEFT JOIN proveedores ON ID_Proveedor = FK_Proveedor WHERE ID_Compra = '$IDCompra'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -340,6 +341,29 @@ class compras {
 
 						$omodelo->movimiento($query1, $_SESSION['user_admin']['ID_Usuario']);
 					}
+				}
+			}
+		}else if($tipo == 'inventario'){
+			$id = $omodelo->link->real_escape_string($id);
+
+			$query = "SELECT ID_Detalle_Compra, FK_Producto, FK_Presentacion, Costo, Cantidad, Subtotal, FK_Sucursal FROM detalle_compras INNER JOIN compras ON FK_Compra = ID_Compra WHERE FK_Compra = '$id'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error 1: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						$query1 = "UPDATE inventario SET Cantidad = Cantidad - ".$row[$i]['Cantidad']." WHERE FK_Producto = '".$row[$i]['FK_Producto']."' AND FK_Presentacion = '".$row[$i]['FK_Presentacion']."' AND FK_Sucursal = '".$row[$i]['FK_Sucursal']."'";
+						$error = $omodelo->_insertar($query1);
+
+						if ($error == "si") {
+							echo "Error 2: ".mysqli_error($omodelo->link);
+						}	
+					}
+
+					echo "Correcto";
 				}
 			}
 		}

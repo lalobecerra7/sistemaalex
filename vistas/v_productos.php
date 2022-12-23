@@ -231,10 +231,11 @@
 		      	<div class="table-responsive">
 		       		<table class="table table table-hover table-striped table-bordered text-center" id="tablaPresentacionProducto" width="100%" style="font-size: 12px;">
 				        <thead>
-				        	<th style="width: 33%;">Clave Unidad</th>
-				          <th style="width: 33%;">Nombre</th>
-				        	<th style="width: 33%;">Abreviatura</th>
-				        	<th style="width: 33%;">Acciones</th>
+				        	<th>Clave Unidad</th>
+				          <th>Nombre</th>
+				        	<th>Abreviatura</th>
+				        	<th>Costo</th>
+				        	<th>Acciones</th>
 				        </thead>
 				        <tbody id="verPresentaciones">
 
@@ -252,6 +253,9 @@
 		                </td>
 		                <td>
 		                  <input type="text" form="formPresentaciones" class="form-control" id="abreviaturaPresentacion" name="abreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación/unidad" required>
+		                </td>
+		                <td>
+		                	<input type="number" step="any" value="0" form="formPresentaciones" class="form-control" id="costoPresentacion" name="costoPresentacion" placeholder="Ingresa el costo de la presentación/unidad" required>	
 		                </td>
 		                <td>
 		                	<button  type="button" class="btn btn-sm btn-success" id="bAgergarPresentacion"><i class="fas fa-plus"></i></button>
@@ -301,7 +305,7 @@
 		                  <input type="number" form="formPreciosProd" class="form-control" id="precioProductoPres" name="precioProductoPres" step="any" min="0" placeholder="$0.00" required>
 		                </td>
 		                <td>
-		                  <input type="number" form="formPreciosProd" class="form-control" id="precioProductoMayoreoPres" name="precioProductoMayoreoPres" step="any" min="0" placeholder="$0.00">
+		                  <input type="number" form="formPreciosProd" class="form-control" id="precioProductoMayoreoPres" name="precioProductoMayoreoPres" step="any" value="0" min="0" placeholder="$0.00" required>
 		                </td>
 		                <td>
 		                	<button type="button" class="btn btn-sm btn-success" id="bAgergarPrecio" attrid nombre><i class="fas fa-plus"></i></button>
@@ -478,6 +482,9 @@
 					</div>	
 					<div class="mb-3">
 						<input type="text" form="formPresentaciones" class="form-control" id="abreviaturaPresentacionM" name="abreviaturaPresentacionM" placeholder="Ingresa la abreviatura de la presentación/unidad"> 	
+					</div>
+					<div class="mb-3">
+						<input type="text" form="formPresentaciones" class="form-control" id="costoPresentacionM" name="costoPresentacionM" placeholder="Ingresa el costo de la presentación/unidad"> 	
 					</div>	
 	      </div>
 	      <div class="modal-footer">

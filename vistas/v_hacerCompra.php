@@ -114,7 +114,7 @@
 	</div>
 </div>
 
-
+<!--///////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalVerProductosCompra" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -126,10 +126,10 @@
                 <div class="table-responsive">
                     <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaProductosCompra" width="100%" style="font-size: 12px;">
                         <thead>
-                            <th style="width: 20%;" orden="No">Producto</th>
-                            <th style="width: 20%;">Descripción</th>
-                            <th style="width: 20%;">Costo</th>
-                            <th style="width: 20%;">Presentación</th>
+                            <th>Código</th>
+                            <th>Descripción</th>
+                            <th>Costo</th>
+                            <th orden="No">Presentación</th>
                         </thead>
                         <tbody>
                                
@@ -144,7 +144,7 @@
     </div>
 </div>
 
-
+<!--///////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalVerProveedoresC" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -174,7 +174,7 @@
     </div>
 </div>
 
-
+<!--///////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalCobrarCompra" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
     <div class="modal-content">
@@ -238,3 +238,33 @@
     </div>
   </div>
 </div> 
+
+<!--///////////////////////////////////////////////////////////-->
+<div class="modal fade" id="modalVerPresentaciones" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Productos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table table-hover table-striped table-bordered text-center" width="100%" style="font-size: 12px;">
+                        <thead>
+                            <th>Nombre</th>
+                            <th>Abreviatura</th>
+                            <th>Costo</th>
+                            <th>Acciones</th>
+                        </thead>
+                        <tbody id="verTablaPrese">
+                               
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
+            </div>
+        </div>
+    </div>
+</div>
