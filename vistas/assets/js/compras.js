@@ -7,7 +7,7 @@ jQuery(document).ready(function($) {
 	$(document).on('click', '#EliminarCompra', function() {
 		var btn = $(this);
 		Swal.fire({
-	        title: '¿Estás seguro que quieres eliminar la compra con el folio '+$(this).attr("folio")+'?',
+	        title: '¿Estás seguro que quieres eliminar la compra con el folio '+btn.attr("folio")+'?',
 	        icon: 'warning',
 	        showCancelButton: true,
 	        confirmButtonColor: '#3085d6',
@@ -16,7 +16,7 @@ jQuery(document).ready(function($) {
 	        confirmButtonText: '¡Si, eliminar!'
 	    }).then((result) => {
 	        if (result.value) {
-	        	var data = "metodo=eliminar&accion=compras&IDCompra="+$(this).attr('attrid');
+	        	var data = "metodo=eliminar&accion=compras&IDCompra="+btn.attr('attrid');
 				$.ajax({
 					url: 'index.php',
 					type: 'POST',
@@ -31,7 +31,54 @@ jQuery(document).ready(function($) {
 							icon: 'success',
 							title: 'Compra eliminada correctamente'
 						});
+
 						TablaReporteCompras();
+
+						Swal.fire({
+							title: '¿Quieres restar los productos del inventario?',
+							icon: 'warning',
+							html: '',
+							showCancelButton: true,
+							confirmButtonColor: '#3085d6',
+							cancelButtonColor: '#d33',
+							cancelButtonText: '¡No, cancelar!',
+							confirmButtonText: '¡Si, continuar!'
+						}).then((result) => {
+							if (result.value) {
+								var data = "metodo=detalles&accion=compras&tipo=inventario&id="+btn.attr('attrid');
+								
+								$.ajax({
+									url: 'index.php',
+									type: 'POST',
+									data: data,
+									beforeSend: function() {
+										progressBoton(btn);
+									}
+								})
+								.done(function(res) {
+									if ($.trim(res) == "Correcto") {
+										Swal.fire({
+											icon: 'success',
+											title: 'Los productos han sido restados del inventario'
+										});
+									}else{
+										Swal.fire({
+											icon: 'error',
+											title: 'Oops...',
+											text: 'Error inesperado al realizar la resta.'
+										});
+
+										console.log($.trim(res));
+									}
+								})
+								.fail(function() {
+									console.log("Error ajax");
+								})
+								.always(function() {
+									unprogressBoton(btn);
+								});
+							}
+						});	
 					}else{
 						Swal.fire({
 							icon: 'error',
