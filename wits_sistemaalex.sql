@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-12-2022 a las 08:12:00
+-- Tiempo de generación: 23-12-2022 a las 08:18:13
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.3
 
@@ -55290,6 +55290,21 @@ CREATE TABLE `detalles_clientes` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `detalles_devolucion`
+--
+
+CREATE TABLE `detalles_devolucion` (
+  `ID_Detalle_Devolucion` int(11) NOT NULL,
+  `FK_Devolucion` int(11) NOT NULL,
+  `FK_Detalle_Venta` int(11) NOT NULL,
+  `Cantidad` double NOT NULL,
+  `Total` double NOT NULL,
+  `Destino` varchar(50) NOT NULL COMMENT 'Nada, Inventario, Merma'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `detalles_impuestos_pedidos`
 --
 
@@ -55463,6 +55478,20 @@ CREATE TRIGGER `inventario_compras` AFTER INSERT ON `detalle_compras` FOR EACH R
 END
 $$
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `devoluciones`
+--
+
+CREATE TABLE `devoluciones` (
+  `ID_Devolucion` int(11) NOT NULL,
+  `FK_Usuario` int(11) NOT NULL,
+  `FK_Venta` int(11) NOT NULL,
+  `Toda` tinyint(1) NOT NULL COMMENT '0 regresaron productos, 1 regresaron toda la venta',
+  `Fecha_Registro` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -59437,6 +59466,14 @@ ALTER TABLE `detalles_clientes`
   ADD KEY `FK_Cliente` (`FK_Cliente`);
 
 --
+-- Indices de la tabla `detalles_devolucion`
+--
+ALTER TABLE `detalles_devolucion`
+  ADD PRIMARY KEY (`ID_Detalle_Devolucion`),
+  ADD KEY `FK_Devolucion` (`FK_Devolucion`),
+  ADD KEY `FK_Detalle_Venta` (`FK_Detalle_Venta`);
+
+--
 -- Indices de la tabla `detalles_impuestos_pedidos`
 --
 ALTER TABLE `detalles_impuestos_pedidos`
@@ -59480,6 +59517,13 @@ ALTER TABLE `detalle_compras`
   ADD PRIMARY KEY (`ID_Detalle_Compra`),
   ADD KEY `compra` (`FK_Compra`,`FK_Producto`),
   ADD KEY `FK_Producto` (`FK_Producto`);
+
+--
+-- Indices de la tabla `devoluciones`
+--
+ALTER TABLE `devoluciones`
+  ADD PRIMARY KEY (`ID_Devolucion`),
+  ADD KEY `FK_Venta` (`FK_Venta`);
 
 --
 -- Indices de la tabla `dinero`
@@ -59694,6 +59738,12 @@ ALTER TABLE `detalles_clientes`
   MODIFY `ID_Detalle_Cliente` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `detalles_devolucion`
+--
+ALTER TABLE `detalles_devolucion`
+  MODIFY `ID_Detalle_Devolucion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+
+--
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_pedidos`
 --
 ALTER TABLE `detalles_impuestos_pedidos`
@@ -59728,6 +59778,12 @@ ALTER TABLE `detalles_ventas`
 --
 ALTER TABLE `detalle_compras`
   MODIFY `ID_Detalle_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT de la tabla `devoluciones`
+--
+ALTER TABLE `devoluciones`
+  MODIFY `ID_Devolucion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `dinero`
@@ -59884,6 +59940,13 @@ ALTER TABLE `detalles_clientes`
   ADD CONSTRAINT `detalles_clientes_ibfk_1` FOREIGN KEY (`FK_Cliente`) REFERENCES `clientes` (`ID_Cliente`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `detalles_devolucion`
+--
+ALTER TABLE `detalles_devolucion`
+  ADD CONSTRAINT `detalles_devolucion_ibfk_1` FOREIGN KEY (`FK_Devolucion`) REFERENCES `devoluciones` (`ID_Devolucion`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `detalles_devolucion_ibfk_2` FOREIGN KEY (`FK_Detalle_Venta`) REFERENCES `detalles_ventas` (`ID_Detalle_Venta`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `detalles_impuestos_pedidos`
 --
 ALTER TABLE `detalles_impuestos_pedidos`
@@ -59921,6 +59984,12 @@ ALTER TABLE `detalles_ventas`
 ALTER TABLE `detalle_compras`
   ADD CONSTRAINT `detalle_compras_ibfk_1` FOREIGN KEY (`FK_Compra`) REFERENCES `compras` (`ID_Compra`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `detalle_compras_ibfk_2` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `devoluciones`
+--
+ALTER TABLE `devoluciones`
+  ADD CONSTRAINT `devoluciones_ibfk_1` FOREIGN KEY (`FK_Venta`) REFERENCES `ventas` (`ID_Venta`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `importes`
