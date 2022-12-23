@@ -568,19 +568,9 @@
               </a>
             </li>
 
-            <li class="menu-item cargarVista" carga="v_ventas" titulo="Ventas" id="cargarVentas">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-shopping-cart"></i>
-                <div data-i18n="Ventas">Ventas</div>
-              </a>
-            </li>
+            #MenuVentas#
 
-            <li class="menu-item cargarVista" carga="v_importes" titulo="Importes" id="cargarImportes">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-money-check"></i>
-                <div data-i18n="Importes">Importes</div>
-              </a>
-            </li>
+            #MenuImportes#
 
             <li class="menu-item cargarVista" carga="v_hacerCompra" titulo="Hacer compra" id="cargarHacerCompra" hidden>
               <a href="javascript:void(0)"  class="menu-link">
@@ -588,7 +578,7 @@
               </a>
             </li>
 
-            #MenuCajas#
+            <!-- #MenuCajas# -->
 
             <!-- Layouts -->
             <li class="menu-item">
@@ -608,17 +598,22 @@
 
                 #MenuAreas#
 
-                <li class="menu-item cargarVista" carga="v_precios" titulo="Precios" id="cargarPrecios">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Precios">Precios</div>
-                  </a>
-                </li>
+                #MenuPrecios#
               </ul>
             </li>
 
             #MenuImpuestos#
 
-            #MenuConfiguracion#
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon fas fa-cogs"></i>
+                <div data-i18n="Layouts">Configuración</div>
+              </a>
+
+              #MenuTicket#
+
+              #MenuFacturacion#
+            </li>
 
             #MenuUsuarios#
 
@@ -642,9 +637,9 @@
               </a>
             </div>
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-              <div id="DivPedidosPendientes">
+              <!-- <div id="DivPedidosPendientes">
                 <a href="javascript:void(0)" style="font-size: 25x" id="cargarVenta" ><i class="fas fa-shopping-cart"></i></a>
-              </div> 
+              </div>  -->
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">

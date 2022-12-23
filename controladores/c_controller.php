@@ -136,6 +136,38 @@ class controller {
 		}
 		$pagina = str_replace('#MenuCompras#', $botonCompras, $pagina);
 
+		$botonVentas = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][1] == '1') {
+			$botonVentas = '<li class="menu-item cargarVista" carga="v_ventas" titulo="Ventas" id="cargarVentas">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-shopping-cart"></i>
+                <div data-i18n="Ventas">Ventas</div>
+              </a>
+            </li>';
+		}
+		$pagina = str_replace('#MenuVentas#', $botonVentas, $pagina);
+
+		$botonImportes = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_importes'][1] == '1') {
+			$botonImportes = '<li class="menu-item cargarVista" carga="v_importes" titulo="Importes" id="cargarImportes">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-money-check"></i>
+                <div data-i18n="Importes">Importes</div>
+              </a>
+            </li>';
+		}
+		$pagina = str_replace('#MenuImportes#', $botonImportes, $pagina);
+
+		$botonPrecios = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_precios'][1] == '1') {
+			$botonPrecios = '<li class="menu-item cargarVista" carga="v_precios" titulo="Precios" id="cargarPrecios">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Precios">Precios</div>
+                  </a>
+                </li>';
+		}
+		$pagina = str_replace('#MenuPrecios#', $botonPrecios, $pagina);
+
 		$botonCategorias = '';
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_categorias'][1] == '1') {
 			$botonCategorias = '<li class="menu-item cargarVista" carga="v_categorias" titulo="Familias" id="cargarCategorias">
@@ -179,32 +211,29 @@ class controller {
 		}
 		$pagina = str_replace('#MenuUsuarios#', $botonUsuarios, $pagina);
 
-		$botonConfiguracion = '';
-		if ($omodelo->permisos() == 'Administrador') {
-			$botonConfiguracion = '<li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-              <i class="menu-icon fas fa-cogs"></i>
-                <div data-i18n="Layouts">Configuración</div>
-              </a>
-
-              <ul class="menu-sub">
+		$botonTicket = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_tickets'][1] == '1') {
+			$botonTicket = '<ul class="menu-sub">
                 <li class="menu-item cargarVista" carga="v_tickets" titulo="Ticket" id="cargarTicket">
                   <a href="javascript:void(0)"  class="menu-link">
                     <div data-i18n="Tickets">Ticket</div>
                   </a>
                 </li>
-              </ul>
+              </ul>';
+		}
+		$pagina = str_replace('#MenuTicket#', $botonTicket, $pagina);
 
-              <ul class="menu-sub">
+		$botonFacturacion = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_facturacion'][1] == '1') {
+			$botonFacturacion = ' <ul class="menu-sub">
                 <li class="menu-item cargarVista" carga="v_facturacion" titulo="Facturación 4.0" id="cargarFacturacion">
                   <a href="javascript:void(0)"  class="menu-link">
                     <div data-i18n="Facturación">Facturación 4.0</div>
                   </a>
                 </li>
-              </ul>
-            </li>';
+              </ul>';
 		}
-		$pagina = str_replace('#MenuConfiguracion#', $botonConfiguracion, $pagina);
+		$pagina = str_replace('#MenuFacturacion#', $botonFacturacion, $pagina);
 
 		return $pagina;
 	}
@@ -422,6 +451,21 @@ class controller {
 		}else if($nombre == "v_areas"){
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_areas'][2] == '0') {
 				echo '<script>$("#botonNuevaArea").remove();</script>';
+			}
+			
+		}else if($nombre == "v_ventas"){
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_ventas'][2] == '0') {
+				echo '<script>$("#BotonNuevaVenta").remove();</script>';
+			}
+			
+		}else if($nombre == "v_zonas"){
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_zonas'][2] == '0') {
+				echo '<script>$("#botonNuevaZona").remove();</script>';
+			}
+			
+		}else if($nombre == "v_compras"){
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_compras'][2] == '0') {
+				echo '<script>$(".botonNuevaCompra").remove();</script>';
 			}
 			
 		}else if($nombre == "v_categorias"){
