@@ -533,7 +533,11 @@ $arregloVenta = '';
                             }else{
                               $nombrePresentacion = "";
                             }
+
                             $subtotalProducto = ($row['Cantidad'] * $row['Precio']);
+
+
+
                             $mostrar .= "<tr>
                                 <td class='codigo'>".$row["Codigo"]."</td>
                                 <td class='producto'>".$row["Descripcion"]. $nombrePresentacion."</td>
@@ -567,9 +571,9 @@ $arregloVenta = '';
         echo '<p class="derecha" style="font-size: 15px;">Descuento: <b style="font-size: 15px;">$'.(round($sumaTotalDescuentos*100)/100).'</b></p>'; 
         echo '<p class="derecha" style="font-size: 15px;">Impuestos: <b style="font-size: 15px;">$'.(round(($sumaTotalImpuestos)*100)/100).'</b></p>'; 
         echo "</br>
-          <p class='derecha negra'><b>TOTAL: $".(round($arregloVenta['Total']*100)/100)."</b></p>
+          <p class='derecha'><b style='font-size: 20px;'>TOTAL: $".(round($arregloVenta['Total']*100)/100)."</b></p>
         ";
-        echo '<p class="derecha negra">Tipo de pago: '.$arregloVenta['Tipo_Pago'].'</p>'; 
+        echo '<p class="derecha">Tipo de pago: '.$arregloVenta['Tipo_Pago'].'</p>'; 
         
         echo '<p class="derecha">Administrador: '.$arregloVenta['NombreUsuario'].'</p>';
       ?>

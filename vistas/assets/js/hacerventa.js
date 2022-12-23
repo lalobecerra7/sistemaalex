@@ -501,6 +501,7 @@ jQuery(document).ready(function($) {
 			});
 		}else{
 			$("#ModalRealizarVenta").modal("show");
+			$("#GuardarVenta").attr("tipo", "");
 			$("#GuardarVenta").attr("idpedido", $("#CargaPedidosModalVentas").attr("attrid"));
 			$("#GuardarVenta").attr("foliopedido", $("#CargaPedidosModalVentas").attr("folio"));
 		}
@@ -589,6 +590,9 @@ jQuery(document).ready(function($) {
 									    var y= parseInt((window.screen.height/2)-(altura/2));
 									    var x= parseInt((window.screen.width/2)-(anchura/2));
 									    window.open("controladores/ticket.php?id="+idVenta+"&idSucursal="+idsucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
+										if ($("#GuardarVenta").attr("tipo") == "facturar") {
+											facturarVenta(idVenta);
+										}
 									}else{
 										Swal.fire({
 											icon: 'error',
@@ -614,6 +618,9 @@ jQuery(document).ready(function($) {
 							    var y= parseInt((window.screen.height/2)-(altura/2));
 							    var x= parseInt((window.screen.width/2)-(anchura/2));
 							    window.open("controladores/ticket.php?id="+idVenta+"&idSucursal="+idsucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
+					       		if ($("#GuardarVenta").attr("tipo") == "facturar") {
+									facturarVenta(idVenta);
+								}
 					        }
 					    });
 					}else{
@@ -629,6 +636,9 @@ jQuery(document).ready(function($) {
 						var y= parseInt((window.screen.height/2)-(altura/2));
 						var x= parseInt((window.screen.width/2)-(anchura/2));
 						window.open("controladores/ticket.php?id="+idVenta+"&idSucursal="+idsucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
+						if ($("#GuardarVenta").attr("tipo") == "facturar") {
+							facturarVenta(idVenta);
+						}
 					}		    	
 			    }else{
 			    	Swal.fire({
@@ -647,6 +657,22 @@ jQuery(document).ready(function($) {
 			});	  
 		}
 	});
+
+	$(document).on('click', '#CobrarFacturar', function() {
+		if ($("#TablaProductosAgregadoVenta tbody tr").length == 0) {
+			Swal.fire({
+			    icon: 'error',
+			    title: 'No se puede realizar una venta sin productos',
+			    timer: 1000
+			});
+		}else{
+			$("#ModalRealizarVenta").modal("show");
+			$("#GuardarVenta").attr("idpedido", $("#CargaPedidosModalVentas").attr("attrid"));
+			$("#GuardarVenta").attr("tipo", "facturar");
+			$("#GuardarVenta").attr("foliopedido", $("#CargaPedidosModalVentas").attr("folio"));
+		}
+	});
+
 
 	function CalcularSubtotalVenta(){
 		if ($("#TablaProductosAgregadoVenta tbody tr").length > 0) {
