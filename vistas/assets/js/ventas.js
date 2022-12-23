@@ -170,113 +170,68 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-
-});
-
-$(document).on('click', '#PagoCompra', function() {
-	var id = $(this).attr("attrid");
-
-	var data = "metodo=detalles&accion=compras&tipo=pago&IDCompra="+id;
-	$.ajax({
-		url: 'index.php',
-		type: 'POST',
-		data: data,
-	})
-	.done(function(res) {
-		console.log(res);
-		var datos = JSON.parse(res);
-		var restante = (parseFloat(datos.Total)-parseFloat(datos.TotalPagos));
-		$('#Proveedor').text(datos.Proveedor);
-		$('#TotalCompra').text(new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(datos.Total));
-		$('#Pagos').text(new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(datos.TotalPagos));
-		$('#Restante').text(new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(restante));
-		$('#ModalPagoCompra').modal('show');
-		$('#GuardarPago').attr('attrid', id);
-	})
-	.fail(function() {
-		console.log("Error ajax");
+	$(document).on('click', '#DevolverVenta', function() {
+		var idventa = $(this).attr("attrid");
+		$("#GuardarDevolucion").attr("attrid", idventa);
+		$("#FolioVentaDevolucion").text($(this).attr("folio"));
+		TablaProductosDevolucion(idventa);
+		moneda();
 	});
-});
 
-$(document).on('click', '#GuardarPago', function() {
-	var id = $(this).attr("attrid");
-	console.log(id);
-	$('#FormPagoCompra').validate({
-        rules: {
-            ImportePagoCompra: {
-                required: true
-            },
-            ConceptoPago: {
-                required: true
-            },
-            TipoDePago: {
-                required: true
-            }
-        },
-        messages: {
-            ImportePagoCompra: {
-                required: "El importe es obligatorio"
-            },
-            ConceptoPago: {
-                required: "El concepto es obligatorio"
-            },
-            TipoDePago: {
-                required: "El tipo de pago es obligatorio"
-            }
-        },
-        submitHandler: function(form) { 
-			console.log('pagooooo');
-            if($('#ImportePagoCompra').val() == '' || $('#ImportePagoCompra').val() == 0){
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'El importe debe ser mayor a $0'
-                });
-            }else {
-
-                var data = new FormData(document.getElementById('FormPagoCompra'));
-                data.append('metodo', 'insertar');
-                data.append('accion', 'compras');
-                data.append('IDCompra', id);
-
-                $.ajax({
-                    url: 'index.php',
-                    type: 'POST',
-                    data: data,
-                    processData: false,
-                    contentType: false
-                })
-                .done(function(res) {
-                    if ($.trim(res) == "Correcto") {
-                        Swal.fire({
-							icon: 'success',
-							title: 'Pago registrado correctamente'
-						});
-						TablaReporteVentas();
-                        $("#ModalPagoCompra").modal("hide");
-                    }else{
-						Swal.fire({
-							icon: 'error',
-							title: 'Oops...',
-							text: 'Error inesperado al registrar la compra.'
-						});
-						console.log($.trim(res));
-                    }
-                })
-                .fail(function() {
-                    console.log("Error ajax");
-                })  
-            }              
-        }
+	$(document).on('click', '#GuardarDevolucion', function() {
+		var productos = new Array();
+		var idventa = $(this).attr("attrid");
+		$("#TablaProductosDevolucion tbody tr").each(function(index, el) {
+			var iddetalle = $(this).children("td:eq(4)").find(".devolverProducto").attr("attrid");
+			var cantidad = $(this).children("td:eq(4)").find(".devolverProducto").val();
+			var maximo = $(this).children("td:eq(1)").text();
+			if (parseFloat(cantidad) > 0 && parseFloat(cantidad) <= parseFloat(maximo)) {
+				productos.push([iddetalle, cantidad]);
+			}else{
+				$(this).children("td:eq(4)").find(".devolverProducto").val(0);
+			}
+		});
+		if (productos.length > 0) {
+			var data = "metodo=detalles&accion=ventas&tipo=GuardarDevolucion&idventa="+idventa+"&producto="+JSON.stringify(productos);
+			$.ajax({
+				url: 'index.php',
+				type: 'POST',
+				data: data,
+				beforeSend: function() {
+					$("#carga").show();
+				}
+			})
+			.done(function(res) {
+				if ($.trim(res) == "Correcto") {
+					Swal.fire({
+						icon: 'success',
+						title: 'Devolución registrada correctamente',
+					});
+				}else{
+					Swal.fire({
+						icon: 'error',
+				        title: 'Oops...',
+					    text: 'Error al guardar devolución.'
+					});
+					console.log(res);
+				}	
+			})
+			.fail(function() {
+				console.log("Error ajax");
+			})
+			.always(function() {
+				$("#carga").hide();
+			});
+		}else{
+			Swal.fire({
+				icon: 'error',
+				title: 'No se puede guardar una devolución sin productos',
+				timer: 1000
+			});
+		}
 	});
-});
 
-$(document).on('change', '#TipoDePago', function() {
-	if($('#TipoDePago').val()!='Efectivo'){
-		$('#Archivo').attr('hidden', false);
-	}else if($('#TipoDePago').val()=='Efectivo'){
-		$('#Archivo').attr('hidden', true);
-	}
+
 });
 
 function TablaReporteVentas(){
@@ -307,3 +262,28 @@ function TablaReporteVentas(){
 		}
 	});
 }
+
+function TablaProductosDevolucion(idventa){
+	ajaxMyDatatable({
+		"table": $("#TablaProductosDevolucion"), 
+		"colums": [
+			"Producto",
+			"Cantidad",
+			"Devuelto",
+			"Total",
+			"Devolver",
+		], 
+		"sort": [
+			1,
+			"desc"
+		],
+		"url": "index.php", 
+		"params":{
+			"metodo": "detalles",
+			"accion": "ventas",
+			"tipo": "ConsultarProductosVentaDevolucion",
+			"idventa": idventa
+		}
+	});
+}
+

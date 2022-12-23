@@ -153,11 +153,27 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                
+                <div class="row">
+                    <div class="col-12 table-responsive" id="divTablaProductos">
+                        <table class="table table-responsive table-striped text-center myDataTable" id="TablaProductosDevolucion" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Devuelto</th>
+                                    <th>Total (Devuelto)</th>
+                                    <th style="width: 15%">Devolver</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table> 
+                    </div>
+                </div> 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-                <button type="button" class="btn btn-primary" id="GuardarDevolucion" attrid="" tipo="insertar"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+                <button type="button" class="btn btn-primary" id="GuardarDevolucion" attrid=""><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
             </div>
         </div>
     </div>

@@ -91,80 +91,6 @@ class ventas {
 
 		echo json_encode($arreglo);
 	}
-
-	public function _insertar(){
-		$omodelo = new m_modelo();
-		extract($_POST);
-		
-		$ImportePago=  $omodelo->link->real_escape_string($ImportePagoCompra);
-		$Concepto =  $omodelo->link->real_escape_string($ConceptoPago);
-		$TipoPago =  $omodelo->link->real_escape_string($TipoDePago);
-		$Detalles =  $omodelo->link->real_escape_string($DetallesPago);
-		$IdCompra =  $omodelo->link->real_escape_string($IDCompra);
-		$fecha = date('Y-m-d H:i:s'); 
-		$usuario = $_SESSION['user_admin']['ID_Usuario'];
-
-		$query = "INSERT INTO pagos SET FK_Compra = '$IdCompra', Monto = '$ImportePago', Concepto = '$Concepto', Tipo_Pago = '$TipoPago', Fecha = '$fecha', FK_Usuario = '$usuario', Detalles_Pago = '$Detalles'";
-		$error = $omodelo->_insertar($query);
-
-		if ($error == "si") {
-			echo "Error 1: ".mysqli_error($omodelo->link);
-		}else{
-			$ID = mysqli_insert_id($omodelo->link);
-
-			$status = 1;
-			if ($_FILES['ComprobantePago']['size'] > 0 && $_FILES['ComprobantePago']['error'] == 0) {
-				$file = $_FILES["ComprobantePago"];
-				$nombreDoc = $file["name"];
-				$tipo = $file["type"];
-				$ruta_provisional = $file["tmp_name"];
-				$size = $file["size"];
-				$carpeta = "vistas/assets/archivos/fotosPagos/";
-
-				if ($tipo != 'image/jpeg' && $tipo != 'image/jpg' && $tipo != 'image/png' && $tipo != 'application/pdf' && $tipo != ''){
-					echo "Error 2 Formato";
-				}else if ($size > (1024*1024*10)){
-					echo "Error 3 Peso";
-				}else{
-					$status = 0;
-					$ruta = $carpeta;
-				}
-			}
-			
-			if($status == 0){
-				$query2 = "UPDATE pagos SET Archivo = '".$id.'_'.$nombreDoc."' WHERE ID_Pago = '$ID'";
-				$error3 = $omodelo->_insertar($query2);	
-
-				if ($error3 == "si") {
-					echo "Error 4: ".mysqli_error($omodelo->link); 
-				}else{
-					move_uploaded_file($ruta_provisional,  $ruta.''.$id.'_'.$nombreDoc);
-
-					$query3 = "SELECT compras.Total AS Total, (SELECT SUM(Monto) FROM pagos WHERE FK_Compra = '$IdCompra') AS TotalPagos FROM compras INNER JOIN pagos ON FK_Compra = ID_Compra WHERE ID_Compra = '$IdCompra'";
-					$row3 = $omodelo->_consultar($query3);
-					$numerofilas3 = $omodelo->numerofilas;
-
-					if($row3 == 'si'){
-						echo "Error: ".mysqli_error($omodelo->link);
-					}else{
-						if($numerofilas3 > 0){
-							if($row3[0]['Total'] <= $row3[0]['TotalPagos']){
-								$query4 = "UPDATE compras SET Estatus = '1' WHERE ID_Compra = '$IDCompra'";
-								$error4 = $omodelo->_insertar($query4);
-								if ($error4 == "si") {
-									echo "Error 5: ".mysqli_error($omodelo->link);
-								}else{
-									echo "Correcto";
-									$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
-								}
-							}
-						}
-					}
-				}
-			}
-			echo ('Correcto');
-		}
-	}
 	
 	public function _modificar(){
 		$omodelo = new m_modelo();
@@ -235,7 +161,7 @@ class ventas {
 		if($tipo == 'productos'){
 			$IDVenta = $omodelo->link->real_escape_string($IDVenta);
 			$tabla = "";
-			$query = "SELECT ID_Detalle_Venta, FK_Venta, detalles_ventas.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, Descripcion, Precio, Cantidad, Descuento, Total, Devuelto, Fecha_Devolucion, Regreso_Inventario, Clave_Unidad_CFDI, Unidad_CFDI, Objeto_Impuesto_CFDI FROM detalles_ventas LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '$IDVenta'";
+			$query = "SELECT ID_Detalle_Venta, FK_Venta, detalles_ventas.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, Descripcion, Precio, Cantidad, Descuento, Total, Regreso_Inventario, Clave_Unidad_CFDI, Unidad_CFDI, Objeto_Impuesto_CFDI FROM detalles_ventas LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '$IDVenta'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -290,7 +216,7 @@ class ventas {
 								<td >".$row[$i]["Descripcion"].$presentacion."</td>
 								<td style='vertical-align: middle;'>$".number_format($row[$i]["Precio"], 2)."</td>
 								<td style='vertical-align: middle;'>".number_format($row[$i]["Cantidad"], 2)."</td>
-								<td style='vertical-align: middle;'>".$row[$i]["Descuento"]."%</td>
+								<td style='vertical-align: middle;'>$".number_format($row[$i]["Descuento"], 2)."</td>
 								<td style='vertical-align: middle;'>$".number_format($subtotal, 2)."</td>
 								<td><button class='btn btn-primary btn-sm verImpuestosProducto' nombre='".$row[$i]["Descripcion"].$nombrepresentacion."' attrid='".$row[$i]["ID_Detalle_Venta"]."'>$".number_format($sumaImpuestos, 2)."</button></td>
 								<td>$".number_format($row[$i]["Total"], 2)."</td>
@@ -329,6 +255,121 @@ class ventas {
 					";
 				}
 				echo $tabla;
+			}
+		}else if($tipo == "ConsultarProductosVentaDevolucion"){
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(presentaciones.Nombre, presentaciones.Abreviatura, Descripcion, Precio, Cantidad, Descuento, Total) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+
+			///////////////////////////////////////////////////////////////////////////////////
+
+			$query = "SELECT ID_Detalle_Venta, detalles_ventas.FK_Producto AS IDProducto, presentaciones.Nombre AS NombrePresentacion, presentaciones.Abreviatura AS NombreAbreviatura, Descripcion AS Producto, Precio, Cantidad, Descuento, Total, (SELECT COUNT(*) FROM detalles_ventas LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '$idventa' $busqueda) AS Num FROM detalles_ventas LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '$idventa' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+
+						$nombrePresentacion = "";
+						$nombreabreviatura = "";
+						if ($row[$i]['NombrePresentacion'] != "") {
+							if ($row[$i]['NombreAbreviatura'] != "") {
+								$nombreabreviatura = "(".$row[$i]['NombreAbreviatura'].")";
+							}
+							$nombrePresentacion = "<br>".$row[$i]['NombrePresentacion'].$nombreabreviatura;
+						}else{
+							$nombrePresentacion = "<br>Sin presentación";
+						}
+
+						$cantidadActual = $row[$i]['Cantidad'];
+						$query2 = "SELECT ID_Detalle_Devolucion, FK_Devolucion, FK_Detalle_Venta, detalles_devolucion.Cantidad, detalles_devolucion.Total FROM detalles_devolucion INNER JOIN detalles_ventas ON FK_Detalle_Venta = ID_Detalle_Venta WHERE detalles_ventas.FK_Venta = '$idventa' AND FK_Detalle_Venta = '".$row[$i]['ID_Detalle_Venta']."'";
+						$row2 = $omodelo->_consultar($query2);
+						$numerofilas2 = $omodelo->numerofilas;
+						$cantidadDevuelto = 0;
+						if($row2 == 'si'){
+							echo "Error 2: ".mysqli_error($omodelo->link);
+						}else{
+							if($numerofilas2 > 0){
+								$cantidadActual = $row[$i]['Cantidad'] - (double)$row2[0]["Cantidad"];
+								$cantidadDevuelto = (double)$row2[0]["Cantidad"];
+							}
+						}
+
+						$campoDevolver = "";
+						if ($cantidadActual > 0) {
+							$campoDevolver = '<input class="form-control devolverProducto" attrid="'.$row[$i]['ID_Detalle_Venta'].'" value="0" min="0" max="'.$cantidadActual.'">';
+						}						
+
+						$arreglo['data'][] = array(
+							'ID' => $row[$i]['ID_Detalle_Venta'],
+							'Producto' => $row[$i]['Producto']." ".$nombrePresentacion,
+							'Cantidad' => $cantidadActual,
+							'Devuelto' => $cantidadDevuelto,
+							'Total' => '<b class="dinero">0</b>',
+							'Devolver' => $campoDevolver,
+						);
+						
+					}	
+				}
+			}
+			//$numerofilasTotal = $numerofilas + $numerofilas2;
+			$arreglo['totales'] = array('NumRows' => $row[0]["Num"]);
+			echo json_encode($arreglo);
+		}else if($tipo == "GuardarDevolucion"){
+			$idventa =  $omodelo->link->real_escape_string($idventa);
+			$fecha = date('Y-m-d H:i:s'); 
+			$query = "INSERT INTO devoluciones SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."' , FK_Venta = '$idventa', Toda = '0', Fecha_Registro = '$fecha'";
+			$error = $omodelo->_insertar($query);
+			if ($error == "si") {
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				$idDevolucion = mysqli_insert_id($omodelo->link);
+
+				$productos = json_decode($productos, true);
+				foreach ($productos as $fila) {
+					$individual = 0;
+					$total = 0;
+					$query2 = "SELECT ID_Detalle_Venta, FK_Venta, FK_Producto, FK_Presentacion, Descripcion, Precio, Cantidad, Descuento, Total FROM detalles_ventas WHERE ID_Detalle_Venta = '$fila[0]'";
+					$row2 = $omodelo->_consultar($query2);
+					$numerofilas2 = $omodelo->numerofilas;
+					if($row2 == 'si'){
+						echo "Error 2: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilas2 > 0){
+							$individual = $row2[0]["Total"] / $row2[0]["Cantidad"];
+							$total = $fila[1] * $individual;
+							$query3 = "INSERT INTO devoluciones SET FK_Devolucion = '$idDevolucion', FK_Detalle_Venta = '".$row2[0]["ID_Detalle_Venta"]."', Cantidad = '$fila[1]', Total = '$total'";
+							$error3 = $omodelo->_insertar($query3);
+							if ($error3 == "si") {
+								echo "Error 3: ".mysqli_error($omodelo->link);
+							}
+						}
+					}
+
+
+
+
+				}
+
 			}
 		}
 	}
