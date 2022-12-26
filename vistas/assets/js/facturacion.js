@@ -384,7 +384,7 @@ function facturarVenta(id) {
                 domicilioCliente += ' '+datos.Colonia_Cliente;
             }
 
-            domicilioCliente += ' C.P. '+datos.CP_Cliente+', '+datos.Ciudad_Cliente+', '+datos.Estado_Cliente+' '+datos.Pais_Cliente+'.';
+            domicilioCliente += ' C.P. '+datos.Codigo_Postal_Cliente+', '+datos.Ciudad_Cliente+', '+datos.Estado_Cliente+' '+datos.Pais_Cliente+'.';
 
             if(datos.FK_Cliente == '1'){
                 domicilioCliente = 'C.P. '+datos.CP_Sucursal;
