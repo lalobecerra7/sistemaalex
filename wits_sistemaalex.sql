@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-12-2022 a las 08:18:13
+-- Tiempo de generación: 26-12-2022 a las 21:54:07
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.3
 
@@ -55163,6 +55163,10 @@ CREATE TABLE `clientes` (
   `No_Cuenta` varchar(30) CHARACTER SET latin1 NOT NULL,
   `Banco` varchar(60) CHARACTER SET latin1 NOT NULL,
   `Titular` varchar(300) CHARACTER SET latin1 NOT NULL,
+  `Nombre_Contacto` tinytext COLLATE latin1_spanish_ci NOT NULL,
+  `Puesto_Contacto` tinytext COLLATE latin1_spanish_ci NOT NULL,
+  `Email_Contacto` tinytext COLLATE latin1_spanish_ci NOT NULL,
+  `Tel_Contacto` tinytext COLLATE latin1_spanish_ci NOT NULL,
   `FK_Sucursal` int(11) NOT NULL,
   `Razon_CFDI` tinytext COLLATE latin1_spanish_ci NOT NULL,
   `Regimen_CFDI` varchar(30) COLLATE latin1_spanish_ci NOT NULL
@@ -55172,19 +55176,19 @@ CREATE TABLE `clientes` (
 -- Volcado de datos para la tabla `clientes`
 --
 
-INSERT INTO `clientes` (`ID_Cliente`, `Nombre`, `Calle`, `No_Exterior`, `No_Interior`, `Colonia`, `Ciudad`, `Codigo_Postal`, `Estado`, `Pais`, `Telefono`, `Celular`, `Descuento`, `Correo`, `Fecha_Nacimiento`, `Sexo`, `Fecha_Registro`, `Foto`, `RFC`, `Facturar`, `No_Cuenta`, `Banco`, `Titular`, `FK_Sucursal`, `Razon_CFDI`, `Regimen_CFDI`) VALUES
-(1, 'PUBLICO EN GENERAL', '', '', '', '', '', '01000', '', '', '', '', 0, '', '0000-00-00', '', '0000-00-00 00:00:00', '', 'XAXX010101000', 0, '', '', '', 0, 'PUBLICO EN GENERAL', '616'),
-(2, 'Arturo Iturbide', '', '', '', '', '', '', '', '', '015556278345', '5532375991', 10, 'iturbide.jastrow@me.com', '0000-00-00', '', '2019-06-30 14:02:11', '', 'YBI140401LJ3', 0, '', '', '', 0, '', ''),
-(3, 'Amelia Mena Vazquez', '', '', '', '', '', '', '', '', '01 55 55 35 02 23', '', 0, 'holaropainfantil@yahoo.com.mx', '0000-00-00', '', '2019-06-30 14:01:16', '', 'MEVA2705309G5', 0, '', '', '', 0, '', ''),
-(5, 'Angelica Gutierrez', '', '', '', '', '', '', '', '', '01 34 14 14 10 83', ' 14 14 03 88', 0, 'lika_2891@hotmail.com', '0000-00-00', '', '2019-06-30 14:01:47', '', 'GUMA530910QR1', 0, '', '', '', 0, '', ''),
-(8, 'Coral Navarro Mascarel', '', '', '', '', '', '', '', '', '01 46 16 12 86 10', ' 01 46 16 14 95 58', 0, 'macoral@hotmaill.com', '0000-00-00', '', '2019-06-30 14:03:05', '', 'NAMC750717JS4', 0, '', '', '', 0, '', ''),
-(9, 'Estefany', '', '', '', '', '', '', '', '', '01 34 87 84 46 66', '', 0, 'compras@bolsadelosaltos.com', '0000-00-00', '', '2016-07-13 11:26:59', '', 'BAL020930EL9', 0, '', '', '', 0, '', ''),
-(11, 'Julio Martin Lopez', '', '', '', '', '', '', '', '', '01 44 99 13 33 36, 9135146 ', '449 467 14 87', 0, 'roponesmagali@prodigy.net.mx', '0000-00-00', '', '2019-06-30 14:05:20', '', 'MALJ721026F84', 0, '', '', '', 0, '', ''),
-(16, 'Luz Rebeca Gonzalez Gonzalez', '', '', '', '', '', '', '', '', '3787090598', '3787090598', 0, 'deazaharesexclusivos@hotmail.com', '0000-00-00', '', '2016-07-13 11:47:40', '', 'GOGL691210FS8', 0, '', '', '', 0, '', ''),
-(17, 'Ma. De Lourdes Portilla Calderon', '', '', '', '', '', '', '', '', '01 89 99 22 06 65, 8999221322', '', 0, 'latiendanuevareynosa@hotmail.com', '0000-00-00', '', '2019-06-30 14:07:29', '', 'POCL351007JV7', 0, '', '', '', 0, '', ''),
-(24, 'Sr. Manuel Yanez 2', '', '', '', '', '', '', '', '', '01 63 94 72 03 98, 6394745148', '', 0, 'novia2003@gmail.com', '0000-00-00', '', '2019-06-30 14:08:17', '', 'CMN84080213', 0, '', '', '', 0, '', ''),
-(26, 'Manuel Emilio Torres Sanchez', '', '', '', '', '', '', '', '', '34 87 84 64 64', '', 0, 'replamex@hotmail.com', '0000-00-00', '', '2016-07-13 12:07:44', '', 'TOSM860124SH5', 0, '', '', '', 0, '', ''),
-(27, 'Ejemplo', 'dfdf', '', '', '', '', '06470', '', '', '', '', 0, '', '0000-00-00', '', '2022-12-05 20:52:47', '', 'SSF1103037F1', 0, '', '', '', 0, 'SCAFANDRA SOFTWARE FACTORY', '601');
+INSERT INTO `clientes` (`ID_Cliente`, `Nombre`, `Calle`, `No_Exterior`, `No_Interior`, `Colonia`, `Ciudad`, `Codigo_Postal`, `Estado`, `Pais`, `Telefono`, `Celular`, `Descuento`, `Correo`, `Fecha_Nacimiento`, `Sexo`, `Fecha_Registro`, `Foto`, `RFC`, `Facturar`, `No_Cuenta`, `Banco`, `Titular`, `Nombre_Contacto`, `Puesto_Contacto`, `Email_Contacto`, `Tel_Contacto`, `FK_Sucursal`, `Razon_CFDI`, `Regimen_CFDI`) VALUES
+(1, 'PUBLICO EN GENERAL', '', '', '', '', '', '01000', '', '', '', '', 0, '', '0000-00-00', '', '0000-00-00 00:00:00', '', 'XAXX010101000', 0, '', '', '', '', '', '', '', 0, 'PUBLICO EN GENERAL', '616'),
+(2, 'Arturo Iturbide', '', '', '', '', '', '', '', '', '015556278345', '5532375991', 10, 'iturbide.jastrow@me.com', '0000-00-00', '', '2019-06-30 14:02:11', '', 'YBI140401LJ3', 0, '', '', '', '', '', '', '', 0, '', ''),
+(3, 'Amelia Mena Vazquez', '', '', '', '', '', '', '', '', '01 55 55 35 02 23', '', 0, 'holaropainfantil@yahoo.com.mx', '0000-00-00', '', '2019-06-30 14:01:16', '', 'MEVA2705309G5', 0, '', '', '', '', '', '', '', 0, '', ''),
+(5, 'Angelica Gutierrez', '', '', '', '', '', '', '', '', '01 34 14 14 10 83', ' 14 14 03 88', 0, 'lika_2891@hotmail.com', '0000-00-00', '', '2019-06-30 14:01:47', '', 'GUMA530910QR1', 0, '', '', '', '', '', '', '', 0, '', ''),
+(8, 'Coral Navarro Mascarel', '', '', '', '', '', '', '', '', '01 46 16 12 86 10', ' 01 46 16 14 95 58', 0, 'macoral@hotmaill.com', '0000-00-00', '', '2019-06-30 14:03:05', '', 'NAMC750717JS4', 0, '', '', '', '', '', '', '', 0, '', ''),
+(9, 'Estefany', '', '', '', '', '', '', '', '', '01 34 87 84 46 66', '', 0, 'compras@bolsadelosaltos.com', '0000-00-00', '', '2016-07-13 11:26:59', '', 'BAL020930EL9', 0, '', '', '', '', '', '', '', 0, '', ''),
+(11, 'Julio Martin Lopez', '', '', '', '', '', '', '', '', '01 44 99 13 33 36, 9135146 ', '449 467 14 87', 0, 'roponesmagali@prodigy.net.mx', '0000-00-00', '', '2019-06-30 14:05:20', '', 'MALJ721026F84', 0, '', '', '', '', '', '', '', 0, '', ''),
+(16, 'Luz Rebeca Gonzalez Gonzalez', '', '', '', '', '', '', '', '', '3787090598', '3787090598', 0, 'deazaharesexclusivos@hotmail.com', '0000-00-00', '', '2016-07-13 11:47:40', '', 'GOGL691210FS8', 0, '', '', '', '', '', '', '', 0, '', ''),
+(17, 'Ma. De Lourdes Portilla Calderon', '', '', '', '', '', '', '', '', '01 89 99 22 06 65, 8999221322', '', 0, 'latiendanuevareynosa@hotmail.com', '0000-00-00', '', '2019-06-30 14:07:29', '', 'POCL351007JV7', 0, '', '', '', '', '', '', '', 0, '', ''),
+(24, 'Sr. Manuel Yanez 2', '', '', '', '', '', '', '', '', '01 63 94 72 03 98, 6394745148', '', 0, 'novia2003@gmail.com', '0000-00-00', '', '2019-06-30 14:08:17', '', 'CMN84080213', 0, '', '', '', '', '', '', '', 0, '', ''),
+(26, 'Manuel Emilio Torres Sanchez', '', '', '', '', '', '', '', '', '34 87 84 64 64', '', 0, 'replamex@hotmail.com', '0000-00-00', '', '2016-07-13 12:07:44', '', 'TOSM860124SH5', 0, '', '', '', '', '', '', '', 0, '', ''),
+(27, 'Ejemplo', 'dfdf', '', '', '', '', '06470', '', '', '', '', 0, 'dedd', '0000-00-00', '', '2022-12-05 20:52:47', '', 'SSF1103037F1', 0, '', '', '', 'dfdf', 'dffd', 'fvdf', 'fddf', 0, 'SCAFANDRA SOFTWARE FACTORY', '601');
 
 -- --------------------------------------------------------
 
@@ -55217,7 +55221,8 @@ CREATE TABLE `compras` (
 INSERT INTO `compras` (`ID_Compra`, `Fecha_Registro`, `FK_Usuario`, `FK_Proveedor`, `Total`, `Estatus`, `Clase`, `Dias_Pagar`, `Tipo_Compra`, `Fecha_Credito`, `FK_Caja`, `FK_Sucursal`, `Descuento`, `Impuestos`, `Anticipo`) VALUES
 (10, '2022-12-22 12:01:44', 2, 2, 150, '1', 0, 0, 'Contado', '0000-00-00 00:00:00', 0, 1, 0, '', 150),
 (11, '2022-12-22 12:03:02', 2, 2, 6000, '2', 0, 0, 'Credito', '2022-12-23 00:00:00', 0, 1, 0, '', 1000),
-(15, '2022-12-23 01:08:39', 2, 2, 50, '0', 0, 0, 'Credito', '2022-12-24 00:00:00', 0, 1, 0, '', 10);
+(15, '2022-12-23 01:08:39', 2, 2, 50, '2', 0, 0, 'Credito', '2022-12-24 00:00:00', 0, 1, 0, '', 10),
+(16, '2022-12-23 15:52:31', 2, 2, 60, '1', 0, 0, 'Contado', '0000-00-00 00:00:00', 0, 1, 0, '', 60);
 
 -- --------------------------------------------------------
 
@@ -55342,7 +55347,7 @@ CREATE TABLE `detalles_impuestos_productos` (
 --
 
 INSERT INTO `detalles_impuestos_productos` (`ID_Detalle_Im_Producto`, `FK_Producto`, `FK_Impuesto`) VALUES
-(38, 35, 1);
+(40, 35, 1);
 
 -- --------------------------------------------------------
 
@@ -55427,7 +55432,8 @@ CREATE TABLE `detalles_ventas` (
 
 INSERT INTO `detalles_ventas` (`ID_Detalle_Venta`, `FK_Venta`, `FK_Producto`, `FK_Presentacion`, `Descripcion`, `Precio`, `Cantidad`, `Descuento`, `Total`, `Devuelto`, `Fecha_Devolucion`, `Regreso_Inventario`, `Clave_ProdServ_CFDI`, `Identificacion_CFDI`, `Clave_Unidad_CFDI`, `Unidad_CFDI`, `Objeto_Impuesto_CFDI`) VALUES
 (4, 3, 36, 0, 'Ejemplo', 50, 1, 5, 45, 0, '0000-00-00 00:00:00', 0, '01010101', 'ejemplo', '11', 'Equipos', '01'),
-(6, 5, 35, 20, 'Caja de fresas', 50, 1, 2.5, 55.1, 0, '0000-00-00 00:00:00', 0, '70141902', 'Prueba', '05', 'ejemplo', '02');
+(6, 5, 35, 20, 'Caja de fresas', 50, 1, 2.5, 55.1, 0, '0000-00-00 00:00:00', 0, '70141902', 'Prueba', '05', 'ejemplo', '02'),
+(7, 6, 26, 0, 'No lo se', 1, 1, 0, 1, 0, '0000-00-00 00:00:00', 0, '', '', '', '', '');
 
 --
 -- Disparadores `detalles_ventas`
@@ -55463,7 +55469,9 @@ INSERT INTO `detalle_compras` (`ID_Detalle_Compra`, `FK_Compra`, `FK_Producto`, 
 (8, 10, 26, 0, 100, 1, 100),
 (9, 10, 36, 0, 50, 1, 50),
 (10, 11, 26, 0, 20, 300, 6000),
-(14, 15, 35, 20, 50, 1, 50);
+(14, 15, 35, 20, 50, 1, 50),
+(15, 16, 26, 0, 10, 1, 10),
+(16, 16, 26, 1, 50, 1, 50);
 
 --
 -- Disparadores `detalle_compras`
@@ -55624,9 +55632,9 @@ CREATE TABLE `inventario` (
 --
 
 INSERT INTO `inventario` (`ID_Inventario`, `FK_Producto`, `FK_Presentacion`, `Cantidad`, `FK_Sucursal`) VALUES
-(1, 26, 1, 5, 1),
+(1, 26, 1, 6, 1),
 (2, 36, 0, 50, 1),
-(3, 35, 20, 101, 1),
+(3, 35, 20, 100, 1),
 (4, 35, 18, 10, 1),
 (5, 35, 0, 10, 1),
 (6, 26, 0, -190, 1);
@@ -58958,7 +58966,18 @@ INSERT INTO `movimientos` (`ID_Movimiento`, `Descripcion`, `IP`, `Pais`, `Estado
 (3239, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'50\', Anticipo= \'10\', Estatus= \'0\', Fecha_Registro = \'2022-12-23 01:08:39\', Fecha_Credito = \'2022-12-24\', Tipo_Compra = \'Credito\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2022-12-23 01:08:39', '', 2),
 (3240, 'Admin: DELETE FROM compras WHERE ID_Compra = \'14\'', '', '', '', '', '', '2022-12-23 01:08:45', '', 2),
 (3241, 'Admin: DELETE FROM compras WHERE ID_Compra = \'13\'', '', '', '', '', '', '2022-12-23 01:08:49', '', 2),
-(3242, 'Admin: DELETE FROM compras WHERE ID_Compra = \'12\'', '', '', '', '', '', '2022-12-23 01:08:54', '', 2);
+(3242, 'Admin: DELETE FROM compras WHERE ID_Compra = \'12\'', '', '', '', '', '', '2022-12-23 01:08:54', '', 2),
+(3243, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-23 15:30:41', '', 0),
+(3244, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'60\', Anticipo= \'60\', Estatus= \'1\', Fecha_Registro = \'2022-12-23 15:52:31\', Fecha_Credito = \'\', Tipo_Compra = \'Contado\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2022-12-23 15:52:31', '', 2),
+(3245, 'Admin: INSERT INTO pagos SET FK_Compra = \'15\', Monto = \'10\', Concepto = \'yuikol\', Tipo_Pago = \'Efectivo\', Fecha = \'2022-12-23 15:53:44\', FK_Usuario = \'2\', Detalles_Pago = \'\'', '', '', '', '', '', '2022-12-23 15:53:44', '', 2),
+(3246, 'Admin: UPDATE compras SET Estatus = \'2\' WHERE ID_Compra = \'15\'', '', '', '', '', '', '2022-12-23 15:54:25', '', 2),
+(3247, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-26 11:27:32', '', 0),
+(3248, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-26 13:12:42', '', 0),
+(3249, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Caja de fresas\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'01010101\', Clave_Unidad_CFDI = \'05\', Nombre_Unidad = \'Ascensor\', Abreviatura_Unidad = \'As\', Objeto_Impuesto_CFDI = \'02\', Importe = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-26 13:56:09', '', 2),
+(3250, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Caja de fresas\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'01010101\', Clave_Unidad_CFDI = \'05\', Nombre_Unidad = \'Ascensor\', Abreviatura_Unidad = \'As\', Objeto_Impuesto_CFDI = \'02\', Importe = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-26 13:56:34', '', 2),
+(3251, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'dfdf\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'06470\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'SSF1103037F1\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'SCAFANDRA SOFTWARE FACTORY\', Regimen_CFDI = \'601\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 14:47:10', '', 2),
+(3252, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'dfdf\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'06470\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'SSF1103037F1\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'SCAFANDRA SOFTWARE FACTORY\', Regimen_CFDI = \'601\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 14:47:58', '', 2),
+(3253, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'dfdf\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'06470\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'SSF1103037F1\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'SCAFANDRA SOFTWARE FACTORY\', Regimen_CFDI = \'601\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 14:52:28', '', 2);
 
 -- --------------------------------------------------------
 
@@ -58988,7 +59007,9 @@ INSERT INTO `pagos` (`ID_Pago`, `FK_Compra`, `Concepto`, `Monto`, `Tipo_Pago`, `
 (1, 10, 'Pago', 150, 'Deposito', '2022-12-22 12:01:44', 2, '', 0, 0, ''),
 (2, 11, 'Abono', 1000, 'TransferenciaBancaria', '2022-12-22 12:03:02', 2, '', 0, 0, ''),
 (3, 11, 'Abono', 500, 'Efectivo', '2022-12-22 12:04:21', 2, '', 0, 0, ''),
-(7, 15, 'Abono', 10, 'Cheque', '2022-12-23 01:08:39', 2, '', 0, 0, '');
+(7, 15, 'Abono', 10, 'Cheque', '2022-12-23 01:08:39', 2, '', 0, 0, ''),
+(8, 16, 'Pago', 60, 'Efectivo', '2022-12-23 15:52:31', 2, '', 0, 0, ''),
+(9, 15, 'yuikol', 10, 'Efectivo', '2022-12-23 15:53:44', 2, '', 0, 0, '');
 
 --
 -- Disparadores `pagos`
@@ -59056,9 +59077,9 @@ CREATE TABLE `precios` (
 
 INSERT INTO `precios` (`ID_Precio`, `FK_Producto`, `FK_Zona`, `FK_Presentacion`, `Nombre`, `Precio`, `Precio_Mayoreo`) VALUES
 (17, 26, 3, 1, 'gATIÃ‘O', 1, 1),
-(41, 35, 2, 0, 'dfdf', 49, 0),
-(42, 35, 3, 19, 'dcd', 59, 10),
-(43, 35, 2, 19, 'kkk', 50, 0);
+(47, 35, 2, 0, 'dfdf', 49, 0),
+(48, 35, 2, 19, 'kkk', 50, 0),
+(49, 35, 3, 19, 'dcd', 59, 10);
 
 -- --------------------------------------------------------
 
@@ -59072,6 +59093,7 @@ CREATE TABLE `presentaciones` (
   `Nombre` varchar(300) NOT NULL,
   `Abreviatura` varchar(50) NOT NULL,
   `Costo` double NOT NULL,
+  `Importe` double NOT NULL,
   `Clave_CFDI` tinytext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -59079,14 +59101,14 @@ CREATE TABLE `presentaciones` (
 -- Volcado de datos para la tabla `presentaciones`
 --
 
-INSERT INTO `presentaciones` (`ID_Presentacion`, `FK_Producto`, `Nombre`, `Abreviatura`, `Costo`, `Clave_CFDI`) VALUES
-(1, 26, 'Gato', '12', 0, ''),
-(2, 26, 'Perro', 'Pe', 0, ''),
-(4, 26, 'Elefante', 'Ele', 0, ''),
-(18, 35, 'fdfd', 'dfdf', 0, ''),
-(19, 35, 'dsds dfd', 'dfdf', 0, ''),
-(20, 35, 'ejemplo', 'ej', 50, '05'),
-(21, 35, 'lol', 'j', 100, '');
+INSERT INTO `presentaciones` (`ID_Presentacion`, `FK_Producto`, `Nombre`, `Abreviatura`, `Costo`, `Importe`, `Clave_CFDI`) VALUES
+(1, 26, 'Gato', '12', 0, 0, ''),
+(2, 26, 'Perro', 'Pe', 0, 0, ''),
+(4, 26, 'Elefante', 'Ele', 0, 0, ''),
+(18, 35, 'fdfd', 'dfdf', 0, 0, ''),
+(19, 35, 'dsds dfd', 'dfdf', 0, 0, ''),
+(20, 35, 'ejemplo', 'ej', 50, 0, '05'),
+(21, 35, 'lol', 'j', 100, 5, '');
 
 -- --------------------------------------------------------
 
@@ -59108,9 +59130,9 @@ CREATE TABLE `productos` (
   `Detalles` text NOT NULL,
   `Minimo` double NOT NULL COMMENT 'General',
   `Maximo` double NOT NULL COMMENT 'General',
-  `Importe` double NOT NULL,
   `Fecha_Registro` datetime NOT NULL,
   `Imagen` varchar(300) NOT NULL,
+  `Importe` double NOT NULL,
   `Clave_ProdServ_CFDI` varchar(60) NOT NULL,
   `Clave_Unidad_CFDI` varchar(60) NOT NULL,
   `Nombre_Unidad` varchar(60) NOT NULL,
@@ -59122,11 +59144,11 @@ CREATE TABLE `productos` (
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`ID_Producto`, `Codigo`, `Descripcion`, `Tipo`, `FK_Categoria`, `Clase`, `Costo`, `Precio`, `Precio_Mayoreo`, `FK_Area`, `Detalles`, `Minimo`, `Maximo`, `Importe`, `Fecha_Registro`, `Imagen`, `Clave_ProdServ_CFDI`, `Clave_Unidad_CFDI`, `Nombre_Unidad`, `Abreviatura_Unidad`, `Objeto_Impuesto_CFDI`) VALUES
-(26, '123', 'No lo se', 0, 4, 'Pieza', 0, 1, 0, 34, '', 0, 0, 0, '2022-11-28 19:17:40', '', '', '', '', '', ''),
-(27, '1234', 'Prueba 2', 0, 4, 'Pieza', 0, 0, 0, 34, '', 0, 0, 0, '2022-11-28 19:18:09', '', '', '', '', '', ''),
-(35, 'Prueba', 'Caja de fresas', 1, 4, 'Pieza', 0, 50, 0, 0, '', 0, 0, 0, '2022-12-03 17:35:01', '', '', '', '', '', ''),
-(36, 'ejemplo', 'Ejemplo', 1, 0, 'Pieza', 0, 50, 0, 0, '', 0, 0, 0, '2022-12-21 19:23:18', '', '01010101', '11', 'Equipos', 'Eq', '01');
+INSERT INTO `productos` (`ID_Producto`, `Codigo`, `Descripcion`, `Tipo`, `FK_Categoria`, `Clase`, `Costo`, `Precio`, `Precio_Mayoreo`, `FK_Area`, `Detalles`, `Minimo`, `Maximo`, `Fecha_Registro`, `Imagen`, `Importe`, `Clave_ProdServ_CFDI`, `Clave_Unidad_CFDI`, `Nombre_Unidad`, `Abreviatura_Unidad`, `Objeto_Impuesto_CFDI`) VALUES
+(26, '123', 'No lo se', 0, 4, 'Pieza', 0, 1, 0, 34, '', 0, 0, '2022-11-28 19:17:40', '', 0, '', '', '', '', ''),
+(27, '1234', 'Prueba 2', 0, 4, 'Pieza', 0, 0, 0, 34, '', 0, 0, '2022-11-28 19:18:09', '', 0, '', '', '', '', ''),
+(35, 'Prueba', 'Caja de fresas', 1, 4, 'Pieza', 0, 50, 0, 0, '', 0, 0, '2022-12-03 17:35:01', '', 0, '01010101', '05', 'Ascensor', 'As', '02'),
+(36, 'ejemplo', 'Ejemplo', 1, 0, 'Pieza', 0, 50, 0, 0, '', 0, 0, '2022-12-21 19:23:18', '', 0, '01010101', '11', 'Equipos', 'Eq', '01');
 
 -- --------------------------------------------------------
 
@@ -59306,7 +59328,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`ID_Usuario`, `Nombre`, `Primer_Apellido`, `Segundo_Apellido`, `Correo`, `Contrasena`, `Tipo_Usuario`, `Permisos`, `BD`, `Estatus`, `Intentos`, `Ultimo_Intento`, `Tiempo_Inicio`, `Tiempo_Final`, `Foto`, `Temporal`, `Activo`, `Tipo_Login`, `Conectado`, `Fecha_Alta`, `FK_Sucursal`) VALUES
-(2, 'Admin', 'cremasi', '', 'admin@gmail.com', '$2y$12$lhPLfk6dsc6TdYE5fnes2OfWuBPlqUQhh8JF9ujg0iNNmSGQC74Xe', 'Administrador', '', 0, 0, 0, '2022-12-22 16:34:29', '2022-12-22 16:34:29', '2022-12-01 08:43:01', '2_anuncio.png', 0, 1, 1, 0, '2022-09-21 18:52:42', 0),
+(2, 'Admin', 'cremasi', '', 'admin@gmail.com', '$2y$12$lhPLfk6dsc6TdYE5fnes2OfWuBPlqUQhh8JF9ujg0iNNmSGQC74Xe', 'Administrador', '', 0, 0, 0, '2022-12-26 13:12:42', '2022-12-26 13:12:42', '2022-12-01 08:43:01', '2_anuncio.png', 0, 1, 1, 0, '2022-09-21 18:52:42', 0),
 (10, 'Lalo', 'bECERRA', '', 'lalo@gmail.com', '$2y$12$ACrdPWFFaSDrOmehjwt0MuIgTfsCmuxpWnDwf8TCoRAwzC8C50QsK', 'Normal', 'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_areas,0,0,0,0~v_categorias,0,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0~v_cajas,0,0,0,0~v_impuestos,0,0,0,0~v_tickets,0~v_general,0~v_usuarios,0,0,0,0,0~', 0, 0, 0, '2022-09-22 18:51:43', '2022-09-22 18:51:43', '2022-09-22 19:02:18', '', 0, 0, 1, 0, '2022-09-22 18:51:31', 0),
 (11, 'Ejemplo', 'sdesde', 'dds', 'ejemplo@gmail.com', '$2y$12$ks7YsxZ13IARNevWP1q4X.Lh8KF0TeogNzNxukBbsnOe4KU5mm0qi', 'Normal', '', 0, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 1, 1, 0, '2022-09-22 18:49:49', 0),
 (14, 'Antonio de Jesus', 'Torres', 'Vazquez', 'antonioudgarandas@gmal.com', '$2y$12$36ZKO7frlfjtaKpoP4K5CumUm/lOK6S7niuUrVNhVrWkIX7D/PKHy', 'Administrador', '', 0, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 1, 1, 0, '2022-11-05 15:25:49', 1);
@@ -59373,7 +59395,8 @@ CREATE TABLE `ventas` (
 
 INSERT INTO `ventas` (`ID_Venta`, `FK_Usuario`, `FK_Caja`, `FK_Sucursal`, `FK_Cliente`, `Descuento`, `Total`, `Tipo_Pago`, `Pago`, `Cambio`, `Notas`, `Fecha_Registro`, `Estatus`, `Fecha_Cancelacion`, `Regreso_Inventario`, `Facturada`, `Version_CFDI`, `Fecha_Expedicion_CFDI`, `Sello_CFDI`, `Forma_Pago_CFDI`, `No_Certificado_CFDI`, `Certificado_CFDI`, `Moneda_CFDI`, `Tipo_Comprobante_CFDI`, `Exportacion_CFDI`, `Metodo_Pago_CFDI`, `Lugar_Expedicion_CFDI`, `Confirmacion_CFDI`, `Emisor_RFC_CFDI`, `Emisor_Nombre_CFDI`, `Emisor_Regimen_Fiscal_CFDI`, `Receptor_RFC_CFDI`, `Receptor_Nombre_CFDI`, `Receptor_Domicilio_CFDI`, `Receptor_Regimen_Fiscal_CFDI`, `Receptor_Uso_CFDI`, `UUID_CFDI`, `Fecha_Timbrado_CFDI`, `Rfc_ProvCertif_CFDI`, `Sello_CFD_CFDI`, `No_Certificado_SAT_CFDI`, `Sello_SAT_CFDI`, `Periodicidad_CFDI`, `Meses_CFDI`, `Ano_CFDI`, `Relacion_CFDI`, `Cadena_CFDI`) VALUES
 (3, 2, 0, 1, 1, 5, 45, 'Efectivo', 50, -5, '', '2022-12-21 19:26:06', 'Completada', '0000-00-00 00:00:00', 0, 1, '4.0', '2022-12-21 19:35:09', 'QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==', '01', '30001000000400002434', 'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==', 'MXN', 'I', '01', 'PUE', '47190', '', 'EKU9003173C9', 'ESCUELA KEMPER URGATE', '601', 'XAXX010101000', 'PUBLICO EN GENERAL', '47190', '616', 'S01', 'e2e52d70-18a0-41c6-b2a8-23e7193a5e4b', '2022-12-21 19:35:13', 'SPR190613I52', 'QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==', '30001000000400002495', 'M3Xm7jJ688eImfZ+3OHqAhy7aKdg66VTwbf+w2v8PNl3nyfLU42ChxwL2bo3DXoeqXch6RJrPgFflNGqG3q2l8LKRb9ndP1j+w8sx2NXLbDHOMqAvmyYwSKF+L9dPRDrxKi2oIrBsWEfZZJFk82/gv3emY9GtEXDOz3CiVhQccHoLMamkSuSY1+5triUkAB/q5ohfOM5PFnyqUdGzlrLjLcwsZxk1c07TlhpkSm5ow+PUSE9hWdTUNHva0/rZOIrZ69lzSBIDcogSrQKth8N/yM6AZdrRcmx9ci4DVv8qitaesOD52zl3isBrbsImV+mlbioCGQn3j6+wPs5wGKQbQ==', '04', '12', '2022', '', '||1.1|e2e52d70-18a0-41c6-b2a8-23e7193a5e4b|2022-12-21T19:35:13|SPR190613I52|QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==|30001000000400002495||'),
-(5, 2, 0, 1, 1, 2.5, 55.1, 'Efectivo', 60, -4.9, '', '2022-12-21 19:57:17', 'Completada', '0000-00-00 00:00:00', 0, 1, '4.0', '2022-12-21 19:58:31', 'TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==', '03', '30001000000400002434', 'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==', 'MXN', 'I', '01', 'PUE', '47190', '', 'EKU9003173C9', 'ESCUELA KEMPER URGATE', '601', 'XAXX010101000', 'PUBLICO EN GENERAL', '47190', '616', 'S01', 'a97fbaad-01ce-4bfd-ad50-63ee62991ac4', '2022-12-21 19:58:37', 'SPR190613I52', 'TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==', '30001000000400002495', 'l/0OQhKeXsDlkeXGQabKQyGXgIrpVBbXbCd8BYEsiV8rmmSlcT2FO+ok3xEvGYxHU25rNXFD5TX6hpG7/3Zq+0ZoiR/A0C+PN+SEPHAOFferolzEqfd5W1KwNrcgoFjt9B2wmW2BhAw9HZqRNBwcCOM4CgkZKfBbX9Fe5BNLAbjZRsNqAUqAYo1usH6cmkUZgZSIofWqOPtgP53N0DIMhqH6b00JOYev0bwb9KejnsI9GY9ufg8OTRwF8A76OADkznV/uTYEfvw7l0o2YFgCPWLB4Hdsgsc6guALKvgKKltJM/YDRdaSu2mFsfmMbbu3BEBPCgWwlMh94RnXhUqE5w==', '04', '12', '2022', '', '||1.1|a97fbaad-01ce-4bfd-ad50-63ee62991ac4|2022-12-21T19:58:37|SPR190613I52|TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==|30001000000400002495||');
+(5, 2, 0, 1, 1, 2.5, 55.1, 'Efectivo', 60, -4.9, '', '2022-12-21 19:57:17', 'Completada', '0000-00-00 00:00:00', 0, 1, '4.0', '2022-12-21 19:58:31', 'TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==', '03', '30001000000400002434', 'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==', 'MXN', 'I', '01', 'PUE', '47190', '', 'EKU9003173C9', 'ESCUELA KEMPER URGATE', '601', 'XAXX010101000', 'PUBLICO EN GENERAL', '47190', '616', 'S01', 'a97fbaad-01ce-4bfd-ad50-63ee62991ac4', '2022-12-21 19:58:37', 'SPR190613I52', 'TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==', '30001000000400002495', 'l/0OQhKeXsDlkeXGQabKQyGXgIrpVBbXbCd8BYEsiV8rmmSlcT2FO+ok3xEvGYxHU25rNXFD5TX6hpG7/3Zq+0ZoiR/A0C+PN+SEPHAOFferolzEqfd5W1KwNrcgoFjt9B2wmW2BhAw9HZqRNBwcCOM4CgkZKfBbX9Fe5BNLAbjZRsNqAUqAYo1usH6cmkUZgZSIofWqOPtgP53N0DIMhqH6b00JOYev0bwb9KejnsI9GY9ufg8OTRwF8A76OADkznV/uTYEfvw7l0o2YFgCPWLB4Hdsgsc6guALKvgKKltJM/YDRdaSu2mFsfmMbbu3BEBPCgWwlMh94RnXhUqE5w==', '04', '12', '2022', '', '||1.1|a97fbaad-01ce-4bfd-ad50-63ee62991ac4|2022-12-21T19:58:37|SPR190613I52|TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==|30001000000400002495||'),
+(6, 2, 0, 1, 1, 0, 1, 'Efectivo', 50, 49, '', '2022-12-23 01:31:03', 'Completada', '0000-00-00 00:00:00', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -59717,7 +59740,7 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
-  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `conversiones`
@@ -59741,7 +59764,7 @@ ALTER TABLE `detalles_clientes`
 -- AUTO_INCREMENT de la tabla `detalles_devolucion`
 --
 ALTER TABLE `detalles_devolucion`
-  MODIFY `ID_Detalle_Devolucion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `ID_Detalle_Devolucion` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_pedidos`
@@ -59753,7 +59776,7 @@ ALTER TABLE `detalles_impuestos_pedidos`
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_productos`
 --
 ALTER TABLE `detalles_impuestos_productos`
-  MODIFY `ID_Detalle_Im_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `ID_Detalle_Im_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_ventas`
@@ -59771,19 +59794,19 @@ ALTER TABLE `detalles_pedidos`
 -- AUTO_INCREMENT de la tabla `detalles_ventas`
 --
 ALTER TABLE `detalles_ventas`
-  MODIFY `ID_Detalle_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID_Detalle_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_compras`
 --
 ALTER TABLE `detalle_compras`
-  MODIFY `ID_Detalle_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `ID_Detalle_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `devoluciones`
 --
 ALTER TABLE `devoluciones`
-  MODIFY `ID_Devolucion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `ID_Devolucion` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `dinero`
@@ -59831,13 +59854,13 @@ ALTER TABLE `merma`
 -- AUTO_INCREMENT de la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
-  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3243;
+  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3254;
 
 --
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `ID_Pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID_Pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `pedidos`
@@ -59849,7 +59872,7 @@ ALTER TABLE `pedidos`
 -- AUTO_INCREMENT de la tabla `precios`
 --
 ALTER TABLE `precios`
-  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT de la tabla `presentaciones`
@@ -59903,7 +59926,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `ID_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `zonas`

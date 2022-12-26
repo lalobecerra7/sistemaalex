@@ -149,7 +149,7 @@ class productos {
 		$abreUnudadProd = $omodelo->link->real_escape_string($abreUnudadProd);
 		$objImProducto = $omodelo->link->real_escape_string($objImProducto);
 
-		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion',  FK_Categoria = '$Categoria', Tipo = '1', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto', importe = '$ImporteProducto'";
+		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion',  FK_Categoria = '$Categoria', Tipo = '1', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto', Importe = '$ImporteProducto'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -194,8 +194,9 @@ class productos {
 				$pres['Nombre'] = $omodelo->link->real_escape_string($pres['Nombre']);
 				$pres['Abreviatura'] = $omodelo->link->real_escape_string($pres['Abreviatura']);
 				$pres['Costo'] = $omodelo->link->real_escape_string($pres['Costo']);
+				$pres['Importe'] = $omodelo->link->real_escape_string($pres['Importe']);
 
-				$queryPresentacion = "INSERT INTO presentaciones SET FK_Producto = '$id', Nombre = '$pres[Nombre]', Abreviatura = '$pres[Abreviatura]', Clave_CFDI = '$pres[Clave]', Costo = '$pres[Costo]'";
+				$queryPresentacion = "INSERT INTO presentaciones SET FK_Producto = '$id', Nombre = '$pres[Nombre]', Abreviatura = '$pres[Abreviatura]', Clave_CFDI = '$pres[Clave]', Costo = '$pres[Costo]', Importe = '$pres[Importe]'";
 				$errorPresentacion = $omodelo->_insertar($queryPresentacion);	
 
 				if ($error == "si") {
@@ -254,13 +255,14 @@ class productos {
 		$Detalles = $omodelo->link->real_escape_string($DetallesProducto);
 		$Minimo = $omodelo->link->real_escape_string($Minimo);
 		$Maximo = $omodelo->link->real_escape_string($Maximo);
+		$ImporteProducto = $omodelo->link->real_escape_string($ImporteProducto);
 		$claveProdServ = $omodelo->link->real_escape_string($claveProdServ);
 		$claveUnidadProd = $omodelo->link->real_escape_string($claveUnidadProd);
 		$unidadProd = $omodelo->link->real_escape_string($unidadProd);
 		$abreUnudadProd = $omodelo->link->real_escape_string($abreUnudadProd);
 		$objImProducto = $omodelo->link->real_escape_string($objImProducto);
 
-		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', FK_Categoria = '$Categoria', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto', importe = '$ImporteProducto' WHERE ID_Producto = '$IDProducto'";
+		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', FK_Categoria = '$Categoria', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto', Importe = '$ImporteProducto' WHERE ID_Producto = '$IDProducto'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -323,8 +325,9 @@ class productos {
 					$pres['Nombre'] = $omodelo->link->real_escape_string($pres['Nombre']);
 					$pres['Abreviatura'] = $omodelo->link->real_escape_string($pres['Abreviatura']);
 					$pres['Costo'] = $omodelo->link->real_escape_string($pres['Costo']);
+					$pres['Importe'] = $omodelo->link->real_escape_string($pres['Importe']);
 
-					$queryPresentacion = "INSERT INTO presentaciones SET ID_Presentacion = '$pres[ID_Presentacion]',FK_Producto = '$IDProducto', Nombre = '$pres[Nombre]', Abreviatura = '$pres[Abreviatura]', Clave_CFDI = '$pres[Clave]', Costo = '$pres[Costo]'";
+					$queryPresentacion = "INSERT INTO presentaciones SET ID_Presentacion = '$pres[ID_Presentacion]',FK_Producto = '$IDProducto', Nombre = '$pres[Nombre]', Abreviatura = '$pres[Abreviatura]', Clave_CFDI = '$pres[Clave]', Costo = '$pres[Costo]', Importe = '$pres[Importe]'";
 					$errorPresentacion = $omodelo->_insertar($queryPresentacion);	
 
 					if ($error == "si") {
@@ -425,7 +428,7 @@ class productos {
 		if($tipo == 'modificarProducto'){
 			$IDProducto =  $omodelo->link->real_escape_string($IDProducto);
 
-			$query = "SELECT ID_Producto, Codigo, Descripcion, FK_Categoria, Clase, Costo, Precio, Precio_Mayoreo, FK_Area, Detalles, Minimo, Maximo, Fecha_Registro, Imagen, importe FROM productos WHERE ID_Producto = '$IDProducto'";
+			$query = "SELECT ID_Producto, Codigo, Descripcion, Tipo, FK_Categoria, Clase, Costo, Precio, Precio_Mayoreo, FK_Area, Detalles, Minimo, Maximo, Importe, Fecha_Registro, Imagen, Clave_ProdServ_CFDI, Clave_Unidad_CFDI, Nombre_Unidad, Abreviatura_Unidad, Objeto_Impuesto_CFDI FROM productos WHERE ID_Producto = '$IDProducto'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -434,7 +437,7 @@ class productos {
 			}else{
 				if($numerofilas > 0){
 					$presentaciones = null;
-					$queryPresentacion = "SELECT ID_Presentacion, Nombre, Abreviatura, Costo, Clave_CFDI, IFNULL((SELECT COUNT(*) FROM detalles_ventas WHERE FK_Presentacion = ID_Presentacion) + (SELECT COUNT(*) FROM detalle_compras WHERE FK_Presentacion = ID_Presentacion), 0) AS NumProd FROM presentaciones WHERE FK_Producto = '$IDProducto'";
+					$queryPresentacion = "SELECT ID_Presentacion, Nombre, Abreviatura, Costo, Importe, Clave_CFDI, IFNULL((SELECT COUNT(*) FROM detalles_ventas WHERE FK_Presentacion = ID_Presentacion) + (SELECT COUNT(*) FROM detalle_compras WHERE FK_Presentacion = ID_Presentacion), 0) AS NumProd FROM presentaciones WHERE FK_Producto = '$IDProducto'";
 					$rowPresentacion = $omodelo->_consultar($queryPresentacion);
 					$numerofilasPresentacion = $omodelo->numerofilas;
 
@@ -449,7 +452,8 @@ class productos {
 									'Abreviatura' => $rowPresentacion[$z]['Abreviatura'],
 									'Clave_CFDI' => $rowPresentacion[$z]['Clave_CFDI'],
 									'NumProd' => $rowPresentacion[$z]['NumProd'],
-									'Costo' => $rowPresentacion[$z]['Costo']
+									'Costo' => $rowPresentacion[$z]['Costo'],
+									'Importe' => $rowPresentacion[$z]['Importe']
 								);
 							}
 						}
@@ -509,7 +513,6 @@ class productos {
 						'Clase' => $row[0]["Clase"],
 						'Costo' => $row[0]["Costo"],
 						'Precio' => $row[0]["Precio"],
-						'Importe' => $row[0]["importe"],
 						'Precio_Mayoreo' => $row[0]["Precio_Mayoreo"],
 						'FK_Area' => $row[0]["FK_Area"],
 						'Detalles' => $row[0]["Detalles"],
@@ -517,6 +520,12 @@ class productos {
 						'Maximo' => $row[0]["Maximo"],
 						'Fecha_Registro' => $row[0]["Fecha_Registro"],
 						'Imagen' => $row[0]["Imagen"],
+						'Importe' => $row[0]['Importe'],  
+						'Clave_ProdServ_CFDI' => $row[0]['Clave_ProdServ_CFDI'], 
+						'Clave_Unidad_CFDI' => $row[0]['Clave_Unidad_CFDI'], 
+						'Nombre_Unidad' => $row[0]['Nombre_Unidad'], 
+						'Abreviatura_Unidad' => $row[0]['Abreviatura_Unidad'], 
+						'Objeto_Impuesto_CFDI' => $row[0]['Objeto_Impuesto_CFDI'],
 						'Presentaciones' => $presentaciones,
 						'Precios' => $precios, 
 						'Impuestos' => $impuestos

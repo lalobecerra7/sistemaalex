@@ -235,6 +235,7 @@
 				          <th>Nombre</th>
 				        	<th>Abreviatura</th>
 				        	<th>Costo</th>
+				        	<th>Importe</th>
 				        	<th>Acciones</th>
 				        </thead>
 				        <tbody id="verPresentaciones">
@@ -256,6 +257,9 @@
 		                </td>
 		                <td>
 		                	<input type="number" step="any" value="0" form="formPresentaciones" class="form-control" id="costoPresentacion" name="costoPresentacion" placeholder="Ingresa el costo de la presentación/unidad" required>	
+		                </td>
+		                <td>
+		                	<input type="number" step="any" value="0" form="formPresentaciones" class="form-control" id="importePresentacion" name="importePresentacion" placeholder="Ingresa el costo de la presentación/unidad" required>	
 		                </td>
 		                <td>
 		                	<button  type="button" class="btn btn-sm btn-success" id="bAgergarPresentacion"><i class="fas fa-plus"></i></button>
@@ -472,19 +476,29 @@
       <form id="formModiPresentacion">
 	      <div class="modal-body">
 	      	<div class="mb-3">
-		      	<div class="input-group">
-							<input type="text" form="formPresentaciones" class="form-control" id="unidadPresentacionM" name="unidadPresentacionM" placeholder="Ingresa la clave de la unidad" readonly>
-							<button type="button" class="btn btn-outline-secondary" id="bBuscarUnidadPresM"><i class="fas fa-search"></i></button>
-						</div>
-					</div>
-					<div class="mb-3">
+            <div class="input-group">
+              <div class="form-floating flex-grow-1">
+                <input type="text" class="form-control" id="unidadPresentacionM" name="unidadPresentacionM" placeholder="Ingresa la clave de la unidad" readonly>
+                <label>Clave de la unidad</label>
+             	</div>
+              <button type="button" class="btn btn-outline-secondary" id="bBuscarUnidadPresM"><i class="fas fa-search"></i></button>
+            </div>
+          </div>
+					<div class="form-floating mb-3">
 						<input type="text" form="formPresentaciones" class="form-control" id="nombrePresentacionM" name="nombrePresentacionM" placeholder="Ingresa el nombre de la presentación/unidad">
+						<label>Nombre de la presentación</label>
 					</div>	
-					<div class="mb-3">
-						<input type="text" form="formPresentaciones" class="form-control" id="abreviaturaPresentacionM" name="abreviaturaPresentacionM" placeholder="Ingresa la abreviatura de la presentación/unidad"> 	
+					<div class="form-floating mb-3">
+						<input type="text" form="formPresentaciones" class="form-control" id="abreviaturaPresentacionM" name="abreviaturaPresentacionM" placeholder="Ingresa la abreviatura de la presentación/unidad">
+						<label>Abreviatura</label> 	
 					</div>
-					<div class="mb-3">
-						<input type="text" form="formPresentaciones" class="form-control" id="costoPresentacionM" name="costoPresentacionM" placeholder="Ingresa el costo de la presentación/unidad"> 	
+					<div class="form-floating mb-3">
+						<input type="text" form="formPresentaciones" class="form-control" id="costoPresentacionM" name="costoPresentacionM" placeholder="Ingresa el costo de la presentación/unidad"> 
+						<label>Costo</label>	
+					</div>
+					<div class="form-floating mb-3">
+						<input type="text" form="formPresentaciones" class="form-control" id="importePresentacionM" name="importePresentacionM" placeholder="Ingresa el importe de la presentación/unidad"> 
+						<label>Importe</label>	
 					</div>	
 	      </div>
 	      <div class="modal-footer">

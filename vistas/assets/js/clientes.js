@@ -30,7 +30,6 @@ function v_clientes() {
             data.append("accion", "clientes");
             data.append("direcciones", direcciones);
             data.append("IDCliente", $("#GuardarCliente").attr("attrid"));
-            
 
             var btn = $('#GuardarCliente');
             $.ajax({
@@ -88,57 +87,7 @@ function v_clientes() {
                 $("#carga").hide();
             });            
         }
-    }); 
-
-    /*$('#FormDireccion').validate({
-        rules: {
-            CalleCliente: {
-                required: true
-            },
-            NoExteriorCliente: {
-                required: true
-            },
-            NombreContactoCliente: {
-                required: true
-            },
-        },
-        messages: {
-            CalleCliente: {
-                required: "El nombre de la calle es obligatorio"
-            },
-            NoExteriorCliente: {
-                required: "El número de la calle es obligatorio"
-            },
-            NombreContactoCliente: {
-                required: "El nombre del contacto es obligatorio"
-            },
-        },
-        submitHandler: function(form) { 
-            var CalleCliente = $("#CalleCliente").val();
-            var NoExteriorCliente = $("#NoExteriorCliente").val();
-            var NoInteriorCliente = $("#NoInteriorCliente").val();
-            var CPCliente = $("#CPCliente").val();
-            var ColoniaCliente = $("#ColoniaCliente").val();
-            var CiudadCliente = $("#CiudadCliente").val();
-            var EstadoCliente = $("#EstadoCliente").val();
-            var PaisCliente = $("#PaisCliente").val();
-            var NombreContactoCliente = $("#NombreContactoCliente").val();
-            var PuestoContactoCliente = $("#PuestoContactoCliente").val();
-            var CorreoContactoCliente = $("#CorreoContactoCliente").val();
-            var TelefonoContactoCliente = $("#TelefonoContactoCliente").val();
-            var tabla = '\
-            <tr calle="'+CalleCliente+'" noexterior="'+NoExteriorCliente+'" nointerior="'+NoInteriorCliente+'" cp="'+CPCliente+'" colonia="'+ColoniaCliente+'" ciudad="'+CiudadCliente+'" estado="'+EstadoCliente+'" pais="'+PaisCliente+'" nombre="'+NombreContactoCliente+'" puesto="'+PuestoContactoCliente+'" correo="'+CorreoContactoCliente+'" telefono="'+TelefonoContactoCliente+'">\
-                <td>Calle: '+CalleCliente+', No. Ext: '+NoExteriorCliente+', No. Int: '+NoInteriorCliente+'<br>Codigo Postal: '+CPCliente+'<br>Colonia: '+ColoniaCliente+'</td>\
-                <td>Ciudad: '+CiudadCliente+'<br>Estado: '+EstadoCliente+'<br>País: '+PaisCliente+'</td>\
-                <td>Nombre: '+NombreContactoCliente+'<br>Puesto: '+PuestoContactoCliente+'<br>Correo electrónico: '+CorreoContactoCliente+'<br>Teléfono: '+TelefonoContactoCliente+'</td>\
-                <td><button class="btn btn-sm btn-danger" id="EliminarDireccion"><i class="fas fa-trash"></i></button></td>\
-            </tr>';
-            $("#TablaUbicacionClientes tbody").append(tabla);
-            $('#FormDireccion').trigger("reset");
-            $("#ModalNuevaDireccionCliente").modal("hide");
-            $("#ModalCliente").modal("show");
-        }
-    }); */      
+    });       
 }
 
 jQuery(document).ready(function($) {
@@ -205,25 +154,6 @@ jQuery(document).ready(function($) {
             });
         }
     });
-
-    /*$(document).on('click', '#ModificarDireccion', function() {
-        var boton = $(this);
-        $('#FormDireccion').trigger("reset");
-        $("#ModalCliente").modal("hide");
-        $("#CalleCliente").val($(this).parent().parent().attr("calle"));
-        $("#NoExteriorCliente").val($(this).parent().parent().attr("noexterior"));
-        $("#NoInteriorCliente").val($(this).parent().parent().attr("nointerior"));
-        $("#CPCliente").val($(this).parent().parent().attr("cp"));
-        $("#ColoniaCliente").val($(this).parent().parent().attr("colonia"));
-        $("#CiudadCliente").val($(this).parent().parent().attr("ciudad"));
-        $("#EstadoCliente").val($(this).parent().parent().attr("estado"));
-        $("#PaisCliente").val($(this).parent().parent().attr("pais"));
-        $("#NombreContactoCliente").val($(this).parent().parent().attr("nombre"));
-        $("#PuestoContactoCliente").val($(this).parent().parent().attr("puesto"));
-        $("#CorreoContactoCliente").val($(this).parent().parent().attr("correo"));
-        $("#TelefonoContactoCliente").val($(this).parent().parent().attr("telefono"));
-        $("#ModalNuevaDireccionCliente").modal("show");
-    });*/
 
     $(document).on('click', '#AgregarDireccionCliente', function() {
         //$("#FormDireccion").trigger("reset");
@@ -418,6 +348,10 @@ jQuery(document).ready(function($) {
             $("#CiudadClienteGeneral").val(datos.Ciudad);
             $("#EstadoClienteGeneral").val(datos.Estado);
             $("#PaisClienteGeneral").val(datos.Pais);
+            $("#contactoCliente").val(datos.Nombre_Contacto);
+            $("#puestoContactoCliente").val(datos.Puesto_Contacto);
+            $("#correoContactoCliente").val(datos.Email_Contacto);
+            $("#telefonoContactoCliente").val(datos.Tel_Contacto);
             if (datos.Foto != "") {
                 $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/fotosClientes/'+datos.Foto);
             }else{

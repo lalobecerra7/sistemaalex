@@ -190,8 +190,12 @@ class clientes {
 		$SucursalCliente = $omodelo->link->real_escape_string($SucursalCliente);
 		$razonCliente = $omodelo->link->real_escape_string($razonCliente);
 		$regimenCliente = $omodelo->link->real_escape_string($regimenCliente);
+		$contactoCliente = $omodelo->link->real_escape_string($contactoCliente);
+		$puestoContactoCliente = $omodelo->link->real_escape_string($puestoContactoCliente);
+		$correoContactoCliente = $omodelo->link->real_escape_string($correoContactoCliente);
+		$telefonoContactoCliente = $omodelo->link->real_escape_string($telefonoContactoCliente);
 
-		$query = "INSERT INTO clientes SET Nombre = '$NombreCliente', Calle = '$CalleClienteGeneral', No_Exterior = '$NoExteriorClienteGeneral', No_Interior = '$NoInteriorClienteGeneral', Codigo_Postal = '$CPClienteGeneral', Colonia = '$ColoniaClienteGeneral', Ciudad = '$CiudadClienteGeneral', Estado = '$EstadoClienteGeneral', Pais = '$PaisClienteGeneral', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', Fecha_Registro = '$fecha', RFC = '$RFCCliente', Facturar = '$FacturarCliente',  No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', FK_Sucursal = '$SucursalCliente', Razon_CFDI = '$razonCliente', Regimen_CFDI = '$regimenCliente'";
+		$query = "INSERT INTO clientes SET Nombre = '$NombreCliente', Calle = '$CalleClienteGeneral', No_Exterior = '$NoExteriorClienteGeneral', No_Interior = '$NoInteriorClienteGeneral', Codigo_Postal = '$CPClienteGeneral', Colonia = '$ColoniaClienteGeneral', Ciudad = '$CiudadClienteGeneral', Estado = '$EstadoClienteGeneral', Pais = '$PaisClienteGeneral', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', Fecha_Registro = '$fecha', RFC = '$RFCCliente', Facturar = '$FacturarCliente',  No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', FK_Sucursal = '$SucursalCliente', Razon_CFDI = '$razonCliente', Regimen_CFDI = '$regimenCliente', Nombre_Contacto = '$contactoCliente', Puesto_Contacto = '$puestoContactoCliente', Email_Contacto = '$correoContactoCliente', Tel_Contacto = '$telefonoContactoCliente'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
@@ -273,8 +277,12 @@ class clientes {
 		$SucursalCliente = $omodelo->link->real_escape_string($SucursalCliente);
 		$razonCliente = $omodelo->link->real_escape_string($razonCliente);
 		$regimenCliente = $omodelo->link->real_escape_string($regimenCliente);
+		$contactoCliente = $omodelo->link->real_escape_string($contactoCliente);
+		$puestoContactoCliente = $omodelo->link->real_escape_string($puestoContactoCliente);
+		$correoContactoCliente = $omodelo->link->real_escape_string($correoContactoCliente);
+		$telefonoContactoCliente = $omodelo->link->real_escape_string($telefonoContactoCliente);
 
-		$query = "UPDATE clientes SET Nombre = '$NombreCliente', Calle = '$CalleClienteGeneral', No_Exterior = '$NoExteriorClienteGeneral', No_Interior = '$NoInteriorClienteGeneral', Codigo_Postal = '$CPClienteGeneral', Colonia = '$ColoniaClienteGeneral', Ciudad = '$CiudadClienteGeneral', Estado = '$EstadoClienteGeneral', Pais = '$PaisClienteGeneral', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', RFC = '$RFCCliente', Facturar = '$FacturarCliente', No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', FK_Sucursal = '$SucursalCliente', Razon_CFDI = '$razonCliente', Regimen_CFDI = '$regimenCliente' WHERE ID_Cliente = '$IDCliente'";
+		$query = "UPDATE clientes SET Nombre = '$NombreCliente', Calle = '$CalleClienteGeneral', No_Exterior = '$NoExteriorClienteGeneral', No_Interior = '$NoInteriorClienteGeneral', Codigo_Postal = '$CPClienteGeneral', Colonia = '$ColoniaClienteGeneral', Ciudad = '$CiudadClienteGeneral', Estado = '$EstadoClienteGeneral', Pais = '$PaisClienteGeneral', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Descuento = '$DescuentoCliente', Correo = '$CorreoCliente', Fecha_Nacimiento = '$FechaNacimientoCliente', Sexo = '$SexoCliente', RFC = '$RFCCliente', Facturar = '$FacturarCliente', No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente', FK_Sucursal = '$SucursalCliente', Razon_CFDI = '$razonCliente', Regimen_CFDI = '$regimenCliente', Nombre_Contacto = '$contactoCliente', Puesto_Contacto = '$puestoContactoCliente', Email_Contacto = '$correoContactoCliente', Tel_Contacto = '$telefonoContactoCliente' WHERE ID_Cliente = '$IDCliente'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
@@ -396,7 +404,8 @@ class clientes {
 				echo "Error 1: " . mysqli_error($omodelo->link);
 			} else {
 				echo "Correcto";
-				//$omodelo->movimiento($query, $_SESSION['user_smart']['usuario']['id_usuario']);
+				
+				//$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 			}
 		}
 	}
@@ -406,7 +415,7 @@ class clientes {
 		extract($_POST);
 		$IDCliente = $omodelo->link->real_escape_string($IDCliente);
 
-		$query = "SELECT ID_Cliente, Nombre, Telefono, Celular, Descuento, Correo, Fecha_Nacimiento, Sexo, Fecha_Registro, Foto, RFC, Facturar, No_Cuenta, Banco, Titular, FK_Sucursal, Razon_CFDI, Regimen_CFDI, Calle, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais FROM clientes WHERE ID_Cliente = '$IDCliente'";
+		$query = "SELECT ID_Cliente, Nombre, Telefono, Celular, Descuento, Correo, Fecha_Nacimiento, Sexo, Fecha_Registro, Foto, RFC, Facturar, No_Cuenta, Banco, Titular, FK_Sucursal, Razon_CFDI, Regimen_CFDI, Calle, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais, Nombre_Contacto, Puesto_Contacto, Email_Contacto, Tel_Contacto FROM clientes WHERE ID_Cliente = '$IDCliente'";
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -434,7 +443,7 @@ class clientes {
 						'Nombre_Contacto' => $rowDirecciones[$x]["Nombre_Contacto"],
 						'Puesto_Contacto' => $rowDirecciones[$x]["Puesto_Contacto"],
 						'Email_Contacto' => $rowDirecciones[$x]["Email_Contacto"],
-						'Telefono_Contacto' => $rowDirecciones[$x]["Telefono_Contacto"],
+						'Telefono_Contacto' => $rowDirecciones[$x]["Telefono_Contacto"]
 					);
 				}
 
@@ -465,6 +474,10 @@ class clientes {
 						'Ciudad' => $row[$x]["Ciudad"],
 						'Estado' => $row[$x]["Estado"],
 						'Pais' => $row[$x]["Pais"],
+						'Nombre_Contacto' => $row[$x]["Nombre_Contacto"], 
+						'Puesto_Contacto' => $row[$x]["Puesto_Contacto"], 
+						'Email_Contacto' => $row[$x]["Email_Contacto"], 
+						'Tel_Contacto' => $row[$x]["Tel_Contacto"],
 						'Extras' => $subarreglo
 				);
 
@@ -472,7 +485,5 @@ class clientes {
 			}
 		}
 	}
-
-
 }
 ?>

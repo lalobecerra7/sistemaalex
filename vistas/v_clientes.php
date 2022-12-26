@@ -135,6 +135,32 @@
 							</div>
 		        </div>
 		        <hr>
+		        <b class="mb-3">Datos de contacto</b>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		               	<input type="text" class="form-control" id="contactoCliente" name="contactoCliente" placeholder="Ingresa el nombre del contacto">
+		                <label>Nombre del contacto</label>
+		            </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		               	<input type="text" class="form-control" id="puestoContactoCliente" name="puestoContactoCliente" placeholder="Ingresa el puesto del contacto">
+		                <label>Puesto del contacto</label>
+		            </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		               	<input type="text" class="form-control" id="correoContactoCliente" name="correoContactoCliente" placeholder="Ingresa el correo electrónico del contacto">
+		                <label>Correo electrónico del contacto</label>
+		            </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		               	<input type="text" class="form-control" id="telefonoContactoCliente" name="telefonoContactoCliente" placeholder="Ingresa el telefono del contacto">
+		                <label>Teléfono del contacto</label>
+		            </div>
+		        </div>
+		        <hr>
 		        <b class="mb-3">Dirección fiscal</b>
 		        <div class="col-md-3 col-sm-12 mb-3">
 		        	<div class="form-floating">

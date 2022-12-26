@@ -17,7 +17,7 @@ class ventas {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d'), ID_Venta, clientes.Nombre, ventas.Descuento, Total, Tipo_Pago, Notas, clientes.Correo) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d'), LPAD(ID_Venta, 8, '0'), clientes.Nombre, ventas.Descuento, Total, Tipo_Pago, Notas, clientes.Correo) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}

@@ -17,7 +17,7 @@ class compras {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(DATE_FORMAT(compras.Fecha_Registro, '%Y-%m-%d'), ID_Compra, proveedores.Nombre, proveedores.Empresa, Anticipo, Total, Estatus, Tipo_Compra) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(DATE_FORMAT(compras.Fecha_Registro, '%Y-%m-%d'), LPAD(ID_Compra, 8, '0'), proveedores.Nombre, proveedores.Empresa, Anticipo, Total, Estatus, Tipo_Compra) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}

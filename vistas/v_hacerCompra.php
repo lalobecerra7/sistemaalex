@@ -100,7 +100,7 @@
                     <div class="col-md-6 text-center mb-2">
                         <div class="row" style="vertical-align: middle;">
                             <div class="col-md-6 d-grid">
-                                <button class="btn btn-secondary" id="RealizarCompra" idProveedor="2" style="font-size: 25px;"><i style="font-size: 25px;" class="fas fa-cart-plus"></i> <b>Cobrar</b></button>
+                                <button class="btn btn-secondary" id="RealizarCompra" idProveedor="2" style="font-size: 25px;"><i style="font-size: 25px;" class="fas fa-cart-plus"></i> <b>Guardar</b></button>
                             </div>
                             <div class="col-md-6">
                                 <h5 style="font-weight: bold;">Total</h5>

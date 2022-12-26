@@ -47,7 +47,7 @@ function v_productos() {
                 const searchRegExp = new RegExp(',', 'g');
                 var presentaciones = [];
                 $("#verPresentaciones").children('tr').each(function(index, el){
-                    presentaciones.push({'ID_Presentacion': $.trim($(this).attr('id')),'Clave': $.trim($(this).children('td:eq(0)').text()), 'Nombre': $.trim($(this).children('td:eq(1)').text()), 'Abreviatura': $.trim($(this).children('td:eq(2)').text()), 'Costo': $.trim($(this).children('td:eq(3)').text().replace('$', '').replace(searchRegExp, ''))});
+                    presentaciones.push({'ID_Presentacion': $.trim($(this).attr('id')),'Clave': $.trim($(this).children('td:eq(0)').text()), 'Nombre': $.trim($(this).children('td:eq(1)').text()), 'Abreviatura': $.trim($(this).children('td:eq(2)').text()), 'Costo': $.trim($(this).children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')), 'Importe': $.trim($(this).children('td:eq(4)').text().replace('$', '').replace(searchRegExp, ''))});
                 });
 
                 var precios = [];
@@ -188,6 +188,14 @@ function v_productos() {
             },
             abreviaturaPresentacionM: {
                 required: true
+            },
+            costoPresentacionM: {
+                required: true,
+                min: 0
+            },
+            importePresentacionM: {
+                required: true,
+                min: 0
             }
         },
         messages: {
@@ -195,7 +203,15 @@ function v_productos() {
                 required: "El nombre es requerido."
             },
             abreviaturaPresentacionM: {
-                required: "La abreviatura de es requerida."
+                required: "La abreviatura es requerida."
+            },
+            costoPresentacionM: {
+                required: "El costo es requerido.",
+                min: "El minimo es 0"
+            },
+            importePresentacionM: {
+                required: "El importe es requerido.",
+                min: "El minimo es 0"
             }
         },
         submitHandler: function(form) {
@@ -207,6 +223,7 @@ function v_productos() {
                 filaPre.children('td:eq(1)').html($.trim($("#nombrePresentacionM").val()));
                 filaPre.children('td:eq(2)').html($.trim($("#abreviaturaPresentacionM").val()));
                 filaPre.children('td:eq(3)').html('<span class="dinero">'+$.trim($("#costoPresentacionM").val())+'</span>');
+                filaPre.children('td:eq(4)').html('<span class="dinero">'+$.trim($("#importePresentacionM").val())+'</span>');
 
                 $("#presentacionProdSelect").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
                 $("#presentacionProdSelect").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
@@ -415,6 +432,11 @@ jQuery(document).ready(function($) {
             $("#Maximo").val(datos.Maximo);
             $("#DetallesProducto").val(datos.Detalles);
             $("#ImporteProducto").val(datos.Importe);
+            $("#claveProdServ").val(datos.Clave_ProdServ_CFDI);
+            $("#claveUnidadProd").val(datos.Clave_Unidad_CFDI);
+            $("#unidadProd").val(datos.Nombre_Unidad);
+            $("#abreUnudadProd").val(datos.Abreviatura_Unidad);
+            $("#objImProducto").val(datos.Objeto_Impuesto_CFDI);
             
             $('#verImagenProducto').html('<img src="vistas/assets/archivos/fotosProductos/' + datos.Imagen + '" width: 250px; height: 170px; cursor:pointer;border-radius:4px;border:2px solid grey;" class="img-thumbnail"><br>');
             
@@ -438,6 +460,7 @@ jQuery(document).ready(function($) {
                         <td>`+presentacion.Nombre+`</td>
                         <td>`+presentacion.Abreviatura+`</td>
                         <td><span class="dinero">`+presentacion.Costo+`</span></td>
+                        <td><span class="dinero">`+presentacion.Importe+`</span></td>
                         <td>`+botonEli+` <button type="button" class="btn btn-warning btn-sm bModificarPresenta" attrID="`+presentacion.ID_Presentacion+`"><i class="fas fa-pencil"></i></button></td>
                     </tr>`);
 
@@ -619,6 +642,7 @@ jQuery(document).ready(function($) {
                 <td>`+$.trim($("#nombrePresentacion").val())+`</td>
                 <td>`+$.trim($("#abreviaturaPresentacion").val())+`</td>
                 <td><span class="dinero">`+$.trim($("#costoPresentacion").val())+`</span></td>
+                <td><span class="dinero">`+$.trim($("#importePresentacion").val())+`</span></td>
                 <td><button type="button" class="btn btn-danger btn-sm bQuitarPresenta"><i class="fas fa-trash"></i></button> <button type="button" class="btn btn-warning btn-sm bModificarPresenta"><i class="fas fa-pencil"></i></button></td>
             </tr>`);
 
@@ -669,6 +693,7 @@ jQuery(document).ready(function($) {
         $("#nombrePresentacionM").val($.trim(filaPre.children('td:eq(1)').text()));
         $("#abreviaturaPresentacionM").val($.trim(filaPre.children('td:eq(2)').text()));
         $("#costoPresentacionM").val($.trim(filaPre.children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')));
+        $("#importePresentacionM").val($.trim(filaPre.children('td:eq(4)').text().replace('$', '').replace(searchRegExp, '')));
         $("#bGuardarPresenta").attr('attrID', $(this).attr('attrID'));
         $("#modalPresentaciones").modal('show');
     });
