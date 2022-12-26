@@ -468,7 +468,7 @@ function facturarVenta(id) {
                             }
                         }
 
-                        if(imp.Tipo_Factor_CFDI != "Exento"){
+                        if(imp.Tipo_Factor_CFDI == "Exento"){
                             impuestos += '<p>(<span class="dinero">0</span>) '+imp.Impuesto_CFDI+' <span class="cantidad">'+imp.Tasa_Cuota_CFDI+'</span>%</p>';
                         }else{
                             impuestos += '<p>(<span class="dinero">'+(((parseFloat(prod.Cantidad) * parseFloat(prod.Precio)) - parseFloat(prod.Descuento)) * (imp.Tasa_Cuota_CFDI / 100))+'</span>) '+imp.Impuesto_CFDI+' <span class="cantidad">'+imp.Tasa_Cuota_CFDI+'</span>%</p>';
