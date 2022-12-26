@@ -535,13 +535,20 @@ $arregloVenta = '';
                             }
 
                             $subtotalProducto = ($row['Cantidad'] * $row['Precio']);
-
-
+                            $devuelto = "";
+                            $sqldev = "SELECT ID_Detalle_Devolucion, FK_Devolucion, FK_Detalle_Venta, SUM(detalles_devolucion.Cantidad) AS Cantidad, SUM(detalles_devolucion.Total) AS Total FROM detalles_devolucion INNER JOIN detalles_ventas ON FK_Detalle_Venta = ID_Detalle_Venta WHERE detalles_ventas.FK_Venta = '".$arregloVenta['ID_Venta']."' AND FK_Detalle_Venta = '".$row["ID_Detalle_Venta"]."' GROUP BY FK_Detalle_Venta"; 
+                            if($resdev=$con->query($sqldev)){
+                              if ($resdev->num_rows > 0) {
+                                while($rowdev = $resdev->fetch_assoc()){
+                                 $devuelto = "<br>(dev. ".$rowdev["Cantidad"].")";
+                                }
+                              }
+                            }
 
                             $mostrar .= "<tr>
                                 <td class='codigo'>".$row["Codigo"]."</td>
                                 <td class='producto'>".$row["Descripcion"]. $nombrePresentacion."</td>
-                                <td class='cantidad'>".(round($row['Cantidad']*100)/100)."</td> 
+                                <td class='cantidad'>".(round($row['Cantidad']*100)/100)." ".$devuelto."</td> 
                                 <td class='precio'>$".(round($row['Precio']*100)/100)."</td>
                                 <td class='impuestos'>".$mostrarImpuestos."</td>
                                 <td class=''>$".$subtotalProducto."<br>Desc: ".(round($row['Descuento']*100)/100)."% <br>$".(round($row['Total']*100)/100)."</td>
@@ -573,6 +580,46 @@ $arregloVenta = '';
         echo "</br>
           <p class='derecha'><b style='font-size: 20px;'>TOTAL: $".(round($arregloVenta['Total']*100)/100)."</b></p>
         ";
+
+        $TotalDevolucion = 0;
+        $sqlTotaldev = "SELECT SUM(Total) AS TotalDevolucion FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE FK_Venta = '".$arregloVenta['ID_Venta']."'";
+        if($resTotalDev=$con->query($sqlTotaldev)){
+          if ($resTotalDev->num_rows > 0) {
+            $rowTotalDev = $resTotalDev->fetch_assoc();
+            $TotalDevolucion = $rowTotalDev["TotalDevolucion"];
+          }
+        }
+        $totalFinal = 0;
+        if ($TotalDevolucion > 0) {
+
+          $totalFinal = $arregloVenta['Total'] - $TotalDevolucion;
+
+          echo "</br>
+            <p class='derecha'><b style='font-size: 20px;'>DEVOLUCIÓN: $".(round($TotalDevolucion*100)/100)."</b></p>
+          ";
+
+          echo "</br>
+            <p class='derecha'><b style='font-size: 20px;'>TOTAL FINAL: $".(round($totalFinal*100)/100)."</b></p>
+          ";
+
+        }
+
+        
+
+      
+        /*
+        if ($TotalDevolucion > 0) {
+         
+          $MostrarDevolucion = "<br>Devuelto: <b>$".number_format($TotalDevolucion, 2)."</b><br>
+          Total final: <b>$".number_format($totalFinal, 2)."</b>";
+          $SumarVentas += $totalFinal;
+        }else{
+          $SumarVentas += $row[$i]['Total'];
+        }*/
+
+
+
+
         echo '<p class="derecha">Tipo de pago: '.$arregloVenta['Tipo_Pago'].'</p>'; 
         
         echo '<p class="derecha">Administrador: '.$arregloVenta['NombreUsuario'].'</p>';

@@ -68,13 +68,28 @@ class compras {
 						$restante = 0;
 					}
 
+					$botonPermisosCancelar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_compras'][3] == '1') {
+						$botonPermisosCancelar = $botondeCancelar;
+					}
+
+					$botonPermisosEliminar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_compras'][4] == '1') {
+						$botonPermisosEliminar = $botonEliminar;
+					}
+
+					$botonPermisosTicket = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_compras'][5] == '1') {
+						$botonPermisosTicket = $botonTicket;
+					}
+
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Compra'],
 						'Datos' => "Fecha: <b>".$row[$i]['Datos']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b><br>Sucursal: <b>".$row[$i]['Sucursal']."</b>",
 						'Proveedor' => 'Nombre: <b>'.$row[$i]['Proveedor'].'</b><br>Empresa: <b>'.$row[$i]['Empresa'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Razón social: <b>'.$row[$i]['RazonSocial'].'</b>',
 						'Total' => 'Total: <b style="font-size: 15px;">$'.number_format($row[$i]['Total'],2 ).'</b><br>Tipo: <b>'.$row[$i]['Tipo_Compra'].'</b><br> Pago: <b>$'.number_format($row[$i]['Pagado'], 2).'</b><br>Restante: <b>$'.number_format($restante,2).'</b><br>A favor: <b>$'.number_format($favor,2).'</b>',
 						'Detalles' => $estatus.'<br>'.$motivocancelada.'<br><button class="btn btn-link btn-sm" id="VerProductosCompra" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'">Ver productos</button><br><button class="btn btn-link btn-sm" id="VerHistorialPagos" attrid="'.$row[$i]['ID_Compra'].'" folio="'.$folio.'">Ver pagos</button>',
-						'Acciones' => $botonEliminar.' '.$botondeCancelar.' '.$botonPagos.' '.$botonTicket,
+						'Acciones' => $botonPermisosEliminar.' '.$botonPermisosCancelar.' '.$botonPagos.' '.$botonPermisosTicket,
 					);
 				}
 

@@ -88,6 +88,31 @@ class ventas {
 						$estatus='<span class="badge rounded-pill bg-success">Completada</span>';
 					}
 
+					$botonPermisosCancelar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][3] == '1') {
+						$botonPermisosCancelar = $botondeCancelar;
+					}
+
+					$botonPermisosEliminar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][4] == '1') {
+						$botonPermisosEliminar = $botonEliminar;
+					}
+
+					$botonPermisosFacturar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][5] == '1') {
+						$botonPermisosFacturar = $botonFacturar;
+					}
+
+					$botonPermisosDevoluciones = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][6] == '1') {
+						$botonPermisosDevoluciones = $botonDevolucion;
+					}
+
+					$botonPermisosTicket = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][7] == '1') {
+						$botonPermisosTicket = $botonTicket;
+					}
+
 
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Venta'],
@@ -102,7 +127,7 @@ class ventas {
 
 
 						'Detalles' => $estatus."<br>".$motivocancelada.$fechacancelada.'<button class="btn btn-link btn-sm" id="VerProductosVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'">Ver productos</button>',
-						'Acciones' => $botonEliminar.' '.$botondeCancelar .' '.$botonTicket.' '.$botonFacturar.' '.$botonDevolucion,
+						'Acciones' => $botonPermisosEliminar.' '.$botonPermisosCancelar .' '.$botonPermisosTicket.' '.$botonPermisosFacturar.' '.$botonPermisosDevoluciones,
 					);
 				}
 

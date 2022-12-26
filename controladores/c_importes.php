@@ -51,15 +51,26 @@ class importes {
 
 					$SumarVentas += $row[$i]['Total'];
 
+					$botonPermisosModificar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_importes'][2] == '1') {
+						$botonPermisosModificar = $botonVerImportes;
+					}
+
+					$botonPermisosTicket = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_importes'][3] == '1') {
+						$botonPermisosTicket = $botonTicket;
+					}
+
+
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Venta'],
 						'Datos' => "Fecha: <b>".$row[$i]['Fecha_Registro']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b>",
 						'Cliente' => 'Nombre: <b>'.$row[$i]['Datos'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Correo electrónico: <b>'.$row[$i]['CorreoCliente'].'</b><br>RFC: <b>'.$row[$i]['RFCCliente']."</b>",
 						'Total' => "Subtotal: <b>$".number_format(($row[$i]['Total'] + $row[$i]['Descuento']), 2)."</b><br>Descuento: <b>$".number_format($row[$i]['Descuento'], 2)."</b><br>Total: <b>$".number_format($row[$i]['Total'], 2)."</b>",
 						'Importes' => "Cantidad de importes: <b>".number_format($row[$i]["NumeroImportes"], 2)."</b><br>
-							Pagados: <b>".$row[$i]['ImportesPagados']."</b><br> Pendientes: <b>".$row[$i]['ImportesPendientes']."</b><br>".$botonVerImportes,
+							Pagados: <b>".$row[$i]['ImportesPagados']."</b><br> Pendientes: <b>".$row[$i]['ImportesPendientes']."</b><br>".$botonPermisosModificar,
 						'Detalles' => $estatus."<br>".$motivocancelada.$fechacancelada,
-						'Acciones' => $botonTicket,
+						'Acciones' => $botonPermisosTicket,
 					);
 				}
 
