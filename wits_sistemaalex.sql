@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-12-2022 a las 21:54:07
+-- Tiempo de generación: 26-12-2022 a las 23:50:13
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.3
 
@@ -55141,36 +55141,36 @@ INSERT INTO `claves_unidades_cfdi` (`ID_Clave`, `Clave`, `Nombre`, `Simbolo`) VA
 
 CREATE TABLE `clientes` (
   `ID_Cliente` int(11) NOT NULL,
-  `Nombre` varchar(150) CHARACTER SET latin1 NOT NULL COMMENT 'Nombre completo del cliente',
-  `Calle` varchar(300) COLLATE latin1_spanish_ci NOT NULL,
-  `No_Exterior` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
-  `No_Interior` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
-  `Colonia` varchar(300) COLLATE latin1_spanish_ci NOT NULL,
-  `Ciudad` varchar(300) COLLATE latin1_spanish_ci NOT NULL,
-  `Codigo_Postal` varchar(300) COLLATE latin1_spanish_ci NOT NULL,
-  `Estado` varchar(300) COLLATE latin1_spanish_ci NOT NULL,
-  `Pais` varchar(300) COLLATE latin1_spanish_ci NOT NULL,
-  `Telefono` varchar(200) CHARACTER SET latin1 NOT NULL,
-  `Celular` varchar(200) CHARACTER SET latin1 NOT NULL,
+  `Nombre` varchar(150) NOT NULL COMMENT 'Nombre completo del cliente',
+  `Calle` varchar(300) NOT NULL,
+  `No_Exterior` varchar(50) NOT NULL,
+  `No_Interior` varchar(50) NOT NULL,
+  `Colonia` varchar(300) NOT NULL,
+  `Ciudad` varchar(300) NOT NULL,
+  `Codigo_Postal` varchar(300) NOT NULL,
+  `Estado` varchar(300) NOT NULL,
+  `Pais` varchar(300) NOT NULL,
+  `Telefono` varchar(200) NOT NULL,
+  `Celular` varchar(200) NOT NULL,
   `Descuento` double NOT NULL COMMENT 'Descuento que le aplica a cada cliente en sus compras',
-  `Correo` varchar(100) CHARACTER SET latin1 NOT NULL,
+  `Correo` varchar(100) NOT NULL,
   `Fecha_Nacimiento` date NOT NULL,
-  `Sexo` varchar(10) CHARACTER SET latin1 NOT NULL,
+  `Sexo` varchar(10) NOT NULL,
   `Fecha_Registro` datetime NOT NULL,
-  `Foto` varchar(300) CHARACTER SET latin1 NOT NULL,
-  `RFC` varchar(50) CHARACTER SET latin1 NOT NULL,
+  `Foto` varchar(300) NOT NULL,
+  `RFC` varchar(50) NOT NULL,
   `Facturar` tinyint(1) NOT NULL COMMENT '1 Si, 0 No',
-  `No_Cuenta` varchar(30) CHARACTER SET latin1 NOT NULL,
-  `Banco` varchar(60) CHARACTER SET latin1 NOT NULL,
-  `Titular` varchar(300) CHARACTER SET latin1 NOT NULL,
-  `Nombre_Contacto` tinytext COLLATE latin1_spanish_ci NOT NULL,
-  `Puesto_Contacto` tinytext COLLATE latin1_spanish_ci NOT NULL,
-  `Email_Contacto` tinytext COLLATE latin1_spanish_ci NOT NULL,
-  `Tel_Contacto` tinytext COLLATE latin1_spanish_ci NOT NULL,
+  `No_Cuenta` varchar(30) NOT NULL,
+  `Banco` varchar(60) NOT NULL,
+  `Titular` varchar(300) NOT NULL,
+  `Nombre_Contacto` tinytext NOT NULL,
+  `Puesto_Contacto` tinytext NOT NULL,
+  `Email_Contacto` tinytext NOT NULL,
+  `Tel_Contacto` tinytext NOT NULL,
   `FK_Sucursal` int(11) NOT NULL,
-  `Razon_CFDI` tinytext COLLATE latin1_spanish_ci NOT NULL,
-  `Regimen_CFDI` varchar(30) COLLATE latin1_spanish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+  `Razon_CFDI` tinytext NOT NULL,
+  `Regimen_CFDI` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `clientes`
@@ -55188,7 +55188,7 @@ INSERT INTO `clientes` (`ID_Cliente`, `Nombre`, `Calle`, `No_Exterior`, `No_Inte
 (17, 'Ma. De Lourdes Portilla Calderon', '', '', '', '', '', '', '', '', '01 89 99 22 06 65, 8999221322', '', 0, 'latiendanuevareynosa@hotmail.com', '0000-00-00', '', '2019-06-30 14:07:29', '', 'POCL351007JV7', 0, '', '', '', '', '', '', '', 0, '', ''),
 (24, 'Sr. Manuel Yanez 2', '', '', '', '', '', '', '', '', '01 63 94 72 03 98, 6394745148', '', 0, 'novia2003@gmail.com', '0000-00-00', '', '2019-06-30 14:08:17', '', 'CMN84080213', 0, '', '', '', '', '', '', '', 0, '', ''),
 (26, 'Manuel Emilio Torres Sanchez', '', '', '', '', '', '', '', '', '34 87 84 64 64', '', 0, 'replamex@hotmail.com', '0000-00-00', '', '2016-07-13 12:07:44', '', 'TOSM860124SH5', 0, '', '', '', '', '', '', '', 0, '', ''),
-(27, 'Ejemplo', 'dfdf', '', '', '', '', '06470', '', '', '', '', 0, 'dedd', '0000-00-00', '', '2022-12-05 20:52:47', '', 'SSF1103037F1', 0, '', '', '', 'dfdf', 'dffd', 'fvdf', 'fddf', 0, 'SCAFANDRA SOFTWARE FACTORY', '601');
+(27, 'Ejemplo', 'Ejemplo', '50', '', 'Eejempo', 'Arandas', '10740', 'Jalisco', 'México ', '', '', 0, 'dedd', '0000-00-00', '', '2022-12-05 20:52:47', '', 'CACX7605101P8', 0, '', '', '', 'dfdf', 'dffd', 'fvdf', 'fddf', 0, 'XOCHILT CASAS CHAVEZ', '605');
 
 -- --------------------------------------------------------
 
@@ -55370,7 +55370,8 @@ CREATE TABLE `detalles_impuestos_ventas` (
 --
 
 INSERT INTO `detalles_impuestos_ventas` (`ID_Impuesto`, `FK_Detalle_Venta`, `Tipo_Impuesto_CFDI`, `Impuesto_CFDI`, `Clave_CFDI`, `Tipo_Factor_CFDI`, `Tasa_Cuota_CFDI`) VALUES
-(2, 6, 'Trasladado', 'IVA', '002', 'Tasa', '16');
+(2, 6, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
+(4, 9, 'Trasladado', 'IVA', '002', 'Tasa', '16');
 
 -- --------------------------------------------------------
 
@@ -55433,7 +55434,8 @@ CREATE TABLE `detalles_ventas` (
 INSERT INTO `detalles_ventas` (`ID_Detalle_Venta`, `FK_Venta`, `FK_Producto`, `FK_Presentacion`, `Descripcion`, `Precio`, `Cantidad`, `Descuento`, `Total`, `Devuelto`, `Fecha_Devolucion`, `Regreso_Inventario`, `Clave_ProdServ_CFDI`, `Identificacion_CFDI`, `Clave_Unidad_CFDI`, `Unidad_CFDI`, `Objeto_Impuesto_CFDI`) VALUES
 (4, 3, 36, 0, 'Ejemplo', 50, 1, 5, 45, 0, '0000-00-00 00:00:00', 0, '01010101', 'ejemplo', '11', 'Equipos', '01'),
 (6, 5, 35, 20, 'Caja de fresas', 50, 1, 2.5, 55.1, 0, '0000-00-00 00:00:00', 0, '70141902', 'Prueba', '05', 'ejemplo', '02'),
-(7, 6, 26, 0, 'No lo se', 1, 1, 0, 1, 0, '0000-00-00 00:00:00', 0, '', '', '', '', '');
+(7, 6, 26, 0, 'No lo se', 1, 1, 0, 1, 0, '0000-00-00 00:00:00', 0, '', '', '', '', ''),
+(9, 8, 35, 0, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0, '01010101', 'Prueba', '05', 'Ascensor', '02');
 
 --
 -- Disparadores `detalles_ventas`
@@ -55635,8 +55637,8 @@ INSERT INTO `inventario` (`ID_Inventario`, `FK_Producto`, `FK_Presentacion`, `Ca
 (1, 26, 1, 6, 1),
 (2, 36, 0, 50, 1),
 (3, 35, 20, 100, 1),
-(4, 35, 18, 10, 1),
-(5, 35, 0, 10, 1),
+(4, 35, 18, 9, 1),
+(5, 35, 0, 9, 1),
 (6, 26, 0, -190, 1);
 
 -- --------------------------------------------------------
@@ -58977,7 +58979,12 @@ INSERT INTO `movimientos` (`ID_Movimiento`, `Descripcion`, `IP`, `Pais`, `Estado
 (3250, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Caja de fresas\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'01010101\', Clave_Unidad_CFDI = \'05\', Nombre_Unidad = \'Ascensor\', Abreviatura_Unidad = \'As\', Objeto_Impuesto_CFDI = \'02\', Importe = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-26 13:56:34', '', 2),
 (3251, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'dfdf\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'06470\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'SSF1103037F1\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'SCAFANDRA SOFTWARE FACTORY\', Regimen_CFDI = \'601\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 14:47:10', '', 2),
 (3252, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'dfdf\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'06470\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'SSF1103037F1\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'SCAFANDRA SOFTWARE FACTORY\', Regimen_CFDI = \'601\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 14:47:58', '', 2),
-(3253, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'dfdf\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'06470\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'SSF1103037F1\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'SCAFANDRA SOFTWARE FACTORY\', Regimen_CFDI = \'601\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 14:52:28', '', 2);
+(3253, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'dfdf\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'06470\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'SSF1103037F1\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'SCAFANDRA SOFTWARE FACTORY\', Regimen_CFDI = \'601\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 14:52:28', '', 2),
+(3254, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'dfdf\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'06470\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'RAQÃ‘7701212M3\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'SCAFANDRA SOFTWARE FACTORY\', Regimen_CFDI = \'605\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 16:18:10', '', 2),
+(3255, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'Ejemplo\', No_Exterior = \'50\', No_Interior = \'\', Codigo_Postal = \'06470\', Colonia = \'Eejempo\', Ciudad = \'Arandas\', Estado = \'Jalisco\', Pais = \'MÃ©xico \', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'RAQÃ‘7701212M3\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'SCAFANDRA SOFTWARE FACTORY\', Regimen_CFDI = \'605\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 16:21:09', '', 2),
+(3256, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'7\'', '', '', '', '', '', '2022-12-26 16:22:19', '', 2),
+(3257, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'Ejemplo\', No_Exterior = \'50\', No_Interior = \'\', Codigo_Postal = \'10740\', Colonia = \'Eejempo\', Ciudad = \'Arandas\', Estado = \'Jalisco\', Pais = \'MÃ©xico \', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'CACX7605101P8\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'XOCHILT CASAS CHAVEZ\', Regimen_CFDI = \'605\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 16:28:42', '', 2),
+(3258, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'Ejemplo\', No_Exterior = \'50\', No_Interior = \'\', Codigo_Postal = \'10740\', Colonia = \'Eejempo\', Ciudad = \'Arandas\', Estado = \'Jalisco\', Pais = \'MÃ©xico \', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'CACX7605101P8\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'XOCHILT CASAS CHAVEZ\', Regimen_CFDI = \'605\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 16:31:50', '', 2);
 
 -- --------------------------------------------------------
 
@@ -59396,7 +59403,8 @@ CREATE TABLE `ventas` (
 INSERT INTO `ventas` (`ID_Venta`, `FK_Usuario`, `FK_Caja`, `FK_Sucursal`, `FK_Cliente`, `Descuento`, `Total`, `Tipo_Pago`, `Pago`, `Cambio`, `Notas`, `Fecha_Registro`, `Estatus`, `Fecha_Cancelacion`, `Regreso_Inventario`, `Facturada`, `Version_CFDI`, `Fecha_Expedicion_CFDI`, `Sello_CFDI`, `Forma_Pago_CFDI`, `No_Certificado_CFDI`, `Certificado_CFDI`, `Moneda_CFDI`, `Tipo_Comprobante_CFDI`, `Exportacion_CFDI`, `Metodo_Pago_CFDI`, `Lugar_Expedicion_CFDI`, `Confirmacion_CFDI`, `Emisor_RFC_CFDI`, `Emisor_Nombre_CFDI`, `Emisor_Regimen_Fiscal_CFDI`, `Receptor_RFC_CFDI`, `Receptor_Nombre_CFDI`, `Receptor_Domicilio_CFDI`, `Receptor_Regimen_Fiscal_CFDI`, `Receptor_Uso_CFDI`, `UUID_CFDI`, `Fecha_Timbrado_CFDI`, `Rfc_ProvCertif_CFDI`, `Sello_CFD_CFDI`, `No_Certificado_SAT_CFDI`, `Sello_SAT_CFDI`, `Periodicidad_CFDI`, `Meses_CFDI`, `Ano_CFDI`, `Relacion_CFDI`, `Cadena_CFDI`) VALUES
 (3, 2, 0, 1, 1, 5, 45, 'Efectivo', 50, -5, '', '2022-12-21 19:26:06', 'Completada', '0000-00-00 00:00:00', 0, 1, '4.0', '2022-12-21 19:35:09', 'QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==', '01', '30001000000400002434', 'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==', 'MXN', 'I', '01', 'PUE', '47190', '', 'EKU9003173C9', 'ESCUELA KEMPER URGATE', '601', 'XAXX010101000', 'PUBLICO EN GENERAL', '47190', '616', 'S01', 'e2e52d70-18a0-41c6-b2a8-23e7193a5e4b', '2022-12-21 19:35:13', 'SPR190613I52', 'QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==', '30001000000400002495', 'M3Xm7jJ688eImfZ+3OHqAhy7aKdg66VTwbf+w2v8PNl3nyfLU42ChxwL2bo3DXoeqXch6RJrPgFflNGqG3q2l8LKRb9ndP1j+w8sx2NXLbDHOMqAvmyYwSKF+L9dPRDrxKi2oIrBsWEfZZJFk82/gv3emY9GtEXDOz3CiVhQccHoLMamkSuSY1+5triUkAB/q5ohfOM5PFnyqUdGzlrLjLcwsZxk1c07TlhpkSm5ow+PUSE9hWdTUNHva0/rZOIrZ69lzSBIDcogSrQKth8N/yM6AZdrRcmx9ci4DVv8qitaesOD52zl3isBrbsImV+mlbioCGQn3j6+wPs5wGKQbQ==', '04', '12', '2022', '', '||1.1|e2e52d70-18a0-41c6-b2a8-23e7193a5e4b|2022-12-21T19:35:13|SPR190613I52|QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==|30001000000400002495||'),
 (5, 2, 0, 1, 1, 2.5, 55.1, 'Efectivo', 60, -4.9, '', '2022-12-21 19:57:17', 'Completada', '0000-00-00 00:00:00', 0, 1, '4.0', '2022-12-21 19:58:31', 'TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==', '03', '30001000000400002434', 'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==', 'MXN', 'I', '01', 'PUE', '47190', '', 'EKU9003173C9', 'ESCUELA KEMPER URGATE', '601', 'XAXX010101000', 'PUBLICO EN GENERAL', '47190', '616', 'S01', 'a97fbaad-01ce-4bfd-ad50-63ee62991ac4', '2022-12-21 19:58:37', 'SPR190613I52', 'TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==', '30001000000400002495', 'l/0OQhKeXsDlkeXGQabKQyGXgIrpVBbXbCd8BYEsiV8rmmSlcT2FO+ok3xEvGYxHU25rNXFD5TX6hpG7/3Zq+0ZoiR/A0C+PN+SEPHAOFferolzEqfd5W1KwNrcgoFjt9B2wmW2BhAw9HZqRNBwcCOM4CgkZKfBbX9Fe5BNLAbjZRsNqAUqAYo1usH6cmkUZgZSIofWqOPtgP53N0DIMhqH6b00JOYev0bwb9KejnsI9GY9ufg8OTRwF8A76OADkznV/uTYEfvw7l0o2YFgCPWLB4Hdsgsc6guALKvgKKltJM/YDRdaSu2mFsfmMbbu3BEBPCgWwlMh94RnXhUqE5w==', '04', '12', '2022', '', '||1.1|a97fbaad-01ce-4bfd-ad50-63ee62991ac4|2022-12-21T19:58:37|SPR190613I52|TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==|30001000000400002495||'),
-(6, 2, 0, 1, 1, 0, 1, 'Efectivo', 50, 49, '', '2022-12-23 01:31:03', 'Completada', '0000-00-00 00:00:00', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '');
+(6, 2, 0, 1, 1, 0, 1, 'Efectivo', 50, 49, '', '2022-12-23 01:31:03', 'Completada', '0000-00-00 00:00:00', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', ''),
+(8, 2, 0, 1, 27, 0, 58, 'Efectivo', 58, 0, '', '2022-12-26 16:25:50', 'Completada', '0000-00-00 00:00:00', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -59782,7 +59790,7 @@ ALTER TABLE `detalles_impuestos_productos`
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_ventas`
 --
 ALTER TABLE `detalles_impuestos_ventas`
-  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_pedidos`
@@ -59794,7 +59802,7 @@ ALTER TABLE `detalles_pedidos`
 -- AUTO_INCREMENT de la tabla `detalles_ventas`
 --
 ALTER TABLE `detalles_ventas`
-  MODIFY `ID_Detalle_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID_Detalle_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_compras`
@@ -59854,7 +59862,7 @@ ALTER TABLE `merma`
 -- AUTO_INCREMENT de la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
-  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3254;
+  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3259;
 
 --
 -- AUTO_INCREMENT de la tabla `pagos`
@@ -59926,7 +59934,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `ID_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `zonas`
