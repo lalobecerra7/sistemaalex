@@ -321,7 +321,7 @@ class hacerventa {
 				$separa = explode(' ', trim($buscar));
 				$busqueda = 'AND ';
 				for ($i=0; $i < count($separa); $i++) { 
-					$busqueda .= "CONCAT(ID_Cliente, Nombre) REGEXP '".$separa[$i]."'";
+					$busqueda .= "CONCAT(Nombre, Calle, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais, Telefono, Celular, Correo, RFC) REGEXP '".$separa[$i]."'";
 					if($i < (count($separa)-1)){
 						$busqueda .= ' AND ';
 					}
@@ -405,6 +405,8 @@ class hacerventa {
 							'Facturar' => $facturar
 						);
 					}
+
+					$arreglo['totales'] = array('NumRows' => $row[0]["Num"]);
 				}
 			}
 
@@ -485,11 +487,12 @@ class hacerventa {
 							'Existencia' => $row2[$x]['Existencia'],
 						);
 						
-					}	
+					}
+
+					$arreglo['totales'] = array('NumRows' => $row2[0]["Num"]);	
 				}
 			}
-			//$numerofilasTotal = $numerofilas + $numerofilas2;
-			$arreglo['totales'] = array('NumRows' => $row2[0]["Num"]);
+			
 			echo json_encode($arreglo);
 		}else if($tipo == "AgregarProducto"){
 			/*if (isset($presentacion) && $presentacion != "") {
