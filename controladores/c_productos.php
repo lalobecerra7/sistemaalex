@@ -428,7 +428,7 @@ class productos {
 		if($tipo == 'modificarProducto'){
 			$IDProducto =  $omodelo->link->real_escape_string($IDProducto);
 
-			$query = "SELECT ID_Producto, Codigo, Descripcion, Tipo, FK_Categoria, Clase, Costo, Precio, Precio_Mayoreo, FK_Area, Detalles, Minimo, Maximo, Importe, Fecha_Registro, Imagen, Clave_ProdServ_CFDI, Clave_Unidad_CFDI, Nombre_Unidad, Abreviatura_Unidad, Objeto_Impuesto_CFDI FROM productos WHERE ID_Producto = '$IDProducto'";
+			$query = "SELECT ID_Producto, Codigo, Descripcion, Tipo, FK_Categoria, Clase, Costo, Precio, Precio_Mayoreo, FK_Area, Detalles, Minimo, Maximo, importe, Fecha_Registro, Imagen, Clave_ProdServ_CFDI, Clave_Unidad_CFDI, Nombre_Unidad, Abreviatura_Unidad, Objeto_Impuesto_CFDI FROM productos WHERE ID_Producto = '$IDProducto'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -520,7 +520,7 @@ class productos {
 						'Maximo' => $row[0]["Maximo"],
 						'Fecha_Registro' => $row[0]["Fecha_Registro"],
 						'Imagen' => $row[0]["Imagen"],
-						'Importe' => $row[0]['Importe'],  
+						'Importe' => $row[0]['importe'],  
 						'Clave_ProdServ_CFDI' => $row[0]['Clave_ProdServ_CFDI'], 
 						'Clave_Unidad_CFDI' => $row[0]['Clave_Unidad_CFDI'], 
 						'Nombre_Unidad' => $row[0]['Nombre_Unidad'], 

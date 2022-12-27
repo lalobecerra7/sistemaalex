@@ -24,7 +24,7 @@ class importes {
 			}
 		}
 		
-		$query = "SELECT ID_Venta, ventas.FK_Usuario, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta) AS NumeroImportes, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta AND Estatus = 'Pagado') AS ImportesPagados, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta AND Estatus = 'Se debe') AS ImportesPendientes, ventas.FK_Sucursal, FK_Cliente, ventas.Descuento, ventas.Total, Tipo_Pago, Pago, Cambio, Notas, ventas.Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS Datos, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente FROM importes INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda GROUP BY ID_Venta ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Venta, ventas.Estatus AS EstatusVenta, ventas.FK_Usuario, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta) AS NumeroImportes, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta AND Estatus = 'Pagado') AS ImportesPagados, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta AND Estatus = 'Se debe') AS ImportesPendientes, ventas.FK_Sucursal, FK_Cliente, ventas.Descuento, ventas.Total, Tipo_Pago, Pago, Cambio, Notas, ventas.Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS Datos, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM importes INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda) AS Num FROM importes INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda GROUP BY ID_Venta ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -41,7 +41,7 @@ class importes {
 
 					$botonTicket = '<button class="btn btn-success btn-sm" id="ImprimirTicketVentaSinCajaImporte" attrid="'.$row[$i]['ID_Venta'].'" sucursal="'.$row[$i]['FK_Sucursal'].'" folio="'.$folio.'"><i class="fas fa-print"></i></button>';
 
-					if ($row[$i]['Cancelada'] == 1) {
+					if ($row[$i]['EstatusVenta'] == "Cancelada") {
 						$estatus='<span class="badge rounded-pill bg-danger">Venta cancelada</span>';
 						$motivocancelada = "Motivo de cancelación: ".$row[$i]['Notas'];
 						$fechacancelada = '<br>Fecha de cancelación: <b>'.$row[$i]['Fecha_Cancelacion']."</b><br>";
@@ -75,7 +75,7 @@ class importes {
 				}
 
 				$arreglo['totales'] = array(
-					'NumRows' => $numerofilas, 
+					'NumRows' => $row[0]['Num'], 
 					'Datos' => "",
 					'Cliente' => "Totales",
 					'Total' => "<b>$".number_format($SumarVentas, 2)."</b>",
@@ -131,7 +131,7 @@ class importes {
 				}
 			}
 			
-			$query = "SELECT ID_Importe, FK_Venta, FK_Producto, Cantidad, importes.Importe, Total, Estatus, productos.Descripcion FROM importes INNER JOIN productos ON FK_Producto = ID_Producto WHERE FK_Venta = '$idventa' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Importe, FK_Venta, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, Total, Estatus, productos.Descripcion FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '$idventa' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -150,13 +150,28 @@ class importes {
 							$estatus = '<span class="badge rounded-pill bg-primary">Pagado</span>';
 						}
 
+						$totalImportes = 0;
+						$nombrePresentacion = "";
+						if ($row[$i]['NombrePresentacion'] != "") {
+							$nombrePresentacion = $row[$i]['NombrePresentacion'];
+						}else{
+							$nombrePresentacion = $row[$i]['NombreGenerico'];
+						}
+						$presentacionImporte = 0;
+						if ($row[$i]["ImportePresentacion"] != "") {
+			                $presentacionImporte = $row[$i]["ImportePresentacion"];
+			            }else{
+			            	$presentacionImporte = $row[$i]["Importe"];
+			            }
+
+			            $totalImportes = $row[$i]['Cantidad'] * $presentacionImporte;
 						
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Importe'],
-							'Producto' => $row[$i]['Descripcion'],
+							'Producto' => $row[$i]['Descripcion']." (".$nombrePresentacion.")",
 							'Cantidad' =>  "<b>".number_format(($row[$i]['Cantidad']), 2)."</b>",
-							'Importe' => "<b>$".number_format(($row[$i]['Importe']), 2)."</b>",
-							'Total' =>"<b>$".number_format(($row[$i]['Total']), 2)."</b>",
+							'Importe' => "<b>$".number_format(($presentacionImporte), 2)."</b>",
+							'Total' =>"<b>$".number_format(($totalImportes), 2)."</b>",
 							'Estatus' => $estatus,
 							'Acciones' => $botonMarcarPagado,
 						);

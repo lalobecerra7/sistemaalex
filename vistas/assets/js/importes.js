@@ -53,6 +53,7 @@ jQuery(document).ready(function($) {
 							title: 'Importe pagado correctamente'
 						});
 						TablaProductosImporte(idventa);
+						TablaReporteImportes();
 					}else{
 						Swal.fire({
 							icon: 'error',

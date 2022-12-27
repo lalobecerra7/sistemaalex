@@ -6,6 +6,7 @@
 
 //$con = mysqli_connect('localhost','root','','smartpoi_negocio'.$_SESSION['user_smart']['cliente']['id_cliente']);
 date_default_timezone_set('America/Mexico_City');
+//$con = mysqli_connect('localhost','wits_userBD','ZfX7y99GSs','wits_sistemaalex');
 $con = mysqli_connect('localhost','root','','wits_sistemaalex');
 $arreglo = '';
 $arregloVenta = '';
@@ -634,7 +635,7 @@ $arregloVenta = '';
       <p class="centrado">***********************************************************</p>
       <?php 
 
-        $sqlImporte = "SELECT ID_Importe, FK_Venta, FK_Producto, productos.Descripcion, Cantidad, importes.Importe, Total, Estatus FROM importes INNER JOIN productos ON FK_Producto = ID_Producto WHERE FK_Venta = '".$arregloVenta['ID_Venta']."'";
+        $sqlImporte = "SELECT ID_Importe, FK_Venta, importes.FK_Producto, presentaciones.Importe AS ImportePresentacion, presentaciones.Nombre AS NombrePrese, presentaciones.Abreviatura AS AbrePrese, productos.Nombre_Unidad AS NombrePreseGenerico, productos.Abreviatura_Unidad AS AbrePreseGenerico, FK_Presentacion, productos.Descripcion, Cantidad, importes.Importe, Total, Estatus FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '".$arregloVenta['ID_Venta']."'";
         if($resImporte=$con->query($sqlImporte)){
           if ($resImporte->num_rows > 0) {
             echo ' <p class="centrado negra">IMPORTES</p>';
@@ -651,12 +652,27 @@ $arregloVenta = '';
                 </thead>
                 <tbody>';
             while($rowI = $resImporte->fetch_assoc()){
+              $presentacionImporte = "";
+              $totalImportes = 0;
+              if ($rowI["ImportePresentacion"] != "") {
+                $presentacionImporte = $rowI["ImportePresentacion"];
+              }else{
+                $presentacionImporte = $rowI["Importe"];
+              }
+              $totalImportes = $presentacionImporte * $rowI["Cantidad"];
+
+              $nombrePresentacion = "";
+              if ($rowI["NombrePrese"] != "") {
+                $nombrePresentacion = $rowI["NombrePrese"];
+              }else{
+                $nombrePresentacion = $rowI["NombrePreseGenerico"];
+              }
                echo '
                   <tr>
-                   <th>'.$rowI["Descripcion"].'</th>
+                   <th>'.$rowI["Descripcion"].' ('.$nombrePresentacion.')</th>
                    <th>'.$rowI["Cantidad"].'</th>
-                   <th>$'.number_format($rowI["Importe"], 2).'</th>  
-                   <th>$'.number_format($rowI["Total"], 2).'</th> 
+                   <th>$'.number_format($presentacionImporte, 2).'</th>  
+                   <th>$'.number_format($totalImportes, 2).'</th> 
                    <th>'.$rowI["Estatus"].'</th>
                   </tr>';
             }

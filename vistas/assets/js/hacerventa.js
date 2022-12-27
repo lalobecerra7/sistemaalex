@@ -493,6 +493,7 @@ jQuery(document).ready(function($) {
 	});
 
 	$(document).on('click', '#RealizarVenta', function() {
+		var total = $(this).attr("total");
 		if ($("#TablaProductosAgregadoVenta tbody tr").length == 0) {
 			Swal.fire({
 			    icon: 'error',
@@ -504,6 +505,8 @@ jQuery(document).ready(function($) {
 			$("#GuardarVenta").attr("tipo", "");
 			$("#GuardarVenta").attr("idpedido", $("#CargaPedidosModalVentas").attr("attrid"));
 			$("#GuardarVenta").attr("foliopedido", $("#CargaPedidosModalVentas").attr("folio"));
+			$("#ImportePagadoVenta").val(total);
+
 		}
 	});
 
@@ -993,7 +996,7 @@ function VentaTablaProductos(){
 	ajaxMyDatatable({
 		"table": $("#VentaTablaProductos"), 
 		"colums": [
-			"Producto",
+			"Descripcion",
 			"Presentacion",
 			"Nombre",
 			"Precio",

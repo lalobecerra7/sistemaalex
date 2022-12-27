@@ -169,9 +169,9 @@
                 <div class="table-responsive">
                     <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="VentaTablaProductos" width="100%" style="font-size: 12px;">
                         <thead>
-                            <th style="width: 20%;" orden="No">Producto</th>
+                            <th style="width: 20%;">Descripcion</th>
                             <th style="width: 20%;">Presentación</th>
-                            <th style="width: 20%;">Nombre del precio</th>
+                            <th style="width: 20%;" orden="No">Nombre del precio</th>
                             <th style="width: 20%;">Precio</th>
                             <th style="width: 20%;">Mayoreo</th>
                             <th style="width: 20%;">Existencia</th>

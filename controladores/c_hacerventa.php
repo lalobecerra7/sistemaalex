@@ -107,7 +107,7 @@ class hacerventa {
 					if ($row2[0]["importe"] > 0) {
 						$totalImporte = $fila[2] * $row2[0]["importe"];
 
-						$query3 = "SELECT Cantidad FROM importes WHERE FK_Producto = '$fila[0]' AND FK_Venta = '".$idVenta."'";
+						$query3 = "SELECT Cantidad FROM importes WHERE FK_Producto = '$fila[0]' AND FK_Venta = '".$idVenta."' AND FK_Presentacion = '$fila[1]'";
 						$row3 = $omodelo->_consultar($query3);
 						$numerofilas3 = $omodelo->numerofilas;
 
@@ -116,14 +116,14 @@ class hacerventa {
 						}else{
 							if($numerofilas3 > 0){
 								$CalculoTotalImporte = ($row3[0]["Cantidad"] + $fila[2]) * $row2[0]["importe"];
-								$queryImportes = "UPDATE importes SET Cantidad = (Cantidad + $fila[2]), Total = '$CalculoTotalImporte' WHERE FK_Venta = '$idVenta' AND FK_Producto = '$fila[0]'";
+								$queryImportes = "UPDATE importes SET Cantidad = (Cantidad + $fila[2]), Total = '$CalculoTotalImporte' WHERE FK_Venta = '$idVenta' AND FK_Producto = '$fila[0]' AND FK_Presentacion = '$fila[1]'";
 								$errorImportes = $omodelo->_insertar($queryImportes);
 
 								if ($errorImportes == "si") {
 									echo "Error importes: ".mysqli_error($omodelo->link);
 								}		
 							}else{
-								$queryImportes = "INSERT INTO importes SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', Cantidad = '$fila[2]', Importe = '".$row2[0]["importe"]."', Total = '$totalImporte', Estatus = 'Se debe'";
+								$queryImportes = "INSERT INTO importes SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Cantidad = '$fila[2]', Importe = '".$row2[0]["importe"]."', Total = '$totalImporte', Estatus = 'Se debe'";
 								$errorImportes = $omodelo->_insertar($queryImportes);
 
 								if ($errorImportes == "si") {
@@ -319,7 +319,7 @@ class hacerventa {
 			$busqueda = '';
 			if(trim($buscar) != ''){
 				$separa = explode(' ', trim($buscar));
-				$busqueda = 'AND ';
+				$busqueda = 'WHERE ';
 				for ($i=0; $i < count($separa); $i++) { 
 					$busqueda .= "CONCAT(Nombre, Calle, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais, Telefono, Celular, Correo, RFC) REGEXP '".$separa[$i]."'";
 					if($i < (count($separa)-1)){
@@ -328,7 +328,7 @@ class hacerventa {
 				}
 			}
 
-			$query = "SELECT ID_Cliente, Nombre, Calle, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais, Telefono, Celular, Correo, RFC, Facturar, (SELECT COUNT(*) FROM clientes WHERE ID_Cliente > 1 $busqueda) AS Num FROM clientes WHERE ID_Cliente > 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Cliente, Nombre, Calle AS Direccion, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais, Telefono, Celular, Correo AS Contacto, RFC, Facturar, (SELECT COUNT(*) FROM clientes $busqueda) AS Num FROM clientes $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -340,8 +340,8 @@ class hacerventa {
 					for($i=0; $i<$numerofilas; $i++){
 						$contacto = "";$direccion=""; $facturar = "No";
 						
-						if ($row[$i]["Calle"] != "") {
-							$direccion="Calle: ".$row[$i]["Calle"]."<br>";
+						if ($row[$i]["Direccion"] != "") {
+							$direccion="Calle: ".$row[$i]["Direccion"]."<br>";
 						}
 
 						if ($row[$i]["No_Exterior"] != "") {
@@ -384,8 +384,8 @@ class hacerventa {
 							$contacto="Celular: ".$row[$i]["Celular"]."<br>";
 						}
 
-						if ($row[$i]["Correo"] != "") {
-							$contacto="Correo electrónico: ".$row[$i]["Correo"]."<br>";
+						if ($row[$i]["Contacto"] != "") {
+							$contacto="Correo electrónico: ".$row[$i]["Contacto"]."<br>";
 						}
 
 						if ($contacto == "") {
@@ -433,7 +433,7 @@ class hacerventa {
 
 			///////////////////////////////////////////////////////////////////////////////////
 
-			$query2 = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion,areas.Nombre AS NombreArea, ID_Presentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Mayoreo, (SELECT Nombre FROM precios WHERE FK_Producto = ID_Producto AND FK_Presentacion = ID_Presentacion ORDER BY Nombre LIMIT 1) AS NombrePrecio, (SELECT Precio FROM precios WHERE FK_Producto = ID_Producto AND FK_Presentacion = ID_Presentacion ORDER BY Nombre LIMIT 1) AS PrecioPresentacion, (SELECT Precio_Mayoreo FROM precios WHERE FK_Producto = ID_Producto AND FK_Presentacion = ID_Presentacion ORDER BY Nombre LIMIT 1) AS PrecioMayPresentacion, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, (SELECT COUNT(*) FROM inventario INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN areas ON FK_Area = ID_Area WHERE FK_Sucursal = '$sucursal' $busqueda) AS Num FROM inventario INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN areas ON FK_Area = ID_Area WHERE FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query2 = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion,areas.Nombre AS NombreArea, ID_Presentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Nombre_Unidad AS NombreGenerico, productos.Abreviatura_Unidad AS AbreviaturaGenerico,  productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Mayoreo, (SELECT Nombre FROM precios WHERE FK_Producto = ID_Producto AND FK_Presentacion = ID_Presentacion ORDER BY Nombre LIMIT 1) AS NombrePrecio, (SELECT Precio FROM precios WHERE FK_Producto = ID_Producto AND FK_Presentacion = ID_Presentacion ORDER BY Nombre LIMIT 1) AS PrecioPresentacion, (SELECT Precio_Mayoreo FROM precios WHERE FK_Producto = ID_Producto AND FK_Presentacion = ID_Presentacion ORDER BY Nombre LIMIT 1) AS PrecioMayPresentacion, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, (SELECT COUNT(*) FROM inventario INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN areas ON FK_Area = ID_Area WHERE FK_Sucursal = '$sucursal' $busqueda) AS Num FROM inventario INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN areas ON FK_Area = ID_Area WHERE FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 
 			$row2 = $omodelo->_consultar($query2);
 			$numerofilas2 = $omodelo->numerofilas;
@@ -456,7 +456,11 @@ class hacerventa {
 						if ($row2[$x]['Presentacion'] != "") {
 							$nombrePresentacion = $row2[$x]['Presentacion']." (".$row2[$x]['AbreviaturaPresentacion'].")";
 						}else{
-							$nombrePresentacion = "Sin presentación";
+							if ($row2[$x]['NombreGenerico'] == "") {
+								$nombrePresentacion = "Sin presentación";
+							}else{
+								$nombrePresentacion = $row2[$x]['NombreGenerico']." (".$row2[$x]['AbreviaturaGenerico'].")";
+							}
 						}
 
 						$precio = 0;
@@ -479,7 +483,7 @@ class hacerventa {
 
 						$arreglo['data'][] = array(
 							'ID' => $row2[$x]['ID_Producto'],
-							'Producto' => $row2[$x]['Descripcion']."<br>Codigo: <b id='CodigoProducto'>".$row2[$x]['Codigo']."</b>",
+							'Descripcion' => $row2[$x]['Descripcion']."<br>Codigo: <b id='CodigoProducto'>".$row2[$x]['Codigo']."</b>",
 							'Presentacion' =>"<span hidden id='IdPresentacionProd'>".$row2[$x]['ID_Presentacion']."</span>".$nombrePresentacion,
 							'Nombre' => $row2[$x]['NombrePrecio'],
 							'Precio' => $precio,
@@ -505,7 +509,7 @@ class hacerventa {
 				$presentacion = 0;
 			}
 
-			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Nombre AS Presentacion, Clase, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN precios ON precios.FK_Presentacion = ID_Presentacion WHERE Codigo = '$codigo' AND inventario.FK_Presentacion = '$presentacion'";
+			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Nombre AS Presentacion, Clase, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Nombre_Unidad AS NombreGenerico, productos.Abreviatura_Unidad AS AbreviaturaGenerico, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN precios ON precios.FK_Presentacion = ID_Presentacion WHERE Codigo = '$codigo' AND inventario.FK_Presentacion = '$presentacion'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -535,7 +539,7 @@ class hacerventa {
 						}
 					}				
 
-					$NombrePresentacion = "";
+					/*$NombrePresentacion = "";
 					if ($row[0]["Presentacion"] != "") {
 						$abreviatura = "";
 						if ($row[0]["AbreviaturaPresentacion"] != "") {
@@ -544,6 +548,17 @@ class hacerventa {
 						$NombrePresentacion = $row[0]["Presentacion"].$abreviatura;
 					}else{
 						$NombrePresentacion = "Sin presentación";	
+					}*/
+
+					$NombrePresentacion = "";
+					if ($row[0]['Presentacion'] != "") {
+						$NombrePresentacion = $row[0]['Presentacion']." (".$row[0]['AbreviaturaPresentacion'].")";
+					}else{
+						if ($row[0]['NombreGenerico'] == "") {
+							$NombrePresentacion = "Sin presentación";
+						}else{
+							$NombrePresentacion = $row[0]['NombreGenerico']." (".$row[0]['AbreviaturaGenerico'].")";
+						}
 					}
 
 					$precio = 0; $precioMayoreo = 0;
@@ -607,7 +622,7 @@ class hacerventa {
 			$numerofilas3 = 0;
 			$numerofilas4 = 0;
 			if (isset($presentacion) && $presentacion != "") {
-				$query = "SELECT ID_Precio, Nombre, Precio, (SELECT COUNT(*) FROM precios $busqueda) AS Num FROM precios WHERE FK_Presentacion = '$presentacion' AND FK_Producto = '$idproducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+				$query = "SELECT ID_Precio, Nombre, Precio, (SELECT COUNT(*) FROM precios WHERE FK_Presentacion = '$presentacion' AND FK_Producto = '$idproducto' $busqueda) AS Num FROM precios WHERE FK_Presentacion = '$presentacion' AND FK_Producto = '$idproducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 
 				$row = $omodelo->_consultar($query);
 				$numerofilas = $omodelo->numerofilas;
@@ -1037,7 +1052,7 @@ class hacerventa {
 				$presentacion = 0;
 			}
 			
-			$query = "SELECT inventario.FK_Presentacion AS ID_Presentacion, inventario.FK_Producto, Cantidad AS Existencia, IFNULL((SELECT Precio FROM precios INNER JOIN zonas ON precios.FK_Zona = ID_Zona INNER JOIN sucursales ON precios.FK_Zona = ID_Zona WHERE sucursales.ID_Sucursal = '$sucursal' AND FK_Producto = inventario.FK_Producto AND FK_Presentacion = inventario.FK_Presentacion ORDER BY Precio LIMIT 1), (SELECT Precio FROM productos WHERE ID_Producto = inventario.FK_Producto)) AS PrimerPrecio, IFNULL(Nombre, 'Sin presentación') AS Nombre, IFNULL(Abreviatura, '') AS Abreviatura, (SELECT COUNT(*) FROM inventario LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN productos ON inventario.FK_Producto = ID_Producto WHERE inventario.FK_Sucursal = '$sucursal' AND inventario.FK_Producto = '$idproducto' AND inventario.FK_Presentacion <> '$presentacion' $busqueda) AS Num FROM inventario LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN productos ON inventario.FK_Producto = ID_Producto WHERE inventario.FK_Sucursal = '$sucursal' AND inventario.FK_Producto = '$idproducto' AND inventario.FK_Presentacion <> '$presentacion' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT inventario.FK_Presentacion AS ID_Presentacion, inventario.FK_Producto, Cantidad AS Existencia, IFNULL((SELECT Precio FROM precios INNER JOIN zonas ON precios.FK_Zona = ID_Zona INNER JOIN sucursales ON precios.FK_Zona = ID_Zona WHERE sucursales.ID_Sucursal = '$sucursal' AND FK_Producto = inventario.FK_Producto AND FK_Presentacion = inventario.FK_Presentacion ORDER BY Precio LIMIT 1), (SELECT Precio FROM productos WHERE ID_Producto = inventario.FK_Producto)) AS PrimerPrecio, Nombre, Abreviatura, productos.Nombre_Unidad AS NombreGenerico, productos.Abreviatura_Unidad AS AbreviaturaGenerico, (SELECT COUNT(*) FROM inventario LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN productos ON inventario.FK_Producto = ID_Producto WHERE inventario.FK_Sucursal = '$sucursal' AND inventario.FK_Producto = '$idproducto' AND inventario.FK_Presentacion <> '$presentacion' $busqueda) AS Num FROM inventario LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN productos ON inventario.FK_Producto = ID_Producto WHERE inventario.FK_Sucursal = '$sucursal' AND inventario.FK_Producto = '$idproducto' AND inventario.FK_Presentacion <> '$presentacion' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -1046,15 +1061,31 @@ class hacerventa {
 			}else{
 				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
+						$nombrePresentacion = "";
+						$abreviaPresentacion = "";
 						if ($row[$i]['ID_Presentacion'] == "" || $row[$i]['ID_Presentacion'] == 0) {
-							$row[$i]['ID_Presentacion'] = null;
+							$row[$i]['ID_Presentacion'] = null;	
 						}
+
+						if ($row[$i]['ID_Presentacion'] != "") {
+							$nombrePresentacion = $row[$i]['Nombre'];
+							$abreviaPresentacion = $row[$i]['Abreviatura'];
+						}else{
+							if ($row[$i]['NombreGenerico'] == "") {
+								$nombrePresentacion = "Sin presentación";
+								$abreviaPresentacion = "";
+							}else{
+								$nombrePresentacion = $row[$i]['NombreGenerico'];
+								$abreviaPresentacion = $row[$i]['AbreviaturaGenerico'];
+							}
+						}
+
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Presentacion'],
-							'Nombre'  => $row[$i]['Nombre'],
-							'Abreviatura' => $row[$i]['Abreviatura'],
+							'Nombre'  => $nombrePresentacion,
+							'Abreviatura' => $abreviaPresentacion,
 							'Existencia' => $row[$i]['Existencia'],
-							'Accion' => '<button type="button" class="btn btn-primary btn-sm SeleccionarPresentacion" presentacionactual="'.$presentacion.'" attrid="'.$row[$i]['ID_Presentacion'].'" precio="'.$row[$i]['PrimerPrecio'].'" abreviatura="'.$row[$i]['Abreviatura'].'" nombre="'.$row[$i]['Nombre'].'" producto="'.$row[$i]['FK_Producto'].'">Seleccionar</button>',
+							'Accion' => '<button type="button" class="btn btn-primary btn-sm SeleccionarPresentacion" presentacionactual="'.$presentacion.'" attrid="'.$row[$i]['ID_Presentacion'].'" precio="'.$row[$i]['PrimerPrecio'].'" nombre="'.$nombrePresentacion.'" abreviatura="'.$abreviaPresentacion.'" producto="'.$row[$i]['FK_Producto'].'">Seleccionar</button>',
 						);
 					}
 
