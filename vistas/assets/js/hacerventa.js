@@ -1004,7 +1004,7 @@ function VentaTablaProductos(){
 			"Existencia"
 		], 
 		"sort": [
-			1,
+			0,
 			"desc"
 		],
 		"url": "index.php", 
