@@ -85,7 +85,7 @@ function TablaReporteImportes(){
 			"Cliente",
 			"Total",
 			"Importes",
-			"Detalles",
+			"Estatus",
 			"Acciones"
 		], 
 		"totals":[
@@ -93,11 +93,11 @@ function TablaReporteImportes(){
 			"Cliente",
 			"Total",
 			"Importes",
-			"Detalles",
+			"Estatus",
 			"Acciones"
 		],
 		"sort": [
-			2,
+			0,
 			"desc"
 		],
 		"url": "index.php", 
