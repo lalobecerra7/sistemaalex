@@ -33,9 +33,9 @@
 						<table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaInventario" width="100%" style="font-size: 12px;">
 							<thead>
 								<th style="width: 20%;">Descripción</th>
-								<th style="width: 10%;" orden="No">Distribución</th>
+								<th style="width: 10%;">Existencia</th>
 								<th style="width: 10%;" orden="No">Precios</th>
-								<th style="width: 15%;"orden="No">Merma</th>
+								<th style="width: 15%;">Merma</th>
 								<th style="width: 5%;" orden="No">Acciones</th>
 							</thead>
 							<tbody>
@@ -48,6 +48,7 @@
 	</div>
 </div>
 
+<!--////////////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalVerTraslados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -87,6 +88,7 @@
     </div>
 </div>
 
+<!--////////////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalVerConversiones" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -116,7 +118,7 @@
     </div>
 </div>
 
-
+<!--////////////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalVerDistribucionPresentacion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -146,6 +148,7 @@
     </div>
 </div>
 
+<!--////////////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalConversionProducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-md modal-dialog-centered" style="z-index: 9999 !important;">
     	<div class="modal-content">
@@ -199,7 +202,7 @@
   	</div>
 </div> 
 
-
+<!--////////////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalTraslados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -276,6 +279,7 @@
     </div>
 </div>
 
+<!--////////////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalDetalles" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered">
 		<div class="modal-content">
@@ -308,6 +312,7 @@
 	</div>
 </div>
 
+<!--////////////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalMerma" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-m modal-dialog-centered">
         <div class="modal-content">
@@ -371,6 +376,7 @@
     </div>
 </div>
 
+<!--////////////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalEditarMerma" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-m modal-dialog-centered">
         <div class="modal-content">

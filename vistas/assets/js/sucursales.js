@@ -54,7 +54,7 @@ function v_sucursales() {
             },
         },
         submitHandler: function(form) { 
-            var data = "metodo="+$("#bGuardarSucu").attr("tipo")+"&accion=sucursales&IDSucursal="+$("#bGuardarSucu").attr("attrid")+"&NombreSucursal="+$.trim($("#NombreSucursal").val())+"&EncargadoSucursal="+$.trim($("#EncargadoSucursal").val())+"&CalleSucursal="+$.trim($("#CalleSucursal").val())+"&NoExteriorSucursal="+$.trim($("#NoExteriorSucursal").val())+"&NoInteriorSucursal="+$.trim($("#NoInteriorSucursal").val())+"&ColoniaSucursal="+$.trim($("#ColoniaSucursal").val())+"&CPSucursal="+$.trim($("#CPSucursal").val())+"&CiudadSucursal="+$.trim($("#CiudadSucursal").val())+"&EstadoSucursal="+$.trim($("#EstadoSucursal").val())+"&PaisSucursal="+$.trim($("#PaisSucursal").val())+"&EmailSucursal="+$.trim($("#EmailSucursal").val())+"&TelefonoSucursal="+$.trim($("#TelefonoSucursal").val())+"&Telefono2Sucursal="+$.trim($("#telefono2Sucursal").val())+"&Zona="+$.trim($("#ZonasSucursal").val());
+            var data = "metodo="+$("#bGuardarSucu").attr("tipo")+"&accion=sucursales&IDSucursal="+$("#bGuardarSucu").attr("attrid")+"&NombreSucursal="+$.trim($("#NombreSucursal").val())+"&EncargadoSucursal="+$.trim($("#EncargadoSucursal").val())+"&CalleSucursal="+$.trim($("#CalleSucursal").val())+"&NoExteriorSucursal="+$.trim($("#NoExteriorSucursal").val())+"&NoInteriorSucursal="+$.trim($("#NoInteriorSucursal").val())+"&ColoniaSucursal="+$.trim($("#ColoniaSucursal").val())+"&CPSucursal="+$.trim($("#CPSucursal").val())+"&CiudadSucursal="+$.trim($("#CiudadSucursal").val())+"&EstadoSucursal="+$.trim($("#EstadoSucursal").val())+"&PaisSucursal="+$.trim($("#PaisSucursal").val())+"&EmailSucursal="+$.trim($("#EmailSucursal").val())+"&TelefonoSucursal="+$.trim($("#TelefonoSucursal").val())+"&Telefono2Sucursal="+$.trim($("#telefono2Sucursal").val())+"&Zona="+$.trim($("#ZonasSucursal").val())+"&latitud="+$.trim($("#latitudSucursal").val())+"&longitud="+$.trim($("#longitudSucursal").val());
            
             $.ajax({
                 url: 'index.php',
@@ -154,6 +154,7 @@ jQuery(document).ready(function($) {
     $(document).on('click', '#ModificarSucursal', function() {
         $("#TituloModalSucursal").text("Modificar");
         var id = $(this).attr('attrid');
+
         var data = "metodo=detalles&accion=sucursales&id="+id+"&tipoDetalle=1";
         $.ajax({
             url: 'index.php',
@@ -183,11 +184,33 @@ jQuery(document).ready(function($) {
             }else{
                 $("#ZonasSucursal").val(res.FK_Zona);
             }
+            $("#latitudSucursal").val(res.Latitud);
+            $("#longitudSucursal").val(res.Longitud);
+
+            $("#mapaSucursal").html("");
+            if($.trim(res.Latitud) != "" && $.trim(res.Longitud) != ""){
+                $("#mapaSucursal").html('<iframe id="iframeUbicacion" src="http://maps.google.com/maps?q='+$.trim(res.Latitud)+', '+$.trim(res.Longitud)+'&z=15&output=embed" width="100%" height="400" allowfullscreen="" loading="lazy"></iframe>');
+            }
+
             $("#ModalSucursal").modal("show");
         })
         .fail(function() {
             console.log("Error ajax");
         });  
+    });
+
+    $(document).on('keyup', '#latitudSucursal', function() {
+        $("#mapaSucursal").html("");
+        if($.trim($(this).val()) != "" && $.trim($("#longitudSucursal").val()) != ""){
+            $("#mapaSucursal").html('<iframe id="iframeUbicacion" src="http://maps.google.com/maps?q='+$.trim($(this).val())+', '+$.trim($("#longitudSucursal").val())+'&z=15&output=embed" width="100%" height="400" allowfullscreen="" loading="lazy"></iframe>');
+        }
+    });
+
+    $(document).on('keyup', '#longitudSucursal', function() {
+        $("#mapaSucursal").html("");
+        if($.trim($(this).val()) != "" && $.trim($("#latitudSucursal").val()) != ""){
+            $("#mapaSucursal").html('<iframe id="iframeUbicacion" src="http://maps.google.com/maps?q='+$.trim($("#latitudSucursal").val())+', '+$.trim($(this).val())+'&z=15&output=embed" width="100%" height="400" allowfullscreen="" loading="lazy"></iframe>');
+        }
     });
 });
 

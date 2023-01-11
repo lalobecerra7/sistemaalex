@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-12-2022 a las 23:50:13
+-- Tiempo de generación: 11-01-2023 a las 20:07:20
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.3
 
@@ -55142,6 +55142,8 @@ INSERT INTO `claves_unidades_cfdi` (`ID_Clave`, `Clave`, `Nombre`, `Simbolo`) VA
 CREATE TABLE `clientes` (
   `ID_Cliente` int(11) NOT NULL,
   `Nombre` varchar(150) NOT NULL COMMENT 'Nombre completo del cliente',
+  `Primer_Apellido` tinytext NOT NULL,
+  `Segundo_Apellido` tinytext NOT NULL,
   `Calle` varchar(300) NOT NULL,
   `No_Exterior` varchar(50) NOT NULL,
   `No_Interior` varchar(50) NOT NULL,
@@ -55151,8 +55153,8 @@ CREATE TABLE `clientes` (
   `Estado` varchar(300) NOT NULL,
   `Pais` varchar(300) NOT NULL,
   `Telefono` varchar(200) NOT NULL,
+  `INE` tinytext NOT NULL,
   `Celular` varchar(200) NOT NULL,
-  `Descuento` double NOT NULL COMMENT 'Descuento que le aplica a cada cliente en sus compras',
   `Correo` varchar(100) NOT NULL,
   `Fecha_Nacimiento` date NOT NULL,
   `Sexo` varchar(10) NOT NULL,
@@ -55176,19 +55178,19 @@ CREATE TABLE `clientes` (
 -- Volcado de datos para la tabla `clientes`
 --
 
-INSERT INTO `clientes` (`ID_Cliente`, `Nombre`, `Calle`, `No_Exterior`, `No_Interior`, `Colonia`, `Ciudad`, `Codigo_Postal`, `Estado`, `Pais`, `Telefono`, `Celular`, `Descuento`, `Correo`, `Fecha_Nacimiento`, `Sexo`, `Fecha_Registro`, `Foto`, `RFC`, `Facturar`, `No_Cuenta`, `Banco`, `Titular`, `Nombre_Contacto`, `Puesto_Contacto`, `Email_Contacto`, `Tel_Contacto`, `FK_Sucursal`, `Razon_CFDI`, `Regimen_CFDI`) VALUES
-(1, 'PUBLICO EN GENERAL', '', '', '', '', '', '01000', '', '', '', '', 0, '', '0000-00-00', '', '0000-00-00 00:00:00', '', 'XAXX010101000', 0, '', '', '', '', '', '', '', 0, 'PUBLICO EN GENERAL', '616'),
-(2, 'Arturo Iturbide', '', '', '', '', '', '', '', '', '015556278345', '5532375991', 10, 'iturbide.jastrow@me.com', '0000-00-00', '', '2019-06-30 14:02:11', '', 'YBI140401LJ3', 0, '', '', '', '', '', '', '', 0, '', ''),
-(3, 'Amelia Mena Vazquez', '', '', '', '', '', '', '', '', '01 55 55 35 02 23', '', 0, 'holaropainfantil@yahoo.com.mx', '0000-00-00', '', '2019-06-30 14:01:16', '', 'MEVA2705309G5', 0, '', '', '', '', '', '', '', 0, '', ''),
-(5, 'Angelica Gutierrez', '', '', '', '', '', '', '', '', '01 34 14 14 10 83', ' 14 14 03 88', 0, 'lika_2891@hotmail.com', '0000-00-00', '', '2019-06-30 14:01:47', '', 'GUMA530910QR1', 0, '', '', '', '', '', '', '', 0, '', ''),
-(8, 'Coral Navarro Mascarel', '', '', '', '', '', '', '', '', '01 46 16 12 86 10', ' 01 46 16 14 95 58', 0, 'macoral@hotmaill.com', '0000-00-00', '', '2019-06-30 14:03:05', '', 'NAMC750717JS4', 0, '', '', '', '', '', '', '', 0, '', ''),
-(9, 'Estefany', '', '', '', '', '', '', '', '', '01 34 87 84 46 66', '', 0, 'compras@bolsadelosaltos.com', '0000-00-00', '', '2016-07-13 11:26:59', '', 'BAL020930EL9', 0, '', '', '', '', '', '', '', 0, '', ''),
-(11, 'Julio Martin Lopez', '', '', '', '', '', '', '', '', '01 44 99 13 33 36, 9135146 ', '449 467 14 87', 0, 'roponesmagali@prodigy.net.mx', '0000-00-00', '', '2019-06-30 14:05:20', '', 'MALJ721026F84', 0, '', '', '', '', '', '', '', 0, '', ''),
-(16, 'Luz Rebeca Gonzalez Gonzalez', '', '', '', '', '', '', '', '', '3787090598', '3787090598', 0, 'deazaharesexclusivos@hotmail.com', '0000-00-00', '', '2016-07-13 11:47:40', '', 'GOGL691210FS8', 0, '', '', '', '', '', '', '', 0, '', ''),
-(17, 'Ma. De Lourdes Portilla Calderon', '', '', '', '', '', '', '', '', '01 89 99 22 06 65, 8999221322', '', 0, 'latiendanuevareynosa@hotmail.com', '0000-00-00', '', '2019-06-30 14:07:29', '', 'POCL351007JV7', 0, '', '', '', '', '', '', '', 0, '', ''),
-(24, 'Sr. Manuel Yanez 2', '', '', '', '', '', '', '', '', '01 63 94 72 03 98, 6394745148', '', 0, 'novia2003@gmail.com', '0000-00-00', '', '2019-06-30 14:08:17', '', 'CMN84080213', 0, '', '', '', '', '', '', '', 0, '', ''),
-(26, 'Manuel Emilio Torres Sanchez', '', '', '', '', '', '', '', '', '34 87 84 64 64', '', 0, 'replamex@hotmail.com', '0000-00-00', '', '2016-07-13 12:07:44', '', 'TOSM860124SH5', 0, '', '', '', '', '', '', '', 0, '', ''),
-(27, 'Ejemplo', 'Ejemplo', '50', '', 'Eejempo', 'Arandas', '10740', 'Jalisco', 'México ', '', '', 0, 'dedd', '0000-00-00', '', '2022-12-05 20:52:47', '', 'CACX7605101P8', 0, '', '', '', 'dfdf', 'dffd', 'fvdf', 'fddf', 0, 'XOCHILT CASAS CHAVEZ', '605');
+INSERT INTO `clientes` (`ID_Cliente`, `Nombre`, `Primer_Apellido`, `Segundo_Apellido`, `Calle`, `No_Exterior`, `No_Interior`, `Colonia`, `Ciudad`, `Codigo_Postal`, `Estado`, `Pais`, `Telefono`, `INE`, `Celular`, `Correo`, `Fecha_Nacimiento`, `Sexo`, `Fecha_Registro`, `Foto`, `RFC`, `Facturar`, `No_Cuenta`, `Banco`, `Titular`, `Nombre_Contacto`, `Puesto_Contacto`, `Email_Contacto`, `Tel_Contacto`, `FK_Sucursal`, `Razon_CFDI`, `Regimen_CFDI`) VALUES
+(1, 'PUBLICO EN GENERAL', '', '', '', '', '', '', '', '01000', '', '', '', '', '', '', '0000-00-00', '', '0000-00-00 00:00:00', '', 'XAXX010101000', 0, '', '', '', '', '', '', '', 0, 'PUBLICO EN GENERAL', '616'),
+(2, 'Arturo Iturbide', 'hjbhkj', '', '', '', '', '', '', '', '', '', '015556278345', '7y7yiuhi', '5532375991', 'iturbide.jastrow@me.com', '0000-00-00', '', '2019-06-30 14:02:11', '', 'YBI140401LJ3', 0, '', '', '', '', '', '', '', 0, '', ''),
+(3, 'Amelia Mena Vazquez', '', '', '', '', '', '', '', '', '', '', '01 55 55 35 02 23', '', '', 'holaropainfantil@yahoo.com.mx', '0000-00-00', '', '2019-06-30 14:01:16', '', 'MEVA2705309G5', 0, '', '', '', '', '', '', '', 0, '', ''),
+(5, 'Angelica Gutierrez', '', '', '', '', '', '', '', '', '', '', '01 34 14 14 10 83', '', ' 14 14 03 88', 'lika_2891@hotmail.com', '0000-00-00', '', '2019-06-30 14:01:47', '', 'GUMA530910QR1', 0, '', '', '', '', '', '', '', 0, '', ''),
+(8, 'Coral Navarro Mascarel', '', '', '', '', '', '', '', '', '', '', '01 46 16 12 86 10', '', ' 01 46 16 14 95 58', 'macoral@hotmaill.com', '0000-00-00', '', '2019-06-30 14:03:05', '', 'NAMC750717JS4', 0, '', '', '', '', '', '', '', 0, '', ''),
+(9, 'Estefany', '', '', '', '', '', '', '', '', '', '', '01 34 87 84 46 66', '', '', 'compras@bolsadelosaltos.com', '0000-00-00', '', '2016-07-13 11:26:59', '', 'BAL020930EL9', 0, '', '', '', '', '', '', '', 0, '', ''),
+(11, 'Julio Martin Lopez', '', '', '', '', '', '', '', '', '', '', '01 44 99 13 33 36, 9135146 ', '', '449 467 14 87', 'roponesmagali@prodigy.net.mx', '0000-00-00', '', '2019-06-30 14:05:20', '', 'MALJ721026F84', 0, '', '', '', '', '', '', '', 0, '', ''),
+(16, 'Luz Rebeca Gonzalez Gonzalez', '', '', '', '', '', '', '', '', '', '', '3787090598', '', '3787090598', 'deazaharesexclusivos@hotmail.com', '0000-00-00', '', '2016-07-13 11:47:40', '', 'GOGL691210FS8', 0, '', '', '', '', '', '', '', 0, '', ''),
+(17, 'Ma. De Lourdes Portilla Calderon', '', '', '', '', '', '', '', '', '', '', '01 89 99 22 06 65, 8999221322', '', '', 'latiendanuevareynosa@hotmail.com', '0000-00-00', '', '2019-06-30 14:07:29', '', 'POCL351007JV7', 0, '', '', '', '', '', '', '', 0, '', ''),
+(24, 'Sr. Manuel Yanez 2', '', '', '', '', '', '', '', '', '', '', '01 63 94 72 03 98, 6394745148', '', '', 'novia2003@gmail.com', '0000-00-00', '', '2019-06-30 14:08:17', '', 'CMN84080213', 0, '', '', '', '', '', '', '', 0, '', ''),
+(26, 'Manuel Emilio Torres Sanchez', '', '', '', '', '', '', '', '', '', '', '34 87 84 64 64', '', '', 'replamex@hotmail.com', '0000-00-00', '', '2016-07-13 12:07:44', '', 'TOSM860124SH5', 0, '', '', '', '', '', '', '', 0, '', ''),
+(27, 'Ejemplo', 'khbkj', 'hjbkj', '', '', '', '', '', '', '', '', '', '', '', 'dedd', '0000-00-00', '', '2022-12-05 20:52:47', '', 'CACX7605101P8', 0, '', '', '', '', '', '', '', 0, 'XOCHILT CASAS CHAVEZ', '621');
 
 -- --------------------------------------------------------
 
@@ -55203,14 +55205,10 @@ CREATE TABLE `compras` (
   `FK_Proveedor` int(11) NOT NULL,
   `Total` double NOT NULL,
   `Estatus` varchar(50) NOT NULL,
-  `Clase` int(11) NOT NULL,
-  `Dias_Pagar` int(11) NOT NULL,
   `Tipo_Compra` varchar(50) NOT NULL,
   `Fecha_Credito` datetime NOT NULL,
-  `FK_Caja` int(11) NOT NULL,
   `FK_Sucursal` int(11) NOT NULL,
   `Descuento` double NOT NULL,
-  `Impuestos` tinytext NOT NULL,
   `Anticipo` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -55218,11 +55216,10 @@ CREATE TABLE `compras` (
 -- Volcado de datos para la tabla `compras`
 --
 
-INSERT INTO `compras` (`ID_Compra`, `Fecha_Registro`, `FK_Usuario`, `FK_Proveedor`, `Total`, `Estatus`, `Clase`, `Dias_Pagar`, `Tipo_Compra`, `Fecha_Credito`, `FK_Caja`, `FK_Sucursal`, `Descuento`, `Impuestos`, `Anticipo`) VALUES
-(10, '2022-12-22 12:01:44', 2, 2, 150, '1', 0, 0, 'Contado', '0000-00-00 00:00:00', 0, 1, 0, '', 150),
-(11, '2022-12-22 12:03:02', 2, 2, 6000, '2', 0, 0, 'Credito', '2022-12-23 00:00:00', 0, 1, 0, '', 1000),
-(15, '2022-12-23 01:08:39', 2, 2, 50, '2', 0, 0, 'Credito', '2022-12-24 00:00:00', 0, 1, 0, '', 10),
-(16, '2022-12-23 15:52:31', 2, 2, 60, '1', 0, 0, 'Contado', '0000-00-00 00:00:00', 0, 1, 0, '', 60);
+INSERT INTO `compras` (`ID_Compra`, `Fecha_Registro`, `FK_Usuario`, `FK_Proveedor`, `Total`, `Estatus`, `Tipo_Compra`, `Fecha_Credito`, `FK_Sucursal`, `Descuento`, `Anticipo`) VALUES
+(22, '2023-01-04 14:13:16', 2, 2, 50, '0', 'Credito', '2023-01-26 00:00:00', 1, 0, 20),
+(23, '2023-01-04 14:25:15', 2, 2, 50, '0', 'Credito', '2023-02-02 00:00:00', 1, 0, 0),
+(24, '2023-01-05 21:46:40', 2, 1, 50, '1', 'Contado', '0000-00-00 00:00:00', 1, 0, 50);
 
 -- --------------------------------------------------------
 
@@ -55292,6 +55289,13 @@ CREATE TABLE `detalles_clientes` (
   `Telefono_Contacto` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `detalles_clientes`
+--
+
+INSERT INTO `detalles_clientes` (`ID_Detalle_Cliente`, `FK_Cliente`, `Calle`, `No_Exterior`, `No_Interior`, `Colonia`, `Codigo_Postal`, `Ciudad`, `Estado`, `Pais`, `Nombre_Contacto`, `Puesto_Contacto`, `Email_Contacto`, `Telefono_Contacto`) VALUES
+(1, 27, '', '', '', '', '', '', '', '', 'aaaaaaa', '', '', '');
+
 -- --------------------------------------------------------
 
 --
@@ -55347,7 +55351,7 @@ CREATE TABLE `detalles_impuestos_productos` (
 --
 
 INSERT INTO `detalles_impuestos_productos` (`ID_Detalle_Im_Producto`, `FK_Producto`, `FK_Impuesto`) VALUES
-(40, 35, 1);
+(42, 35, 1);
 
 -- --------------------------------------------------------
 
@@ -55371,7 +55375,35 @@ CREATE TABLE `detalles_impuestos_ventas` (
 
 INSERT INTO `detalles_impuestos_ventas` (`ID_Impuesto`, `FK_Detalle_Venta`, `Tipo_Impuesto_CFDI`, `Impuesto_CFDI`, `Clave_CFDI`, `Tipo_Factor_CFDI`, `Tasa_Cuota_CFDI`) VALUES
 (2, 6, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
-(4, 9, 'Trasladado', 'IVA', '002', 'Tasa', '16');
+(5, 10, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
+(8, 13, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
+(9, 14, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
+(10, 15, 'Trasladado', 'IVA', '002', 'Tasa', '16');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detalles_orden`
+--
+
+CREATE TABLE `detalles_orden` (
+  `ID_Detalle_Orden` int(11) NOT NULL,
+  `FK_Orden` int(11) NOT NULL,
+  `FK_Producto` int(11) NOT NULL,
+  `FK_Presentacion` int(11) NOT NULL,
+  `Costo` double NOT NULL,
+  `Cantidad` double NOT NULL,
+  `Subtotal` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `detalles_orden`
+--
+
+INSERT INTO `detalles_orden` (`ID_Detalle_Orden`, `FK_Orden`, `FK_Producto`, `FK_Presentacion`, `Costo`, `Cantidad`, `Subtotal`) VALUES
+(1, 1, 26, 0, 50, 1, 50),
+(4, 2, 27, 0, 95, 1, 95),
+(5, 3, 35, 0, 45, 2, 90);
 
 -- --------------------------------------------------------
 
@@ -55400,6 +55432,27 @@ CREATE TABLE `detalles_pedidos` (
 
 INSERT INTO `detalles_pedidos` (`ID_Detalle_Pedido`, `FK_Pedido`, `FK_Producto`, `FK_Presentacion`, `Descripcion`, `Precio`, `Cantidad`, `Descuento`, `Total`, `Devuelto`, `Fecha_Devolucion`, `Regreso_Inventario`) VALUES
 (1, 1, 35, 18, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detalles_proveedores_productos`
+--
+
+CREATE TABLE `detalles_proveedores_productos` (
+  `ID_Detalle_Proveedor` int(11) NOT NULL,
+  `FK_Producto` int(11) NOT NULL,
+  `FK_Proveedor` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `detalles_proveedores_productos`
+--
+
+INSERT INTO `detalles_proveedores_productos` (`ID_Detalle_Proveedor`, `FK_Producto`, `FK_Proveedor`) VALUES
+(2, 37, 2),
+(3, 26, 2),
+(4, 26, 3);
 
 -- --------------------------------------------------------
 
@@ -55434,8 +55487,10 @@ CREATE TABLE `detalles_ventas` (
 INSERT INTO `detalles_ventas` (`ID_Detalle_Venta`, `FK_Venta`, `FK_Producto`, `FK_Presentacion`, `Descripcion`, `Precio`, `Cantidad`, `Descuento`, `Total`, `Devuelto`, `Fecha_Devolucion`, `Regreso_Inventario`, `Clave_ProdServ_CFDI`, `Identificacion_CFDI`, `Clave_Unidad_CFDI`, `Unidad_CFDI`, `Objeto_Impuesto_CFDI`) VALUES
 (4, 3, 36, 0, 'Ejemplo', 50, 1, 5, 45, 0, '0000-00-00 00:00:00', 0, '01010101', 'ejemplo', '11', 'Equipos', '01'),
 (6, 5, 35, 20, 'Caja de fresas', 50, 1, 2.5, 55.1, 0, '0000-00-00 00:00:00', 0, '70141902', 'Prueba', '05', 'ejemplo', '02'),
-(7, 6, 26, 0, 'No lo se', 1, 1, 0, 1, 0, '0000-00-00 00:00:00', 0, '', '', '', '', ''),
-(9, 8, 35, 0, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0, '01010101', 'Prueba', '05', 'Ascensor', '02');
+(10, 9, 35, 0, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0, '70141902', 'Prueba', 'EA', 'Elemento', '02'),
+(13, 12, 35, 20, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0, '', '', '', '', ''),
+(14, 13, 35, 20, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0, '', '', '', '', ''),
+(15, 14, 35, 0, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0, '', '', '', '', '');
 
 --
 -- Disparadores `detalles_ventas`
@@ -55468,12 +55523,9 @@ CREATE TABLE `detalle_compras` (
 --
 
 INSERT INTO `detalle_compras` (`ID_Detalle_Compra`, `FK_Compra`, `FK_Producto`, `FK_Presentacion`, `Costo`, `Cantidad`, `Subtotal`) VALUES
-(8, 10, 26, 0, 100, 1, 100),
-(9, 10, 36, 0, 50, 1, 50),
-(10, 11, 26, 0, 20, 300, 6000),
-(14, 15, 35, 20, 50, 1, 50),
-(15, 16, 26, 0, 10, 1, 10),
-(16, 16, 26, 1, 50, 1, 50);
+(22, 22, 26, 0, 50, 1, 50),
+(23, 23, 26, 0, 50, 1, 50),
+(24, 24, 26, 0, 50, 1, 50);
 
 --
 -- Disparadores `detalle_compras`
@@ -55636,10 +55688,11 @@ CREATE TABLE `inventario` (
 INSERT INTO `inventario` (`ID_Inventario`, `FK_Producto`, `FK_Presentacion`, `Cantidad`, `FK_Sucursal`) VALUES
 (1, 26, 1, 6, 1),
 (2, 36, 0, 50, 1),
-(3, 35, 20, 100, 1),
+(3, 35, 20, 97, 1),
 (4, 35, 18, 9, 1),
-(5, 35, 0, 9, 1),
-(6, 26, 0, -190, 1);
+(5, 35, 0, 7, 1),
+(6, 26, 0, -182, 1),
+(7, 35, 21, 49, 1);
 
 -- --------------------------------------------------------
 
@@ -55660,18 +55713,6 @@ CREATE TABLE `merma` (
   `Foto` varchar(300) NOT NULL,
   `FK_Usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `merma`
---
-
-INSERT INTO `merma` (`ID_Merma`, `FK_Producto`, `FK_Presentacion`, `Costo`, `FK_Sucursal`, `Cantidad`, `Fecha_Merma`, `Fecha_Registro`, `Motivo`, `Foto`, `FK_Usuario`) VALUES
-(33, 23, 30, 0, 1, 5, '2022-10-08 00:00:00', '2022-10-10 15:06:31', 'Prueba', '', 2),
-(34, 23, 30, 0, 1, 2, '2022-10-10 00:00:00', '2022-10-10 15:14:56', 'Prueba', '', 2),
-(35, 23, 30, 0, 1, 18, '2022-10-10 00:00:00', '2022-10-10 15:16:22', 'Prueba', '', 2),
-(36, 23, 31, 0, 1, 2, '2022-10-10 00:00:00', '2022-10-10 15:34:15', 'Prueba', '', 2),
-(37, 21, 33, 0, 1, 1, '2022-10-10 00:00:00', '2022-10-10 15:53:29', '47', '', 2),
-(38, 21, 33, 0, 1, 1, '2022-10-10 00:00:00', '2022-10-10 15:54:00', '1', '', 2);
 
 -- --------------------------------------------------------
 
@@ -58984,7 +59025,121 @@ INSERT INTO `movimientos` (`ID_Movimiento`, `Descripcion`, `IP`, `Pais`, `Estado
 (3255, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'Ejemplo\', No_Exterior = \'50\', No_Interior = \'\', Codigo_Postal = \'06470\', Colonia = \'Eejempo\', Ciudad = \'Arandas\', Estado = \'Jalisco\', Pais = \'MÃ©xico \', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'RAQÃ‘7701212M3\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'SCAFANDRA SOFTWARE FACTORY\', Regimen_CFDI = \'605\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 16:21:09', '', 2),
 (3256, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'7\'', '', '', '', '', '', '2022-12-26 16:22:19', '', 2),
 (3257, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'Ejemplo\', No_Exterior = \'50\', No_Interior = \'\', Codigo_Postal = \'10740\', Colonia = \'Eejempo\', Ciudad = \'Arandas\', Estado = \'Jalisco\', Pais = \'MÃ©xico \', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'CACX7605101P8\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'XOCHILT CASAS CHAVEZ\', Regimen_CFDI = \'605\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 16:28:42', '', 2),
-(3258, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'Ejemplo\', No_Exterior = \'50\', No_Interior = \'\', Codigo_Postal = \'10740\', Colonia = \'Eejempo\', Ciudad = \'Arandas\', Estado = \'Jalisco\', Pais = \'MÃ©xico \', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'CACX7605101P8\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'XOCHILT CASAS CHAVEZ\', Regimen_CFDI = \'605\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 16:31:50', '', 2);
+(3258, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'Ejemplo\', No_Exterior = \'50\', No_Interior = \'\', Codigo_Postal = \'10740\', Colonia = \'Eejempo\', Ciudad = \'Arandas\', Estado = \'Jalisco\', Pais = \'MÃ©xico \', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'CACX7605101P8\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'XOCHILT CASAS CHAVEZ\', Regimen_CFDI = \'605\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 16:31:50', '', 2),
+(3259, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'8\'', '', '', '', '', '', '2022-12-26 16:52:45', '', 2),
+(3260, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Caja de fresas\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'0\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'70141902\', Clave_Unidad_CFDI = \'EA\', Nombre_Unidad = \'Elemento\', Abreviatura_Unidad = \'E\', Objeto_Impuesto_CFDI = \'02\', Importe = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2022-12-26 16:55:11', '', 2),
+(3261, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'6\'', '', '', '', '', '', '2022-12-26 16:55:20', '', 2),
+(3262, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'Ejemplo\', No_Exterior = \'50\', No_Interior = \'\', Codigo_Postal = \'10740\', Colonia = \'Eejempo\', Ciudad = \'Arandas\', Estado = \'Jalisco\', Pais = \'Mexico \', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'CACX7605101P8\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'XOCHILT CASAS CHAVEZ\', Regimen_CFDI = \'621\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2022-12-26 17:01:03', '', 2),
+(3263, 'Admin: UPDATE ventas SET Facturada = \'1\', Version_CFDI = \'4.0\', Fecha_Expedicion_CFDI = \'2022-12-26 17:01:15\', Sello_CFDI = \'GtY9UB7LWuTP/huNSQYjjHt/7GjYcCR5Eno3xOsJcndWYbF4ZCgzqrwB9oIlQFmGtPduYBlgrHtYbKN6OtKuXHItuTKI5rEJ9Wz1bx8XvA28eJjlrOMP6piBab0/rnk0LNlsYp9ZlQlcxzcJmgtrfnyyPZXcKX9t3O2FRI1/2CiddCYXhNmaT7GjDe63OtQbFExAZj3oRT2EZC0xY4s4AnnGKD0L818+G44Dk0CB3ONIyEKjtsxzHkrCB7Fq2RzuQtyokRkB3Dk8gy3Nzv8uiHYBKYVHS/8o2nGWedQVRNx7Yk7f2tH0Tb5xbzbBqrVRpsq+VYgFTp53GIl/11B3ow==\', Forma_Pago_CFDI = \'01\', No_Certificado_CFDI = \'30001000000400002434\', Certificado_CFDI = \'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==\', Moneda_CFDI = \'MXN\', Tipo_Comprobante_CFDI = \'I\', Exportacion_CFDI = \'01\', Metodo_Pago_CFDI = \'PUE\', Lugar_Expedicion_CFDI = \'47190\', Confirmacion_CFDI = \'\', Emisor_RFC_CFDI = \'EKU9003173C9\', Emisor_Nombre_CFDI = \'ESCUELA KEMPER URGATE\', Emisor_Regimen_Fiscal_CFDI = \'601\', Receptor_RFC_CFDI = \'CACX7605101P8\', Receptor_Nombre_CFDI = \'XOCHILT CASAS CHAVEZ\', Receptor_Domicilio_CFDI = \'10740\', Receptor_Regimen_Fiscal_CFDI = \'621\', Receptor_Uso_CFDI = \'G01\', UUID_CFDI = \'1c19a8cc-a46c-4e16-8399-551ca5fe4afb\', Fecha_Timbrado_CFDI = \'2022-12-26 17:01:16\', Rfc_ProvCertif_CFDI = \'SPR190613I52\', Sello_CFD_CFDI = \'GtY9UB7LWuTP/huNSQYjjHt/7GjYcCR5Eno3xOsJcndWYbF4ZCgzqrwB9oIlQFmGtPduYBlgrHtYbKN6OtKuXHItuTKI5rEJ9Wz1bx8XvA28eJjlrOMP6piBab0/rnk0LNlsYp9ZlQlcxzcJmgtrfnyyPZXcKX9t3O2FRI1/2CiddCYXhNmaT7GjDe63OtQbFExAZj3oRT2EZC0xY4s4AnnGKD0L818+G44Dk0CB3ONIyEKjtsxzHkrCB7Fq2RzuQtyokRkB3Dk8gy3Nzv8uiHYBKYVHS/8o2nGWedQVRNx7Yk7f2tH0Tb5xbzbBqrVRpsq+VYgFTp53GIl/11B3ow==\', No_Certificado_SAT_CFDI = \'30001000000400002495\', Sello_SAT_CFDI = \'ICmfagqjkxYowtQ08Tfs7EPbj2vM28CpDKCWy1vJylwar/h41vsu4dy/dpcR1nZxTjR4u6gBv2CvnXmCC4BavbiEzkainMieA28iZpS0PQr9Bx3WfliLeuk+GWOPWThiwvTW300UKxR64Z7iVFkvNkemU0T8SldRamwWiIqYGw2ubrN9iDhhRMvMHj9ZZu5ZiOmBw3NeWTu/hh/B9W0b0rCiC2GG1rA2Qxubl9TcGjJqGkXiOGU1TQhqkZ6ll1CqqRgxGIqgG7t2UcvKXqSyL9eU3e7Hu4/cGfwT/bJ3/AbmRzBidu7jzWZF7hlWjnMgML1BgmLaPJyIkf9uG6zdhw==\', Periodicidad_CFDI = \'undefined\', Meses_CFDI = \'undefined\', Ano_CFDI = \'\', Relacion_CFDI = \'\', Cadena_CFDI = \'||1.1|1c19a8cc-a46c-4e16-8399-551ca5fe4afb|2022-12-26T17:01:16|SPR190613I52|GtY9UB7LWuTP/huNSQYjjHt/7GjYcCR5Eno3xOsJcndWYbF4ZCgzqrwB9oIlQFmGtPduYBlgrHtYbKN6OtKuXHItuTKI5rEJ9Wz1bx8XvA28eJjlrOMP6piBab0/rnk0LNlsYp9ZlQlcxzcJmgtrfnyyPZXcKX9t3O2FRI1/2CiddCYXhNmaT7GjDe63OtQbFExAZj3oRT2EZC0xY4s4AnnGKD0L818+G44Dk0CB3ONIyEKjtsxzHkrCB7Fq2RzuQtyokRkB3Dk8gy3Nzv8uiHYBKYVHS/8o2nGWedQVRNx7Yk7f2tH0Tb5xbzbBqrVRpsq+VYgFTp53GIl/11B3ow==|30001000000400002495||\' WHERE ID_Venta = \'9\'', '', '', '', '', '', '2022-12-26 17:01:16', '', 2),
+(3264, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-27 14:17:01', '', 0),
+(3265, 'Admin: INSERT INTO inventario SET Cantidad = 50, FK_Producto = \'35\', FK_Sucursal = \'1\', FK_Presentacion = \'21\'', '', '', '', '', '', '2022-12-27 14:30:53', '', 2),
+(3266, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2022-12-29 11:28:22', '', 0),
+(3267, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2023-01-02 16:08:16', '', 0),
+(3268, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2023-01-03 14:28:48', '', 0),
+(3269, 'Admin: UPDATE sucursales SET Nombre = \'Tienda Dionisio\', FK_Encargado = \'2\', Calle = \'Dionisio Rodriguez\', No_Exterior = \'3868\', No_Interior = \'\', Colonia = \'Jardines de San Francisco\', CP = \'44790\', Ciudad = \'Guadalajara\', Estado = \'Jalisco\', Pais = \'MÃ©xico\', Email = \'\', Telefono = \'3336051454\', Segundo_Telefono  = \'3323018720\', FK_Zona = \'3\', Latitud = \'20.700966\', Longitud = \'-102.344290\' WHERE ID_Sucursal = \'8\'', '', '', '', '', '', '2023-01-03 17:26:39', '', 2),
+(3270, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'Ejemplo\', No_Exterior = \'50\', No_Interior = \'\', Codigo_Postal = \'10740\', Colonia = \'Eejempo\', Ciudad = \'Arandas\', Estado = \'Jalisco\', Pais = \'Mexico \', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'CACX7605101P8\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'XOCHILT CASAS CHAVEZ\', Regimen_CFDI = \'621\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2023-01-03 19:36:24', '', 2),
+(3271, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'Ejemplo\', No_Exterior = \'50\', No_Interior = \'\', Codigo_Postal = \'10740\', Colonia = \'Eejempo\', Ciudad = \'Arandas\', Estado = \'Jalisco\', Pais = \'Mexico \', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'CACX7605101P8\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'XOCHILT CASAS CHAVEZ\', Regimen_CFDI = \'621\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2023-01-03 19:37:34', '', 2),
+(3272, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'Ejemplo\', No_Exterior = \'50\', No_Interior = \'\', Codigo_Postal = \'10740\', Colonia = \'Eejempo\', Ciudad = \'Arandas\', Estado = \'Jalisco\', Pais = \'Mexico \', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'CACX7605101P8\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'XOCHILT CASAS CHAVEZ\', Regimen_CFDI = \'621\', Nombre_Contacto = \'dfdf\', Puesto_Contacto = \'dffd\', Email_Contacto = \'fvdf\', Tel_Contacto = \'fddf\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2023-01-03 19:38:58', '', 2),
+(3273, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Calle = \'\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Descuento = \'0\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'CACX7605101P8\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'XOCHILT CASAS CHAVEZ\', Regimen_CFDI = \'621\', Nombre_Contacto = \'\', Puesto_Contacto = \'\', Email_Contacto = \'\', Tel_Contacto = \'\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2023-01-03 19:39:08', '', 2),
+(3274, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Primer_Apellido = \'khbkj\', Segundo_Apellido = \'hjbkj\', Calle = \'\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Descuento = \'\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'CACX7605101P8\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'XOCHILT CASAS CHAVEZ\', Regimen_CFDI = \'621\', Nombre_Contacto = \'\', Puesto_Contacto = \'\', Email_Contacto = \'\', Tel_Contacto = \'\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2023-01-03 21:41:26', '', 2),
+(3275, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Primer_Apellido = \'khbkj\', Segundo_Apellido = \'hjbkj\', Calle = \'\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Descuento = \'\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'CACX7605101P8\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'XOCHILT CASAS CHAVEZ\', Regimen_CFDI = \'621\', Nombre_Contacto = \'\', Puesto_Contacto = \'\', Email_Contacto = \'\', Tel_Contacto = \'\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2023-01-03 21:42:20', '', 2),
+(3276, 'Admin: UPDATE clientes SET Nombre = \'Ejemplo\', Primer_Apellido = \'khbkj\', Segundo_Apellido = \'hjbkj\', Calle = \'\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'\', Celular = \'\', Correo = \'dedd\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'CACX7605101P8\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'XOCHILT CASAS CHAVEZ\', Regimen_CFDI = \'621\', Nombre_Contacto = \'\', Puesto_Contacto = \'\', Email_Contacto = \'\', Tel_Contacto = \'\' WHERE ID_Cliente = \'27\'', '', '', '', '', '', '2023-01-03 21:43:45', '', 2),
+(3277, 'Admin: UPDATE clientes SET Nombre = \'Arturo Iturbide\', Primer_Apellido = \'hjbhkj\', Segundo_Apellido = \'\', Calle = \'\', No_Exterior = \'\', No_Interior = \'\', Codigo_Postal = \'\', Colonia = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Telefono = \'015556278345\', Celular = \'5532375991\', Correo = \'iturbide.jastrow@me.com\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'YBI140401LJ3\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'\', Regimen_CFDI = \'\', Nombre_Contacto = \'\', Puesto_Contacto = \'\', Email_Contacto = \'\', Tel_Contacto = \'\', INE = \'7y7yiuhi\' WHERE ID_Cliente = \'2\'', '', '', '', '', '', '2023-01-03 22:33:07', '', 2),
+(3278, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2023-01-04 13:12:01', '', 0),
+(3279, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'50\', Anticipo= \'50\', Estatus= \'1\', Fecha_Registro = \'2023-01-04 13:49:28\', Fecha_Credito = \'\', Tipo_Compra = \'Contado\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2023-01-04 13:49:28', '', 2),
+(3280, 'Admin: DELETE FROM compras WHERE ID_Compra = \'17\'', '', '', '', '', '', '2023-01-04 13:56:37', '', 2),
+(3281, 'Admin: DELETE FROM compras WHERE ID_Compra = \'16\'', '', '', '', '', '', '2023-01-04 13:56:52', '', 2),
+(3282, 'Admin: DELETE FROM compras WHERE ID_Compra = \'15\'', '', '', '', '', '', '2023-01-04 13:57:15', '', 2),
+(3283, 'Admin: DELETE FROM compras WHERE ID_Compra = \'11\'', '', '', '', '', '', '2023-01-04 13:57:19', '', 2),
+(3284, 'Admin: DELETE FROM compras WHERE ID_Compra = \'10\'', '', '', '', '', '', '2023-01-04 13:57:22', '', 2),
+(3285, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'1\', Total= \'50\', Anticipo= \'50\', Estatus= \'1\', Fecha_Registro = \'2023-01-04 13:57:45\', Fecha_Credito = \'\', Tipo_Compra = \'Contado\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2023-01-04 13:57:45', '', 2),
+(3286, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'50\', Anticipo= \'50\', Estatus= \'1\', Fecha_Registro = \'2023-01-04 13:58:18\', Fecha_Credito = \'\', Tipo_Compra = \'Contado\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2023-01-04 13:58:18', '', 2),
+(3287, 'Admin: UPDATE proveedores SET Nombre = \'Eva\', Calle = \'Jesus Maria\', No_Exterior = \'\', No_Interior = \'\', Telefono = \'5555221081\', Ciudad = \'Mexico D.F.\', Estado = \'\', Pais = \'\', Empresa = \' EL BICENTENARIO\', Colonia = \'Centro\', Codigo_Postal = \'6060\', Puesto = \'Agente de ventas\', Correo = \'albicentenario@hotmail.com\', RFC = \'\', Celular = \'5522682861\', No_Cuenta = \'\', Banco = \'BANAMEX\', Razon_Social = \'ALMACENES EL BICENTENARIO S.A. DE C.V.\', Tipo_Descuento = \'Porcentaje\', Descuento = \'10\', Credito = \'6000\' WHERE ID_Proveedor = \'2\'', '', '', '', '', '', '2023-01-04 14:00:14', '', 2),
+(3288, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'50\', Anticipo= \'50\', Estatus= \'0\', Fecha_Registro = \'2023-01-04 14:09:09\', Fecha_Credito = \'2023-01-19\', Tipo_Compra = \'Credito\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2023-01-04 14:09:09', '', 2),
+(3289, 'Admin: DELETE FROM compras WHERE ID_Compra = \'20\'', '', '', '', '', '', '2023-01-04 14:09:43', '', 2),
+(3290, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'50\', Anticipo= \'0\', Estatus= \'0\', Fecha_Registro = \'2023-01-04 14:12:36\', Fecha_Credito = \'2023-01-25\', Tipo_Compra = \'Credito\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2023-01-04 14:12:36', '', 2),
+(3291, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'50\', Anticipo= \'20\', Estatus= \'0\', Fecha_Registro = \'2023-01-04 14:13:16\', Fecha_Credito = \'2023-01-26\', Tipo_Compra = \'Credito\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2023-01-04 14:13:16', '', 2),
+(3292, 'Admin: DELETE FROM compras WHERE ID_Compra = \'21\'', '', '', '', '', '', '2023-01-04 14:23:28', '', 2),
+(3293, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'2\', Total= \'50\', Anticipo= \'0\', Estatus= \'0\', Fecha_Registro = \'2023-01-04 14:25:15\', Fecha_Credito = \'2023-02-02\', Tipo_Compra = \'Credito\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2023-01-04 14:25:15', '', 2),
+(3294, 'Admin: DELETE FROM compras WHERE ID_Compra = \'18\'', '', '', '', '', '', '2023-01-04 14:39:56', '', 2),
+(3295, 'Admin: DELETE FROM compras WHERE ID_Compra = \'19\'', '', '', '', '', '', '2023-01-04 14:41:59', '', 2),
+(3296, 'Admin: UPDATE productos SET Codigo = \'Prueba\', Descripcion = \'Caja de fresas\', FK_Categoria = \'4\', Clase = \'Pieza\', Costo = \'45\', Precio = \'50\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Minimo = \'0\', Maximo = \'0\', Clave_ProdServ_CFDI = \'70141902\', Clave_Unidad_CFDI = \'EA\', Nombre_Unidad = \'Elemento\', Abreviatura_Unidad = \'E\', Objeto_Impuesto_CFDI = \'02\', Importe = \'0\' WHERE ID_Producto = \'35\'', '', '', '', '', '', '2023-01-04 15:05:42', '', 2),
+(3297, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,1,0,0,0~v_orden_compra,0,0,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'10\'', '', '', '', '', '', '2023-01-04 17:20:50', '', 2),
+(3298, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,0,0,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'10\'', '', '', '', '', '', '2023-01-04 17:20:51', '', 2),
+(3299, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,0,0,0,0~v_proveedores,0,0,0,0~v_clientes,0,0,0,0~v_orden_compra,0,0,0,0,0~v_compras,1,1,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-04 17:20:55', '', 2),
+(3300, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,0,0,0,0~v_proveedores,0,0,0,0~v_clientes,0,0,0,0~v_orden_compra,0,0,0,0,0~v_compras,1,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-04 17:20:55', '', 2),
+(3301, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,0,0,0,0~v_proveedores,0,0,0,0~v_clientes,0,0,0,0~v_orden_compra,0,0,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-04 17:20:57', '', 2),
+(3302, 'Admin: INSERT INTO ordenes_compra SET FK_Proveedor= \'1\', Total= \'50\', Estatus= \'Pendiente\', Fecha_Registro = \'2023-01-04 19:26:18\', Descuento = \'\', FK_Sucursal = \'1\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-04 19:26:18', '', 2),
+(3303, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2023-01-05 12:34:01', '', 0),
+(3304, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2023-01-05 16:51:39', '', 0),
+(3305, 'Admin: INSERT INTO ordenes_compra SET FK_Proveedor= \'1\', Total= \'100\', Estatus= \'Pendiente\', Fecha_Registro = \'2023-01-05 17:11:47\', Descuento = \'\', FK_Sucursal = \'1\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-05 17:11:47', '', 2),
+(3306, 'Admin: DELETE FROM ordenes_compra WHERE ID_Orden_Compra = \'2\'', '', '', '', '', '', '2023-01-05 17:12:25', '', 2),
+(3307, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2023-01-05 19:51:48', '', 0),
+(3308, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'1\', Total= \'50\', Anticipo= \'50\', Estatus= \'1\', Fecha_Registro = \'2023-01-05 21:46:40\', Fecha_Credito = \'\', Tipo_Compra = \'Contado\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2023-01-05 21:46:40', '', 2),
+(3309, 'Admin: INSERT INTO ordenes_compra SET FK_Proveedor= \'1\', Total= \'100\', Estatus= \'Pendiente\', Fecha_Registro = \'2023-01-05 21:47:15\', Descuento = \'\', FK_Sucursal = \'1\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-05 21:47:15', '', 2),
+(3310, 'Admin: UPDATE ordenes_compra SET FK_Proveedor= \'1\', Total= \'95\', Estatus= \'Pendiente\', Fecha_Registro = \'2023-01-05 21:47:33\', Descuento = \'\', FK_Sucursal = \'1\', FK_Usuario = \'2\' WHERE ID_Orden_Compra = \'2\'', '', '', '', '', '', '2023-01-05 21:47:33', '', 2),
+(3311, 'Admin: UPDATE ordenes_compra SET FK_Proveedor= \'1\', Total= \'95\', Estatus= \'Pendiente\', Fecha_Registro = \'2023-01-05 21:48:11\', Descuento = \'\', FK_Sucursal = \'1\', FK_Usuario = \'2\' WHERE ID_Orden_Compra = \'2\'', '', '', '', '', '', '2023-01-05 21:48:11', '', 2),
+(3312, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2023-01-08 17:08:28', '', 0),
+(3313, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,0,0,0,0~v_proveedores,0,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,0,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-08 17:13:42', '', 2),
+(3314, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,0,0,0,0~v_proveedores,0,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-08 17:13:43', '', 2),
+(3315, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,0,0,0,0~v_proveedores,0,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,1,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-08 17:13:48', '', 2),
+(3316, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,0,0,0,0~v_proveedores,0,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-08 17:13:48', '', 2),
+(3317, 'Admin: LOGIN ADMIN ejemplo@gmail.com', '', '', '', '', '', '2023-01-08 17:18:09', '', 0),
+(3318, 'Admin: INSERT INTO ordenes_compra SET FK_Proveedor= \'1\', Total= \'90\', Estatus= \'Pendiente\', Fecha_Registro = \'2023-01-08 18:09:08\', Descuento = \'\', FK_Sucursal = \'1\', FK_Usuario = \'11\'', '', '', '', '', '', '2023-01-08 18:09:08', '', 11),
+(3319, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2023-01-08 18:54:44', '', 0),
+(3320, 'Admin: UPDATE usuarios SET Nombre = \'Ejemplo\', Primer_Apellido = \'sdesde\', Segundo_Apellido = \'dds\', Correo = \'ejemplo@gmail.com\',  Tipo_Usuario = \'Normal\', Estatus = \'0\', Temporal = \'0\', Activo = \'1\', Tipo_Login = \'1\', Conectado = \'0\', Fecha_Alta = \'2023-01-08 18:55:45\', FK_Sucursal = \'1\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-08 18:55:45', '', 2),
+(3321, 'Admin: LOGIN ADMIN ejemplo@gmail.com', '', '', '', '', '', '2023-01-08 18:55:54', '', 0),
+(3322, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2023-01-08 18:56:18', '', 0),
+(3323, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'11\'', '', '', '', '', '', '2023-01-08 21:31:25', '', 2),
+(3324, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'10\'', '', '', '', '', '', '2023-01-08 21:31:52', '', 2),
+(3325, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2023-01-09 10:41:12', '', 0),
+(3326, 'Admin: INSERT INTO productos SET Codigo = \'fvfvfd\', Descripcion = \'Prueba\',  FK_Categoria = \'\', Tipo = \'1\', Costo = \'\', Precio = \'60\', Precio_Mayoreo = \'\', FK_Area = \'\', Detalles = \'\', Fecha_Registro = \'2023-01-09 18:35:36\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', Importe = \'\'', '', '', '', '', '', '2023-01-09 18:35:36', '', 2),
+(3327, 'Admin: UPDATE productos SET Codigo = \'fvfvfd\', Descripcion = \'Prueba\', FK_Categoria = \'\', Costo = \'0\', Precio = \'60\', Precio_Mayoreo = \'0\', FK_Area = \'\', Detalles = \'\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', Importe = \'0\' WHERE ID_Producto = \'37\'', '', '', '', '', '', '2023-01-09 18:45:48', '', 2),
+(3328, 'Admin: UPDATE productos SET Codigo = \'123\', Descripcion = \'No lo se\', FK_Categoria = \'4\', Costo = \'0\', Precio = \'1\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', Importe = \'0\', Bloqueado = \'\\\"1\\\"\' WHERE ID_Producto = \'26\'', '', '', '', '', '', '2023-01-09 19:25:57', '', 2),
+(3329, 'Admin: UPDATE productos SET Codigo = \'123\', Descripcion = \'No lo se\', FK_Categoria = \'4\', Costo = \'0\', Precio = \'1\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', Importe = \'0\', Bloqueado = \'\\\"1\\\"\' WHERE ID_Producto = \'26\'', '', '', '', '', '', '2023-01-09 19:26:31', '', 2),
+(3330, 'Admin: UPDATE productos SET Codigo = \'123\', Descripcion = \'No lo se\', FK_Categoria = \'4\', Costo = \'0\', Precio = \'1\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', Importe = \'0\', Bloqueado = \'\\\"1\\\"\' WHERE ID_Producto = \'26\'', '', '', '', '', '', '2023-01-09 19:28:07', '', 2),
+(3331, 'Admin: UPDATE productos SET Codigo = \'123\', Descripcion = \'No lo se\', FK_Categoria = \'4\', Costo = \'0\', Precio = \'1\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', Importe = \'0\', Bloqueado = \'\\\"1\\\"\' WHERE ID_Producto = \'26\'', '', '', '', '', '', '2023-01-09 19:28:59', '', 2),
+(3332, 'Admin: UPDATE productos SET Codigo = \'123\', Descripcion = \'No lo se\', FK_Categoria = \'4\', Costo = \'0\', Precio = \'1\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', Importe = \'0\', Bloqueado = \'\\\"1\\\"\' WHERE ID_Producto = \'26\'', '', '', '', '', '', '2023-01-09 19:29:52', '', 2),
+(3333, 'Admin: UPDATE productos SET Codigo = \'123\', Descripcion = \'No lo se\', FK_Categoria = \'4\', Costo = \'0\', Precio = \'1\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', Importe = \'0\', Bloqueado = \'\\\"1\\\"\' WHERE ID_Producto = \'26\'', '', '', '', '', '', '2023-01-09 19:30:56', '', 2);
+INSERT INTO `movimientos` (`ID_Movimiento`, `Descripcion`, `IP`, `Pais`, `Estado`, `Navegador`, `SO`, `Fecha`, `Access`, `FK_Usuario`) VALUES
+(3334, 'Admin: UPDATE productos SET Codigo = \'123\', Descripcion = \'No lo se\', FK_Categoria = \'4\', Costo = \'0\', Precio = \'1\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', Importe = \'0\', Bloqueado = \'1\' WHERE ID_Producto = \'26\'', '', '', '', '', '', '2023-01-09 19:32:45', '', 2),
+(3335, 'Admin: INSERT INTO proveedores SET Nombre = \'\', Calle = \'\', No_Exterior = \'\', No_Interior = \'\', Telefono = \'\', Ciudad = \'\', Estado = \'\', Pais = \'\', Empresa = \'fvdfffd\', Colonia = \'\', Codigo_Postal = \'\', Puesto = \'\', Correo = \'\', RFC = \'\', Celular = \'\', No_Cuenta = \'\', Banco = \'\', Razon_Social = \'\', Fecha_Registro = \'2023-01-09 20:53:23\', Tipo_Descuento = \'undefined\', Descuento = \'undefined\', Credito = \'\'', '', '', '', '', '', '2023-01-09 20:53:23', '', 2),
+(3336, 'Admin: UPDATE productos SET Codigo = \'123\', Descripcion = \'No lo se\', FK_Categoria = \'4\', Costo = \'0\', Precio = \'1\', Precio_Mayoreo = \'0\', FK_Area = \'34\', Detalles = \'\', Clave_ProdServ_CFDI = \'\', Clave_Unidad_CFDI = \'\', Nombre_Unidad = \'\', Abreviatura_Unidad = \'\', Objeto_Impuesto_CFDI = \'\', Importe = \'0\', Bloqueado = \'1\' WHERE ID_Producto = \'26\'', '', '', '', '', '', '2023-01-09 20:53:43', '', 2),
+(3337, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2023-01-10 12:15:53', '', 0),
+(3338, 'Admin: INSERT INTO usuarios SET Nombre = \'dcds\', Primer_Apellido = \'dsdds\', Segundo_Apellido = \'\', Correo = \'sds@sddsds.com\', Contrasena = \'$2y$12$UCopD20d0.H7/gGZnj5JqeCvF0MGVuhQLDWFE2x53oXaCw90Gb0uS\', Tipo_Usuario = \'Normal\', Estatus = \'0\', Temporal = \'0\', Activo = \'0\', Tipo_Login = \'1\', Conectado = \'0\', Fecha_Alta = \'2023-01-10 12:22:04\', FK_Sucursal = \'0\'', '', '', '', '', '', '2023-01-10 12:22:05', '', 2),
+(3339, 'Admin: UPDATE usuarios SET Nombre = \'dcdsdcds\', Primer_Apellido = \'dsdds\', Segundo_Apellido = \'\', Correo = \'sds@sddsds.com\',  Tipo_Usuario = \'Normal\', Estatus = \'0\', Temporal = \'0\', Activo = \'0\', Tipo_Login = \'1\', Conectado = \'0\', Fecha_Alta = \'2023-01-10 12:22:19\', FK_Sucursal = \'0\' WHERE ID_Usuario = \'15\'', '', '', '', '', '', '2023-01-10 12:22:19', '', 2),
+(3340, 'Admin: DELETE FROM usuarios WHERE ID_Usuario = \'15\'', '', '', '', '', '', '2023-01-10 12:22:26', '', 2),
+(3341, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,1,0,0,1~v_orden_compra,0,0,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'10\'', '', '', '', '', '', '2023-01-10 15:26:14', '', 2),
+(3342, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,1,0,0,0~v_orden_compra,0,0,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'10\'', '', '', '', '', '', '2023-01-10 15:26:14', '', 2),
+(3343, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,0,0,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'10\'', '', '', '', '', '', '2023-01-10 15:26:16', '', 2),
+(3344, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,1,0,0,0~v_proveedores,0,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-10 15:26:20', '', 2),
+(3345, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-10 15:26:21', '', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ordenes_compra`
+--
+
+CREATE TABLE `ordenes_compra` (
+  `ID_Orden_Compra` int(11) NOT NULL,
+  `Fecha_Registro` datetime NOT NULL,
+  `FK_Usuario` int(11) NOT NULL,
+  `FK_Proveedor` int(11) NOT NULL,
+  `Total` double NOT NULL,
+  `FK_Sucursal` int(11) NOT NULL,
+  `Estatus` varchar(50) NOT NULL,
+  `Descuento` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `ordenes_compra`
+--
+
+INSERT INTO `ordenes_compra` (`ID_Orden_Compra`, `Fecha_Registro`, `FK_Usuario`, `FK_Proveedor`, `Total`, `FK_Sucursal`, `Estatus`, `Descuento`) VALUES
+(1, '2023-01-04 19:26:18', 2, 1, 50, 1, 'Completada', 0),
+(2, '2023-01-05 21:48:11', 2, 1, 95, 1, 'Pendiente', 0),
+(3, '2023-01-08 18:09:08', 11, 1, 90, 1, 'Pendiente', 0);
 
 -- --------------------------------------------------------
 
@@ -59011,12 +59166,8 @@ CREATE TABLE `pagos` (
 --
 
 INSERT INTO `pagos` (`ID_Pago`, `FK_Compra`, `Concepto`, `Monto`, `Tipo_Pago`, `Fecha`, `FK_Usuario`, `Archivo`, `Clase`, `FK_Caja`, `Detalles_Pago`) VALUES
-(1, 10, 'Pago', 150, 'Deposito', '2022-12-22 12:01:44', 2, '', 0, 0, ''),
-(2, 11, 'Abono', 1000, 'TransferenciaBancaria', '2022-12-22 12:03:02', 2, '', 0, 0, ''),
-(3, 11, 'Abono', 500, 'Efectivo', '2022-12-22 12:04:21', 2, '', 0, 0, ''),
-(7, 15, 'Abono', 10, 'Cheque', '2022-12-23 01:08:39', 2, '', 0, 0, ''),
-(8, 16, 'Pago', 60, 'Efectivo', '2022-12-23 15:52:31', 2, '', 0, 0, ''),
-(9, 15, 'yuikol', 10, 'Efectivo', '2022-12-23 15:53:44', 2, '', 0, 0, '');
+(15, 22, 'Abono', 20, 'Efectivo', '2023-01-04 14:13:16', 2, '', 0, 0, ''),
+(16, 24, 'Pago', 50, '', '2023-01-05 21:46:40', 2, '', 0, 0, '');
 
 --
 -- Disparadores `pagos`
@@ -59083,10 +59234,8 @@ CREATE TABLE `precios` (
 --
 
 INSERT INTO `precios` (`ID_Precio`, `FK_Producto`, `FK_Zona`, `FK_Presentacion`, `Nombre`, `Precio`, `Precio_Mayoreo`) VALUES
-(17, 26, 3, 1, 'gATIÃ‘O', 1, 1),
-(47, 35, 2, 0, 'dfdf', 49, 0),
-(48, 35, 2, 19, 'kkk', 50, 0),
-(49, 35, 3, 19, 'dcd', 59, 10);
+(53, 35, 2, 0, 'dfdf', 49, 0),
+(63, 26, 3, 1, 'gATIÃ‘O', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -59115,7 +59264,8 @@ INSERT INTO `presentaciones` (`ID_Presentacion`, `FK_Producto`, `Nombre`, `Abrev
 (18, 35, 'fdfd', 'dfdf', 0, 0, ''),
 (19, 35, 'dsds dfd', 'dfdf', 0, 0, ''),
 (20, 35, 'ejemplo', 'ej', 50, 0, '05'),
-(21, 35, 'lol', 'j', 100, 5, '');
+(21, 35, 'lol', 'j', 100, 5, ''),
+(22, 37, 'dffdfd', '', 60, 0, '');
 
 -- --------------------------------------------------------
 
@@ -59129,14 +59279,11 @@ CREATE TABLE `productos` (
   `Descripcion` tinytext NOT NULL,
   `Tipo` int(11) NOT NULL COMMENT 'Producto(1) - Materia(2)',
   `FK_Categoria` int(11) NOT NULL,
-  `Clase` varchar(30) NOT NULL COMMENT 'Pieza o Granel',
   `Costo` double NOT NULL COMMENT 'General',
   `Precio` double NOT NULL COMMENT 'General',
-  `Precio_Mayoreo` double NOT NULL COMMENT 'General',
+  `Precio_Mayoreo` double NOT NULL,
   `FK_Area` int(11) NOT NULL,
   `Detalles` text NOT NULL,
-  `Minimo` double NOT NULL COMMENT 'General',
-  `Maximo` double NOT NULL COMMENT 'General',
   `Fecha_Registro` datetime NOT NULL,
   `Imagen` varchar(300) NOT NULL,
   `Importe` double NOT NULL,
@@ -59144,18 +59291,20 @@ CREATE TABLE `productos` (
   `Clave_Unidad_CFDI` varchar(60) NOT NULL,
   `Nombre_Unidad` varchar(60) NOT NULL,
   `Abreviatura_Unidad` varchar(60) NOT NULL,
-  `Objeto_Impuesto_CFDI` varchar(60) NOT NULL
+  `Objeto_Impuesto_CFDI` varchar(60) NOT NULL,
+  `Bloqueado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`ID_Producto`, `Codigo`, `Descripcion`, `Tipo`, `FK_Categoria`, `Clase`, `Costo`, `Precio`, `Precio_Mayoreo`, `FK_Area`, `Detalles`, `Minimo`, `Maximo`, `Fecha_Registro`, `Imagen`, `Importe`, `Clave_ProdServ_CFDI`, `Clave_Unidad_CFDI`, `Nombre_Unidad`, `Abreviatura_Unidad`, `Objeto_Impuesto_CFDI`) VALUES
-(26, '123', 'No lo se', 0, 4, 'Pieza', 0, 1, 0, 34, '', 0, 0, '2022-11-28 19:17:40', '', 0, '', '', '', '', ''),
-(27, '1234', 'Prueba 2', 0, 4, 'Pieza', 0, 0, 0, 34, '', 0, 0, '2022-11-28 19:18:09', '', 0, '', '', '', '', ''),
-(35, 'Prueba', 'Caja de fresas', 1, 4, 'Pieza', 0, 50, 0, 0, '', 0, 0, '2022-12-03 17:35:01', '', 0, '01010101', '05', 'Ascensor', 'As', '02'),
-(36, 'ejemplo', 'Ejemplo', 1, 0, 'Pieza', 0, 50, 0, 0, '', 0, 0, '2022-12-21 19:23:18', '', 0, '01010101', '11', 'Equipos', 'Eq', '01');
+INSERT INTO `productos` (`ID_Producto`, `Codigo`, `Descripcion`, `Tipo`, `FK_Categoria`, `Costo`, `Precio`, `Precio_Mayoreo`, `FK_Area`, `Detalles`, `Fecha_Registro`, `Imagen`, `Importe`, `Clave_ProdServ_CFDI`, `Clave_Unidad_CFDI`, `Nombre_Unidad`, `Abreviatura_Unidad`, `Objeto_Impuesto_CFDI`, `Bloqueado`) VALUES
+(26, '123', 'No lo se', 0, 4, 0, 1, 0, 34, '', '2022-11-28 19:17:40', '', 0, '', '', '', '', '', 1),
+(27, '1234', 'Prueba 2', 0, 4, 0, 0, 0, 34, '', '2022-11-28 19:18:09', '', 0, '', '', '', '', '', 0),
+(35, 'Prueba', 'Caja de fresas', 1, 4, 45, 50, 0, 0, '', '2022-12-03 17:35:01', '', 0, '70141902', 'EA', 'Elemento', 'E', '02', 0),
+(36, 'ejemplo', 'Ejemplo', 1, 0, 0, 50, 0, 0, '', '2022-12-21 19:23:18', '', 0, '01010101', '11', 'Equipos', 'Eq', '01', 0),
+(37, 'fvfvfd', 'Prueba', 1, 0, 0, 60, 0, 0, '', '2023-01-09 18:35:36', '', 0, '', '', '', '', '', 0);
 
 -- --------------------------------------------------------
 
@@ -59195,7 +59344,8 @@ CREATE TABLE `proveedores` (
 
 INSERT INTO `proveedores` (`ID_Proveedor`, `Nombre`, `Calle`, `No_Exterior`, `No_Interior`, `Telefono`, `Ciudad`, `Estado`, `Pais`, `Empresa`, `Colonia`, `Codigo_Postal`, `Puesto`, `Correo`, `RFC`, `Credito`, `Tipo_Descuento`, `Descuento`, `Celular`, `No_Cuenta`, `Banco`, `Razon_Social`, `Fecha_Registro`) VALUES
 (1, 'Proveedor General', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', 0, '', '', '', '', '0000-00-00 00:00:00'),
-(2, 'Eva', 'Jesus Maria', '', '', '5555221081', 'Mexico D.F.', '', '', ' EL BICENTENARIO', 'Centro', '6060', 'Agente de ventas', 'albicentenario@hotmail.com', '', 0, '', 0, '5522682861', '', 'BANAMEX', 'ALMACENES EL BICENTENARIO S.A. DE C.V.', '2022-11-21 00:00:00');
+(2, 'Eva', 'Jesus Maria', '', '', '5555221081', 'Mexico D.F.', '', '', ' EL BICENTENARIO', 'Centro', '6060', 'Agente de ventas', 'albicentenario@hotmail.com', '', 6000, 'Porcentaje', 10, '5522682861', '', 'BANAMEX', 'ALMACENES EL BICENTENARIO S.A. DE C.V.', '2022-11-21 00:00:00'),
+(3, '', '', '', '', '', '', '', '', 'fvdfffd', '', '', '', '', '', 0, 'undefined', 0, '', '', '', '', '2023-01-09 20:53:23');
 
 -- --------------------------------------------------------
 
@@ -59208,6 +59358,29 @@ CREATE TABLE `relacionados_cfdi` (
   `FK_Venta` int(11) NOT NULL,
   `UUID` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `stock_productos`
+--
+
+CREATE TABLE `stock_productos` (
+  `ID_Stock` int(11) NOT NULL,
+  `FK_Producto` int(11) NOT NULL,
+  `FK_Presentacion` int(11) NOT NULL,
+  `FK_Sucursal` int(11) NOT NULL,
+  `Minimo` double NOT NULL,
+  `Maximo` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `stock_productos`
+--
+
+INSERT INTO `stock_productos` (`ID_Stock`, `FK_Producto`, `FK_Presentacion`, `FK_Sucursal`, `Minimo`, `Maximo`) VALUES
+(2, 37, 0, 1, 10, 100),
+(3, 37, 22, 1, 20, 100);
 
 -- --------------------------------------------------------
 
@@ -59230,6 +59403,8 @@ CREATE TABLE `sucursales` (
   `Email` text NOT NULL,
   `Telefono` tinytext NOT NULL,
   `Segundo_Telefono` tinytext NOT NULL,
+  `Latitud` varchar(60) NOT NULL,
+  `Longitud` varchar(60) NOT NULL,
   `FK_Zona` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -59237,9 +59412,9 @@ CREATE TABLE `sucursales` (
 -- Volcado de datos para la tabla `sucursales`
 --
 
-INSERT INTO `sucursales` (`ID_Sucursal`, `Nombre`, `FK_Encargado`, `Calle`, `No_Exterior`, `No_Interior`, `Colonia`, `CP`, `Ciudad`, `Estado`, `Pais`, `Email`, `Telefono`, `Segundo_Telefono`, `FK_Zona`) VALUES
-(1, 'General 1', 2, 'Ejemplo', '54', '', '', '47190', 'Aranadas', 'Jalisco', 'MÃ©xico', '', '', '', 2),
-(8, 'Tienda Dionisio', 2, 'Dionisio Rodriguez', '3868', '', 'Jardines de San Francisco', '44790', 'Guadalajara', 'Jalisco', 'MÃ©xico', '', '3336051454', '3323018720', 3);
+INSERT INTO `sucursales` (`ID_Sucursal`, `Nombre`, `FK_Encargado`, `Calle`, `No_Exterior`, `No_Interior`, `Colonia`, `CP`, `Ciudad`, `Estado`, `Pais`, `Email`, `Telefono`, `Segundo_Telefono`, `Latitud`, `Longitud`, `FK_Zona`) VALUES
+(1, 'General 1', 2, 'Ejemplo', '54', '', '', '47190', 'Aranadas', 'Jalisco', 'MÃ©xico', '', '', '', '', '', 2),
+(8, 'Tienda Dionisio', 2, 'Dionisio Rodriguez', '3868', '', 'Jardines de San Francisco', '44790', 'Guadalajara', 'Jalisco', 'MÃ©xico', '', '3336051454', '3323018720', '20.700966', '-102.344290', 3);
 
 --
 -- Disparadores `sucursales`
@@ -59335,9 +59510,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`ID_Usuario`, `Nombre`, `Primer_Apellido`, `Segundo_Apellido`, `Correo`, `Contrasena`, `Tipo_Usuario`, `Permisos`, `BD`, `Estatus`, `Intentos`, `Ultimo_Intento`, `Tiempo_Inicio`, `Tiempo_Final`, `Foto`, `Temporal`, `Activo`, `Tipo_Login`, `Conectado`, `Fecha_Alta`, `FK_Sucursal`) VALUES
-(2, 'Admin', 'cremasi', '', 'admin@gmail.com', '$2y$12$lhPLfk6dsc6TdYE5fnes2OfWuBPlqUQhh8JF9ujg0iNNmSGQC74Xe', 'Administrador', '', 0, 0, 0, '2022-12-26 13:12:42', '2022-12-26 13:12:42', '2022-12-01 08:43:01', '2_anuncio.png', 0, 1, 1, 0, '2022-09-21 18:52:42', 0),
-(10, 'Lalo', 'bECERRA', '', 'lalo@gmail.com', '$2y$12$ACrdPWFFaSDrOmehjwt0MuIgTfsCmuxpWnDwf8TCoRAwzC8C50QsK', 'Normal', 'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_areas,0,0,0,0~v_categorias,0,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0~v_cajas,0,0,0,0~v_impuestos,0,0,0,0~v_tickets,0~v_general,0~v_usuarios,0,0,0,0,0~', 0, 0, 0, '2022-09-22 18:51:43', '2022-09-22 18:51:43', '2022-09-22 19:02:18', '', 0, 0, 1, 0, '2022-09-22 18:51:31', 0),
-(11, 'Ejemplo', 'sdesde', 'dds', 'ejemplo@gmail.com', '$2y$12$ks7YsxZ13IARNevWP1q4X.Lh8KF0TeogNzNxukBbsnOe4KU5mm0qi', 'Normal', '', 0, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 1, 1, 0, '2022-09-22 18:49:49', 0),
+(2, 'Admin', 'cremasi', '', 'admin@gmail.com', '$2y$12$lhPLfk6dsc6TdYE5fnes2OfWuBPlqUQhh8JF9ujg0iNNmSGQC74Xe', 'Administrador', '', 0, 0, 0, '2023-01-10 12:15:53', '2023-01-10 12:15:53', '2023-01-08 18:55:50', '2_anuncio.png', 0, 1, 1, 0, '2022-09-21 18:52:42', 0),
+(10, 'Lalo', 'bECERRA', '', 'lalo@gmail.com', '$2y$12$ACrdPWFFaSDrOmehjwt0MuIgTfsCmuxpWnDwf8TCoRAwzC8C50QsK', 'Normal', 'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,0,0,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~', 0, 0, 0, '2022-09-22 18:51:43', '2022-09-22 18:51:43', '2022-09-22 19:02:18', '', 0, 0, 1, 0, '2022-09-22 18:51:31', 0),
+(11, 'Ejemplo', 'sdesde', 'dds', 'ejemplo@gmail.com', '$2y$12$ks7YsxZ13IARNevWP1q4X.Lh8KF0TeogNzNxukBbsnOe4KU5mm0qi', 'Normal', 'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~', 0, 0, 0, '2023-01-08 18:55:53', '2023-01-08 18:55:53', '2023-01-08 18:56:10', '', 0, 1, 1, 0, '2023-01-08 18:55:45', 1),
 (14, 'Antonio de Jesus', 'Torres', 'Vazquez', 'antonioudgarandas@gmal.com', '$2y$12$36ZKO7frlfjtaKpoP4K5CumUm/lOK6S7niuUrVNhVrWkIX7D/PKHy', 'Administrador', '', 0, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 1, 1, 0, '2022-11-05 15:25:49', 1);
 
 -- --------------------------------------------------------
@@ -59360,6 +59535,7 @@ CREATE TABLE `ventas` (
   `Notas` text NOT NULL,
   `Fecha_Registro` datetime NOT NULL,
   `Estatus` varchar(50) NOT NULL COMMENT 'Completada, Cancelada, Devuelta',
+  `Enviada` tinyint(1) NOT NULL,
   `Fecha_Cancelacion` datetime NOT NULL,
   `Regreso_Inventario` tinyint(1) NOT NULL,
   `Facturada` tinyint(1) NOT NULL,
@@ -59400,11 +59576,13 @@ CREATE TABLE `ventas` (
 -- Volcado de datos para la tabla `ventas`
 --
 
-INSERT INTO `ventas` (`ID_Venta`, `FK_Usuario`, `FK_Caja`, `FK_Sucursal`, `FK_Cliente`, `Descuento`, `Total`, `Tipo_Pago`, `Pago`, `Cambio`, `Notas`, `Fecha_Registro`, `Estatus`, `Fecha_Cancelacion`, `Regreso_Inventario`, `Facturada`, `Version_CFDI`, `Fecha_Expedicion_CFDI`, `Sello_CFDI`, `Forma_Pago_CFDI`, `No_Certificado_CFDI`, `Certificado_CFDI`, `Moneda_CFDI`, `Tipo_Comprobante_CFDI`, `Exportacion_CFDI`, `Metodo_Pago_CFDI`, `Lugar_Expedicion_CFDI`, `Confirmacion_CFDI`, `Emisor_RFC_CFDI`, `Emisor_Nombre_CFDI`, `Emisor_Regimen_Fiscal_CFDI`, `Receptor_RFC_CFDI`, `Receptor_Nombre_CFDI`, `Receptor_Domicilio_CFDI`, `Receptor_Regimen_Fiscal_CFDI`, `Receptor_Uso_CFDI`, `UUID_CFDI`, `Fecha_Timbrado_CFDI`, `Rfc_ProvCertif_CFDI`, `Sello_CFD_CFDI`, `No_Certificado_SAT_CFDI`, `Sello_SAT_CFDI`, `Periodicidad_CFDI`, `Meses_CFDI`, `Ano_CFDI`, `Relacion_CFDI`, `Cadena_CFDI`) VALUES
-(3, 2, 0, 1, 1, 5, 45, 'Efectivo', 50, -5, '', '2022-12-21 19:26:06', 'Completada', '0000-00-00 00:00:00', 0, 1, '4.0', '2022-12-21 19:35:09', 'QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==', '01', '30001000000400002434', 'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==', 'MXN', 'I', '01', 'PUE', '47190', '', 'EKU9003173C9', 'ESCUELA KEMPER URGATE', '601', 'XAXX010101000', 'PUBLICO EN GENERAL', '47190', '616', 'S01', 'e2e52d70-18a0-41c6-b2a8-23e7193a5e4b', '2022-12-21 19:35:13', 'SPR190613I52', 'QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==', '30001000000400002495', 'M3Xm7jJ688eImfZ+3OHqAhy7aKdg66VTwbf+w2v8PNl3nyfLU42ChxwL2bo3DXoeqXch6RJrPgFflNGqG3q2l8LKRb9ndP1j+w8sx2NXLbDHOMqAvmyYwSKF+L9dPRDrxKi2oIrBsWEfZZJFk82/gv3emY9GtEXDOz3CiVhQccHoLMamkSuSY1+5triUkAB/q5ohfOM5PFnyqUdGzlrLjLcwsZxk1c07TlhpkSm5ow+PUSE9hWdTUNHva0/rZOIrZ69lzSBIDcogSrQKth8N/yM6AZdrRcmx9ci4DVv8qitaesOD52zl3isBrbsImV+mlbioCGQn3j6+wPs5wGKQbQ==', '04', '12', '2022', '', '||1.1|e2e52d70-18a0-41c6-b2a8-23e7193a5e4b|2022-12-21T19:35:13|SPR190613I52|QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==|30001000000400002495||'),
-(5, 2, 0, 1, 1, 2.5, 55.1, 'Efectivo', 60, -4.9, '', '2022-12-21 19:57:17', 'Completada', '0000-00-00 00:00:00', 0, 1, '4.0', '2022-12-21 19:58:31', 'TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==', '03', '30001000000400002434', 'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==', 'MXN', 'I', '01', 'PUE', '47190', '', 'EKU9003173C9', 'ESCUELA KEMPER URGATE', '601', 'XAXX010101000', 'PUBLICO EN GENERAL', '47190', '616', 'S01', 'a97fbaad-01ce-4bfd-ad50-63ee62991ac4', '2022-12-21 19:58:37', 'SPR190613I52', 'TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==', '30001000000400002495', 'l/0OQhKeXsDlkeXGQabKQyGXgIrpVBbXbCd8BYEsiV8rmmSlcT2FO+ok3xEvGYxHU25rNXFD5TX6hpG7/3Zq+0ZoiR/A0C+PN+SEPHAOFferolzEqfd5W1KwNrcgoFjt9B2wmW2BhAw9HZqRNBwcCOM4CgkZKfBbX9Fe5BNLAbjZRsNqAUqAYo1usH6cmkUZgZSIofWqOPtgP53N0DIMhqH6b00JOYev0bwb9KejnsI9GY9ufg8OTRwF8A76OADkznV/uTYEfvw7l0o2YFgCPWLB4Hdsgsc6guALKvgKKltJM/YDRdaSu2mFsfmMbbu3BEBPCgWwlMh94RnXhUqE5w==', '04', '12', '2022', '', '||1.1|a97fbaad-01ce-4bfd-ad50-63ee62991ac4|2022-12-21T19:58:37|SPR190613I52|TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==|30001000000400002495||'),
-(6, 2, 0, 1, 1, 0, 1, 'Efectivo', 50, 49, '', '2022-12-23 01:31:03', 'Completada', '0000-00-00 00:00:00', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', ''),
-(8, 2, 0, 1, 27, 0, 58, 'Efectivo', 58, 0, '', '2022-12-26 16:25:50', 'Completada', '0000-00-00 00:00:00', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '');
+INSERT INTO `ventas` (`ID_Venta`, `FK_Usuario`, `FK_Caja`, `FK_Sucursal`, `FK_Cliente`, `Descuento`, `Total`, `Tipo_Pago`, `Pago`, `Cambio`, `Notas`, `Fecha_Registro`, `Estatus`, `Enviada`, `Fecha_Cancelacion`, `Regreso_Inventario`, `Facturada`, `Version_CFDI`, `Fecha_Expedicion_CFDI`, `Sello_CFDI`, `Forma_Pago_CFDI`, `No_Certificado_CFDI`, `Certificado_CFDI`, `Moneda_CFDI`, `Tipo_Comprobante_CFDI`, `Exportacion_CFDI`, `Metodo_Pago_CFDI`, `Lugar_Expedicion_CFDI`, `Confirmacion_CFDI`, `Emisor_RFC_CFDI`, `Emisor_Nombre_CFDI`, `Emisor_Regimen_Fiscal_CFDI`, `Receptor_RFC_CFDI`, `Receptor_Nombre_CFDI`, `Receptor_Domicilio_CFDI`, `Receptor_Regimen_Fiscal_CFDI`, `Receptor_Uso_CFDI`, `UUID_CFDI`, `Fecha_Timbrado_CFDI`, `Rfc_ProvCertif_CFDI`, `Sello_CFD_CFDI`, `No_Certificado_SAT_CFDI`, `Sello_SAT_CFDI`, `Periodicidad_CFDI`, `Meses_CFDI`, `Ano_CFDI`, `Relacion_CFDI`, `Cadena_CFDI`) VALUES
+(3, 2, 0, 1, 1, 5, 45, 'Efectivo', 50, -5, '', '2022-12-21 19:26:06', 'Completada', 1, '0000-00-00 00:00:00', 0, 1, '4.0', '2022-12-21 19:35:09', 'QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==', '01', '30001000000400002434', 'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==', 'MXN', 'I', '01', 'PUE', '47190', '', 'EKU9003173C9', 'ESCUELA KEMPER URGATE', '601', 'XAXX010101000', 'PUBLICO EN GENERAL', '47190', '616', 'S01', 'e2e52d70-18a0-41c6-b2a8-23e7193a5e4b', '2022-12-21 19:35:13', 'SPR190613I52', 'QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==', '30001000000400002495', 'M3Xm7jJ688eImfZ+3OHqAhy7aKdg66VTwbf+w2v8PNl3nyfLU42ChxwL2bo3DXoeqXch6RJrPgFflNGqG3q2l8LKRb9ndP1j+w8sx2NXLbDHOMqAvmyYwSKF+L9dPRDrxKi2oIrBsWEfZZJFk82/gv3emY9GtEXDOz3CiVhQccHoLMamkSuSY1+5triUkAB/q5ohfOM5PFnyqUdGzlrLjLcwsZxk1c07TlhpkSm5ow+PUSE9hWdTUNHva0/rZOIrZ69lzSBIDcogSrQKth8N/yM6AZdrRcmx9ci4DVv8qitaesOD52zl3isBrbsImV+mlbioCGQn3j6+wPs5wGKQbQ==', '04', '12', '2022', '', '||1.1|e2e52d70-18a0-41c6-b2a8-23e7193a5e4b|2022-12-21T19:35:13|SPR190613I52|QscEIgEt6C9qmsLLzKhKbA0JVb9QO2RLGcuFM5GRHeoSDRaYO5+ed+7g1n9FuTLuY0YBiSwMfP0yd2imZC/OujTeqSlK1zztEUJc2YueQQjHPV1ZTb1PfAQN/nfuBS4rKNtGplgMIvOP17cWSvAnWq2IXupkDH8PB2rXgGSlWY6Xq5OioGtlJ3urJk372nlrbT/vFFzfqCQNK9lFyjIoVNzxpyjPoMn1/35zhigT0xFlvD0FJBsNt1xYW64c4lYbmIuoYOhxYkO/UJ/jiy7BSwJe5GP8lPHSkCWxdLBpNFgmO0Qd4WPv0/rYbG4NgBTqlYdYiktBBL9iVGWQ5XUy1A==|30001000000400002495||'),
+(5, 2, 0, 1, 1, 2.5, 55.1, 'Efectivo', 60, -4.9, '', '2022-12-21 19:57:17', 'Completada', 0, '0000-00-00 00:00:00', 0, 1, '4.0', '2022-12-21 19:58:31', 'TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==', '03', '30001000000400002434', 'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==', 'MXN', 'I', '01', 'PUE', '47190', '', 'EKU9003173C9', 'ESCUELA KEMPER URGATE', '601', 'XAXX010101000', 'PUBLICO EN GENERAL', '47190', '616', 'S01', 'a97fbaad-01ce-4bfd-ad50-63ee62991ac4', '2022-12-21 19:58:37', 'SPR190613I52', 'TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==', '30001000000400002495', 'l/0OQhKeXsDlkeXGQabKQyGXgIrpVBbXbCd8BYEsiV8rmmSlcT2FO+ok3xEvGYxHU25rNXFD5TX6hpG7/3Zq+0ZoiR/A0C+PN+SEPHAOFferolzEqfd5W1KwNrcgoFjt9B2wmW2BhAw9HZqRNBwcCOM4CgkZKfBbX9Fe5BNLAbjZRsNqAUqAYo1usH6cmkUZgZSIofWqOPtgP53N0DIMhqH6b00JOYev0bwb9KejnsI9GY9ufg8OTRwF8A76OADkznV/uTYEfvw7l0o2YFgCPWLB4Hdsgsc6guALKvgKKltJM/YDRdaSu2mFsfmMbbu3BEBPCgWwlMh94RnXhUqE5w==', '04', '12', '2022', '', '||1.1|a97fbaad-01ce-4bfd-ad50-63ee62991ac4|2022-12-21T19:58:37|SPR190613I52|TaIfjLqt3PtAOHROS74cIhuW0tmHio+gHemDtRo5YIJFjIrelWqGPHOAZqCGUusXV+RwyHo1GXvB0Yip8srDyv1qrVStGz0VnvjqzwqMWMcu9h9FCUqHSZnRfeasjMAHAx3LexfuKGcsXG7Ijwy/gG9SSR3Fi39oF6HgSpjNghAJxjcN9InVHPj6wIjmyTEEK4VvLYhgx9CxC7smPkfndGpZ3t+lMOeIwOfCguo6FBPYKwQdji4l4KUH/9PVz5CiFxuTIKGNqSuvC4ToQZN9S7GMrdeZgSxTTkudv2omYV2fE3+S49SGMlyiijqhzrF9r69DFmbOmHEaFqn68Uio7A==|30001000000400002495||'),
+(9, 2, 0, 1, 27, 0, 58, 'Efectivo', 58, 0, '', '2022-12-26 16:59:07', 'Completada', 0, '0000-00-00 00:00:00', 0, 1, '4.0', '2022-12-26 17:01:15', 'GtY9UB7LWuTP/huNSQYjjHt/7GjYcCR5Eno3xOsJcndWYbF4ZCgzqrwB9oIlQFmGtPduYBlgrHtYbKN6OtKuXHItuTKI5rEJ9Wz1bx8XvA28eJjlrOMP6piBab0/rnk0LNlsYp9ZlQlcxzcJmgtrfnyyPZXcKX9t3O2FRI1/2CiddCYXhNmaT7GjDe63OtQbFExAZj3oRT2EZC0xY4s4AnnGKD0L818+G44Dk0CB3ONIyEKjtsxzHkrCB7Fq2RzuQtyokRkB3Dk8gy3Nzv8uiHYBKYVHS/8o2nGWedQVRNx7Yk7f2tH0Tb5xbzbBqrVRpsq+VYgFTp53GIl/11B3ow==', '01', '30001000000400002434', 'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==', 'MXN', 'I', '01', 'PUE', '47190', '', 'EKU9003173C9', 'ESCUELA KEMPER URGATE', '601', 'CACX7605101P8', 'XOCHILT CASAS CHAVEZ', '10740', '621', 'G01', '1c19a8cc-a46c-4e16-8399-551ca5fe4afb', '2022-12-26 17:01:16', 'SPR190613I52', 'GtY9UB7LWuTP/huNSQYjjHt/7GjYcCR5Eno3xOsJcndWYbF4ZCgzqrwB9oIlQFmGtPduYBlgrHtYbKN6OtKuXHItuTKI5rEJ9Wz1bx8XvA28eJjlrOMP6piBab0/rnk0LNlsYp9ZlQlcxzcJmgtrfnyyPZXcKX9t3O2FRI1/2CiddCYXhNmaT7GjDe63OtQbFExAZj3oRT2EZC0xY4s4AnnGKD0L818+G44Dk0CB3ONIyEKjtsxzHkrCB7Fq2RzuQtyokRkB3Dk8gy3Nzv8uiHYBKYVHS/8o2nGWedQVRNx7Yk7f2tH0Tb5xbzbBqrVRpsq+VYgFTp53GIl/11B3ow==', '30001000000400002495', 'ICmfagqjkxYowtQ08Tfs7EPbj2vM28CpDKCWy1vJylwar/h41vsu4dy/dpcR1nZxTjR4u6gBv2CvnXmCC4BavbiEzkainMieA28iZpS0PQr9Bx3WfliLeuk+GWOPWThiwvTW300UKxR64Z7iVFkvNkemU0T8SldRamwWiIqYGw2ubrN9iDhhRMvMHj9ZZu5ZiOmBw3NeWTu/hh/B9W0b0rCiC2GG1rA2Qxubl9TcGjJqGkXiOGU1TQhqkZ6ll1CqqRgxGIqgG7t2UcvKXqSyL9eU3e7Hu4/cGfwT/bJ3/AbmRzBidu7jzWZF7hlWjnMgML1BgmLaPJyIkf9uG6zdhw==', 'undefined', 'undefined', '', '', '||1.1|1c19a8cc-a46c-4e16-8399-551ca5fe4afb|2022-12-26T17:01:16|SPR190613I52|GtY9UB7LWuTP/huNSQYjjHt/7GjYcCR5Eno3xOsJcndWYbF4ZCgzqrwB9oIlQFmGtPduYBlgrHtYbKN6OtKuXHItuTKI5rEJ9Wz1bx8XvA28eJjlrOMP6piBab0/rnk0LNlsYp9ZlQlcxzcJmgtrfnyyPZXcKX9t3O2FRI1/2CiddCYXhNmaT7GjDe63OtQbFExAZj3oRT2EZC0xY4s4AnnGKD0L818+G44Dk0CB3ONIyEKjtsxzHkrCB7Fq2RzuQtyokRkB3Dk8gy3Nzv8uiHYBKYVHS/8o2nGWedQVRNx7Yk7f2tH0Tb5xbzbBqrVRpsq+VYgFTp53GIl/11B3ow==|30001000000400002495||'),
+(12, 2, 0, 1, 1, 0, 58, 'Efectivo', 58, 0, '', '2023-01-08 21:35:40', 'Completada', 0, '0000-00-00 00:00:00', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', ''),
+(13, 2, 0, 1, 1, 0, 58, 'Efectivo', 200, 142, '', '2023-01-08 21:40:07', 'Completada', 0, '0000-00-00 00:00:00', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', ''),
+(14, 2, 0, 1, 1, 0, 58, 'Efectivo', 58, 0, '', '2023-01-09 21:47:36', 'Completada', 0, '0000-00-00 00:00:00', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -59527,11 +59705,27 @@ ALTER TABLE `detalles_impuestos_ventas`
   ADD KEY `FK_Detalle_Venta` (`FK_Detalle_Venta`);
 
 --
+-- Indices de la tabla `detalles_orden`
+--
+ALTER TABLE `detalles_orden`
+  ADD PRIMARY KEY (`ID_Detalle_Orden`),
+  ADD KEY `FK_Producto` (`FK_Producto`),
+  ADD KEY `FK_Orden` (`FK_Orden`) USING BTREE;
+
+--
 -- Indices de la tabla `detalles_pedidos`
 --
 ALTER TABLE `detalles_pedidos`
   ADD PRIMARY KEY (`ID_Detalle_Pedido`),
   ADD KEY `FK_Pedido` (`FK_Pedido`);
+
+--
+-- Indices de la tabla `detalles_proveedores_productos`
+--
+ALTER TABLE `detalles_proveedores_productos`
+  ADD PRIMARY KEY (`ID_Detalle_Proveedor`),
+  ADD KEY `FK_Producto` (`FK_Producto`),
+  ADD KEY `FK_Proveedor` (`FK_Proveedor`);
 
 --
 -- Indices de la tabla `detalles_ventas`
@@ -59612,6 +59806,13 @@ ALTER TABLE `movimientos`
   ADD PRIMARY KEY (`ID_Movimiento`);
 
 --
+-- Indices de la tabla `ordenes_compra`
+--
+ALTER TABLE `ordenes_compra`
+  ADD PRIMARY KEY (`ID_Orden_Compra`),
+  ADD KEY `FK_Sucursal` (`FK_Sucursal`);
+
+--
 -- Indices de la tabla `pagos`
 --
 ALTER TABLE `pagos`
@@ -59659,6 +59860,14 @@ ALTER TABLE `proveedores`
 ALTER TABLE `relacionados_cfdi`
   ADD PRIMARY KEY (`ID_Relacion`),
   ADD KEY `FK_Venta` (`FK_Venta`);
+
+--
+-- Indices de la tabla `stock_productos`
+--
+ALTER TABLE `stock_productos`
+  ADD PRIMARY KEY (`ID_Stock`),
+  ADD KEY `FK_Producto` (`FK_Producto`),
+  ADD KEY `FK_Sucursal` (`FK_Sucursal`);
 
 --
 -- Indices de la tabla `sucursales`
@@ -59748,7 +59957,7 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
-  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `conversiones`
@@ -59766,7 +59975,7 @@ ALTER TABLE `detalles_caja`
 -- AUTO_INCREMENT de la tabla `detalles_clientes`
 --
 ALTER TABLE `detalles_clientes`
-  MODIFY `ID_Detalle_Cliente` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Detalle_Cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_devolucion`
@@ -59784,13 +59993,19 @@ ALTER TABLE `detalles_impuestos_pedidos`
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_productos`
 --
 ALTER TABLE `detalles_impuestos_productos`
-  MODIFY `ID_Detalle_Im_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `ID_Detalle_Im_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_ventas`
 --
 ALTER TABLE `detalles_impuestos_ventas`
-  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `detalles_orden`
+--
+ALTER TABLE `detalles_orden`
+  MODIFY `ID_Detalle_Orden` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_pedidos`
@@ -59799,16 +60014,22 @@ ALTER TABLE `detalles_pedidos`
   MODIFY `ID_Detalle_Pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT de la tabla `detalles_proveedores_productos`
+--
+ALTER TABLE `detalles_proveedores_productos`
+  MODIFY `ID_Detalle_Proveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT de la tabla `detalles_ventas`
 --
 ALTER TABLE `detalles_ventas`
-  MODIFY `ID_Detalle_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID_Detalle_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_compras`
 --
 ALTER TABLE `detalle_compras`
-  MODIFY `ID_Detalle_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `ID_Detalle_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `devoluciones`
@@ -59850,25 +60071,31 @@ ALTER TABLE `impuestos`
 -- AUTO_INCREMENT de la tabla `inventario`
 --
 ALTER TABLE `inventario`
-  MODIFY `ID_Inventario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID_Inventario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `merma`
 --
 ALTER TABLE `merma`
-  MODIFY `ID_Merma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `ID_Merma` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
-  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3259;
+  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3346;
+
+--
+-- AUTO_INCREMENT de la tabla `ordenes_compra`
+--
+ALTER TABLE `ordenes_compra`
+  MODIFY `ID_Orden_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `ID_Pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID_Pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `pedidos`
@@ -59880,31 +60107,37 @@ ALTER TABLE `pedidos`
 -- AUTO_INCREMENT de la tabla `precios`
 --
 ALTER TABLE `precios`
-  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT de la tabla `presentaciones`
 --
 ALTER TABLE `presentaciones`
-  MODIFY `ID_Presentacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `ID_Presentacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `ID_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `ID_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
-  MODIFY `ID_Proveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_Proveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `relacionados_cfdi`
 --
 ALTER TABLE `relacionados_cfdi`
   MODIFY `ID_Relacion` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `stock_productos`
+--
+ALTER TABLE `stock_productos`
+  MODIFY `ID_Stock` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `sucursales`
@@ -59934,7 +60167,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `ID_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `ID_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `zonas`
@@ -59997,10 +60230,24 @@ ALTER TABLE `detalles_impuestos_ventas`
   ADD CONSTRAINT `detalles_impuestos_ventas_ibfk_1` FOREIGN KEY (`FK_Detalle_Venta`) REFERENCES `detalles_ventas` (`ID_Detalle_Venta`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `detalles_orden`
+--
+ALTER TABLE `detalles_orden`
+  ADD CONSTRAINT `detalles_orden_ibfk_1` FOREIGN KEY (`FK_Orden`) REFERENCES `ordenes_compra` (`ID_Orden_Compra`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `detalles_orden_ibfk_2` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `detalles_pedidos`
 --
 ALTER TABLE `detalles_pedidos`
   ADD CONSTRAINT `detalles_pedidos_ibfk_1` FOREIGN KEY (`FK_Pedido`) REFERENCES `pedidos` (`ID_Pedido`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `detalles_proveedores_productos`
+--
+ALTER TABLE `detalles_proveedores_productos`
+  ADD CONSTRAINT `detalles_proveedores_productos_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `detalles_proveedores_productos_ibfk_2` FOREIGN KEY (`FK_Proveedor`) REFERENCES `proveedores` (`ID_Proveedor`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `detalles_ventas`
@@ -60035,6 +60282,19 @@ ALTER TABLE `inventario`
   ADD CONSTRAINT `inventario_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `merma`
+--
+ALTER TABLE `merma`
+  ADD CONSTRAINT `merma_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `merma_ibfk_2` FOREIGN KEY (`FK_Sucursal`) REFERENCES `sucursales` (`ID_Sucursal`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `ordenes_compra`
+--
+ALTER TABLE `ordenes_compra`
+  ADD CONSTRAINT `ordenes_compra_ibfk_1` FOREIGN KEY (`FK_Sucursal`) REFERENCES `sucursales` (`ID_Sucursal`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `pagos`
 --
 ALTER TABLE `pagos`
@@ -60064,6 +60324,13 @@ ALTER TABLE `presentaciones`
 --
 ALTER TABLE `relacionados_cfdi`
   ADD CONSTRAINT `relacionados_cfdi_ibfk_1` FOREIGN KEY (`FK_Venta`) REFERENCES `ventas` (`ID_Venta`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `stock_productos`
+--
+ALTER TABLE `stock_productos`
+  ADD CONSTRAINT `stock_productos_ibfk_1` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `stock_productos_ibfk_2` FOREIGN KEY (`FK_Sucursal`) REFERENCES `sucursales` (`ID_Sucursal`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `sucursales`

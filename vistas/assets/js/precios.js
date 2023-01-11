@@ -31,6 +31,7 @@ function tablaPrecios() {
         "colums": [
             "Producto",
 			"Presentacion",
+			"Proveedores",
 			"Nombre",
 			"Precio",
 			"Mayoreo"
@@ -75,9 +76,9 @@ jQuery(document).ready(function($) {
 		var padre = $(this).parent();
 		
 		var tipoPrecio = '';
-		if($(this).parent().index() == 3){
+		if($(this).parent().index() == 4){
 			tipoPrecio = 'Precio';
-		}else if($(this).parent().index() == 4){
+		}else if($(this).parent().index() == 5){
 			tipoPrecio = 'Precio_Mayoreo';
 		}
 

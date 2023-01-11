@@ -125,7 +125,6 @@ jQuery(document).ready(function($) {
         $("#NuevaContrasena").removeAttr("disabled");
         $("#RepetirNuevaContrasena").removeAttr("disabled");
         $(".campoMostrarContrasena").css("display", "none");
-        
         $("#NuevaContrasena").val("");
         $("#RepetirNuevaContrasena").val("");
     });
@@ -216,6 +215,8 @@ jQuery(document).ready(function($) {
             }else{
                 $("#verfotoUsuario img").attr('src', 'vistas/assets/archivos/default.jpg');
             }
+            $("#NuevaContrasena").val("");
+            $("#RepetirNuevaContrasena").val("");
             $("#ModalUsuario").modal("show");
         })
         .fail(function() {

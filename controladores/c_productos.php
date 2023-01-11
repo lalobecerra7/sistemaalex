@@ -17,14 +17,14 @@ class productos {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Producto, Codigo, productos.Descripcion, Tipo, Clase, Costo, Precio, Precio_Mayoreo, Detalles, Minimo, Maximo, Imagen, areas.Nombre, areas.Descripcion, areas.Nivel) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(ID_Producto, Codigo, productos.Descripcion, Tipo, Costo, Precio, Precio_Mayoreo, Detalles, Imagen, areas.Nombre, areas.Descripcion, areas.Nivel) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Producto, Codigo, productos.Descripcion, Tipo, Clase, Costo, Precio, Precio_Mayoreo, Detalles, Minimo, Maximo, Imagen, areas.Nombre, areas.Descripcion AS DescripcionArea, areas.Nivel, (SELECT COUNT(*) FROM productos $busqueda) AS Num, ((SELECT COUNT(*) FROM detalles_ventas WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras WHERE FK_Producto = ID_Producto)) AS numProd FROM productos LEFT JOIN areas ON FK_Area = ID_Area $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Producto, Codigo, productos.Descripcion, Tipo, Costo, Precio, Precio_Mayoreo, Detalles, Imagen, areas.Nombre, areas.Descripcion AS DescripcionArea, areas.Nivel, (SELECT COUNT(*) FROM productos $busqueda) AS Num, ((SELECT COUNT(*) FROM detalles_ventas WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras WHERE FK_Producto = ID_Producto)) AS numProd FROM productos LEFT JOIN areas ON FK_Area = ID_Area $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -76,13 +76,13 @@ class productos {
 						}
 					}
 
-					$presentacion = "<br><b>Presentaciones</b> <br>";
+					$presentacion = "<b>Presentaciones:</b><br>";
 					$queryPresentacion = "SELECT ID_Presentacion, FK_Producto, Nombre, Abreviatura FROM presentaciones WHERE FK_Producto = '".$row[$i]['ID_Producto']."'";
 					$rowPresentacion = $omodelo->_consultar($queryPresentacion);
 					$numerofilasPresentacion = $omodelo->numerofilas;
 					if ($numerofilasPresentacion > 0) {
 						for ($z=0; $z < $numerofilasPresentacion; $z++) { 
-							$presentacion .= "Nombre: ".$rowPresentacion[$z]["Nombre"]."<br>Abreviatura: ".$rowPresentacion[$z]["Abreviatura"]."<br>";
+							$presentacion .= $rowPresentacion[$z]["Nombre"].'('.$rowPresentacion[$z]["Abreviatura"].")<br>";
 						}
 					}
 
@@ -113,7 +113,7 @@ class productos {
 						'Descripcion' => $row[$i]['Descripcion'],
 						'Costo' => '<b class="dinero">$'.number_format($row[$i]['Costo'], 2).'</b>',
 						'Precio' => 'General: <b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b><br>'.$precios,
-						'Detalles' => $area."Detalles: ".$row[$i]['Detalles']."<br> Clase: <b>".$row[$i]['Clase']."</b><br> Minimo: <b>".$row[$i]['Minimo']."</b> <br> Maximo: <b>".$row[$i]['Maximo']."</b>".$presentacion,
+						'Detalles' => $area."Detalles: ".$row[$i]['Detalles']."<br>".$presentacion,
 						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar.' '.$botonAumentarExistencias,
 					);
 					
@@ -134,22 +134,20 @@ class productos {
 		$CodigoBarras = $omodelo->link->real_escape_string($CodigoBarras);
 		$Descripcion = $omodelo->link->real_escape_string($Descripcion);
 		$Categoria = $omodelo->link->real_escape_string($Categoria);
-		$Clase = $omodelo->link->real_escape_string($ClaseProducto);
 		$Costo = $omodelo->link->real_escape_string($CostoProducto);
 		$Precio = $omodelo->link->real_escape_string($PrecioProducto);
 		$PrecioMayoreo = $omodelo->link->real_escape_string($PrecioMayoreo);
 		$Area = $omodelo->link->real_escape_string($Area);
 		$Detalles = $omodelo->link->real_escape_string($DetallesProducto);
-		$Minimo = $omodelo->link->real_escape_string($Minimo);
-		$Maximo = $omodelo->link->real_escape_string($Maximo);
 		$ImporteProducto = $omodelo->link->real_escape_string($ImporteProducto);
 		$claveProdServ = $omodelo->link->real_escape_string($claveProdServ);
 		$claveUnidadProd = $omodelo->link->real_escape_string($claveUnidadProd);
 		$unidadProd = $omodelo->link->real_escape_string($unidadProd);
 		$abreUnudadProd = $omodelo->link->real_escape_string($abreUnudadProd);
 		$objImProducto = $omodelo->link->real_escape_string($objImProducto);
+		$bloqueado = $omodelo->link->real_escape_string($bloqueado);
 
-		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion',  FK_Categoria = '$Categoria', Tipo = '1', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Fecha_Registro = '$Fecha', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto', Importe = '$ImporteProducto'";
+		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion',  FK_Categoria = '$Categoria', Tipo = '1', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Fecha_Registro = '$Fecha', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto', Importe = '$ImporteProducto', Bloqueado = '$bloqueado'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -231,6 +229,33 @@ class productos {
 					echo "Error: ".mysqli_error($omodelo->link);
 				}
 			}
+
+			$proveedores = json_decode($proveedores, true);
+			foreach ($proveedores as $pro) {
+				$pro['ID_Proveedor'] = $omodelo->link->real_escape_string($pro['ID_Proveedor']);
+
+				$query1 = "INSERT INTO detalles_proveedores_productos SET FK_Producto = '$id', FK_Proveedor = '$pro[ID_Proveedor]'";
+				$error = $omodelo->_insertar($query1);
+	
+				if ($error == "si") {
+					echo "Error: ".mysqli_error($omodelo->link);
+				}
+			}
+
+			$stock = json_decode($stock, true);
+			foreach ($stock as $sto) {
+				$sto['ID_Sucursal'] = $omodelo->link->real_escape_string($sto['ID_Sucursal']);
+				$sto['Presentacion'] = $omodelo->link->real_escape_string($sto['Presentacion']);
+				$sto['Minimo'] = $omodelo->link->real_escape_string($sto['Minimo']);
+				$sto['Maximo'] = $omodelo->link->real_escape_string($sto['Maximo']);
+
+				$query1 = "INSERT INTO stock_productos SET FK_Producto = '$id', FK_Presentacion = IFNULL((SELECT ID_Presentacion FROM presentaciones WHERE Nombre = '$sto[Presentacion]' AND FK_Producto = '$id'), 0), FK_Sucursal = '$sto[ID_Sucursal]', Minimo = '$sto[Minimo]', Maximo = '$sto[Maximo]'";
+				$error = $omodelo->_insertar($query1);
+	
+				if ($error == "si") {
+					echo "Error: ".mysqli_error($omodelo->link);
+				}
+			}
 			
 			echo "Correcto";
 
@@ -247,22 +272,20 @@ class productos {
 		$CodigoBarras = $omodelo->link->real_escape_string($CodigoBarras);
 		$Descripcion = $omodelo->link->real_escape_string($Descripcion);
 		$Categoria = $omodelo->link->real_escape_string($Categoria);
-		$Clase = $omodelo->link->real_escape_string($ClaseProducto);
 		$Costo = $omodelo->link->real_escape_string($CostoProducto);
 		$Precio = $omodelo->link->real_escape_string($PrecioProducto);
 		$PrecioMayoreo = $omodelo->link->real_escape_string($PrecioMayoreo);
 		$Area = $omodelo->link->real_escape_string($Area);
 		$Detalles = $omodelo->link->real_escape_string($DetallesProducto);
-		$Minimo = $omodelo->link->real_escape_string($Minimo);
-		$Maximo = $omodelo->link->real_escape_string($Maximo);
 		$ImporteProducto = $omodelo->link->real_escape_string($ImporteProducto);
 		$claveProdServ = $omodelo->link->real_escape_string($claveProdServ);
 		$claveUnidadProd = $omodelo->link->real_escape_string($claveUnidadProd);
 		$unidadProd = $omodelo->link->real_escape_string($unidadProd);
 		$abreUnudadProd = $omodelo->link->real_escape_string($abreUnudadProd);
 		$objImProducto = $omodelo->link->real_escape_string($objImProducto);
+		$bloqueado = $omodelo->link->real_escape_string($bloqueado);
 
-		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', FK_Categoria = '$Categoria', Clase = '$Clase', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Minimo = '$Minimo', Maximo = '$Maximo', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto', Importe = '$ImporteProducto' WHERE ID_Producto = '$IDProducto'";
+		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', FK_Categoria = '$Categoria', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto', Importe = '$ImporteProducto', Bloqueado = '$bloqueado' WHERE ID_Producto = '$IDProducto'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -375,6 +398,47 @@ class productos {
 					}
 				}
 			}
+
+			$query1 = "DELETE FROM detalles_proveedores_productos WHERE FK_Producto = '$IDProducto'";
+			$error = $omodelo->_insertar($query1);
+	
+			if ($error == "si") {
+				echo "Error 8: ".mysqli_error($omodelo->link);
+			}else{
+				$proveedores = json_decode($proveedores, true);
+				foreach ($proveedores as $pro) {
+					$pro['ID_Proveedor'] = $omodelo->link->real_escape_string($pro['ID_Proveedor']);
+
+					$query1 = "INSERT INTO detalles_proveedores_productos SET FK_Producto = '$IDProducto', FK_Proveedor = '$pro[ID_Proveedor]'";
+					$error = $omodelo->_insertar($query1);
+		
+					if ($error == "si") {
+						echo "Error: ".mysqli_error($omodelo->link);
+					}
+				}
+			}
+
+			$query1 = "DELETE FROM stock_productos WHERE FK_Producto = '$IDProducto'";
+			$error = $omodelo->_insertar($query1);
+	
+			if ($error == "si") {
+				echo "Error 9: ".mysqli_error($omodelo->link);
+			}else{
+				$stock = json_decode($stock, true);
+				foreach ($stock as $sto) {
+					$sto['ID_Sucursal'] = $omodelo->link->real_escape_string($sto['ID_Sucursal']);
+					$sto['Presentacion'] = $omodelo->link->real_escape_string($sto['Presentacion']);
+					$sto['Minimo'] = $omodelo->link->real_escape_string($sto['Minimo']);
+					$sto['Maximo'] = $omodelo->link->real_escape_string($sto['Maximo']);
+
+					$query1 = "INSERT INTO stock_productos SET FK_Producto = '$IDProducto', FK_Presentacion = IFNULL((SELECT ID_Presentacion FROM presentaciones WHERE Nombre = '$sto[Presentacion]' AND FK_Producto = '$IDProducto'), 0), FK_Sucursal = '$sto[ID_Sucursal]', Minimo = '$sto[Minimo]', Maximo = '$sto[Maximo]'";
+					$error = $omodelo->_insertar($query1);
+		
+					if ($error == "si") {
+						echo "Error: ".mysqli_error($omodelo->link);
+					}
+				}
+			}
 			
 			echo "Correcto";
 
@@ -428,7 +492,7 @@ class productos {
 		if($tipo == 'modificarProducto'){
 			$IDProducto =  $omodelo->link->real_escape_string($IDProducto);
 
-			$query = "SELECT ID_Producto, Codigo, Descripcion, Tipo, FK_Categoria, Clase, Costo, Precio, Precio_Mayoreo, FK_Area, Detalles, Minimo, Maximo, importe, Fecha_Registro, Imagen, Clave_ProdServ_CFDI, Clave_Unidad_CFDI, Nombre_Unidad, Abreviatura_Unidad, Objeto_Impuesto_CFDI FROM productos WHERE ID_Producto = '$IDProducto'";
+			$query = "SELECT ID_Producto, Codigo, Descripcion, Tipo, FK_Categoria, Costo, Precio, Precio_Mayoreo, FK_Area, Detalles, importe, Fecha_Registro, Imagen, Clave_ProdServ_CFDI, Clave_Unidad_CFDI, Nombre_Unidad, Abreviatura_Unidad, Objeto_Impuesto_CFDI, Bloqueado FROM productos WHERE ID_Producto = '$IDProducto'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -505,19 +569,59 @@ class productos {
 						}
 					}
 
+					$proveedores = null;
+					$queryProveedores = "SELECT ID_Detalle_Proveedor, FK_Proveedor, Nombre, Empresa FROM detalles_proveedores_productos INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor WHERE FK_Producto = '$IDProducto'";
+					$rowProve = $omodelo->_consultar($queryProveedores);
+					$numerofilasProve = $omodelo->numerofilas;
+
+					if($rowProve == 'si'){
+						echo "Error 5: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasProve > 0){
+							for ($z=0; $z < $numerofilasProve; $z++) { 
+								$proveedores[$z] = array(
+									'ID_Detalle_Proveedor' => $rowProve[$z]['ID_Detalle_Proveedor'],
+									'FK_Proveedor' => $rowProve[$z]['FK_Proveedor'],
+									'Nombre' => $rowProve[$z]['Nombre'],
+									'Empresa' => $rowProve[$z]['Empresa']	
+								);
+							}
+						}
+					}
+
+					$stocks = null;
+					$queryStock = "SELECT ID_Stock, FK_Presentacion, FK_Sucursal, sucursales.Nombre AS Sucursal, IFNULL(presentaciones.Nombre, '') AS Presentacion, Minimo, Maximo FROM stock_productos INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE stock_productos.FK_Producto = '$IDProducto'";
+					$rowStock = $omodelo->_consultar($queryStock);
+					$numerofilasStock = $omodelo->numerofilas;
+
+					if($rowStock == 'si'){
+						echo "Error 6: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasStock > 0){
+							for ($z=0; $z < $numerofilasStock; $z++) { 
+								$stocks[$z] = array(
+									'ID_Stock' => $rowStock[$z]['ID_Stock'],
+									'FK_Presentacion' => $rowStock[$z]['FK_Presentacion'],
+									'FK_Sucursal' => $rowStock[$z]['FK_Sucursal'],
+									'Sucursal' => $rowStock[$z]['Sucursal'],
+									'Presentacion' => $rowStock[$z]['Presentacion'],
+									'Minimo' => $rowStock[$z]['Minimo'],
+									'Maximo' => $rowStock[$z]['Maximo']	
+								);
+							}
+						}
+					}
+
 					$arreglo = array(
 						'ID_Producto' => $row[0]['ID_Producto'],
 						'Codigo' => $row[0]["Codigo"],
 						'Descripcion' => $row[0]["Descripcion"],
 						'FK_Categoria' => $row[0]["FK_Categoria"],
-						'Clase' => $row[0]["Clase"],
 						'Costo' => $row[0]["Costo"],
 						'Precio' => $row[0]["Precio"],
 						'Precio_Mayoreo' => $row[0]["Precio_Mayoreo"],
 						'FK_Area' => $row[0]["FK_Area"],
 						'Detalles' => $row[0]["Detalles"],
-						'Minimo' => $row[0]["Minimo"],
-						'Maximo' => $row[0]["Maximo"],
 						'Fecha_Registro' => $row[0]["Fecha_Registro"],
 						'Imagen' => $row[0]["Imagen"],
 						'Importe' => $row[0]['importe'],  
@@ -528,7 +632,10 @@ class productos {
 						'Objeto_Impuesto_CFDI' => $row[0]['Objeto_Impuesto_CFDI'],
 						'Presentaciones' => $presentaciones,
 						'Precios' => $precios, 
-						'Impuestos' => $impuestos
+						'Proveedores' => $proveedores,
+						'Stocks' => $stocks,
+						'Impuestos' => $impuestos,
+						'Bloqueado' => $row[0]['Bloqueado']
 					);
 				}
 			}

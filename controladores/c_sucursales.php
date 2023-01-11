@@ -24,7 +24,7 @@ class sucursales {
 			}
 		}
 		
-		$query = "SELECT ID_Sucursal, sucursales.Nombre, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Telefono, Segundo_Telefono, Email, FK_Encargado, usuarios.Nombre AS NombreEncargado, usuarios.Primer_Apellido AS PrimerApellido, usuarios.Segundo_Apellido AS SegundoApellido, FK_Zona, zonas.Nombre AS NombreZona, (SELECT COUNT(*) FROM sucursales $busqueda) AS Num, ((SELECT COUNT(*) FROM ventas INNER JOIN cajas ON FK_Caja = ID_Caja WHERE cajas.FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM cajas WHERE FK_Sucursal = ID_Sucursal)) AS numSucu FROM sucursales INNER JOIN usuarios ON ID_Usuario = FK_Encargado LEFT JOIN zonas ON FK_Zona = ID_Zona $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Sucursal, sucursales.Nombre, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Telefono, Segundo_Telefono, Email, FK_Encargado, usuarios.Nombre AS NombreEncargado, usuarios.Primer_Apellido AS PrimerApellido, usuarios.Segundo_Apellido AS SegundoApellido, FK_Zona, zonas.Nombre AS NombreZona, Latitud, Longitud, (SELECT COUNT(*) FROM sucursales $busqueda) AS Num, ((SELECT COUNT(*) FROM ventas INNER JOIN cajas ON FK_Caja = ID_Caja WHERE cajas.FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM cajas WHERE FK_Sucursal = ID_Sucursal)) AS numSucu FROM sucursales INNER JOIN usuarios ON ID_Usuario = FK_Encargado LEFT JOIN zonas ON FK_Zona = ID_Zona $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -79,10 +79,14 @@ class sucursales {
 						$telefono .= "Segundo teléfono: <b>".$row[$i]['Segundo_Telefono'].'</b><br>';
 					}
 
+					if ($row[$i]['Latitud'] != '' && $row[$i]['Longitud'] != '') {
+						$telefono .= 'Ubicación: <b>'.$row[$i]['Latitud'].', '.$row[$i]['Longitud'].'</b>';
+					}
+					
 					if ($telefono == "") {
 						$telefono = "No hay telefono registrado";
 					}
-
+					
 					if ($row[$i]['Email'] != "") {
 						$email = $row[$i]['Email'];
 					}else{	
@@ -133,23 +137,24 @@ class sucursales {
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$NombreSucursal =  $omodelo->link->real_escape_string($NombreSucursal);
-		$EncargadoSucursal =  $omodelo->link->real_escape_string($EncargadoSucursal);
-		$CalleSucursal =  $omodelo->link->real_escape_string($CalleSucursal);
-		$NoExteriorSucursal =  $omodelo->link->real_escape_string($NoExteriorSucursal);
-		$NoInteriorSucursal =  $omodelo->link->real_escape_string($NoInteriorSucursal);
-		$ColoniaSucursal =  $omodelo->link->real_escape_string($ColoniaSucursal);
-		$CPSucursal =  $omodelo->link->real_escape_string($CPSucursal);
-		$CiudadSucursal =  $omodelo->link->real_escape_string($CiudadSucursal);
-		$EstadoSucursal =  $omodelo->link->real_escape_string($EstadoSucursal);
-		$PaisSucursal =  $omodelo->link->real_escape_string($PaisSucursal);
-		$EmailSucursal =  $omodelo->link->real_escape_string($EmailSucursal);
-		$TelefonoSucursal =  $omodelo->link->real_escape_string($TelefonoSucursal);
-		$Telefono2Sucursal =  $omodelo->link->real_escape_string($Telefono2Sucursal);
-		$Zona =  $omodelo->link->real_escape_string($Zona);
+		$NombreSucursal = $omodelo->link->real_escape_string($NombreSucursal);
+		$EncargadoSucursal = $omodelo->link->real_escape_string($EncargadoSucursal);
+		$CalleSucursal = $omodelo->link->real_escape_string($CalleSucursal);
+		$NoExteriorSucursal = $omodelo->link->real_escape_string($NoExteriorSucursal);
+		$NoInteriorSucursal = $omodelo->link->real_escape_string($NoInteriorSucursal);
+		$ColoniaSucursal = $omodelo->link->real_escape_string($ColoniaSucursal);
+		$CPSucursal = $omodelo->link->real_escape_string($CPSucursal);
+		$CiudadSucursal = $omodelo->link->real_escape_string($CiudadSucursal);
+		$EstadoSucursal = $omodelo->link->real_escape_string($EstadoSucursal);
+		$PaisSucursal = $omodelo->link->real_escape_string($PaisSucursal);
+		$EmailSucursal = $omodelo->link->real_escape_string($EmailSucursal);
+		$TelefonoSucursal = $omodelo->link->real_escape_string($TelefonoSucursal);
+		$Telefono2Sucursal = $omodelo->link->real_escape_string($Telefono2Sucursal);
+		$Zona = $omodelo->link->real_escape_string($Zona);
+		$latitud = $omodelo->link->real_escape_string($latitud);
+		$longitud = $omodelo->link->real_escape_string($longitud);
 
-
-		$query = "INSERT INTO sucursales SET Nombre = '$NombreSucursal', FK_Encargado = '$EncargadoSucursal', Calle = '$CalleSucursal', No_Exterior = '$NoExteriorSucursal', No_Interior = '$NoInteriorSucursal', Colonia = '$ColoniaSucursal', CP = '$CPSucursal', Ciudad = '$CiudadSucursal', Estado = '$EstadoSucursal', Pais = '$PaisSucursal', Email = '$EmailSucursal', Telefono = '$TelefonoSucursal', Segundo_Telefono  = '$Telefono2Sucursal', FK_Zona = '$Zona'";
+		$query = "INSERT INTO sucursales SET Nombre = '$NombreSucursal', FK_Encargado = '$EncargadoSucursal', Calle = '$CalleSucursal', No_Exterior = '$NoExteriorSucursal', No_Interior = '$NoInteriorSucursal', Colonia = '$ColoniaSucursal', CP = '$CPSucursal', Ciudad = '$CiudadSucursal', Estado = '$EstadoSucursal', Pais = '$PaisSucursal', Email = '$EmailSucursal', Telefono = '$TelefonoSucursal', Segundo_Telefono  = '$Telefono2Sucursal', FK_Zona = '$Zona', Latitud = '$latitud', Longitud = '$longitud'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -180,23 +185,25 @@ class sucursales {
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$IDSucursal =  $omodelo->link->real_escape_string($IDSucursal);
-		$NombreSucursal =  $omodelo->link->real_escape_string($NombreSucursal);
-		$EncargadoSucursal =  $omodelo->link->real_escape_string($EncargadoSucursal);
-		$CalleSucursal =  $omodelo->link->real_escape_string($CalleSucursal);
-		$NoExteriorSucursal =  $omodelo->link->real_escape_string($NoExteriorSucursal);
-		$NoInteriorSucursal =  $omodelo->link->real_escape_string($NoInteriorSucursal);
-		$ColoniaSucursal =  $omodelo->link->real_escape_string($ColoniaSucursal);
-		$CPSucursal =  $omodelo->link->real_escape_string($CPSucursal);
-		$CiudadSucursal =  $omodelo->link->real_escape_string($CiudadSucursal);
-		$EstadoSucursal =  $omodelo->link->real_escape_string($EstadoSucursal);
-		$PaisSucursal =  $omodelo->link->real_escape_string($PaisSucursal);
-		$EmailSucursal =  $omodelo->link->real_escape_string($EmailSucursal);
-		$TelefonoSucursal =  $omodelo->link->real_escape_string($TelefonoSucursal);
-		$Telefono2Sucursal =  $omodelo->link->real_escape_string($Telefono2Sucursal);
-		$Zona =  $omodelo->link->real_escape_string($Zona);
+		$IDSucursal = $omodelo->link->real_escape_string($IDSucursal);
+		$NombreSucursal = $omodelo->link->real_escape_string($NombreSucursal);
+		$EncargadoSucursal = $omodelo->link->real_escape_string($EncargadoSucursal);
+		$CalleSucursal = $omodelo->link->real_escape_string($CalleSucursal);
+		$NoExteriorSucursal = $omodelo->link->real_escape_string($NoExteriorSucursal);
+		$NoInteriorSucursal = $omodelo->link->real_escape_string($NoInteriorSucursal);
+		$ColoniaSucursal = $omodelo->link->real_escape_string($ColoniaSucursal);
+		$CPSucursal = $omodelo->link->real_escape_string($CPSucursal);
+		$CiudadSucursal = $omodelo->link->real_escape_string($CiudadSucursal);
+		$EstadoSucursal = $omodelo->link->real_escape_string($EstadoSucursal);
+		$PaisSucursal = $omodelo->link->real_escape_string($PaisSucursal);
+		$EmailSucursal = $omodelo->link->real_escape_string($EmailSucursal);
+		$TelefonoSucursal = $omodelo->link->real_escape_string($TelefonoSucursal);
+		$Telefono2Sucursal = $omodelo->link->real_escape_string($Telefono2Sucursal);
+		$Zona = $omodelo->link->real_escape_string($Zona);
+		$latitud = $omodelo->link->real_escape_string($latitud);
+		$longitud = $omodelo->link->real_escape_string($longitud);
 
-		$query = "UPDATE sucursales SET Nombre = '$NombreSucursal', FK_Encargado = '$EncargadoSucursal', Calle = '$CalleSucursal', No_Exterior = '$NoExteriorSucursal', No_Interior = '$NoInteriorSucursal', Colonia = '$ColoniaSucursal', CP = '$CPSucursal', Ciudad = '$CiudadSucursal', Estado = '$EstadoSucursal', Pais = '$PaisSucursal', Email = '$EmailSucursal', Telefono = '$TelefonoSucursal', Segundo_Telefono  = '$Telefono2Sucursal', FK_Zona = '$Zona' WHERE ID_Sucursal = '$IDSucursal'";
+		$query = "UPDATE sucursales SET Nombre = '$NombreSucursal', FK_Encargado = '$EncargadoSucursal', Calle = '$CalleSucursal', No_Exterior = '$NoExteriorSucursal', No_Interior = '$NoInteriorSucursal', Colonia = '$ColoniaSucursal', CP = '$CPSucursal', Ciudad = '$CiudadSucursal', Estado = '$EstadoSucursal', Pais = '$PaisSucursal', Email = '$EmailSucursal', Telefono = '$TelefonoSucursal', Segundo_Telefono  = '$Telefono2Sucursal', FK_Zona = '$Zona', Latitud = '$latitud', Longitud = '$longitud' WHERE ID_Sucursal = '$IDSucursal'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -214,7 +221,9 @@ class sucursales {
 		$fecha = date ('Y-m-d H:i:s');
 
 		if($tipoDetalle == '1'){
-			$query = "SELECT *, ((SELECT COUNT(*) FROM ventas INNER JOIN cajas ON FK_Caja = ID_Caja WHERE cajas.FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM cajas WHERE FK_Sucursal = ID_Sucursal)) AS numSucu  FROM sucursales WHERE ID_Sucursal = '$id'";
+			$arreglo = array();
+
+			$query = "SELECT ID_Sucursal, Nombre, FK_Encargado, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Email, Telefono, Segundo_Telefono, Latitud, Longitud, FK_Zona, ((SELECT COUNT(*) FROM ventas INNER JOIN cajas ON FK_Caja = ID_Caja WHERE cajas.FK_Sucursal = ID_Sucursal) + (SELECT COUNT(*) FROM cajas WHERE FK_Sucursal = ID_Sucursal)) AS numSucu  FROM sucursales WHERE ID_Sucursal = '$id'";
 			$row = $omodelo->_consultar($query);
 				
 			if ($row == "si") {
@@ -227,10 +236,10 @@ class sucursales {
 				}
 				$botonModificar = '<button type="button" class="btn btn-theme-inverse btn-info bModificarSucu" attrID="'.$row[0]["ID_Sucursal"].'" nombre="'.$row[0]["Nombre"].'"><i class="fa fa-pencil-square-o"></i></button> ';
 
-				$arreglo = array('Nombre' => $row[0]["Nombre"], 'FK_Encargado' => $row[0]["FK_Encargado"], 'Calle' => utf8_encode($row[0]["Calle"]), 'No_Exterior' => utf8_encode($row[0]["No_Exterior"]), 'No_Interior' => $row[0]["No_Interior"], 'Colonia' => $row[0]["Colonia"], 'CP' => $row[0]["CP"], 'Ciudad' => $row[0]["Ciudad"], 'Estado' => $row[0]["Estado"], 'Pais' => $row[0]["Pais"], 'Email' => $row[0]["Email"], 'Telefono' => $row[0]["Telefono"], 'Segundo_Telefono' => $row[0]["Segundo_Telefono"], 'FK_Zona' => $row[0]["FK_Zona"]);
-
-				echo json_encode($arreglo);
+				$arreglo = array('Nombre' => $row[0]["Nombre"], 'FK_Encargado' => $row[0]["FK_Encargado"], 'Calle' => utf8_encode($row[0]["Calle"]), 'No_Exterior' => utf8_encode($row[0]["No_Exterior"]), 'No_Interior' => $row[0]["No_Interior"], 'Colonia' => $row[0]["Colonia"], 'CP' => $row[0]["CP"], 'Ciudad' => $row[0]["Ciudad"], 'Estado' => $row[0]["Estado"], 'Pais' => $row[0]["Pais"], 'Email' => $row[0]["Email"], 'Telefono' => $row[0]["Telefono"], 'Segundo_Telefono' => $row[0]["Segundo_Telefono"], 'FK_Zona' => $row[0]["FK_Zona"], 'Latitud' => $row[0]['Latitud'], 'Longitud' => $row[0]['Longitud']);	
 			}
+
+			echo json_encode($arreglo);
 		}else if($tipoDetalle == '2'){
 			$query = "SELECT ID_Sucursal, nombre FROM sucursales";
 			$row = $omodelo->_consultar($query);

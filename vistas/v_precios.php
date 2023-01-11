@@ -59,6 +59,7 @@
 							<tr>
 								<th>Producto</th>
 								<th>Presentación</th>
+								<th>Proveedores</th>
 								<th>Nombre</th>
 								<th style="width: 15%;">Precio</th>
 								<th style="width: 15%;">Mayoreo</th>

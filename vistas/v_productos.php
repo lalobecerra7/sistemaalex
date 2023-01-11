@@ -36,7 +36,7 @@
 		            <th style="width: 15%;">Descripción</th>
 		            <th style="width: 10%;">Costo</th>
 		            <th style="width: 25%;">Precio</th>
-		            <th style="width: 30%;">Detalles</th>
+		            <th style="width: 30%;" orden="No">Detalles</th>
 		            <th style="width: 5%;" orden="No">Acciones</th>
 		          </thead>
 		          <tbody>                        
@@ -59,6 +59,8 @@
       </div>
       <form id="formPresentaciones"><button type="submit" id="bGuardarPres" hidden></button></form>
       <form id="formPreciosProd"><button type="submit" id="bGuardarPrecio" hidden></button></form>
+      <form id="formProveedoresProd"><button type="submit" id="bGuardarProveedor" hidden></button></form>
+      <form id="formStockProd"><button type="submit" id="bGuardarStock" hidden></button></form>
       <form id="FormProductos">
 	      <div class="modal-body">
 	       	<div class="row">
@@ -114,16 +116,6 @@
 		      </div>
 
 					<div class="row">
-						<div class="col-md-4 col-sm-12 mb-3">
-					  	<div class="form-floating mb-3">
-								<select class="form-select" name="ClaseProducto" id="ClaseProducto" >
-									<option value="">- Seleccione una opción -</option>
-									<option value="Pieza">Pieza</option>
-									<option value="Granel">Granel</option>
-								</select>
-								<label for="ClaseProducto">Clase de producto</label>
-							</div>
-		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		           	<input type="number" class="form-control" step="any" min='0' max='10000' id="PrecioProducto" name="PrecioProducto" placeholder="Ingresa el precio del producto">
@@ -136,40 +128,32 @@
 		            <label for="CostoProducto">Costo</label>
 		          </div>
 		        </div>
-	       	</div>
-					<div class="row">
-						<div class="col-md-4 col-sm-12 mb-3">
+		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		            <input type="number" class="form-control" step="any" min='0' max='10000' id="PrecioMayoreo" name="PrecioMayoreo" placeholder="Ingresa el precio de mayoreo del producto">
 		            <label for="PrecioMayoreo">Precio de mayoreo</label>
 		          </div>
 		        </div>
-		        <div class="col-md-4 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		            <input type="number" class="form-control" id="Minimo" step="any" min='0' max='1000' name="Minimo" placeholder="Ingresa el mínimo de stock del producto">
-		            <label for="Minimo">Stock Mínimo</label>
-		          </div>
-		        </div>
-						<div class="col-md-4 col-sm-12 mb-3">
-		        	<div class="form-floating">
-		               	<input type="number" class="form-control" id="Maximo" step="any" min='0' max='1000' name="Maximo" placeholder="Ingresa el máximo de stock del producto">
-		                <label for="Maximo">Stock Máximo</label>
-		            </div>
-		        </div>
 	       	</div>
 					<div class="row">
-		        <div class="col-md-8 col-sm-12 mb-3">
+		        <div class="col-md-6 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		            <input type="text" class="form-control" id="DetallesProducto" name="DetallesProducto" placeholder="Ingresa los detalles adicionales del producto">
 		            <label for="DetallesProducto">Detalles adicionales</label>
 		          </div>
 		        </div>
-		        <div class="col-md-4 col-sm-12 mb-3">
+		        <div class="col-md-3 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		           	<input type="number" class="form-control" step="any" min='0' max='10000' id="ImporteProducto" name="ImporteProducto" placeholder="Ingresa el precio del importe">
 		            <label for="ImporteProducto">Importe</label>
 		          </div>
 		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+			        <div class="form-check form-switch">
+							  <input class="form-check-input" type="checkbox" id="bloquearProducto">
+							  <label class="form-check-label">Bloquear</label>
+							</div>
+						</div>	
 	    		</div>
 	    		<hr>
 		      <div class="row mb-3">
@@ -221,6 +205,38 @@
 							</div>
 		        </div>
 		      </div>
+		     	<hr>
+	    		<div class="row mb-3">
+		       	<div class="col-md-6 col-sm-12 text-start">
+		       		<b class="mb-3">Proveedores</b>
+		       	</div>
+		      </div>
+		      <div class="col-md-12 col-sm-12">
+		      	<div class="table-responsive">
+		       		<table class="table table table-hover table-striped table-bordered text-center" id="tablaProveedoresProducto" width="100%" style="font-size: 12px;">
+				        <thead>
+				          <th>Nombre</th>
+				        	<th>Acciones</th>
+				        </thead>
+				        <tbody id="verProveedoresProd">
+
+				        </tbody>
+				        <tfoot>
+				        	<tr>
+				        		<td>
+				        			<select form="formProveedoresProd" class="form-select" name="proveedorProducto" id="proveedorProducto" required>
+                      	<option value="">--Seleccione una opción--</option>  
+                      	#proveedores# 
+                    	</select>	
+		                </td>
+		                <td>
+		                	<button  type="button" class="btn btn-sm btn-success" id="bAgergarProveedor"><i class="fas fa-plus"></i></button>
+		                </td>
+				        	</tr>
+				        </tfoot>
+				    	</table>
+		      	</div>
+		      </div>
 		      <hr>
 	    		<div class="row mb-3">
 		       	<div class="col-md-6 col-sm-12 text-start">
@@ -253,7 +269,7 @@
 		                  <input type="text" form="formPresentaciones" class="form-control" id="nombrePresentacion" name="nombrePresentacion" placeholder="Ingresa el nombre de la presentación/unidad" required>
 		                </td>
 		                <td>
-		                  <input type="text" form="formPresentaciones" class="form-control" id="abreviaturaPresentacion" name="abreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación/unidad" required>
+		                  <input type="text" form="formPresentaciones" class="form-control" id="abreviaturaPresentacion" name="abreviaturaPresentacion" placeholder="Ingresa la abreviatura de la presentación/unidad">
 		                </td>
 		                <td>
 		                	<input type="number" step="any" value="0" form="formPresentaciones" class="form-control" id="costoPresentacion" name="costoPresentacion" placeholder="Ingresa el costo de la presentación/unidad" required>	
@@ -313,6 +329,52 @@
 		                </td>
 		                <td>
 		                	<button type="button" class="btn btn-sm btn-success" id="bAgergarPrecio" attrid nombre><i class="fas fa-plus"></i></button>
+		                </td>
+				        	</tr>
+				        </tfoot>
+				    	</table>
+		      	</div>
+		      </div>
+		      <hr>
+	    		<div class="row mb-3">
+		       	<div class="col-md-6 col-sm-12 text-start">
+		       		<b class="mb-3">Stock</b>
+		       	</div>
+		      </div>
+		      <div class="col-md-12 col-sm-12">
+		      	<div class="table-responsive">
+		       		<table class="table table table-hover table-striped table-bordered text-center" id="tablaStockProducto" width="100%" style="font-size: 12px;">
+				        <thead>
+				        	<th>Sucursal</th>
+				        	<th>Presentación</th>
+				          <th>Mínimo</th>
+				          <th>Máximo</th>
+				        	<th>Acciones</th>
+				        </thead>
+				        <tbody id="verStockProd">
+
+				        </tbody>
+				        <tfoot>
+				        	<tr>
+				        		<td>
+				        			<select form="formStockProd" class="form-select" name="sucursalProducto" id="sucursalProducto" required>
+                      	<option value="">--Seleccione una opción--</option>  
+                      	#sucursales# 
+                    	</select>	
+		                </td>
+		                <td>
+	                    <select form="formPreciosProd" class="form-select" name="presentacionProdSelect1" id="presentacionProdSelect1">
+	                      <option value="">--Seleccione una opción--</option>  
+	                    </select>
+	                	</td>
+		                <td>
+		                	<input type="number" step="any" min="0.1" form="formStockProd" class="form-control" id="minimoStock" name="minimoStock" placeholder="Ingresa el stock mínimo" required>		
+		                </td>
+		                <td>
+		                	<input type="number" step="any" min="0.1" form="formStockProd" class="form-control" id="maximoStock" name="maximoStock" placeholder="Ingresa el stock máximo" required>	
+		                </td>
+		                <td>
+		                	<button  type="button" class="btn btn-sm btn-success" id="bAgergarStock"><i class="fas fa-plus"></i></button>
 		                </td>
 				        	</tr>
 				        </tfoot>

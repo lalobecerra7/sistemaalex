@@ -71,7 +71,7 @@
               <div class="app-brand justify-content-center" style="margin: auto;">
                 <a href="javascript:void(0)">
                   <!-- <img src="vistas/assets/img/logos/icon.png" style="width:100%;"> -->
-                  <h1>CREMASI</h1>
+                  <h1>MISCELÁNEA RÍOS</h1>
                 </a>
               </div>
               <br>

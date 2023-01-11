@@ -107,6 +107,7 @@ jQuery(document).ready(function($) {
             }
         })
         .done(function(res) {
+        	//console.log($.trim(res));
             $("#CodigoProductoVenta").val("");
             if($.trim(res) == "No encontrado"){
                 Swal.fire({
@@ -116,7 +117,7 @@ jQuery(document).ready(function($) {
 				})
             }else{       
             	var datos = JSON.parse($.trim(res));
-            	console.log(datos);
+            	//console.log(datos);
                 var existencia = 0;
                 if(datos.Existencia != null){
                     existencia = datos.Existencia;
@@ -506,7 +507,6 @@ jQuery(document).ready(function($) {
 			$("#GuardarVenta").attr("idpedido", $("#CargaPedidosModalVentas").attr("attrid"));
 			$("#GuardarVenta").attr("foliopedido", $("#CargaPedidosModalVentas").attr("folio"));
 			$("#ImportePagadoVenta").val(total);
-
 		}
 	});
 
@@ -935,7 +935,12 @@ jQuery(document).ready(function($) {
 
 	});
 
-	
+	$(document).on('change keyup', '#ImportePagadoVenta', function() {
+		const searchRegExp = new RegExp(',', 'g');
+		var pagado = parseFloat($(this).val()) || 0;
+		$("#verCambio").html(pagado - parseFloat($("#TotalVentaFinal").text().replace('$', '').replace(searchRegExp, '')));
+		moneda();
+	});
 });
 
 function TablaVerPedidosGuardados(){
@@ -1004,8 +1009,8 @@ function VentaTablaProductos(){
 			"Existencia"
 		], 
 		"sort": [
-			1,
-			"desc"
+			0,
+			"asc"
 		],
 		"url": "index.php", 
 		"params":{

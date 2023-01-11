@@ -6,13 +6,19 @@ function v_clientes() {
             NombreCliente: {
                 required: true
             },
+            primerApellidoCliente: {
+                required: true
+            },
             SucursalCliente: {
                 required: true
             }
         },
         messages: {
             NombreCliente: {
-                required: "El nombre del cliente es requerido."
+                required: "El nombre es requerido."
+            },
+            primerApellidoCliente: {
+                required: "El primer apellido es requerido."
             },
             SucursalCliente: {
                 required: "La sucursal es requerdia."
@@ -21,10 +27,9 @@ function v_clientes() {
         submitHandler: function(form) { 
             var direcciones = '';
             $("#TablaUbicacionClientes tbody tr").each(function(index, el){
-                if ($(this).find("#CalleCliente").val() != "" && $(this).find("#NombreContactoCliente").val() != "") {
-                    direcciones += $(this).find("#CalleCliente").val()+"~"+$(this).find("#NoExteriorCliente").val()+"~"+$(this).find("#NoInteriorCliente").val()+"~"+$(this).find("#CPCliente").val()+"~"+$(this).find("#ColoniaCliente").val()+"~"+$(this).find("#CiudadCliente").val()+"~"+$(this).find("#EstadoCliente").val()+"~"+$(this).find("#PaisCliente").val()+"~"+$(this).find("#NombreContactoCliente").val()+"~"+$(this).find("#PuestoContactoCliente").val()+"~"+$(this).find("#CorreoContactoCliente").val()+"~"+$(this).find("#TelefonoContactoCliente").val()+",";
-                }
+                direcciones += $(this).find("#CalleCliente").val()+"~"+$(this).find("#NoExteriorCliente").val()+"~"+$(this).find("#NoInteriorCliente").val()+"~"+$(this).find("#CPCliente").val()+"~"+$(this).find("#ColoniaCliente").val()+"~"+$(this).find("#CiudadCliente").val()+"~"+$(this).find("#EstadoCliente").val()+"~"+$(this).find("#PaisCliente").val()+"~"+$(this).find("#NombreContactoCliente").val()+"~"+$(this).find("#PuestoContactoCliente").val()+"~"+$(this).find("#CorreoContactoCliente").val()+"~"+$(this).find("#TelefonoContactoCliente").val()+",";
             });
+
             var data = new FormData(document.getElementById("FormClientes"));
             data.append("metodo", $("#GuardarCliente").attr("tipo"));
             data.append("accion", "clientes");
@@ -326,6 +331,8 @@ jQuery(document).ready(function($) {
             var datos = JSON.parse($.trim(res));
 
             $("#NombreCliente").val(datos.Nombre);
+            $("#primerApellidoCliente").val(datos.Primer_Apellido);
+            $("#segundoApellidoCliente").val(datos.Segundo_Apellido);
             $("#TelefonoCliente").val(datos.Telefono);
             $("#CelularCliente").val(datos.Celular);
             $("#CorreoCliente").val(datos.Correo);
@@ -352,6 +359,7 @@ jQuery(document).ready(function($) {
             $("#puestoContactoCliente").val(datos.Puesto_Contacto);
             $("#correoContactoCliente").val(datos.Email_Contacto);
             $("#telefonoContactoCliente").val(datos.Tel_Contacto);
+            $("#INECliente").val(datos.INE);
             if (datos.Foto != "") {
                 $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/fotosClientes/'+datos.Foto);
             }else{
@@ -508,6 +516,7 @@ function TablaClientes(){
     ajaxMyDatatable({
         "table": $("#TablaClientes"), 
         "colums": [
+            "IDCliente",
             "Fecha",
             "Nombre",
             "Direcciones",
@@ -516,7 +525,7 @@ function TablaClientes(){
         ], 
         "sort": [
             0,
-            "desc"
+            "asc"
         ],
         "url": "index.php", 
         "params":{

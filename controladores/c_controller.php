@@ -48,7 +48,43 @@ class controller {
 					$pagina = str_replace('#ImagenPerfil#', 'vistas/assets/archivos/default.jpg', $pagina);
 			}else{
 					$pagina = str_replace('#ImagenPerfil#', 'vistas/assets/archivos/fotosUsuarios/'.$_SESSION['user_admin']['Foto'], $pagina);
-			}       
+			}     
+
+			$alertas = '';
+			$query = "SELECT ID_Stock, stock_productos.FK_Producto, Descripcion, Nombre_Unidad, FK_Presentacion, FK_Sucursal, Minimo, Maximo, Nombre, IFNULL((SELECT Cantidad FROM inventario WHERE FK_Producto = stock_productos.FK_Producto AND FK_Presentacion = FK_Presentacion AND FK_Sucursal = FK_Sucursal), 0) AS Cantidad FROM stock_productos INNER JOIN productos ON stock_productos.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			}else{
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$presentacion = 'Sin presentación';
+						if($row[$i]['FK_Presentacion'] == 0){
+							if(trim($row[$i]['Nombre_Unidad']) != ''){
+								$presentacion = trim($row[$i]['Nombre_Unidad']);
+							}
+						}else{
+							$presentacion = trim($row[$i]['Nombre']);
+						}
+
+						if($row[$i]['Cantidad'] > $row[$i]['Maximo']){
+							$alertas .= '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+							  <strong>Se alcanzó el stock máximo de '.$row[$i]['Descripcion'].' '.$presentacion.'</strong>,la cantidad actual es '.$row[$i]['Cantidad'].', el mínimo es '.$row[$i]['Minimo'].'.
+							  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+							</div>';
+						}else if($row[$i]['Cantidad'] < $row[$i]['Minimo']){
+							$alertas .= '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+							  <strong>Se alcanzó el stock mínimo de '.$row[$i]['Descripcion'].' '.$presentacion.'</strong>, la cantidad actual es '.$row[$i]['Cantidad'].', el mínimo es '.$row[$i]['Minimo'].'.
+							  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+							</div>';
+						}	
+					}
+				}
+			}
+
+			$pagina = str_replace('#alertas#', $alertas, $pagina);
 
 		///************************* PERMISOS DEL MENU **************************///
 		$botonSucursales = '';
@@ -133,7 +169,15 @@ class controller {
                 <div data-i18n="Compras">Compras</div>
               </a>
             </li>';
+		}else if(@$omodelo->permisos()['v_orden_compra'][1] == '1'){
+				$botonCompras = '<li class="menu-item cargarVista" carga="v_hacerCompra" titulo="Hacer Compra" id="cargarHacerCompra">
+            <a href="javascript:void(0)"  class="menu-link">
+              <i class="menu-icon fas fa-basket-shopping"></i>
+              <div data-i18n="Compras">Compras</div>
+            </a>
+       	</li>';
 		}
+
 		$pagina = str_replace('#MenuCompras#', $botonCompras, $pagina);
 
 		$botonVentas = '';
@@ -234,6 +278,24 @@ class controller {
               </ul>';
 		}
 		$pagina = str_replace('#MenuFacturacion#', $botonFacturacion, $pagina);
+
+		$botonProd = '';
+		if($botonProductos != '' || $botonInventario != '' || $botonCategorias != '' || $botonAreas != '' || $botonPrecios != ''){
+			  $botonProd = '<a href="javascript:void(0);" class="menu-link menu-toggle">
+            <i class="menu-icon fas fa-boxes-stacked"></i>
+            <div data-i18n="Layouts">Productos</div>
+        </a>';
+    }
+    $pagina = str_replace('#menuProd#', $botonProd, $pagina);
+
+		$botonConfi = '';
+		if($botonFacturacion != '' || $botonTicket != ''){
+			  $botonConfi = '<a href="javascript:void(0);" class="menu-link menu-toggle">
+            <i class="menu-icon fas fa-cogs"></i>
+            <div data-i18n="Layouts">Configuración</div>
+        </a>';
+    }
+    $pagina = str_replace('#menuConfi#', $botonConfi, $pagina);
 
 		return $pagina;
 	}
@@ -356,8 +418,29 @@ class controller {
 
 			$pagina = str_replace('#zonas#', $opciones, $pagina);
 
-		}else if($nombre == "v_inventario"){
+			$query = "SELECT ID_Proveedor, Nombre, Empresa FROM proveedores WHERE ID_Proveedor != '1'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
 
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="'.$row[$i]['ID_Proveedor'].'">'.$row[$i]['Empresa'].'/'.$row[$i]['Nombre'].'</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#proveedores#', $opciones, $pagina);
+
+		}else if($nombre == "v_inventario"){
+			$botonPermisosTraslados = "";
+					/*if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][3] == '1') {
+						$botonPermisosTraslados = '<button class="btn btn-primary btn-sm mb-1" id="Traslados" title="Traslado de producto" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-right-left"></i></button>';
+					}*/
+					
 			$query = "SELECT ID_Sucursal, Nombre FROM sucursales";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
@@ -520,6 +603,27 @@ class controller {
 
 			$pagina = str_replace('#sucursales#', $opciones, $pagina);
 		}else if($nombre == "v_hacerCompra"){
+			if ($omodelo->permisos() != 'Administrador'){
+				if(@$omodelo->permisos()['v_compras'][2] == '0'){
+					echo '<script>
+						$("#RealizarCompra").addClass("oculto");
+						$("#cambiarTipoCompra").addClass("oculto");
+						$("#ponerDescuento").addClass("oculto");
+						$("#verTotal").addClass("oculto");
+						$("#verSubtotal").addClass("oculto");
+					</script>';
+				}
+
+				if(@$omodelo->permisos()['v_compras'][2] == '0' || @$omodelo->permisos()['v_ordenes_compra'][5] == '0'){
+					echo '<script>$(".costoOculto").addClass("oculto")</script>
+					<style>
+						.costoP, .totalP{
+							display: none;
+						}
+					</style>';
+				}
+			}
+
 			$query = "SELECT ID_Sucursal, sucursales.Nombre AS Nombre FROM sucursales, usuarios WHERE ID_Sucursal = FK_Sucursal AND ID_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;

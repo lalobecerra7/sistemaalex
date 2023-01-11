@@ -48,7 +48,7 @@
 	</div>
 </div>
 
-
+<!--//////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalUsuario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content">
@@ -195,7 +195,7 @@
                             <tr class="table-secondary">
                                 <th>Puedes seleccionar un perfil</th>
                                 <th style="vertical-align: middle;">
-                                    <div class="form-check form-check-inline">
+                                    <!--<div class="form-check form-check-inline">
                                         <input class="form-check-input checkPerfil" type="radio" name="radiosPerfil" id="perfil1" value="option1">
                                         <label for="perfil1" class="form-check-label">Capturista</label>
                                     </div>
@@ -206,7 +206,7 @@
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input checkPerfil" type="radio" name="radiosPerfil" id="perfil3" value="option3">
                                         <label for="perfil3" class="form-check-label" for="inlineRadio2">Supervisor</label>
-                                    </div>
+                                    </div>-->
                                     <button type="button" class="btn btn-light btn-sm" id="bResetearPer">Resetear Permisos <i class="fas fa-redo"></i></button>
                                 </th>
                             </tr>
@@ -296,6 +296,49 @@
                                                 <td>Eliminar</td>
                                             </tr>
                                             <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_orden_compra">Ordenes de Compra</th>
+                                <td class="table-responsive">
+                                    <table class="table table-bordered text-center" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Ver</td>
+                                                <td>Agregar</td>
+                                                <td>Modificar</td>
+                                                <td>Eliminar</td>
+                                                <td>Ver Costos</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <div>
                                                         <input class="form-check-input checkPermisos" type="checkbox">
@@ -500,13 +543,19 @@
                                         <tbody>
                                             <tr>
                                                 <td>Ver inventario</td>
-                                                <td>Registrar merma</td>
-                                                <td>Registrar traslados</td>
                                                 <td>Ver merma</td>
+                                                <td>Registrar merma</td>
+                                                <td>Ver traslados</td>
+                                                <td>Registrar traslados</td>
                                                 <td>Ver conversiones</td>
                                                 <td>Registrar conversiones</td>
                                             </tr>
                                             <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <div>
                                                         <input class="form-check-input checkPermisos" type="checkbox">

@@ -4,7 +4,6 @@
     header('Location: ../index.php');
   }
 
-//$con = mysqli_connect('localhost','root','','smartpoi_negocio'.$_SESSION['user_smart']['cliente']['id_cliente']);
 date_default_timezone_set('America/Mexico_City');
 //$con = mysqli_connect('localhost','wits_userBD','ZfX7y99GSs','wits_sistemaalex');
 $con = mysqli_connect('localhost','root','','wits_sistemaalex');
@@ -369,7 +368,8 @@ $arregloVenta = '';
       }
     }
 
-    $sql2 = "SELECT ID_Venta, Estatus, FK_Usuario, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal) AS NombreSucursal, FK_Cliente, (SELECT Nombre FROM clientes WHERE ID_Cliente = FK_Cliente) AS NombreCliente, Descuento, Total, Tipo_Pago, Pago, Cambio, Notas, Fecha_Registro, Cancelada, Fecha_Cancelacion, Regreso_Inventario FROM ventas WHERE ID_Venta = '".$_GET["id"]."'";
+    $sql2 = "SELECT ID_Venta, Estatus, FK_Usuario, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal) AS NombreSucursal, FK_Cliente, (SELECT Nombre FROM clientes WHERE ID_Cliente = FK_Cliente) AS NombreCliente, Descuento, Total, Tipo_Pago, Pago, Cambio, Notas, Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario FROM ventas WHERE ID_Venta = '".$_GET["id"]."'";
+
     if($res=$con->query($sql2)){
       if ($res->num_rows > 0) {
         $row = $res->fetch_assoc();
@@ -392,10 +392,8 @@ $arregloVenta = '';
           'Cambio' => $row["Cambio"],
           'Notas' => $row["Notas"],
           'Fecha_Registro' => $row["Fecha_Registro"],
-          'Cancelada' => $row["Cancelada"],
           'Fecha_Cancelacion' => $row["Fecha_Cancelacion"],
           'Regreso_Inventario' => $row["Regreso_Inventario"],
-          
         );
       }else{
         echo "No se encontraron resultados";
@@ -453,24 +451,20 @@ $arregloVenta = '';
         ?>
       </div>
       <?php  
-        echo '<p class="centrado">FOLIO: '.$arreglo['Folio'].'</p>';
+        echo '<p class="centrado">FOLIO: '.$arreglo['Folio'].'</p>
+          <p class="centrado">ESTATUS: '.$arregloVenta['Estatus'].'</p>';
         if ($arregloVenta['Estatus'] == "Cancelada") {
-          echo '<p class="centrado">ESTATUS: CANCELADA</p>';
           echo '<p class="centrado">MOTIVO: '.$arregloVenta['Notas'].'</p>';
-        }else if ($arregloVenta['Estatus'] == "Devuelta") {
-          echo '<p class="centrado">ESTATUS: DEVUELTA</p>';
-        }else{
-          echo '<p class="centrado">ESTATUS: COMPLETADA</p>';
         }
+        echo '<p class="centrado">CLIENTE: '.$arregloVenta['NombreCliente'].'</p>';
       ?>
       <br>
       <table class="centrado" width="100%">
         <thead>
           <tr>
             <?php  
-              echo '<th class="codigo">Cod.</th>';  
-              echo '<th class="producto">Prod.</th>
-              <th class="cantidad">Cant.</th>';
+              echo '<th class="codigo">Cód.</th>';  
+              echo '<th class="cantidad">Cant.</th>';
               echo '<th class="precio">Prec.</th>';  
               echo '<th class="impuestos">Impu.</th>'; 
               echo '<th class="precio">Importe</th>';
@@ -546,14 +540,17 @@ $arregloVenta = '';
                               }
                             }
 
-                            $mostrar .= "<tr>
+                            $mostrar .= "
+                            <tr>
+                                <td colspan='5' style='text-align: left;'>".$row["Descripcion"].$nombrePresentacion."</td>      
+                            </tr>
+                            <tr>
                                 <td class='codigo'>".$row["Codigo"]."</td>
-                                <td class='producto'>".$row["Descripcion"]. $nombrePresentacion."</td>
                                 <td class='cantidad'>".(round($row['Cantidad']*100)/100)." ".$devuelto."</td> 
                                 <td class='precio'>$".(round($row['Precio']*100)/100)."</td>
                                 <td class='impuestos'>".$mostrarImpuestos."</td>
                                 <td class=''>$".$subtotalProducto."<br>Desc: ".(round($row['Descuento']*100)/100)."% <br>$".(round($row['Total']*100)/100)."</td>
-                              </tr>";
+                            </tr>";
 
                             $subtotal += ($row['Cantidad'] * $row['Precio']);
                             $sumaTotalDescuentos += $subtotalProducto * ($row['Descuento'] / 100);
@@ -580,6 +577,8 @@ $arregloVenta = '';
         echo '<p class="derecha" style="font-size: 15px;">Impuestos: <b style="font-size: 15px;">$'.(round(($sumaTotalImpuestos)*100)/100).'</b></p>'; 
         echo "</br>
           <p class='derecha'><b style='font-size: 20px;'>TOTAL: $".(round($arregloVenta['Total']*100)/100)."</b></p>
+          <p class='derecha'><b style='font-size: 14px;'>IMPORTE PAGADO: $".number_format($arregloVenta['Pago'], 2)."</b></p>
+          <p class='derecha'><b style='font-size: 14px;'>CAMBIO: $".number_format($arregloVenta['Cambio'], 2)."</b></p>
         ";
 
         $TotalDevolucion = 0;
@@ -602,27 +601,9 @@ $arregloVenta = '';
           echo "</br>
             <p class='derecha'><b style='font-size: 20px;'>TOTAL FINAL: $".(round($totalFinal*100)/100)."</b></p>
           ";
-
         }
 
-        
-
-      
-        /*
-        if ($TotalDevolucion > 0) {
-         
-          $MostrarDevolucion = "<br>Devuelto: <b>$".number_format($TotalDevolucion, 2)."</b><br>
-          Total final: <b>$".number_format($totalFinal, 2)."</b>";
-          $SumarVentas += $totalFinal;
-        }else{
-          $SumarVentas += $row[$i]['Total'];
-        }*/
-
-
-
-
         echo '<p class="derecha">Tipo de pago: '.$arregloVenta['Tipo_Pago'].'</p>'; 
-        
         echo '<p class="derecha">Administrador: '.$arregloVenta['NombreUsuario'].'</p>';
       ?>
       <br>

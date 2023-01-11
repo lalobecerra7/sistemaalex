@@ -15,9 +15,6 @@ function v_productos() {
             Descripcion: {
                 required: true
             },
-            ClaseProducto: {
-                required: true
-            },
             PrecioProducto: {
                 required: true
             }
@@ -29,93 +26,108 @@ function v_productos() {
             Descripcion: {
                 required: "La descripción del producto es obligatorio"
             },
-            ClaseProducto: {
-                required: "La clase del producto es obligatorio"
-            },
             PrecioProducto: {
                 required: "El precio del producto es obligatorio"
             }
         },
         submitHandler: function(form) { 
-            if($('#Maximo').val()!= '' && $('#Minimo').val() != '' && $('#Maximo').val() > '0' && $('#Minimo').val() > '0' && $('#Maximo').val()<=$('#Minimo').val()){
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'El stock máximo debe ser mayor al stock mínimo'
-                });
-            }else {
-                const searchRegExp = new RegExp(',', 'g');
-                var presentaciones = [];
+            const searchRegExp = new RegExp(',', 'g');
+            var presentaciones = [];
+            if($("#verPresentaciones").children('tr').length > 0){
                 $("#verPresentaciones").children('tr').each(function(index, el){
                     presentaciones.push({'ID_Presentacion': $.trim($(this).attr('id')),'Clave': $.trim($(this).children('td:eq(0)').text()), 'Nombre': $.trim($(this).children('td:eq(1)').text()), 'Abreviatura': $.trim($(this).children('td:eq(2)').text()), 'Costo': $.trim($(this).children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')), 'Importe': $.trim($(this).children('td:eq(4)').text().replace('$', '').replace(searchRegExp, ''))});
                 });
+            }
 
-                var precios = [];
+            var precios = [];
+            if($("#verPreciosProd").children('tr').length > 0){
                 $("#verPreciosProd").children('tr').each(function(index, el){
                     precios.push({'ID_Precio': $.trim($(this).attr('id')),'Zona': $.trim($(this).children('td:eq(0)').attr('attrID')), 'Presentacion': $.trim($(this).children('td:eq(1)').text()), 'Nombre': $.trim($(this).children('td:eq(2)').text()), 'Precio': $.trim($(this).children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')), 'Precio_Mayoreo': $.trim($(this).children('td:eq(4)').text().replace('$', '').replace(searchRegExp, ''))});
                 });
+            }
 
-                var impuestos = [];
-                if($("#verImpuetsosProd").children('tr').length > 0){
-                    $("#verImpuetsosProd").children('tr').each(function(index, el) {
-                        impuestos.push({'ID_Impuesto': $(this).attr('attrID')});
-                    });
-                }
+            var impuestos = [];
+            if($("#verImpuetsosProd").children('tr').length > 0){
+                $("#verImpuetsosProd").children('tr').each(function(index, el) {
+                    impuestos.push({'ID_Impuesto': $.trim($(this).attr('attrID'))});
+                });
+            }
 
-                var data = new FormData(document.getElementById('FormProductos'));
-                data.append('metodo', $('#GuardarProducto').attr('tipo'));
-                data.append('accion', 'productos');
-                data.append('IDProducto', $('#GuardarProducto').attr('attrid'));
-                data.append('presentaciones', JSON.stringify(presentaciones));
-                data.append('precios', JSON.stringify(precios));
-                data.append('impuestos', JSON.stringify(impuestos));
+            var proveedores = [];
+            if($("#verProveedoresProd").children('tr').length > 0){
+                $("#verProveedoresProd").children('tr').each(function(index, el) {
+                    proveedores.push({'ID_Proveedor': $.trim($(this).children('td:eq(0)').attr('attrID'))});
+                });
+            }
+
+            var stock = [];
+            if($("#verStockProd").children('tr').length > 0){
+                $("#verStockProd").children('tr').each(function(index, el){
+                    stock.push({'ID_Sucursal': $.trim($(this).children('td:eq(0)').attr('attrID')), 'Presentacion': $.trim($(this).children('td:eq(1)').text()),'Minimo': $.trim($(this).children('td:eq(2)').text().replace(searchRegExp, '')), 'Maximo': $.trim($(this).children('td:eq(3)').text().replace(searchRegExp, ''))});
+                });
+            }
+
+            var bloqueado = '0';
+            if($("#bloquearProducto").prop('checked')){
+                bloqueado = '1';
+            }
+            
+            var data = new FormData(document.getElementById('FormProductos'));
+            data.append('metodo', $('#GuardarProducto').attr('tipo'));
+            data.append('accion', 'productos');
+            data.append('IDProducto', $('#GuardarProducto').attr('attrid'));
+            data.append('presentaciones', JSON.stringify(presentaciones));
+            data.append('precios', JSON.stringify(precios));
+            data.append('impuestos', JSON.stringify(impuestos));
+            data.append('proveedores', JSON.stringify(proveedores));
+            data.append('stock', JSON.stringify(stock));
+            data.append('bloqueado', bloqueado);
                 
-                $.ajax({
-                    url: 'index.php',
-                    type: 'POST',
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    beforeSend: function() {
-                        $("#carga").show();
-                    }
-                })
-                .done(function(res) {
-                    if ($.trim(res) == "Correcto") {
-                        if ($("#GuardarProducto").attr("tipo") == "modificar") {
-                            var tipoAlerta = "modificado";
-                        }else{
-                            var tipoAlerta = "guardado";
-                        }
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Producto '+tipoAlerta+' correctamente'
-                        });
-
-                        TablaProductos(); 
-                        $("#ModalProductos").modal("hide");
-                    } else if ($.trim(res) == "Error: Duplicate entry '"+$("#CodigoBarras").val()+"' for key 'Codigo'"){
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'El código del producto ya fue registrado, intenta con otro.'
-                        });
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    $("#carga").show();
+                }
+            })
+            .done(function(res) {
+                if ($.trim(res) == "Correcto") {
+                    if ($("#GuardarProducto").attr("tipo") == "modificar") {
+                        var tipoAlerta = "modificado";
                     }else{
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Error inesperado al '+$("#GuardarProducto").attr("tipo")+' producto.'
-                        });
-                        console.log($.trim(res));
+                        var tipoAlerta = "guardado";
                     }
-                })
-                .fail(function() {
-                    console.log("Error ajax");
-                })
-                .always(function() {
-                    $("#carga").hide();
-                });    
-            }              
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Producto '+tipoAlerta+' correctamente'
+                    });
+
+                    TablaProductos(); 
+                    $("#ModalProductos").modal("hide");
+                } else if ($.trim(res) == "Error: Duplicate entry '"+$("#CodigoBarras").val()+"' for key 'Codigo'"){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'El código del producto ya fue registrado, intenta con otro.'
+                    });
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Error inesperado al '+$("#GuardarProducto").attr("tipo")+' producto.'
+                    });
+                    console.log($.trim(res));
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            })
+            .always(function() {
+                $("#carga").hide();
+            });                
         }
     });  
 
@@ -227,6 +239,8 @@ function v_productos() {
 
                 $("#presentacionProdSelect").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
                 $("#presentacionProdSelect").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
+                $("#presentacionProdSelect1").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
+                $("#presentacionProdSelect1").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
                 $("#modalPresentaciones").modal('hide');
 
                 moneda();
@@ -254,7 +268,7 @@ function TablaProductos(){
         ],
         "sort": [
             0,
-            "desc"
+            "asc"
         ],
         "url": "index.php", 
         "params":{
@@ -344,6 +358,9 @@ jQuery(document).ready(function($) {
         document.getElementById('formPresentaciones').reset();
         $("#verPresentaciones").html("");
         $("#verImpuetsosProd").html("");
+        $("#verProveedoresProd").html("");
+        $("#verStockProd").html("");
+        $("#bloquearProducto").prop('checked', false);
         $('#verImagenProducto').html('<img src="vistas/assets/archivos/fotosProductos/default.jpg" style="width: 250px; height: 170px; cursor:pointer;border-radius:4px;border:2px solid grey;" class="img-thumbnail"><br>');
         JsBarcode("#CodigoB", "CODIGO");
     });
@@ -398,10 +415,14 @@ jQuery(document).ready(function($) {
         $("#verPresentaciones").html("");
         $("#verPreciosProd").html("");
         $("#verImpuetsosProd").html("");
+        $("#verProveedoresProd").html("");
+        $("#verStockProd").html("");
         $("#GuardarProducto").attr('tipo', 'modificar');
         $("#GuardarProducto").attr('attrid', id);
         $("#TituloModalProductos").text("Modificar");
         $("#presentacionProdSelect").html('<option value="">--Seleccione una opción--</option>');
+        $("#presentacionProdSelect1").html('<option value="">--Seleccione una opción--</option>');
+        $("#bloquearProducto").prop('checked', false);
 
         var data = "metodo=detalles&accion=productos&tipo=modificarProducto&IDProducto="+id;
         
@@ -416,7 +437,6 @@ jQuery(document).ready(function($) {
 
             $("#CodigoBarras").val(datos.Codigo);
             $("#Descripcion").val(datos.Descripcion);
-            $("#ClaseProducto").val(datos.Clase);
             if(datos.FK_Categoria == '0'){
                 datos.FK_Categoria = '';
             }
@@ -428,8 +448,6 @@ jQuery(document).ready(function($) {
                 datos.FK_Area = '';
             }
             $("#Area").val(datos.FK_Area);
-            $("#Minimo").val(datos.Minimo);
-            $("#Maximo").val(datos.Maximo);
             $("#DetallesProducto").val(datos.Detalles);
             $("#ImporteProducto").val(datos.Importe);
             $("#claveProdServ").val(datos.Clave_ProdServ_CFDI);
@@ -437,6 +455,10 @@ jQuery(document).ready(function($) {
             $("#unidadProd").val(datos.Nombre_Unidad);
             $("#abreUnudadProd").val(datos.Abreviatura_Unidad);
             $("#objImProducto").val(datos.Objeto_Impuesto_CFDI);
+
+            if(datos.Bloqueado == '1'){
+                $("#bloquearProducto").prop('checked', true);
+            }
             
             $('#verImagenProducto').html('<img src="vistas/assets/archivos/fotosProductos/' + datos.Imagen + '" width: 250px; height: 170px; cursor:pointer;border-radius:4px;border:2px solid grey;" class="img-thumbnail"><br>');
             
@@ -465,6 +487,7 @@ jQuery(document).ready(function($) {
                     </tr>`);
 
                     $("#presentacionProdSelect").append('<option value="'+presentacion.Nombre+'">'+presentacion.Nombre+'</option>');
+                    $("#presentacionProdSelect1").append('<option value="'+presentacion.Nombre+'">'+presentacion.Nombre+'</option>');
                 });
             }
 
@@ -490,6 +513,27 @@ jQuery(document).ready(function($) {
                         <td>`+impuesto.Tipo+`</td>
                         <td>`+impuesto.Clase+`</td>
                         <td><button type="button" class="btn btn-danger btn-sm bQuitarImpu"><i class="fas fa-trash"></i></button></td>
+                    </tr>`);
+                });
+            }
+
+            if(datos.Proveedores != null){
+                datos.Proveedores.forEach(proveedor => {
+                    $("#verProveedoresProd").append(`<tr id="`+proveedor.FK_Proveedor+`">
+                        <td attrID="`+proveedor.FK_Proveedor+`">`+proveedor.Empresa+`/`+proveedor.Nombre+`</td>
+                        <td><button type="button" class="btn btn-danger btn-sm bQuitarProveedor"><i class="fas fa-trash"></i></button></td>
+                    </tr>`);
+                });
+            }
+
+            if(datos.Stocks != null){
+                datos.Stocks.forEach(stock => {
+                    $("#verStockProd").append(`<tr>
+                        <td attrID="`+stock.FK_Sucursal+`">`+stock.Sucursal+`</td>
+                        <td attrID="`+stock.FK_Presentacion+`">`+stock.Presentacion+`</td>
+                        <td><span class="cantidad">`+stock.Minimo+`</span></td>
+                        <td><span class="cantidad">`+stock.Maximo+`</span></td>
+                        <td><button type="button" class="btn btn-danger btn-sm bQuitarStock"><i class="fas fa-trash"></i></button></td>
                     </tr>`);
                 });
             }
@@ -647,6 +691,7 @@ jQuery(document).ready(function($) {
             </tr>`);
 
             $("#presentacionProdSelect").append('<option value="'+$.trim($("#nombrePresentacion").val())+'">'+$.trim($("#nombrePresentacion").val())+'</option>');
+            $("#presentacionProdSelect1").append('<option value="'+$.trim($("#nombrePresentacion").val())+'">'+$.trim($("#nombrePresentacion").val())+'</option>');
 
             document.getElementById('formPresentaciones').reset();
             moneda();
@@ -696,5 +741,81 @@ jQuery(document).ready(function($) {
         $("#importePresentacionM").val($.trim(filaPre.children('td:eq(4)').text().replace('$', '').replace(searchRegExp, '')));
         $("#bGuardarPresenta").attr('attrID', $(this).attr('attrID'));
         $("#modalPresentaciones").modal('show');
+    });
+
+    $(document).on('click', '#bAgergarProveedor', function() {
+        $("#bGuardarProveedor").trigger('click');
+    });
+
+    $(document).on('submit', '#formProveedoresProd', function(event) {
+        event.preventDefault();
+
+        if($("#verProveedoresProd").children('tr[id="'+$.trim($("#proveedorProducto").val())+'"]').length == 0){
+            $("#verProveedoresProd").append(`<tr id="`+$.trim($("#proveedorProducto").val())+`">
+                <td attrID="`+$.trim($("#proveedorProducto").val())+`">`+$.trim($('#proveedorProducto option:selected').text())+`</td>
+                <td><button type="button" class="btn btn-danger btn-sm bQuitarProveedor"><i class="fas fa-trash"></i></button></td>
+            </tr>`);
+
+            document.getElementById('formProveedoresProd').reset();
+            moneda();
+        }else{
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'El proveedor ya existe, por favor agrega otro.'
+            });  
+        }
+    });
+
+    $(document).on('click', '.bQuitarProveedor', function() {
+        $(this).parent().parent().remove();
+    });
+
+    $(document).on('click', '#bAgergarStock', function() {
+        $("#bGuardarStock").trigger('click');
+    });
+
+    $(document).on('submit', '#formStockProd', function(event) {
+        event.preventDefault();
+        if(parseFloat($("#minimoStock").val()) < parseFloat($("#maximoStock").val())){
+            var encontro = false;
+            if($("#verStockProd").children('tr').length > 0){
+                for (var i = $("#verStockProd").children('tr').length - 1; i >= 0; i--) {
+                    if($.trim($("#sucursalProducto").val()) == $.trim($("#verStockProd").children('tr:eq('+i+')').children('td:eq(0)').attr('attrID')) && $.trim($("#presentacionProdSelect1").val()) == $.trim($("#verStockProd").children('tr:eq('+i+')').children('td:eq(1)').text())){
+                        encontro = true;
+                        break;
+                    }
+                }
+            }
+
+            if(encontro == false){
+                $("#verStockProd").append(`<tr>
+                    <td attrID="`+$.trim($("#sucursalProducto").val())+`">`+$.trim($('#sucursalProducto option:selected').text())+`</td>
+                    <td>`+$.trim($("#presentacionProdSelect1").val())+`</td>
+                    <td><span class="cantidad">`+$("#minimoStock").val()+`</span></td>
+                    <td><span class="cantidad">`+$("#maximoStock").val()+`</span></td>
+                    <td><button type="button" class="btn btn-danger btn-sm bQuitarStock"><i class="fas fa-trash"></i></button></td>
+                </tr>`);
+
+                document.getElementById('formStockProd').reset();
+                moneda();
+            }else{
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'El stock de la presentación en la sucursal ya existe, por favor utiliza otra.'
+                });
+            }
+        }else{
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'El stock mínimo debe ser menor al stock máximo.'
+            });
+        }
+    });
+
+    $(document).on('click', '.bQuitarStock', function() {
+        $(this).parent().parent().remove();
     });
 });

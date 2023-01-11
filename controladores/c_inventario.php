@@ -15,135 +15,116 @@ class inventario {
 		$busqueda = '';
 		if(trim($buscar) != ''){
 			$separa = explode(' ', trim($buscar));
+
 			$busqueda = 'WHERE ';
+			if ($omodelo->permisos() != 'Administrador' && $_SESSION['user_admin']['FK_Sucursal'] != '0') {
+				$busqueda = ' AND ';
+			}
+
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Producto, Codigo, Descripcion, Precio, Costo) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(Codigo, Descripcion, Nombre_Unidad, Abreviatura_Unidad, presentaciones.Nombre, Abreviatura, inventario.Cantidad, sucursales.Nombre) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query =  "SELECT DISTINCT(ID_Producto) AS 'ID_Producto', Descripcion, Codigo, Precio, Costo, IFNULL(((SELECT SUM(inventario.Cantidad) FROM inventario
-		 WHERE FK_Producto = productos.ID_Producto)),0) AS  'Cantidad', Imagen, 
-		 (SELECT COUNT(DISTINCT(ID_Producto)) FROM productos) AS 'Num' FROM productos LEFT JOIN inventario ON inventario.FK_Producto = productos.ID_Producto 
-		 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$where = '';
+		if ($omodelo->permisos() != 'Administrador' && $_SESSION['user_admin']['FK_Sucursal'] != '0') {
+			$where = "WHERE inventario.FK_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal'];
+		}
 
+		$query =  "SELECT ID_Inventario, inventario.FK_Producto AS FK_Producto, Imagen, Codigo, Descripcion, Precio, Nombre_Unidad, Abreviatura_Unidad, inventario.FK_Presentacion AS FK_Presentacion, presentaciones.Nombre AS Presentacion, Abreviatura, inventario.Cantidad AS Existencia, inventario.FK_Sucursal AS FK_Sucursal, sucursales.Nombre AS Sucursal, IFNULL(merma.Costo, 0) AS Costo, IFNULL(merma.Cantidad, 0) AS Merma, (SELECT COUNT(*) FROM inventario INNER JOIN productos ON inventario.FK_Producto = ID_Producto INNER JOIN sucursales ON inventario.FK_Sucursal = ID_Sucursal $where $busqueda) AS 'Num' FROM inventario INNER JOIN productos ON inventario.FK_Producto = ID_Producto INNER JOIN sucursales ON inventario.FK_Sucursal = ID_Sucursal LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion LEFT JOIN merma ON inventario.FK_Producto = merma.FK_Producto AND inventario.FK_Presentacion = merma.FK_Presentacion AND inventario.FK_Sucursal = merma.FK_Sucursal $where $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
 		if($row == 'si'){
-			echo "Error: ".mysqli_error($omodelo->link);
+			echo "Error 1: ".mysqli_error($omodelo->link);
 		}else{
 			if($numerofilas > 0){
-				
 				for($i=0; $i<$numerofilas; $i++){
-
-					$Merma = '';
-
-					$queryMerma = "SELECT SUM(Cantidad * productos.Costo) AS TotalMerma, SUM(Cantidad) AS CantidadMerma FROM merma INNER JOIN productos ON merma.FK_Producto = ID_Producto WHERE merma.FK_Producto = '".$row[$i]["ID_Producto"]."'";
-					
-					$rowmerma = $omodelo->_consultar($queryMerma);
-					$numerofilasmerma = $omodelo->numerofilas; 
-
-					if ($rowmerma == "si") {
-						echo "Error: ".mysqli_error($omodelo->link);
-					}else{
-						if($numerofilasmerma > 0){
-							if ($rowmerma[0]["TotalMerma"] == "") {
-								$rowmerma[0]["TotalMerma"] = 0;
-							}
-							if ($rowmerma[0]["CantidadMerma"] == "") {
-								$rowmerma[0]["CantidadMerma"] = 0;
-							}
-							$Merma = '<b class="dinero">$'.number_format($rowmerma[0]["TotalMerma"], 2).'</b><br>Cantidad: <b class="cantidad">'.$rowmerma[0]["CantidadMerma"].'</b>';
-						}
-					}
-
 					$foto = '<a href="vistas/assets/archivos/fotosProductos/default.jpg" data-fancybox="images">
-									<div style="background-image: url('."'".'vistas/assets/archivos/fotosProductos/default.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
-									</div>
-								</a><br>';
+						<div style="background-image: url('."'".'vistas/assets/archivos/fotosProductos/default.jpg'."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
+						</div>
+					</a><br>';
+
 					if ($row[$i]["Imagen"] != "") {
 						if($row[$i]["Imagen"] != "" && file_exists("vistas/assets/archivos/fotosProductos/".$row[$i]["Imagen"])){
 							$foto = '<a href="vistas/assets/archivos/fotosProductos/'.$row[$i]["Imagen"].'" data-fancybox="images">
-									<div style="background-image: url('."'".'vistas/assets/archivos/fotosProductos/'.$row[$i]["Imagen"]."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
-									</div>
-								</a><br>';
+								<div style="background-image: url('."'".'vistas/assets/archivos/fotosProductos/'.$row[$i]["Imagen"]."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
+								</div>
+							</a><br>';
 						}	
 					}
-
-					
-
-					$sucursales="";
-					$querySucursales="SELECT ID_Sucursal, sucursales.Nombre AS 'Sucursal', SUM(Cantidad) AS Cantidad FROM inventario INNER JOIN sucursales ON  FK_Sucursal=sucursales.ID_Sucursal WHERE FK_Producto ='".$row[$i]["ID_Producto"]."' GROUP BY ID_Sucursal";
-					$rowSucursales = $omodelo->_consultar($querySucursales);
-					$numerofilasSucursales = $omodelo->numerofilas; 
-					
-					if ($rowSucursales == "si") {
-						echo "Error: ".mysqli_error($omodelo->link);
-					}else{
-						if($numerofilasSucursales > 0){
-							for($a=0; $a<$numerofilasSucursales; $a++){
-								$sucursales.= "<button class='btn btn-sm mt-2 btn-outline-dark' id='verDistribucionSucursal' attrid='".$rowSucursales[$a]["ID_Sucursal"]."' nombreProducto='".$row[$i]['Descripcion']."' nombre='".$rowSucursales[$a]["Sucursal"]."' producto='".$row[$i]['ID_Producto']."'>".$rowSucursales[$a]["Sucursal"].": ".$rowSucursales[$a]["Cantidad"]."</button><br>";
-							}	
-						 }
-					}
-
-					$conversiones = "<button class='btn btn-sm mt-2 btn-outline-primary' id='VerConversionesProducto' nombreProducto='".$row[$i]['Descripcion']."'  producto='".$row[$i]['ID_Producto']."'>Conversiones</button>";
 
 					$precios = '';
 					$queryZona = "SELECT ID_Zona, Nombre FROM zonas";
 					$rowZona = $omodelo->_consultar($queryZona);
 					$numerofilasZona = $omodelo->numerofilas;
-					if ($numerofilasZona > 0) {
-						for ($a=0; $a < $numerofilasZona; $a++) { 
-							$queryPrecios = "SELECT ID_Precio, FK_Producto, FK_Zona, Nombre, Precio, Precio_Mayoreo FROM precios WHERE FK_Producto = '".$row[$i]['ID_Producto']."' AND FK_Zona = '".$rowZona[$a]["ID_Zona"]."'";
-							$rowPrecios = $omodelo->_consultar($queryPrecios);
-							$numerofilasPrecios = $omodelo->numerofilas;
-							if ($numerofilasPrecios > 0) {
-								$precios .= "Zona: ".$rowZona[$a]["Nombre"]."<br>";
-								for ($x=0; $x < $numerofilasPrecios; $x++) { 
-									$precios .= $rowPrecios[$x]["Nombre"].": <b>$".number_format($rowPrecios[$x]["Precio"], 2)."</b><br>";
+
+					if($rowZona == 'si'){
+						echo "Error 2: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasZona > 0){
+							for ($a=0; $a < $numerofilasZona; $a++) { 
+								$queryPrecios = "SELECT ID_Precio, FK_Producto, FK_Zona, Nombre, Precio, Precio_Mayoreo FROM precios WHERE FK_Producto = '".$row[$i]['FK_Producto']."' AND FK_Presentacion = '".$row[$i]['FK_Presentacion']."' AND FK_Zona = '".$rowZona[$a]["ID_Zona"]."'";
+								$rowPrecios = $omodelo->_consultar($queryPrecios);
+								$numerofilasPrecios = $omodelo->numerofilas;
+
+								if($rowPrecios == 'si'){
+									echo "Error 3: ".mysqli_error($omodelo->link);
+								}else{
+									if($numerofilasPrecios > 0){
+										$precios .= "Zona: ".$rowZona[$a]["Nombre"]."<br>";
+										
+										for ($x=0; $x < $numerofilasPrecios; $x++) { 
+											$precios .= $rowPrecios[$x]["Nombre"].": <b>$".number_format($rowPrecios[$x]["Precio"], 2)."</b><br>";
+										}
+									}	
 								}
-							}	
+							}
 						}
 					}
-
 					
-					
-					$botonPermisosAgregarMerma = "";
-					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][2] == '1') {
-						$botonPermisosAgregarMerma = '<button class="btn btn-warning btn-sm mb-1" id="AgregarMerma" title="Registrar merma" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fas fa-level-down"></i></button>';
-					}
-
-					$botonPermisosTraslados = "";
-					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][3] == '1') {
-						$botonPermisosTraslados = '<button class="btn btn-primary btn-sm mb-1" id="Traslados" title="Traslado de producto" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-right-left"></i></button>';
-					}
-
 					$botonPermisosVerMerma = "";
-					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][4] == '1') {
-						$botonPermisosVerMerma = '<br><button type="button" class="btn btn-link btn-sm verDetallesMerma" nombre="'.$row[$i]["Descripcion"].'" attrid="'.$row[$i]["ID_Producto"].'" title="Detalles de la merma Merma">Ver detalles <i class="fas fa-eye"></i></button>';
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][2] == '1') {
+						$botonPermisosVerMerma = '<br><button type="button" class="btn btn-link btn-sm verDetallesMerma" attrProducto="'.$row[$i]['FK_Producto'].'" attrPresentacion="'.$row[$i]['FK_Presentacion'].'" attrSucursal="'.$row[$i]['FK_Sucursal'].'" title="Detalles Merma">Ver detalles <i class="fas fa-eye"></i></button>';
 					}
 
-					$botonPermisosVerConversiones = "";
-					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][5] == '1') {
-						$botonPermisosVerConversiones = $conversiones;
+					$botonPermisosAgregarMerma = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][3] == '1') {
+						$botonPermisosAgregarMerma = '<button class="btn btn-warning btn-sm mb-1 AgregarMerma" attrProducto="'.$row[$i]['FK_Producto'].'" attrPresentacion="'.$row[$i]['FK_Presentacion'].'" attrSucursal="'.$row[$i]['FK_Sucursal'].'" title="Registrar merma"><i class="fas fa-level-down"></i></button>';
 					}
 
 					$botonConversion = "";
-					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][6] == '1') {
-						$botonConversion = '<button class="btn btn-success btn-sm mb-1" id="ConvertirProducto" title="Convertir producto" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-boxes-stacked"></i></button>';
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][7] == '1') {
+						$botonConversion = '<button class="btn btn-success btn-sm mb-1 ConvertirProducto" attrProducto="'.$row[$i]['FK_Producto'].'" attrPresentacion="'.$row[$i]['FK_Presentacion'].'" attrSucursal="'.$row[$i]['FK_Sucursal'].'" title="Convertir producto"><i class="fa-solid fa-boxes-stacked"></i></button>';
+					}
+
+					$presentacion = 'Sin presentación';
+					$abreviatura = '';
+					if($row[$i]['FK_Presentacion'] != '0'){
+						if($row[$i]['Abreviatura'] != ""){
+							$abreviatura = '('.$row[$i]['Abreviatura'].')';
+						}
+						$presentacion = $row[$i]['Presentacion'].$abreviatura;
+					}else{
+						$precios = 'General: <b class="dinero">'.$row[$i]['Precio'].'</b><br>'.$precios;
+						if($row[$i]['Nombre_Unidad'] != ""){
+							if($row[$i]['Abreviatura_Unidad'] != ""){
+								$abreviatura = '('.$row[$i]['Abreviatura_Unidad'].')';
+							}
+							$presentacion = $row[$i]['Nombre_Unidad'].$abreviatura;
+						}
 					}
 
 					$arreglo['data'][$i] = array(
-						'ID' => $row[$i]['ID_Producto'],
-						'Descripcion' => $foto.$row[$i]['Descripcion']."<br> Codigo: <b>".$row[$i]['Codigo']."</b>",
-						'Distribucion' => 'Existencia: <b>'.$row[$i]['Cantidad'].'</b><br>'.$sucursales.$botonPermisosVerConversiones,
-						'Precios' => 'General: <b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b><br>'.$precios,
-						'Merma' => $Merma.$botonPermisosVerMerma,
-						'Acciones' => $botonPermisosAgregarMerma.' '.$botonPermisosTraslados." ".$botonConversion,
+						'ID' => $row[$i]['ID_Inventario'],
+						'Descripcion' => $foto.$row[$i]['Descripcion'].'<br>'.$presentacion.'<br>Codigo: <b>'.$row[$i]['Codigo'].'</b>',
+						'Existencia' => 'Total: <b>'.$row[$i]['Existencia'].'</b><br>Sucursal: <b>'.$row[$i]['Sucursal'].'</b>',
+						'Precios' => $precios,
+						'Merma' => 'Cantidad: <b class="cantidad">'.$row[$i]["Merma"].'</b><br>Total: <b class="dinero">$'.number_format(($row[$i]['Merma'] * $row[$i]['Costo']), 2).'</b><br>'.$botonPermisosVerMerma,
+						'Acciones' => $botonPermisosAgregarMerma.' '.$botonConversion,
 					);
 					
 				}

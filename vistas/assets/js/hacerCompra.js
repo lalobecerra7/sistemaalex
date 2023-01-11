@@ -22,7 +22,6 @@ jQuery(document).ready(function($) {
 		$("#CargarProveedoresModalC").html('<i class="fas fa-user"></i> Proveedor');
 	});
 
-
     $(document).on('keyup change', '.campoCantidad', function() {
     	var cantidad = $(this).val();
     	if (cantidad == "") {
@@ -108,8 +107,8 @@ jQuery(document).ready(function($) {
 						<td>"+codigo+"</td>\
 						<td>"+descripcion+"</td>\
 						<td><button type='button' class='btn btn-sm btn-primary bCambiarPre' attrID='"+idProducto+"'>"+presentacion+"</button></td>\
-						<td class='costoP'><input type='number' value='"+costo+"' min='1' step='any' class='form-control campoCosto'></td>\
-						<td><input type='number' value='1' min='1' step='any' class='form-control campoCantidad'></td>\
+						<td class='costoP'><input type='number' value='"+costo+"' min='0.1' step='any' class='form-control campoCosto'></td>\
+						<td><input type='number' value='1' min='0.1' step='any' class='form-control campoCantidad'></td>\
 						<td class='totalP'><span class='dinero'>"+costo+"</span></td>\
 						<td><button class='btn btn-danger btn-sm EliminarFila'><i class='fas fa-trash'></i></button></td>\
 					</tr>\
@@ -155,7 +154,7 @@ jQuery(document).ready(function($) {
 		var descripcion = padre.children("td:eq(1)").find(".NombreProducto").text();
 		var costo = $(this).attr('costo');
 		var idPresentacion = $(this).attr('presentacion');
-		var presentacion = $(this).children('span').text();
+		var presentacion = $(this).children('span').html();
 		
 		//var existencia = $(this).children("td:eq(3)").find(".ExistenciaProducto").text();
 		
@@ -164,8 +163,8 @@ jQuery(document).ready(function($) {
                 <td>"+codigo+"</td>\
                 <td>"+descripcion+"</td>\
                 <td><button type='button' class='btn btn-sm btn-primary bCambiarPre' attrID='"+idProducto+"'>"+presentacion+"</button></td>\
-                <td class='costoP'><input type='number' value='"+costo+"' min='1' step='any' class='form-control campoCosto'></td>\
-                <td><input type='number' value='1' min='1' step='any' class='form-control campoCantidad'></td>\
+                <td class='costoP'><input type='number' value='"+costo+"' min='0.1' step='any' class='form-control campoCosto'></td>\
+                <td><input type='number' value='1' min='0.1' step='any' class='form-control campoCantidad'></td>\
                 <td class='totalP'><span class='dinero'>"+costo+"</span></td>\
             	<td><button class='btn btn-danger btn-sm EliminarFila'><i class='fas fa-trash'></i></button></td>\
             </tr>\
@@ -239,10 +238,7 @@ jQuery(document).ready(function($) {
 		}else{
 			const searchRegExp = new RegExp(',', 'g');
 			var fecha = new Date();
-			var day = fecha.getDate();
-			var month = fecha.getMonth() + 1;
-			var year = fecha.getFullYear();
-			var hoy = (year+'-'+month+'-'+day);
+
 			if($('#TipoCompra').val() == 'Contado'){
 				$("#CreditoCompra").attr("hidden", true);
 				$("#Total").text($("#TotalCompra").text());
@@ -262,7 +258,7 @@ jQuery(document).ready(function($) {
 						title: 'Oops...',
 						text: 'Debes elegir una fecha como limite de pago.'
 					});
-				}else if($('#fechaCredito').val() <= hoy){
+				}else if(new Date($('#fechaCredito').val()) <= fecha){
 					Swal.fire({
 						icon: 'error',
 						title: 'Oops...',
@@ -273,14 +269,14 @@ jQuery(document).ready(function($) {
 					$("#CreditoCompra").attr("hidden", false);
 					$("#Credito").text($('#MostrarCreditoRestante').text());
 					var totalFinal=0;
-					totalFinal = parseFloat($('#TotalCompra').text().replace('$', '').replace(searchRegExp, ''))-parseFloat($("#MostrarCreditoRestante").text().replace('$', '').replace(searchRegExp, ''))
+					totalFinal = parseFloat($('#TotalCompra').text().replace('$', '').replace(searchRegExp, ''));
 					$("#Total").text(new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(totalFinal));
 					$("#ModalCobrarCompra").modal("show");
 					$("#SubtotalCompra").attr("hidden", false);
 					$("#DescuentoCompra").attr("hidden", false);
 					$("#TotalDeCompra").attr("hidden", false);
 					$("#Detalles").attr("hidden", false);
-					//$("#Archivo").attr("hidden", false);
+					$("#ImportePagadoCompra").val('0');
 					$("#Subtotal").text($("#MostrarSubtotal").text());
 					$("#Descuento").text(new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format($("#DescuentoCompraDinero").val()));
 				}
@@ -437,6 +433,7 @@ jQuery(document).ready(function($) {
 			data.append('Descuento', descuento);
 			data.append('TipoPago', tipoPago);
 			data.append('Sucursal', $('#Sucursales').val());
+			data.append('idOrden', $.trim($("#bGuardarOrden").attr('attrID')));
 
 			$.ajax({
 				url: 'index.php',
@@ -465,7 +462,7 @@ jQuery(document).ready(function($) {
 					var x= parseInt((window.screen.width/2)-(anchura/2));
 
 					window.open("controladores/ticketCompra.php?id="+idCompra+"&idSucursal="+sucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
-					
+					$("#bGuardarOrden").attr('attrID', '');	
 				}else{
 					Swal.fire({
 						icon: 'error',
@@ -529,9 +526,273 @@ jQuery(document).ready(function($) {
 		CalcularSubtotal();
 		$("#modalVerPresentaciones").modal('hide');
 	});
+
+	document.onkeydown = function(evt) {
+        evt = evt || window.event;
+        //console.log("Key: "+evt.key+" Code: "+evt.keyCode);
+        
+        if(evt.key === "F2"){
+            $("#CargarProductosModalC").trigger('click');   
+        }
+    };
+
+    $(document).on('click', '#bGuardarOrden', function() {
+    	if($("#tbodyTablaProductosAgregados tr").length <= 0){
+			Swal.fire({
+	            icon: 'error',
+	            title: 'Oops...',
+	        	text: 'Tienes que ingresar al menos un producto para realizar la compra'
+	        });
+		}else{
+	    	const searchRegExp = new RegExp(',', 'g');
+			var total = $("#TotalCompra").text().replace("$", "").replace(searchRegExp, '');
+			var ImportePagadoCompra = parseFloat($("#ImportePagadoCompra").val());
+			var idProveedor = $("#RealizarCompra").attr("idProveedor");
+			var descuento = $("#Descuento").text().replace("$", "").replace(searchRegExp, '');
+			var subtotal = $("#MostrarSubtotal").text().replace("$", "").replace(searchRegExp, '');
+			
+			var productos = [];
+			$("#tbodyTablaProductosAgregados tr").each(function(){
+				var idProducto = $(this).attr("attrid");
+				var Sucursal = $('#Sucursales').val();
+				var Presentacion = $(this).attr("idPresentacion");
+				var Costo = $(this).children("td:eq(3)").find(".campoCosto").val();
+				var Cantidad = $(this).children("td:eq(4)").find(".campoCantidad").val();
+				productos.push([idProducto,Costo,Cantidad,Presentacion,Sucursal])
+			});
+
+			var tipo = 'insertarOrden';
+			if($.trim($(this).attr('attrID')) != ''){
+				tipo = 'modificarOrden';
+			}
+
+			var data = new FormData(document.getElementById('FormCobrarCompra'));
+			data.append('metodo', 'modificar');
+			data.append('accion', 'hacerCompra');
+			data.append('tipo', tipo);
+			data.append('idProveedor', idProveedor);
+			data.append('Productos', JSON.stringify(productos));
+			data.append('subtotal', subtotal);
+			data.append('total', total);
+			data.append('Descuento', descuento);
+			data.append('Sucursal', $('#Sucursales').val());
+			data.append('id', $.trim($(this).attr('attrID')));
+
+			$.ajax({
+				url: 'index.php',
+				type: 'POST',
+				data: data,
+				processData: false,
+				contentType: false
+			})
+			.done(function(res) {
+				var datos = res.split("~");
+				if ($.trim(datos[0]) == "Correcto") {
+					Swal.fire({
+						icon: 'success',
+						title: 'Orden de compra realizada correctamente'
+					});
+
+					$('#cargarHacerCompra').trigger('click');
+					$("#RealizarCompra").attr("idProveedor", '1');
+						
+					var idCompra = datos[1];
+					var sucursal = datos[2];
+					var altura=50;
+					var anchura=310;
+
+					var y= parseInt((window.screen.height/2)-(altura/2));
+					var x= parseInt((window.screen.width/2)-(anchura/2));
+
+					window.open("controladores/ticketOrden.php?id="+idCompra+"&idSucursal="+sucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
+					$("#bGuardarOrden").attr('attrID', '');	
+				}else{
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Error inesperado al registrar la compra.'
+					});
+
+					console.log($.trim(res));
+				}
+			})
+			.fail(function() {
+				console.log("Error ajax");
+			});	
+		}
+    });
+
+    $(document).on('click', '#bVerOrdenes', function() {
+    	tablaOrdenesCompra();
+    	$("#modalVerOrdenes").modal('show');
+    });
+
+    $(document).on('click', '.bVerProductosOrden', function() {
+    	var btn = $(this);
+    	var data = "metodo=detalles&accion=hacerCompra&tipo=consultarProductosOrden&id="+btn.attr('attrID');
+
+		$.ajax({
+			url: 'index.php',
+			type: 'POST',
+			data: data,
+			beforeSend: function() {
+				$("#carga").show();
+			}
+		})
+		.done(function(res) {
+			//console.log($.trim(res));
+			$("#verProdOrden").html($.trim(res));
+			moneda();
+			$("#modalVerProductosOrden").modal('show');
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			$("#carga").hide();
+		});
+    });
+
+    $(document).on('click', '.bImprimirTicketOrden', function() {
+    	var idCompra = $(this).attr("attrid");
+		var sucursal = $(this).attr("idSucursal");
+		var altura=50;
+		var anchura=310;
+	
+		var y= parseInt((window.screen.height/2)-(altura/2));
+		var x= parseInt((window.screen.width/2)-(anchura/2));
+	
+		window.open("controladores/ticketOrden.php?id="+idCompra+"&idSucursal="+sucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
+    });
+
+    $(document).on('click', '.bEliminarOrden', function() {
+		var btn = $(this);
+		Swal.fire({
+	        title: '¿Estás seguro que quieres eliminar la orden de compra?',
+	        icon: 'warning',
+	        showCancelButton: true,
+	        confirmButtonColor: '#3085d6',
+	        cancelButtonColor: '#d33',
+	        cancelButtonText: '¡No, cancelar!',
+	        confirmButtonText: '¡Si, eliminar!'
+	    }).then((result) => {
+	        if (result.value) {
+	        	var data = "metodo=eliminar&accion=hacerCompra&tipo=ordenCompra&id="+btn.attr('attrid');
+				$.ajax({
+					url: 'index.php',
+					type: 'POST',
+					data: data,
+					beforeSend: function() {
+					    progressBoton(btn);
+					}
+				})
+				.done(function(res) {
+					if ($.trim(res) == "Correcto") {
+						Swal.fire({
+							icon: 'success',
+							title: 'Orden de compra eliminada correctamente'
+						});
+
+						tablaOrdenesCompra();
+					}else{
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Error inesperado al eliminar la orden de compra.'
+						});
+						console.log($.trim(res));
+					}
+				})
+				.fail(function() {
+					console.log("Error ajax");
+				})
+				.always(function() {
+					unprogressBoton(btn);
+				});
+			}    
+		});	  
+	});
+
+	$(document).on('click', '.bCargarOrden', function() {
+		var btn = $(this);
+    	var data = "metodo=detalles&accion=hacerCompra&tipo=consultarOrden&id="+btn.attr('attrID');
+
+		$.ajax({
+			url: 'index.php',
+			type: 'POST',
+			data: data,
+			beforeSend: function() {
+				$("#carga").show();
+			}
+		})
+		.done(function(res) {
+			console.log($.trim(res));
+			var datos = JSON.parse($.trim(res));
+
+			if(datos != null){
+				console.log(datos);
+				$("#Sucursales").val(datos.FK_Sucursal);
+				$(".BotonLimpiarProveedor").removeClass("oculto");
+				if(datos.FK_Proveedor != 1){
+					$("#RealizarCompra").attr("idProveedor", datos.FK_Proveedor);
+					$("#CargarProveedoresModalC").html('Proveedor: '+datos.Proveedor+'<br>Razon social: '+datos.RazonSocial);
+					if($('#TipoCompra').val() == 'Credito'){
+						$("#TipoCompra").trigger('change');
+					}
+				}
+
+				var fila = '';
+				datos.Productos.forEach(producto => {
+					fila += "\
+						<tr attrid='"+producto.FK_Producto+"' idPresentacion='"+producto.FK_Presetacion+"'>\
+							<td>"+producto.Codigo+"</td>\
+							<td>"+producto.Descripcion+"</td>\
+							<td><button type='button' class='btn btn-sm btn-primary bCambiarPre' attrID='"+producto.FK_Producto+"'>"+producto.Presentacion+"</button></td>\
+							<td class='costoP'><input type='number' value='"+producto.Costo+"' min='0.1' step='any' class='form-control campoCosto'></td>\
+							<td><input type='number' value='"+producto.Cantidad+"' min='0.1' step='any' class='form-control campoCantidad'></td>\
+							<td class='totalP'><span class='dinero'>"+producto.Subtotal+"</span></td>\
+							<td><button class='btn btn-danger btn-sm EliminarFila'><i class='fas fa-trash'></i></button></td>\
+						</tr>\
+					";	
+				});
+
+				$("#tbodyTablaProductosAgregados").append(fila);
+				CalcularSubtotal();
+				$("#bGuardarOrden").attr('attrID', datos.ID_Orden_Compra);
+				$("#modalVerOrdenes").modal('hide');
+			}
+		})
+		.fail(function() {
+			console.log("Error ajax");
+		})
+		.always(function() {
+			$("#carga").hide();
+		});
+	});
 });
 
-
+function tablaOrdenesCompra(){
+	ajaxMyDatatable({
+		"table": $("#tablaOrdenesCompra"), 
+		"colums": [
+			"Datos",
+			"Proveedor",
+			"Total",
+			"Detalles",
+			"Acciones"
+		], 
+		"sort": [
+			0,
+			"desc"
+		],
+		"url": "index.php", 
+		"params":{
+			"metodo": "consultar",
+			"tipo": "consultarOrdenes",
+			"accion": "hacerCompra"
+		}
+	});
+}
 
 function TablaProductosCompra(){
 	ajaxMyDatatable({
@@ -539,7 +800,6 @@ function TablaProductosCompra(){
 		"colums": [
 			"Codigo",
 			"Descripcion",
-			"Costo",
 			"Presentacion"
 		], 
 		"sort": [

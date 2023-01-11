@@ -339,15 +339,14 @@ function TablaReporteVentas(){
 			"Datos",
 			"Cliente",
 			"Total",
+			"Facturada",
 			"Detalles",
 			"Acciones"
 		], 
 		"totals":[
 			"Datos",
 			"Cliente",
-			"Total",
-			"Detalles",
-			"Acciones"
+			"Total"
 		],
 		"sort": [
 			0,
@@ -374,8 +373,8 @@ function TablaProductosDevolucion(idventa){
 			"Devolver",
 		], 
 		"sort": [
-			1,
-			"desc"
+			0,
+			"asc"
 		],
 		"url": "index.php", 
 		"params":{

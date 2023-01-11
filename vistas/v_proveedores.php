@@ -177,7 +177,7 @@
 		                <label for="CreditoProveedor">Monto de crédito que ofrecen</label>
 		            </div>
 		        </div>
-		        <hr>
+		        <!--<hr>
 		        <b class="mb-3">Descuento que ofrece el proveedor</b>
 		        <br>
 		        <div class="col-md-4 col-sm-12 mb-3">
@@ -199,7 +199,7 @@
             <div class="col-md-4 text-center col-sm-12 mb-3">
             	<h6>Descuento</h6>
               <h4 id="LabelDescuentoProveedor"><b class="cantidad">0</b></h4>
-            </div>
+            </div>-->
 	       	</div>
 	      </div>
 	      <div class="modal-footer">

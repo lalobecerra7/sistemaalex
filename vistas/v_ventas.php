@@ -33,7 +33,8 @@
                     <thead>
                         <th style="width: 20%;">Datos</th>
                         <th style="width: 25%;" orden="No">Cliente</th>
-                        <th style="width: 25%;">Total</th>
+                        <th style="width: 20%;">Total</th>
+                        <th style="width: 5%;">Facturada</th>
                         <th style="width: 15%;" orden="No">Detalles</th>
                         <th style="width: 15%;" orden="No">Acciones</th>
                     </thead>

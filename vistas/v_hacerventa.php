@@ -91,6 +91,7 @@
 	</div>
 </div>
 
+<!--/////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalPreciosProductoVenta" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -123,6 +124,7 @@
     </div>
 </div>
 
+<!--/////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalPresentacionesProducto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -157,7 +159,7 @@
     </div>
 </div>
 
-
+<!--/////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalVerProductosVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -189,8 +191,7 @@
     </div>
 </div>
 
-
-
+<!--/////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalVerPedidosVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -221,6 +222,7 @@
     </div>
 </div>
 
+<!--/////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalVerProductosReportePedido" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -268,6 +270,7 @@
     </div>
 </div>
 
+<!--/////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalVerImpuestosProductoPedido" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -309,7 +312,7 @@
     </div>
 </div>
 
-
+<!--/////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalVerClientesVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -340,7 +343,7 @@
     </div>
 </div>
 
-
+<!--/////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalRealizarVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
     <div class="modal-content">
@@ -365,9 +368,13 @@
                 </div>
                 <div class="col-md-12 col-sm-12 mb-3">
                     <div class="form-floating">
-                        <input type="number" class="form-control" min='1' step="any" id="ImportePagadoVenta" name="ImportePagadoVenta" placeholder="Ingresa el importe a pagar">
+                        <input type="number" class="form-control" min='0.1' step="any" id="ImportePagadoVenta" name="ImportePagadoVenta" placeholder="Ingresa el importe a pagar">
                         <label for="ImportePagadoVenta">Importe pagado</label>
                     </div>
+                </div>
+                <div class="col-md-12 col-sm-12 mb-3">
+                    <h5>Cambio</h5>
+                    <h5 class="dinero" id="verCambio">$0.00</h5>
                 </div>
 	       	</div>
 	    </div>

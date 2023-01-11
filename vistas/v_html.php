@@ -14,7 +14,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
-    <title>CREMASI</title>
+    <title>MISCELÁNEA RÍOS</title>
     <meta name="description" content="" />
     <link rel="shortcut icon" href="vistas/assets/img/favicon/favicon.ico" /> 
     <link rel="stylesheet" href="vistas/assets/vendor/fonts/boxicons.css" />
@@ -525,7 +525,7 @@
           <div class="app-brand demo">
             <a href="index.php">
               <!-- //<img src="vistas/assets/img/logos/icon.png" style="width:100%;"> -->
-              <h1>CREMASI</h1>
+              <h4>MISCELÁNEA RÍOS</h4>
             </a>
 
             <a href="index.php;" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -582,10 +582,7 @@
 
             <!-- Layouts -->
             <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon fas fa-boxes-stacked"></i>
-                <div data-i18n="Layouts">Productos</div>
-              </a>
+              #menuProd#
 
               <ul class="menu-sub">
                 #MenuProductos#
@@ -605,10 +602,7 @@
             #MenuImpuestos#
 
             <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-              <i class="menu-icon fas fa-cogs"></i>
-                <div data-i18n="Layouts">Configuración</div>
-              </a>
+              #menuConfi#
 
               #MenuTicket#
 
@@ -693,6 +687,10 @@
             <!-- Cargar las vistas -->
             <div class="container-fluid" >
               <div class="row">
+                <div class="col-12">
+                  <br>
+                  #alertas#
+                </div>
                 <div class="col-12" id="verVista">
                   
                 </div>

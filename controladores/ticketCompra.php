@@ -1,13 +1,11 @@
 <?php  
+  date_default_timezone_set('America/Mexico_City');
   session_start();
   if (!isset($_SESSION['user_admin']['ID_Usuario'])) {
     header('Location: ../index.php');
   }
 
-//$con = mysqli_connect('localhost','root','','smartpoi_negocio'.$_SESSION['user_smart']['cliente']['id_cliente']);
-date_default_timezone_set('America/Mexico_City');
-//$con = mysqli_connect('localhost','root','','wits_sistemaalex');
-$con = mysqli_connect('localhost','wits_userBD','ZfX7y99GSs','wits_sistemaalex');
+$con = mysqli_connect('localhost','root','','wits_sistemaalex');
 $arreglo = '';
 $arreglo2 = '';
 ?>
@@ -107,8 +105,8 @@ $arreglo2 = '';
 
     .negra{
       font-size: 20px;
-      background: #000;
-      color: #FFF;
+      /*background: #000;*/
+      color: #000;
     }
 
     .negra b{
@@ -253,26 +251,36 @@ $arreglo2 = '';
         <thead>
           <tr>
             <?php  
-              echo '<th class="codigo">Cód.</th>';  
-              echo '<th class="producto">Producto</th>
-              <th class="cantidad">Cant.</th>';
-              echo '<th class="precio">Prec. Unit.</th>';  
-              echo '<th class="precio">Importe</th>';
+              echo '<th class="codigo">Cód.</th>
+              <th class="cantidad">Cant.</th>
+              <th class="precio">Costo. Unit.</th>  
+              <th class="precio">Importe</th>';
             ?>
           </tr>
         </thead>
         <tbody> 
           <?php 
-            $sql = "SELECT ID_Detalle_Compra, FK_Compra, FK_Producto, productos.Descripcion AS NombreProducto, detalle_compras.Costo AS Costo, Cantidad, Subtotal, productos.Codigo FROM detalle_compras INNER JOIN productos ON FK_Producto = ID_Producto WHERE FK_Compra = '".$arreglo['ID_Compra']."'";
+            $sql = "SELECT ID_Detalle_Compra, FK_Presentacion, productos.Descripcion AS NombreProducto, Nombre_Unidad, Abreviatura_Unidad, detalle_compras.Costo AS Costo, Cantidad, Subtotal, productos.Codigo, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS Abreviatura FROM detalle_compras INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Compra = '".$arreglo['ID_Compra']."'";
             $mostrar= "";
             $subtotal = 0;
             $contador = 0;
             if($res=$con->query($sql)){
               if ($res->num_rows > 0) {
                 while($row = $res->fetch_assoc()){
+                    $presentacion = ' - '.$row['Nombre_Unidad'].' ('.$row['Abreviatura_Unidad'].')';
+                    if($row['FK_Presentacion'] != 0){
+                      $presentacion = ' - '.$row['Presentacion'].' ('.$row['Abreviatura'].')';
+                    }
+
+                    if($presentacion == ' -  ()'){
+                      $presentacion = '';
+                    }
+
                     $mostrar .= "<tr>
+                        <td style='text-align: left;' class='producto' colspan='4'>".$row["NombreProducto"].$presentacion."</td>
+                      </tr>  
+                      <tr>  
                         <td class='codigo'>".$row["Codigo"]."</td>
-                        <td class='producto'>".$row["NombreProducto"]."</td>
                         <td class='cantidad'>".(round($row['Cantidad']*100)/100)."</td> 
                         <td class='precio'>$".(round($row['Costo']*100)/100)."</td>
                         <td class='precio'>$".(round($row['Subtotal']*100)/100)."</td>
@@ -301,16 +309,8 @@ $arreglo2 = '';
         ";
         echo '<p class="derecha negra">Importe Pagado: $'.(round($arreglo['Anticipo']*100)/100).'</p>'; 
         
-        echo '<p class="derecha">Administrador: '.$arreglo['Usuario'].'</p>';
+        echo '<p class="derecha">Usuario: '.$arreglo['Usuario'].'</p>';
       ?>
-      <br>
-      <p class="centrado">***********************************************************</p>
-      <p class="centrado">***********************************************************</p>
-      <br>
-      <p class="centrado"><?php echo $arreglo2['Mensaje'] ?></p>
-      <br>
-      <p class="centrado">***********************************************************</p>
-      <p class="centrado">***********************************************************</p>
     </div>
   <script>
     window.print();

@@ -1,5 +1,6 @@
 function v_inventario() {
     TablaInventario();
+    
     $('#FormTraslados').validate({
         rules: {
             FechaTraslado: {
@@ -640,14 +641,14 @@ function TablaInventario() {
         "table": $("#TablaInventario"),
         "colums": [
             "Descripcion",
-            "Distribucion",
+            "Existencia",
             "Precios",
             "Merma",
             "Acciones"
         ],
         "sort": [
             0,
-            "desc"
+            "asc"
         ],
         "url": "index.php",
         "params": {

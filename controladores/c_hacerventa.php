@@ -5,7 +5,6 @@ class hacerventa {
 		$omodelo = new m_modelo();
 		extract($_POST);
 
-		
 	}
 
 	public function _insertar(){
@@ -431,9 +430,7 @@ class hacerventa {
 				}
 			}
 
-			///////////////////////////////////////////////////////////////////////////////////
-
-			$query2 = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion,areas.Nombre AS NombreArea, ID_Presentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Nombre_Unidad AS NombreGenerico, productos.Abreviatura_Unidad AS AbreviaturaGenerico,  productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Mayoreo, (SELECT Nombre FROM precios WHERE FK_Producto = ID_Producto AND FK_Presentacion = ID_Presentacion ORDER BY Nombre LIMIT 1) AS NombrePrecio, (SELECT Precio FROM precios WHERE FK_Producto = ID_Producto AND FK_Presentacion = ID_Presentacion ORDER BY Nombre LIMIT 1) AS PrecioPresentacion, (SELECT Precio_Mayoreo FROM precios WHERE FK_Producto = ID_Producto AND FK_Presentacion = ID_Presentacion ORDER BY Nombre LIMIT 1) AS PrecioMayPresentacion, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia, (SELECT COUNT(*) FROM inventario INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN areas ON FK_Area = ID_Area WHERE FK_Sucursal = '$sucursal' $busqueda) AS Num FROM inventario INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN areas ON FK_Area = ID_Area WHERE FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query2 = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion,areas.Nombre AS NombreArea, ID_Presentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Nombre_Unidad AS NombreGenerico, productos.Abreviatura_Unidad AS AbreviaturaGenerico,  productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Mayoreo, (SELECT Nombre FROM precios WHERE FK_Producto = ID_Producto AND FK_Presentacion = ID_Presentacion ORDER BY Nombre LIMIT 1) AS NombrePrecio, (SELECT Precio FROM precios WHERE FK_Producto = ID_Producto AND FK_Presentacion = ID_Presentacion ORDER BY Nombre LIMIT 1) AS PrecioPresentacion, (SELECT Precio_Mayoreo FROM precios WHERE FK_Producto = ID_Producto AND FK_Presentacion = ID_Presentacion ORDER BY Nombre LIMIT 1) AS PrecioMayPresentacion, Detalles, Fecha_Registro, inventario.Cantidad AS Existencia, (SELECT COUNT(*) FROM inventario INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN areas ON FK_Area = ID_Area WHERE FK_Sucursal = '$sucursal' $busqueda) AS Num FROM inventario INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN areas ON FK_Area = ID_Area WHERE FK_Sucursal = '$sucursal' AND productos.Bloqueado = 0 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 
 			$row2 = $omodelo->_consultar($query2);
 			$numerofilas2 = $omodelo->numerofilas;
@@ -499,17 +496,11 @@ class hacerventa {
 			
 			echo json_encode($arreglo);
 		}else if($tipo == "AgregarProducto"){
-			/*if (isset($presentacion) && $presentacion != "") {
-				$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, Clase, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN presentaciones ON FK_Producto = ID_Producto LEFT JOIN inventario ON ID_Presentacion = FK_Presentacion AND inventario.FK_Sucursal = '$sucursal' AND FK_Presentacion = '$presentacion' INNER JOIN precios ON precios.FK_Presentacion = ID_Presentacion WHERE Codigo = '$codigo'";				
-			}else{
-				$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, 'Sin presentación' AS Presentacion, 0 AS IDPresentacion, 'NA' AS AbreviaturaPresentacion,  Clase, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia FROM productos LEFT JOIN areas ON FK_Area = ID_Area LEFT JOIN inventario ON inventario.FK_Producto = ID_Producto AND FK_Presentacion = 0 WHERE Codigo = '$codigo'";
-			}*/
-
 			if (!isset($presentacion) || $presentacion == "") {
 				$presentacion = 0;
 			}
 
-			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Nombre AS Presentacion, Clase, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Nombre_Unidad AS NombreGenerico, productos.Abreviatura_Unidad AS AbreviaturaGenerico, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, productos.Minimo AS Minimo_General, productos.Maximo AS Maximo_General, Fecha_Registro, inventario.Cantidad AS Existencia FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN precios ON precios.FK_Presentacion = ID_Presentacion WHERE Codigo = '$codigo' AND inventario.FK_Presentacion = '$presentacion'";
+			$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Nombre_Unidad AS NombreGenerico, productos.Abreviatura_Unidad AS AbreviaturaGenerico, productos.Costo AS Costo_General, productos.Precio AS Precio_General, productos.Precio_Mayoreo AS Precio_Mayoreo_General, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, Fecha_Registro, inventario.Cantidad AS Existencia FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN precios ON precios.FK_Presentacion = ID_Presentacion WHERE Codigo = '$codigo' AND inventario.FK_Presentacion = '$presentacion' AND productos.Bloqueado = 0";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -519,7 +510,7 @@ class hacerventa {
 				if($numerofilas > 0){
 					$subarreglo = null;
 					$campoImpuestos = "";
-					$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje, impuestos.Clave_CFDI, impuestos.Tipo_Factor, impuestos.Clase FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."'";
+					$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre AS Nombre, impuestos.Porcentaje AS Porcentaje, impuestos.Clave_CFDI AS Clave_CFDI, impuestos.Tipo_Factor AS Tipo_Factor, impuestos.Clase AS Clase FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."'";
 					$rowI = $omodelo->_consultar($queryI);
 					$numerofilasI = $omodelo->numerofilas;
 					if($rowI == 'si'){
@@ -580,15 +571,12 @@ class hacerventa {
 						'Codigo' => $row[0]["Codigo"],
 						'Descripcion' => $row[0]["Descripcion"],
 						'Presentacion' => $NombrePresentacion,
-						'Clase' => $row[0]["Clase"],
 						'IDPresentacion' => $row[0]["IDPresentacion"],
 						'Costo_General' => $row[0]["Costo_General"],
 						'Precio_General' => $precio,
 						'Precio_Mayoreo_General' => $precioMayoreo,
 						'NombreArea' => $row[0]["NombreArea"],
 						'Detalles' => $row[0]["Detalles"],
-						'Minimo_General' => $row[0]["Minimo_General"],
-						'Maximo_General' => $row[0]["Maximo_General"],
 						'Fecha_Registro' => $row[0]["Fecha_Registro"],
 						'Existencia' => $row[0]["Existencia"],
 						'Impuestos' => $campoImpuestos
@@ -892,7 +880,7 @@ class hacerventa {
 						if($numerofilas2 > 0){
 							for ($i=0; $i < $numerofilas2; $i++) { 
 								$campoImpuestos = "";
-								$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre, impuestos.Porcentaje, impuestos.Clave_CFDI, impuestos.Tipo_Factor, impuestos.Clase FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row2[$i]["FK_Producto"]."'";
+								$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre AS Nombre, impuestos.Porcentaje AS Porcentaje, impuestos.Clave_CFDI AS Clave_CFDI, impuestos.Tipo_Factor AS Tipo_Factor, impuestos.Clase AS Clase FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row2[$i]["FK_Producto"]."'";
 								$rowI = $omodelo->_consultar($queryI);
 								$numerofilasI = $omodelo->numerofilas;
 								if($rowI == 'si'){
@@ -923,56 +911,6 @@ class hacerventa {
 													</label>
 												</div>
 											';
-											/*$query3 = "SELECT ID_Impuesto, FK_Detalle_Pedido, Tipo_Impuesto_CFDI, Impuesto_CFDI, Clave_CFDI, Tipo_Factor_CFDI, Tasa_Cuota_CFDI FROM detalles_impuestos_pedidos WHERE FK_Detalle_Pedido = '".$row2[0]["ID_Detalle_Pedido"]."'";
-											$row3 = $omodelo->_consultar($query3); 
-											$numerofilas3 = $omodelo->numerofilas;
-
-											if($row3 == 'si'){
-												echo "Error 3: ".mysqli_error($omodelo->link);
-											}else{
-												if($numerofilas3 > 0){
-
-														($rowI[$a]["Nombre"] == $row3[0]["Impuesto_CFDI"] && 
-															$rowI[$a]["Porcentaje"] == $row3[0]["Tasa_Cuota_CFDI"] && 
-															$rowI[$a]["Tipo_Factor"] == $row3[0]["Tipo_Factor_CFDI"] && 
-															$rowI[$a]["Clave_CFDI"] == $row3[0]["Clave_CFDI"] && 
-															$rowI[$a]["Clase"] == $row3[0]["Tipo_Impuesto_CFDI"]
-														) {
-															$campoImpuestos .= '
-																<div class="form-check impuesto">
-																	<input class="form-check-input seleccionarImpuesto" checked type="checkbox" nombre="'.$rowI[$a]["Nombre"].'" porcentaje="'.$rowI[$a]["Porcentaje"].'" attrid="'.$rowI[$a]["FK_Impuesto"].'" clavecfdi="'.$rowI[$a]["Clave_CFDI"].'" tipofactor="'.$rowI[$a]["Tipo_Factor"].'" clase="'.$rowI[$a]["Clase"].'">
-																	<label class="form-check-label" for="flexCheckDefault">
-																					'.$rowI[$a]["Nombre"].' ('.$rowI[$a]["Porcentaje"].'%)
-																	</label>
-																</div>
-															';	
-														}else{
-															$campoImpuestos .= '
-																<div class="form-check impuesto">
-																	<input class="form-check-input seleccionarImpuesto" type="checkbox" nombre="'.$rowI[$a]["Nombre"].'" porcentaje="'.$rowI[$a]["Porcentaje"].'" attrid="'.$rowI[$a]["FK_Impuesto"].'" clavecfdi="'.$rowI[$a]["Clave_CFDI"].'" tipofactor="'.$rowI[$a]["Tipo_Factor"].'" clase="'.$rowI[$a]["Clase"].'">
-																	<label class="form-check-label" for="flexCheckDefault">
-																		'.$rowI[$a]["Nombre"].' ('.$rowI[$a]["Porcentaje"].'%)
-																	</label>
-																</div>
-															';
-														}
-
-														// ///////////////////////////////////////////
-														// $impuestos['data'][0] = array(
-														// 	'ID_Impuesto' => $row3[$x]["ID_Impuesto"],
-														// 	'FK_Detalle_Pedido' => $row3[$x]["FK_Detalle_Pedido"],
-														// 	'Tipo_Impuesto_CFDI' => $row3[$x]["Tipo_Impuesto_CFDI"],
-														// 	'Impuesto_CFDI' => $row3[$x]["Impuesto_CFDI"],
-														// 	'Clave_CFDI' => $row3[$x]["Clave_CFDI"],
-														// 	'Tipo_Factor_CFDI' => $row3[$x]["Tipo_Factor_CFDI"],
-														// 	'Tasa_Cuota_CFDI' => $row3[$x]["Tasa_Cuota_CFDI"]
-														// );
-													
-
-												}
-											}*/
-
-										//
 										}
 
 									}

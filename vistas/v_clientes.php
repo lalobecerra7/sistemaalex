@@ -31,11 +31,12 @@
 		      <div class="col-12">
 		        <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaClientes" width="100%" style="font-size: 12px;">
 		          <thead>
-		            <th style="width: 15%;">Fecha</th>
+		          	<th style="width: 7%;">ID</th>
+		            <th style="width: 10%;">Fecha</th>
 		            <th style="width: 15%;">Nombre</th>
 		            <th style="width: 20%;">Direcciones</th>
 		            <th style="width: 15%;" orden="No">Detalles</th>
-		          	<th style="width: 10%;" orden="No">Acciones</th>
+		          	<th style="width: 8%;" orden="No">Acciones</th>
 		          </thead>
 		          <tbody>
 		          </tbody>
@@ -72,33 +73,39 @@
 	       		<div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		               	<input type="text" class="form-control" id="NombreCliente" name="NombreCliente" placeholder="Ingresa el nombre del cliente">
-		                <label for="NombreCliente">Nombre del cliente</label>
+		                <label for="NombreCliente">Nombre</label>
 		          </div>
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		               	<input type="text" class="form-control" id="TelefonoCliente" name="TelefonoCliente" placeholder="Ingresa el teléfono del cliente">
-		                <label for="TelefonoCliente">Teléfono del cliente</label>
+		               	<input type="text" class="form-control" id="primerApellidoCliente" name="primerApellidoCliente" placeholder="Ingresa el primer apellido">
+		                <label for="NombreCliente">Primer Apellido</label>
+		          </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		               	<input type="text" class="form-control" id="segundoApellidoCliente" name="segundoApellidoCliente" placeholder="Ingresa el segundo apellido">
+		                <label for="TelefonoCliente">Segundo Apellido</label>
+		            </div>
+		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		               	<input type="text" class="form-control" id="TelefonoCliente" name="TelefonoCliente" placeholder="Ingresa el teléfono">
+		                <label for="TelefonoCliente">Teléfono</label>
 		            </div>
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		               	<input type="text" class="form-control" id="CelularCliente" name="CelularCliente" placeholder="Ingresa el celular del cliente">
-		                <label for="CelularCliente">Celular del cliente</label>
+		                <label for="CelularCliente">Celular</label>
 		            </div>
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		               	<input type="text" class="form-control" id="CorreoCliente" name="CorreoCliente" placeholder="Ingresa el correo electrónico del cliente">
-		                <label for="CorreoCliente">Correo electrónico del cliente</label>
+		                <label for="CorreoCliente">Correo electrónico</label>
 		            </div>
 		        </div>
-		        <div class="col-md-4 col-sm-12 mb-3">
-            	<div class="form-floating">
-              	<input type="number" min="0" step="any" class="form-control" id="DescuentoCliente" name="DescuentoCliente" placeholder="Ingresa el valor del descuento">
-                <label for="DescuentoCliente">Descuento (%)</label>
-              </div>
-            </div>
             <div class="col-md-4">
             	<div class="form-floating mb-3">
 								<select class="form-select" name="SucursalCliente" id="SucursalCliente" >
@@ -134,6 +141,12 @@
 							 	<label for="FacturarCliente">Facturar ventas</label>
 							</div>
 		        </div>
+		        <div class="col-md-4 col-sm-12 mb-3">
+            	<div class="form-floating">
+              	<input type="text" class="form-control" id="INECliente" name="INECliente" placeholder="Ingresa código del INE">
+                <label>INE</label>
+              </div>
+            </div>
 		        <hr>
 		        <b class="mb-3">Datos de contacto</b>
 		        <div class="col-md-4 col-sm-12 mb-3">
@@ -275,7 +288,7 @@
 		        <hr>
 		        <div class="row mb-3">
 		        	<div class="col-md-6 col-sm-12 text-start">
-		        		<b class="mb-3">Datos de ubicación</b>
+		        		<b class="mb-3">Direcciones</b>
 		        	</div>
 		        	<div class="col-md-6 col-sm-12 text-end">
 		        		<button type="button" class="btn btn-success" id="AgregarDireccionCliente">Agregar dirección <i class="fas fa-plus"></i></button>

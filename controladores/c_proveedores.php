@@ -17,7 +17,7 @@ class proveedores {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'AND ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(Fecha_Registro, ID_Proveedor, Nombre, Calle, No_Exterior, No_Interior, Telefono, Ciudad, Estado, Pais, Empresa , Colonia, Codigo_Postal, Puesto, Correo, RFC, Credito, Celular, No_Cuenta, Banco, Razon_Social) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(Fecha_Registro, Nombre, Calle, No_Exterior, No_Interior, Telefono, Ciudad, Estado, Pais, Empresa , Colonia, Codigo_Postal, Puesto, Correo, RFC, Credito, Celular, Razon_Social) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
@@ -49,14 +49,6 @@ class proveedores {
 
 					if ($row[$i]['Celular'] != "") {
 						$contacto .= "Celular: ".$row[$i]['Celular']."<br>";
-					}
-
-					if ($row[$i]['Banco'] != "") {
-						$contacto .= "Banco: ".$row[$i]['Banco']."<br>";
-					}
-
-					if ($row[$i]['No_Cuenta'] != "") {
-						$contacto .= "No. de cuenta: ".$row[$i]['No_Cuenta']."<br>";
 					}
 
 					if ($row[$i]['Calle'] != "") {
@@ -113,7 +105,7 @@ class proveedores {
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Proveedor'],
 						'Fecha' => '<b>'.$row[$i]['Fecha'].'</b>',
-						'Empresa' => $razonsocial.$row[$i]['Empresa'].$telefono,
+						'Empresa' => 'Nombre comercial: <b>'.$row[$i]['Empresa'].'</b><br>'.$razonsocial.$telefono,
 						'Contacto' => $contacto,
 						'Direccion' => $direccion,
 						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,

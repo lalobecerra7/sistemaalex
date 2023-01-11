@@ -17,6 +17,11 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
+                    <div class="col-md-4 mb-2 text-end">
+                        <button type="button" class="btn btn-outline-secondary" id="bVerOrdenes">
+                            <i class="fas fa-file"></i> Ver Ordenes
+                        </button>
+                    </div>
 			    </div>
                 <br>
                 <form id="FormAgregarProductoC" class="row">
@@ -31,13 +36,13 @@
                     </div>
                     <div class="col-md-3 col-sm-6 d-grid mb-3">
                         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ModalVerProductosCompra" id="CargarProductosModalC">
-                            <i class="fas fa-search"></i> Buscar
+                            <i class="fas fa-search"></i> Buscar - (F2)
                         </button>
                     </div>
                 </form>
                 <div class="row">
                     <div class="col-md-3">
-                        <div class="form-floating">
+                        <div class="form-floating" id="cambiarTipoCompra">
                             <select class="form-select" id="TipoCompra" name="TipoCompra">
                                 <option value="Contado" selected>Contado</option>
                                 <option value="Credito">Crédito</option>
@@ -70,9 +75,9 @@
                                 <th style="width: 15%;">Codigo</th>
                                 <th style="width: 15%;">Descripción</th>
                                 <th style="width: 15%;">Presentación</th>
-                                <th style="width: 15%;">Costo</th>
+                                <th style="width: 15%;" class="costoOculto">Costo</th>
                                 <th style="width: 15%;">Cantidad</th>
-                                <th style="width: 15%;">Total</th>
+                                <th style="width: 15%;" class="costoOculto">Total</th>
                                 <th style="width: 10%;"></th>
                             </thead>
                             <tbody id="tbodyTablaProductosAgregados">
@@ -87,22 +92,28 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-3 text-center">
-                        <h5 style="font-weight: bold;">Subtotal</h5>
-                        <h4 style="font-weight: bold;" id="MostrarSubtotal">0.00</h4>
+                        <div id="verSubtotal">
+                            <h5 style="font-weight: bold;">Subtotal</h5>
+                            <h4 style="font-weight: bold;" id="MostrarSubtotal">0.00</h4>
+                        </div>    
                     </div>
                     <div class="col-md-3 text-center mb-2">
-                        <h5 style="font-weight: bold;">Descuento</h5>
-                        <div class="input-group">
-                            <span class="input-group-text" id="basic-addon1"><b>$</b></span>
-                            <input type="number" min="0" value="0" step="any" class="form-control" id="DescuentoCompraDinero" name="DescuentoCompraDinero" placeholder="$0.00">
+                        <div id="ponerDescuento">
+                            <h5 style="font-weight: bold;">Descuento</h5>
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon1"><b>$</b></span>
+                                <input type="number" min="0" value="0" step="any" class="form-control" id="DescuentoCompraDinero" name="DescuentoCompraDinero" placeholder="$0.00">
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6 text-center mb-2">
                         <div class="row" style="vertical-align: middle;">
                             <div class="col-md-6 d-grid">
-                                <button class="btn btn-secondary" id="RealizarCompra" idProveedor="2" style="font-size: 25px;"><i style="font-size: 25px;" class="fas fa-cart-plus"></i> <b>Guardar</b></button>
+                                <button class="btn btn-secondary" id="RealizarCompra" idProveedor="1" style="font-size: 18px;"><i style="font-size: 25px;" class="fas fa-cart-plus"></i> <b>Guardar Compra</b></button>
+                                <br>
+                                <button class="btn btn-secondary" id="bGuardarOrden" idProveedor="1" style="font-size: 18px;"><i style="font-size: 25px;" class="fas fa-cart-plus"></i> <b>Guardar Orden</b></button>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6" id="verTotal">
                                 <h5 style="font-weight: bold;">Total</h5>
                                 <h4 style="font-weight: bold;" id="TotalCompra">0.00</h4>
                             </div>
@@ -128,7 +139,6 @@
                         <thead>
                             <th>Código</th>
                             <th>Descripción</th>
-                            <th>Costo</th>
                             <th orden="No">Presentación</th>
                         </thead>
                         <tbody>
@@ -253,10 +263,69 @@
                         <thead>
                             <th>Nombre</th>
                             <th>Abreviatura</th>
-                            <th>Costo</th>
+                            <th class="costoOculto">Costo</th>
                             <th>Acciones</th>
                         </thead>
                         <tbody id="verTablaPrese">
+                               
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--///////////////////////////////////////////////////////////-->
+<div class="modal fade" id="modalVerOrdenes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Productos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body table-responsive">
+                <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="tablaOrdenesCompra" width="100%" style="font-size: 12px;">
+                    <thead>
+                        <th>Datos</th>
+                        <th>Proveedor</th>
+                        <th>Total</th>
+                        <th>Detalles</th>
+                        <th>Acciones</th>
+                    </thead>
+                    <tbody>
+                               
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--///////////////////////////////////////////////////////////-->
+<div class="modal fade" id="modalVerProductosOrden" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Productos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table table-hover table-striped table-bordered text-center" width="100%" style="font-size: 12px;">
+                        <thead>
+                            <th>Nombre</th>
+                            <th>Cantidad</th>
+                            <th class="costoOculto">Costo</th>
+                            <th class="costoOculto">Total</th>
+                        </thead>
+                        <tbody id="verProdOrden">
                                
                         </tbody>
                     </table>
