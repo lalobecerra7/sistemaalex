@@ -24,7 +24,7 @@ class importes {
 			}
 		}
 		
-		$query = "SELECT ID_Venta, ventas.Estatus AS EstatusVenta, ventas.FK_Usuario, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta) AS NumeroImportes, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta AND Estatus = 'Pagado') AS Estatus, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta AND Estatus = 'Se debe') AS ImportesPendientes, ventas.FK_Sucursal, FK_Cliente, ventas.Descuento, ventas.Total, Tipo_Pago, Pago, Cambio, Notas, ventas.Fecha_Registro AS Datos, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS Cliente, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM importes INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda) AS Num FROM importes INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda GROUP BY ID_Venta ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Venta, ventas.Estatus AS EstatusVenta, ventas.FK_Usuario, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta) AS NumeroImportes, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta AND Estatus = 'Pagado') AS Estatus, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta AND Estatus = 'Se debe') AS ImportesPendientes, (SELECT SUM(Total) FROM importes WHERE FK_venta = ID_Venta AND Estatus = 'Se debe') AS SumaPendientes, (SELECT SUM(Total) FROM importes WHERE FK_venta = ID_Venta AND Estatus = 'Pagado') AS SumaPagados, ventas.FK_Sucursal, FK_Cliente, ventas.Descuento, ventas.Total, Tipo_Pago, Pago, Cambio, Notas, ventas.Fecha_Registro AS Datos, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS Cliente, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM importes INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda) AS Num FROM importes INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda GROUP BY ID_Venta ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -48,7 +48,43 @@ class importes {
 					}else{
 						$estatus='<span class="badge rounded-pill bg-success">Venta completada</span>';
 					}*/
+					$sumapendientes = 0;
+					$query2 = "SELECT presentaciones.Importe AS ImportePresentacion, Cantidad, importes.Importe FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '".$row[$i]['ID_Venta']."' AND Estatus = 'Se debe'";
+					$row2 = $omodelo->_consultar($query2);
+					$numerofilas2 = $omodelo->numerofilas;
 
+					if($row2 == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilas2 > 0){
+							for ($x=0; $x < $numerofilas2; $x++) { 
+								if ($row2[$x]["ImportePresentacion"] != "") {
+									$sumapendientes += $row2[$x]["ImportePresentacion"] * $row2[$x]["Cantidad"];
+								}else{
+									$sumapendientes += $row2[$x]["Importe"] * $row2[$x]["Cantidad"];
+								}
+ 							}
+						}
+					}
+
+					$sumapagados = 0;
+					$query3 = "SELECT presentaciones.Importe AS ImportePresentacion, Cantidad, importes.Importe FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '".$row[$i]['ID_Venta']."' AND Estatus = 'Pagado'";
+					$row3 = $omodelo->_consultar($query3);
+					$numerofilas3 = $omodelo->numerofilas;
+
+					if($row3 == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilas3 > 0){
+							for ($x=0; $x < $numerofilas3; $x++) { 
+								if ($row3[$x]["ImportePresentacion"] != "") {
+									$sumapagados += $row3[$x]["ImportePresentacion"] * $row3[$x]["Cantidad"];
+								}else{
+									$sumapagados += $row3[$x]["Importe"] * $row3[$x]["Cantidad"];
+								}
+ 							}
+						}
+					}
 
 
 					$SumarVentas += $row[$i]['Total'];
@@ -75,7 +111,7 @@ class importes {
 						'Cliente' => 'Nombre: <b>'.$row[$i]['Cliente'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Correo electrónico: <b>'.$row[$i]['CorreoCliente'].'</b><br>RFC: <b>'.$row[$i]['RFCCliente']."</b>",
 						'Total' => "Subtotal: <b>$".number_format(($row[$i]['Total'] + $row[$i]['Descuento']), 2)."</b><br>Descuento: <b>$".number_format($row[$i]['Descuento'], 2)."</b><br>Total: <b>$".number_format($row[$i]['Total'], 2)."</b>",
 						'Importes' => "Cantidad de importes: <b>".number_format($row[$i]["NumeroImportes"], 2)."</b><br>
-							Pagados: <b>".$row[$i]['Estatus']."</b><br> Pendientes: <b>".$row[$i]['ImportesPendientes']."</b><br>".$botonPermisosModificar,
+							Pagados: <b>".$row[$i]['Estatus']."</b><br>Total pagados: $".number_format($sumapagados, 2)." <br>Pendientes: <b>".$row[$i]['ImportesPendientes']."</b><br>Total pendientes: $".number_format($sumapendientes, 2)."<br>".$botonPermisosModificar,
 						'Estatus' => $estatus."<br>".$motivocancelada.$fechacancelada,
 						'Acciones' => $botonPermisosTicket,
 					);

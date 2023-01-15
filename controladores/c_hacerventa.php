@@ -15,7 +15,7 @@ class hacerventa {
 			if (!isset($cliente) || $cliente == "") {
 				$cliente = 1;
 			}
-			$query = "INSERT INTO pedidos SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Sucursal = '$idsucursal', FK_Cliente = '$cliente', Descuento = '$sumadescuento', Total = '$total', Fecha_Registro = '$fecha', Fecha_Entrega = '$fechaEntrega'";
+			$query = "INSERT INTO pedidos SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Sucursal = '$idsucursal', FK_Cliente = '$cliente', FK_Direccion = '$idDireccion', Descuento = '$sumadescuento', Total = '$total', Fecha_Registro = '$fecha', Fecha_Entrega = '$fechaEntrega'";
 			$error = $omodelo->_insertar($query);
 
 			if ($error == "si") {
@@ -38,7 +38,7 @@ class hacerventa {
 							$nombreProducto = $row2[0]["Descripcion"];
 						}
 					}
-					$query = "INSERT INTO detalles_pedidos SET FK_Pedido = '$idPedido', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]'";
+					$query = "INSERT INTO detalles_pedidos SET FK_Pedido = '$idPedido', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]', Cobrar_Importe = '$fila[7]'";
 					$error = $omodelo->_insertar($query);
 
 					if ($error == "si") {
@@ -70,7 +70,7 @@ class hacerventa {
 				$Importe = $total;
 			}
 			$cambio = $Importe - $total;
-			$query = "INSERT INTO ventas SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Sucursal = '$idsucursal', FK_Cliente = '$cliente', Descuento = '$sumadescuento', Total = '$total', Tipo_Pago = '$TipoPago', Pago = '$Importe', Cambio = '$cambio', Fecha_Registro = '$fecha', Estatus = 'Completada'";
+			$query = "INSERT INTO ventas SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Sucursal = '$idsucursal', FK_Cliente = '$cliente', FK_Direccion = '$idDireccion', Descuento = '$sumadescuento', Total = '$total', Tipo_Pago = '$TipoPago', Pago = '$Importe', Cambio = '$cambio', Fecha_Registro = '$fecha', Estatus = 'Completada'";
 			$error = $omodelo->_insertar($query);
 
 			if ($error == "si") {
@@ -94,7 +94,7 @@ class hacerventa {
 						}
 					}
 					$idDetalleVenta = "";
-					$query = "INSERT INTO detalles_ventas SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]'";
+					$query = "INSERT INTO detalles_ventas SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]', Cobrar_Importe = '$fila[7]'";
 					$error = $omodelo->_insertar($query);
 
 					if ($error == "si") {
@@ -103,7 +103,7 @@ class hacerventa {
 						$idDetalleVenta = mysqli_insert_id($omodelo->link);
 					}
 
-					if ($row2[0]["importe"] > 0) {
+					if ($row2[0]["importe"] > 0 && $fila[7] == 1) {
 						$totalImporte = $fila[2] * $row2[0]["importe"];
 
 						$query3 = "SELECT Cantidad FROM importes WHERE FK_Producto = '$fila[0]' AND FK_Venta = '".$idVenta."' AND FK_Presentacion = '$fila[1]'";
@@ -259,7 +259,7 @@ class hacerventa {
 							$nombreProducto = $row2[0]["Descripcion"];
 						}
 					}
-					$query = "INSERT INTO detalles_pedidos SET FK_Pedido = '$IDPedido', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]'";
+					$query = "INSERT INTO detalles_pedidos SET FK_Pedido = '$IDPedido', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]', Cobrar_Importe = '$fila[7]'";
 					$error = $omodelo->_insertar($query);
 
 					if ($error == "si") {
@@ -340,35 +340,35 @@ class hacerventa {
 						$contacto = "";$direccion=""; $facturar = "No";
 						
 						if ($row[$i]["Direccion"] != "") {
-							$direccion="Calle: ".$row[$i]["Direccion"]."<br>";
+							$direccion.="Calle: ".$row[$i]["Direccion"]."<br>";
 						}
 
 						if ($row[$i]["No_Exterior"] != "") {
-							$direccion="No. Exterior: ".$row[$i]["No_Exterior"]."<br>";
+							$direccion.="No. Exterior: ".$row[$i]["No_Exterior"]."<br>";
 						}
 
 						if ($row[$i]["No_Interior"] != "") {
-							$direccion="No. Interior: ".$row[$i]["No_Interior"]."<br>";
+							$direccion.="No. Interior: ".$row[$i]["No_Interior"]."<br>";
 						}
 
 						if ($row[$i]["Colonia"] != "") {
-							$direccion="Colonia: ".$row[$i]["Colonia"]."<br>";
+							$direccion.="Colonia: ".$row[$i]["Colonia"]."<br>";
 						}
 
 						if ($row[$i]["Ciudad"] != "") {
-							$direccion="Ciudad: ".$row[$i]["Ciudad"]."<br>";
+							$direccion.="Ciudad: ".$row[$i]["Ciudad"]."<br>";
 						}
 
 						if ($row[$i]["Codigo_Postal"] != "") {
-							$direccion="Codigo postal: ".$row[$i]["Codigo_Postal"]."<br>";
+							$direccion.="Codigo postal: ".$row[$i]["Codigo_Postal"]."<br>";
 						}
 
 						if ($row[$i]["Estado"] != "") {
-							$direccion="Estado: ".$row[$i]["Estado"]."<br>";
+							$direccion.="Estado: ".$row[$i]["Estado"]."<br>";
 						}
 
 						if ($row[$i]["Pais"] != "") {
-							$direccion="Pais: ".$row[$i]["Pais"]."<br>";
+							$direccion.="Pais: ".$row[$i]["Pais"]."<br>";
 						}
 
 						if ($direccion == "") {
@@ -376,15 +376,15 @@ class hacerventa {
 						}
 
 						if ($row[$i]["Telefono"] != "") {
-							$contacto="Teléfono: ".$row[$i]["Telefono"]."<br>";
+							$contacto.="Teléfono: ".$row[$i]["Telefono"]."<br>";
 						}
 
 						if ($row[$i]["Celular"] != "") {
-							$contacto="Celular: ".$row[$i]["Celular"]."<br>";
+							$contacto.="Celular: ".$row[$i]["Celular"]."<br>";
 						}
 
 						if ($row[$i]["Contacto"] != "") {
-							$contacto="Correo electrónico: ".$row[$i]["Contacto"]."<br>";
+							$contacto.="Correo electrónico: ".$row[$i]["Contacto"]."<br>";
 						}
 
 						if ($contacto == "") {
@@ -409,6 +409,167 @@ class hacerventa {
 				}
 			}
 
+			echo json_encode($arreglo);
+		}else if ($tipo == "ConsultarDireccionCliente") {
+			$idCliente =  $omodelo->link->real_escape_string($idCliente);
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(Calle, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+
+			$query = "SELECT ID_Cliente, Calle AS Domicilio, No_Exterior, No_Interior, Colonia, Ciudad AS Ubicacion, Codigo_Postal, Estado, Pais, (SELECT COUNT(*) FROM clientes WHERE ID_Cliente = '$idCliente' $busqueda) AS Num FROM clientes WHERE ID_Cliente = '$idCliente' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					$SumarCompras = 0;
+					for($i=0; $i<$numerofilas; $i++){
+						$direccion=""; $ubicacion = ""; $colonia = ""; $idDireccion ="0";
+						
+						if ($row[$i]["Domicilio"] != "") {
+							$direccion.="Calle: ".$row[$i]["Domicilio"]."<br>";
+						}
+
+						if ($row[$i]["No_Exterior"] != "") {
+							$direccion.="No. Exterior: ".$row[$i]["No_Exterior"]."<br>";
+						}
+
+						if ($row[$i]["No_Interior"] != "") {
+							$direccion.="No. Interior: ".$row[$i]["No_Interior"]."<br>";
+						}
+
+						if ($row[$i]["Colonia"] != "") {
+							$colonia.="Colonia: ".$row[$i]["Colonia"]."<br>";
+						}
+
+						if ($row[$i]["Codigo_Postal"] != "") {
+							$colonia.="Codigo postal: ".$row[$i]["Codigo_Postal"]."<br>";
+						}
+
+						if ($row[$i]["Ubicacion"] != "") {
+							$ubicacion.="Ciudad: ".$row[$i]["Ubicacion"]."<br>";
+						}
+
+						if ($row[$i]["Estado"] != "") {
+							$ubicacion.="Estado: ".$row[$i]["Estado"]."<br>";
+						}
+
+						if ($row[$i]["Pais"] != "") {
+							$ubicacion.="Pais: ".$row[$i]["Pais"]."<br>";
+						}
+
+						if ($direccion == "") {
+							 $idDireccion ="No";
+							$direccion = "No hay datos registrados";
+						}
+
+						if ($colonia == "") {
+							$colonia = "No hay datos registrados";
+						}
+
+						if ($ubicacion == "") {
+							$ubicacion = "No hay datos registrados";
+						}
+
+						$arreglo['data'][] = array(
+							'ID' => $idDireccion,
+							'Domicilio' => $direccion,
+							'Colonia' => $colonia,
+							'Ubicación' => $ubicacion,
+						);
+					}
+
+					
+				}
+			}
+
+			$query2 = "SELECT ID_Detalle_Cliente, FK_Cliente AS IDCliente, Calle AS Domicilio, No_Exterior, No_Interior, Colonia, Ciudad AS Ubicacion, Codigo_Postal, Estado, Pais, (SELECT COUNT(*) FROM detalles_clientes WHERE FK_Cliente = '$idCliente' $busqueda) AS Num FROM detalles_clientes WHERE FK_Cliente = '$idCliente' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$row2 = $omodelo->_consultar($query2);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row2 == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					$SumarCompras = 0;
+					for($x=0; $x<$numerofilas; $x++){
+						$direccion=""; $ubicacion = ""; $colonia = ""; $idDireccion =$row2[$x]["ID_Detalle_Cliente"];
+						
+						if ($row2[$x]["Domicilio"] != "") {
+							$direccion.="Calle: ".$row2[$x]["Domicilio"]."<br>";
+						}
+
+						if ($row2[$x]["No_Exterior"] != "") {
+							$direccion.="No. Exterior: ".$row2[$x]["No_Exterior"]."<br>";
+						}
+
+						if ($row2[$x]["No_Interior"] != "") {
+							$direccion.="No. Interior: ".$row2[$x]["No_Interior"]."<br>";
+						}
+
+						if ($row2[$x]["Colonia"] != "") {
+							$colonia.="Colonia: ".$row2[$x]["Colonia"]."<br>";
+						}
+
+						if ($row2[$x]["Codigo_Postal"] != "") {
+							$colonia.="Codigo postal: ".$row2[$x]["Codigo_Postal"]."<br>";
+						}
+
+						if ($row2[$x]["Ubicacion"] != "") {
+							$ubicacion.="Ciudad: ".$row2[$x]["Ubicacion"]."<br>";
+						}
+
+						if ($row2[$x]["Estado"] != "") {
+							$ubicacion .="Estado: ".$row2[$x]["Estado"]."<br>";
+						}
+
+						if ($row2[$x]["Pais"] != "") {
+							$ubicacion .="Pais: ".$row2[$x]["Pais"]."<br>";
+						}
+
+						if ($direccion == "") {
+							$direccion = "No hay datos registrados";
+						 	$idDireccion ="No";
+						}
+
+						if ($colonia == "") {
+							$colonia = "No hay datos registrados";
+						}
+
+						if ($ubicacion == "") {
+							$ubicacion = "No hay datos registrados";
+						}
+
+						$arreglo['data'][] = array(
+							'ID' => $row2[$x]["ID_Detalle_Cliente"],
+							'Domicilio' => $direccion,
+							'Colonia' => $colonia,
+							'Ubicación' => $ubicacion,
+						);
+					}
+				}
+			}
+
+			$arreglo['totales'] = array('NumRows' => ($row[0]["Num"]));
+
+			//
 			echo json_encode($arreglo);
 		}else if ($tipo == "ConsultarProductos") {
 			$buscar =  $omodelo->link->real_escape_string($buscar);
@@ -610,7 +771,22 @@ class hacerventa {
 			$numerofilas3 = 0;
 			$numerofilas4 = 0;
 			if (isset($presentacion) && $presentacion != "") {
-				$query = "SELECT ID_Precio, Nombre, Precio, (SELECT COUNT(*) FROM precios WHERE FK_Presentacion = '$presentacion' AND FK_Producto = '$idproducto' $busqueda) AS Num FROM precios WHERE FK_Presentacion = '$presentacion' AND FK_Producto = '$idproducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+				$idZona = "";
+				$queryz = "SELECT FK_Zona FROM sucursales WHERE ID_Sucursal = '$sucursal'";
+
+				$rowz = $omodelo->_consultar($queryz);
+				$numerofilasz = $omodelo->numerofilas;
+
+				if($rowz == 'si'){
+					echo "Error: ".mysqli_error($omodelo->link);
+				}else{
+					if($numerofilasz > 0){
+						$idZona = $rowz[0]["FK_Zona"];
+					}
+				}	
+
+
+				$query = "SELECT ID_Precio, Nombre, Precio, (SELECT COUNT(*) FROM precios WHERE FK_Presentacion = '$presentacion' AND FK_Producto = '$idproducto' $busqueda) AS Num FROM precios WHERE FK_Presentacion = '$presentacion' AND FK_Producto = '$idproducto' AND FK_Zona = '$idZona' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 
 				$row = $omodelo->_consultar($query);
 				$numerofilas = $omodelo->numerofilas;
@@ -631,7 +807,7 @@ class hacerventa {
 					}
 				}
 
-				$query2 = "SELECT ID_Precio, Nombre, Precio_Mayoreo AS Precio, (SELECT COUNT(*) FROM precios $busqueda) AS Num FROM precios WHERE FK_Presentacion = '$presentacion' AND FK_Producto = '$idproducto' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+				$query2 = "SELECT ID_Precio, Nombre, Precio_Mayoreo AS Precio, (SELECT COUNT(*) FROM precios $busqueda) AS Num FROM precios WHERE FK_Presentacion = '$presentacion' AND FK_Producto = '$idproducto' AND FK_Zona = '$idZona' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 
 				$row2 = $omodelo->_consultar($query2);
 				$numerofilas2 = $omodelo->numerofilas;

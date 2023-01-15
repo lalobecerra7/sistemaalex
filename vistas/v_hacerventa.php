@@ -12,12 +12,17 @@
                             <i class="fas fa-user"></i> Seleccionar cliente
                         </button>
                     </div>
+                    <div class="col-md-2 BotonLimpiarCliente oculto d-grid mb-2">
+                        <button type="button" class="btn btn-outline-primary" id="CargarClientesModalDirecciones" attrid="">
+                            <i class="fas fa-map-marker"></i> Dirección
+                        </button>
+                    </div>
                     <div class="col-md-1 BotonLimpiarCliente oculto">
                         <button type="button" class="btn btn-outline-danger btn-sm" id="LimpiarClienteSeleccionado" attrid="">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <div class="offset-md-3 col-md-3 text-end d-grid mb-2 BotonSeleccionarPedido">
+                    <div class="col-md-3 text-end BotonSeleccionarPedido d-grid mb-2">
                         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ModalVerPedidosVenta" id="CargaPedidosModalVentas" folio="" attrid="">
                             <i class="fas fa-arrow-down"></i> Seleccionar pedido
                         </button>
@@ -329,6 +334,35 @@
                             <th style="width: 20%;" orden="no">RFC</th>
                             <th style="width: 20%;" orden="no">Contacto</th>
                             <th style="width: 20%;" orden="no">Facturar</th>
+                        </thead>
+                        <tbody>
+                               
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalVerDireccionesCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Direcciones</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaDireccionesClientes" width="100%" style="font-size: 12px;">
+                        <thead>
+                            <th style="width: 20%;">Domicilio</th>
+                            <th style="width: 20%;">Colonia</th>
+                            <th style="width: 20%;">Ubicación</th>
                         </thead>
                         <tbody>
                                

@@ -81,21 +81,11 @@ function TablaReporteImportes(){
 	ajaxMyDatatable({
 		"table": $("#TablaReporteImportes"), 
 		"colums": [
-			"Datos",
 			"Cliente",
-			"Total",
 			"Importes",
 			"Estatus",
-			"Acciones"
+			"Acciones",
 		], 
-		"totals":[
-			"Datos",
-			"Cliente",
-			"Total",
-			"Importes",
-			"Estatus",
-			"Acciones"
-		],
 		"sort": [
 			0,
 			"desc"

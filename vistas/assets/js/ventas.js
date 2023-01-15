@@ -226,7 +226,9 @@ jQuery(document).ready(function($) {
 								title: 'Devolución registrada correctamente',
 							});
 							$("#ModalDevolucionVenta").modal("hide");
+							ComprobarDevuelta(idventa);
 							TablaReporteVentas();
+
 						}else{
 							Swal.fire({
 								icon: 'error',
@@ -302,6 +304,7 @@ jQuery(document).ready(function($) {
 								title: 'Devolución registrada correctamente',
 							});
 							$("#ModalDevolucionVenta").modal("hide");
+							ComprobarDevuelta(idventa);
 							TablaReporteVentas();
 						}else{
 							Swal.fire({
@@ -331,6 +334,21 @@ jQuery(document).ready(function($) {
 
 
 });
+
+function ComprobarDevuelta(idventa){
+	var data = "metodo=detalles&accion=ventas&tipo=ComprobarDevolucionProducto&idventa="+idventa;
+	$.ajax({
+		url: 'index.php',
+		type: 'POST',
+		data: data,
+	})
+	.done(function(res) {
+		console.log(res);
+	})
+	.fail(function() {
+		console.log("Error ajax");
+	})	
+}
 
 function TablaReporteVentas(){
 	ajaxMyDatatable({
