@@ -96,6 +96,9 @@ class hacerventa {
 						}
 					}
 
+					if ($fila[1] == "null") {
+						$fila[1] = 0;
+					}
 
 					//CONSULTAR IMPORTE POR PRESENTACION
 					$query3 = "SELECT Nombre, Importe FROM presentaciones WHERE FK_Producto = '$fila[0]' AND ID_Presentacion = '$fila[1]'";
@@ -111,9 +114,10 @@ class hacerventa {
 							}else{
 								$ImporteProducto = $row2[0]["importe"];
 							}
+						}else{
+							$ImporteProducto = $row2[0]["importe"];
 						}
 					}
-
 					$idDetalleVenta = "";
 					$query = "INSERT INTO detalles_ventas SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]', Cobrar_Importe = '$fila[7]'";
 					$error = $omodelo->_insertar($query);
