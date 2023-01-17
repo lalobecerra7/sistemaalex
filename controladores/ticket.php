@@ -635,11 +635,8 @@ $arregloVenta = '';
             while($rowI = $resImporte->fetch_assoc()){
               $presentacionImporte = "";
               $totalImportes = 0;
-              if ($rowI["ImportePresentacion"] != "") {
-                $presentacionImporte = $rowI["ImportePresentacion"];
-              }else{
-                $presentacionImporte = $rowI["Importe"];
-              }
+              $presentacionImporte = $rowI["Importe"];
+              
               $totalImportes = $presentacionImporte * $rowI["Cantidad"];
 
               $nombrePresentacion = "";

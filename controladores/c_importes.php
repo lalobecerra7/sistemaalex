@@ -17,14 +17,14 @@ class importes {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Venta, clientes.Nombre, Notas, ventas.Fecha_Registro) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(Nombre, Telefono, Correo, RFC) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
-		
-		$query = "SELECT ID_Venta, ventas.Estatus AS EstatusVenta, ventas.FK_Usuario, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta) AS NumeroImportes, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta AND Estatus = 'Pagado') AS Estatus, (SELECT COUNT(*) FROM importes WHERE FK_venta = ID_Venta AND Estatus = 'Se debe') AS ImportesPendientes, (SELECT SUM(Total) FROM importes WHERE FK_venta = ID_Venta AND Estatus = 'Se debe') AS SumaPendientes, (SELECT SUM(Total) FROM importes WHERE FK_venta = ID_Venta AND Estatus = 'Pagado') AS SumaPagados, ventas.FK_Sucursal, FK_Cliente, ventas.Descuento, ventas.Total, Tipo_Pago, Pago, Cambio, Notas, ventas.Fecha_Registro AS Datos, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS Cliente, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM importes INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda) AS Num FROM importes INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda GROUP BY ID_Venta ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+
+		$query = "SELECT ID_Cliente, Nombre AS Cliente, Telefono, Correo, RFC FROM `importes` INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda GROUP BY ID_Cliente ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -35,11 +35,7 @@ class importes {
 				$SumarVentas = 0;
 				for($i=0; $i<$numerofilas; $i++){
 					$tipoUsuario = "";$usuario="";$estatus="";$motivocancelada="";$botonCancelar="";$fechacancelada="";$botonTicket="";
-					$folio = str_pad($row[$i]['ID_Venta'], 8, "0", STR_PAD_LEFT);
-
-					$botonVerImportes = '<button class="btn btn-primary btn-sm" id="VerProductosImporte" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'">Ver importes</button>';
-
-					$botonTicket = '<button class="btn btn-success btn-sm" id="ImprimirTicketVentaSinCajaImporte" attrid="'.$row[$i]['ID_Venta'].'" sucursal="'.$row[$i]['FK_Sucursal'].'" folio="'.$folio.'"><i class="fas fa-print"></i></button>';
+					$botonVerImportes = '<button class="btn btn-primary btn-sm" id="VerProductosImporte" nombre="'.$row[$i]['Cliente'].'" idcliente="'.$row[$i]['ID_Cliente'].'">Ver importes</button>';
 
 					/*if ($row[$i]['EstatusVenta'] == "Cancelada") {
 						$estatus='<span class="badge rounded-pill bg-danger">Venta cancelada</span>';
@@ -47,7 +43,7 @@ class importes {
 						$fechacancelada = '<br>Fecha de cancelación: <b>'.$row[$i]['Fecha_Cancelacion']."</b><br>";
 					}else{
 						$estatus='<span class="badge rounded-pill bg-success">Venta completada</span>';
-					}*/
+					}
 					$sumapendientes = 0;
 					$query2 = "SELECT presentaciones.Importe AS ImportePresentacion, Cantidad, importes.Importe FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '".$row[$i]['ID_Venta']."' AND Estatus = 'Se debe'";
 					$row2 = $omodelo->_consultar($query2);
@@ -87,38 +83,69 @@ class importes {
 					}
 
 
-					$SumarVentas += $row[$i]['Total'];
+					$SumarVentas += $row[$i]['Total'];*/
+
+					/*if ($row[$i]['ImportesPendientes'] == 0) {
+						$estatus='<span class="badge rounded-pill bg-success">PAGADO</span>';
+					}else{
+						$estatus='<span class="badge rounded-pill bg-warning">PENDIENTE</span>';	
+					}*/
+					
+					/*
+						//"Subtotal: <b>$".number_format(($row[$i]['Total'] + $row[$i]['Descuento']), 2)."</b><br>Descuento: <b>$".number_format($row[$i]['Descuento'], 2)."</b><br>Total: <b>$".number_format($row[$i]['Total'], 2)."</b>",
+
+						"Cantidad de importes: <b>".number_format($row[$i]["NumeroImportes"], 2)."</b><br>
+							Pagados: <b>".$row[$i]['Estatus']."</b><br>Total pagados: $".number_format($sumapagados, 2)." <br>Pendientes: <b>".$row[$i]['ImportesPendientes']."</b><br>Total pendientes: $".number_format($sumapendientes, 2)."<br>".$botonPermisosModificar
+					*/
+
 
 					$botonPermisosModificar = "";
 					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_importes'][2] == '1') {
 						$botonPermisosModificar = $botonVerImportes;
 					}
+					$sumapagados = 0;
+					$sumapendientes = 0;
+					$cantidadImportes = 0;
+					$cantidadPendientes = 0;
+					$cantidadPagados = 0;
+					$query3 = "SELECT FK_Cliente, productos.Importe AS ImporteProducto, ID_Importe, presentaciones.Importe AS ImportePresentacion, FK_Venta, importes.FK_Producto, importes.FK_Presentacion, Cantidad, importes.Importe, importes.Total, importes.Estatus FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '".$row[$i]['ID_Cliente']."'";
+					$row3 = $omodelo->_consultar($query3);
+					$numerofilas3 = $omodelo->numerofilas;
 
-					$botonPermisosTicket = "";
-					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_importes'][3] == '1') {
-						$botonPermisosTicket = $botonTicket;
+					if($row3 == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilas3 > 0){
+							for ($x=0; $x < $numerofilas3; $x++) { 
+								$cantidadImportes += $row3[$x]["Cantidad"];
+								if ($row3[$x]["Estatus"] == "Se debe") {
+									$sumapendientes += ($row3[$x]["Importe"] * $row3[$x]["Cantidad"]);
+									$cantidadPendientes += $row3[$x]["Cantidad"];
+								}else if($row3[$x]["Estatus"] == "Pagado"){
+									$sumapagados += ($row3[$x]["Importe"] * $row3[$x]["Cantidad"]);
+									$cantidadPagados += $row3[$x]["Cantidad"];
+								}
+							}
+						}
 					}
 
-					if ($row[$i]['ImportesPendientes'] == 0) {
+					if ($cantidadPendientes == 0) {
 						$estatus='<span class="badge rounded-pill bg-success">PAGADO</span>';
 					}else{
 						$estatus='<span class="badge rounded-pill bg-warning">PENDIENTE</span>';	
 					}
 
 					$arreglo['data'][$i] = array(
-						'ID' => $row[$i]['ID_Venta'],
-						'Datos' => "Fecha: <b>".$row[$i]['Datos']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b>",
-						'Cliente' => 'Nombre: <b>'.$row[$i]['Cliente'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Correo electrónico: <b>'.$row[$i]['CorreoCliente'].'</b><br>RFC: <b>'.$row[$i]['RFCCliente']."</b>",
-						'Total' => "Subtotal: <b>$".number_format(($row[$i]['Total'] + $row[$i]['Descuento']), 2)."</b><br>Descuento: <b>$".number_format($row[$i]['Descuento'], 2)."</b><br>Total: <b>$".number_format($row[$i]['Total'], 2)."</b>",
-						'Importes' => "Cantidad de importes: <b>".number_format($row[$i]["NumeroImportes"], 2)."</b><br>
-							Pagados: <b>".$row[$i]['Estatus']."</b><br>Total pagados: $".number_format($sumapagados, 2)." <br>Pendientes: <b>".$row[$i]['ImportesPendientes']."</b><br>Total pendientes: $".number_format($sumapendientes, 2)."<br>".$botonPermisosModificar,
+						'ID' => $row[$i]['ID_Cliente'],
+						'Cliente' => 'Nombre: <b>'.$row[$i]['Cliente'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Correo electrónico: <b>'.$row[$i]['Correo'].'</b><br>RFC: <b>'.$row[$i]['RFC']."</b>",
+						'Importes' => "Cantidad de importes: ".$cantidadImportes."<br>Cantidad pagados: <b>".$cantidadPagados."</b><br>Total pagados: <b class='dinero'>".$sumapagados."</b><br>Cantidad pendientes: <b>".$cantidadPendientes."</b><br>Total pendientes: <b class='dinero'>".$sumapendientes."</b>",
 						'Estatus' => $estatus."<br>".$motivocancelada.$fechacancelada,
-						'Acciones' => $botonPermisosTicket,
+						'Acciones' => $botonPermisosModificar,
 					);
 				}
 
 				$arreglo['totales'] = array(
-					'NumRows' => $row[0]['Num'], 
+					'NumRows' => $numerofilas, 
 					'Datos' => "",
 					'Cliente' => "Totales",
 					'Total' => "<b>$".number_format($SumarVentas, 2)."</b>",
@@ -154,7 +181,7 @@ class importes {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		if($tipo == 'ConsultarProductosImporte'){
-			$idventa =  $omodelo->link->real_escape_string($idventa);
+			$idcliente =  $omodelo->link->real_escape_string($idcliente);
 			$buscar =  $omodelo->link->real_escape_string($buscar);
 			$limit =  $omodelo->link->real_escape_string($limit);
 			$pagina =  $omodelo->link->real_escape_string($pagina);
@@ -174,7 +201,7 @@ class importes {
 				}
 			}
 			
-			$query = "SELECT ID_Importe, FK_Venta, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, Total, Estatus, productos.Descripcion FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '$idventa' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Importe, FK_Venta, FK_Cliente, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, importes.Total, importes.Estatus, productos.Descripcion AS Producto FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -188,7 +215,7 @@ class importes {
 						$botonMarcarPagado = "";
 						if ($row[$i]['Estatus'] == "Se debe") {
 							$estatus = '<span class="badge rounded-pill bg-warning">Se debe</span>';
-							$botonMarcarPagado = '<button class="btn btn-primary btn-sm MarcarPagadoImporte" attrid="'.$row[$i]['ID_Importe'].'" idventa="'.$row[$i]['FK_Venta'].'">Pagado</button>';
+							$botonMarcarPagado = '<button class="btn btn-primary btn-sm MarcarPagadoImporte" attrid="'.$row[$i]['ID_Importe'].'" idventa="'.$row[$i]['FK_Venta'].'" idcliente="'.$row[$i]['FK_Cliente'].'">Pagado</button>';
 						}else if($row[$i]['Estatus'] == "Pagado"){
 							$estatus = '<span class="badge rounded-pill bg-primary">Pagado</span>';
 						}
@@ -200,18 +227,15 @@ class importes {
 						}else{
 							$nombrePresentacion = $row[$i]['NombreGenerico'];
 						}
-						$presentacionImporte = 0;
-						if ($row[$i]["ImportePresentacion"] != "") {
-			                $presentacionImporte = $row[$i]["ImportePresentacion"];
-			            }else{
-			            	$presentacionImporte = $row[$i]["Importe"];
-			            }
+
+			            $presentacionImporte = $row[$i]["Importe"];
 
 			            $totalImportes = $row[$i]['Cantidad'] * $presentacionImporte;
 						
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Importe'],
-							'Producto' => $row[$i]['Descripcion']." (".$nombrePresentacion.")",
+							'Venta' => $row[$i]['FK_Venta'],
+							'Producto' => $row[$i]['Producto']." (".$nombrePresentacion.")",
 							'Cantidad' =>  "<b>".number_format(($row[$i]['Cantidad']), 2)."</b>",
 							'Importe' => "<b>$".number_format(($presentacionImporte), 2)."</b>",
 							'Total' =>"<b>$".number_format(($totalImportes), 2)."</b>",
@@ -223,6 +247,7 @@ class importes {
 
 					$arreglo['totales'] = array(
 						'NumRows' => $numerofilas, 
+						'Venta' => "",
 						'Producto' => "",
 						'Cantidad' => "",
 						'Importe' => "Totales",

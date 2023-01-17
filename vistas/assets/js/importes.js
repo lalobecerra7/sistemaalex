@@ -17,16 +17,17 @@ jQuery(document).ready(function($) {
 	});
 
 	$(document).on('click', '#VerProductosImporte', function() {
-		var folio = $(this).attr("folio");
-		var id = $(this).attr("attrid");
+		var nombre = $(this).attr("nombre");
+		var id = $(this).attr("idcliente");
 		$("#ModalVerProductosImporte").modal("show");
-		$("#FolioImporteVenta").text(folio);
+		$("#FolioImporteVenta").text(nombre);
 		TablaProductosImporte(id);
 	});
 
 	$(document).on('click', '.MarcarPagadoImporte', function() {
 		var btn = $(this);
-		var idventa = $(this).attr("idventa");
+		var attrid = $(this).attr("attrid");
+		var idcliente = $(this).attr("idcliente");
 		Swal.fire({
 	        title: '¿Estás seguro que quieres marcar este importe como pagado?',
 	        icon: 'info',
@@ -52,7 +53,7 @@ jQuery(document).ready(function($) {
 							icon: 'success',
 							title: 'Importe pagado correctamente'
 						});
-						TablaProductosImporte(idventa);
+						TablaProductosImporte(idcliente);
 						TablaReporteImportes();
 					}else{
 						Swal.fire({
@@ -99,10 +100,11 @@ function TablaReporteImportes(){
 }
 
 
-function TablaProductosImporte(idventa){
+function TablaProductosImporte(idcliente){
 	ajaxMyDatatable({
 		"table": $("#TablaCargarProductosImporte"), 
 		"colums": [
+			'Venta',
 			'Producto',
 			'Cantidad',
 			'Importe',
@@ -119,7 +121,7 @@ function TablaProductosImporte(idventa){
 			"metodo": "detalles",
 			"accion": "importes",
 			"tipo": "ConsultarProductosImporte",
-			"idventa": idventa
+			"idcliente": idcliente,
 		}
 	});
 }

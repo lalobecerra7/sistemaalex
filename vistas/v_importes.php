@@ -50,7 +50,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Productos de la venta <span id="FolioImporteVenta"></span></h5>
+                <h5 class="modal-title" id="exampleModalLabel">Importes del cliente <span id="FolioImporteVenta"></span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -58,6 +58,7 @@
                     <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaCargarProductosImporte" width="100%" style="font-size: 12px;">
                         <thead>
                             <tr>
+                            	<th>Venta</th>
                                 <th>Producto</th>
                                 <th>Cantidad</th>
                                 <th>Importe</th>

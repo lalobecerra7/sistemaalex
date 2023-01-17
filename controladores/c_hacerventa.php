@@ -81,6 +81,8 @@ class hacerventa {
 				$productos = json_decode($productos, true);
 				foreach ($productos as $fila) {
 
+					$ImporteProducto = 0;
+
 					$nombreProducto = '';
 					$query2 = "SELECT Descripcion, importe FROM productos WHERE ID_Producto = '$fila[0]'";
 					$row2 = $omodelo->_consultar($query2);
@@ -93,6 +95,25 @@ class hacerventa {
 							$nombreProducto = $row2[0]["Descripcion"];
 						}
 					}
+
+
+					//CONSULTAR IMPORTE POR PRESENTACION
+					$query3 = "SELECT Nombre, Importe FROM presentaciones WHERE FK_Producto = '$fila[0]' AND ID_Presentacion = '$fila[1]'";
+					$row3 = $omodelo->_consultar($query3);
+					$numerofilas3 = $omodelo->numerofilas;
+
+					if($row3 == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilas3 > 0){
+							if ($row3[0]["Importe"] > 0) {
+								$ImporteProducto = $row3[0]["Importe"];
+							}else{
+								$ImporteProducto = $row2[0]["importe"];
+							}
+						}
+					}
+
 					$idDetalleVenta = "";
 					$query = "INSERT INTO detalles_ventas SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]', Cobrar_Importe = '$fila[7]'";
 					$error = $omodelo->_insertar($query);
@@ -103,8 +124,8 @@ class hacerventa {
 						$idDetalleVenta = mysqli_insert_id($omodelo->link);
 					}
 
-					if ($row2[0]["importe"] > 0 && $fila[7] == 1) {
-						$totalImporte = $fila[2] * $row2[0]["importe"];
+					if ($ImporteProducto > 0 && $fila[7] == 1) {
+						$totalImporte = $fila[2] * $ImporteProducto;
 
 						$query3 = "SELECT Cantidad FROM importes WHERE FK_Producto = '$fila[0]' AND FK_Venta = '".$idVenta."' AND FK_Presentacion = '$fila[1]'";
 						$row3 = $omodelo->_consultar($query3);
@@ -114,7 +135,7 @@ class hacerventa {
 							echo "Error 3: ".mysqli_error($omodelo->link);
 						}else{
 							if($numerofilas3 > 0){
-								$CalculoTotalImporte = ($row3[0]["Cantidad"] + $fila[2]) * $row2[0]["importe"];
+								$CalculoTotalImporte = ($row3[0]["Cantidad"] + $fila[2]) * $ImporteProducto;
 								$queryImportes = "UPDATE importes SET Cantidad = (Cantidad + $fila[2]), Total = '$CalculoTotalImporte' WHERE FK_Venta = '$idVenta' AND FK_Producto = '$fila[0]' AND FK_Presentacion = '$fila[1]'";
 								$errorImportes = $omodelo->_insertar($queryImportes);
 
@@ -122,7 +143,7 @@ class hacerventa {
 									echo "Error importes: ".mysqli_error($omodelo->link);
 								}		
 							}else{
-								$queryImportes = "INSERT INTO importes SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Cantidad = '$fila[2]', Importe = '".$row2[0]["importe"]."', Total = '$totalImporte', Estatus = 'Se debe'";
+								$queryImportes = "INSERT INTO importes SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Cantidad = '$fila[2]', Importe = '".$ImporteProducto."', Total = '$totalImporte', Estatus = 'Se debe'";
 								$errorImportes = $omodelo->_insertar($queryImportes);
 
 								if ($errorImportes == "si") {
