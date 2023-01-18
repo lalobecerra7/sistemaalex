@@ -810,7 +810,6 @@ class hacerventa {
 					}
 				}	
 
-
 				$query = "SELECT ID_Precio, Nombre, Precio, (SELECT COUNT(*) FROM precios WHERE FK_Presentacion = '$presentacion' AND FK_Producto = '$idproducto' $busqueda) AS Num FROM precios WHERE FK_Presentacion = '$presentacion' AND FK_Producto = '$idproducto' AND FK_Zona = '$idZona' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 
 				$row = $omodelo->_consultar($query);
@@ -1234,6 +1233,23 @@ class hacerventa {
 			}
 
 			echo json_encode($arreglo);
+		}else if($tipo == "ConsultarAdministrador"){
+			echo $_SESSION['user_admin']['Tipo_Usuario'];
+		}else if($tipo == "ValidarAdministrador"){
+			$correo =  $omodelo->link->real_escape_string($correo);
+			$contra =  $omodelo->link->real_escape_string($contra);
+			$query = "SELECT ID_Usuario, Contrasena FROM usuarios WHERE Tipo_Usuario = 'Administrador' AND Correo = '$correo'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0 && password_verify($contra, $row[0]['Contrasena'])){
+					echo "Correcto";
+				}else{
+					echo "Incorrecto";
+				}
+			}
 		}
 		/*if($tipo == 'productos'){
 			$IDCompra = $omodelo->link->real_escape_string($IDCompra);

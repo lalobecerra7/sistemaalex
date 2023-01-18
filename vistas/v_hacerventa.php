@@ -378,6 +378,40 @@
 </div>
 
 <!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalPermisoAdministrador" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+    <div class="modal-content">
+        <div class="modal-header bg-inverse bd-inverse-darken">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Solicita los datos a un administrador para poder continuar</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="FormAdmin">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="correoAdmin" name="correoAdmin" placeholder="Ingresa el correo del administrador">
+                            <label for="correoAdmin">Correo electrónico</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="contraAdmin" name="contraAdmin" placeholder="Ingresa la contraseña del administrador">
+                            <label for="contraAdmin">Contraseña</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                <button type="submit" class="btn btn-primary" id="ValidarAdministrador" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div> 
+
+<!--/////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalRealizarVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
     <div class="modal-content">

@@ -1,5 +1,60 @@
 function v_hacerventa() {
 	//TablaReporteCompras();
+
+	$('#FormAdmin').validate({
+        rules: {
+            correoAdmin: {
+                required: true
+            },
+            contraAdmin: {
+                required: true
+            },
+        },
+        messages: {
+            correoAdmin: {
+                required: "El correo electrónico es obligatorio"
+            },
+            contraAdmin: {
+                required: "La contraseña es obligatoria"
+            },
+        },
+        submitHandler: function(form) { 
+           	var data = "metodo=detalles&accion=hacerventa&tipo=ValidarAdministrador&correo="+$("#correoAdmin").val()+"&contra="+$("#contraAdmin").val();
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+                beforeSend: function() {
+                	$("#carga").show();
+            	}
+            })
+            .done(function(res) {
+                if ($.trim(res) == "Correcto") {
+                	$('#FormAdmin').trigger("reset");
+                	var total = $("#RealizarVenta").attr("total");
+					$("#ModalRealizarVenta").modal("show");
+					$("#ModalPermisoAdministrador").modal("hide");
+					$("#GuardarVenta").attr("tipo", "");
+					$("#GuardarVenta").attr("idpedido", $("#CargaPedidosModalVentas").attr("attrid"));
+					$("#GuardarVenta").attr("foliopedido", $("#CargaPedidosModalVentas").attr("folio"));
+					$("#ImportePagadoVenta").val(total);
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Los datos ingresados son incorrectos.'
+                    });
+                    console.log($.trim(res));
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            }) 
+            .always(function() {
+	            $("#carga").hide();
+	        });          
+        }
+    });   
 }
 
 jQuery(document).ready(function($) {
@@ -562,11 +617,32 @@ jQuery(document).ready(function($) {
 			    timer: 1000
 			});
 		}else{
-			$("#ModalRealizarVenta").modal("show");
-			$("#GuardarVenta").attr("tipo", "");
-			$("#GuardarVenta").attr("idpedido", $("#CargaPedidosModalVentas").attr("attrid"));
-			$("#GuardarVenta").attr("foliopedido", $("#CargaPedidosModalVentas").attr("folio"));
-			$("#ImportePagadoVenta").val(total);
+			//CONSULTAR SI ES ADMINISTRADOR
+			var data = "metodo=detalles&accion=hacerventa&tipo=ConsultarAdministrador";
+			$.ajax({
+				url: 'index.php',
+			    type: 'POST',
+			    data: data,
+			})
+			.done(function(res) {
+				var sumadescuento = 0;
+				$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
+					sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
+				});
+				console.log(res+" y  "+sumadescuento);
+				if ($.trim(res) != "Administrador" && sumadescuento > 0) {
+					$("#ModalPermisoAdministrador").modal("show");
+				}else{
+					$("#ModalRealizarVenta").modal("show");
+					$("#GuardarVenta").attr("tipo", "");
+					$("#GuardarVenta").attr("idpedido", $("#CargaPedidosModalVentas").attr("attrid"));
+					$("#GuardarVenta").attr("foliopedido", $("#CargaPedidosModalVentas").attr("folio"));
+					$("#ImportePagadoVenta").val(total);
+				}
+			})
+			.fail(function() {
+				console.log("Error ajax");
+			});
 		}
 	});
 
@@ -1124,7 +1200,6 @@ function VentaTablaProductos(){
 }
 
 function VentaTablaPreciosProducto(idproducto, presentacion){
-	console.log(idproducto+" "+presentacion);
 	ajaxMyDatatable({
 		"table": $("#TablaPreciosProductosVenta"), 
 		"colums": [
@@ -1141,7 +1216,8 @@ function VentaTablaPreciosProducto(idproducto, presentacion){
 			"tipo": "ConsultarPrecios",
 			"accion": "hacerventa",
 			"idproducto": idproducto,
-			"presentacion": presentacion
+			"presentacion": presentacion,
+			"sucursal": $("#SucursalVenta").attr("attrid"),
 		}
 	});
 }

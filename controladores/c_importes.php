@@ -200,7 +200,7 @@ class importes {
 					}
 				}
 			}
-			
+			//CHECAR PORQUE NO ORDENA ESTA TABLA
 			$query = "SELECT ID_Importe, FK_Venta, FK_Cliente, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, importes.Total, importes.Estatus, productos.Descripcion AS Producto FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
@@ -231,10 +231,10 @@ class importes {
 			            $presentacionImporte = $row[$i]["Importe"];
 
 			            $totalImportes = $row[$i]['Cantidad'] * $presentacionImporte;
-						
+						$folio = str_pad($row[$i]['FK_Venta'], 8, "0", STR_PAD_LEFT);
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Importe'],
-							'Venta' => $row[$i]['FK_Venta'],
+							'Venta' => $folio,
 							'Producto' => $row[$i]['Producto']." (".$nombrePresentacion.")",
 							'Cantidad' =>  "<b>".number_format(($row[$i]['Cantidad']), 2)."</b>",
 							'Importe' => "<b>$".number_format(($presentacionImporte), 2)."</b>",
