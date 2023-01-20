@@ -133,9 +133,14 @@ jQuery(document).ready(function($) {
                  	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').children("td:eq(3)").find(".campoCantidadProducto").val(parseFloat(cantidad) + 1);
                 	$(".campoCantidadProducto").trigger("change");
                 }else{
-                	var campoImportes = "";
+                	var campoImportes = ""; var precioimporte ="";
                 	if (datos.ImportePresentacion > 0 || datos.ImporteGeneral > 0) {
                 		campoImportes = "<br><span>Importes</span><input type='number' value='1' min='0' step='any' class='form-control form-control-sm campoCantidadImporte'>";
+                		if (datos.ImportePresentacion > 0) {
+	                		precioimporte = "<br>Importe: <br><span class='dinero campoPrecioImporte'>"+datos.ImportePresentacion+"</span>";
+	                	}else{
+	                		precioimporte = "<br>Importe: <br><span class='dinero campoPrecioImporte'>"+datos.ImporteGeneral+"</span>";
+	                	}
                 	}else{
                 		campoImportes = "";
                 	}
@@ -144,7 +149,7 @@ jQuery(document).ready(function($) {
 	             		<tr attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`"  importegeneral="`+datos.ImporteGeneral+`" importepresentacion="`+datos.ImportePresentacion+`">
 	                        <td>`+datos.Codigo+`</td>
 	                        <td>`+datos.Descripcion+` <br><button class="btn btn-secondary btn-sm CambiarPresentacion" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Presentacion+`</button></td>
-	                        <td><button class="btn btn-sm btn-primary cambiarPrecio dinero" precio="`+datos.Precio_General+`" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Precio_General+`</button></td>
+	                        <td><button class="btn btn-sm btn-primary cambiarPrecio dinero" precio="`+datos.Precio_General+`" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Precio_General+`</button>`+precioimporte+`</td>
 	                        <td><span>Productos</span><input type='number' value='1' min='1' step='any' class='form-control form-control-sm campoCantidadProducto'>`+campoImportes+`</td>
 	                        <td>`+datos.Impuestos+`</td>
 	                        <td>
@@ -207,9 +212,14 @@ jQuery(document).ready(function($) {
                  	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+datos.ID_Producto+'][idPresentacion='+datos.IDPresentacion+']').children("td:eq(3)").find(".campoCantidadProducto").val(parseFloat(cantidad) + 1);
                 	$(".campoCantidadProducto").trigger("change");
                 }else{
-                	var campoImportes = "";
+                	var campoImportes = ""; var precioimporte = "";
                 	if (datos.ImportePresentacion > 0 || datos.ImporteGeneral > 0) {
                 		campoImportes = "<br><span>Importes</span><input type='number' value='1' min='0' step='any' class='form-control form-control-sm campoCantidadImporte'>";
+                		if (datos.ImportePresentacion > 0) {
+	                		precioimporte = "<br>Importe: <br><span class='dinero campoPrecioImporte'>"+datos.ImportePresentacion+"</span>";
+	                	}else{
+	                		precioimporte = "<br>Importe: <br><span class='dinero campoPrecioImporte'>"+datos.ImporteGeneral+"</span>";
+	                	}
                 	}else{
                 		campoImportes = "";
                 	}
@@ -217,7 +227,7 @@ jQuery(document).ready(function($) {
 	             		<tr attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`" importegeneral="`+datos.ImporteGeneral+`" importepresentacion="`+datos.ImportePresentacion+`">
 	                        <td>`+datos.Codigo+`</td>
 	                        <td>`+datos.Descripcion+` <br> <button class="btn btn-secondary btn-sm CambiarPresentacion" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Presentacion+`</button></td>
-	                        <td><button class="btn btn-sm btn-primary cambiarPrecio dinero" precio="`+datos.Precio_General+`" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Precio_General+`</button></td>
+	                        <td><button class="btn btn-sm btn-primary cambiarPrecio dinero" precio="`+datos.Precio_General+`" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Precio_General+`</button>`+precioimporte+`</td>
 	                        <td><span>Productos</span><input type='number' value='1' min='1' step='any' class='form-control form-control-sm campoCantidadProducto'>`+campoImportes+`</td>
 	                        <td>`+datos.Impuestos+`</td>
 	                        <td>
@@ -259,6 +269,10 @@ jQuery(document).ready(function($) {
 	</div>	
 */	
 	$(document).on('keyup change', '.campoCantidadImporte', function() {
+		if ($(this).val() > $(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val()) {
+			$(this).val($(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val());
+		}
+		//REVISAR QUE FUNCIONEN BIEN LOS IMPORTES Y GUARDAR EL TOTAL DE IMPORTES EN LA VENTA SEPARADO DEL TOTAL DE LA VENTA PARA QUE NO AFECTE FACTURACION
 		if ($(this).val() == "") {
 			$(this).val(0);
 		}
@@ -269,24 +283,22 @@ jQuery(document).ready(function($) {
 		}else{
 			importe = $(this).parent().parent().attr("importegeneral");	
 		}
-		console.log(cantidad+" y "+importe);
 		var total = parseFloat(cantidad) * parseFloat(importe);
 		$(this).parent().parent().children("td:eq(6)").find(".totalColumnaImporte").text(total);
 		moneda();	
+		CalcularSubtotalVenta();
 	});
 
 	$(document).on('keyup change', '.campoCantidadProducto', function() {
 		if ($(this).val() == "") {
 			$(this).val(0);
 		}
-		var CantidadImportes = $(this).parent().find(".campoCantidadImporte").val();
-
-		if ($(this).val() < CantidadImportes) {
-			$(this).parent().find(".campoCantidadImporte").val($(this).val());
-		}
 		$(this).parent().find(".campoCantidadImporte").attr('max', $(this).val());
+		$(this).parent().find(".campoCantidadImporte").val($(this).val());
+
 		var precio = $(this).parent().parent().children("td:eq(2)").find(".cambiarPrecio").attr("precio");
-		var cantidad = $(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val();
+		//var cantidad = $(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val();
+		var cantidad = $(this).val();
 		var subtotal = parseFloat(precio) * parseFloat(cantidad);
 		var descuento = parseFloat($(this).parent().parent().children("td:eq(5)").find(".campoDescuentoProducto").val()) / 100;
 		if (isNaN(descuento)) {
@@ -881,8 +893,8 @@ jQuery(document).ready(function($) {
 		$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 			const searchRegExp = new RegExp(',', 'g');
 			total += parseFloat($(this).children("td:eq(6)").find(".totalColumna").text().replace("$","").replace(searchRegExp, ''));
+			total += parseFloat($(this).children("td:eq(6)").find(".totalColumnaImporte").text().replace("$","").replace(searchRegExp, ''));
 		});
-		console.log(total);
 		$("#TotalVentaFinal").text(total);
 		$("#GuardarPedido").attr("total", total);
 		$("#RealizarVenta").attr("total", total);
@@ -994,9 +1006,14 @@ jQuery(document).ready(function($) {
 					presentacion = null;
 				}
 
-				var campoImportes = "";
+				var campoImportes = ""; var precioimporte = "";
                 if (datos.data.Productos.data[i].ImportePresentacion > 0 || datos.data.Productos.data[i].ImporteGeneral > 0) {
                 	campoImportes = "<br><span>Importes</span><input type='number' value='1' min='0' max='"+datos.data.Productos.data[i].Cantidad+"' step='any' class='form-control form-control-sm campoCantidadImporte'>";
+                	if (datos.data.Productos.data[i].ImportePresentacion > 0) {
+                		precioimporte = "<br>Importe: <br><span class='dinero campoPrecioImporte'>"+datos.data.Productos.data[i].ImportePresentacion+"</span>";
+                	}else{
+                		precioimporte = "<br>Importe: <br><span class='dinero campoPrecioImporte'>"+datos.data.Productos.data[i].ImporteGeneral+"</span>";
+                	}
                 }else{
                 	campoImportes = "";
                 }
@@ -1005,7 +1022,7 @@ jQuery(document).ready(function($) {
 		        <tr attrid="`+datos.data.Productos.data[i].FK_Producto+`" idPresentacion="`+presentacion+`" importegeneral="`+datos.data.Productos.data[i].ImporteGeneral+`" importepresentacion="`+datos.data.Productos.data[i].ImportePresentacion+`">
 		        	<td>`+datos.data.Productos.data[i].Codigo+`</td>
 		            <td>`+datos.data.Productos.data[i].Descripcion+` <br> <button class="btn btn-secondary btn-sm CambiarPresentacion" attrid="`+datos.data.Productos.data[i].FK_Producto+`" idPresentacion="`+presentacion+`">`+datos.data.Productos.data[i].NombrePresentacion+`</button>
-		            <td><button class="btn btn-sm btn-primary cambiarPrecio dinero" precio="`+datos.data.Productos.data[i].Precio+`" attrid="`+datos.data.Productos.data[i].FK_Producto+`" idPresentacion="`+datos.data.Productos.data[i].FK_Presentacion+`">`+datos.data.Productos.data[i].Precio+`</button></td>
+		            <td><button class="btn btn-sm btn-primary cambiarPrecio dinero" precio="`+datos.data.Productos.data[i].Precio+`" attrid="`+datos.data.Productos.data[i].FK_Producto+`" idPresentacion="`+datos.data.Productos.data[i].FK_Presentacion+`">`+datos.data.Productos.data[i].Precio+`</button>`+precioimporte+`</td>
 		            <td><span>Productos</span><input type='number' value='`+datos.data.Productos.data[i].Cantidad+`' min='1' step='any' class='form-control form-control-sm campoCantidadProducto'>`+campoImportes+`</td>
 		            <td>`+datos.data.Productos.data[i].Impuestos+`</td>
 		            <td>
@@ -1121,6 +1138,12 @@ jQuery(document).ready(function($) {
 	    	}else{
 	    		$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(1)").find(".CambiarPresentacion").text(nombre+"("+abreviatura+")");
 	    	}
+
+	    	if (importepresentacion > 0) {
+		    	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(2)").find(".campoPrecioImporte").text(importepresentacion);
+		    }else{
+		    	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(2)").find(".campoPrecioImporte").text(importegeneral);
+		    }
 
 	    	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(2)").find(".cambiarPrecio").attr("precio", precio);
 	    	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(2)").find(".cambiarPrecio").text(precio);

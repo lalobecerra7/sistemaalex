@@ -72,16 +72,19 @@
                     <div class="col-md-3 text-center">
                         <h5 style="font-weight: bold;">Subtotal (Sin impuestos)</h5>
                         <h4 style="font-weight: bold;" class="dinero" id="MostrarSubtotalVenta">0.00</h4>
+                       <!--  <br>
+                        <h5 style="font-weight: bold;">Subtotal (Importes)</h5>
+                        <h4 style="font-weight: bold;" class="dinero" id="MostrarSubtotalImportes">0.00</h4> -->
                     </div>
                     <div class="col-md-9 text-center mb-2">
                         <div class="row" style="vertical-align: middle;">
-                            <div class="col-md-3 d-grid">
+                            <div class="col-md-3">
                                 <button class="btn btn-outline-primary" id="GuardarPedido" total="" style="font-size: 15px;"><b>Guardar como pedido</b></button>
                             </div>
-                            <div class="col-md-3 d-grid">
+                            <div class="col-md-3">
                                 <button class="btn btn-outline-primary" id="CobrarFacturar" total="" style="font-size: 15px;"><b>Cobrar y facturar</b></button>
                             </div>
-                            <div class="col-md-3 d-grid">
+                            <div class="col-md-3">
                                 <button class="btn btn-outline-primary" id="RealizarVenta" total="" style="font-size: 15px;"><b>Finalizar venta</b></button>
                             </div>
                             <div class="col-md-3">
