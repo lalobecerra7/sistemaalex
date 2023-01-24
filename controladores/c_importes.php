@@ -108,7 +108,7 @@ class importes {
 					$cantidadImportes = 0;
 					$cantidadPendientes = 0;
 					$cantidadPagados = 0;
-					$query3 = "SELECT FK_Cliente, productos.Importe AS ImporteProducto, ID_Importe, presentaciones.Importe AS ImportePresentacion, FK_Venta, importes.FK_Producto, importes.FK_Presentacion, Cantidad, importes.Importe, importes.Total, importes.Estatus FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '".$row[$i]['ID_Cliente']."'";
+					$query3 = "SELECT FK_Cliente, Pagados, productos.Importe AS ImporteProducto, ID_Importe, presentaciones.Importe AS ImportePresentacion, FK_Venta, importes.FK_Producto, importes.FK_Presentacion, Cantidad, importes.Importe, importes.Total, importes.Estatus FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '".$row[$i]['ID_Cliente']."'";
 					$row3 = $omodelo->_consultar($query3);
 					$numerofilas3 = $omodelo->numerofilas;
 
@@ -118,13 +118,10 @@ class importes {
 						if($numerofilas3 > 0){
 							for ($x=0; $x < $numerofilas3; $x++) { 
 								$cantidadImportes += $row3[$x]["Cantidad"];
-								if ($row3[$x]["Estatus"] == "Se debe") {
-									$sumapendientes += ($row3[$x]["Importe"] * $row3[$x]["Cantidad"]);
-									$cantidadPendientes += $row3[$x]["Cantidad"];
-								}else if($row3[$x]["Estatus"] == "Pagado"){
-									$sumapagados += ($row3[$x]["Importe"] * $row3[$x]["Cantidad"]);
-									$cantidadPagados += $row3[$x]["Cantidad"];
-								}
+								$cantidadPagados += $row3[$x]["Pagados"];
+								$sumapagados += ($row3[$x]["Importe"] * $row3[$x]["Pagados"]);
+								$cantidadPendientes += $row3[$x]["Cantidad"] - $row3[$x]["Pagados"];
+								$sumapendientes += ($row3[$x]["Importe"] * $cantidadPendientes);	
 							}
 						}
 					}
@@ -164,17 +161,34 @@ class importes {
 		extract($_POST);
 
 		$IDImporte = $omodelo->link->real_escape_string($IDImporte);
+		$ImportesPagos = $omodelo->link->real_escape_string($ImportesPagos);
 
-		$query = "UPDATE importes SET Estatus = 'Pagado' WHERE ID_Importe = '$IDImporte'";
+		$query = "UPDATE importes SET Pagados = (Pagados + '$ImportesPagos') WHERE ID_Importe = '$IDImporte'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
 			echo "Error 1: ".mysqli_error($omodelo->link);
 		}else{
-			echo "Correcto";
-			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
-		}	
+			$query = "SELECT ID_Importe, FK_Venta, FK_Producto, FK_Presentacion, Cantidad, Importe, Total, Pagados, Estatus FROM importes WHERE ID_Importe = '$IDImporte'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
 
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					if ($row[0]["Pagados"] == $row[0]["Cantidad"]) {
+						$query = "UPDATE importes SET Estatus = 'Pagado' WHERE ID_Importe = '$IDImporte'";
+						$error = $omodelo->_insertar($query);
+
+						if ($error == "si") {
+							echo "Error 1: ".mysqli_error($omodelo->link);
+						}	
+					}
+				}
+			}
+			echo "Correcto";
+		}	
 	}
 
 	public function _detalles(){
@@ -200,7 +214,7 @@ class importes {
 					}
 				}
 			}
-			$query = "SELECT ID_Importe, FK_Venta AS Venta, FK_Cliente, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, importes.Total, importes.Estatus, productos.Descripcion AS Producto FROM importes INNER JOIN productos ON importes.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Importe, importes.Pagados AS ImportesPagados, FK_Venta AS Venta, FK_Cliente, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, importes.Total, importes.Estatus, productos.Descripcion AS Producto FROM importes INNER JOIN productos ON importes.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -211,13 +225,6 @@ class importes {
 					$SumarImportes = 0;
 					for($i=0; $i<$numerofilas; $i++){
 						$estatus = "";
-						$botonMarcarPagado = "";
-						if ($row[$i]['Estatus'] == "Se debe") {
-							$estatus = '<span class="badge rounded-pill bg-warning">Se debe</span>';
-							$botonMarcarPagado = '<button class="btn btn-primary btn-sm MarcarPagadoImporte" attrid="'.$row[$i]['ID_Importe'].'" idventa="'.$row[$i]['Venta'].'" idcliente="'.$row[$i]['FK_Cliente'].'">Pagado</button>';
-						}else if($row[$i]['Estatus'] == "Pagado"){
-							$estatus = '<span class="badge rounded-pill bg-primary">Pagado</span>';
-						}
 
 						$totalImportes = 0;
 						$nombrePresentacion = "";
@@ -227,15 +234,27 @@ class importes {
 							$nombrePresentacion = $row[$i]['NombreGenerico'];
 						}
 
+						$NombreProducto = $row[$i]['Producto']." (".$nombrePresentacion.")";
+
+						$folio = str_pad($row[$i]['Venta'], 8, "0", STR_PAD_LEFT);
+						$botonMarcarPagado = "";
+						$restantesPagar = $row[$i]['Cantidad'] - $row[$i]['ImportesPagados'];
+						if ($row[$i]['Estatus'] == "Se debe") {
+							$estatus = '<span class="badge rounded-pill bg-warning">Se debe</span>';
+							$botonMarcarPagado = '<button class="btn btn-primary btn-sm MarcarPagadoImporte" attrid="'.$row[$i]['ID_Importe'].'" idventa="'.$row[$i]['Venta'].'" nombreproducto="'.$NombreProducto.'" folio="'.$folio.'" importes="'.$row[$i]['Cantidad'].'" pagados="'.$row[$i]['ImportesPagados'].'" restantes="'.$restantesPagar.'" idcliente="'.$row[$i]['FK_Cliente'].'">Pagado</button>';
+						}else if($row[$i]['Estatus'] == "Pagado"){
+							$estatus = '<span class="badge rounded-pill bg-primary">Pagado</span>';
+						}
+
 			            $presentacionImporte = $row[$i]["Importe"];
 
 			            $totalImportes = $row[$i]['Cantidad'] * $presentacionImporte;
-						$folio = str_pad($row[$i]['Venta'], 8, "0", STR_PAD_LEFT);
+
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Importe'],
 							'Venta' => $folio,
 							'Producto' => $row[$i]['Producto']." (".$nombrePresentacion.")",
-							'Cantidad' =>  "<b>".number_format(($row[$i]['Cantidad']), 2)."</b>",
+							'Cantidad' =>  "<b>".number_format(($row[$i]['Cantidad']), 2)."</b><br>Pagados: <b>".number_format(($row[$i]['ImportesPagados']), 2)."</b>",
 							'Importe' => "<b>$".number_format(($presentacionImporte), 2)."</b>",
 							'Total' =>"<b>$".number_format(($totalImportes), 2)."</b>",
 							'Estatus' => $estatus,

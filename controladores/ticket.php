@@ -620,7 +620,7 @@ $arregloVenta = '';
       <p class="centrado">***********************************************************</p>
       <?php 
 
-        $sqlImporte = "SELECT ID_Importe, FK_Venta, importes.FK_Producto, presentaciones.Importe AS ImportePresentacion, presentaciones.Nombre AS NombrePrese, presentaciones.Abreviatura AS AbrePrese, productos.Nombre_Unidad AS NombrePreseGenerico, productos.Abreviatura_Unidad AS AbrePreseGenerico, FK_Presentacion, productos.Descripcion, Cantidad, importes.Importe, Total, Estatus FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '".$arregloVenta['ID_Venta']."'";
+        $sqlImporte = "SELECT ID_Importe, Pagados, FK_Venta, importes.FK_Producto, presentaciones.Importe AS ImportePresentacion, presentaciones.Nombre AS NombrePrese, presentaciones.Abreviatura AS AbrePrese, productos.Nombre_Unidad AS NombrePreseGenerico, productos.Abreviatura_Unidad AS AbrePreseGenerico, FK_Presentacion, productos.Descripcion, Cantidad, importes.Importe, Total, Estatus FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '".$arregloVenta['ID_Venta']."'";
         if($resImporte=$con->query($sqlImporte)){
           if ($resImporte->num_rows > 0) {
             echo ' <p class="centrado negra">IMPORTES</p>';
@@ -649,10 +649,11 @@ $arregloVenta = '';
               }else{
                 $nombrePresentacion = $rowI["NombrePreseGenerico"];
               }
+
                echo '
                   <tr>
                    <th>'.$rowI["Descripcion"].' ('.$nombrePresentacion.')</th>
-                   <th>'.$rowI["Cantidad"].'</th>
+                   <th>'.$rowI["Cantidad"].' <br> Pagados: '.$rowI["Pagados"].'</th>
                    <th>$'.number_format($presentacionImporte, 2).'</th>  
                    <th>$'.number_format($totalImportes, 2).'</th> 
                    <th>'.$rowI["Estatus"].'</th>

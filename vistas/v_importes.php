@@ -79,3 +79,51 @@
         </div>
     </div>
 </div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalPagarImportes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+    <div class="modal-content">
+        <div class="modal-header bg-inverse bd-inverse-darken">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Pagar importes de la venta <span id="folioVentaImportes"></span></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="FormPagarImportes">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        Producto: <span id="NombreProductoImporte"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        Importes: <span id="spanImportes"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        Pagados: <span id="spanPagados"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        Restantes: <span id="spanRestantes"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="number" class="form-control" id="CampoImportesPagados" name="CampoImportesPagados" min="1" max="" placeholder="Ingresa cuantos importes vas a pagar">
+                            <label for="CampoImportesPagados">Pagar importes</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                <button type="submit" class="btn btn-primary" id="GuardarImportesPagados" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div> 
