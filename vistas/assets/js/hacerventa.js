@@ -260,23 +260,13 @@ jQuery(document).ready(function($) {
         });
     });
 
-/*
-	<div class="form-check">
-		<input class="form-check-input" type="checkbox" value="" id="CobrarImporteProducto" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">
-		<label class="form-check-label" for="CobrarImporteProducto">
-			Cobrar importe
-		</label>
-	</div>	
-*/	
-	$(document).on('keyup change', '.campoCantidadImporte', function() {
-		if ($(this).val() > $(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val()) {
-			$(this).val($(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val());
+	$(document).on('change keyup', '.campoCantidadImporte', function() {
+
+		if (parseFloat($(this).val()) > parseFloat($(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val())) {
+			$(this).val(parseFloat($(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val()));
 		}
-		//REVISAR QUE FUNCIONEN BIEN LOS IMPORTES Y GUARDAR EL TOTAL DE IMPORTES EN LA VENTA SEPARADO DEL TOTAL DE LA VENTA PARA QUE NO AFECTE FACTURACION
-		if ($(this).val() == "") {
-			$(this).val(0);
-		}
-		var cantidad = $(this).val();
+
+		var cantidad = parseFloat($(this).val());
 		var importe = 0;
 		if ($(this).parent().parent().attr("importepresentacion") != 0) {
 			importe = $(this).parent().parent().attr("importepresentacion");
@@ -284,18 +274,20 @@ jQuery(document).ready(function($) {
 			importe = $(this).parent().parent().attr("importegeneral");	
 		}
 		var total = parseFloat(cantidad) * parseFloat(importe);
-		$(this).parent().parent().children("td:eq(6)").find(".totalColumnaImporte").text(total);
+
+		$(this).parent().parent().children("td:eq(6)").find(".totalColumnaImporte").text(total || 0);
 		moneda();	
 		CalcularSubtotalVenta();
 	});
 
-	$(document).on('keyup change', '.campoCantidadProducto', function() {
+	$(document).on('change keyup', '.campoCantidadProducto', function() {
 		if ($(this).val() == "") {
-			$(this).val(0);
+			$(this).val(1);
 		}
-		$(this).parent().find(".campoCantidadImporte").attr('max', $(this).val());
-		$(this).parent().find(".campoCantidadImporte").val($(this).val());
 
+		$(this).parent().find(".campoCantidadImporte").attr('max', parseFloat($(this).val()));
+		$(this).parent().find(".campoCantidadImporte").val(parseFloat($(this).val()));
+		
 		var precio = $(this).parent().parent().children("td:eq(2)").find(".cambiarPrecio").attr("precio");
 		//var cantidad = $(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val();
 		var cantidad = $(this).val();
@@ -407,22 +399,20 @@ jQuery(document).ready(function($) {
 					var productos = new Array();
 					var sumadescuento = 0;
 					var total = $(this).attr("total");
+					var totalventa = $(this).attr("totalventa");
+					var totalimporte = $(this).attr("totalimportes");
 					var fechaEntrega = $("#FechaEntregaPedido").val();
 					const searchRegExp = new RegExp(',', 'g');
 					$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 						var idProducto = $(this).attr("attrid");
 						var Presentacion = $(this).attr("idpresentacion");
 						var cantidad = $(this).children("td:eq(3)").find(".campoCantidadProducto").val();
+						var cantidadImportes = $(this).children("td:eq(3)").find(".campoCantidadImporte").val();
 						var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
+						var precioImporte = $(this).children("td:eq(2)").find(".campoPrecioImporte").text().replace("$","").replace(searchRegExp, '');
 						var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val();
 						var totalproducto = $(this).children("td:eq(6)").find(".totalColumna").text().replace("$","").replace(searchRegExp, '');
 						sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
-						var Cobrarimporte = $(this).children("td:eq(7)").find("#CobrarImporteProducto").prop("checked");
-						if (Cobrarimporte == true) {
-							Cobrarimporte = 1;
-						}else{
-							Cobrarimporte = 0;
-						}
 						var impuestos = "";
 						$(this).children("td:eq(4)").find(".impuesto").each(function(index, el) {
 							var impuesto = $(this).find(".seleccionarImpuesto");
@@ -430,10 +420,10 @@ jQuery(document).ready(function($) {
 								impuestos += impuesto.attr("attrid")+","+impuesto.attr("nombre")+","+impuesto.attr("porcentaje")+","+impuesto.attr("clavecfdi")+","+impuesto.attr("tipofactor")+","+impuesto.attr("clase")+"~";
 							}
 						});
-						productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto, Cobrarimporte]);
+						productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto, cantidadImportes, precioImporte]);
 					});
 
-					var data = "metodo=modificar&accion=hacerventa&tipo=ModificarPedido&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&fechaEntrega="+fechaEntrega+"&IDPedido="+$("#CargaPedidosModalVentas").attr("attrid");
+					var data = "metodo=modificar&accion=hacerventa&tipo=ModificarPedido&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&fechaEntrega="+fechaEntrega+"&IDPedido="+$("#CargaPedidosModalVentas").attr("attrid")+"&totalventa="+totalventa+"&totalfinalimporte="+totalimporte;
 					$.ajax({
 						url: 'index.php',
 						type: 'POST',
@@ -496,22 +486,21 @@ jQuery(document).ready(function($) {
 								var productos = new Array();
 								var sumadescuento = 0;
 								var total = $(this).attr("total");
+								var totalventa = $(this).attr("totalventa");
+								var totalimporte = $(this).attr("totalimportes");
 								var fechaEntrega = $("#FechaEntregaPedido").val();
 								const searchRegExp = new RegExp(',', 'g');
 								$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 									var idProducto = $(this).attr("attrid");
 									var Presentacion = $(this).attr("idpresentacion");
 									var cantidad = $(this).children("td:eq(3)").find(".campoCantidadProducto").val();
+									var cantidadImportes = $(this).children("td:eq(3)").find(".campoCantidadImporte").val();
 									var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
+									var precioImporte = $(this).children("td:eq(2)").find(".campoPrecioImporte").text().replace("$","").replace(searchRegExp, '');
 									var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val();
 									var totalproducto = $(this).children("td:eq(6)").find(".totalColumna").text().replace("$","").replace(searchRegExp, '');
 									sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
-									var Cobrarimporte = $(this).children("td:eq(7)").find("#CobrarImporteProducto").prop("checked");
-									if (Cobrarimporte == true) {
-										Cobrarimporte = 1;
-									}else{
-										Cobrarimporte = 0;
-									}
+
 									var impuestos = "";
 									$(this).children("td:eq(4)").find(".impuesto").each(function(index, el) {
 										var impuesto = $(this).find(".seleccionarImpuesto");
@@ -519,10 +508,10 @@ jQuery(document).ready(function($) {
 											impuestos += impuesto.attr("attrid")+","+impuesto.attr("nombre")+","+impuesto.attr("porcentaje")+","+impuesto.attr("clavecfdi")+","+impuesto.attr("tipofactor")+","+impuesto.attr("clase")+"~";
 										}
 									});
-									productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto, Cobrarimporte]);
+									productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto, cantidadImportes, precioImporte]);
 								});
 
-								var data = "metodo=insertar&accion=hacerventa&tipo=GuardarPedido&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&fechaEntrega="+fechaEntrega;
+								var data = "metodo=insertar&accion=hacerventa&tipo=GuardarPedido&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&fechaEntrega="+fechaEntrega+"&totalventa="+totalventa+"&totalfinalimporte="+totalimporte;
 						        $.ajax({
 						            url: 'index.php',
 						            type: 'POST',
@@ -590,22 +579,20 @@ jQuery(document).ready(function($) {
 						var productos = new Array();
 						var sumadescuento = 0;
 						var total = $(this).attr("total");
+						var totalventa = $(this).attr("totalventa");
+						var totalimporte = $(this).attr("totalimportes");
 						var fechaEntrega = $("#FechaEntregaPedido").val();
 						const searchRegExp = new RegExp(',', 'g');
 						$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 							var idProducto = $(this).attr("attrid");
 							var Presentacion = $(this).attr("idpresentacion");
 							var cantidad = $(this).children("td:eq(3)").find(".campoCantidadProducto").val();
+							var cantidadImportes = $(this).children("td:eq(3)").find(".campoCantidadImporte").val();
 							var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
+							var precioImporte = $(this).children("td:eq(2)").find(".campoPrecioImporte").text().replace("$","").replace(searchRegExp, '');
 							var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val();
 							var totalproducto = $(this).children("td:eq(6)").find(".totalColumna").text().replace("$","").replace(searchRegExp, '');
 							sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
-							var Cobrarimporte = $(this).children("td:eq(7)").find("#CobrarImporteProducto").prop("checked");
-							if (Cobrarimporte == true) {
-								Cobrarimporte = 1;
-							}else{
-								Cobrarimporte = 0;
-							}
 							var impuestos = "";
 							$(this).children("td:eq(4)").find(".impuesto").each(function(index, el) {
 								var impuesto = $(this).find(".seleccionarImpuesto");
@@ -613,10 +600,10 @@ jQuery(document).ready(function($) {
 									impuestos += impuesto.attr("attrid")+","+impuesto.attr("nombre")+","+impuesto.attr("porcentaje")+","+impuesto.attr("clavecfdi")+","+impuesto.attr("tipofactor")+","+impuesto.attr("clase")+"~";
 								}
 							});
-							productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto, Cobrarimporte]);
+							productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto, cantidadImportes, precioImporte]);
 						});
 
-						var data = "metodo=insertar&accion=hacerventa&tipo=GuardarPedido&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&fechaEntrega="+fechaEntrega;
+						var data = "metodo=insertar&accion=hacerventa&tipo=GuardarPedido&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&fechaEntrega="+fechaEntrega+"&totalventa="+totalventa+"&totalfinalimporte="+totalimporte;
 					    $.ajax({
 					    	url: 'index.php',
 						    type: 'POST',
@@ -713,6 +700,8 @@ jQuery(document).ready(function($) {
 			var productos = new Array();
 			var sumadescuento = 0;
 			var total = $("#RealizarVenta").attr("total");
+			var totalventa = $("#RealizarVenta").attr("totalventa");
+			var totalimporte = $("#RealizarVenta").attr("totalimportes");
 			var tipopago = $("#TipoPagoVenta").val();
 			var pago = $("#ImportePagadoVenta").val();
 			const searchRegExp = new RegExp(',', 'g');
@@ -720,7 +709,9 @@ jQuery(document).ready(function($) {
 				var idProducto = $(this).attr("attrid");
 				var Presentacion = $(this).attr("idpresentacion");
 				var cantidad = $(this).children("td:eq(3)").find(".campoCantidadProducto").val();
+				var cantidadImportes = $(this).children("td:eq(3)").find(".campoCantidadImporte").val();
 				var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
+				var precioImporte = $(this).children("td:eq(2)").find(".campoPrecioImporte").text().replace("$","").replace(searchRegExp, '');
 				var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val();
 				var totalproducto = $(this).children("td:eq(6)").find(".totalColumna").text().replace("$","").replace(searchRegExp, '');
 				sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
@@ -737,10 +728,10 @@ jQuery(document).ready(function($) {
 						impuestos += impuesto.attr("attrid")+","+impuesto.attr("nombre")+","+impuesto.attr("porcentaje")+","+impuesto.attr("clavecfdi")+","+impuesto.attr("tipofactor")+","+impuesto.attr("clase")+"~";
 					}
 				});
-				productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto, Cobrarimporte]);
+				productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto, cantidadImportes, precioImporte]);
 			});
 
-			var data = "metodo=insertar&accion=hacerventa&tipo=RealizarVenta&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&TipoPago="+tipopago+"&Importe="+pago;
+			var data = "metodo=insertar&accion=hacerventa&tipo=RealizarVenta&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&TipoPago="+tipopago+"&Importe="+pago+"&totalventa="+totalventa+"&totalfinalimporte="+totalimporte;
 			$.ajax({
 				url: 'index.php',
 			    type: 'POST',
@@ -854,18 +845,39 @@ jQuery(document).ready(function($) {
 	});
 
 	$(document).on('click', '#CobrarFacturar', function() {
-		if ($("#TablaProductosAgregadoVenta tbody tr").length == 0) {
-			Swal.fire({
-			    icon: 'error',
-			    title: 'No se puede realizar una venta sin productos',
-			    timer: 1000
+		//CONSULTAR SI ES ADMINISTRADOR
+		var data = "metodo=detalles&accion=hacerventa&tipo=ConsultarAdministrador";
+		$.ajax({
+			url: 'index.php',
+		    type: 'POST',
+		    data: data,
+		})
+		.done(function(res) {
+			var sumadescuento = 0;
+			$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
+				sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
 			});
-		}else{
-			$("#ModalRealizarVenta").modal("show");
-			$("#GuardarVenta").attr("idpedido", $("#CargaPedidosModalVentas").attr("attrid"));
-			$("#GuardarVenta").attr("tipo", "facturar");
-			$("#GuardarVenta").attr("foliopedido", $("#CargaPedidosModalVentas").attr("folio"));
-		}
+			console.log(res+" y  "+sumadescuento);
+			if ($.trim(res) != "Administrador" && sumadescuento > 0) {
+				$("#ModalPermisoAdministrador").modal("show");
+			}else{
+				if ($("#TablaProductosAgregadoVenta tbody tr").length == 0) {
+					Swal.fire({
+					    icon: 'error',
+					    title: 'No se puede realizar una venta sin productos',
+					    timer: 1000
+					});
+				}else{
+					$("#ModalRealizarVenta").modal("show");
+					$("#GuardarVenta").attr("idpedido", $("#CargaPedidosModalVentas").attr("attrid"));
+					$("#GuardarVenta").attr("tipo", "facturar");
+					$("#GuardarVenta").attr("foliopedido", $("#CargaPedidosModalVentas").attr("folio"));
+				}
+			}
+		})
+		.fail(function() {
+			console.log("Error ajax");
+		});
 	});
 
 
@@ -880,7 +892,9 @@ jQuery(document).ready(function($) {
 		}
 		var subtotal = 0;
 		$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
+			const searchRegExp = new RegExp(',', 'g');
 			subtotal += parseFloat($(this).children("td:eq(6)").find(".totalColumna").attr("subtotal"))
+			subtotal += parseFloat($(this).children("td:eq(6)").find(".totalColumnaImporte").text().replace("$","").replace(searchRegExp, ''));
 		});
 		$("#MostrarSubtotalVenta").text(subtotal);
 		$("#cantidadProductosSpanVenta").text($("#TablaProductosAgregadoVenta tbody tr").length)
@@ -890,14 +904,22 @@ jQuery(document).ready(function($) {
 
 	function CalcularTotal(){
 		var total = 0;
+		var totalventa = 0;
+		var totalimportes = 0;
 		$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 			const searchRegExp = new RegExp(',', 'g');
 			total += parseFloat($(this).children("td:eq(6)").find(".totalColumna").text().replace("$","").replace(searchRegExp, ''));
 			total += parseFloat($(this).children("td:eq(6)").find(".totalColumnaImporte").text().replace("$","").replace(searchRegExp, ''));
+			totalventa += parseFloat($(this).children("td:eq(6)").find(".totalColumna").text().replace("$","").replace(searchRegExp, ''));
+			totalimportes += parseFloat($(this).children("td:eq(6)").find(".totalColumnaImporte").text().replace("$","").replace(searchRegExp, ''));
 		});
 		$("#TotalVentaFinal").text(total);
 		$("#GuardarPedido").attr("total", total);
+		$("#GuardarPedido").attr("totalventa", totalventa);
+		$("#GuardarPedido").attr("totalimportes", totalimportes);
 		$("#RealizarVenta").attr("total", total);
+		$("#RealizarVenta").attr("totalventa", totalventa);
+		$("#RealizarVenta").attr("totalimportes", totalimportes);
 		moneda();
 	}
 	/*function TotalFinalVenta() {

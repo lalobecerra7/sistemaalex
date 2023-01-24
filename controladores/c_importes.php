@@ -194,14 +194,13 @@ class importes {
 				$separa = explode(' ', trim($buscar));
 				$busqueda = 'AND ';
 				for ($i=0; $i < count($separa); $i++) { 
-					$busqueda .= "CONCAT(ID_Importe, FK_Venta, FK_Producto, Cantidad, Importe, Total, Estatus, productos.Descripcion) REGEXP '".$separa[$i]."'";
+					$busqueda .= "CONCAT(Cantidad, importes.Total, importes.Estatus, productos.Descripcion) REGEXP '".$separa[$i]."'";
 					if($i < (count($separa)-1)){
 						$busqueda .= ' AND ';
 					}
 				}
 			}
-			//CHECAR PORQUE NO ORDENA ESTA TABLA
-			$query = "SELECT ID_Importe, FK_Venta, FK_Cliente, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, importes.Total, importes.Estatus, productos.Descripcion AS Producto FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Importe, FK_Venta AS Venta, FK_Cliente, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, importes.Total, importes.Estatus, productos.Descripcion AS Producto FROM importes INNER JOIN productos ON importes.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -215,7 +214,7 @@ class importes {
 						$botonMarcarPagado = "";
 						if ($row[$i]['Estatus'] == "Se debe") {
 							$estatus = '<span class="badge rounded-pill bg-warning">Se debe</span>';
-							$botonMarcarPagado = '<button class="btn btn-primary btn-sm MarcarPagadoImporte" attrid="'.$row[$i]['ID_Importe'].'" idventa="'.$row[$i]['FK_Venta'].'" idcliente="'.$row[$i]['FK_Cliente'].'">Pagado</button>';
+							$botonMarcarPagado = '<button class="btn btn-primary btn-sm MarcarPagadoImporte" attrid="'.$row[$i]['ID_Importe'].'" idventa="'.$row[$i]['Venta'].'" idcliente="'.$row[$i]['FK_Cliente'].'">Pagado</button>';
 						}else if($row[$i]['Estatus'] == "Pagado"){
 							$estatus = '<span class="badge rounded-pill bg-primary">Pagado</span>';
 						}
@@ -231,7 +230,7 @@ class importes {
 			            $presentacionImporte = $row[$i]["Importe"];
 
 			            $totalImportes = $row[$i]['Cantidad'] * $presentacionImporte;
-						$folio = str_pad($row[$i]['FK_Venta'], 8, "0", STR_PAD_LEFT);
+						$folio = str_pad($row[$i]['Venta'], 8, "0", STR_PAD_LEFT);
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Importe'],
 							'Venta' => $folio,

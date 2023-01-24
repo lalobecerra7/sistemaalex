@@ -78,13 +78,13 @@
                     </div>
                     <div class="col-md-9 text-center mb-2">
                         <div class="row" style="vertical-align: middle;">
-                            <div class="col-md-3">
+                            <div class="col-md-3 d-grid">
                                 <button class="btn btn-outline-primary" id="GuardarPedido" total="" style="font-size: 15px;"><b>Guardar como pedido</b></button>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3 d-grid">
                                 <button class="btn btn-outline-primary" id="CobrarFacturar" total="" style="font-size: 15px;"><b>Cobrar y facturar</b></button>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3 d-grid">
                                 <button class="btn btn-outline-primary" id="RealizarVenta" total="" style="font-size: 15px;"><b>Finalizar venta</b></button>
                             </div>
                             <div class="col-md-3">

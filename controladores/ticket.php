@@ -368,7 +368,7 @@ $arregloVenta = '';
       }
     }
 
-    $sql2 = "SELECT ID_Venta, Estatus, FK_Usuario, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal) AS NombreSucursal, FK_Cliente, (SELECT Nombre FROM clientes WHERE ID_Cliente = FK_Cliente) AS NombreCliente, Descuento, Total, Tipo_Pago, Pago, Cambio, Notas, Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario FROM ventas WHERE ID_Venta = '".$_GET["id"]."'";
+    $sql2 = "SELECT ID_Venta, Estatus, FK_Usuario, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal) AS NombreSucursal, FK_Cliente, (SELECT Nombre FROM clientes WHERE ID_Cliente = FK_Cliente) AS NombreCliente, Descuento, Total, Total_Importes, Tipo_Pago, Pago, Cambio, Notas, Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario FROM ventas WHERE ID_Venta = '".$_GET["id"]."'";
 
     if($res=$con->query($sql2)){
       if ($res->num_rows > 0) {
@@ -387,6 +387,8 @@ $arregloVenta = '';
           'NombreCliente' => $row["NombreCliente"],
           'Descuento' => $row["Descuento"],
           'Total' => $row["Total"],
+          'Total_Importes' => $row["Total_Importes"],
+          'TotalFinal' => ($row["Total_Importes"] + $row["Total"]),
           'Tipo_Pago' => $row["Tipo_Pago"],
           'Pago' => $row["Pago"],
           'Cambio' => $row["Cambio"],
@@ -576,7 +578,9 @@ $arregloVenta = '';
         echo '<p class="derecha" style="font-size: 15px;">Descuento: <b style="font-size: 15px;">$'.(round($sumaTotalDescuentos*100)/100).'</b></p>'; 
         echo '<p class="derecha" style="font-size: 15px;">Impuestos: <b style="font-size: 15px;">$'.(round(($sumaTotalImpuestos)*100)/100).'</b></p>'; 
         echo "</br>
-          <p class='derecha'><b style='font-size: 20px;'>TOTAL: $".(round($arregloVenta['Total']*100)/100)."</b></p>
+          <p class='derecha'><b style='font-size: 20px;'>TOTAL DE LA VENTA: $".(round($arregloVenta['Total']*100)/100)."</b></p>
+          <p class='derecha'><b style='font-size: 20px;'>TOTAL IMPORTES: $".(round($arregloVenta['Total_Importes']*100)/100)."</b></p>
+          <p class='derecha'><b style='font-size: 20px;'>TOTAL: $".(round($arregloVenta['TotalFinal']*100)/100)."</b></p>
           <p class='derecha'><b style='font-size: 14px;'>IMPORTE PAGADO: $".number_format($arregloVenta['Pago'], 2)."</b></p>
           <p class='derecha'><b style='font-size: 14px;'>CAMBIO: $".number_format($arregloVenta['Cambio'], 2)."</b></p>
         ";
