@@ -34,6 +34,7 @@ function v_importes() {
 					});
 					TablaProductosImporte(idcliente);
 					TablaReporteImportes();
+					$("#CampoImportesPagados").val("");
 					$("#ModalPagarImportes").modal("hide");
 				}else{
 					Swal.fire({
@@ -84,6 +85,7 @@ jQuery(document).ready(function($) {
 		var pagados = $(this).attr("pagados");
 		var attrid = $(this).attr("attrid");
 		var idcliente = $(this).attr("idcliente");
+		var precio = $(this).attr("precioImporte");
 		var nombre = $(this).attr("nombreproducto");
 		$("#folioVentaImportes").text(folio);
 		$("#CampoImportesPagados").attr("max", restante);
@@ -92,11 +94,18 @@ jQuery(document).ready(function($) {
 		$("#GuardarImportesPagados").attr("pagados", pagados);
 		$("#GuardarImportesPagados").attr("attrid", attrid);
 		$("#GuardarImportesPagados").attr("idcliente", idcliente);
+		$("#spanPrecioImporte").text(precio);
 		$("#NombreProductoImporte").text(nombre);
 		$("#spanImportes").text(importes);
 		$("#spanPagados").text(pagados);
 		$("#spanRestantes").text(restante);
+		var totalpagado = parseFloat(pagados) * parseFloat(precio);
+		var totalrestante = parseFloat(restante) * parseFloat(precio);
+		$("#spanTotalPagados").text(totalpagado);
+		$("#spanTotalRestantes").text(totalrestante);
+
 		$("#ModalPagarImportes").modal("show");
+		moneda();
 		/*Swal.fire({
 	        title: '¿Estás seguro que quieres marcar este importe como pagado?',
 	        icon: 'info',

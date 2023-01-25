@@ -102,12 +102,29 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12 col-sm-12 mb-3">
+                        Precio: <span id="spanPrecioImporte" class="dinero"></span>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
                         Pagados: <span id="spanPagados"></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 col-sm-12 mb-3">
+                        Total Pagados: <span id="spanTotalPagados" class="dinero"></span>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
                         Restantes: <span id="spanRestantes"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        Total Restantes: <span id="spanTotalRestantes" class="dinero"></span>
                     </div>
                 </div>
                 <div class="row">

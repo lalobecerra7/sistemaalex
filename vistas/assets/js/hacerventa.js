@@ -1,6 +1,6 @@
 function v_hacerventa() {
 	//TablaReporteCompras();
-
+	EstatusCaja();
 	$('#FormAdmin').validate({
         rules: {
             correoAdmin: {
@@ -53,6 +53,55 @@ function v_hacerventa() {
             .always(function() {
 	            $("#carga").hide();
 	        });          
+        }
+    });  
+
+    //CERRAR CAJA
+    $('#FormCerrarCaja').validate({
+        rules: {
+            MontoCierreCaja: {
+                required: true,
+                min: 1,
+            },
+        },
+        messages: {
+            MontoCierreCaja: {
+                required: "Ingresa el monto de cierre de la caja"
+            },
+        },
+        submitHandler: function(form) { 
+
+            var data = "metodo=detalles&accion=hacerventa&tipo=CerrarCaja&MontoCierre="+$("#MontoCierreCaja").val();
+			$.ajax({
+				url: 'index.php',
+				type: 'POST',
+				data: data,
+				beforeSend: function() {
+				    $("#carga").show();
+				}
+			})
+			.done(function(res) {
+				if ($.trim(res) == "Correcto") {
+					Swal.fire({
+						icon: 'success',
+						title: 'Caja cerrada correctamente',
+					});
+					$("#cargarVentas").trigger("click");
+				}else{
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Error inesperado al cerrar caja.'
+					});
+					console.log($.trim(res));
+				}
+			})
+			.fail(function() {
+				console.log("Error ajax");
+			})
+			.always(function() {
+				$("#carga").hide();
+			});         
         }
     });   
 }
@@ -1181,6 +1230,7 @@ jQuery(document).ready(function($) {
 		$("#verCambio").html(pagado - parseFloat($("#TotalVentaFinal").text().replace('$', '').replace(searchRegExp, '')));
 		moneda();
 	});
+
 });
 
 function TablaVerPedidosGuardados(){
@@ -1359,5 +1409,26 @@ function TablaReporteCompras(){
 			"metodo": "consultar",
 			"accion": "compras"
 		}
+	});
+}
+
+
+function EstatusCaja(){
+	var data = "metodo=detalles&accion=ventas&tipo=ConsultarCaja";
+	$.ajax({
+		url: 'index.php',
+		type: 'POST',
+		data: data,
+	})
+	.done(function(res) {
+		if ($.trim(res) == "Abierta") {
+			$("#BotonCerrarCaja").removeClass("oculto");
+		}else{
+			$("#BotonCerrarCaja").addClass("oculto");
+			$("#cargarVentas").trigger("click");
+		}
+	})
+	.fail(function() {
+		console.log("Error ajax");
 	});
 }

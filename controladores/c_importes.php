@@ -241,7 +241,7 @@ class importes {
 						$restantesPagar = $row[$i]['Cantidad'] - $row[$i]['ImportesPagados'];
 						if ($row[$i]['Estatus'] == "Se debe") {
 							$estatus = '<span class="badge rounded-pill bg-warning">Se debe</span>';
-							$botonMarcarPagado = '<button class="btn btn-primary btn-sm MarcarPagadoImporte" attrid="'.$row[$i]['ID_Importe'].'" idventa="'.$row[$i]['Venta'].'" nombreproducto="'.$NombreProducto.'" folio="'.$folio.'" importes="'.$row[$i]['Cantidad'].'" pagados="'.$row[$i]['ImportesPagados'].'" restantes="'.$restantesPagar.'" idcliente="'.$row[$i]['FK_Cliente'].'">Pagado</button>';
+							$botonMarcarPagado = '<button class="btn btn-primary btn-sm MarcarPagadoImporte" attrid="'.$row[$i]['ID_Importe'].'" idventa="'.$row[$i]['Venta'].'" nombreproducto="'.$NombreProducto.'" folio="'.$folio.'" importes="'.$row[$i]['Cantidad'].'" pagados="'.$row[$i]['ImportesPagados'].'" restantes="'.$restantesPagar.'" idcliente="'.$row[$i]['FK_Cliente'].'" precioImporte="'.$row[$i]["Importe"].'">Pagar</button>';
 						}else if($row[$i]['Estatus'] == "Pagado"){
 							$estatus = '<span class="badge rounded-pill bg-primary">Pagado</span>';
 						}

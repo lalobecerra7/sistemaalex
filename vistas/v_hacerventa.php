@@ -4,6 +4,13 @@
         <div class="section">
             <div class="Principal">
                 <div class="row">
+                    <div class="col text-end mb-2">
+                        <button type="button" class="btn btn-outline-danger oculto" data-bs-toggle="modal" data-bs-target="#ModalCerrarCaja" id="BotonCerrarCaja" attrid="">
+                                <i class="fas fa-times"></i> Hacer corte de caja
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
 					<div class="col-md-3 text-center">
 						#MostrarSucursal#
 					</div>
@@ -453,6 +460,34 @@
 			<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
             <button type="button" class="btn btn-primary" id="GuardarVenta" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
 	    </div>
+    </div>
+  </div>
+</div> 
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalCerrarCaja" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+    <div class="modal-content">
+        <div class="modal-header bg-inverse bd-inverse-darken">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Cerrar Caja / Hacer corte de caja</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="FormCerrarCaja">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="number" class="form-control" id="MontoCierreCaja" name="MontoCierreCaja" min="1" placeholder="Ingresa el monto de cierre de la caja">
+                            <label for="MontoCierreCaja">¿Cuánto dinero hay en caja?</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                <button type="submit" class="btn btn-primary" id="CerrarCajaVentas" attrid=""><i class="fa fa-check-circle"></i> <strong>Cerrar caja</strong></button>
+            </div>
+        </form>
     </div>
   </div>
 </div> 

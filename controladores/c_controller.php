@@ -24,6 +24,7 @@ include "controladores/c_ventas.php";
 include "controladores/c_facturacion.php";
 include "controladores/c_importes.php";
 include "controladores/c_precios.php";
+include "controladores/c_reporteCaja.php";
 
 class controller {
 

@@ -649,13 +649,16 @@ $arregloVenta = '';
               }else{
                 $nombrePresentacion = $rowI["NombrePreseGenerico"];
               }
+              $totalPagado = 0;
+
+              $totalPagado = $rowI["Pagados"] * $presentacionImporte;
 
                echo '
                   <tr>
                    <th>'.$rowI["Descripcion"].' ('.$nombrePresentacion.')</th>
                    <th>'.$rowI["Cantidad"].' <br> Pagados: '.$rowI["Pagados"].'</th>
                    <th>$'.number_format($presentacionImporte, 2).'</th>  
-                   <th>$'.number_format($totalImportes, 2).'</th> 
+                   <th>$'.number_format($totalImportes, 2).'<br>Total pagado: $'.number_format($totalPagado, 2).'</th> 
                    <th>'.$rowI["Estatus"].'</th>
                   </tr>';
             }

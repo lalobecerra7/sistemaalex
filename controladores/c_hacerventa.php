@@ -15,7 +15,7 @@ class hacerventa {
 			if (!isset($cliente) || $cliente == "") {
 				$cliente = 1;
 			}
-			$query = "INSERT INTO pedidos SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Sucursal = '$idsucursal', FK_Cliente = '$cliente', FK_Direccion = '$idDireccion', Descuento = '$sumadescuento', Total = '$totalventa', Total_Importes = '$totalimporte', Fecha_Registro = '$fecha', Fecha_Entrega = '$fechaEntrega'";
+			$query = "INSERT INTO pedidos SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Sucursal = '$idsucursal', FK_Cliente = '$cliente', FK_Direccion = '$idDireccion', Descuento = '$sumadescuento', Total = '$totalventa', Total_Importes = '$totalfinalimporte', Fecha_Registro = '$fecha', Fecha_Entrega = '$fechaEntrega'";
 			$error = $omodelo->_insertar($query);
 
 			if ($error == "si") {
@@ -785,7 +785,95 @@ class hacerventa {
 					);
 					echo json_encode($arreglo);
 				}else{
-					echo "No encontrado";
+					//echo "No encontrado";
+					$query = "SELECT ID_Producto, Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Nombre_Unidad AS NombreGenerico, productos.Abreviatura_Unidad AS AbreviaturaGenerico, productos.Costo AS Costo_General, productos.Precio AS Precio_General, IFNULL(productos.importe, 0) AS ImporteGeneral, IFNULL(presentaciones.Importe, 0) AS ImportePresentacion, productos.Precio_Mayoreo AS Precio_Mayoreo_General, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, Fecha_Registro, inventario.Cantidad AS Existencia FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN precios ON precios.FK_Presentacion = ID_Presentacion WHERE Codigo = '$codigo' AND productos.Bloqueado = 0";
+					$row = $omodelo->_consultar($query);
+					$numerofilas = $omodelo->numerofilas;
+
+					if($row == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilas > 0){
+							$subarreglo = null;
+							$campoImpuestos = "";
+							$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre AS Nombre, impuestos.Porcentaje AS Porcentaje, impuestos.Clave_CFDI AS Clave_CFDI, impuestos.Tipo_Factor AS Tipo_Factor, impuestos.Clase AS Clase FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."'";
+							$rowI = $omodelo->_consultar($queryI);
+							$numerofilasI = $omodelo->numerofilas;
+							if($rowI == 'si'){
+								echo "Error: ".mysqli_error($omodelo->link);
+							}else{
+								if($numerofilasI > 0){
+									for ($i=0; $i < $numerofilasI; $i++) { 
+										$campoImpuestos .= '
+											<div class="form-check impuesto">
+												<input class="form-check-input seleccionarImpuesto oculto" checked type="checkbox" nombre="'.$rowI[$i]["Nombre"].'" porcentaje="'.$rowI[$i]["Porcentaje"].'" attrid="'.$rowI[$i]["FK_Impuesto"].'" clavecfdi="'.$rowI[$i]["Clave_CFDI"].'" tipofactor="'.$rowI[$i]["Tipo_Factor"].'" clase="'.$rowI[$i]["Clase"].'">
+												<label class="form-check-label" for="flexCheckDefault">
+													'.$rowI[$i]["Nombre"].' ('.$rowI[$i]["Porcentaje"].'%)
+												</label>
+											</div>
+										';
+									}
+								}
+							}				
+
+							/*$NombrePresentacion = "";
+							if ($row[0]["Presentacion"] != "") {
+								$abreviatura = "";
+								if ($row[0]["AbreviaturaPresentacion"] != "") {
+									$abreviatura = "(".$row[0]["AbreviaturaPresentacion"].")";
+								}
+								$NombrePresentacion = $row[0]["Presentacion"].$abreviatura;
+							}else{
+								$NombrePresentacion = "Sin presentación";	
+							}*/
+
+							$NombrePresentacion = "";
+							if ($row[0]['Presentacion'] != "") {
+								$NombrePresentacion = $row[0]['Presentacion']." (".$row[0]['AbreviaturaPresentacion'].")";
+							}else{
+								if ($row[0]['NombreGenerico'] == "") {
+									$NombrePresentacion = "Sin presentación";
+								}else{
+									$NombrePresentacion = $row[0]['NombreGenerico']." (".$row[0]['AbreviaturaGenerico'].")";
+								}
+							}
+
+							$precio = 0; $precioMayoreo = 0;
+							if ($row[0]["PrecioPresentacion"] != "") {
+								$precio = $row[0]["PrecioPresentacion"];
+							}else{
+								$precio = $row[0]["Precio_General"];	
+							}
+
+							if ($row[0]["PrecioMayPresentacion"] != "") {
+								$precioMayoreo = $row[0]["PrecioMayPresentacion"];
+							}else{
+								$precioMayoreo = $row[0]["Precio_Mayoreo_General"];	
+							}
+
+							
+							$arreglo = array(
+								'ID_Producto' => $row[0]["ID_Producto"],
+								'Codigo' => $row[0]["Codigo"],
+								'Descripcion' => $row[0]["Descripcion"],
+								'Presentacion' => $NombrePresentacion,
+								'IDPresentacion' => $row[0]["IDPresentacion"],
+								'Costo_General' => $row[0]["Costo_General"],
+								'Precio_General' => $precio,
+								'Precio_Mayoreo_General' => $precioMayoreo,
+								'NombreArea' => $row[0]["NombreArea"],
+								'Detalles' => $row[0]["Detalles"],
+								'Fecha_Registro' => $row[0]["Fecha_Registro"],
+								'Existencia' => $row[0]["Existencia"],
+								'ImporteGeneral' => $row[0]["ImporteGeneral"],
+								'ImportePresentacion' => $row[0]["ImportePresentacion"],
+								'Impuestos' => $campoImpuestos
+							);
+							echo json_encode($arreglo);
+						}else{
+							echo "No encontrado";
+						}
+					}
 				}
 			}
 		}else if($tipo == "ConsultarPrecios"){
@@ -1268,6 +1356,31 @@ class hacerventa {
 					echo "Incorrecto";
 				}
 			}
+		}else if($tipo == "CerrarCaja"){
+			$fecha = date('Y-m-d H:i:s'); 
+			$query = "SELECT ID_Detalle_Caja, FK_Caja, Fecha_Abrir, Monto_Abrir, FK_Usuario_Abrir, Fecha_Cierre, Monto_Cierre, FK_Usuario_Cierre FROM detalles_caja WHERE FK_Usuario_Cierre = 0";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					$query = "UPDATE cajas SET Estado = 0, FK_Usuario = '0' WHERE ID_Caja = 1";
+					$error = $omodelo->_insertar($query);
+					if($error == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						$query2 = "UPDATE detalles_caja SET Fecha_Cierre = '$fecha', Monto_Cierre = '$MontoCierre', FK_Usuario_Cierre = '".$_SESSION['user_admin']['ID_Usuario']."'";
+						$error2 = $omodelo->_insertar($query2);
+						if($error2 == 'si'){
+							echo "Error 2: ".mysqli_error($omodelo->link);
+						}else{
+							echo "Correcto";
+						}
+					}
+				}
+			}
+
 		}
 		/*if($tipo == 'productos'){
 			$IDCompra = $omodelo->link->real_escape_string($IDCompra);

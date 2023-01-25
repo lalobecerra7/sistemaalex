@@ -1,11 +1,11 @@
-<br>
 <div class="mb-3 mt-2">
 	<div class="row">
 		<div class="col-12">
 			<nav aria-label="breadcrumb">
 			  <ol class="breadcrumb">
 			    <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
-			    <li class="breadcrumb-item active" aria-current="page">Ventas</li>
+			    <li class="breadcrumb-item" aria-current="page">Reportes</li>
+                <li class="breadcrumb-item active" aria-current="page">Reporte de caja</li>
 			  </ol>
 			</nav>
 		</div>

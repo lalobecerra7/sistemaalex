@@ -1,4 +1,4 @@
-function v_ventas() {
+function v_reporteCaja() {
 	TablaReporteVentas();
 
 	$('#FormAbrirCaja').validate({
