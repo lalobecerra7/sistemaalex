@@ -1,4 +1,3 @@
-<br>
 <div id="content" class="card">
 	<div class="card-body">
         <div class="section">

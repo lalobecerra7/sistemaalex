@@ -1,4 +1,5 @@
-﻿	<div id="content" class="card">
+﻿<div style="margin-top: -22px;">
+	<div id="content" class="card">
 		<div class="card-body">
 			<div class="row">
 				<div class="col-12">
@@ -14,9 +15,9 @@
 			</div>
 			<br>
 			<div class="Principal">
-		    <div class="row mb-5">
-		    	<div class="col-12">
-		      	<table class="table table table-hover table-bordered text-center myDataTable" id="TablaSucursales" width="100%" style="font-size: 12px;">
+				<div class="row mb-5">
+					<div class="col-12">
+						<table class="table table table-hover table-bordered text-center myDataTable" id="TablaSucursales" width="100%" style="font-size: 12px;">
 		        	<thead>
 		          	<th style="width: 20%;">Nombre</th>
 		            <th style="width: 20%;" orden="No">Dirección</th>
@@ -28,12 +29,13 @@
 		          <tbody>
 		          </tbody>
 		        </table>
-		      </div>
-		    </div>
-		  </div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
+
 
 <!--////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalSucursal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

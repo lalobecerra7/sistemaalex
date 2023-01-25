@@ -1,16 +1,4 @@
 <div class="mb-3">
-	<div class="row">
-		<div class="col-12">
-			<nav aria-label="breadcrumb">
-			  <ol class="breadcrumb">
-			    <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
-			    <li class="breadcrumb-item" aria-current="page">Productos</li>
-			    <li class="breadcrumb-item active" aria-current="page">Productos</li>
-			  </ol>
-			</nav>
-		</div>
-	</div>
-	<br>
 	<div id="content" class="card">
 		<div class="card-body">
 			<div class="row">
