@@ -108,6 +108,7 @@ class hacerCompra {
 	public function _consultar(){
 		$omodelo = new m_modelo();
 		extract($_POST);
+
 		if ($tipo == "ConsultarProductos") {
 			$buscar =  $omodelo->link->real_escape_string($buscar);
 			$limit =  $omodelo->link->real_escape_string($limit);
@@ -121,7 +122,7 @@ class hacerCompra {
 				$separa = explode(' ', trim($buscar));
 				$busqueda = 'WHERE ';
 				for ($i=0; $i < count($separa); $i++) { 
-					$busqueda .= "CONCAT(ID_Producto, Descripcion, Codigo, Costo, presentaciones.Nombre) REGEXP '".$separa[$i]."'";
+					$busqueda .= "CONCAT(ID_Producto, Descripcion, Codigo, Costo, Nombre_Unidad, Abreviatura_Unidad) REGEXP '".$separa[$i]."'";
 					if($i < (count($separa)-1)){
 						$busqueda .= ' AND ';
 					}
@@ -150,7 +151,7 @@ class hacerCompra {
 							$presentacion .= '<button style="margin: 2px;" type="button" class="btn btn-sm btn-primary bSelePresCom" presentacion="0" costo="'.$row[$i]['Costo'].'"><span>Sin presentación</span> <span class="'.$clase.'">$'.number_format($row[$i]['Costo'], 2).'</span></button>';
 						}
 
-						$query1 = "SELECT ID_Presentacion, Nombre, Abreviatura, Clave_CFDI, Costo, IFNULL((SELECT Cantidad FROM inventario WHERE FK_Presentacion = ID_Presentacion AND inventario.FK_Producto = FK_Producto), 0) AS Existencia FROM presentaciones WHERE FK_Producto = '".$row[$i]['ID_Producto']."' ORDER BY Nombre";
+						$query1 = "SELECT ID_Presentacion, Nombre, Abreviatura, Clave_CFDI, Costo, IFNULL((SELECT SUM(Cantidad) FROM inventario WHERE FK_Presentacion = ID_Presentacion AND FK_Producto = '".$row[$i]['ID_Producto']."), 0) AS Existencia FROM presentaciones WHERE FK_Producto = '".$row[$i]['ID_Producto']."' ORDER BY Nombre";
 						$row1 = $omodelo->_consultar($query1);
 						$numerofilas1 = $omodelo->numerofilas;
 

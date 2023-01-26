@@ -24,6 +24,7 @@ include "controladores/c_ventas.php";
 include "controladores/c_facturacion.php";
 include "controladores/c_importes.php";
 include "controladores/c_precios.php";
+include "controladores/c_reportes.php";
 
 class controller {
 
@@ -182,7 +183,7 @@ class controller {
 
 		$botonVentas = '';
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][1] == '1') {
-			$botonVentas = '<li class="menu-item cargarVista" carga="v_ventas" titulo="Ventas" id="cargarVentas">
+			$botonVentas = '<li class="menu-item active cargarVista" carga="v_ventas" titulo="Ventas" id="cargarVentas">
               <a href="javascript:void(0)"  class="menu-link">
                 <i class="menu-icon fas fa-shopping-cart"></i>
                 <div data-i18n="Ventas">Ventas</div>
@@ -296,6 +297,14 @@ class controller {
         </a>';
     }
     $pagina = str_replace('#menuConfi#', $botonConfi, $pagina);
+
+    $venta = '';
+    if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][2] == '1') {
+    	$venta = file_get_contents('vistas/v_hacerventa.php');
+    	$venta = $this->remplazar($venta, 'v_hacerventa');
+    }
+
+    $pagina = str_replace('#verVista#', $venta, $pagina);
 
 		return $pagina;
 	}
@@ -437,9 +446,17 @@ class controller {
 
 		}else if($nombre == "v_inventario"){
 			$botonPermisosTraslados = "";
-					/*if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][3] == '1') {
-						$botonPermisosTraslados = '<button class="btn btn-primary btn-sm mb-1" id="Traslados" title="Traslado de producto" attrid="'.$row[$i]['ID_Producto'].'" nombre="'.$row[$i]['Descripcion'].'"><i class="fa-solid fa-right-left"></i></button>';
-					}*/
+			if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][10] == '1') {
+					$botonPermisosTraslados = '<button type="button" class="btn btn-primary" id="bVerTraslados"><i class="fa-solid fa-arrows-left-right"></i> Traslados</button>';
+			}
+
+			$pagina = str_replace('#botonTraslados#', $botonPermisosTraslados, $pagina);
+
+			if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][11] == '1') {
+					$botonAgregarTras = '<button type="button" class="btn btn-primary" id="bAgregarTraslado"><i class="fas fa-plus"></i> Agregar</button>';
+			}
+
+			$pagina = str_replace('#bAgregarTraslado#', $botonAgregarTras, $pagina);
 					
 			$query = "SELECT ID_Sucursal, Nombre FROM sucursales";
 			$row = $omodelo->_consultar($query);

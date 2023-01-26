@@ -127,55 +127,33 @@ $arreglo2 = '';
 
 <body>
   <?php 
-    $permisosMo = null;
-    $sql = "SELECT Permisos, Tipo_Usuario FROM usuarios WHERE ID_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
-
-    if($res=$con->query($sql)){
-      if ($res->num_rows > 0) {
-        $row = $res->fetch_assoc();
-
-        if($row['Tipo_Usuario'] == 'Administrador'){
-          $permisosMo = 'Administrador';
-        }else{
-          $modulos = explode('~', $row['Permisos']);
-
-          for ($i=0; $i < count($modulos); $i++) {
-            $cadena = explode(',', $modulos[$i]);
-            $nombreModu = $cadena[0];
-            unset($cadena[0]);
-            $permisosMo[$nombreModu] = $cadena;
-          }
-        }
-      }
-    }
-
     $FechaHoy = date('Y-m-d H:i:s');
     
-    $sql = "SELECT ID_Orden_Compra, FK_Proveedor, (SELECT proveedores.Nombre FROM proveedores WHERE ID_Proveedor = FK_Proveedor) AS NombreProveedor, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, Descuento, Total, Estatus, Fecha_Registro FROM ordenes_compra WHERE ID_Orden_Compra = '".$_GET["id"]."'";
-    
+    $sql = "SELECT ID_Traslado, Estatus, Detalles, FK_Sucursal_Origen, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Origen) AS Origen, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Destino) AS Destino, DATE_FORMAT(Fecha_Traslado, '%d-%m-%Y') AS Fecha_Traslado, DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, FK_Usuario FROM traslados WHERE ID_Traslado = '".$_GET["id"]."'";
+
     if($res=$con->query($sql)){
       if ($res->num_rows > 0) {
         $row = $res->fetch_assoc();
         $arreglo = array(
-          'ID_Orden_Compra'=> $row['ID_Orden_Compra'],
-          'Proveedor' => $row['NombreProveedor'],  
-          'Usuario' => $row['NombreUsuario'], 
-          'Descuento' => $row['Descuento'],
-          'Total' => $row['Total'], 
-          'Estatus' => $row['Estatus'], 
-          'Fecha_Registro' => $row['Fecha_Registro']
+          'ID_Traslado' => $row['ID_Traslado'],
+          'Estatus' => $row['Estatus'],
+          'Detalles' => $row['Detalles'],
+          'FK_Sucursal_Origen' => $row['FK_Sucursal_Origen'],
+          'Origen' => $row['Origen'],
+          'Destino' => $row['Destino'],
+          'Fecha_Traslado' => $row['Fecha_Traslado'],
+          'Fecha_Registro' => $row['Fecha_Registro'],
+          'FK_Usuario' => $row['FK_Usuario']
         );
       }else{
         echo "No se encontraron resultados compras";
       }
     }
 
-    $sql2 = "SELECT ID_Ticket, FK_Sucursal, Imagen, Ruta_Imagen, tickets.Nombre AS MostrarNombre, Domicilio, tickets.Telefono AS MostrarTelefono, tickets.Email AS MostrarEmail, Total_Letras, Incluir_Mensaje, Mensaje, Moneda, Simbolo, Origen, sucursales.Nombre AS NombreSucursal, FK_Encargado, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, sucursales.Email AS CorreoSucursal, sucursales.Telefono AS TelefonoSucursal, Segundo_Telefono, FK_Zona FROM tickets INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE FK_Sucursal = '".$_GET["idSucursal"]."'";
+    $sql2 = "SELECT ID_Ticket, FK_Sucursal, Imagen, Ruta_Imagen, tickets.Nombre AS MostrarNombre, Domicilio, tickets.Telefono AS MostrarTelefono, tickets.Email AS MostrarEmail, Total_Letras, Incluir_Mensaje, Mensaje, Moneda, Simbolo, Origen, sucursales.Nombre AS NombreSucursal, FK_Encargado, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, sucursales.Email AS CorreoSucursal, sucursales.Telefono AS TelefonoSucursal, Segundo_Telefono, FK_Zona FROM tickets INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE FK_Sucursal = '".$arreglo["FK_Sucursal_Origen"]."'";
     if($res2=$con->query($sql2)){
       if ($res2->num_rows > 0) {
         $row2 = $res2->fetch_assoc();
-
-        $folio = str_pad($_GET["id"], 8, "0", STR_PAD_LEFT);
 
         $arreglo2 = array(
           'ID_Ticket' => $row2["ID_Ticket"],
@@ -202,8 +180,7 @@ $arreglo2 = '';
           'TelefonoSucursal' => $row2["TelefonoSucursal"],
           'CorreoSucursal' => $row2["CorreoSucursal"],
           'Segundo_Telefono' => $row2["Segundo_Telefono"],
-          'FK_Zona' => $row2["FK_Zona"],
-          'Folio' => $folio
+          'FK_Zona' => $row2["FK_Zona"]
         );
       }else{
         echo "No se encontraron resultados ticket";
@@ -219,10 +196,11 @@ $arreglo2 = '';
       </p>
       <br class="oculto-impresion">
       <div class="centrado">
-        <?php echo "<h1>MISCELÁNEA RÍOS</h1>"; ?>
         <?php  
+          echo "<h1>MISCELÁNEA RÍOS</h1>";
+          echo "<h2>Traslado</h2>";
           $FechaHoy = date('Y-m-d H:i:s');
-          echo '<p>'.$FechaHoy.'</p>'; 
+          echo '<p>'.$arreglo['Fecha_Registro'].'</p>'; 
 
           if ($arreglo2["Domicilio"] == 1) {
             if ($arreglo2["Calle"] != "") {
@@ -258,61 +236,53 @@ $arreglo2 = '';
           if ($arreglo2["MostrarEmail"] == 1) {
             echo "<p>".$arreglo2["CorreoSucursal"]."</p>";
           }
+
+          echo '<br><br>
+          <p><b>Sucursal Origen: '.$arreglo['Origen'].'</b></p>
+          <br>
+          <p><b>Sucursal Destino: '.$arreglo['Destino'].'</b></p>
+          <br>
+          <p><b>Estatus: '.$arreglo['Estatus'].'</b></p>
+          <p><b>'.$arreglo['Detalles'].'</b></p><br>';
         ?>
       </div>
-      <?php  
-        echo '<p class="centrado">FOLIO: '.$arreglo2['Folio'].'</p>
-        <p class="centrado">Estatus: '.$arreglo['Estatus'].'</p>';
-      ?>
       <br>
       <table class="centrado" width="100%">
         <thead>
           <tr>
-            <?php  
-              $clase = ''; 
-              if($permisosMo != 'Administrador'){
-                if(@$permisosMo['v_compras'][2] == '0' || @$permisosMo['v_ordenes_compra'][5] == '0'){
-                  $clase = 'oculto'; 
-                }
-              }
-
-              echo '<th class="codigo">Cód.</th>
-              <th class="cantidad">Cant.</th>
-              <th class="precio '.$clase.'">Costo. Unit.</th>  
-              <th class="precio '.$clase.'">Importe</th>';
-            ?>
+            <th class="codigo">Código</th>
+            <th class="cantidad">Cantidad</th>
           </tr>
         </thead>
         <tbody> 
           <?php 
-            $sql = "SELECT ID_Detalle_Orden, FK_Presentacion, productos.Descripcion AS NombreProducto, Nombre_Unidad, Abreviatura_Unidad, detalles_orden.Costo AS Costo, Cantidad, Subtotal, productos.Codigo, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS Abreviatura FROM detalles_orden INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Orden = '".$arreglo['ID_Orden_Compra']."'";
+            $sql = "SELECT ID_Detalle_Traslado, Codigo, Descripcion, Nombre_Unidad, Abreviatura_Unidad, FK_Presentacion, Cantidad, Nombre, Abreviatura FROM detalles_traslados INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Traslado = '".$_GET['id']."'";
             $mostrar= "";
             $subtotal = 0;
             $contador = 0;
             if($res=$con->query($sql)){
               if ($res->num_rows > 0) {
                 while($row = $res->fetch_assoc()){
-                    $presentacion = ' - '.$row['Nombre_Unidad'].' ('.$row['Abreviatura_Unidad'].')';
-                    if($row['FK_Presentacion'] != 0){
-                      $presentacion = ' - '.$row['Presentacion'].' ('.$row['Abreviatura'].')';
-                    }
-
-                    if($presentacion == ' -  ()'){
-                      $presentacion = '';
+                    $presentacion = '';
+                    if($row['FK_Presentacion'] == 0){
+                      $presentacion = $row['Nombre_Unidad'];
+                      if(trim($row['Abreviatura_Unidad']) != ''){
+                        $presentacion .= '('.$row['Abreviatura_Unidad'].')';
+                      }
+                    }else{
+                      $presentacion = $row['Nombre'];
+                      if(trim($row['Abreviatura']) != ''){
+                        $presentacion .= '('.$row['Abreviatura'].')';
+                      }
                     }
 
                     $mostrar .= "<tr>
-                        <td style='text-align: left;' class='producto' colspan='4'>".$row["NombreProducto"].$presentacion."</td>
-                      </tr>  
-                      <tr>  
-                        <td class='codigo'>".$row["Codigo"]."</td>
-                        <td class='cantidad'>".(round($row['Cantidad']*100)/100)."</td> 
-                        <td class='precio ".$clase."'>$".(round($row['Costo']*100)/100)."</td>
-                        <td class='precio ".$clase."'>$".(round($row['Subtotal']*100)/100)."</td>
-                      </tr>";
-
-                    $subtotal += $row['Subtotal'];
-                    $contador++;
+                        <td colspan='1' style='text-align: left;'>".$row['Descripcion'].' '.$presentacion."</td>
+                    </tr>
+                    <tr>  
+                        <td class='codigo'>".$row['Codigo']."</td>
+                        <td class='cantidad'>".number_format($row['Cantidad'], 2)."</td> 
+                    </tr>";
                 }
                   echo $mostrar;
               }else{
@@ -326,14 +296,7 @@ $arreglo2 = '';
       </table>
       <hr>
       <?php 
-        echo '<p class="derecha">No. de Articulos: '.$contador.'</p>'; 
-        echo '<p class="derecha '.$clase.'" style="font-size: 15px;">Subtotal: <b style="font-size: 15px;">$'.(round(($subtotal)*100)/100).'</b></p>';  
-        echo '<p class="derecha '.$clase.'" style="font-size: 15px;">Descuento: <b style="font-size: 15px;">$'.(round($arreglo['Descuento']*100)/100).'</b></p>'; 
-        echo "</br>
-          <p class='derecha negra ".$clase."'><b>TOTAL: $".(round($arreglo['Total']*100)/100)."</b></p>
-        ";
-        
-        echo '<p class="derecha">Usuario: '.$arreglo['Usuario'].'</p>';
+        //echo '<p class="derecha">Usuario: '.$arreglo['Usuario'].'</p>';
       ?>
     </div>
   <script>

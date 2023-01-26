@@ -24,7 +24,7 @@ class clientes {
 			}
 		}
 
-		$query = "SELECT ID_Cliente, LPAD(ID_Cliente, 4, '0') AS IDCliente, clientes.Nombre, Primer_Apellido, Segundo_Apellido, Foto, clientes.Telefono, Celular, Correo, Fecha_Registro AS Fecha, clientes.RFC, Facturar, Titular, Banco, No_Cuenta, FK_Sucursal, sucursales.Nombre AS NombreSucursal, clientes.Calle AS Direccion, clientes.No_Exterior, clientes.No_Interior, clientes.Colonia, clientes.Ciudad, clientes.Codigo_Postal, clientes.Estado, clientes.Pais, (SELECT COUNT(*) FROM clientes WHERE ID_Cliente <> 1 $busqueda) AS Num FROM clientes LEFT JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE ID_Cliente <> 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Cliente, LPAD(ID_Cliente, 4, '0') AS IDCliente, clientes.Nombre, Primer_Apellido, Segundo_Apellido, Foto, clientes.Telefono, Celular, Correo, Fecha_Registro AS Fecha, DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, clientes.RFC, Facturar, Titular, Banco, No_Cuenta, FK_Sucursal, sucursales.Nombre AS NombreSucursal, clientes.Calle AS Direccion, clientes.No_Exterior, clientes.No_Interior, clientes.Colonia, clientes.Ciudad, clientes.Codigo_Postal, clientes.Estado, clientes.Pais, (SELECT COUNT(*) FROM clientes WHERE ID_Cliente <> 1 $busqueda) AS Num FROM clientes LEFT JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE ID_Cliente <> 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -148,7 +148,7 @@ class clientes {
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Cliente'],
 						'IDCliente' => $row[$i]['IDCliente'],
-						'Fecha' => $row[$i]['Fecha'],
+						'Fecha' => $row[$i]['Fecha_Registro'],
 						'Nombre' => $foto.$row[$i]['Nombre'].' '.$row[$i]['Primer_Apellido'].' '.$row[$i]['Segundo_Apellido'],
 						'Direcciones' => "Dirección fiscal: <br>".$direccionfiscal."<br>".$direccion,
 						'Detalles' => $datosbancarios,

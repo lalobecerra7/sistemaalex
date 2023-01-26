@@ -170,7 +170,7 @@ html, body{
     min-height: 100vh;
     z-index: 2000;
     background: rgba(0, 0, 0, 0.8);
-    display: none;
+    /*display: none;*/
 }
 
 #caja {

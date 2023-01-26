@@ -545,12 +545,49 @@
                                                 <td>Ver inventario</td>
                                                 <td>Ver merma</td>
                                                 <td>Registrar merma</td>
-                                                <td>Ver traslados</td>
-                                                <td>Registrar traslados</td>
+                                                <td>Modificar merma</td>
+                                                <td>Eliminar merma</td>
                                                 <td>Ver conversiones</td>
                                                 <td>Registrar conversiones</td>
+                                                <td>Modificar conversiones</td>
+                                                <td>Eliminar conversiones</td>
+                                                <td>Ver traslados</td>
+                                                <td>Registrar traslados</td>
+                                                <td>Completar traslados</td>
+                                                <td>Cancelar traslados</td>
+                                                <td>Eliminar traslados</td>
                                             </tr>
                                             <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <div>
                                                         <input class="form-check-input checkPermisos" type="checkbox">

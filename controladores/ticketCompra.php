@@ -195,7 +195,7 @@ $arreglo2 = '';
       </p>
       <br class="oculto-impresion">
       <div class="centrado">
-        <?php echo "<h1>CREMASI</h1>"; ?>
+        <?php echo "<h1>MISCELÁNEA RÍOS</h1>"; ?>
         <?php  
           $FechaHoy = date('Y-m-d H:i:s');
           echo '<p>'.$FechaHoy.'</p>'; 

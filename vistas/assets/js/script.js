@@ -26,11 +26,7 @@ function moneda() {
 }
 
 jQuery(document).ready(function($) {
-    var idVista = "cargarInicio";
-    setTimeout(function(){
-      $("#cargarInicio").trigger("click");
-    },100);
-   
+    $("#carga").hide();
     
     $(document).on('click', '.cargarVista', function() {
         var nombre = $(this).attr('carga'), titulo = $(this).attr('titulo'), id = $(this).attr('id'), atri = $(this).attr('atri'), pesta = $(this).attr('pesta'); 

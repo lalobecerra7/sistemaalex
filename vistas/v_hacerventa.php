@@ -99,8 +99,7 @@
                 <h5 class="modal-title" id="staticBackdropLabel">Precios</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="AgregarPrecioProducto">
-                <div class="modal-body">
+            <div class="modal-body">
                     <div class="row">
                         <div class="col-12 table-responsive" id="divTablaProductos">
                             <table class="table table-responsive table-striped text-center myDataTable" id="TablaPreciosProductosVenta" width="100%">
@@ -115,11 +114,10 @@
                             </table> 
                         </div>
                     </div>    
-                </div>
-                <div class="modal-footer text-center">
-                    <button type="button" class="btn BotonDatosPrecio" producto="" presentacion=""  data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-                </div>
-            </form>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn BotonDatosPrecio" producto="" presentacion=""  data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+            </div>
         </div>    
     </div>
 </div>
@@ -132,8 +130,7 @@
                 <h5 class="modal-title" id="staticBackdropLabel">Presentaciones</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="AgregarPrecioProducto">
-                <div class="modal-body">
+            <div class="modal-body">
                     <div class="row">
                         <div class="col-12 table-responsive" id="divTablaProductos">
                             <table class="table table-responsive table-striped text-center myDataTable" id="TablaPresentacionesProducto" width="100%">
@@ -150,11 +147,10 @@
                             </table> 
                         </div>
                     </div>    
-                </div>
-                <div class="modal-footer text-center">
-                    <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-                </div>
-            </form>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+            </div>
         </div>    
     </div>
 </div>

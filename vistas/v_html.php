@@ -538,13 +538,13 @@
           <div class="menu-inner-shadow"></div>
 
           <ul class="menu-inner py-1" style="overflow-x: hidden; overflow-y: hidden;">
-            <!-- Dashboard -->
+            <!-- Dashboard 
             <li class="menu-item active cargarVista mt-4" aria-current="page" carga="v_inicio" titulo="Inicio" id="cargarInicio">
               <a class="menu-link" href="javascript:void(0)">
                 <i class="menu-icon fas fa-home"></i>
                 <div data-i18n="Inicio">Inicio </div>
               </a>
-            </li>
+            </li>-->
 
             #MenuSucursales#
 
@@ -612,6 +612,42 @@
             #MenuUsuarios#
 
             <!--#MenuMovimientos#-->
+
+            <!-- Layouts -->
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                  <i class="menu-icon fas fa-chart-line"></i>
+                  <div data-i18n="Layouts">Reportes</div>
+              </a>
+
+              <ul class="menu-sub">
+                <li class="menu-item cargarVista" carga="v_reporteProductos" titulo="Reporte productos" id="cargarReporteProductos">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Productos">Productos</div>
+                  </a>
+                </li>
+                <li class="menu-item cargarVista" carga="v_reporteClientes" titulo="Reporte clientes" id="cargarReporteClientes">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Clientes">Clientes</div>
+                  </a>
+                </li>
+                <li class="menu-item cargarVista" carga="v_reporteVentas" titulo="Reporte ventas" id="cargarReporteVentas">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Ventas">Ventas</div>
+                  </a>
+                </li>
+                <li class="menu-item cargarVista" carga="v_reporteCompras" titulo="Reporte compras" id="cargarReporteCompras">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Compras">Compras</div>
+                  </a>
+                </li>
+                <li class="menu-item cargarVista" carga="v_reporteFinanzas" titulo="Reporte finanzas" id="cargarReporteFinanzas">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Finanzas">Finanzas</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
 
           </ul>
         </aside>
@@ -692,7 +728,7 @@
                   #alertas#
                 </div>
                 <div class="col-12" id="verVista">
-                  
+                  #verVista#
                 </div>
               </div>
             </div>
@@ -1206,6 +1242,10 @@
     <script type="text/javascript" src="vistas/assets/plugins/fancybox/dist/jquery.fancybox.min.js"></script>
     <script type="text/javascript" src="vistas/assets/plugins/sweetalert/dist/sweetalert2.min.js"></script>
     <!-- <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.amcharts.com/lib/version/5.2.48/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/version/5.2.48/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/version/5.2.48/themes/Animated.js"></script>
+    <script src="https://cdn.amcharts.com/lib/version/5.2.48/locales/es_ES.js"></script>
     <script async defer src="vistas/assets/vendor/js/buttons.js"></script>
     <script src="vistas/assets/plugins/myDataTable/js/myDataTable.js"></script>
     <script type="text/javascript" src="vistas/assets/js/script.js"></script>
@@ -1232,5 +1272,6 @@
     <script type="text/javascript" src="vistas/assets/js/facturacion.js"></script>
     <script type="text/javascript" src="vistas/assets/js/importes.js"></script>
     <script type="text/javascript" src="vistas/assets/js/precios.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/reportes.js"></script>
   </body>
 </html>

@@ -22,7 +22,7 @@
 			<br>
 			<div class="row">
 				<div class="col-12 text-end">
-					<!-- <button type="button" class="btn btn-primary" id="botonVerTraslados" data-bs-toggle="modal" data-bs-target="#ModalVerTraslados"><i class="fa fa-print"></i> Traslados</button> -->
+					#botonTraslados#
 					<a href="javascript:void(0)" class="btn btn-light btn-reload" onclick="$('#cargarInventario').trigger('click')"><i class="fa fa-retweet"></i></a>
 				</div>
 			</div>
@@ -49,239 +49,8 @@
 </div>
 
 <!--////////////////////////////////////////////////////////////////////////////-->
-<div class="modal fade" id="ModalVerTraslados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Traslados</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            	<div class="row mb-3">
-            		<div class="col-md-6">
-            			<label for="FechaInicioTraslado">Desde</label>
-            			<input type="date" id="FechaInicioTraslado" name="FechaInicioTraslado" class="form-control">
-            		</div>
-            		<div class="col-md-6">
-            			<label for="FechaFinalTraslado">Hasta</label>
-            			<input type="date" id="FechaFinalTraslado" name="FechaFinalTraslado" class="form-control">
-            		</div>
-            	</div>
-            	<div class="row mb-5">
-					<div class="col-12">
-						<table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaImprimirTraslados" width="100%" style="font-size: 12px;">
-							<thead>
-								<th style="width: 33%;">Fecha</th>
-								<th style="width: 33%;">Detalles</th>
-								<th style="width: 33%;">Acciones</th>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</div>
-				</div>
-            </div>
-            <div class="modal-footer">
-				<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--////////////////////////////////////////////////////////////////////////////-->
-<div class="modal fade" id="ModalVerConversiones" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Conversiones del producto <b class="TituloConversionesModal"></b></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            	<div class="row">
-					<div class="col-12">
-						<table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaConversiones" width="100%" style="font-size: 12px;">
-							<thead>
-								<th style="width: 15%;">Origen</th>
-								<th style="width: 15%;">Destino</th>
-								<th style="width: 10%;">Usuario</th>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</div>
-				</div>
-            </div>
-            <div class="modal-footer">
-				<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--////////////////////////////////////////////////////////////////////////////-->
-<div class="modal fade" id="ModalVerDistribucionPresentacion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Distribución de <b id="NombreProductoPresentaciones"></b> en la sucursal: <b id="NombreSucursalModalPresentacion"></b></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            	<div class="row">
-					<div class="col-12">
-						<table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaPresentacionesSucursal" width="100%" style="font-size: 12px;">
-							<thead>
-								<th style="width: 33%;">Presentación</th>
-								<th style="width: 33%;">Abreviatura</th>
-								<th style="width: 33%;">Cantidad</th>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</div>
-				</div>
-            </div>
-            <div class="modal-footer">
-				<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--////////////////////////////////////////////////////////////////////////////-->
-<div class="modal fade" id="ModalConversionProducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-md modal-dialog-centered" style="z-index: 9999 !important;">
-    	<div class="modal-content">
-      		<div class="modal-header bg-inverse bd-inverse-darken">
-	        	<h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Conversiones</h5>
-	        	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      		</div>
-      		<form id="FormConversionProducto">
-		      	<div class="modal-body">
-		       		<div class="row">
-					   	<div class="col-md-12">
-					   		<div class="form-floating mb-3">
-								<select class="form-select" name="SucursalOrigenPresentacion" id="SucursalOrigenPresentacion" >
-								</select>
-								<label for="SucursalOrigenPresentacion">Sucursal de origen</label>
-							</div>
-					   		<div class="form-floating mb-3">
-								<select class="form-select" name="PresentacionesProductoOrigen" id="PresentacionesProductoOrigen" >
-									<option value=""> Seleccione una opción </option>
-								</select>
-								<label for="PresentacionesProductoOrigen">Presentación de origen</label>
-							</div>
-							<div class="form-floating mb-3">
-								<input type="number" class="form-control" min='0' id="CantidadPresentacionOrigen" name="CantidadPresentacionOrigen" placeholder="Ingresa la cantidad">
-								<label for="CantidadPresentacionOrigen">Cantidad</label>
-							</div>
-							<div class="form-floating mb-3">
-								<select class="form-select" name="SucursalDestinoPresentacion" id="SucursalDestinoPresentacion" >
-								</select>
-								<label for="SucursalDestinoPresentacion">Sucursal de destino</label>
-							</div>
-							<div class="form-floating mb-3">
-								<select class="form-select" name="PresentacionesProductoDestino" id="PresentacionesProductoDestino" >
-									<option value=""> Seleccione una opción </option>
-								</select>
-								<label for="PresentacionesProductoDestino">Presentación de destino</label>
-							</div>
-							<div class="form-floating mb-3">
-								<input type="number" class="form-control" min='0' id="CantidadPresentacionDestino" name="CantidadPresentacionDestino" placeholder="Ingresa la cantidad">
-								<label for="CantidadPresentacionDestino">Cantidad</label>
-							</div>
-					   	</div>
-					</div>
-		      	</div>
-		      	<div class="modal-footer">
-		        	<button type="submit" class="btn btn-primary" id="GuardarConversionProducto"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
-					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-		      	</div>
-  			</form>
-    	</div>
-  	</div>
-</div> 
-
-<!--////////////////////////////////////////////////////////////////////////////-->
-<div class="modal fade" id="ModalTraslados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Traslado del producto <span id="NombreProductoT">Producto</span></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="FormTraslados">
-                <div class="modal-body">
-                    <div class="row mt-3">
-                        <div class="col-md-12 col-sm-6 mb-3">
-                            <div class="form-floating">
-                                <input type="date"  class="form-control" id="FechaTraslado" name="FechaTraslado" placeholder="Selecciona la fecha del traslado">
-                                <label for="FechaTraslado">Fecha de traslado</label>
-                            </div>
-                        </div>
-                        <div class="col-md-12 col-sm-6 mb-3">
-							<div class="form-floating mb-3">
-								<select class="form-select" name="SucursalOrigen" id="SucursalOrigen" >
-									<option value="">- Seleccione una opción -</option>
-										#sucursales#
-								</select>
-								<label for="SucursalOrigen">Sucursal de origen</label>
-							</div>
-                        </div>
-                        <div class="col-md-12 col-sm-6 mb-3">
-							<div class="form-floating mb-3">
-								<select class="form-select" name="PresentacionProductoTraslado" id="PresentacionProductoTraslado" >
-									<option value="">- Seleccione una opción -</option>
-								</select>
-								<label for="PresentacionProductoTraslado">Presentación</label>
-							</div>
-                        </div>
-                        <div class="col-md-12 col-sm-6 mb-3">
-							<div class="form-floating mb-3">
-								<select class="form-select" name="SucursalDestino" id="SucursalDestino" >
-									<option value="">- Seleccione una opción -</option>
-								</select>
-								<label for="SucursalDestino">Sucursal de destino</label>
-							</div>
-                        </div>
-                        <div class="col-md-12 col-sm-6 mb-3">
-                            <div class="form-floating">
-                                <input type="number" min='1' max='' class="form-control" id="Cantidad" name="Cantidad" placeholder="Ingresa la cantidad de producto a trasladar">
-                                <label for="Cantidad">Cantidad</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                    	<div class="col-md-12 col-sm-12">
-                    		<div class="">
-								<table class="table table-hover table-striped table-bordered text-center myDataTable" id="TablaTraslados" width="100%" style="font-size: 12px;">
-									<thead>
-										<th style="width: 20%;" >Fecha</th>
-							     		<th style="width: 20%;" >Origen</th>
-										<th style="width: 15%;" >Destino</th>
-										<th style="width: 15%;" >Cantidad</th>
-										<th style="width: 15%;" >Usuario</th>
-									</thead>
-									<tbody>
-									
-									</tbody>
-								</table>
-							</div>
-                    	</div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" attrid='' id="GuardarTraslado"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
-					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!--////////////////////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalDetalles" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg modal-dialog-centered">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">Detalles de merma de <span id="NombreProductoM">Producto</span></h5>
@@ -291,13 +60,14 @@
 				<div class="">
 					<table class="table table-hover table-striped table-bordered text-center myDataTable" id="TablaMerma" width="100%" style="font-size: 12px;">
 						<thead>
-							<th style="width: 20%;" >Fecha de merma</th>
-							<th style="width: 20%;" >Motivo</th>
-							<th style="width: 15%;" >Sucursal</th>
-							<th style="width: 15%;" >Presentación</th>
-							<th style="width: 15%;" >Cantidad</th>
-							<th style="width: 15%;" orden="No">Imagen</th>
-							<th style="width: 15%;" orden="No">Acciones</th>
+							<th>Fecha Registro</th>
+							<th>Fecha Merma</th>
+							<th>Costo</th>
+							<th>Cantidad</th>
+							<th>Total</th>
+							<th>Motivo</th>
+							<th orden="No">Imagen</th>
+							<th orden="No">Acciones</th>
 						</thead>
 						<tbody>
 							
@@ -317,7 +87,7 @@
     <div class="modal-dialog modal-m modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar merma de <span id="NombreProductoAM">Producto</span></h5>
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Merma</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="FormMerma">
@@ -332,43 +102,32 @@
 				      	</div>
                         <div class="col-md-12 col-sm-6 mb-3">
                             <div class="form-floating">
-                                <input type="date"  class="form-control" id="FechaMerma" name="FechaMerma" placeholder="Selecciona la fecha de la merma">
-                                <label for="FechaMerma">Fecha de merma</label>
+                                <input type="date"  class="form-control" id="fechaMerma" name="fechaMerma" placeholder="Selecciona la fecha de la merma">
+                                <label for="FechaMerma">Fecha de Merma</label>
                             </div>
-                        </div>
-                        <div class="col-md-12 col-sm-6 mb-3">
-							<div class="form-floating">
-								<select class="form-select" name="SucursalMerma" id="SucursalMerma" >
-									<option value="">- Seleccione una opción -</option>
-										#sucursales#
-								</select>
-								<label for="SucursalMerma">Sucursal</label>
-							</div>
-                        </div>
-                        <div class="col-md-12 col-sm-6 mb-3">
-							<div class="form-floating">
-								<select class="form-select" name="PresentacionProductoMerma" id="PresentacionProductoMerma">
-									<option value="">- Seleccione una opción -</option>
-								</select>
-								<label for="PresentacionProductoMerma">Presentación</label>
-							</div>
                         </div>
                         <div class="col-md-12 col-sm-6 mb-3">
                             <div class="form-floating">
-                                <input type="number" min='1' class="form-control" id="CantidadMerma" name="CantidadMerma" placeholder="Ingresa la cantidad de producto a trasladar">
-                                <label for="CantidadMerma">Cantidad</label>
+                                <input type="number" min='0.01' step="any" class="form-control" id="cantidadMerma" name="cantidadMerma" placeholder="Ingresa la cantidad de producto">
+                                <label>Cantidad</label>
                             </div>
                         </div>
+                        <div class="col-md-12 col-sm-6 mb-3">
+                        	<h6 id="costoMerma" class="dinero">$0.00</h6>
+                        </div>	
+                        <div class="col-md-12 col-sm-6 mb-3">
+                        	<h6 id="totalMerma" class="dinero">$0.00</h6>
+                        </div>	
 						<div class="col-md-12 col-sm-6 mb-3">
                             <div class="form-floating">
-                                <input type="text" class="form-control" id="MotivoMerma" name="MotivoMerma" placeholder="Ingresa el motivo de la merma">
+                                <input type="text" class="form-control" id="motivoMerma" name="motivoMerma" placeholder="Ingresa el motivo de la merma">
                                 <label for="MotivoMerma">Motivo de la merma</label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                	<button type="submit" class="btn btn-primary" attrid='' id="GuardarMerma"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+                	<button type="submit" class="btn btn-primary" id="GuardarMerma"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
 					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
                 </div>
             </form>
@@ -377,35 +136,309 @@
 </div>
 
 <!--////////////////////////////////////////////////////////////////////////////-->
-<div class="modal fade" id="ModalEditarMerma" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-m modal-dialog-centered">
+<div class="modal fade" id="ModalConversionProducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-xl modal-dialog-centered" style="z-index: 9999 !important;">
+    	<div class="modal-content">
+      		<div class="modal-header bg-inverse bd-inverse-darken">
+	        	<h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Conversiones</h5>
+	        	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      		</div>
+      		<form id="FormConversionProducto">
+		      	<div class="modal-body">
+		       		<div class="row">
+		       			<div class="col-md-6 text-center">
+					   		<div class="row">
+					   			<div class="col-12 mb-3" id="conversionProducto">
+					   				
+					   			</div>
+					   			<div class="col-12 mb-3" id="conversionSucursal">
+					   				
+					   			</div>
+					   		</div>
+					   	</div>
+					   	<div class="col-md-6">
+					   		<div class="row mb-3">
+					   			<div class="col-12">
+                            		<div class="form-floating">
+                                		<input type="number" min='0.01' step="any" class="form-control" id="cantidadConversion" name="cantidadConversion" placeholder="Ingresa la cantidad de producto" required>
+                                		<label>Cantidad</label>
+                            		</div>
+					   			</div>
+					   		</div>
+					   		<div class="row mb-3">
+					   			<div class="col-12 table-responsive">
+							   		<table class="table table-hover table-striped text-center" width="100%" style="font-size: 12px;">
+							   			<thead>
+							   				<tr>
+							   					<th>Nombre</th>
+							   					<th>Cantidad</th>
+							   				</tr>
+							   			</thead>
+							   			<tbody id="verPresentaciones">
+							   				
+							   			</tbody>
+							   		</table>
+								</div>
+					   		</div>
+					   	</div>
+					</div>
+		      	</div>
+		      	<div class="modal-footer">
+		        	<button type="submit" class="btn btn-primary" id="GuardarConversionProducto"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+		      	</div>
+  			</form>
+    	</div>
+  	</div>
+</div> 
+
+<!--////////////////////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalConversiones" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Detalles Conversiones</span></h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body row">
+				<div class="col-12 text-center mb-3" id="verDetalleProducto">
+					
+				</div>
+				<div class="col-12 table-responsive">
+					<table class="table table-hover table-striped table-bordered text-center myDataTable" id="TablaConversiones" width="100%" style="font-size: 12px;">
+						<thead>
+							<th>Fecha Registro</th>
+							<th>Cantidad</th>
+							<th orden="No">Conversión</th>
+							<th orden="No">Acciones</th>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id='CerrarDetalleConversiones' attrid= ''>Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--////////////////////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalTraslados" tabindex="-1" data-bs-focus="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Editar merma</span></h5>
+                <h5 class="modal-title" id="exampleModalLabel">Traslado del producto <span id="NombreProductoT">Producto</span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="FormEditarMerma">
-                <div class="modal-body">
-                    <div class="row mt-3">
-                        <div class="col-md-12 col-sm-6 mb-3">
-                            <div class="form-floating">
-                                <input type="date"  class="form-control" id="FechaMermaE" name="FechaMermaE" placeholder="Selecciona la fecha de la merma">
-                                <label for="FechaMermaE">Fecha de merma</label>
-                            </div>
-                        </div>
-						<div class="col-md-12 col-sm-6 mb-3">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="MotivoMermaE" name="MotivoMermaE" placeholder="Ingresa el motivo de la merma">
-                                <label for="MotivoMermaE">Motivo de la merma</label>
-                            </div>
-                        </div>
+            <div class="modal-body">
+            	<div class="row">
+            		<div class="col-12 text-end">
+            			#bAgregarTraslado#
+            		</div>
+            	</div>
+            	<br>
+                <div class="row">
+                    <div class="col-12 table-responsive">
+                    	<table class="table table-hover table-striped table-bordered text-center myDataTable" id="TablaTraslados" width="100%" style="font-size: 12px;">
+							<thead>
+								<th>Fecha Registro</th>
+								<th>Fecha Traslado</th>
+							    <th>Origen</th>
+								<th>Destino</th>
+								<th>Estatus</th>
+								<th orden="No">Detalles</th>
+								<th orden="No">Acciones</th>
+							</thead>
+							<tbody>
+									
+							</tbody>
+						</table>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" attrid='' id="GuardarMermaE"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
-					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+            </div>
+            <div class="modal-footer">
+				<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--////////////////////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalAgregarTraslado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-xl modal-dialog-centered" style="z-index: 9999 !important;">
+    	<div class="modal-content">
+      		<div class="modal-header bg-inverse bd-inverse-darken">
+	        	<h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Agregar Traslado</h5>
+	        	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      		</div>
+      		<div class="modal-body">
+      			<div class="row">
+      				<div class="col-md-6">
+      					<div class="form-floating">
+				         	<select class="form-select" id="sucursalOrigenTraslado" name="sucursalOrigenTraslado">
+				         		#sucursales#
+				          	</select>
+				        	<label>Sucursal origen</label>
+						</div>
+      				</div>
+      				<div class="col-md-6">
+      					<div class="form-floating">
+				         	<select class="form-select" id="sucursalDestinoTraslado" name="sucursalDestinoTraslado">
+				         		<option value="">--Selelcciona una sucursal--</option>
+				         		#sucursales#
+				          	</select>
+				        	<label>Sucursal destino</label>
+						</div>
+      				</div>
+      			</div>
+      			<br>
+      			<div class="row">
+      				<div class="col-md-6">
+      					<div class="form-floating">
+                            <input type="date" class="form-control" id="fechaTraslado" name="fechaTraslado" placeholder="Fecha">
+                            <label>Fecha</label>
+                        </div>	
+      				</div>
+      				<div class="col-md-6">
+      					<div class="form-floating">
+				         	<select class="form-select" id="estatusTraslado" name="estatusTraslado">
+				         		<option value="Pendiente">Pendiente</option>
+				         		<option value="Completado">Completado</option>
+				          	</select>
+				        	<label>Estatus</label>
+						</div>
+      				</div>
+      			</div>
+      			<br>
+      			<br>
+		       	<form id="FormAgregarProductoTraslado" class="row">
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-barcode"></i></span>
+                            <input type="text" class="form-control" id="CodigoProductoTraslado" name="CodigoProductoTraslado" placeholder="Código del producto" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 d-grid mb-3">
+                        <button type="submit" class="btn btn-outline-danger" id="AgregarProductoTraslado">Agregar producto <i class="fas fa-check"></i></button>
+                    </div>
+                    <div class="col-md-3 col-sm-6 d-grid mb-3">
+                        <button type="button" class="btn btn-outline-secondary" id="CargarProductosModalTraslado">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                    </div>
+                </form>
+                <br>
+				<div class="row mb-3">
+					<div class="col-12 table-responsive">
+						<table class="table table-hover table-striped text-center table-bordered" width="100%" style="font-size: 12px;">
+							<thead>
+							   	<tr>
+							   		<th>Código</th>
+							   		<th>Producto</th>
+							   		<th>Presentacion</th>
+							   		<th>Existencia</th>
+							   		<th>Cantidad</th>
+							   	</tr>
+							</thead>
+							<tbody id="verProductosTras">
+							   				
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+			    <button type="submit" class="btn btn-primary" id="bGuardarTraslado"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+				<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+			</div>
+		</div>
+  	</div>
+</div> 
+
+<!--///////////////////////////////////////////////////////////-->
+<div class="modal fade" id="modalVerPresentaciones" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Productos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table table-hover table-striped table-bordered text-center" width="100%" style="font-size: 12px;">
+                        <thead>
+                            <th>Nombre</th>
+                            <th>Abreviatura</th>
+                            <th>Existencia</th>
+                            <th>Acciones</th>
+                        </thead>
+                        <tbody id="verTablaPrese">
+                               
+                        </tbody>
+                    </table>
                 </div>
-            </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--///////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalVerProductosTraslados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Productos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body table-responsive">
+                <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaProductosTraslados" width="100%" style="font-size: 12px;">
+                    <thead>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                        <th>Presentacion</th>
+                    </thead>
+                    <tbody>
+                               
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--///////////////////////////////////////////////////////////-->
+<div class="modal fade" id="modalDetallesTraslados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Productos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body table-responsive">
+                <table class="table table table-hover table-striped table-bordered text-center" width="100%" style="font-size: 12px;">
+                    <thead>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                        <th>Presentacion</th>
+                        <th>Cantidad</th>
+                    </thead>
+                    <tbody id="verProductosTraslados">
+                               
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
+            </div>
         </div>
     </div>
 </div>
