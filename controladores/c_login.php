@@ -10,7 +10,7 @@ class login {
 		$usuario = $omodelo->link->real_escape_string($usuario);
 		$contrasena = $omodelo->link->real_escape_string($contrasena);
 
-		$query4 = "SELECT ID_Usuario, Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta FROM usuarios WHERE Correo = '$usuario'";
+		$query4 = "SELECT ID_Usuario, Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta, FK_Sucursal FROM usuarios WHERE Correo = '$usuario'";
 		$row = $omodelo->_consultar($query4);
 		$numerofilas = $omodelo->numerofilas;
 		

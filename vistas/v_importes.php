@@ -1,16 +1,4 @@
-<br>
-<div class="mb-3 mt-2">
-	<div class="row">
-		<div class="col-12">
-			<nav aria-label="breadcrumb">
-			  <ol class="breadcrumb">
-			    <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
-			    <li class="breadcrumb-item active" aria-current="page">Importes</li>
-			  </ol>
-			</nav>
-		</div>
-	</div>
-	<br>
+<div>
 	<div id="content" class="card">
 		<div class="card-body">
 			<div class="row">
@@ -30,9 +18,7 @@
 		      <div class="col-12">
 		        <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaReporteImportes" width="100%" style="font-size: 12px;">
                     <thead>
-                        <th style="width: 20%;">Datos</th>
                         <th style="width: 25%;">Cliente</th>
-                        <th style="width: 25%;">Total</th>
                         <th style="width: 25%;">Importes</th>
                         <th style="width: 15%;">Estatus</th>
                         <th style="width: 15%;" orden="No">Acciones</th>
@@ -40,16 +26,6 @@
                     <tbody>
                            
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td></td>
-                            <td>Totales</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
 		        </table>
 		      </div>
 		    </div>
@@ -62,7 +38,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Productos de la venta <span id="FolioImporteVenta"></span></h5>
+                <h5 class="modal-title" id="exampleModalLabel">Importes del cliente <span id="FolioImporteVenta"></span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -70,6 +46,7 @@
                     <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaCargarProductosImporte" width="100%" style="font-size: 12px;">
                         <thead>
                             <tr>
+                            	<th>Venta</th>
                                 <th>Producto</th>
                                 <th>Cantidad</th>
                                 <th>Importe</th>
@@ -90,3 +67,68 @@
         </div>
     </div>
 </div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalPagarImportes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+    <div class="modal-content">
+        <div class="modal-header bg-inverse bd-inverse-darken">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Pagar importes de la venta <span id="folioVentaImportes"></span></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="FormPagarImportes">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        Producto: <span id="NombreProductoImporte"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        Importes: <span id="spanImportes"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        Precio: <span id="spanPrecioImporte" class="dinero"></span>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        Pagados: <span id="spanPagados"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        Total Pagados: <span id="spanTotalPagados" class="dinero"></span>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        Restantes: <span id="spanRestantes"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        Total Restantes: <span id="spanTotalRestantes" class="dinero"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="number" class="form-control" id="CampoImportesPagados" name="CampoImportesPagados" min="1" max="" placeholder="Ingresa cuantos importes vas a pagar">
+                            <label for="CampoImportesPagados">Pagar importes</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                <button type="submit" class="btn btn-primary" id="GuardarImportesPagados" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div> 

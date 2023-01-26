@@ -1,5 +1,58 @@
 function v_importes() {
 	TablaReporteImportes();
+
+	$('#FormPagarImportes').validate({
+        rules: {
+            CampoImportesPagados: {
+                required: true,
+                min: 1,
+                max: $("#GuardarImportesPagados").attr("restante")
+            },
+        },
+        messages: {
+            CampoImportesPagados: {
+                required: "Ingresa los importes pagados."
+            },
+        },
+        submitHandler: function(form) { 
+        	var btn = $("#GuardarImportesPagados");
+        	var idcliente = $(btn).attr('idcliente');
+            var data = "metodo=modificar&accion=importes&IDImporte="+$(btn).attr('attrid')+"&ImportesPagos="+$("#CampoImportesPagados").val();
+			$.ajax({
+				url: 'index.php',
+				type: 'POST',
+				data: data,
+				beforeSend: function() {
+				    $("#carga").show();
+				}
+			})
+			.done(function(res) {
+				if ($.trim(res) == "Correcto") {
+					Swal.fire({
+						icon: 'success',
+						title: 'Importe pagado correctamente'
+					});
+					TablaProductosImporte(idcliente);
+					TablaReporteImportes();
+					$("#CampoImportesPagados").val("");
+					$("#ModalPagarImportes").modal("hide");
+				}else{
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Error inesperado al pagar importe.'
+					});
+					console.log($.trim(res));
+				}
+			})
+			.fail(function() {
+				console.log("Error ajax");
+			})
+			.always(function() {
+				$("#carga").hide();
+			});         
+        }
+    });   
 }
 
 jQuery(document).ready(function($) {
@@ -17,17 +70,43 @@ jQuery(document).ready(function($) {
 	});
 
 	$(document).on('click', '#VerProductosImporte', function() {
-		var folio = $(this).attr("folio");
-		var id = $(this).attr("attrid");
+		var nombre = $(this).attr("nombre");
+		var id = $(this).attr("idcliente");
 		$("#ModalVerProductosImporte").modal("show");
-		$("#FolioImporteVenta").text(folio);
+		$("#FolioImporteVenta").text(nombre);
 		TablaProductosImporte(id);
 	});
 
 	$(document).on('click', '.MarcarPagadoImporte', function() {
 		var btn = $(this);
-		var idventa = $(this).attr("idventa");
-		Swal.fire({
+		var folio = $(this).attr("folio");
+		var importes = $(this).attr("importes");
+		var restante = $(this).attr("restantes");
+		var pagados = $(this).attr("pagados");
+		var attrid = $(this).attr("attrid");
+		var idcliente = $(this).attr("idcliente");
+		var precio = $(this).attr("precioImporte");
+		var nombre = $(this).attr("nombreproducto");
+		$("#folioVentaImportes").text(folio);
+		$("#CampoImportesPagados").attr("max", restante);
+		$("#GuardarImportesPagados").attr("importes", importes);
+		$("#GuardarImportesPagados").attr("restante", restante);
+		$("#GuardarImportesPagados").attr("pagados", pagados);
+		$("#GuardarImportesPagados").attr("attrid", attrid);
+		$("#GuardarImportesPagados").attr("idcliente", idcliente);
+		$("#spanPrecioImporte").text(precio);
+		$("#NombreProductoImporte").text(nombre);
+		$("#spanImportes").text(importes);
+		$("#spanPagados").text(pagados);
+		$("#spanRestantes").text(restante);
+		var totalpagado = parseFloat(pagados) * parseFloat(precio);
+		var totalrestante = parseFloat(restante) * parseFloat(precio);
+		$("#spanTotalPagados").text(totalpagado);
+		$("#spanTotalRestantes").text(totalrestante);
+
+		$("#ModalPagarImportes").modal("show");
+		moneda();
+		/*Swal.fire({
 	        title: '¿Estás seguro que quieres marcar este importe como pagado?',
 	        icon: 'info',
 	        showCancelButton: true,
@@ -37,7 +116,7 @@ jQuery(document).ready(function($) {
 	        confirmButtonText: '¡Si, continuar!'
 	    }).then((result) => {
 	        if (result.value) {
-	        	var data = "metodo=modificar&accion=importes&IDImporte="+$(btn).attr('attrid');
+	        	var data = "metodo=modificar&accion=importes&IDImporte="+$(btn).attr('attrid')+"&ImportesPagos="+$("#CampoImportesPagados").val();
 				$.ajax({
 					url: 'index.php',
 					type: 'POST',
@@ -52,7 +131,7 @@ jQuery(document).ready(function($) {
 							icon: 'success',
 							title: 'Importe pagado correctamente'
 						});
-						TablaProductosImporte(idventa);
+						TablaProductosImporte(idcliente);
 						TablaReporteImportes();
 					}else{
 						Swal.fire({
@@ -67,10 +146,16 @@ jQuery(document).ready(function($) {
 					console.log("Error ajax");
 				})
 				.always(function() {
-					unprogressBoton(btn);
+					$("#carga").hide();
 				});
 			}    
-		});	  
+		});	 */ 
+	});
+
+	$(document).on('keyup change', '#CampoImportesPagados', function() {
+		if (parseFloat($(this).val()) > parseFloat($("#GuardarImportesPagados").attr("restante"))) {
+			$(this).val(parseFloat($("#GuardarImportesPagados").attr("restante")));
+		}
 	});
 
 });
@@ -81,21 +166,11 @@ function TablaReporteImportes(){
 	ajaxMyDatatable({
 		"table": $("#TablaReporteImportes"), 
 		"colums": [
-			"Datos",
 			"Cliente",
-			"Total",
 			"Importes",
 			"Estatus",
-			"Acciones"
+			"Acciones",
 		], 
-		"totals":[
-			"Datos",
-			"Cliente",
-			"Total",
-			"Importes",
-			"Estatus",
-			"Acciones"
-		],
 		"sort": [
 			0,
 			"desc"
@@ -109,10 +184,11 @@ function TablaReporteImportes(){
 }
 
 
-function TablaProductosImporte(idventa){
+function TablaProductosImporte(idcliente){
 	ajaxMyDatatable({
 		"table": $("#TablaCargarProductosImporte"), 
 		"colums": [
+			'Venta',
 			'Producto',
 			'Cantidad',
 			'Importe',
@@ -121,7 +197,7 @@ function TablaProductosImporte(idventa){
 			'Acciones',
 		], 
 		"sort": [
-			1,
+			0,
 			"desc"
 		],
 		"url": "index.php", 
@@ -129,7 +205,7 @@ function TablaProductosImporte(idventa){
 			"metodo": "detalles",
 			"accion": "importes",
 			"tipo": "ConsultarProductosImporte",
-			"idventa": idventa
+			"idcliente": idcliente,
 		}
 	});
 }

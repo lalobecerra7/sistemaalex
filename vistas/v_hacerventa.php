@@ -1,8 +1,14 @@
-<br>
 <div id="content" class="card">
 	<div class="card-body">
         <div class="section">
             <div class="Principal">
+                <div class="row">
+                    <div class="col text-end mb-2">
+                        <button type="button" class="btn btn-outline-danger oculto" data-bs-toggle="modal" data-bs-target="#ModalCerrarCaja" id="BotonCerrarCaja" attrid="">
+                                <i class="fas fa-times"></i> Hacer corte de caja
+                        </button>
+                    </div>
+                </div>
                 <div class="row">
 					<div class="col-md-3 text-center">
 						#MostrarSucursal#
@@ -12,12 +18,17 @@
                             <i class="fas fa-user"></i> Seleccionar cliente
                         </button>
                     </div>
+                    <div class="col-md-2 BotonLimpiarCliente oculto d-grid mb-2">
+                        <button type="button" class="btn btn-outline-primary" id="CargarClientesModalDirecciones" attrid="">
+                            <i class="fas fa-map-marker"></i> Dirección
+                        </button>
+                    </div>
                     <div class="col-md-1 BotonLimpiarCliente oculto">
                         <button type="button" class="btn btn-outline-danger btn-sm" id="LimpiarClienteSeleccionado" attrid="">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <div class="offset-md-3 col-md-3 text-end d-grid mb-2 BotonSeleccionarPedido">
+                    <div class="col-md-3 text-end BotonSeleccionarPedido d-grid mb-2">
                         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ModalVerPedidosVenta" id="CargaPedidosModalVentas" folio="" attrid="">
                             <i class="fas fa-arrow-down"></i> Seleccionar pedido
                         </button>
@@ -67,6 +78,9 @@
                     <div class="col-md-3 text-center">
                         <h5 style="font-weight: bold;">Subtotal (Sin impuestos)</h5>
                         <h4 style="font-weight: bold;" class="dinero" id="MostrarSubtotalVenta">0.00</h4>
+                       <!--  <br>
+                        <h5 style="font-weight: bold;">Subtotal (Importes)</h5>
+                        <h4 style="font-weight: bold;" class="dinero" id="MostrarSubtotalImportes">0.00</h4> -->
                     </div>
                     <div class="col-md-9 text-center mb-2">
                         <div class="row" style="vertical-align: middle;">
@@ -131,22 +145,22 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12 table-responsive" id="divTablaProductos">
-                            <table class="table table-responsive table-striped text-center myDataTable" id="TablaPresentacionesProducto" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Abreviatura</th>
-                                        <th>Existencia</th>
-                                        <th>Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table> 
-                        </div>
-                    </div>    
+                <div class="row">
+                    <div class="col-12 table-responsive" id="divTablaProductos">
+                        <table class="table table-responsive table-striped text-center myDataTable" id="TablaPresentacionesProducto" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Abreviatura</th>
+                                    <th>Existencia</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table> 
+                    </div>
+                </div>    
             </div>
             <div class="modal-footer text-center">
                 <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
@@ -340,6 +354,69 @@
 </div>
 
 <!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalVerDireccionesCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Direcciones</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaDireccionesClientes" width="100%" style="font-size: 12px;">
+                        <thead>
+                            <th style="width: 20%;">Domicilio</th>
+                            <th style="width: 20%;">Colonia</th>
+                            <th style="width: 20%;">Ubicación</th>
+                        </thead>
+                        <tbody>
+                               
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalPermisoAdministrador" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+    <div class="modal-content">
+        <div class="modal-header bg-inverse bd-inverse-darken">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Solicita los datos a un administrador para poder continuar</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="FormAdmin">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="correoAdmin" name="correoAdmin" placeholder="Ingresa el correo del administrador">
+                            <label for="correoAdmin">Correo electrónico</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="contraAdmin" name="contraAdmin" placeholder="Ingresa la contraseña del administrador">
+                            <label for="contraAdmin">Contraseña</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                <button type="submit" class="btn btn-primary" id="ValidarAdministrador" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div> 
+
+<!--/////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalRealizarVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
     <div class="modal-content">
@@ -378,6 +455,34 @@
 			<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
             <button type="button" class="btn btn-primary" id="GuardarVenta" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
 	    </div>
+    </div>
+  </div>
+</div> 
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalCerrarCaja" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+    <div class="modal-content">
+        <div class="modal-header bg-inverse bd-inverse-darken">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Cerrar Caja / Hacer corte de caja</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="FormCerrarCaja">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="number" class="form-control" id="MontoCierreCaja" name="MontoCierreCaja" min="1" placeholder="Ingresa el monto de cierre de la caja">
+                            <label for="MontoCierreCaja">¿Cuánto dinero hay en caja?</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                <button type="submit" class="btn btn-primary" id="CerrarCajaVentas" attrid=""><i class="fa fa-check-circle"></i> <strong>Cerrar caja</strong></button>
+            </div>
+        </form>
     </div>
   </div>
 </div> 

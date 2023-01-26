@@ -368,7 +368,7 @@ $arregloVenta = '';
       }
     }
 
-    $sql2 = "SELECT ID_Venta, Estatus, FK_Usuario, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal) AS NombreSucursal, FK_Cliente, (SELECT Nombre FROM clientes WHERE ID_Cliente = FK_Cliente) AS NombreCliente, Descuento, Total, Tipo_Pago, Pago, Cambio, Notas, Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario FROM ventas WHERE ID_Venta = '".$_GET["id"]."'";
+    $sql2 = "SELECT ID_Venta, Estatus, FK_Usuario, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal) AS NombreSucursal, FK_Cliente, (SELECT Nombre FROM clientes WHERE ID_Cliente = FK_Cliente) AS NombreCliente, Descuento, Total, Total_Importes, Tipo_Pago, Pago, Cambio, Notas, Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario FROM ventas WHERE ID_Venta = '".$_GET["id"]."'";
 
     if($res=$con->query($sql2)){
       if ($res->num_rows > 0) {
@@ -387,6 +387,8 @@ $arregloVenta = '';
           'NombreCliente' => $row["NombreCliente"],
           'Descuento' => $row["Descuento"],
           'Total' => $row["Total"],
+          'Total_Importes' => $row["Total_Importes"],
+          'TotalFinal' => ($row["Total_Importes"] + $row["Total"]),
           'Tipo_Pago' => $row["Tipo_Pago"],
           'Pago' => $row["Pago"],
           'Cambio' => $row["Cambio"],
@@ -409,7 +411,7 @@ $arregloVenta = '';
       </p>
       <br class="oculto-impresion">
       <div class="centrado">
-        <?php echo "<h1>CREMASI</h1>"; ?>
+        <?php echo "<h1>MISCELÁNEA RIOS</h1>"; ?>
         <?php  
           $FechaHoy = date('Y-m-d H:i:s');
           echo '<p>'.$FechaHoy.'</p>'; 
@@ -576,7 +578,9 @@ $arregloVenta = '';
         echo '<p class="derecha" style="font-size: 15px;">Descuento: <b style="font-size: 15px;">$'.(round($sumaTotalDescuentos*100)/100).'</b></p>'; 
         echo '<p class="derecha" style="font-size: 15px;">Impuestos: <b style="font-size: 15px;">$'.(round(($sumaTotalImpuestos)*100)/100).'</b></p>'; 
         echo "</br>
-          <p class='derecha'><b style='font-size: 20px;'>TOTAL: $".(round($arregloVenta['Total']*100)/100)."</b></p>
+          <p class='derecha'><b style='font-size: 20px;'>TOTAL DE LA VENTA: $".(round($arregloVenta['Total']*100)/100)."</b></p>
+          <p class='derecha'><b style='font-size: 20px;'>TOTAL IMPORTES: $".(round($arregloVenta['Total_Importes']*100)/100)."</b></p>
+          <p class='derecha'><b style='font-size: 20px;'>TOTAL: $".(round($arregloVenta['TotalFinal']*100)/100)."</b></p>
           <p class='derecha'><b style='font-size: 14px;'>IMPORTE PAGADO: $".number_format($arregloVenta['Pago'], 2)."</b></p>
           <p class='derecha'><b style='font-size: 14px;'>CAMBIO: $".number_format($arregloVenta['Cambio'], 2)."</b></p>
         ";
@@ -616,7 +620,7 @@ $arregloVenta = '';
       <p class="centrado">***********************************************************</p>
       <?php 
 
-        $sqlImporte = "SELECT ID_Importe, FK_Venta, importes.FK_Producto, presentaciones.Importe AS ImportePresentacion, presentaciones.Nombre AS NombrePrese, presentaciones.Abreviatura AS AbrePrese, productos.Nombre_Unidad AS NombrePreseGenerico, productos.Abreviatura_Unidad AS AbrePreseGenerico, FK_Presentacion, productos.Descripcion, Cantidad, importes.Importe, Total, Estatus FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '".$arregloVenta['ID_Venta']."'";
+        $sqlImporte = "SELECT ID_Importe, Pagados, FK_Venta, importes.FK_Producto, presentaciones.Importe AS ImportePresentacion, presentaciones.Nombre AS NombrePrese, presentaciones.Abreviatura AS AbrePrese, productos.Nombre_Unidad AS NombrePreseGenerico, productos.Abreviatura_Unidad AS AbrePreseGenerico, FK_Presentacion, productos.Descripcion, Cantidad, importes.Importe, Total, Estatus FROM importes INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '".$arregloVenta['ID_Venta']."'";
         if($resImporte=$con->query($sqlImporte)){
           if ($resImporte->num_rows > 0) {
             echo ' <p class="centrado negra">IMPORTES</p>';
@@ -635,11 +639,8 @@ $arregloVenta = '';
             while($rowI = $resImporte->fetch_assoc()){
               $presentacionImporte = "";
               $totalImportes = 0;
-              if ($rowI["ImportePresentacion"] != "") {
-                $presentacionImporte = $rowI["ImportePresentacion"];
-              }else{
-                $presentacionImporte = $rowI["Importe"];
-              }
+              $presentacionImporte = $rowI["Importe"];
+              
               $totalImportes = $presentacionImporte * $rowI["Cantidad"];
 
               $nombrePresentacion = "";
@@ -648,12 +649,16 @@ $arregloVenta = '';
               }else{
                 $nombrePresentacion = $rowI["NombrePreseGenerico"];
               }
+              $totalPagado = 0;
+
+              $totalPagado = $rowI["Pagados"] * $presentacionImporte;
+
                echo '
                   <tr>
                    <th>'.$rowI["Descripcion"].' ('.$nombrePresentacion.')</th>
-                   <th>'.$rowI["Cantidad"].'</th>
+                   <th>'.$rowI["Cantidad"].' <br> Pagados: '.$rowI["Pagados"].'</th>
                    <th>$'.number_format($presentacionImporte, 2).'</th>  
-                   <th>$'.number_format($totalImportes, 2).'</th> 
+                   <th>$'.number_format($totalImportes, 2).'<br>Total pagado: $'.number_format($totalPagado, 2).'</th> 
                    <th>'.$rowI["Estatus"].'</th>
                   </tr>';
             }

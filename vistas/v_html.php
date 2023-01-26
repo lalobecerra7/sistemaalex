@@ -609,6 +609,13 @@
               #MenuFacturacion#
             </li>
 
+            <li class="menu-item cargarVista" carga="v_reporteCaja" titulo="Reporte de caja" id="cargaReporteCaja">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-money-check"></i>
+                <div data-i18n="Venta">Reporte de caja</div>
+              </a>
+            </li>
+
             #MenuUsuarios#
 
             <!--#MenuMovimientos#-->
@@ -1273,5 +1280,6 @@
     <script type="text/javascript" src="vistas/assets/js/importes.js"></script>
     <script type="text/javascript" src="vistas/assets/js/precios.js"></script>
     <script type="text/javascript" src="vistas/assets/js/reportes.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/reporteCaja.js"></script>
   </body>
 </html>

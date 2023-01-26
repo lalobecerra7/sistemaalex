@@ -25,9 +25,9 @@ include "controladores/c_facturacion.php";
 include "controladores/c_importes.php";
 include "controladores/c_precios.php";
 include "controladores/c_reportes.php";
+include "controladores/c_reporteCaja.php";
 
 class controller {
-
 
 	function _layouts(){
 			$omodelo = new m_modelo();

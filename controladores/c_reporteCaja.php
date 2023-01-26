@@ -1,5 +1,5 @@
 <?php
-class ventas {
+class reporteCaja {
 
 	public function _consultar(){
 		$omodelo = new m_modelo();

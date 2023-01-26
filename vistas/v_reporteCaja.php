@@ -1,4 +1,4 @@
-<div>
+<div class="">
 	<div id="content" class="card">
 		<div class="card-body">
 			<div class="row">
