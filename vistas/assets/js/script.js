@@ -27,6 +27,22 @@ function moneda() {
 
 jQuery(document).ready(function($) {
     $("#carga").hide();
+
+    setInterval(function() {
+        var data = "metodo=renovar";
+
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            data: data
+        })
+        .done(function(res) {
+            console.log("Sesion renovada");    
+        })
+        .fail(function(){
+            console.log("error ajax");
+        });
+    }, 60000*10);
     
     $(document).on('click', '.cargarVista', function() {
         var nombre = $(this).attr('carga'), titulo = $(this).attr('titulo'), id = $(this).attr('id'), atri = $(this).attr('atri'), pesta = $(this).attr('pesta'); 

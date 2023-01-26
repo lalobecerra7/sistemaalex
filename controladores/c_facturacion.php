@@ -21,7 +21,8 @@ class facturacion {
 				if(trim($row[0]['RFC']) == '' || trim($row[0]['Nombre']) == '' || trim($row[0]['Regimen']) == '' || trim($row[0]['Certificado']) == '' || trim($row[0]['Key_Cer']) == '' || trim($row[0]['Contrasena']) == ''){
 					echo "Error 2 Datos Facturacion";
 				}else{
-					$query1 = "SELECT ID_Venta, FK_Cliente, Razon_CFDI, Regimen_CFDI, clientes.Calle AS Calle_Cliente, clientes.No_Exterior AS No_Exterior_Cliente, clientes.No_Interior AS No_Interior_Cliente, clientes.Colonia AS Colonia_Cliente, clientes.Ciudad AS Ciudad_Cliente, clientes.Codigo_Postal AS Codigo_Postal_Cliente, clientes.Estado AS Estado_Cliente, clientes.Pais AS Pais_Cliente, RFC AS RFC_Cliente, sucursales.Nombre AS Sucursal, sucursales.Calle AS Calle_Sucursal, sucursales.No_Exterior AS No_Exterior_Sucursal, sucursales.No_Interior AS No_Interior_Sucursal, sucursales.Colonia AS Colonia_Sucursal, sucursales.CP AS CP_Sucursal, sucursales.Ciudad AS Ciudad_Sucursal, sucursales.Estado AS Estado_Sucursal, sucursales.Pais AS Pais_Sucursal, ventas.Descuento AS Descuento, Total, ventas.Fecha_Registro AS Fecha_Registro FROM ventas INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ID_Venta = '$id' AND Facturada = '0' AND Estatus = 'Completada'";
+					$query1 = "SELECT ID_Venta, FK_Cliente, Razon_CFDI, Regimen_CFDI, clientes.Calle AS Calle_Cliente, clientes.No_Exterior AS No_Exterior_Cliente, clientes.No_Interior AS No_Interior_Cliente, clientes.Colonia AS Colonia_Cliente, clientes.Ciudad AS Ciudad_Cliente, clientes.Codigo_Postal AS Codigo_Postal_Cliente, clientes.Estado AS Estado_Cliente, clientes.Pais AS Pais_Cliente, RFC AS RFC_Cliente, sucursales.Nombre AS Sucursal, sucursales.Calle AS Calle_Sucursal, sucursales.No_Exterior AS No_Exterior_Sucursal, sucursales.No_Interior AS No_Interior_Sucursal, sucursales.Colonia AS Colonia_Sucursal, sucursales.CP AS CP_Sucursal, sucursales.Ciudad AS Ciudad_Sucursal, sucursales.Estado AS Estado_Sucursal, sucursales.Pais AS Pais_Sucursal, ventas.Descuento AS Descuento, Total, ventas.Fecha_Registro AS Fecha_Registro FROM ventas INNER JOIN sucursales ON FK_Sucursal = 1 INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ID_Venta = '$id' AND Facturada = '0' AND Estatus = 'Completada'";
+					//ID_Sucursal
 					$row1 = $omodelo->_consultar($query1);
 					$numerofilas1 = $omodelo->numerofilas;
 
@@ -575,6 +576,106 @@ class facturacion {
 				echo "Error 12 Tabla datos generales";
 			}
 		}		
+	}
+
+	public function _detalles()
+	{
+		$omodelo = new m_modelo();
+		extract($_POST);
+		$fecha = date('Y-m-d H:i:s');
+
+		$id = $omodelo->link->real_escape_string($id);
+		$motivo = $omodelo->link->real_escape_string($motivo);
+		$folio = $omodelo->link->real_escape_string($folio);
+		$regresar = $omodelo->link->real_escape_string($regresar);
+
+		$client = new \GuzzleHttp\Client();
+
+		$query = "SELECT RFC, Nombre, Regimen, Certificado, Key_Cer, Contrasena FROM general WHERE ID_General = '1'";
+		$row = $omodelo->_consultar($query);
+		$numerofilas = $omodelo->numerofilas;
+
+		if($row == 'si'){
+			echo "Error 1: ".mysqli_error($omodelo->link);
+		}else{
+			if($numerofilas > 0){
+				$query1 = "SELECT ID_Venta, FK_Cliente, Razon_CFDI, Regimen_CFDI, clientes.Calle AS Calle_Cliente, clientes.No_Exterior AS No_Exterior_Cliente, clientes.No_Interior AS No_Interior_Cliente, clientes.Colonia AS Colonia_Cliente, clientes.Ciudad AS Ciudad_Cliente, clientes.Codigo_Postal AS Codigo_Postal_Cliente, clientes.Estado AS Estado_Cliente, clientes.Pais AS Pais_Cliente, RFC AS RFC_Cliente, ventas.FK_Sucursal AS FK_Sucursal, sucursales.Nombre AS Sucursal, sucursales.Calle AS Calle_Sucursal, sucursales.No_Exterior AS No_Exterior_Sucursal, sucursales.No_Interior AS No_Interior_Sucursal, sucursales.Colonia AS Colonia_Sucursal, sucursales.CP AS CP_Sucursal, sucursales.Ciudad AS Ciudad_Sucursal, sucursales.Estado AS Estado_Sucursal, sucursales.Pais AS Pais_Sucursal, ventas.Descuento AS Descuento, Total, ventas.Fecha_Registro AS Fecha_Registro, Version_CFDI, Fecha_Expedicion_CFDI, Sello_CFDI, Forma_Pago_CFDI, No_Certificado_CFDI, Certificado_CFDI, Moneda_CFDI, Tipo_Comprobante_CFDI, Exportacion_CFDI, Metodo_Pago_CFDI, Lugar_Expedicion_CFDI, Confirmacion_CFDI, Emisor_RFC_CFDI, Emisor_Nombre_CFDI, Emisor_Regimen_Fiscal_CFDI, Receptor_RFC_CFDI, Receptor_Nombre_CFDI, Receptor_Domicilio_CFDI, Receptor_Regimen_Fiscal_CFDI, Receptor_Uso_CFDI, UUID_CFDI, Fecha_Timbrado_CFDI, Rfc_ProvCertif_CFDI, Sello_CFD_CFDI, No_Certificado_SAT_CFDI, Sello_SAT_CFDI, Periodicidad_CFDI, Meses_CFDI, Ano_CFDI, Relacion_CFDI, Cadena_CFDI FROM ventas INNER JOIN sucursales ON ventas.FK_Sucursal = ID_Sucursal INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ID_Venta = '$id' AND Facturada = '1' AND  Estatus = 'Completada'";
+				$row1 = $omodelo->_consultar($query1);
+				$numerofilas1 = $omodelo->numerofilas;
+
+				if($row1 == 'si'){
+					echo "Error 2: ".mysqli_error($omodelo->link);
+				}else{
+					if($numerofilas1 > 0){
+						//echo base64_encode(file_get_contents(__DIR__.'../../vistas/assets/archivos/certificados/'.$row[0]['Certificado']));
+						//echo base64_encode(file_get_contents(__DIR__.'../../vistas/assets/archivos/certificados/'.$row[0]['Key_Cer']));
+
+						$response = $client->request('POST', 'https://testapi.facturoporti.com.mx/servicios/cancelar/csd', [
+							'body' => '{
+							  	"rfcEmisor": "'.$row[0]['RFC'].'",
+							  	"rfcReceptor": "'.$row1[0]['RFC_Cliente'].'",
+							  	"uuid": "'.$row1[0]['UUID_CFDI'].'",
+							  	"total": '.$row1[0]['Total'].',
+							  	"motivo": "'.$motivo.'",
+							  	"folioFiscalSustitucion": "'.$folio.'",
+							  	"sello": "'.substr($row1[0]['Sello_CFD_CFDI'], -8).'",
+							  	"certificado": "'.base64_encode(file_get_contents(__DIR__.'../../vistas/assets/archivos/certificados/'.$row[0]['Certificado'])).'",
+							  	"llavePrivada": "'.base64_encode(file_get_contents(__DIR__.'../../vistas/assets/archivos/certificados/'.$row[0]['Key_Cer'])).'",
+							  	"password": "'.$row[0]['Contrasena'].'"
+						  	}',
+						  	'headers' => [
+								'accept' => 'application/json',
+								'authorization' => 'Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoialYrdVVUYmtWNmUxRmNZb2cvNWtGQT09IiwibmJmIjoxNjY5NzY1MTM1LCJleHAiOjE2NzIzNTcxMzUsImlzcyI6IlNjYWZhbmRyYVNlcnZpY2lvcyIsImF1ZCI6IlNjYWZhbmRyYSBTZXJ2aWNpb3MiLCJJZEVtcHJlc2EiOiJqVit1VVRia1Y2ZTFGY1lvZy81a0ZBPT0iLCJJZFVzdWFyaW8iOiJidXlaYzFMWUl5VURaSGhGR3NqaGdRPT0ifQ.7NfXWvnQSy_2PtWEnzItEtZseWV0VqahTuAS3YPG8TE',
+								'content-type' => 'application/*+json',
+							],
+						]);
+
+						//echo $response->getBody();
+						$respuesta = json_decode($response->getBody(), true);	
+
+						//print_r($respuesta['mensaje']);
+						
+						$regreso = 0;
+						if($regresar == 'Si'){
+							$regreso = 1;
+						}
+
+						$query4 = "UPDATE ventas SET Estatus = 'Cancelada', Fecha_Cancelacion = '$fecha', Regreso_Inventario = '$regreso', Mensaje_Cancelada = '$respuesta[mensaje]' WHERE ID_Venta = '$id'";
+						$error2 = $omodelo->_insertar($query4);
+
+						if($error2 == 'si'){
+							echo "Error 3: ".mysqli_error($omodelo->link);
+						}else{
+							echo "Correcto";
+							$omodelo->movimiento($query4, $_SESSION['user_admin']['ID_Usuario']);
+
+							if ($regresar == "Si") {
+								$query2 = "SELECT ID_Detalle_Venta, FK_Producto, FK_Presentacion, Cantidad FROM detalles_ventas WHERE FK_Venta = '$id'";
+								$row2 = $omodelo->_consultar($query2);
+								$numerofilas2 = $omodelo->numerofilas;
+
+								if($row2 == 'si'){
+									echo "Error 4: ".mysqli_error($omodelo->link);
+								}else{
+									if($numerofilas > 0){
+										for($i=0; $i<$numerofilas2; $i++){
+											$query3 = "UPDATE inventario SET Cantidad = Cantidad + '".$row2[$i]["Cantidad"]."' WHERE FK_Producto = '".$row2[$i]["FK_Producto"]."' AND FK_Presentacion = '".$row2[$i]["FK_Presentacion"]."' AND FK_Sucursal = '".$row1[0]['FK_Sucursal']."'";
+											$error3 = $omodelo->_insertar($query3);
+												
+											if ($error3 == "si") {
+												echo "Error 5: ".mysqli_error($omodelo->link);
+											}
+										}
+									}
+								}
+							}
+						}
+					}else{
+						echo "Factura no encontrada o cancelada";
+					}
+				}
+			}
+		}
 	}
 }
 

@@ -46,6 +46,87 @@ function v_ventas() {
 			});         
         }
     });  
+
+    $('#formCancelarFactura').validate({
+        rules: {
+            motivoCancelarFactura: {
+                required: true
+            }
+        },
+        messages: {
+            motivoCancelarFactura: {
+                required: 'El motivo es requerido'
+            },
+            folioSustituye: {
+                required: 'El folio es requerido'            
+            }
+        },
+        submitHandler: function(form) { 
+        	var btn = $("#bFormCancelarFactura");
+			
+			Swal.fire({
+		        title: '¿Estás seguro que quieres cancelar la venta y la factura?',
+		        icon: 'warning',
+		        showCancelButton: true,
+		        confirmButtonColor: '#3085d6',
+		        cancelButtonColor: '#d33',
+		        cancelButtonText: '¡No, cancelar!',
+		        confirmButtonText: '¡Si, continuar!'
+		    }).then((result) => {
+		        if (result.value) {
+		        	Swal.fire({
+				        title: '¿Que deseas hacer con la existencia de los productos?',
+				        icon: 'warning',
+				        showCancelButton: true,
+				        confirmButtonColor: '#3085d6',
+				        cancelButtonColor: '#d33',
+				        cancelButtonText: 'Nada',
+				        confirmButtonText: 'Regresar a inventario'
+				    }).then((result) => {
+				    	var regresarInventario = "No";
+				        if (result.value) {
+				        	regresarInventario = "Si";
+				        }
+
+				        var data = "metodo=detalles&accion=facturacion&id="+$(btn).attr('attrid')+"&regresar="+regresarInventario+"&motivo="+$("#motivoCancelarFactura").val()+"&folio="+$("#folioSustituye").val();
+						
+						$.ajax({
+							url: 'index.php',
+							type: 'POST',
+							data: data,
+							beforeSend: function() {
+							    progressBoton(btn);
+							}
+						})
+						.done(function(res) {
+							if ($.trim(res) == "Correcto") {
+								Swal.fire({
+									icon: 'success',
+									title: 'Venta y factura cancelada correctamente'
+								});
+
+								TablaReporteVentas();
+							}else{
+								Swal.fire({
+									icon: 'error',
+									title: 'Oops...',
+									text: 'Error inesperado al cancelar la venta y la factura.'
+								});
+
+								console.log($.trim(res));
+							}
+						})
+						.fail(function() {
+							console.log("Error ajax");
+						})
+						.always(function() {
+							unprogressBoton(btn);
+						});
+				    });
+				}    
+			});
+        }
+    });  
 }
 
 jQuery(document).ready(function($) {
@@ -69,7 +150,13 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-
+	$(document).on('change', '#motivoCancelarFactura', function() {
+		if($(this).val() == '01'){
+			$("#folioSustituye").prop('required', true);
+		}else{
+			$("#folioSustituye").prop('required', false);
+		}
+	});
 
 	$(document).on('click', '#EliminarVenta', function() {
 		var btn = $(this);
@@ -118,7 +205,7 @@ jQuery(document).ready(function($) {
 		});	  
 	});
 
-	$(document).on('click', '#CancelarVenta', function() {
+	$(document).on('click', '.CancelarVenta', function() {
 		var btn = $(this);
 		Swal.fire({
 	        title: '¿Estás seguro que quieres cancelar la venta con el folio '+$(this).attr("folio")+'?',
@@ -181,6 +268,13 @@ jQuery(document).ready(function($) {
 			    });
 			}    
 		});	  
+	});
+
+	$(document).on('click', '.CancelarFactura', function() {
+		$("#folioSustituye").prop('required', false);
+		$("#bFormCancelarFactura").attr('attrID', $(this).attr('attrID'));
+		document.getElementById('formCancelarFactura').reset();
+		$("#modalCancelarFactura").modal('show');
 	});
 
 	$(document).on('click', '#ImprimirTicketVentaSinCaja', function() {
