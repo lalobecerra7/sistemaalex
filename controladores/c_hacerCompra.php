@@ -130,7 +130,6 @@ class hacerCompra {
 			}	  
 
 			$query = "SELECT ID_Producto, Codigo, Descripcion, Nombre_Unidad AS NombrePresentacion, Abreviatura_Unidad AS Abreviatura, Costo, IFNULL((SELECT SUM(Cantidad) FROM inventario WHERE FK_Presentacion = 0 AND inventario.FK_Producto = ID_Producto), 0) AS Existencia, (SELECT COUNT(*) FROM productos $busqueda) AS Num FROM productos $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
-
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -151,7 +150,7 @@ class hacerCompra {
 							$presentacion .= '<button style="margin: 2px;" type="button" class="btn btn-sm btn-primary bSelePresCom" presentacion="0" costo="'.$row[$i]['Costo'].'"><span>Sin presentación</span> <span class="'.$clase.'">$'.number_format($row[$i]['Costo'], 2).'</span></button>';
 						}
 
-						$query1 = "SELECT ID_Presentacion, Nombre, Abreviatura, Clave_CFDI, Costo, IFNULL((SELECT SUM(Cantidad) FROM inventario WHERE FK_Presentacion = ID_Presentacion AND FK_Producto = '".$row[$i]['ID_Producto']."), 0) AS Existencia FROM presentaciones WHERE FK_Producto = '".$row[$i]['ID_Producto']."' ORDER BY Nombre";
+						$query1 = "SELECT ID_Presentacion, Nombre, Abreviatura, Clave_CFDI, Costo, IFNULL((SELECT SUM(Cantidad) FROM inventario WHERE FK_Presentacion = ID_Presentacion AND FK_Producto = '".$row[$i]['ID_Producto']."'), 0) AS Existencia FROM presentaciones WHERE FK_Producto = '".$row[$i]['ID_Producto']."' ORDER BY Nombre";
 						$row1 = $omodelo->_consultar($query1);
 						$numerofilas1 = $omodelo->numerofilas;
 
