@@ -128,9 +128,9 @@ class hacerventa {
 					}else{
 						$idDetalleVenta = mysqli_insert_id($omodelo->link);
 					}
-
-					$cantidadImportes = $fila[7];
-					$precioImporte = $fila[8];
+					
+					$cantidadImportes = $fila[7] || 0;
+					$precioImporte = $fila[8] || 0;
 					$totaDeImporte = $cantidadImportes * $precioImporte;
 
 					if ($totaDeImporte > 0) {
