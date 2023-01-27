@@ -937,9 +937,9 @@ jQuery(document).ready(function($) {
 				var datos = res.split("~");
 				if ($.trim(datos[0]) == "Correcto") {
 					$("#ModalRealizarVenta").modal("hide");
-
+					//NOS QUEDAMOS AQUI EN CAMBIAR EL ESTATUS AL PEDIDO
 					if ($("#GuardarVenta").attr("idpedido") != "") {
-						Swal.fire({
+						/*Swal.fire({
 					        title: '¿Quieres eliminar el pedido con el folio '+$("#GuardarVenta").attr("foliopedido")+'?',
 					        icon: 'warning',
 					        showCancelButton: true,
@@ -984,7 +984,7 @@ jQuery(document).ready(function($) {
 								.fail(function() {
 									console.log("Error ajax");
 								});
-					        }else{
+					        }else{*/
 					        	Swal.fire({
 									icon: 'success',
 									title: 'Venta realizada correctamente',
@@ -1000,8 +1000,8 @@ jQuery(document).ready(function($) {
 					       		if ($("#GuardarVenta").attr("tipo") == "facturar") {
 									facturarVenta(idVenta);
 								}
-					        }
-					    });
+					        /*}
+					    });*/
 					}else{
 						Swal.fire({
 							icon: 'success',
@@ -1070,6 +1070,10 @@ jQuery(document).ready(function($) {
 		.fail(function() {
 			console.log("Error ajax");
 		});
+	});
+
+	$(document).on('click', '#bQuitarLimpiarPedido', function() {
+		$("#cargarHacerVenta").trigger("click");
 	});
 
 
@@ -1197,21 +1201,12 @@ jQuery(document).ready(function($) {
 		.done(function(res) {
 			console.log(res);
 			var datos = JSON.parse($.trim(res));
+			$("#bQuitarLimpiarPedido").removeClass("oculto");
 			$("#CargarClientesModalDirecciones").attr("iddireccion", "");
 			$("#CargarClientesModalVentas").html("Cliente: "+datos.data.NombreCliente+"<br>RFC: "+datos.data.RFCCliente);
 			$("#CargarClientesModalVentas").attr("attrid", datos.data.FK_Cliente);
 			$("#ModalVerPedidosVenta").modal("hide");
 			for (var i = 0; i < datos.data.Productos.data.length; i++) {
-				/*var impuestos = "";
-				for (var x = 0; x < datos.data.Productos.data[i].Impuestos.data.length; x++) {
-					impuestos += '\
-					<div class="form-check impuesto">\
-						<input class="form-check-input seleccionarImpuesto" checked type="checkbox" nombre="'+datos.data.Productos.data[i].Impuestos.data[x].Impuesto_CFDI+'" porcentaje="'+datos.data.Productos.data[i].Impuestos.data[x].Tasa_Cuota_CFDI+'" attrid="'+datos.data.Productos.data[i].Impuestos.data[x].ID_Impuesto+'" clavecfdi="'+datos.data.Productos.data[i].Impuestos.data[x].Clave_CFDI+'" tipofactor="'+datos.data.Productos.data[i].Impuestos.data[x].Tipo_Factor_CFDI+'" clase="'+datos.data.Productos.data[i].Impuestos.data[x].Tipo_Impuesto_CFDI+'">\
-						<label class="form-check-label" for="flexCheckDefault">\
-							'+datos.data.Productos.data[i].Impuestos.data[x].Impuesto_CFDI+' ('+datos.data.Productos.data[i].Impuestos.data[x].Tasa_Cuota_CFDI+'%)\
-						</label>\
-					</div>'
-				}*/
 				var presentacion = null;
 
 				if (datos.data.Productos.data[i].FK_Presentacion != 0) {

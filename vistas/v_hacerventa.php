@@ -29,8 +29,12 @@
                     </button>
                 </div>
                 <div class="col-md-3 text-end BotonSeleccionarPedido d-grid mb-2">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ModalVerPedidosVenta" id="CargaPedidosModalVentas" folio="" attrid="">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#ModalVerPedidosVenta" id="CargaPedidosModalVentas" folio="" attrid="">
                         <i class="fas fa-arrow-down"></i> Seleccionar pedido
+                    </button>
+                    <br>
+                    <button type="button" class="btn btn-outline-secondary btn-sm mt-3 oculto" id="bQuitarLimpiarPedido">
+                        <i class="fas fa-trash"></i> Quitar pedido
                     </button>
                 </div>
             </div>
