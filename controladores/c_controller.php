@@ -183,7 +183,7 @@ class controller {
 
 		$botonVentas = '';
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][1] == '1') {
-			$botonVentas = '<li class="menu-item active cargarVista" carga="v_ventas" titulo="Ventas" id="cargarVentas">
+			$botonVentas = '<li class="menu-item cargarVista" carga="v_ventas" titulo="Ventas" id="cargarVentas">
               <a href="javascript:void(0)"  class="menu-link">
                 <i class="menu-icon fas fa-shopping-cart"></i>
                 <div data-i18n="Ventas">Ventas</div>
@@ -299,10 +299,10 @@ class controller {
     $pagina = str_replace('#menuConfi#', $botonConfi, $pagina);
 
     $venta = '';
-    if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][2] == '1') {
+    /*if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][2] == '1') {
     	$venta = file_get_contents('vistas/v_hacerventa.php');
     	$venta = $this->remplazar($venta, 'v_hacerventa');
-    }
+    }*/
 
     $pagina = str_replace('#verVista#', $venta, $pagina);
 

@@ -215,7 +215,6 @@
                 <div class="col-md-12 col-sm-12 mb-3">
                     <div class="form-floating">
                         <select class="form-select" id="TipoPago" name="TipoPago">
-                            <option value="" selected>--Seleccione una opción--</option>
                             <option value="Efectivo">Efectivo</option>
                             <option value="Deposito">Depósito</option>
                             <option value="Cheque">Cheque</option>
