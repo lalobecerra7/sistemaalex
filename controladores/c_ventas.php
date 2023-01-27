@@ -110,9 +110,9 @@ class ventas {
 					}
 
 					$botonPermisosDevoluciones = "";
-					if ($row[$i]['Facturada'] == '1' && ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][6] == '1')) {
+					//if ($row[$i]['Facturada'] == '1' && ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][6] == '1')) {
 						$botonPermisosDevoluciones = $botonDevolucion;
-					}
+					//}
 
 					$botonPermisosTicket = "";
 					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][7] == '1') {

@@ -489,46 +489,97 @@
 
 <!--/////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalBalanceCaja" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+  <div class="modal-dialog modal-lg modal-dialog-centered" style="z-index: 9999 !important;">
     <div class="modal-content">
         <div class="modal-header bg-inverse bd-inverse-darken">
             <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Cerrar Caja / Hacer corte de caja</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <div class="row">
-                <div class="col-md-12 col-sm-12 mb-3">
-                    Monto de apertura: <span id="spanMontoApertura"></span>
+            <div class="row text-center">
+                <div class="col-md-6">
+                    Abrio caja
+                    <br>
+                    <span id="spanFechaAbrir"></span>
+                </div>
+                <div class="col-md-6">
+                    Cerro caja
+                    <br>
+                    <span id="spanFechaCerrar"></span>
+                </div>
+            </div>
+            <br>
+            <div class="row text-center">
+                <div class="col-md-6 col-sm-12">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                            Monto de apertura: <span class="dinero" id="spanMontoApertura"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;" >
+                            Monto de cierre: <span class="dinero" id="spanMontoCierre"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12 col-sm-12 mb-3">
-                    Monto de cierre: <span id="spanMontoCierre"></span>
+                <div class="col-md-4 text-center">
+                    Ingresos
+                    <h2 class="dinero" id="totalIngresosSpan"></h2>
+                </div>
+                <div class="col-md-4 text-center">
+                    Egresos
+                    <h2 class="dinero" id="totalEgresosSpan"></h2>
+                </div>
+                <div class="col-md-4 text-center">
+                    Utilidad
+                    <h2 class="dinero" id="totalUtilidadSpan"></h2>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12 col-sm-12 mb-3">
-                    Ingresos en Efectivo: <span id="spanIngresoEfectivo"></span>
+                <div class="col-md-6 text-center">
+                    <h2>Ingresos</h2>
+                    <br>
+                    <div class="text-start">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                Total de ventas: <span class="dinero" id="spanTotalVentas"></span>
+                            </div>
+                        </div>
+                        <div id="DivMostrarVentasDesplegada">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                Total de importes: <span class="dinero" id="spanTotalImportes"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 col-sm-12 mb-3">
-                    Ingresos en Transferencia bancaria: <span id="spanIngresoTransferencia"></span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 col-sm-12 mb-3">
-                    Total Ingresos: <span id="spanTotalIngresos"></span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 col-sm-12 mb-3">
-                    Total Egresos: <span id="spanTotalEgresos"></span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 col-sm-12 mb-3">
-                    Utilidad: <span id="spanUtilidadBalance"></span>
+                <div class="col-md-6 text-center">
+                    <h2>Egresos</h2>
+                    <br>
+                    <div class="text-start">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                Total de compras: <span class="dinero" id="spanTotalCompras"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                Total de pagos: <span class="dinero" id="spanTotalPagos"></span>
+                            </div>
+                        </div>
+                        <div id="DivMostrarPagosDesplegado">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                Total de devoluciones: <span class="dinero" id="spanTotalDevoluciones"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

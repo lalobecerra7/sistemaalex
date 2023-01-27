@@ -139,7 +139,7 @@ class hacerventa {
 
 					$cantidadImportes = $fila[7];
 					$precioImporte = $fila[8];
-					$totaDeImporte = $cantidadImportes * $precioImporte;
+					$totaDeImporte = doubleval($cantidadImportes) * doubleval($precioImporte);
 
 					if ($totaDeImporte > 0) {
 						$queryImportes = "INSERT INTO importes SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Cantidad = '$cantidadImportes', Importe = '".$precioImporte."', Total = '$totaDeImporte', Estatus = 'Se debe'";
@@ -1378,7 +1378,7 @@ class hacerventa {
 					if($error == 'si'){
 						echo "Error: ".mysqli_error($omodelo->link);
 					}else{
-						$query2 = "UPDATE detalles_caja SET Fecha_Cierre = '$fecha', Monto_Cierre = '$MontoCierre', FK_Usuario_Cierre = '".$_SESSION['user_admin']['ID_Usuario']."'";
+						$query2 = "UPDATE detalles_caja SET Fecha_Cierre = '$fecha', Monto_Cierre = '$MontoCierre', FK_Usuario_Cierre = '".$_SESSION['user_admin']['ID_Usuario']."' WHERE ID_Detalle_Caja = '".$row[0]["ID_Detalle_Caja"]."'";
 						$error2 = $omodelo->_insertar($query2);
 						if($error2 == 'si'){
 							echo "Error 2: ".mysqli_error($omodelo->link);
@@ -1391,7 +1391,7 @@ class hacerventa {
 		}else if($tipo == "ConsultarBalanceCerrar"){
 			$fecha = date('Y-m-d H:i:s'); 
 			$arreglo = [];
-			$query = "SELECT ID_Detalle_Caja, FK_Caja, Fecha_Abrir, Monto_Abrir, FK_Usuario_Abrir, Fecha_Cierre, Monto_Cierre, FK_Usuario_Cierre FROM detalles_caja WHERE ID_Detalle_Caja = '$IDDetalleCaja'";
+			$query = "SELECT ID_Detalle_Caja, FK_Caja, Fecha_Abrir, Monto_Abrir, FK_Usuario_Abrir, Fecha_Cierre, Monto_Cierre, FK_Usuario_Cierre, DATE_FORMAT(Fecha_Cierre, '%Y-%m-%d %r') AS FechaCerrar, DATE_FORMAT(Fecha_Abrir, '%Y-%m-%d %r') AS FechaAbrir FROM detalles_caja WHERE ID_Detalle_Caja = '$IDDetalleCaja'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			if($row == 'si'){
@@ -1454,7 +1454,7 @@ class hacerventa {
 
 					//************************** EGRESOS ************************//
 					//Compras al contado
-					$query2 = "SELECT Total FROM compras WHERE (Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row[0]["Fecha_Cierre"]."') AND Estatus = 1 AND Tipo_Compra = 'Contado'";
+					$query2 = "SELECT Total FROM compras WHERE Estatus = 1 AND Tipo_Compra = 'Contado' AND (Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row[0]["Fecha_Cierre"]."')";
 					$rowc = $omodelo->_consultar($query2);
 					$numerofilasc = $omodelo->numerofilas;
 					if($rowc == 'si'){
@@ -1474,7 +1474,7 @@ class hacerventa {
 					$pagosdeposito = 0;
 					$pagostarjeta = 0;
 					$pagostransferencia = 0;
-					$query2 = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row[0]["Fecha_Cierre"]."') AND Estatus = 0 AND Tipo_Compra = 'Credito'";
+					$query2 = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row[0]["Fecha_Abrir"]."' AND pagos.Fecha <= '".$row[0]["Fecha_Cierre"]."') AND Estatus = 0 AND Tipo_Compra = 'Credito'";
 					$rowp = $omodelo->_consultar($query2);
 					$numerofilasp = $omodelo->numerofilas;
 					if($rowp == 'si'){
@@ -1484,15 +1484,15 @@ class hacerventa {
 							for ($pagos=0; $pagos < $numerofilasp; $pagos++) { 
 								$totalEgresos += $rowp[$pagos]["Monto"];
 								$totalpagos += $rowp[$pagos]["Monto"];
-								if ($rowp[$pagos]["Efectivo"] == "") {
+								if ($rowp[$pagos]["Tipo_Pago"] == "Efectivo") {
 									$pagosefectivo = $rowp[$pagos]["Monto"];
-								}else if ($rowp[$pagos]["Deposito"] == "") {
+								}else if ($rowp[$pagos]["Tipo_Pago"] == "Deposito") {
 									$pagosdeposito = $rowp[$pagos]["Monto"];
-								}else if ($rowp[$pagos]["Cheque"] == "") {
+								}else if ($rowp[$pagos]["Tipo_Pago"] == "Cheque") {
 									$pagoscheque = $rowp[$pagos]["Monto"];
-								}else if ($rowp[$pagos]["TransferenciaBancaria"] == "") {
+								}else if ($rowp[$pagos]["Tipo_Pago"] == "TransferenciaBancaria") {
 									$pagostransferencia = $rowp[$pagos]["Monto"];
-								}else if ($rowp[$pagos]["TarjetaCreditoDebito"] == "") {
+								}else if ($rowp[$pagos]["Tipo_Pago"] == "TarjetaCreditoDebito") {
 									$pagostarjeta = $rowp[$pagos]["Monto"];	
 								}
 							}
@@ -1515,6 +1515,9 @@ class hacerventa {
 					}
 
 					$arreglo[] = array(
+						"ID_Detalle_Caja" => $row[0]["ID_Detalle_Caja"],
+						"Fecha_Abrir" => $row[0]["FechaAbrir"],
+						"Fecha_Cerrar" => $row[0]["FechaCerrar"],
 						"Monto_Abrir" => $row[0]["Monto_Abrir"],
 						"Monto_Cierre" => $row[0]["Monto_Cierre"],
 						"Total_Ingresos" => $totalIngresos,
