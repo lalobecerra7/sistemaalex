@@ -1,5 +1,5 @@
 <?php 
-	session_cache_expire(15); 
+	session_cache_expire(30);
 	session_start();
 	require "controladores/c_controller.php";
 	$controller = new controller();

@@ -199,3 +199,43 @@
     </div>
   </div>
 </div> 
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="modalCancelarFactura" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+    <div class="modal-content">
+        <div class="modal-header bg-inverse bd-inverse-darken">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Abrir Caja</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="formCancelarFactura">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <select name="motivoCancelarFactura" id="motivoCancelarFactura" class="form-control">
+                                <option value="">--Selecciona un motivo--</option>
+                                <option value="01">01 - Comprobante emitido con errores con relación</option>
+                                <option value="02">02 - Comprobante emitido con errores sin relación</option>
+                                <option value="03">03 - No se llevó a cabo la operación</option>
+                                <option value="04">04 - Operación nominativa relacionada en una factura global</option>
+                            </select>
+                            <label>Motivo</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="folioSustituye" name="folioSustituye" placeholder="Folio fiscal que sustituye">
+                            <label>Folio fiscal que sustituye</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
+                <button type="submit" class="btn btn-primary" id="bFormCancelarFactura" attrid=""><i class="fa fa-check-circle"></i> <strong>Cancelar Factura</strong></button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div> 

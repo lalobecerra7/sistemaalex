@@ -785,3 +785,7 @@ footer .breadcrumb .breadcrumb-item a:hover{
 	border-color: #C0C0C0;
 	outline: none;
 }
+
+.bg-menu-theme .menu-inner-shadow {
+	background: none !important;
+}
