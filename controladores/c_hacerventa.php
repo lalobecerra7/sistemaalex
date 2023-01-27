@@ -128,13 +128,21 @@ class hacerventa {
 					}else{
 						$idDetalleVenta = mysqli_insert_id($omodelo->link);
 					}
-					
-					$cantidadImportes = $fila[7] || 0;
-					$precioImporte = $fila[8] || 0;
+
+					if (!isset($fila[7])) {
+						$fila[7] = 0;
+					}
+
+					if (!isset($fila[8])) {
+						$fila[8] = 0;
+					}
+
+					$cantidadImportes = $fila[7];
+					$precioImporte = $fila[8];
 					$totaDeImporte = $cantidadImportes * $precioImporte;
 
 					if ($totaDeImporte > 0) {
-						$queryImportes = "INSERT INTO importes SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Cantidad = '$fila[7]', Importe = '".$precioImporte."', Total = '$totaDeImporte', Estatus = 'Se debe'";
+						$queryImportes = "INSERT INTO importes SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Cantidad = '$cantidadImportes', Importe = '".$precioImporte."', Total = '$totaDeImporte', Estatus = 'Se debe'";
 						$errorImportes = $omodelo->_insertar($queryImportes);
 
 						if ($errorImportes == "si") {
