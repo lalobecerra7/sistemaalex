@@ -22,7 +22,7 @@ class inventario {
 			}
 
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(Codigo, Descripcion, Nombre_Unidad, Abreviatura_Unidad, presentaciones.Nombre, Abreviatura, inventario.Cantidad, sucursales.Nombre) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(Codigo, Descripcion, IF(FK_Presentacion = 0, CONCAT(Nombre_Unidad, ' ', Abreviatura_Unidad), CONCAT(IFNULL((SELECT Nombre FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), ''), ' ', IFNULL((SELECT Abreviatura FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), ''))), inventario.Cantidad, sucursales.Nombre) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
@@ -34,7 +34,7 @@ class inventario {
 			$where = "WHERE inventario.FK_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal'];
 		}
 
-		$query =  "SELECT ID_Inventario, inventario.FK_Producto AS FK_Producto, Imagen, Codigo, Descripcion, Precio, Nombre_Unidad, Abreviatura_Unidad, inventario.FK_Presentacion AS FK_Presentacion, presentaciones.Nombre AS Presentacion, Abreviatura, inventario.Cantidad AS Existencia, inventario.FK_Sucursal AS FK_Sucursal, sucursales.Nombre AS Sucursal, IFNULL((SELECT SUM(Costo * Cantidad) FROM merma WHERE FK_Inventario = ID_Inventario), 0) AS Costo, productos.Costo AS Costo_Producto, presentaciones.Costo AS Costo_Presentacion, IFNULL((SELECT SUM(Cantidad) FROM merma WHERE FK_Inventario = ID_Inventario), 0) AS Merma, (SELECT COUNT(*) FROM inventario INNER JOIN productos ON inventario.FK_Producto = ID_Producto INNER JOIN sucursales ON inventario.FK_Sucursal = ID_Sucursal $where $busqueda) AS 'Num' FROM inventario INNER JOIN productos ON inventario.FK_Producto = ID_Producto INNER JOIN sucursales ON inventario.FK_Sucursal = ID_Sucursal LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion $where $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query =  "SELECT ID_Inventario, inventario.FK_Producto AS FK_Producto, Imagen, Codigo, Descripcion, Precio, Nombre_Unidad, Abreviatura_Unidad, inventario.FK_Presentacion AS FK_Presentacion, IFNULL((SELECT Nombre FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), '') AS Presentacion, IFNULL((SELECT Abreviatura FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), '') AS Abreviatura, inventario.Cantidad AS Existencia, inventario.FK_Sucursal AS FK_Sucursal, sucursales.Nombre AS Sucursal, IFNULL((SELECT SUM(Costo * Cantidad) FROM merma WHERE FK_Inventario = ID_Inventario), 0) AS Costo, productos.Costo AS Costo_Producto, IFNULL((SELECT Costo FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), '') AS Costo_Presentacion, IFNULL((SELECT SUM(Cantidad) FROM merma WHERE FK_Inventario = ID_Inventario), 0) AS Merma, (SELECT COUNT(*) FROM inventario INNER JOIN productos ON inventario.FK_Producto = ID_Producto INNER JOIN sucursales ON inventario.FK_Sucursal = ID_Sucursal $where $busqueda) AS 'Num' FROM inventario INNER JOIN productos ON inventario.FK_Producto = ID_Producto INNER JOIN sucursales ON inventario.FK_Sucursal = ID_Sucursal $where $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -227,8 +227,8 @@ class inventario {
 					if($error1 == 'si'){
 						echo "Error 2: ".mysqli_error($omodelo->link);
 					}else{
-						$query = "SELECT ID_Inventario FROM inventario WHERE FK_Producto = '$producto', FK_Presentacion = '$conversion[ID_Presentacion]', FK_Sucursal = '$sucursal'";
-						$row = $omodelo->_consultar($query);
+						$query2 = "SELECT ID_Inventario FROM inventario WHERE FK_Producto = '$producto' AND FK_Presentacion = '$conversion[ID_Presentacion]' AND FK_Sucursal = '$sucursal'";
+						$row = $omodelo->_consultar($query2);
 						$numerofilas = $omodelo->numerofilas;
 
 						if($row == 'si'){
@@ -479,7 +479,6 @@ class inventario {
 			$presentacion = $omodelo->link->real_escape_string($presentacion);
 			$sucursal = $omodelo->link->real_escape_string($sucursal);
 			$cantidad = $omodelo->link->real_escape_string($cantidad);
-			$cantidad = $omodelo->link->real_escape_string($cantidad);
 
 			$query = "UPDATE conversiones SET Cantidad_Origen = '$cantidad', FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
 			$error = $omodelo->_insertar($query);
@@ -681,7 +680,7 @@ class inventario {
 				}
 			}
 		
-			$query = "SELECT ID_Merma, Cantidad, Costo, Fecha_Registro AS Fecha, Fecha_Merma, DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r') AS FechaMerma, DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro,  Motivo, Foto, (SELECT COUNT(*) FROM merma $busqueda) AS 'Num' FROM merma WHERE FK_Inventario = '$inventario' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Merma, Cantidad, Costo, Fecha_Registro AS Fecha, Fecha_Merma, DATE_FORMAT(Fecha_Merma, '%d-%m-%Y %r') AS FechaMerma, DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro,  Motivo, Foto, (SELECT COUNT(*) FROM merma WHERE FK_Inventario = '$inventario' $busqueda) AS 'Num' FROM merma WHERE FK_Inventario = '$inventario' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 	
@@ -816,14 +815,14 @@ class inventario {
 				$separa = explode(' ', trim($buscar));
 				$busqueda = 'AND ';
 				for ($i=0; $i < count($separa); $i++) { 
-					$busqueda .= "CONCAT(Cantidad_Origen, DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r')) REGEXP '".$separa[$i]."'";
+					$busqueda .= "CONCAT(Cantidad_Origen, DATE_FORMAT(conversiones.Fecha_Registro, '%d-%m-%Y %r')) REGEXP '".$separa[$i]."'";
 					if($i < (count($separa)-1)){
 						$busqueda .= ' AND ';
 					}
 				}
 			}
 		
-			$query = "SELECT ID_Conversion, FK_Producto, FK_Presentacion_Origen, FK_Sucursal, Cantidad_Origen, conversiones.Fecha_Registro AS Fecha, FK_Usuario, DATE_FORMAT(conversiones.Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, Nombre_Unidad, Abreviatura_Unidad, (SELECT COUNT(*) FROM conversiones $busqueda) AS 'Num' FROM conversiones INNER JOIN productos ON FK_Producto = ID_Producto WHERE FK_Producto = '$producto' AND FK_Presentacion_Origen = '$presentacion' AND FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Conversion, FK_Producto, FK_Presentacion_Origen, FK_Sucursal, Cantidad_Origen, conversiones.Fecha_Registro AS Fecha, FK_Usuario, DATE_FORMAT(conversiones.Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, Nombre_Unidad, Abreviatura_Unidad, (SELECT COUNT(*) FROM conversiones WHERE FK_Producto = '$producto' AND FK_Presentacion_Origen = '$presentacion' AND FK_Sucursal = '$sucursal' $busqueda) AS 'Num' FROM conversiones INNER JOIN productos ON FK_Producto = ID_Producto WHERE FK_Producto = '$producto' AND FK_Presentacion_Origen = '$presentacion' AND FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 	
@@ -897,7 +896,7 @@ class inventario {
 				$separa = explode(' ', trim($buscar));
 				$busqueda = 'WHERE ';
 				for ($i=0; $i < count($separa); $i++) { 
-					$busqueda .= "CONCAT(Estatus, Detalles, DATE_FORMAT(Fecha_Traslado, '%d-%m-%Y'), DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r'), (SELECT Nombre FROM susucrsales WHERE ID_Sucursal = FK_Sucursal_Origen), (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Destino)) REGEXP '".$separa[$i]."'";
+					$busqueda .= "CONCAT(Estatus, Detalles, DATE_FORMAT(Fecha_Traslado, '%d-%m-%Y'), DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r'), (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Origen), (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Destino)) REGEXP '".$separa[$i]."'";
 					if($i < (count($separa)-1)){
 						$busqueda .= ' AND ';
 					}

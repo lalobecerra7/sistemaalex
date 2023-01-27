@@ -37,7 +37,7 @@ class m_modelo extends conexion{
 		$this->numerofilas = $result->num_rows;
 		if (!$result) {
 			$this->error = 'si';
-			echo "Se produjo un error en el modelo: ".mysqli_error($this->link);
+			echo "Se produjo un error en el modelo: ".mysqli_error($this->link).' '.$query;
 		}
         else{
 			$this->error = 'no';

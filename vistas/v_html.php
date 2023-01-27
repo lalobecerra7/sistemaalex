@@ -548,38 +548,6 @@
 
             #MenuSucursales#
 
-            #MenuProveedores#
-
-            #MenuClientes#
-
-            #MenuCompras#
-
-            <li class="menu-item cargarVista oculto" carga="v_hacerCompra" titulo="Compras" id="cargarHacerCompra">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-shopping-cart"></i>
-                <div data-i18n="Compras">Compras</div>
-              </a>
-            </li>
-
-            <li class="menu-item cargarVista oculto" carga="v_hacerventa" titulo="Ventas" id="cargarHacerVenta">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-shopping-cart"></i>
-                <div data-i18n="Venta">Hacer venta</div>
-              </a>
-            </li>
-
-            #MenuVentas#
-
-            #MenuImportes#
-
-            <li class="menu-item cargarVista" carga="v_hacerCompra" titulo="Hacer compra" id="cargarHacerCompra" hidden>
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-money-check"></i>
-              </a>
-            </li>
-
-            <!-- #MenuCajas# -->
-
             <!-- Layouts -->
             <li class="menu-item">
               #menuProd#
@@ -599,7 +567,38 @@
               </ul>
             </li>
 
-            #MenuImpuestos#
+            #MenuProveedores#
+
+            #MenuCompras#
+
+            #MenuClientes#
+
+            #MenuVentas#
+
+            <li class="menu-item cargarVista oculto" carga="v_hacerCompra" titulo="Compras" id="cargarHacerCompra">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-shopping-cart"></i>
+                <div data-i18n="Compras">Compras</div>
+              </a>
+            </li>
+
+            <li class="menu-item cargarVista oculto" carga="v_hacerventa" titulo="Ventas" id="cargarHacerVenta">
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-shopping-cart"></i>
+                <div data-i18n="Venta">Hacer venta</div>
+              </a>
+            </li>
+
+            #MenuImportes#
+
+            <li class="menu-item cargarVista" carga="v_hacerCompra" titulo="Hacer compra" id="cargarHacerCompra" hidden>
+              <a href="javascript:void(0)"  class="menu-link">
+                <i class="menu-icon fas fa-money-check"></i>
+              </a>
+            </li>
+
+            <!-- #MenuCajas# -->
+            #MenuUsuarios#
 
             <li class="menu-item">
               #menuConfi#
@@ -609,7 +608,7 @@
               #MenuFacturacion#
             </li>
 
-            #MenuUsuarios#
+            #MenuImpuestos#
 
             <!--#MenuMovimientos#-->
 

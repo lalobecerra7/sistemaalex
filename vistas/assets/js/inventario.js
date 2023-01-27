@@ -435,6 +435,7 @@ jQuery(document).ready(function($) {
     $(document).on('click', '.bModificarConversion', function() {
         var btn = $(this);
         var padre = $(this).parent().parent();
+        $("#conversionSucursal").html('');
         $("#conversionProducto").html($("#verDetalleProducto").html());
         const searchRegExp = new RegExp(',', 'g');
         $("#cantidadConversion").val(padre.children('td:eq(1)').text().replace(searchRegExp, ''));
