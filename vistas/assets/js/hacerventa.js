@@ -937,9 +937,8 @@ jQuery(document).ready(function($) {
 				var datos = res.split("~");
 				if ($.trim(datos[0]) == "Correcto") {
 					$("#ModalRealizarVenta").modal("hide");
-					//NOS QUEDAMOS AQUI EN CAMBIAR EL ESTATUS AL PEDIDO
 					if ($("#GuardarVenta").attr("idpedido") != "") {
-						/*Swal.fire({
+						Swal.fire({
 					        title: '¿Quieres eliminar el pedido con el folio '+$("#GuardarVenta").attr("foliopedido")+'?',
 					        icon: 'warning',
 					        showCancelButton: true,
@@ -984,7 +983,7 @@ jQuery(document).ready(function($) {
 								.fail(function() {
 									console.log("Error ajax");
 								});
-					        }else{*/
+					        }else{
 					        	Swal.fire({
 									icon: 'success',
 									title: 'Venta realizada correctamente',
@@ -1000,8 +999,8 @@ jQuery(document).ready(function($) {
 					       		if ($("#GuardarVenta").attr("tipo") == "facturar") {
 									facturarVenta(idVenta);
 								}
-					        /*}
-					    });*/
+					        }
+					    });
 					}else{
 						Swal.fire({
 							icon: 'success',
