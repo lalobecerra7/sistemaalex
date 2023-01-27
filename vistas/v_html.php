@@ -620,6 +620,11 @@
               </a>
 
               <ul class="menu-sub">
+                <li class="menu-item cargarVista" carga="v_reporteCaja" titulo="Reporte de caja" id="cargaReporteCaja">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Reporte de caja">Reporte de caja</div>
+                  </a>
+                </li>
                 <li class="menu-item cargarVista" carga="v_reporteProductos" titulo="Reporte productos" id="cargarReporteProductos">
                   <a href="javascript:void(0)"  class="menu-link">
                     <div data-i18n="Productos">Productos</div>
@@ -643,11 +648,6 @@
                 <li class="menu-item cargarVista" carga="v_reporteFinanzas" titulo="Reporte finanzas" id="cargarReporteFinanzas">
                   <a href="javascript:void(0)"  class="menu-link">
                     <div data-i18n="Finanzas">Finanzas</div>
-                  </a>
-                </li>
-                <li class="menu-item cargarVista" carga="v_reporteCaja" titulo="Reporte de caja" id="cargaReporteCaja">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Reporte de caja">Reporte de caja</div>
                   </a>
                 </li>
               </ul>
