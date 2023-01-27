@@ -1283,7 +1283,7 @@ function TablaClienteVenta(){
 		],
 		"sort": [
 			0,
-			"desc"
+			"asc"
 		],
 		"url": "index.php", 
 		"params":{

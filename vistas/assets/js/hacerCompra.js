@@ -17,7 +17,15 @@ jQuery(document).ready(function($) {
 		TablaProveedoresCompra();
 	});
 
+	$(document).on('click', '#bFolioOrdenCompra', function() {
+		$(this).addClass('oculto');
+		$('#cargarHacerCompra').trigger('click');
+	});
+
 	$(document).on('click', '#LimpiarProveedorSeleccionado', function() {
+		$("#MostrarCreditoProveedor").html('$0.00');
+		$("#MostrarCreditoRestante").text('$0.00');
+		$("#MostrarCreditoProveedor").attr("credito", '0.00');
 		$(".BotonLimpiarProveedor").addClass("oculto");
 		$("#CargarProveedoresModalC").html('<i class="fas fa-user"></i> Proveedor');
 	});
@@ -311,7 +319,7 @@ jQuery(document).ready(function($) {
 	    moneda();
 	}
 
-	$(document).on('click', '#TipoCompra', function() {
+	$(document).on('change', '#TipoCompra', function() {
 		if ($("#TipoCompra").val() == "Credito") {
 			id = $("#RealizarCompra").attr('idproveedor'); 
 			var data = "metodo=consultar&accion=hacerCompra&tipo=creditoProveedor&IDProveedor="+id;
@@ -730,7 +738,9 @@ jQuery(document).ready(function($) {
 			var datos = JSON.parse($.trim(res));
 
 			if(datos != null){
-				console.log(datos);
+				//console.log(datos);
+				$("#bFolioOrdenCompra").removeClass('oculto');
+				$("#folioOrdenCompra").html(datos.ID_Orden_Compra.padStart(8, '0'));
 				$("#Sucursales").val(datos.FK_Sucursal);
 				$(".BotonLimpiarProveedor").removeClass("oculto");
 				if(datos.FK_Proveedor != 1){
@@ -756,7 +766,7 @@ jQuery(document).ready(function($) {
 					";	
 				});
 
-				$("#tbodyTablaProductosAgregados").append(fila);
+				$("#tbodyTablaProductosAgregados").html(fila);
 				CalcularSubtotal();
 				$("#bGuardarOrden").attr('attrID', datos.ID_Orden_Compra);
 				$("#modalVerOrdenes").modal('hide');

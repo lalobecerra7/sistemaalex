@@ -284,6 +284,7 @@ $(document).on('click', '.CancelarCompra', function() {
 });
 
 $(document).on('click', '.PagoCom', function() {
+	document.getElementById('FormPagoCompra').reset();
 	var id = $(this).attr("attrid");
 	var data = "metodo=detalles&accion=compras&tipo=pago&IDCompra="+id;
 	

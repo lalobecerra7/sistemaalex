@@ -20,6 +20,10 @@
                         <button type="button" class="btn btn-outline-secondary" id="bVerOrdenes">
                             <i class="fas fa-file"></i> Ver Ordenes
                         </button>
+                        <br>
+                        <button type="button" class="btn btn-outline-secondary btn-sm oculto mt-3" id="bFolioOrdenCompra">
+                            <i class="fas fa-trash"></i> <span id="folioOrdenCompra"></span>
+                        </button>
                     </div>
 			    </div>
                 <br>
