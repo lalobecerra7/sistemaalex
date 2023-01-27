@@ -460,7 +460,7 @@ button.list-group-item-primary.active {
   color: #e0e1ff;
 }
 .menu.bg-primary .menu-inner-shadow {
-  background: linear-gradient(#696cff 41%, rgba(105, 108, 255, 0.11) 95%, rgba(105, 108, 255, 0));
+  background: linear-gradient(#696cff -100%, rgba(105, 108, 255, 0.11) 95%, rgba(105, 108, 255, 0));
 }
 .menu.bg-primary .menu-text {
   color: #fff;
@@ -693,7 +693,7 @@ a:hover {
   color: #697a8d;
 }
 .bg-menu-theme .menu-inner-shadow {
-  background: linear-gradient(#fff 41%, rgba(255, 255, 255, 0.11) 95%, rgba(255, 255, 255, 0));
+  background: linear-gradient(#fff -100%, rgba(255, 255, 255, 0.11) 95%, rgba(255, 255, 255, 0));
 }
 .bg-menu-theme .menu-text {
   color: #566a7f;

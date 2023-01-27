@@ -159,7 +159,7 @@ class importes {
 	public function _modificar(){
 		$omodelo = new m_modelo();
 		extract($_POST);
-
+		$fecha = date('Y-m-d H:i:s'); 
 		$IDImporte = $omodelo->link->real_escape_string($IDImporte);
 		$ImportesPagos = $omodelo->link->real_escape_string($ImportesPagos);
 
@@ -169,25 +169,31 @@ class importes {
 		if ($error == "si") {
 			echo "Error 1: ".mysqli_error($omodelo->link);
 		}else{
-			$query = "SELECT ID_Importe, FK_Venta, FK_Producto, FK_Presentacion, Cantidad, Importe, Total, Pagados, Estatus FROM importes WHERE ID_Importe = '$IDImporte'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-
-			if($row == 'si'){
-				echo "Error: ".mysqli_error($omodelo->link);
+			$querydetalle = "INSERT INTO detalles_importes SET Cantidad = '$ImportesPagos', FK_Importe = '$IDImporte', Fecha_Registro = '$fecha'";
+			$errordetalle = $omodelo->_insertar($querydetalle);
+			if ($errordetalle == "si") {
+				echo "Error detalles: ".mysqli_error($omodelo->link);
 			}else{
-				if($numerofilas > 0){
-					if ($row[0]["Pagados"] == $row[0]["Cantidad"]) {
-						$query = "UPDATE importes SET Estatus = 'Pagado' WHERE ID_Importe = '$IDImporte'";
-						$error = $omodelo->_insertar($query);
+				$query = "SELECT ID_Importe, FK_Venta, FK_Producto, FK_Presentacion, Cantidad, Importe, Total, Pagados, Estatus FROM importes WHERE ID_Importe = '$IDImporte'";
+				$row = $omodelo->_consultar($query);
+				$numerofilas = $omodelo->numerofilas;
 
-						if ($error == "si") {
-							echo "Error 1: ".mysqli_error($omodelo->link);
-						}	
+				if($row == 'si'){
+					echo "Error: ".mysqli_error($omodelo->link);
+				}else{
+					if($numerofilas > 0){
+						if ($row[0]["Pagados"] == $row[0]["Cantidad"]) {
+							$query = "UPDATE importes SET Estatus = 'Pagado' WHERE ID_Importe = '$IDImporte'";
+							$error = $omodelo->_insertar($query);
+
+							if ($error == "si") {
+								echo "Error 1: ".mysqli_error($omodelo->link);
+							}	
+						}
 					}
 				}
+				echo "Correcto";
 			}
-			echo "Correcto";
 		}	
 	}
 

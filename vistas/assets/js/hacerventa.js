@@ -81,12 +81,21 @@ function v_hacerventa() {
 				}
 			})
 			.done(function(res) {
-				if ($.trim(res) == "Correcto") {
-					Swal.fire({
-						icon: 'success',
-						title: 'Caja cerrada correctamente',
-					});
-					$("#cargarVentas").trigger("click");
+				var datos = res.split("~");
+				if ($.trim(datos[0]) == "Correcto") {
+					$("#ModalBalanceCaja").modal("show");
+					var data = "metodo=detalles&accion=hacerventa&tipo=ConsultarBalanceCerrar&IDDetalleCaja="+datos[1];
+					$.ajax({
+						url: 'index.php',
+						type: 'POST',
+						data: data
+					})
+					.done(function(res) {
+						console.log(res);
+					})
+					.fail(function() {
+						console.log("Error ajax");
+					})
 				}else{
 					Swal.fire({
 						icon: 'error',

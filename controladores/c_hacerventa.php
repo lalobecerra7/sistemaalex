@@ -1375,12 +1375,162 @@ class hacerventa {
 						if($error2 == 'si'){
 							echo "Error 2: ".mysqli_error($omodelo->link);
 						}else{
-							echo "Correcto";
+							echo "Correcto~".$row[0]["ID_Detalle_Caja"];
 						}
 					}
 				}
 			}
+		}else if($tipo == "ConsultarBalanceCerrar"){
+			$fecha = date('Y-m-d H:i:s'); 
+			$arreglo = [];
+			$query = "SELECT ID_Detalle_Caja, FK_Caja, Fecha_Abrir, Monto_Abrir, FK_Usuario_Abrir, Fecha_Cierre, Monto_Cierre, FK_Usuario_Cierre FROM detalles_caja WHERE ID_Detalle_Caja = '$IDDetalleCaja'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					$totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0; 
+					$totalcompras = 0; $totaldevoluciones = 0; $totalpagos = 0; 
 
+					//************************** INGRESOS ***********************//
+					//Ventas
+					//Importes
+					$totalvefectivo = 0;
+					$totalvcheque = 0;
+					$totalvdeposito = 0;
+					$totalvtarjeta = 0;
+					$totalvtransferencia = 0;
+					$totalvonline = 0;
+
+					$queryv = "SELECT Total, Tipo_Pago FROM ventas WHERE (Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row[0]["Fecha_Cierre"]."') AND Estatus = 'Completada'";
+					$rowv = $omodelo->_consultar($queryv);
+					$numerofilasv = $omodelo->numerofilas;
+					if($rowv == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasv > 0){
+							for ($ventas=0; $ventas < $numerofilasv; $ventas++) { 
+								$totalIngresos += $rowv[$ventas]["Total"];
+								$totalventas += $rowv[$ventas]["Total"];
+								if ($rowv[$ventas]["Tipo_Pago"] == "Efectivo") {
+									$totalvefectivo += $rowv[$ventas]["Total"];
+								}else if ($rowv[$ventas]["Tipo_Pago"] == "Deposito") {
+									$totalvdeposito += $rowv[$ventas]["Total"];
+								}else if ($rowv[$ventas]["Tipo_Pago"] == "Cheque") {
+									$totalvcheque += $rowv[$ventas]["Total"];
+								}else if ($rowv[$ventas]["Tipo_Pago"] == "TransferenciaBancaria") {
+									$totalvtransferencia += $rowv[$ventas]["Total"];
+								}else if ($rowv[$ventas]["Tipo_Pago"] == "TarjetaCreditoDebito") {
+									$totalvtarjeta += $rowv[$ventas]["Total"];
+								}else if ($rowv[$ventas]["Tipo_Pago"] == "PagoOnline") {
+									$totalvonline += $rowv[$ventas]["Total"];
+								}
+							}
+						}
+					}
+
+					$queryi = "SELECT detalles_importes.Cantidad AS CantidadImportes, importes.Importe AS PrecioImporte FROM detalles_importes INNER JOIN importes ON FK_Importe = ID_Importe WHERE (detalles_importes.Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND detalles_importes.Fecha_Registro <= '".$row[0]["Fecha_Cierre"]."')";
+					$rowi = $omodelo->_consultar($queryi);
+					$numerofilasi = $omodelo->numerofilas;
+					if($rowi == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasi > 0){
+							for ($importes=0; $importes < $numerofilasi; $importes++) { 
+								$totalIngresos += $rowi[$importes]["CantidadImportes"] * $rowi[$importes]["PrecioImporte"];
+								$totalimportes += $rowi[$importes]["CantidadImportes"] * $rowi[$importes]["PrecioImporte"];
+							}
+						}
+					}
+
+					//************************** EGRESOS ************************//
+					//Compras al contado
+					$query2 = "SELECT Total FROM compras WHERE (Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row[0]["Fecha_Cierre"]."') AND Estatus = 1 AND Tipo_Compra = 'Contado'";
+					$rowc = $omodelo->_consultar($query2);
+					$numerofilasc = $omodelo->numerofilas;
+					if($rowc == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasc > 0){
+							for ($compras=0; $compras < $numerofilasc; $compras++) { 
+								$totalEgresos += $rowc[$compras]["Total"];
+								$totalcompras += $rowc[$compras]["Total"];
+							}
+						}
+					}
+
+					//Pagos
+					$pagosefectivo = 0;
+					$pagoscheque = 0;
+					$pagosdeposito = 0;
+					$pagostarjeta = 0;
+					$pagostransferencia = 0;
+					$query2 = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row[0]["Fecha_Cierre"]."') AND Estatus = 0 AND Tipo_Compra = 'Credito'";
+					$rowp = $omodelo->_consultar($query2);
+					$numerofilasp = $omodelo->numerofilas;
+					if($rowp == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasp > 0){
+							for ($pagos=0; $pagos < $numerofilasp; $pagos++) { 
+								$totalEgresos += $rowp[$pagos]["Monto"];
+								$totalpagos += $rowp[$pagos]["Monto"];
+								if ($rowp[$pagos]["Efectivo"] == "") {
+									$pagosefectivo = $rowp[$pagos]["Monto"];
+								}else if ($rowp[$pagos]["Deposito"] == "") {
+									$pagosdeposito = $rowp[$pagos]["Monto"];
+								}else if ($rowp[$pagos]["Cheque"] == "") {
+									$pagoscheque = $rowp[$pagos]["Monto"];
+								}else if ($rowp[$pagos]["TransferenciaBancaria"] == "") {
+									$pagostransferencia = $rowp[$pagos]["Monto"];
+								}else if ($rowp[$pagos]["TarjetaCreditoDebito"] == "") {
+									$pagostarjeta = $rowp[$pagos]["Monto"];	
+								}
+							}
+						}
+					}
+
+					//Devoluciones
+					$querydev = "SELECT Total FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE (devoluciones.Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND devoluciones.Fecha_Registro <= '".$row[0]["Fecha_Cierre"]."')";
+					$rowdev = $omodelo->_consultar($querydev);
+					$numerofilasdev = $omodelo->numerofilas;
+					if($rowdev == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilasdev > 0){
+							for ($devol=0; $devol < $numerofilasdev; $devol++) { 
+								$totalEgresos += $rowdev[$devol]["Total"];
+								$totaldevoluciones += $rowdev[$devol]["Total"];
+							}
+						}
+					}
+
+					$arreglo[] = array(
+						"Monto_Abrir" => $row[0]["Monto_Abrir"],
+						"Monto_Cierre" => $row[0]["Monto_Cierre"],
+						"Total_Ingresos" => $totalIngresos,
+						"Total_Egresos" => $totalEgresos,
+						"Total_Ventas" => $totalventas,
+						"Total_Ventas_Efectivo" => $totalvefectivo,
+						"Total_Ventas_Deposito" => $totalvdeposito,
+						"Total_Ventas_Cheque" => $totalvcheque,
+						"Total_Ventas_TransferenciaBancaria" => $totalvtransferencia,
+						"Total_Ventas_TarjetaCreditoDebito" => $totalvtarjeta,
+						"Total_Ventas_PagoOnline" => $totalvonline,
+						"Total_Importes" => $totalimportes,
+						"Total_Compras" => $totalcompras,
+						"Total_Pagos" => $totalpagos,
+						"Total_Pagos_Efectivo" => $pagosefectivo,
+						"Total_Pagos_Deposito" => $pagosdeposito,
+						"Total_Pagos_Cheque" => $pagoscheque,
+						"Total_Pagos_TransferenciaBancaria" => $pagostransferencia,
+						"Total_Pagos_TarjetaCreditoDebito" => $pagostarjeta,
+						"Total_Devoluciones" => $totaldevoluciones,
+					);
+				}
+				echo json_encode($arreglo);
+			}
 		}
 		/*if($tipo == 'productos'){
 			$IDCompra = $omodelo->link->real_escape_string($IDCompra);

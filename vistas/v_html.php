@@ -609,13 +609,6 @@
               #MenuFacturacion#
             </li>
 
-            <li class="menu-item cargarVista" carga="v_reporteCaja" titulo="Reporte de caja" id="cargaReporteCaja">
-              <a href="javascript:void(0)"  class="menu-link">
-                <i class="menu-icon fas fa-money-check"></i>
-                <div data-i18n="Venta">Reporte de caja</div>
-              </a>
-            </li>
-
             #MenuUsuarios#
 
             <!--#MenuMovimientos#-->
@@ -651,6 +644,11 @@
                 <li class="menu-item cargarVista" carga="v_reporteFinanzas" titulo="Reporte finanzas" id="cargarReporteFinanzas">
                   <a href="javascript:void(0)"  class="menu-link">
                     <div data-i18n="Finanzas">Finanzas</div>
+                  </a>
+                </li>
+                <li class="menu-item cargarVista" carga="v_reporteCaja" titulo="Reporte de caja" id="cargaReporteCaja">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Reporte de caja">Reporte de caja</div>
                   </a>
                 </li>
               </ul>
