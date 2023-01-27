@@ -140,7 +140,6 @@ jQuery(document).ready(function($) {
 
 	$(document).on('click', '#TablaDireccionesClientes tbody tr', function() {
 		var idDireccion = $(this).attr("id");
-		console.log(idDireccion);
 		if (idDireccion != "No") {
 			var direccion = $(this).children("td:eq(0)").html();
 			$("#ModalVerDireccionesCliente").modal("hide");
@@ -221,7 +220,7 @@ jQuery(document).ready(function($) {
 		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProductoCantidad">
 		                        </div>
 		                    </td>
-	                        <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Total de importes: <br><span class='totalColumnaImporte dinero'></span></td>
+	                        <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Total de importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
 	                        <td>
 	                        	<button class="btn btn-sm btn-danger eliminarFila"><i class="fas fa-trash"></i></button>
 	                        </td>
@@ -299,7 +298,7 @@ jQuery(document).ready(function($) {
 		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProductoCantidad">
 		                        </div>
 	                        </td>
-	                        <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Total de importes: <br><span class='totalColumnaImporte dinero'></span></td>
+	                        <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Total de importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
 	                        <td>
 	                        	<button class="btn btn-sm btn-danger eliminarFila"><i class="fas fa-trash"></i></button></td>
 	                    </tr>`);
@@ -319,7 +318,6 @@ jQuery(document).ready(function($) {
     });
 
 	$(document).on('change keyup', '.campoCantidadImporte', function() {
-
 		if (parseFloat($(this).val()) > parseFloat($(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val())) {
 			$(this).val(parseFloat($(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val()));
 		}
@@ -332,8 +330,7 @@ jQuery(document).ready(function($) {
 			importe = $(this).parent().parent().attr("importegeneral");	
 		}
 		var total = parseFloat(cantidad) * parseFloat(importe);
-
-		$(this).parent().parent().children("td:eq(6)").find(".totalColumnaImporte").text(total || 0);
+		$(this).parent().parent().children("td:eq(6)").find(".totalColumnaImporte").text(parseFloat(total) || 0);
 		moneda();	
 		CalcularSubtotalVenta();
 	});
@@ -375,7 +372,10 @@ jQuery(document).ready(function($) {
 			}
 		});
 		var totalfinal = parseFloat(total) + parseFloat(totalImpuestos);
+		/*console.log($(this).parent().find(".campoCantidadImporte").length);
+		if ($(this).parent().find(".campoCantidadImporte").length > 0) {*/
 		$(".campoCantidadImporte").trigger("keyup");
+
 		$(this).parent().parent().children("td:eq(6)").find(".totalColumna").text(totalfinal);
 		$(this).parent().parent().children("td:eq(6)").find(".totalColumna").attr("subtotal", total);
 		CalcularSubtotalVenta();
@@ -719,7 +719,6 @@ jQuery(document).ready(function($) {
 				$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 					sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
 				});
-				console.log(res+" y  "+sumadescuento);
 				if ($.trim(res) != "Administrador" && sumadescuento > 0) {
 					$("#ModalPermisoAdministrador").modal("show");
 				}else{
@@ -915,7 +914,6 @@ jQuery(document).ready(function($) {
 			$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 				sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
 			});
-			console.log(res+" y  "+sumadescuento);
 			if ($.trim(res) != "Administrador" && sumadescuento > 0) {
 				$("#ModalPermisoAdministrador").modal("show");
 			}else{
@@ -1116,7 +1114,7 @@ jQuery(document).ready(function($) {
 			                <input type="number" value="`+datos.data.Productos.data[i].Descuento+`" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProductoCantidad">
 			            </div>
 		            </td>
-		            <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Total de importes: <br><span class='totalColumnaImporte dinero'></span></td>
+		            <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Total de importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
 		            <td>
 						<button class="btn btn-sm btn-danger eliminarFila"><i class="fas fa-trash"></i></button></td>
 		        </tr>`);
