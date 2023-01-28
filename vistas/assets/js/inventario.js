@@ -539,6 +539,7 @@ jQuery(document).ready(function($) {
                         <td attrID="0">`+datos.Presentacion+`<br></td>
                         <td><span class="cantidad">`+datos.Existencia+`</span></td>
                         <td><input type="number" step="any" class="form-control" value="1"></td>
+                        <td><button class="btn btn-sm btn-danger eliminarFila"><i class="fas fa-trash"></i></button></td>
                     </tr>`);
                     
                     moneda();
@@ -552,6 +553,10 @@ jQuery(document).ready(function($) {
         }).always(function() {
             $("#carga").hide();
         });
+    });
+
+    $(document).on('click', '.eliminarFila', function() {
+        $(this).parent().parent().remove();
     });
 
     var filaTraslado = null;
@@ -620,6 +625,7 @@ jQuery(document).ready(function($) {
                 <td attrID="`+$(this).attr('presentacion')+`"><button type="button" class="btn btn-sm btn-secondary bCambiarPresTras" attrID="`+padre.attr('id')+`" title="Cambiar presentación">`+$(this).children('span:eq(1)').text()+`</button><br></td>
                 <td><span class="cantidad">`+$(this).children('span:eq(0)').text()+`</span></td>
                 <td><input type="number" step="any" class="form-control" value="1"></td>
+                <td><button class="btn btn-sm btn-danger eliminarFila"><i class="fas fa-trash"></i></button></td>
             </tr>`);
             
             $("#ModalVerProductosTraslados").modal('hide');

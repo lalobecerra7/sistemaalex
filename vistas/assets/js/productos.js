@@ -261,7 +261,6 @@ function TablaProductos(){
         "colums": [
             "Codigo",
 	        "Descripcion",
-		    "Costo",
 		    "Precio",
             "Detalles",
 		    "Acciones"

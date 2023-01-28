@@ -21,7 +21,6 @@
 		          <thead>
 		            <th style="width: 15%;">Código</th>
 		            <th style="width: 15%;">Descripción</th>
-		            <th style="width: 10%;">Costo</th>
 		            <th style="width: 25%;">Precio</th>
 		            <th style="width: 30%;" orden="No">Detalles</th>
 		            <th style="width: 5%;" orden="No">Acciones</th>

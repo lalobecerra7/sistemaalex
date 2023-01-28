@@ -328,6 +328,7 @@
 							   		<th>Presentacion</th>
 							   		<th>Existencia</th>
 							   		<th>Cantidad</th>
+							   		<th></th>
 							   	</tr>
 							</thead>
 							<tbody id="verProductosTras">

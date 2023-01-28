@@ -896,14 +896,14 @@ class inventario {
 				$separa = explode(' ', trim($buscar));
 				$busqueda = 'WHERE ';
 				for ($i=0; $i < count($separa); $i++) { 
-					$busqueda .= "CONCAT(Estatus, Detalles, DATE_FORMAT(Fecha_Traslado, '%d-%m-%Y'), DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r'), (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Origen), (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Destino)) REGEXP '".$separa[$i]."'";
+					$busqueda .= "CONCAT(Estatus, Detalles, LPAD(ID_Traslado, 8, 0), DATE_FORMAT(Fecha_Traslado, '%d-%m-%Y'), DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r'), (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Origen), (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Destino)) REGEXP '".$separa[$i]."'";
 					if($i < (count($separa)-1)){
 						$busqueda .= ' AND ';
 					}
 				}
 			}
 		
-			$query = "SELECT ID_Traslado, Estatus, Detalles, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Origen) AS Origen, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Destino) AS Destino, Fecha_Traslado AS FechaTraslado, DATE_FORMAT(Fecha_Traslado, '%d-%m-%Y') AS Fecha_Traslado, Fecha_Registro AS Fecha, DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, FK_Usuario, (SELECT COUNT(*) FROM traslados $busqueda) AS 'Num' FROM traslados $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Traslado, LPAD(ID_Traslado, 8, 0) AS FolioTraslado, Estatus, Detalles, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Origen) AS Origen, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Destino) AS Destino, Fecha_Traslado AS FechaTraslado, DATE_FORMAT(Fecha_Traslado, '%d-%m-%Y') AS Fecha_Traslado, Fecha_Registro AS Fecha, DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, FK_Usuario, (SELECT COUNT(*) FROM traslados $busqueda) AS 'Num' FROM traslados $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 	
@@ -937,7 +937,7 @@ class inventario {
 
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Traslado'],
-							'Fecha' => $row[$i]['Fecha_Registro'],
+							'Fecha' => $row[$i]['Fecha_Registro']."<br>Folio: <b>".$row[$i]['FolioTraslado']."</b>",
 							'FechaTraslado' => $row[$i]['Fecha_Traslado'],
 							'Origen' => $row[$i]['Origen'],
 							'Destino' => $row[$i]['Destino'],
