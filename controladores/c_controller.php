@@ -301,7 +301,7 @@ class controller {
     $botonReporteCaja = '';
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][1] == '1') {
 			$botonReporteCaja = '<li class="menu-item cargarVista" carga="v_reporteCaja" titulo="Reporte de caja" id="cargaReporteCaja">
-                  <a href="javascript:void(0)"  class="menu-link">
+                  <a href="javascript:void(0)" class="menu-link">
                     <div data-i18n="Reporte de caja">Reporte de caja</div>
                   </a>
                 </li>';
@@ -309,9 +309,9 @@ class controller {
 		$pagina = str_replace('#reportesCaja#', $botonReporteCaja, $pagina);
     
 		$botonReporteProductos = '';
-		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][1] == '1') {
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][2] == '1') {
 			$botonReporteProductos = '<li class="menu-item cargarVista" carga="v_reporteProductos" titulo="Reporte productos" id="cargarReporteProductos">
-                  <a href="javascript:void(0)"  class="menu-link">
+                  <a href="javascript:void(0)" class="menu-link">
                     <div data-i18n="Productos">Productos</div>
                   </a>
                 </li>';
@@ -319,9 +319,9 @@ class controller {
 		$pagina = str_replace('#reportesProductos#', $botonReporteProductos, $pagina);
 
     $botonReporteClientes = '';
-		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][1] == '1') {
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][3] == '1') {
 			$botonReporteClientes = '<li class="menu-item cargarVista" carga="v_reporteClientes" titulo="Reporte clientes" id="cargarReporteClientes">
-                  <a href="javascript:void(0)"  class="menu-link">
+                  <a href="javascript:void(0)" class="menu-link">
                     <div data-i18n="Clientes">Clientes</div>
                   </a>
                 </li>';
@@ -329,9 +329,9 @@ class controller {
 		$pagina = str_replace('#reportesClientes#', $botonReporteClientes, $pagina);
 
 		$botonReporteVentas = '';
-		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][1] == '1') {
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][4] == '1') {
 			$botonReporteClientes = '<li class="menu-item cargarVista" carga="v_reporteVentas" titulo="Reporte ventas" id="cargarReporteVentas">
-                  <a href="javascript:void(0)"  class="menu-link">
+                  <a href="javascript:void(0)" class="menu-link">
                     <div data-i18n="Ventas">Ventas</div>
                   </a>
                 </li>';
@@ -339,9 +339,9 @@ class controller {
 		$pagina = str_replace('#reportesVentas#', $botonReporteVentas, $pagina);
 
 		$botonReporteCompras = '';
-		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][1] == '1') {
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][5] == '1') {
 			$botonReporteCompras = '<li class="menu-item cargarVista" carga="v_reporteCompras" titulo="Reporte compras" id="cargarReporteCompras">
-                  <a href="javascript:void(0)"  class="menu-link">
+                  <a href="javascript:void(0)" class="menu-link">
                     <div data-i18n="Compras">Compras</div>
                   </a>
                 </li>';
@@ -349,9 +349,9 @@ class controller {
 		$pagina = str_replace('#reportesCompras#', $botonReporteCompras, $pagina);
 
 		$botonReporteFinanzas = '';
-		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][1] == '1') {
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][6] == '1') {
 			$botonReporteFinanzas = '<li class="menu-item cargarVista" carga="v_reporteFinanzas" titulo="Reporte finanzas" id="cargarReporteFinanzas">
-                  <a href="javascript:void(0)"  class="menu-link">
+                  <a href="javascript:void(0)" class="menu-link">
                     <div data-i18n="Finanzas">Finanzas</div>
                   </a>
                 </li>';
