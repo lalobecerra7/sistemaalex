@@ -340,6 +340,9 @@
 					<div class="col-md-12 col-sm-12 mb-2">
 						País: <span style="font-weight: bold;" id="DatosPais"></span>
 					</div>
+					<div class="col-md-12 col-sm-12 mb-2">
+						Referencia visual / Detalles: <span style="font-weight: bold;" id="DatosReferencia"></span>
+					</div>
 					<hr>
 					<h6>Datos del contacto</h6>
 					<div class="col-md-12 col-sm-12 mt-2">

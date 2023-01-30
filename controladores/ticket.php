@@ -480,7 +480,7 @@ $arregloVenta = '';
             $contador = 0;
             $sumaTotalImpuestos = 0;
             $sumaTotalDescuentos = 0;
-            $sql1 = "SELECT productos.FK_Categoria, categorias.Nombre FROM detalles_ventas LEFT JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion LEFT JOIN categorias ON productos.FK_Categoria = ID_Categoria WHERE FK_Venta = '".$arregloVenta['ID_Venta']."' GROUP BY FK_Categoria";
+            $sql1 = "SELECT productos.FK_Categoria, categorias.Nombre FROM detalles_ventas LEFT JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion LEFT JOIN categorias ON productos.FK_Categoria = ID_Categoria WHERE FK_Venta = '".$arregloVenta['ID_Venta']."' GROUP BY FK_Categoria ORDER BY categorias.Nombre ASC";
             if($res1=$con->query($sql1)){
               if ($res1->num_rows > 0) {
                 while($row1 = $res1->fetch_assoc()){

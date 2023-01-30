@@ -71,11 +71,11 @@ class clientes {
 						$direccionfiscal = "No hay datos registrados";
 					}
 
-					$queryDirecciones = "SELECT ID_Detalle_Cliente, FK_Cliente, Calle, No_Exterior, No_Interior, Colonia, Codigo_Postal, Ciudad, Estado, Pais, Nombre_Contacto, Puesto_Contacto, Email_Contacto, Telefono_Contacto FROM detalles_clientes WHERE FK_Cliente = '".$row[$i]['ID_Cliente']."'";
+					$queryDirecciones = "SELECT ID_Detalle_Cliente, FK_Cliente, Calle, No_Exterior, No_Interior, Colonia, Codigo_Postal, Ciudad, Estado, Pais, Detalles, Nombre_Contacto, Puesto_Contacto, Email_Contacto, Telefono_Contacto FROM detalles_clientes WHERE FK_Cliente = '".$row[$i]['ID_Cliente']."'";
 					$rowDirecciones = $omodelo->_consultar($queryDirecciones);
 					$numerofilasDirecciones = $omodelo->numerofilas;
 					for ($x=0; $x < $numerofilasDirecciones; $x++) { 
-						$direccion .= "<button class='btn btn-link verDatosDireccion' Calle='".$rowDirecciones[$x]['Calle']."' No_Exterior='".$rowDirecciones[$x]['No_Exterior']."' No_Interior='".$rowDirecciones[$x]['No_Interior']."' Colonia='".$rowDirecciones[$x]['Colonia']."' Codigo_Postal='".$rowDirecciones[$x]['Codigo_Postal']."' Ciudad='".$rowDirecciones[$x]['Ciudad']."' Estado='".$rowDirecciones[$x]['Estado']."' Pais='".$rowDirecciones[$x]['Pais']."' Nombre_Contacto='".$rowDirecciones[$x]['Nombre_Contacto']."' Puesto_Contacto='".$rowDirecciones[$x]['Puesto_Contacto']."' Email_Contacto='".$rowDirecciones[$x]['Email_Contacto']."' Telefono_Contacto='".$rowDirecciones[$x]['Telefono_Contacto']."'  title='Ver datos de la dirección' attrid='".$rowDirecciones[$x]['ID_Detalle_Cliente']."' >
+						$direccion .= "<button class='btn btn-link verDatosDireccion' Calle='".$rowDirecciones[$x]['Calle']."' No_Exterior='".$rowDirecciones[$x]['No_Exterior']."' No_Interior='".$rowDirecciones[$x]['No_Interior']."' Colonia='".$rowDirecciones[$x]['Colonia']."' Codigo_Postal='".$rowDirecciones[$x]['Codigo_Postal']."' Ciudad='".$rowDirecciones[$x]['Ciudad']."' Estado='".$rowDirecciones[$x]['Estado']."' Pais='".$rowDirecciones[$x]['Pais']."' Nombre_Contacto='".$rowDirecciones[$x]['Nombre_Contacto']."' Puesto_Contacto='".$rowDirecciones[$x]['Puesto_Contacto']."' Email_Contacto='".$rowDirecciones[$x]['Email_Contacto']."' Telefono_Contacto='".$rowDirecciones[$x]['Telefono_Contacto']."' Detalles='".$rowDirecciones[$x]['Detalles']."'  title='Ver datos de la dirección' attrid='".$rowDirecciones[$x]['ID_Detalle_Cliente']."' >
 						Contacto: ".$rowDirecciones[$x]['Nombre_Contacto']." <br>
 						Dirección: ".$rowDirecciones[$x]['Calle']." ".$rowDirecciones[$x]['No_Exterior']."</button><br>";
 					}
@@ -211,7 +211,7 @@ class clientes {
 			$direcciones = explode(",", $direcciones);
 			for ($i=0; $i < sizeof($direcciones) - 1; $i++) { 
 				$datosdireccion = explode("~", $direcciones[$i]);
-				$queryDirecciones = "INSERT INTO detalles_clientes SET FK_Cliente = '$IDCliente', Calle = '$datosdireccion[0]', No_Exterior = '$datosdireccion[1]', No_Interior = '$datosdireccion[2]', Colonia = '$datosdireccion[4]', Codigo_Postal = '$datosdireccion[3]', Ciudad = '$datosdireccion[5]', Estado = '$datosdireccion[6]', Pais = '$datosdireccion[7]', Nombre_Contacto = '$datosdireccion[8]', Puesto_Contacto = '$datosdireccion[9]', Email_Contacto = '$datosdireccion[10]', Telefono_Contacto  = '$datosdireccion[11]'";
+				$queryDirecciones = "INSERT INTO detalles_clientes SET FK_Cliente = '$IDCliente', Calle = '$datosdireccion[0]', No_Exterior = '$datosdireccion[1]', No_Interior = '$datosdireccion[2]', Colonia = '$datosdireccion[4]', Codigo_Postal = '$datosdireccion[3]', Ciudad = '$datosdireccion[5]', Estado = '$datosdireccion[6]', Pais = '$datosdireccion[7]', Nombre_Contacto = '$datosdireccion[8]', Puesto_Contacto = '$datosdireccion[9]', Email_Contacto = '$datosdireccion[10]', Telefono_Contacto  = '$datosdireccion[11]', Detalles  = '$datosdireccion[12]'";
 				$errorDirecciones = $omodelo->_insertar($queryDirecciones);	
 
 				if ($errorDirecciones == "si") {
@@ -308,14 +308,14 @@ class clientes {
 					echo "Error consultar archivo: ".mysqli_error($omodelo->link);
 				}else{
 					if($numerofilasPrese > 0){
-						$queryDirecciones = "UPDATE detalles_clientes SET No_Interior = '$datosdireccion[2]', Colonia = '$datosdireccion[4]', Codigo_Postal = '$datosdireccion[3]',  Nombre_Contacto = '$datosdireccion[8]', Puesto_Contacto = '$datosdireccion[9]', Email_Contacto = '$datosdireccion[10]', Telefono_Contacto  = '$datosdireccion[11]' WHERE FK_Cliente = '$IDCliente' AND Calle = '$datosdireccion[0]' AND No_Exterior = '$datosdireccion[1]' AND Ciudad = '$datosdireccion[5]' AND Estado = '$datosdireccion[6]' AND Pais = '$datosdireccion[7]'";
+						$queryDirecciones = "UPDATE detalles_clientes SET No_Interior = '$datosdireccion[2]', Colonia = '$datosdireccion[4]', Codigo_Postal = '$datosdireccion[3]',  Nombre_Contacto = '$datosdireccion[8]', Puesto_Contacto = '$datosdireccion[9]', Email_Contacto = '$datosdireccion[10]', Telefono_Contacto  = '$datosdireccion[11]', Detalles  = '$datosdireccion[12]' WHERE FK_Cliente = '$IDCliente' AND Calle = '$datosdireccion[0]' AND No_Exterior = '$datosdireccion[1]' AND Ciudad = '$datosdireccion[5]' AND Estado = '$datosdireccion[6]' AND Pais = '$datosdireccion[7]'";
 						$errorDirecciones = $omodelo->_insertar($queryDirecciones);	
 
 						if ($errorDirecciones == "si") {
 							echo "Error direcciones: ".mysqli_error($omodelo->link); 
 						}
 					}else{
-						$queryDirecciones = "INSERT INTO detalles_clientes SET FK_Cliente = '$IDCliente', Calle = '$datosdireccion[0]', No_Exterior = '$datosdireccion[1]', No_Interior = '$datosdireccion[2]', Colonia = '$datosdireccion[4]', Codigo_Postal = '$datosdireccion[3]', Ciudad = '$datosdireccion[5]', Estado = '$datosdireccion[6]', Pais = '$datosdireccion[7]', Nombre_Contacto = '$datosdireccion[8]', Puesto_Contacto = '$datosdireccion[9]', Email_Contacto = '$datosdireccion[10]', Telefono_Contacto  = '$datosdireccion[11]'";
+						$queryDirecciones = "INSERT INTO detalles_clientes SET FK_Cliente = '$IDCliente', Calle = '$datosdireccion[0]', No_Exterior = '$datosdireccion[1]', No_Interior = '$datosdireccion[2]', Colonia = '$datosdireccion[4]', Codigo_Postal = '$datosdireccion[3]', Ciudad = '$datosdireccion[5]', Estado = '$datosdireccion[6]', Pais = '$datosdireccion[7]', Nombre_Contacto = '$datosdireccion[8]', Puesto_Contacto = '$datosdireccion[9]', Email_Contacto = '$datosdireccion[10]', Telefono_Contacto  = '$datosdireccion[11]', Detalles  = '$datosdireccion[12]'";
 						$errorDirecciones = $omodelo->_insertar($queryDirecciones);	
 
 						if ($errorDirecciones == "si") {
@@ -430,7 +430,7 @@ class clientes {
 			if($numerofilas > 0){
 				$subarreglo = null;
 
-				$queryDirecciones = "SELECT ID_Detalle_Cliente, FK_Cliente, Calle, No_Exterior, No_Interior, Colonia, Codigo_Postal, Ciudad, Estado, Pais, Nombre_Contacto, Puesto_Contacto, Email_Contacto, Telefono_Contacto FROM detalles_clientes WHERE FK_Cliente = '".$row[0]['ID_Cliente']."'";
+				$queryDirecciones = "SELECT ID_Detalle_Cliente, FK_Cliente, Calle, No_Exterior, No_Interior, Colonia, Codigo_Postal, Ciudad, Estado, Pais, Detalles, Nombre_Contacto, Puesto_Contacto, Email_Contacto, Telefono_Contacto FROM detalles_clientes WHERE FK_Cliente = '".$row[0]['ID_Cliente']."'";
 				$rowDirecciones = $omodelo->_consultar($queryDirecciones);
 				$numerofilasDirecciones = $omodelo->numerofilas;
 				for ($x=0; $x < $numerofilasDirecciones; $x++) { 
@@ -445,6 +445,7 @@ class clientes {
 						'Ciudad' => $rowDirecciones[$x]["Ciudad"],
 						'Estado' => $rowDirecciones[$x]["Estado"],
 						'Pais' => $rowDirecciones[$x]["Pais"],
+						'Detalles' => $rowDirecciones[$x]["Detalles"],
 						'Nombre_Contacto' => $rowDirecciones[$x]["Nombre_Contacto"],
 						'Puesto_Contacto' => $rowDirecciones[$x]["Puesto_Contacto"],
 						'Email_Contacto' => $rowDirecciones[$x]["Email_Contacto"],

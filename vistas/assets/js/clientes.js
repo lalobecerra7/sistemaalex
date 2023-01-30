@@ -27,7 +27,7 @@ function v_clientes() {
         submitHandler: function(form) { 
             var direcciones = '';
             $("#TablaUbicacionClientes tbody tr").each(function(index, el){
-                direcciones += $(this).find("#CalleCliente").val()+"~"+$(this).find("#NoExteriorCliente").val()+"~"+$(this).find("#NoInteriorCliente").val()+"~"+$(this).find("#CPCliente").val()+"~"+$(this).find("#ColoniaCliente").val()+"~"+$(this).find("#CiudadCliente").val()+"~"+$(this).find("#EstadoCliente").val()+"~"+$(this).find("#PaisCliente").val()+"~"+$(this).find("#NombreContactoCliente").val()+"~"+$(this).find("#PuestoContactoCliente").val()+"~"+$(this).find("#CorreoContactoCliente").val()+"~"+$(this).find("#TelefonoContactoCliente").val()+",";
+                direcciones += $(this).find("#CalleCliente").val()+"~"+$(this).find("#NoExteriorCliente").val()+"~"+$(this).find("#NoInteriorCliente").val()+"~"+$(this).find("#CPCliente").val()+"~"+$(this).find("#ColoniaCliente").val()+"~"+$(this).find("#CiudadCliente").val()+"~"+$(this).find("#EstadoCliente").val()+"~"+$(this).find("#PaisCliente").val()+"~"+$(this).find("#NombreContactoCliente").val()+"~"+$(this).find("#PuestoContactoCliente").val()+"~"+$(this).find("#CorreoContactoCliente").val()+"~"+$(this).find("#TelefonoContactoCliente").val()+"~"+$(this).find("#ReferenciaCliente").val()+",";
             });
 
             var data = new FormData(document.getElementById("FormClientes"));
@@ -199,6 +199,9 @@ jQuery(document).ready(function($) {
                 <br>
                 <label for="PaisCliente">País</label>
                 <input type="text" class="form-control" id="PaisCliente" name="PaisCliente" placeholder="Ingresa el país del cliente">
+                <br>
+                <label for="ReferenciaCliente">Referencia visual / Detalles</label>
+                <input type="text" class="form-control" id="ReferenciaCliente" name="ReferenciaCliente" placeholder="Ingresa el país del cliente">
             </td>
             <td>
                 <label for="NombreContactoCliente">Nombre</label>
@@ -376,6 +379,7 @@ jQuery(document).ready(function($) {
                     var CiudadCliente = datos.Extras[i].Ciudad;
                     var EstadoCliente = datos.Extras[i].Estado;
                     var PaisCliente = datos.Extras[i].Pais;
+                    var ReferenciaCliente = datos.Extras[i].Detalles;
                     var NombreContactoCliente = datos.Extras[i].Nombre_Contacto;
                     var PuestoContactoCliente = datos.Extras[i].Puesto_Contacto;
                     var CorreoContactoCliente = datos.Extras[i].Email_Contacto;
@@ -417,6 +421,9 @@ jQuery(document).ready(function($) {
                             <br>
                             <label for="PaisCliente">País</label>
                             <input type="text" class="form-control" value="`+PaisCliente+`" id="PaisCliente" name="PaisCliente" placeholder="Ingresa el país del cliente">
+                            <br>
+                            <label for="ReferenciaCliente">Referencia visual / Detalles</label>
+                            <input type="text" class="form-control" value="`+ReferenciaCliente+`" id="ReferenciaCliente" name="ReferenciaCliente" placeholder="Ingresa el país del cliente">
                         </td>
                         <td>
                             <label for="NombreContactoCliente">Nombre</label>
@@ -506,6 +513,13 @@ jQuery(document).ready(function($) {
         }else{  
             $("#DatosTelefono").text("No hay datos registrados");
         }
+        if ($(this).attr("Detalles") != "") {
+            $("#DatosReferencia").text($(this).attr("Detalles"));
+        }else{  
+            $("#DatosReferencia").text("No hay datos registrados");
+        }
+
+        
         $("#ModalDetallesDireccion").modal("show");
 
     });

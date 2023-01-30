@@ -129,13 +129,14 @@ $arreglo2 = '';
   <?php 
     $FechaHoy = date('Y-m-d H:i:s');
     
-    $sql = "SELECT ID_Traslado, Estatus, Detalles, FK_Sucursal_Origen, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Origen) AS Origen, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Destino) AS Destino, DATE_FORMAT(Fecha_Traslado, '%d-%m-%Y') AS Fecha_Traslado, DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, FK_Usuario FROM traslados WHERE ID_Traslado = '".$_GET["id"]."'";
+    $sql = "SELECT ID_Traslado, LPAD(ID_Traslado, 8, 0) AS FolioTraslado, Estatus, Detalles, FK_Sucursal_Origen, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Origen) AS Origen, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal_Destino) AS Destino, DATE_FORMAT(Fecha_Traslado, '%d-%m-%Y') AS Fecha_Traslado, DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, FK_Usuario FROM traslados WHERE ID_Traslado = '".$_GET["id"]."'";
 
     if($res=$con->query($sql)){
       if ($res->num_rows > 0) {
         $row = $res->fetch_assoc();
         $arreglo = array(
           'ID_Traslado' => $row['ID_Traslado'],
+          'FolioTraslado' => $row['FolioTraslado'],
           'Estatus' => $row['Estatus'],
           'Detalles' => $row['Detalles'],
           'FK_Sucursal_Origen' => $row['FK_Sucursal_Origen'],
@@ -199,6 +200,7 @@ $arreglo2 = '';
         <?php  
           echo "<h1>MISCELÁNEA RÍOS</h1>";
           echo "<h2>Traslado</h2>";
+          echo '<p>Folio: '.$arreglo['FolioTraslado'].'</p>';   
           $FechaHoy = date('Y-m-d H:i:s');
           echo '<p>'.$arreglo['Fecha_Registro'].'</p>'; 
 
