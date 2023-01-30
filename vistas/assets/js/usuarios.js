@@ -129,8 +129,6 @@ jQuery(document).ready(function($) {
         $("#RepetirNuevaContrasena").val("");
     });
 
-
-
     $(document).on('click', '#verfotoUsuario', function() {
         $("#FotoUsuario").trigger("click");
     });
@@ -399,11 +397,9 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('click', '.checkPermisos', function() {
-
-
         if ($(this).parent().parent().index() > 0 && $(this).parent().parent().parent().children('td:eq(0)').children('div').children('input').prop('checked') == false) {
             $(this).parent().parent().parent().children('td:eq(0)').children('div').children('input').prop('checked', true);    
-        }else if ($(this).parent().parent().index() == 0 && $(this).prop('checked') == false) {
+        }else if ($(this).parent().parent().index() == 0 && $(this).prop('checked') == false && $(this).attr('id') != 'bReporteCheck') {
             $(this).parent().parent().parent().children('td').each(function(index) {
                 if ($(this).children('div').children('input').prop('checked')) {
                     $(this).children('div').children('input').prop('checked', false);

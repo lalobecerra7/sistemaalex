@@ -611,6 +611,11 @@
                                                         <input class="form-check-input checkPermisos" type="checkbox">
                                                     </div>
                                                 </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -834,6 +839,55 @@
                                                 <td>Permisos</td>
                                             </tr>
                                             <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_reportes">Reportes</th>
+                                <td class="table-responsive">
+                                    <table class="table table-bordered text-center" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Reporte Balance Caja</td>
+                                                <td>Reporte Productos</td>
+                                                <td>Reporte Clientes</td>
+                                                <td>Reporte Ventas</td>
+                                                <td>Reporte Compras</td>
+                                                <td>Reporte Finanazas</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox" id="bReporteCheck">
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <div>
                                                         <input class="form-check-input checkPermisos" type="checkbox">

@@ -614,42 +614,20 @@
 
             <!-- Layouts -->
             <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                  <i class="menu-icon fas fa-chart-line"></i>
-                  <div data-i18n="Layouts">Reportes</div>
-              </a>
+              #menuReportes#
 
               <ul class="menu-sub">
-                <li class="menu-item cargarVista" carga="v_reporteCaja" titulo="Reporte de caja" id="cargaReporteCaja">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Reporte de caja">Reporte de caja</div>
-                  </a>
-                </li>
-                <li class="menu-item cargarVista" carga="v_reporteProductos" titulo="Reporte productos" id="cargarReporteProductos">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Productos">Productos</div>
-                  </a>
-                </li>
-                <li class="menu-item cargarVista" carga="v_reporteClientes" titulo="Reporte clientes" id="cargarReporteClientes">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Clientes">Clientes</div>
-                  </a>
-                </li>
-                <li class="menu-item cargarVista" carga="v_reporteVentas" titulo="Reporte ventas" id="cargarReporteVentas">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Ventas">Ventas</div>
-                  </a>
-                </li>
-                <li class="menu-item cargarVista" carga="v_reporteCompras" titulo="Reporte compras" id="cargarReporteCompras">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Compras">Compras</div>
-                  </a>
-                </li>
-                <li class="menu-item cargarVista" carga="v_reporteFinanzas" titulo="Reporte finanzas" id="cargarReporteFinanzas">
-                  <a href="javascript:void(0)"  class="menu-link">
-                    <div data-i18n="Finanzas">Finanzas</div>
-                  </a>
-                </li>
+                #reportesCaja#
+
+                #reportesProductos#
+                
+                #reportesClientes#
+                
+                #reportesVentas#
+
+                #reportesCompras#
+                
+                #reportesFinanzas#
               </ul>
             </li>
 

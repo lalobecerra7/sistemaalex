@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-01-2023 a las 00:27:17
+-- Tiempo de generación: 28-01-2023 a las 00:00:46
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.3
 
@@ -62,8 +62,7 @@ CREATE TABLE `cajas` (
 --
 
 INSERT INTO `cajas` (`ID_Caja`, `FK_Sucursal`, `Nombre`, `Detalles`, `Estado`, `FK_Usuario`) VALUES
-(1, 1, 'Caja 1', '', 1, 2),
-(2, 1, 'Prueba', '', 1, 13);
+(1, 1, 'Caja 1', '', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -55180,7 +55179,7 @@ CREATE TABLE `clientes` (
 
 INSERT INTO `clientes` (`ID_Cliente`, `Nombre`, `Primer_Apellido`, `Segundo_Apellido`, `Calle`, `No_Exterior`, `No_Interior`, `Colonia`, `Ciudad`, `Codigo_Postal`, `Estado`, `Pais`, `Telefono`, `INE`, `Celular`, `Correo`, `Fecha_Nacimiento`, `Sexo`, `Fecha_Registro`, `Foto`, `RFC`, `Facturar`, `No_Cuenta`, `Banco`, `Titular`, `Nombre_Contacto`, `Puesto_Contacto`, `Email_Contacto`, `Tel_Contacto`, `FK_Sucursal`, `Razon_CFDI`, `Regimen_CFDI`) VALUES
 (1, 'PUBLICO EN GENERAL', '', '', '', '', '', '', '', '01000', '', '', '', '', '', '', '0000-00-00', '', '0000-00-00 00:00:00', '', 'XAXX010101000', 0, '', '', '', '', '', '', '', 0, 'PUBLICO EN GENERAL', '616'),
-(2, 'Arturo Iturbide', 'hjbhkj', '', '', '', '', '', '', '', '', '', '015556278345', '7y7yiuhi', '5532375991', 'iturbide.jastrow@me.com', '0000-00-00', '', '2019-06-30 14:02:11', '', 'YBI140401LJ3', 0, '', '', '', '', '', '', '', 0, '', ''),
+(2, 'Arturo Iturbide', 'hjbhkj', '', 'fdvfvfd', '152', '', 'dffv', 'fv', '47180', 'fdf', 'dv', '015556278345', '7y7yiuhi', '5532375991', 'iturbide.jastrow@me.com', '0000-00-00', '', '2019-06-30 14:02:11', '', 'YBI140401LJ3', 0, '', '', '', '', '', '', '', 0, '', ''),
 (3, 'Amelia Mena Vazquez', '', '', '', '', '', '', '', '', '', '', '01 55 55 35 02 23', '', '', 'holaropainfantil@yahoo.com.mx', '0000-00-00', '', '2019-06-30 14:01:16', '', 'MEVA2705309G5', 0, '', '', '', '', '', '', '', 0, '', ''),
 (5, 'Angelica Gutierrez', '', '', '', '', '', '', '', '', '', '', '01 34 14 14 10 83', '', ' 14 14 03 88', 'lika_2891@hotmail.com', '0000-00-00', '', '2019-06-30 14:01:47', '', 'GUMA530910QR1', 0, '', '', '', '', '', '', '', 0, '', ''),
 (8, 'Coral Navarro Mascarel', '', '', '', '', '', '', '', '', '', '', '01 46 16 12 86 10', '', ' 01 46 16 14 95 58', 'macoral@hotmaill.com', '0000-00-00', '', '2019-06-30 14:03:05', '', 'NAMC750717JS4', 0, '', '', '', '', '', '', '', 0, '', ''),
@@ -55220,7 +55219,9 @@ INSERT INTO `compras` (`ID_Compra`, `Fecha_Registro`, `FK_Usuario`, `FK_Proveedo
 (22, '2023-01-04 14:13:16', 2, 2, 50, '0', 'Credito', '2023-01-26 00:00:00', 1, 0, 20),
 (23, '2023-01-04 14:25:15', 2, 2, 50, '0', 'Credito', '2023-02-02 00:00:00', 1, 0, 0),
 (24, '2023-01-05 21:46:40', 2, 1, 50, '1', 'Contado', '0000-00-00 00:00:00', 1, 0, 50),
-(25, '2023-01-23 14:43:53', 2, 1, 400, '1', 'Contado', '0000-00-00 00:00:00', 1, 0, 400);
+(25, '2023-01-23 14:43:53', 2, 1, 400, '1', 'Contado', '0000-00-00 00:00:00', 1, 0, 400),
+(27, '2023-01-26 18:58:10', 2, 1, 30, '2', 'Credito', '2023-01-28 00:00:00', 1, 0, 0),
+(28, '2023-01-26 20:02:24', 2, 1, 10, '1', 'Contado', '0000-00-00 00:00:00', 1, 0, 10);
 
 -- --------------------------------------------------------
 
@@ -55243,11 +55244,13 @@ CREATE TABLE `conversiones` (
 --
 
 INSERT INTO `conversiones` (`ID_Conversion`, `FK_Producto`, `FK_Sucursal`, `FK_Presentacion_Origen`, `Cantidad_Origen`, `Fecha_Registro`, `FK_Usuario`) VALUES
-(8, 35, 1, 1, 8, '2023-01-16 20:10:13', 2),
-(9, 35, 1, 20, 8, '2023-01-16 20:16:55', 2),
-(10, 35, 1, 0, 4, '2023-01-24 21:10:09', 2),
-(11, 35, 1, 0, 2, '2023-01-24 21:11:06', 2),
-(12, 35, 1, 0, 3, '2023-01-24 21:14:09', 2);
+(8, 35, 1, 1, 1, '2023-01-16 20:10:13', 2),
+(9, 35, 1, 20, 1, '2023-01-16 20:16:55', 2),
+(10, 35, 1, 0, 1, '2023-01-24 21:10:09', 2),
+(11, 35, 1, 0, 1, '2023-01-24 21:11:06', 2),
+(12, 35, 1, 0, 1, '2023-01-24 21:14:09', 2),
+(18, 35, 1, 20, 1, '2023-01-26 20:32:56', 2),
+(19, 35, 1, 20, 1, '2023-01-26 21:12:26', 2);
 
 --
 -- Disparadores `conversiones`
@@ -55287,9 +55290,7 @@ CREATE TABLE `detalles_caja` (
 --
 
 INSERT INTO `detalles_caja` (`ID_Detalle_Caja`, `FK_Caja`, `Fecha_Abrir`, `Monto_Abrir`, `FK_Usuario_Abrir`, `Fecha_Cierre`, `Monto_Cierre`, `FK_Usuario_Cierre`) VALUES
-(6, 1, '2022-09-08 10:05:15', 50, 2, '0000-00-00 00:00:00', 0, 0),
-(7, 1, '2022-09-12 16:07:38', 0, 1, '0000-00-00 00:00:00', 0, 0),
-(8, 2, '2022-10-08 19:39:14', 123, 13, '0000-00-00 00:00:00', 0, 0);
+(9, 1, '2023-01-26 19:32:58', 500, 2, '0000-00-00 00:00:00', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -55319,7 +55320,8 @@ CREATE TABLE `detalles_clientes` (
 --
 
 INSERT INTO `detalles_clientes` (`ID_Detalle_Cliente`, `FK_Cliente`, `Calle`, `No_Exterior`, `No_Interior`, `Colonia`, `Codigo_Postal`, `Ciudad`, `Estado`, `Pais`, `Nombre_Contacto`, `Puesto_Contacto`, `Email_Contacto`, `Telefono_Contacto`) VALUES
-(1, 27, '', '', '', '', '', '', '', '', 'aaaaaaa', '', '', '');
+(1, 27, '', '', '', '', '', '', '', '', 'aaaaaaa', '', '', ''),
+(2, 2, 'dcdds', '45', '', 'sddcds', '47180', 'dc', 'dcdds', 'cddc', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -55350,7 +55352,9 @@ INSERT INTO `detalles_conversion` (`ID_Detalle_Conversion`, `FK_Conversion`, `FK
 (30, 10, 19, 5),
 (31, 11, 20, 10),
 (32, 12, 18, 5),
-(33, 12, 21, 10);
+(33, 12, 21, 10),
+(39, 18, 0, 10),
+(40, 19, 0, 6);
 
 -- --------------------------------------------------------
 
@@ -55377,6 +55381,26 @@ INSERT INTO `detalles_devolucion` (`ID_Detalle_Devolucion`, `FK_Devolucion`, `FK
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `detalles_importes`
+--
+
+CREATE TABLE `detalles_importes` (
+  `ID_Detalle_Importes` int(11) NOT NULL,
+  `FK_Importe` int(11) NOT NULL,
+  `Cantidad` double NOT NULL,
+  `Fecha_Registro` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `detalles_importes`
+--
+
+INSERT INTO `detalles_importes` (`ID_Detalle_Importes`, `FK_Importe`, `Cantidad`, `Fecha_Registro`) VALUES
+(5, 4, 1, '2023-01-26 22:03:33');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `detalles_impuestos_pedidos`
 --
 
@@ -55395,7 +55419,9 @@ CREATE TABLE `detalles_impuestos_pedidos` (
 --
 
 INSERT INTO `detalles_impuestos_pedidos` (`ID_Impuesto`, `FK_Detalle_Pedido`, `Tipo_Impuesto_CFDI`, `Impuesto_CFDI`, `Clave_CFDI`, `Tipo_Factor_CFDI`, `Tasa_Cuota_CFDI`) VALUES
-(1, 1, 'Trasladado', 'IVA', '002', 'Tasa', '16');
+(1, 1, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
+(2, 2, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
+(3, 3, 'Trasladado', 'IVA', '002', 'Tasa', '16');
 
 -- --------------------------------------------------------
 
@@ -55441,7 +55467,12 @@ INSERT INTO `detalles_impuestos_ventas` (`ID_Impuesto`, `FK_Detalle_Venta`, `Tip
 (5, 10, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
 (8, 13, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
 (9, 14, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
-(10, 15, 'Trasladado', 'IVA', '002', 'Tasa', '16');
+(10, 15, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
+(11, 16, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
+(12, 17, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
+(13, 18, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
+(14, 19, 'Trasladado', 'IVA', '002', 'Tasa', '16'),
+(18, 23, 'Trasladado', 'IVA', '002', 'Tasa', '16');
 
 -- --------------------------------------------------------
 
@@ -55466,7 +55497,8 @@ CREATE TABLE `detalles_orden` (
 INSERT INTO `detalles_orden` (`ID_Detalle_Orden`, `FK_Orden`, `FK_Producto`, `FK_Presentacion`, `Costo`, `Cantidad`, `Subtotal`) VALUES
 (1, 1, 26, 0, 50, 1, 50),
 (4, 2, 27, 0, 95, 1, 95),
-(5, 3, 35, 0, 45, 2, 90);
+(6, 4, 26, 0, 0, 1, 0),
+(7, 3, 35, 0, 45, 2, 90);
 
 -- --------------------------------------------------------
 
@@ -55495,7 +55527,9 @@ CREATE TABLE `detalles_pedidos` (
 --
 
 INSERT INTO `detalles_pedidos` (`ID_Detalle_Pedido`, `FK_Pedido`, `FK_Producto`, `FK_Presentacion`, `Cobrar_Importe`, `Descripcion`, `Precio`, `Cantidad`, `Descuento`, `Total`, `Devuelto`, `Fecha_Devolucion`, `Regreso_Inventario`) VALUES
-(1, 1, 35, 18, 0, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0);
+(1, 1, 35, 18, 0, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0),
+(2, 2, 35, 21, 5, 'Caja de fresas', 50, 10, 0, 580, 0, '0000-00-00 00:00:00', 0),
+(3, 3, 35, 20, 0, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -55578,7 +55612,12 @@ INSERT INTO `detalles_ventas` (`ID_Detalle_Venta`, `FK_Venta`, `FK_Producto`, `F
 (10, 9, 35, 0, 0, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0, '70141902', 'Prueba', 'EA', 'Elemento', '02'),
 (13, 12, 35, 20, 0, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0, '', '', '', '', ''),
 (14, 13, 35, 20, 0, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0, '', '', '', '', ''),
-(15, 14, 35, 0, 0, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0, '', '', '', '', '');
+(15, 14, 35, 0, 0, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0, '', '', '', '', ''),
+(16, 15, 35, 0, 0, 'Caja de fresas', 50, 1, 25, 29, 0, '0000-00-00 00:00:00', 0, '', '', '', '', ''),
+(17, 16, 35, 20, 0, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0, '', '', '', '', ''),
+(18, 17, 35, 18, 0, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0, '', '', '', '', ''),
+(19, 18, 35, 20, 10, 'Caja de fresas', 50, 10, 0, 580, 0, '0000-00-00 00:00:00', 0, '', '', '', '', ''),
+(23, 22, 35, 20, 1, 'Caja de fresas', 50, 1, 0, 58, 0, '0000-00-00 00:00:00', 0, '', '', '', '', '');
 
 --
 -- Disparadores `detalles_ventas`
@@ -55614,7 +55653,9 @@ INSERT INTO `detalle_compras` (`ID_Detalle_Compra`, `FK_Compra`, `FK_Producto`, 
 (22, 22, 26, 0, 50, 1, 50),
 (23, 23, 26, 0, 50, 1, 50),
 (24, 24, 26, 0, 50, 1, 50),
-(25, 25, 26, 0, 100, 4, 400);
+(25, 25, 26, 0, 100, 4, 400),
+(27, 27, 26, 0, 10, 3, 30),
+(28, 28, 26, 0, 10, 1, 10);
 
 --
 -- Disparadores `detalle_compras`
@@ -55735,12 +55776,20 @@ CREATE TABLE `importes` (
   `ID_Importe` int(11) NOT NULL,
   `FK_Venta` int(11) NOT NULL,
   `FK_Producto` int(11) NOT NULL,
+  `FK_Presentacion` int(11) NOT NULL,
   `Cantidad` double NOT NULL,
   `Importe` double NOT NULL,
   `Total` double NOT NULL,
   `Pagados` double NOT NULL COMMENT 'Cantidad de importes pagados',
   `Estatus` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `importes`
+--
+
+INSERT INTO `importes` (`ID_Importe`, `FK_Venta`, `FK_Producto`, `FK_Presentacion`, `Cantidad`, `Importe`, `Total`, `Pagados`, `Estatus`) VALUES
+(4, 22, 35, 20, 1, 5, 5, 1, 'Pagado');
 
 -- --------------------------------------------------------
 
@@ -55783,17 +55832,19 @@ CREATE TABLE `inventario` (
 --
 
 INSERT INTO `inventario` (`ID_Inventario`, `FK_Producto`, `FK_Presentacion`, `Cantidad`, `FK_Sucursal`) VALUES
-(1, 26, 1, 6, 1),
+(1, 26, 1, 7, 1),
 (2, 36, 0, 40, 1),
-(3, 35, 20, 71, 1),
-(5, 35, 0, 50, 1),
-(6, 26, 0, -178, 1),
-(19, 35, 18, 20, 1),
+(3, 35, 20, 44, 1),
+(5, 35, 0, 20, 1),
+(6, 26, 0, -177, 1),
+(19, 35, 18, 19, 1),
 (20, 35, 19, 10, 1),
 (21, 35, 21, 10, 1),
 (22, 35, 0, 18, 8),
 (26, 36, 0, 10, 8),
-(27, 35, 20, 0, 8);
+(27, 35, 20, 0, 8),
+(29, 27, 0, 0, 1),
+(30, 27, 0, 0, 8);
 
 -- --------------------------------------------------------
 
@@ -55818,7 +55869,7 @@ CREATE TABLE `merma` (
 --
 
 INSERT INTO `merma` (`ID_Merma`, `FK_Inventario`, `Costo`, `Cantidad`, `Fecha_Merma`, `Fecha_Registro`, `Motivo`, `Foto`, `FK_Usuario`) VALUES
-(10, 3, 45, 5, '2023-01-24', '2023-01-24 21:07:31', 'dfdf', '', 2);
+(11, 3, 45, 5, '2023-01-26', '2023-01-26 21:22:41', 'dfndfkj', '', 2);
 
 --
 -- Disparadores `merma`
@@ -59335,7 +59386,51 @@ INSERT INTO `movimientos` (`ID_Movimiento`, `Descripcion`, `IP`, `Pais`, `Estado
 (3442, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'15\'', '', '', '', '', '', '2023-01-25 20:52:58', '', 2),
 (3443, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'16\'', '', '', '', '', '', '2023-01-25 20:53:16', '', 2),
 (3444, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2023-01-26 13:20:48', '', 0),
-(3445, 'Admin: UPDATE ventas SET Estatus = \'Cancelada\', Fecha_Cancelacion = \'2023-01-26 17:25:25\', Regreso_Inventario = \'1\', Mensaje_Cancelada = \'002 - No se pudo enviar la solicitud de cancelaciÃ³n con csd. Si el problema persiste contacte a soporte@facturoporti.com.mx CA205 - Folio Fiscal No Existente. Error al cancelar el UUID de la factura.\' WHERE ID_Venta = \'9\'', '', '', '', '', '', '2023-01-26 17:25:27', '', 2);
+(3445, 'Admin: UPDATE ventas SET Estatus = \'Cancelada\', Fecha_Cancelacion = \'2023-01-26 17:25:25\', Regreso_Inventario = \'1\', Mensaje_Cancelada = \'002 - No se pudo enviar la solicitud de cancelaciÃ³n con csd. Si el problema persiste contacte a soporte@facturoporti.com.mx CA205 - Folio Fiscal No Existente. Error al cancelar el UUID de la factura.\' WHERE ID_Venta = \'9\'', '', '', '', '', '', '2023-01-26 17:25:27', '', 2),
+(3446, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'1\', Total= \'10\', Anticipo= \'10\', Estatus= \'1\', Fecha_Registro = \'2023-01-26 18:42:48\', Fecha_Credito = \'2023-02-03\', Tipo_Compra = \'Contado\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2023-01-26 18:42:48', '', 2),
+(3447, 'Admin: DELETE FROM compras WHERE ID_Compra = \'26\'', '', '', '', '', '', '2023-01-26 18:44:20', '', 2),
+(3448, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'1\', Total= \'30\', Anticipo= \'0\', Estatus= \'0\', Fecha_Registro = \'2023-01-26 18:58:10\', Fecha_Credito = \'2023-01-28\', Tipo_Compra = \'Credito\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2023-01-26 18:58:10', '', 2),
+(3449, 'Admin: INSERT INTO pagos SET FK_Compra = \'27\', Monto = \'20\', Concepto = \'dfdfdf\', Tipo_Pago = \'Efectivo\', Fecha = \'2023-01-26 18:58:47\', FK_Usuario = \'2\', Detalles_Pago = \'dsdcdsds\'', '', '', '', '', '', '2023-01-26 18:58:47', '', 2),
+(3450, 'Admin: UPDATE compras SET Estatus = \'2\' WHERE ID_Compra = \'27\'', '', '', '', '', '', '2023-01-26 19:01:27', '', 2),
+(3451, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,0,0~v_compras,0,0,0,0,0~v_ventas,1,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-26 19:34:16', '', 2),
+(3452, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,0,0~v_compras,0,0,0,0,0~v_ventas,1,1,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-26 19:34:17', '', 2),
+(3453, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,0,0~v_compras,0,0,0,0,0~v_ventas,1,1,1,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-26 19:34:18', '', 2),
+(3454, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,0,0~v_compras,0,0,0,0,0~v_ventas,1,1,1,1,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-26 19:34:19', '', 2),
+(3455, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,0,0~v_compras,0,0,0,0,0~v_ventas,1,1,1,1,1,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-26 19:34:30', '', 2),
+(3456, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,0,0~v_compras,0,0,0,0,0~v_ventas,1,1,1,1,1,1,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-26 19:34:33', '', 2),
+(3457, 'Admin: UPDATE usuarios SET Permisos = \'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,0,0~v_compras,0,0,0,0,0~v_ventas,1,1,1,1,1,1,1~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~\' WHERE ID_Usuario = \'11\'', '', '', '', '', '', '2023-01-26 19:34:35', '', 2),
+(3458, 'Admin: LOGIN ADMIN ejemplo@gmail.com', '', '', '', '', '', '2023-01-26 19:34:55', '', 0),
+(3459, 'Admin: LOGIN ADMIN admin@gmail.com', '', '', '', '', '', '2023-01-26 19:41:38', '', 0),
+(3460, 'Admin: INSERT INTO ordenes_compra SET FK_Proveedor= \'1\', Total= \'0\', Estatus= \'Pendiente\', Fecha_Registro = \'2023-01-26 19:45:00\', Descuento = \'\', FK_Sucursal = \'1\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-26 19:45:00', '', 2),
+(3461, 'Admin: INSERT INTO compras SET FK_Usuario = \'2\', FK_Proveedor= \'1\', Total= \'10\', Anticipo= \'10\', Estatus= \'1\', Fecha_Registro = \'2023-01-26 20:02:24\', Fecha_Credito = \'\', Tipo_Compra = \'Contado\', Descuento = \'0.00\', FK_Sucursal = \'1\'', '', '', '', '', '', '2023-01-26 20:02:24', '', 2),
+(3462, 'Admin: UPDATE ordenes_compra SET FK_Proveedor= \'1\', Total= \'90\', Estatus= \'Pendiente\', Fecha_Registro = \'2023-01-26 20:02:37\', Descuento = \'\', FK_Sucursal = \'1\', FK_Usuario = \'2\' WHERE ID_Orden_Compra = \'3\'', '', '', '', '', '', '2023-01-26 20:02:37', '', 2),
+(3463, 'Admin: UPDATE clientes SET Nombre = \'Arturo Iturbide\', Primer_Apellido = \'hjbhkj\', Segundo_Apellido = \'\', Calle = \'fdvfvfd\', No_Exterior = \'152\', No_Interior = \'\', Codigo_Postal = \'47180\', Colonia = \'dffv\', Ciudad = \'fv\', Estado = \'fdf\', Pais = \'dv\', Telefono = \'015556278345\', Celular = \'5532375991\', Correo = \'iturbide.jastrow@me.com\', Fecha_Nacimiento = \'\', Sexo = \'\', RFC = \'YBI140401LJ3\', Facturar = \'0\', No_Cuenta = \'\', Banco = \'\', Titular = \'\', FK_Sucursal = \'0\', Razon_CFDI = \'\', Regimen_CFDI = \'\', Nombre_Contacto = \'\', Puesto_Contacto = \'\', Email_Contacto = \'\', Tel_Contacto = \'\', INE = \'7y7yiuhi\' WHERE ID_Cliente = \'2\'', '', '', '', '', '', '2023-01-26 20:08:10', '', 2),
+(3464, 'Admin: INSERT INTO conversiones SET FK_Producto = \'35\', FK_Sucursal = \'1\', FK_Presentacion_Origen = \'20\', Cantidad_Origen = \'1\', Fecha_Registro = \'2023-01-26 20:20:20\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-26 20:20:20', '', 2),
+(3465, 'Admin: INSERT INTO conversiones SET FK_Producto = \'35\', FK_Sucursal = \'1\', FK_Presentacion_Origen = \'20\', Cantidad_Origen = \'1\', Fecha_Registro = \'2023-01-26 20:26:58\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-26 20:26:58', '', 2),
+(3466, 'Admin: INSERT INTO conversiones SET FK_Producto = \'35\', FK_Sucursal = \'1\', FK_Presentacion_Origen = \'20\', Cantidad_Origen = \'1\', Fecha_Registro = \'2023-01-26 20:28:43\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-26 20:28:43', '', 2),
+(3467, 'Admin: DELETE FROM conversiones WHERE ID_Conversion = \'17\'', '', '', '', '', '', '2023-01-26 20:32:16', '', 2),
+(3468, 'Admin: DELETE FROM conversiones WHERE ID_Conversion = \'16\'', '', '', '', '', '', '2023-01-26 20:32:19', '', 2),
+(3469, 'Admin: DELETE FROM conversiones WHERE ID_Conversion = \'15\'', '', '', '', '', '', '2023-01-26 20:32:25', '', 2),
+(3470, 'Admin: DELETE FROM conversiones WHERE ID_Conversion = \'14\'', '', '', '', '', '', '2023-01-26 20:32:29', '', 2),
+(3471, 'Admin: DELETE FROM conversiones WHERE ID_Conversion = \'13\'', '', '', '', '', '', '2023-01-26 20:32:34', '', 2),
+(3472, 'Admin: INSERT INTO conversiones SET FK_Producto = \'35\', FK_Sucursal = \'1\', FK_Presentacion_Origen = \'20\', Cantidad_Origen = \'1\', Fecha_Registro = \'2023-01-26 20:32:56\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-26 20:32:56', '', 2),
+(3473, 'Admin: UPDATE conversiones SET Cantidad_Origen = \'1\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-26 20:33:58', '', 2),
+(3474, 'Admin: UPDATE conversiones SET Cantidad_Origen = \'1\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-26 20:39:14', '', 2),
+(3475, 'Admin: UPDATE conversiones SET Cantidad_Origen = \'1\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-26 20:46:15', '', 2),
+(3476, 'Admin: INSERT INTO conversiones SET FK_Producto = \'35\', FK_Sucursal = \'1\', FK_Presentacion_Origen = \'20\', Cantidad_Origen = \'1\', Fecha_Registro = \'2023-01-26 21:12:26\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-26 21:12:26', '', 2),
+(3477, 'Admin: UPDATE conversiones SET Cantidad_Origen = \'1\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-26 21:13:31', '', 2),
+(3478, 'Admin: INSERT INTO conversiones SET FK_Producto = \'35\', FK_Sucursal = \'1\', FK_Presentacion_Origen = \'20\', Cantidad_Origen = \'1\', Fecha_Registro = \'2023-01-26 21:13:48\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-26 21:13:48', '', 2),
+(3479, 'Admin: UPDATE conversiones SET Cantidad_Origen = \'1\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-26 21:13:59', '', 2),
+(3480, 'Admin: DELETE FROM conversiones WHERE ID_Conversion = \'20\'', '', '', '', '', '', '2023-01-26 21:21:49', '', 2),
+(3481, 'Admin: DELETE FROM merma WHERE ID_Merma = \'10\'', '', '', '', '', '', '2023-01-26 21:22:32', '', 2),
+(3482, 'Admin: INSERT INTO merma SET FK_Inventario = \'3\', Costo = \'45\', Cantidad = \'5\', Fecha_Merma = \'2023-01-26\', Fecha_Registro = \'2023-01-26 21:22:41\', Motivo = \'dfndfkj\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-26 21:22:41', '', 2),
+(3483, 'Admin: INSERT INTO traslados SET FK_Sucursal_Origen = \'1\', FK_Sucursal_Destino = \'8\', Fecha_Traslado = \'2023-01-26\', Fecha_Registro = \'2023-01-26 21:30:52\', Estatus = \'Pendiente\', FK_Usuario = \'2\'', '', '', '', '', '', '2023-01-26 21:30:52', '', 2),
+(3484, 'Admin: UPDATE traslados SET Estatus = \'Completado\' WHERE ID_Traslado = \'9\'', '', '', '', '', '', '2023-01-26 21:31:50', '', 2),
+(3485, 'Admin: UPDATE traslados SET Estatus = \'Cancelado\', Detalles = \'dfdfdf\' WHERE ID_Traslado = \'9\'', '', '', '', '', '', '2023-01-26 21:32:09', '', 2),
+(3486, 'Admin: DELETE FROM traslados WHERE ID_Traslado = \'9\'', '', '', '', '', '', '2023-01-26 21:32:41', '', 2),
+(3487, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'19\'', '', '', '', '', '', '2023-01-26 21:53:56', '', 2),
+(3488, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'20\'', '', '', '', '', '', '2023-01-26 21:56:30', '', 2),
+(3489, 'Admin: DELETE FROM ventas WHERE ID_Venta = \'21\'', '', '', '', '', '', '2023-01-26 22:02:57', '', 2);
 
 -- --------------------------------------------------------
 
@@ -59361,7 +59456,8 @@ CREATE TABLE `ordenes_compra` (
 INSERT INTO `ordenes_compra` (`ID_Orden_Compra`, `Fecha_Registro`, `FK_Usuario`, `FK_Proveedor`, `Total`, `FK_Sucursal`, `Estatus`, `Descuento`) VALUES
 (1, '2023-01-04 19:26:18', 2, 1, 50, 1, 'Completada', 0),
 (2, '2023-01-05 21:48:11', 2, 1, 95, 1, 'Pendiente', 0),
-(3, '2023-01-08 18:09:08', 11, 1, 90, 1, 'Pendiente', 0);
+(3, '2023-01-26 20:02:37', 2, 1, 90, 1, 'Pendiente', 0),
+(4, '2023-01-26 19:45:00', 2, 1, 0, 1, 'Completada', 0);
 
 -- --------------------------------------------------------
 
@@ -59390,7 +59486,9 @@ CREATE TABLE `pagos` (
 INSERT INTO `pagos` (`ID_Pago`, `FK_Compra`, `Concepto`, `Monto`, `Tipo_Pago`, `Fecha`, `FK_Usuario`, `Archivo`, `Clase`, `FK_Caja`, `Detalles_Pago`) VALUES
 (15, 22, 'Abono', 20, 'Efectivo', '2023-01-04 14:13:16', 2, '', 0, 0, ''),
 (16, 24, 'Pago', 50, '', '2023-01-05 21:46:40', 2, '', 0, 0, ''),
-(17, 25, 'Pago', 400, 'Efectivo', '2023-01-23 14:43:53', 2, '', 0, 0, '');
+(17, 25, 'Pago', 400, 'Efectivo', '2023-01-23 14:43:53', 2, '', 0, 0, ''),
+(19, 27, 'dfdfdf', 20, 'Efectivo', '2023-01-26 18:58:47', 2, '', 0, 0, 'dsdcdsds'),
+(20, 28, 'Pago', 10, 'Efectivo', '2023-01-26 20:02:24', 2, '', 0, 0, '');
 
 --
 -- Disparadores `pagos`
@@ -59436,7 +59534,9 @@ CREATE TABLE `pedidos` (
 --
 
 INSERT INTO `pedidos` (`ID_Pedido`, `FK_Usuario`, `FK_Caja`, `FK_Sucursal`, `FK_Cliente`, `FK_Direccion`, `Descuento`, `Total`, `Total_Importes`, `Tipo_Pago`, `Pago`, `Cambio`, `Notas`, `Fecha_Entrega`, `Fecha_Registro`, `Cancelada`, `Fecha_Cancelacion`, `Regreso_Inventario`) VALUES
-(1, 2, 0, 1, 1, 0, 0, 58, 0, '', 0, 0, '', '2022-12-24', '2022-12-22 13:23:54', 0, '0000-00-00 00:00:00', 0);
+(1, 2, 0, 1, 1, 0, 0, 58, 0, '', 0, 0, '', '2022-12-24', '2022-12-22 13:23:54', 0, '0000-00-00 00:00:00', 0),
+(2, 2, 0, 1, 1, 0, 0, 580, 25, '', 0, 0, '', '2023-02-11', '2023-01-26 19:43:48', 0, '0000-00-00 00:00:00', 0),
+(3, 2, 0, 1, 2, 2, 0, 58, 0, '', 0, 0, '', '0000-00-00', '2023-01-26 20:10:28', 0, '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -59527,7 +59627,7 @@ CREATE TABLE `productos` (
 INSERT INTO `productos` (`ID_Producto`, `Codigo`, `Descripcion`, `Tipo`, `FK_Categoria`, `Costo`, `Precio`, `Precio_Mayoreo`, `FK_Area`, `Detalles`, `Fecha_Registro`, `Imagen`, `Importe`, `Clave_ProdServ_CFDI`, `Clave_Unidad_CFDI`, `Nombre_Unidad`, `Abreviatura_Unidad`, `Objeto_Impuesto_CFDI`, `Bloqueado`) VALUES
 (26, '123', 'No lo se', 0, 4, 0, 1, 0, 34, '', '2022-11-28 19:17:40', '', 0, '', '', '', '', '', 1),
 (27, '1234', 'Prueba 2', 0, 4, 0, 0, 0, 34, '', '2022-11-28 19:18:09', '', 0, '', '', '', '', '', 0),
-(35, 'Prueba', 'Caja de fresas', 1, 4, 45, 50, 0, 0, '', '2022-12-03 17:35:01', '35_492x0w.png', 0, '70141902', 'EA', 'Elemento', 'E', '02', 0),
+(35, 'Prueba', 'Caja de fresas', 1, 4, 45, 50, 0, 0, '', '2022-12-03 17:35:01', '35_492x0w.png', 5, '70141902', 'EA', 'Elemento', 'E', '02', 0),
 (36, 'ejemplo', 'Ejemplo', 1, 0, 0, 50, 0, 0, '', '2022-12-21 19:23:18', '', 0, '01010101', '11', 'Equipos', 'Eq', '01', 0),
 (37, 'fvfvfd', 'Prueba', 1, 0, 0, 60, 0, 0, '', '2023-01-09 18:35:36', '', 0, '', '', '', '', '', 0);
 
@@ -59742,9 +59842,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`ID_Usuario`, `Nombre`, `Primer_Apellido`, `Segundo_Apellido`, `Correo`, `Contrasena`, `Tipo_Usuario`, `Permisos`, `BD`, `Estatus`, `Intentos`, `Ultimo_Intento`, `Tiempo_Inicio`, `Tiempo_Final`, `Foto`, `Temporal`, `Activo`, `Tipo_Login`, `Conectado`, `Fecha_Alta`, `FK_Sucursal`) VALUES
-(2, 'Admin', 'cremasi', '', 'admin@gmail.com', '$2y$12$lhPLfk6dsc6TdYE5fnes2OfWuBPlqUQhh8JF9ujg0iNNmSGQC74Xe', 'Administrador', '', 0, 0, 0, '2023-01-26 13:20:47', '2023-01-26 13:20:47', '2023-01-25 20:42:25', '2_anuncio.png', 0, 1, 1, 0, '2022-09-21 18:52:42', 0),
+(2, 'Admin', 'cremasi', '', 'admin@gmail.com', '$2y$12$lhPLfk6dsc6TdYE5fnes2OfWuBPlqUQhh8JF9ujg0iNNmSGQC74Xe', 'Administrador', '', 0, 0, 0, '2023-01-26 19:41:37', '2023-01-26 19:41:37', '2023-01-26 19:34:44', '2_anuncio.png', 0, 1, 1, 0, '2022-09-21 18:52:42', 0),
 (10, 'Lalo', 'bECERRA', '', 'lalo@gmail.com', '$2y$12$ACrdPWFFaSDrOmehjwt0MuIgTfsCmuxpWnDwf8TCoRAwzC8C50QsK', 'Normal', 'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,0,0,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~', 0, 0, 0, '2022-09-22 18:51:43', '2022-09-22 18:51:43', '2022-09-22 19:02:18', '', 0, 0, 1, 0, '2022-09-22 18:51:31', 0),
-(11, 'Ejemplo', 'sdesde', 'dds', 'ejemplo@gmail.com', '$2y$12$ks7YsxZ13IARNevWP1q4X.Lh8KF0TeogNzNxukBbsnOe4KU5mm0qi', 'Normal', 'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~', 0, 0, 0, '2023-01-08 18:55:53', '2023-01-08 18:55:53', '2023-01-08 18:56:10', '', 0, 1, 1, 0, '2023-01-08 18:55:45', 1),
+(11, 'Ejemplo', 'sdesde', 'dds', 'ejemplo@gmail.com', '$2y$12$ks7YsxZ13IARNevWP1q4X.Lh8KF0TeogNzNxukBbsnOe4KU5mm0qi', 'Normal', 'v_sucursales,1,0,0,0~v_proveedores,1,0,0,0~v_clientes,0,0,0,0~v_orden_compra,1,1,0,0,0~v_compras,0,0,0,0,0~v_ventas,1,1,1,1,1,1,1~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,1,0,0,0,0,0,0,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~', 0, 0, 0, '2023-01-26 19:34:55', '2023-01-26 19:34:55', '2023-01-26 19:41:24', '', 0, 1, 1, 0, '2023-01-08 18:55:45', 1),
 (14, 'Antonio de Jesus', 'Torres', 'Vazquez', 'antonioudgarandas@gmal.com', '$2y$12$36ZKO7frlfjtaKpoP4K5CumUm/lOK6S7niuUrVNhVrWkIX7D/PKHy', 'Administrador', '', 0, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 1, 1, 0, '2022-11-05 15:25:49', 1);
 
 -- --------------------------------------------------------
@@ -59817,7 +59917,12 @@ INSERT INTO `ventas` (`ID_Venta`, `FK_Usuario`, `FK_Caja`, `FK_Sucursal`, `FK_Cl
 (9, 2, 0, 1, 27, 0, 0, 58, 0, 'Efectivo', 58, 0, '', '2022-12-26 16:59:07', 'Cancelada', 0, '2023-01-26 17:25:25', '002 - No se pudo enviar la solicitud de cancelaciÃ³n con csd. Si el problema persiste contacte a soporte@facturoporti.com.mx CA205 - Folio Fiscal No Existente. Error al cancelar el UUID de la factura.', 1, 1, '4.0', '2022-12-26 17:01:15', 'GtY9UB7LWuTP/huNSQYjjHt/7GjYcCR5Eno3xOsJcndWYbF4ZCgzqrwB9oIlQFmGtPduYBlgrHtYbKN6OtKuXHItuTKI5rEJ9Wz1bx8XvA28eJjlrOMP6piBab0/rnk0LNlsYp9ZlQlcxzcJmgtrfnyyPZXcKX9t3O2FRI1/2CiddCYXhNmaT7GjDe63OtQbFExAZj3oRT2EZC0xY4s4AnnGKD0L818+G44Dk0CB3ONIyEKjtsxzHkrCB7Fq2RzuQtyokRkB3Dk8gy3Nzv8uiHYBKYVHS/8o2nGWedQVRNx7Yk7f2tH0Tb5xbzbBqrVRpsq+VYgFTp53GIl/11B3ow==', '01', '30001000000400002434', 'MIIFuzCCA6OgAwIBAgIUMzAwMDEwMDAwMDA0MDAwMDI0MzQwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWRpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMTkwNjE3MTk0NDE0WhcNMjMwNjE3MTk0NDE0WjCB4jEnMCUGA1UEAxMeRVNDVUVMQSBLRU1QRVIgVVJHQVRFIFNBIERFIENWMScwJQYDVQQpEx5FU0NVRUxBIEtFTVBFUiBVUkdBVEUgU0EgREUgQ1YxJzAlBgNVBAoTHkVTQ1VFTEEgS0VNUEVSIFVSR0FURSBTQSBERSBDVjElMCMGA1UELRMcRUtVOTAwMzE3M0M5IC8gWElRQjg5MTExNlFFNDEeMBwGA1UEBRMVIC8gWElRQjg5MTExNk1HUk1aUjA1MR4wHAYDVQQLExVFc2N1ZWxhIEtlbXBlciBVcmdhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCN0peKpgfOL75iYRv1fqq+oVYsLPVUR/GibYmGKc9InHFy5lYF6OTYjnIIvmkOdRobbGlCUxORX/tLsl8Ya9gm6Yo7hHnODRBIDup3GISFzB/96R9K/MzYQOcscMIoBDARaycnLvy7FlMvO7/rlVnsSARxZRO8Kz8Zkksj2zpeYpjZIya/369+oGqQk1cTRkHo59JvJ4Tfbk/3iIyf4H/Ini9nBe9cYWo0MnKob7DDt/vsdi5tA8mMtA953LapNyCZIDCRQQlUGNgDqY9/8F5mUvVgkcczsIgGdvf9vMQPSf3jjCiKj7j6ucxl1+FwJWmbvgNmiaUR/0q4m2rm78lFAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQBcpj1TjT4jiinIujIdAlFzE6kRwYJCnDG08zSp4kSnShjxADGEXH2chehKMV0FY7c4njA5eDGdA/G2OCTPvF5rpeCZP5Dw504RZkYDl2suRz+wa1sNBVpbnBJEK0fQcN3IftBwsgNFdFhUtCyw3lus1SSJbPxjLHS6FcZZ51YSeIfcNXOAuTqdimusaXq15GrSrCOkM6n2jfj2sMJYM2HXaXJ6rGTEgYmhYdwxWtil6RfZB+fGQ/H9I9WLnl4KTZUS6C9+NLHh4FPDhSk19fpS2S/56aqgFoGAkXAYt9Fy5ECaPcULIfJ1DEbsXKyRdCv3JY89+0MNkOdaDnsemS2o5Gl08zI4iYtt3L40gAZ60NPh31kVLnYNsmvfNxYyKp+AeJtDHyW9w7ftM0Hoi+BuRmcAQSKFV3pk8j51la+jrRBrAUv8blbRcQ5BiZUwJzHFEKIwTsRGoRyEx96sNnB03n6GTwjIGz92SmLdNl95r9rkvp+2m4S6q1lPuXaFg7DGBrXWC8iyqeWE2iobdwIIuXPTMVqQb12m1dAkJVRO5NdHnP/MpqOvOgLqoZBNHGyBg4Gqm4sCJHCxA1c8Elfa2RQTCk0tAzllL4vOnI1GHkGJn65xokGsaU4B4D36xh7eWrfj4/pgWHmtoDAYa8wzSwo2GVCZOs+mtEgOQB91/g==', 'MXN', 'I', '01', 'PUE', '47190', '', 'EKU9003173C9', 'ESCUELA KEMPER URGATE', '601', 'CACX7605101P8', 'XOCHILT CASAS CHAVEZ', '10740', '621', 'G01', '1c19a8cc-a46c-4e16-8399-551ca5fe4afb', '2022-12-26 17:01:16', 'SPR190613I52', 'GtY9UB7LWuTP/huNSQYjjHt/7GjYcCR5Eno3xOsJcndWYbF4ZCgzqrwB9oIlQFmGtPduYBlgrHtYbKN6OtKuXHItuTKI5rEJ9Wz1bx8XvA28eJjlrOMP6piBab0/rnk0LNlsYp9ZlQlcxzcJmgtrfnyyPZXcKX9t3O2FRI1/2CiddCYXhNmaT7GjDe63OtQbFExAZj3oRT2EZC0xY4s4AnnGKD0L818+G44Dk0CB3ONIyEKjtsxzHkrCB7Fq2RzuQtyokRkB3Dk8gy3Nzv8uiHYBKYVHS/8o2nGWedQVRNx7Yk7f2tH0Tb5xbzbBqrVRpsq+VYgFTp53GIl/11B3ow==', '30001000000400002495', 'ICmfagqjkxYowtQ08Tfs7EPbj2vM28CpDKCWy1vJylwar/h41vsu4dy/dpcR1nZxTjR4u6gBv2CvnXmCC4BavbiEzkainMieA28iZpS0PQr9Bx3WfliLeuk+GWOPWThiwvTW300UKxR64Z7iVFkvNkemU0T8SldRamwWiIqYGw2ubrN9iDhhRMvMHj9ZZu5ZiOmBw3NeWTu/hh/B9W0b0rCiC2GG1rA2Qxubl9TcGjJqGkXiOGU1TQhqkZ6ll1CqqRgxGIqgG7t2UcvKXqSyL9eU3e7Hu4/cGfwT/bJ3/AbmRzBidu7jzWZF7hlWjnMgML1BgmLaPJyIkf9uG6zdhw==', 'undefined', 'undefined', '', '', '||1.1|1c19a8cc-a46c-4e16-8399-551ca5fe4afb|2022-12-26T17:01:16|SPR190613I52|GtY9UB7LWuTP/huNSQYjjHt/7GjYcCR5Eno3xOsJcndWYbF4ZCgzqrwB9oIlQFmGtPduYBlgrHtYbKN6OtKuXHItuTKI5rEJ9Wz1bx8XvA28eJjlrOMP6piBab0/rnk0LNlsYp9ZlQlcxzcJmgtrfnyyPZXcKX9t3O2FRI1/2CiddCYXhNmaT7GjDe63OtQbFExAZj3oRT2EZC0xY4s4AnnGKD0L818+G44Dk0CB3ONIyEKjtsxzHkrCB7Fq2RzuQtyokRkB3Dk8gy3Nzv8uiHYBKYVHS/8o2nGWedQVRNx7Yk7f2tH0Tb5xbzbBqrVRpsq+VYgFTp53GIl/11B3ow==|30001000000400002495||'),
 (12, 2, 0, 1, 1, 0, 0, 58, 0, 'Efectivo', 58, 0, '', '2023-01-08 21:35:40', 'Completada', 0, '0000-00-00 00:00:00', '', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', ''),
 (13, 2, 0, 1, 1, 0, 0, 58, 0, 'Efectivo', 200, 142, '', '2023-01-08 21:40:07', 'Completada', 0, '0000-00-00 00:00:00', '', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', ''),
-(14, 2, 0, 1, 1, 0, 0, 58, 0, 'Efectivo', 58, 0, '', '2023-01-09 21:47:36', 'Completada', 0, '0000-00-00 00:00:00', '', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '');
+(14, 2, 0, 1, 1, 0, 0, 58, 0, 'Efectivo', 58, 0, '', '2023-01-09 21:47:36', 'Completada', 0, '0000-00-00 00:00:00', '', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', ''),
+(15, 11, 0, 1, 1, 0, 25, 29, 0, 'Efectivo', 100, 71, '', '2023-01-26 19:36:05', 'Completada', 0, '0000-00-00 00:00:00', '', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', ''),
+(16, 11, 0, 1, 1, 0, 0, 58, 0, 'Efectivo', 58, 0, '', '2023-01-26 19:40:55', 'Completada', 0, '0000-00-00 00:00:00', '', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', ''),
+(17, 2, 0, 1, 1, 0, 0, 58, 0, 'Efectivo', 58, 0, '', '2023-01-26 20:03:42', 'Completada', 0, '0000-00-00 00:00:00', '', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', ''),
+(18, 2, 0, 1, 1, 0, 0, 580, 50, 'Efectivo', 630, 0, '', '2023-01-26 21:35:51', 'Completada', 0, '0000-00-00 00:00:00', '', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', ''),
+(22, 2, 0, 1, 1, 0, 0, 58, 5, 'Efectivo', 63, 0, '', '2023-01-26 22:03:06', 'Completada', 0, '0000-00-00 00:00:00', '', 0, 0, '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '', '', '', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -59926,6 +60031,13 @@ ALTER TABLE `detalles_devolucion`
   ADD KEY `FK_Detalle_Venta` (`FK_Detalle_Venta`);
 
 --
+-- Indices de la tabla `detalles_importes`
+--
+ALTER TABLE `detalles_importes`
+  ADD PRIMARY KEY (`ID_Detalle_Importes`),
+  ADD KEY `FK_Importe` (`FK_Importe`);
+
+--
 -- Indices de la tabla `detalles_impuestos_pedidos`
 --
 ALTER TABLE `detalles_impuestos_pedidos`
@@ -60026,7 +60138,8 @@ ALTER TABLE `historial_caja`
 --
 ALTER TABLE `importes`
   ADD PRIMARY KEY (`ID_Importe`),
-  ADD KEY `FK_Venta` (`FK_Venta`);
+  ADD KEY `FK_Venta` (`FK_Venta`),
+  ADD KEY `FK_Producto` (`FK_Producto`);
 
 --
 -- Indices de la tabla `impuestos`
@@ -60176,7 +60289,7 @@ ALTER TABLE `areas`
 -- AUTO_INCREMENT de la tabla `cajas`
 --
 ALTER TABLE `cajas`
-  MODIFY `ID_Caja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_Caja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
@@ -60206,31 +60319,31 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
-  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de la tabla `conversiones`
 --
 ALTER TABLE `conversiones`
-  MODIFY `ID_Conversion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ID_Conversion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_caja`
 --
 ALTER TABLE `detalles_caja`
-  MODIFY `ID_Detalle_Caja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `ID_Detalle_Caja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_clientes`
 --
 ALTER TABLE `detalles_clientes`
-  MODIFY `ID_Detalle_Cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_Detalle_Cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_conversion`
 --
 ALTER TABLE `detalles_conversion`
-  MODIFY `ID_Detalle_Conversion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `ID_Detalle_Conversion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_devolucion`
@@ -60239,10 +60352,16 @@ ALTER TABLE `detalles_devolucion`
   MODIFY `ID_Detalle_Devolucion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT de la tabla `detalles_importes`
+--
+ALTER TABLE `detalles_importes`
+  MODIFY `ID_Detalle_Importes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_pedidos`
 --
 ALTER TABLE `detalles_impuestos_pedidos`
-  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_productos`
@@ -60254,19 +60373,19 @@ ALTER TABLE `detalles_impuestos_productos`
 -- AUTO_INCREMENT de la tabla `detalles_impuestos_ventas`
 --
 ALTER TABLE `detalles_impuestos_ventas`
-  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ID_Impuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_orden`
 --
 ALTER TABLE `detalles_orden`
-  MODIFY `ID_Detalle_Orden` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID_Detalle_Orden` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_pedidos`
 --
 ALTER TABLE `detalles_pedidos`
-  MODIFY `ID_Detalle_Pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_Detalle_Pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_proveedores_productos`
@@ -60284,13 +60403,13 @@ ALTER TABLE `detalles_traslados`
 -- AUTO_INCREMENT de la tabla `detalles_ventas`
 --
 ALTER TABLE `detalles_ventas`
-  MODIFY `ID_Detalle_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `ID_Detalle_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_compras`
 --
 ALTER TABLE `detalle_compras`
-  MODIFY `ID_Detalle_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `ID_Detalle_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de la tabla `devoluciones`
@@ -60320,7 +60439,7 @@ ALTER TABLE `historial_caja`
 -- AUTO_INCREMENT de la tabla `importes`
 --
 ALTER TABLE `importes`
-  MODIFY `ID_Importe` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Importe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `impuestos`
@@ -60332,37 +60451,37 @@ ALTER TABLE `impuestos`
 -- AUTO_INCREMENT de la tabla `inventario`
 --
 ALTER TABLE `inventario`
-  MODIFY `ID_Inventario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `ID_Inventario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `merma`
 --
 ALTER TABLE `merma`
-  MODIFY `ID_Merma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ID_Merma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
-  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3446;
+  MODIFY `ID_Movimiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3490;
 
 --
 -- AUTO_INCREMENT de la tabla `ordenes_compra`
 --
 ALTER TABLE `ordenes_compra`
-  MODIFY `ID_Orden_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_Orden_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `ID_Pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `ID_Pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `ID_Pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_Pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `precios`
@@ -60428,7 +60547,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `ID_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `ID_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `zonas`
@@ -60477,6 +60596,12 @@ ALTER TABLE `detalles_conversion`
 ALTER TABLE `detalles_devolucion`
   ADD CONSTRAINT `detalles_devolucion_ibfk_1` FOREIGN KEY (`FK_Devolucion`) REFERENCES `devoluciones` (`ID_Devolucion`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `detalles_devolucion_ibfk_2` FOREIGN KEY (`FK_Detalle_Venta`) REFERENCES `detalles_ventas` (`ID_Detalle_Venta`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `detalles_importes`
+--
+ALTER TABLE `detalles_importes`
+  ADD CONSTRAINT `detalles_importes_ibfk_1` FOREIGN KEY (`FK_Importe`) REFERENCES `importes` (`ID_Importe`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `detalles_impuestos_pedidos`
@@ -60548,7 +60673,8 @@ ALTER TABLE `devoluciones`
 -- Filtros para la tabla `importes`
 --
 ALTER TABLE `importes`
-  ADD CONSTRAINT `importes_ibfk_1` FOREIGN KEY (`FK_Venta`) REFERENCES `ventas` (`ID_Venta`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `importes_ibfk_1` FOREIGN KEY (`FK_Venta`) REFERENCES `ventas` (`ID_Venta`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `importes_ibfk_2` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `inventario`

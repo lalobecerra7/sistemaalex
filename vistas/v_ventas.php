@@ -205,7 +205,7 @@
   <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
     <div class="modal-content">
         <div class="modal-header bg-inverse bd-inverse-darken">
-            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Abrir Caja</h5>
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Cancelar Venta y Factura</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form id="formCancelarFactura">
