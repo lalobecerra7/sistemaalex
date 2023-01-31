@@ -238,6 +238,7 @@
 				        	<th>Abreviatura</th>
 				        	<th>Costo</th>
 				        	<th>Importe</th>
+				        	<th>Codigo</th>
 				        	<th>Acciones</th>
 				        </thead>
 				        <tbody id="verPresentaciones">
@@ -262,6 +263,9 @@
 		                </td>
 		                <td>
 		                	<input type="number" step="any" value="0" form="formPresentaciones" class="form-control" id="importePresentacion" name="importePresentacion" placeholder="Ingresa el costo de la presentación/unidad" required>	
+		                </td>
+		                <td>
+		                  <input type="text" form="formPresentaciones" class="form-control" id="CodigoPresentacion" name="CodigoPresentacion" placeholder="Ingresa el codigo de barras de la presentación" required>
 		                </td>
 		                <td>
 		                	<button  type="button" class="btn btn-sm btn-success" id="bAgergarPresentacion"><i class="fas fa-plus"></i></button>
@@ -547,6 +551,10 @@
 					<div class="form-floating mb-3">
 						<input type="text" form="formPresentaciones" class="form-control" id="importePresentacionM" name="importePresentacionM" placeholder="Ingresa el importe de la presentación/unidad"> 
 						<label>Importe</label>	
+					</div>
+					<div class="form-floating mb-3">
+						<input type="text" form="formPresentaciones" class="form-control" id="CodigoPresentacionM" name="CodigoPresentacionM" placeholder="Ingresa el codigo de barras de la presentación"> 
+						<label>Codigo de barras</label>	
 					</div>	
 	      </div>
 	      <div class="modal-footer">

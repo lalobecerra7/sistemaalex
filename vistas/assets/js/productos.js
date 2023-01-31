@@ -35,7 +35,7 @@ function v_productos() {
             var presentaciones = [];
             if($("#verPresentaciones").children('tr').length > 0){
                 $("#verPresentaciones").children('tr').each(function(index, el){
-                    presentaciones.push({'ID_Presentacion': $.trim($(this).attr('id')),'Clave': $.trim($(this).children('td:eq(0)').text()), 'Nombre': $.trim($(this).children('td:eq(1)').text()), 'Abreviatura': $.trim($(this).children('td:eq(2)').text()), 'Costo': $.trim($(this).children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')), 'Importe': $.trim($(this).children('td:eq(4)').text().replace('$', '').replace(searchRegExp, ''))});
+                    presentaciones.push({'ID_Presentacion': $.trim($(this).attr('id')),'Clave': $.trim($(this).children('td:eq(0)').text()), 'Nombre': $.trim($(this).children('td:eq(1)').text()), 'Abreviatura': $.trim($(this).children('td:eq(2)').text()), 'Costo': $.trim($(this).children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')), 'Importe': $.trim($(this).children('td:eq(4)').text().replace('$', '').replace(searchRegExp, '')), 'Codigo': $.trim($(this).children('td:eq(5)').text())});
                 });
             }
 
@@ -236,6 +236,7 @@ function v_productos() {
                 filaPre.children('td:eq(2)').html($.trim($("#abreviaturaPresentacionM").val()));
                 filaPre.children('td:eq(3)').html('<span class="dinero">'+$.trim($("#costoPresentacionM").val())+'</span>');
                 filaPre.children('td:eq(4)').html('<span class="dinero">'+$.trim($("#importePresentacionM").val())+'</span>');
+                filaPre.children('td:eq(5)').html($.trim($("#CodigoPresentacionM").val()));
 
                 $("#presentacionProdSelect").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
                 $("#presentacionProdSelect").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
@@ -482,6 +483,7 @@ jQuery(document).ready(function($) {
                         <td>`+presentacion.Abreviatura+`</td>
                         <td><span class="dinero">`+presentacion.Costo+`</span></td>
                         <td><span class="dinero">`+presentacion.Importe+`</span></td>
+                        <td>`+presentacion.Codigo+`</td>
                         <td>`+botonEli+` <button type="button" class="btn btn-warning btn-sm bModificarPresenta" attrID="`+presentacion.ID_Presentacion+`"><i class="fas fa-pencil"></i></button></td>
                     </tr>`);
 
@@ -686,6 +688,7 @@ jQuery(document).ready(function($) {
                 <td>`+$.trim($("#abreviaturaPresentacion").val())+`</td>
                 <td><span class="dinero">`+$.trim($("#costoPresentacion").val())+`</span></td>
                 <td><span class="dinero">`+$.trim($("#importePresentacion").val())+`</span></td>
+                <td>`+$.trim($("#CodigoPresentacion").val())+`</td>
                 <td><button type="button" class="btn btn-danger btn-sm bQuitarPresenta"><i class="fas fa-trash"></i></button> <button type="button" class="btn btn-warning btn-sm bModificarPresenta"><i class="fas fa-pencil"></i></button></td>
             </tr>`);
 
@@ -738,6 +741,7 @@ jQuery(document).ready(function($) {
         $("#abreviaturaPresentacionM").val($.trim(filaPre.children('td:eq(2)').text()));
         $("#costoPresentacionM").val($.trim(filaPre.children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')));
         $("#importePresentacionM").val($.trim(filaPre.children('td:eq(4)').text().replace('$', '').replace(searchRegExp, '')));
+        $("#CodigoPresentacionM").val($.trim(filaPre.children('td:eq(5)').text()));
         $("#bGuardarPresenta").attr('attrID', $(this).attr('attrID'));
         $("#modalPresentaciones").modal('show');
     });
