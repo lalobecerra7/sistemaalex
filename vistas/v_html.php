@@ -517,6 +517,138 @@
       </div>
     </div>
 
+    <!--/////////////////////////////////////////////////////////////-->
+    <div class="modal fade" id="ModalCerrarCaja" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+            <div class="modal-content">
+                <div class="modal-header bg-inverse bd-inverse-darken">
+                    <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Cerrar Caja / Hacer corte de caja</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="FormCerrarCaja">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-3">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" id="MontoCierreCaja" name="MontoCierreCaja" min="1" placeholder="Ingresa el monto de cierre de la caja">
+                                    <label for="MontoCierreCaja">¿Cuánto dinero hay en caja?</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                        <button type="submit" class="btn btn-primary" id="CerrarCajaVentas" attrid=""><i class="fa fa-check-circle"></i> <strong>Cerrar caja</strong></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+
+    <!--/////////////////////////////////////////////////////////////-->
+    <div class="modal fade" id="ModalBalanceCaja" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+       <div class="modal-dialog modal-lg modal-dialog-centered" style="z-index: 9999 !important;">
+            <div class="modal-content">
+                <div class="modal-header bg-inverse bd-inverse-darken">
+                    <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Cerrar Caja / Hacer corte de caja</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row text-center">
+                        <div class="col-md-6">
+                            Abrio caja
+                            <br>
+                            <span id="spanFechaAbrir"></span>
+                        </div>
+                        <div class="col-md-6">
+                            Cerro caja
+                            <br>
+                            <span id="spanFechaCerrar"></span>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row text-center">
+                        <div class="col-md-6 col-sm-12">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                    Monto de apertura: <span class="dinero" id="spanMontoApertura"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;" >
+                                    Monto de cierre: <span class="dinero" id="spanMontoCierre"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            Ingresos
+                            <h2 class="dinero" id="totalIngresosSpan"></h2>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            Egresos
+                            <h2 class="dinero" id="totalEgresosSpan"></h2>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            Utilidad
+                            <h2 class="dinero" id="totalUtilidadSpan"></h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 text-center">
+                            <h2>Ingresos</h2>
+                            <br>
+                            <div class="text-start">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                        Total de ventas: <span class="dinero" id="spanTotalVentas"></span>
+                                    </div>
+                                </div>
+                                <div id="DivMostrarVentasDesplegada">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                        Total de importes: <span class="dinero" id="spanTotalImportes"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <h2>Egresos</h2>
+                            <br>
+                            <div class="text-start">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                        Total de compras: <span class="dinero" id="spanTotalCompras"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                        Total de pagos: <span class="dinero" id="spanTotalPagos"></span>
+                                    </div>
+                                </div>
+                                <div id="DivMostrarPagosDesplegado">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                        Total de devoluciones: <span class="dinero" id="spanTotalDevoluciones"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                    <button type="button" class="btn btn-primary" id="ImprimirBalance" attrid=""><i class="fa fa-print"></i> <strong>Imprimir balance</strong></button>
+                </div>
+            </div>
+        </div>
+    </div> 
+
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
         <!-- Menu -->
@@ -649,9 +781,11 @@
               </a>
             </div>
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-              <!-- <div id="DivPedidosPendientes">
-                <a href="javascript:void(0)" style="font-size: 25x" id="cargarVenta" ><i class="fas fa-shopping-cart"></i></a>
-              </div>  -->
+              <div class="">
+                <button type="button" class="btn btn-outline-danger oculto" data-bs-toggle="modal" data-bs-target="#ModalCerrarCaja" id="BotonCerrarCaja" attrid="">
+                  <i class="fas fa-times"></i> Hacer corte de caja
+                </button>
+              </div>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">

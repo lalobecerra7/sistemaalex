@@ -1,6 +1,5 @@
 function v_hacerventa() {
 	//TablaReporteCompras();
-	EstatusCaja();
 	$('#FormAdmin').validate({
         rules: {
             correoAdmin: {

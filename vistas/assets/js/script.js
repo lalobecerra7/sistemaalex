@@ -27,6 +27,7 @@ function moneda() {
 
 jQuery(document).ready(function($) {
     $("#carga").hide();
+    EstatusCaja();
 
     setInterval(function() {
         var data = "metodo=renovar";
@@ -63,11 +64,10 @@ jQuery(document).ready(function($) {
             $("#vistaTitulo").html(titulo);
             $(".cargarVista").removeClass("active");
             itemVista.addClass("active");
-            
             if(nombre == "v_inicio"){
              
             }
-
+            EstatusCaja();
             crearDataTable();
             
             if(typeof window[nombre] === 'function') {
