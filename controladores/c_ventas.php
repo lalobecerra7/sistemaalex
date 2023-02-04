@@ -562,7 +562,7 @@ class ventas {
 				echo "No";
 			}
 		}else if($tipo == "ConsultarCaja"){
-			$query = "SELECT Estado, FK_Usuario FROM cajas WHERE ID_Caja = 1";
+			$query = "SELECT ID_Caja, Estado, FK_Usuario FROM cajas WHERE ID_Caja = 1";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			if($row == 'si'){

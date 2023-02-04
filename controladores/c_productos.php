@@ -831,6 +831,32 @@ class productos {
 			}
 
 			echo $opciones;
+		}else if($tipo == "ConsultarValidezCodigo"){
+			$Codigo = $omodelo->link->real_escape_string($Codigo);
+
+			$query = "SELECT Codigo FROM presentaciones WHERE Codigo = '$Codigo'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					echo "NoValido";
+				}else{
+					$query = "SELECT Codigo FROM productos WHERE Codigo = '$Codigo'";
+					$row = $omodelo->_consultar($query);
+					$numerofilas = $omodelo->numerofilas;
+					if ($row == "si") {
+						echo "Error: " . mysqli_error($omodelo->link);
+					} else {
+						if ($numerofilas > 0) {
+							echo "NoValido2";
+						}else{
+							echo "Valido";
+						}
+					}
+				}
+			}
 		}
 	}
 }
