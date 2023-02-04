@@ -58,21 +58,30 @@
 					<br>
 					<div class="row">
 						<b class="mb-3">Datos del cliente</b>
+						<div class="col-md-4">
+							<div class="form-floating mb-3">
+								<select class="form-select" name="TipoPersona" id="TipoPersona" >
+									<option value="Fisica">Fisica</option>
+									<option value="Moral">Moral</option>
+								</select>
+								<label for="TipoPersona">Tipo de persona</label>
+							</div>
+						</div>
 						<div class="col-md-4 col-sm-12 mb-3">
 							<div class="form-floating">
 								<input type="text" class="form-control" id="NombreCliente" name="NombreCliente" placeholder="Ingresa el nombre del cliente">
 								<label for="NombreCliente">Nombre</label>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-12 mb-3">
+						<div class="col-md-4 col-sm-12 mb-3 camposFisica">
 							<div class="form-floating">
-								<input type="text" class="form-control" id="primerApellidoCliente" name="primerApellidoCliente" placeholder="Ingresa el primer apellido">
+								<input type="text" class="form-control " id="primerApellidoCliente" name="primerApellidoCliente" placeholder="Ingresa el primer apellido">
 								<label for="NombreCliente">Primer Apellido</label>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-12 mb-3">
+						<div class="col-md-4 col-sm-12 mb-3 camposFisica">
 							<div class="form-floating">
-								<input type="text" class="form-control" id="segundoApellidoCliente" name="segundoApellidoCliente" placeholder="Ingresa el segundo apellido">
+								<input type="text" class="form-control " id="segundoApellidoCliente" name="segundoApellidoCliente" placeholder="Ingresa el segundo apellido">
 								<label for="TelefonoCliente">Segundo Apellido</label>
 							</div>
 						</div>
@@ -103,15 +112,15 @@
 								<label for="SucursalCliente">Sucursal</label>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-12 mb-3">
+						<div class="col-md-4 col-sm-12 mb-3 camposFisica">
 							<div class="form-floating">
-								<input type="date" class="form-control" id="FechaNacimientoCliente" name="FechaNacimientoCliente" placeholder="Ingresa la fecha de nacimiento del cliente">
+								<input type="date" class="form-control " id="FechaNacimientoCliente" name="FechaNacimientoCliente" placeholder="Ingresa la fecha de nacimiento del cliente">
 								<label for="FechaNacimientoCliente">Fecha de nacimiento</label>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-12 mb-3">
+						<div class="col-md-4 col-sm-12 mb-3 camposFisica">
 							<div class="form-floating">
-								<select class="form-select" id="SexoCliente" name="SexoCliente">
+								<select class="form-select " id="SexoCliente" name="SexoCliente">
 									<option value="" selected> - Seleccione una opción - </option>
 									<option value="Masculino">Masculino</option>
 									<option value="Femenino">Femenino</option>
@@ -129,7 +138,7 @@
 								<label for="FacturarCliente">Facturar ventas</label>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-12 mb-3">
+						<div class="col-md-4 col-sm-12 mb-3 camposFisica">
 							<div class="form-floating">
 								<input type="text" class="form-control" id="INECliente" name="INECliente" placeholder="Ingresa código del INE">
 								<label>INE</label>
