@@ -556,6 +556,19 @@
                 <div class="modal-body">
                     <div class="row text-center">
                         <div class="col-md-6">
+                            Usuario que abrio la caja:
+                            <br>
+                            <span id="spanUsuarioAbrir"></span>
+                        </div>
+                        <div class="col-md-6">
+                            Usuario que cerro la caja:
+                            <br>
+                            <span id="spanUsuarioCerrar"></span>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row text-center">
+                        <div class="col-md-6">
                             Abrio caja
                             <br>
                             <span id="spanFechaAbrir"></span>
@@ -567,14 +580,7 @@
                         </div>
                     </div>
                     <br>
-                    <div class="row text-center">
-                        <div class="col-md-6 col-sm-12">
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
-                                    Monto de apertura: <span class="dinero" id="spanMontoApertura"></span>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- <div class="row text-center">
                         <div class="col-md-6 col-sm-12">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;" >
@@ -582,26 +588,33 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="row">
                         <div class="col-md-4 text-center">
-                            Ingresos
-                            <h2 class="dinero" id="totalIngresosSpan"></h2>
+                            Monto de cierre
+                            <h2 class="dinero" id="spanMontoCierre"></h2>
                         </div>
                         <div class="col-md-4 text-center">
-                            Egresos
-                            <h2 class="dinero" id="totalEgresosSpan"></h2>
+                            Monto actual en caja (Efectivo)
+                            <h2 class="dinero" id="totalActualEfectivo" title="Ingresos en efectivo - Egresos en efectivo"></h2>
                         </div>
                         <div class="col-md-4 text-center">
-                            Utilidad
-                            <h2 class="dinero" id="totalUtilidadSpan"></h2>
+                            Diferencia (Efectivo)
+                            <h2 class="dinero" id="totalDiferenciaSpan"></h2>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 text-center">
-                            <h2>Ingresos</h2>
+                            <h4>Ingresos totales <h4 class="dinero" id="totalIngresosSpan"></h4></h4>
+                            <br>
+                            <h6>Ingresos (Efectivo) <h6 class="dinero" id="totalIngresosEfectivo"></h6></h6>
                             <br>
                             <div class="text-start">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                        Monto de apertura: <span class="dinero" id="spanMontoApertura"></span>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
                                         Total de ventas: <span class="dinero" id="spanTotalVentas"></span>
@@ -617,17 +630,21 @@
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
-                            <h2>Egresos</h2>
+                            <h4>Egresos totales: <h4 class="dinero" id="totalEgresosSpan"></h4></h4>
+                            <br>
+                            <h6>Egresos (Efectivo) <h6 class="dinero" id="totalEgresosEfectivo"></h6></h6>
                             <br>
                             <div class="text-start">
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
-                                        Total de compras: <span class="dinero" id="spanTotalCompras"></span>
+                                        Total de compras al contado: <span class="dinero" id="spanTotalCompras"></span>
                                     </div>
+                                </div>
+                                <div id="DivMostrarComprasDesplegado">
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
-                                        Total de pagos: <span class="dinero" id="spanTotalPagos"></span>
+                                        Total de compras a credito (Pagos): <span class="dinero" id="spanTotalComprasCredito"></span>
                                     </div>
                                 </div>
                                 <div id="DivMostrarPagosDesplegado">

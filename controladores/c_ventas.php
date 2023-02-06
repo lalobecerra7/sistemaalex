@@ -445,7 +445,7 @@ class ventas {
 
 						$totalVenta = $row[$i]['Total'] - $total;
 						$precio = 0;
-						if ($totalVenta <= 0) {
+						if ($totalVenta <= 0 && $cantidadDevuelto > 0) {
 							$precio = $total / $cantidadDevuelto;
 						}else{
 							$precio = ($totalVenta / $cantidadActual);

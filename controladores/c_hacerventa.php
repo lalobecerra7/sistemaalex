@@ -708,7 +708,8 @@ class hacerventa {
 				$presentacion = 0;
 			}
 
-			$query = "SELECT ID_Producto, productos.Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Nombre_Unidad AS NombreGenerico, productos.Abreviatura_Unidad AS AbreviaturaGenerico, productos.Costo AS Costo_General, productos.Precio AS Precio_General, IFNULL(productos.importe, 0) AS ImporteGeneral, IFNULL(presentaciones.Importe, 0) AS ImportePresentacion, productos.Precio_Mayoreo AS Precio_Mayoreo_General, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, Fecha_Registro, inventario.Cantidad AS Existencia FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN precios ON precios.FK_Presentacion = ID_Presentacion WHERE productos.Codigo = '$codigo' AND inventario.FK_Presentacion = '$presentacion' AND productos.Bloqueado = 0";
+			//CONSULTAR POR CODIGO DE PRESENTACION
+			$query = "SELECT ID_Producto, productos.Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Nombre_Unidad AS NombreGenerico, productos.Abreviatura_Unidad AS AbreviaturaGenerico, productos.Costo AS Costo_General, productos.Precio AS Precio_General, IFNULL(productos.importe, 0) AS ImporteGeneral, IFNULL(presentaciones.Importe, 0) AS ImportePresentacion, productos.Precio_Mayoreo AS Precio_Mayoreo_General, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, Fecha_Registro, inventario.Cantidad AS Existencia FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN precios ON precios.FK_Presentacion = ID_Presentacion WHERE presentaciones.Codigo = '$codigo' AND productos.Bloqueado = 0";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -737,18 +738,6 @@ class hacerventa {
 							}
 						}
 					}				
-
-					/*$NombrePresentacion = "";
-					if ($row[0]["Presentacion"] != "") {
-						$abreviatura = "";
-						if ($row[0]["AbreviaturaPresentacion"] != "") {
-							$abreviatura = "(".$row[0]["AbreviaturaPresentacion"].")";
-						}
-						$NombrePresentacion = $row[0]["Presentacion"].$abreviatura;
-					}else{
-						$NombrePresentacion = "Sin presentación";	
-					}*/
-
 					$NombrePresentacion = "";
 					if ($row[0]['Presentacion'] != "") {
 						$NombrePresentacion = $row[0]['Presentacion']." (".$row[0]['AbreviaturaPresentacion'].")";
@@ -773,7 +762,7 @@ class hacerventa {
 						$precioMayoreo = $row[0]["Precio_Mayoreo_General"];	
 					}
 
-					
+							
 					$arreglo = array(
 						'ID_Producto' => $row[0]["ID_Producto"],
 						'Codigo' => $row[0]["Codigo"],
@@ -793,8 +782,7 @@ class hacerventa {
 					);
 					echo json_encode($arreglo);
 				}else{
-					//echo "No encontrado";
-					$query = "SELECT ID_Producto, productos.Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Nombre_Unidad AS NombreGenerico, productos.Abreviatura_Unidad AS AbreviaturaGenerico, productos.Costo AS Costo_General, productos.Precio AS Precio_General, IFNULL(productos.importe, 0) AS ImporteGeneral, IFNULL(presentaciones.Importe, 0) AS ImportePresentacion, productos.Precio_Mayoreo AS Precio_Mayoreo_General, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, Fecha_Registro, inventario.Cantidad AS Existencia FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN precios ON precios.FK_Presentacion = ID_Presentacion WHERE productos.Codigo = '$codigo' AND productos.Bloqueado = 0";
+					$query = "SELECT ID_Producto, productos.Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Nombre_Unidad AS NombreGenerico, productos.Abreviatura_Unidad AS AbreviaturaGenerico, productos.Costo AS Costo_General, productos.Precio AS Precio_General, IFNULL(productos.importe, 0) AS ImporteGeneral, IFNULL(presentaciones.Importe, 0) AS ImportePresentacion, productos.Precio_Mayoreo AS Precio_Mayoreo_General, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, Fecha_Registro, inventario.Cantidad AS Existencia FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN precios ON precios.FK_Presentacion = ID_Presentacion WHERE productos.Codigo = '$codigo' AND inventario.FK_Presentacion = '$presentacion' AND productos.Bloqueado = 0";
 					$row = $omodelo->_consultar($query);
 					$numerofilas = $omodelo->numerofilas;
 
@@ -879,9 +867,97 @@ class hacerventa {
 							);
 							echo json_encode($arreglo);
 						}else{
-							echo "No encontrado";
+							//echo "No encontrado";
+							$query = "SELECT ID_Producto, productos.Codigo, productos.Descripcion AS Descripcion, presentaciones.ID_Presentacion AS IDPresentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, productos.Nombre_Unidad AS NombreGenerico, productos.Abreviatura_Unidad AS AbreviaturaGenerico, productos.Costo AS Costo_General, productos.Precio AS Precio_General, IFNULL(productos.importe, 0) AS ImporteGeneral, IFNULL(presentaciones.Importe, 0) AS ImportePresentacion, productos.Precio_Mayoreo AS Precio_Mayoreo_General, precios.Nombre AS NombrePrecio, precios.Precio AS PrecioPresentacion, precios.Precio_Mayoreo AS PrecioMayPresentacion, areas.Nombre AS NombreArea, Detalles, Fecha_Registro, inventario.Cantidad AS Existencia FROM productos LEFT JOIN areas ON FK_Area = ID_Area INNER JOIN inventario ON inventario.FK_Producto = ID_Producto AND inventario.FK_Sucursal = '$sucursal' LEFT JOIN presentaciones ON inventario.FK_Presentacion = ID_Presentacion LEFT JOIN precios ON precios.FK_Presentacion = ID_Presentacion WHERE productos.Codigo = '$codigo' AND productos.Bloqueado = 0";
+							$row = $omodelo->_consultar($query);
+							$numerofilas = $omodelo->numerofilas;
+
+							if($row == 'si'){
+								echo "Error: ".mysqli_error($omodelo->link);
+							}else{
+								if($numerofilas > 0){
+									$subarreglo = null;
+									$campoImpuestos = "";
+									$queryI = "SELECT ID_Detalle_Im_Producto, FK_Producto, FK_Impuesto, impuestos.Nombre AS Nombre, impuestos.Porcentaje AS Porcentaje, impuestos.Clave_CFDI AS Clave_CFDI, impuestos.Tipo_Factor AS Tipo_Factor, impuestos.Clase AS Clase FROM detalles_impuestos_productos INNER JOIN impuestos ON FK_Impuesto = ID_Impuesto WHERE FK_Producto = '".$row[0]["ID_Producto"]."'";
+									$rowI = $omodelo->_consultar($queryI);
+									$numerofilasI = $omodelo->numerofilas;
+									if($rowI == 'si'){
+										echo "Error: ".mysqli_error($omodelo->link);
+									}else{
+										if($numerofilasI > 0){
+											for ($i=0; $i < $numerofilasI; $i++) { 
+												$campoImpuestos .= '
+													<div class="form-check impuesto">
+														<input class="form-check-input seleccionarImpuesto oculto" checked type="checkbox" nombre="'.$rowI[$i]["Nombre"].'" porcentaje="'.$rowI[$i]["Porcentaje"].'" attrid="'.$rowI[$i]["FK_Impuesto"].'" clavecfdi="'.$rowI[$i]["Clave_CFDI"].'" tipofactor="'.$rowI[$i]["Tipo_Factor"].'" clase="'.$rowI[$i]["Clase"].'">
+														<label class="form-check-label" for="flexCheckDefault">
+															'.$rowI[$i]["Nombre"].' ('.$rowI[$i]["Porcentaje"].'%)
+														</label>
+													</div>
+												';
+											}
+										}
+									}				
+
+									/*$NombrePresentacion = "";
+									if ($row[0]["Presentacion"] != "") {
+										$abreviatura = "";
+										if ($row[0]["AbreviaturaPresentacion"] != "") {
+											$abreviatura = "(".$row[0]["AbreviaturaPresentacion"].")";
+										}
+										$NombrePresentacion = $row[0]["Presentacion"].$abreviatura;
+									}else{
+										$NombrePresentacion = "Sin presentación";	
+									}*/
+
+									$NombrePresentacion = "";
+									if ($row[0]['Presentacion'] != "") {
+										$NombrePresentacion = $row[0]['Presentacion']." (".$row[0]['AbreviaturaPresentacion'].")";
+									}else{
+										if ($row[0]['NombreGenerico'] == "") {
+											$NombrePresentacion = "Sin presentación";
+										}else{
+											$NombrePresentacion = $row[0]['NombreGenerico']." (".$row[0]['AbreviaturaGenerico'].")";
+										}
+									}
+
+									$precio = 0; $precioMayoreo = 0;
+									if ($row[0]["PrecioPresentacion"] != "") {
+										$precio = $row[0]["PrecioPresentacion"];
+									}else{
+										$precio = $row[0]["Precio_General"];	
+									}
+
+									if ($row[0]["PrecioMayPresentacion"] != "") {
+										$precioMayoreo = $row[0]["PrecioMayPresentacion"];
+									}else{
+										$precioMayoreo = $row[0]["Precio_Mayoreo_General"];	
+									}
+
+									
+									$arreglo = array(
+										'ID_Producto' => $row[0]["ID_Producto"],
+										'Codigo' => $row[0]["Codigo"],
+										'Descripcion' => $row[0]["Descripcion"],
+										'Presentacion' => $NombrePresentacion,
+										'IDPresentacion' => $row[0]["IDPresentacion"],
+										'Costo_General' => $row[0]["Costo_General"],
+										'Precio_General' => $precio,
+										'Precio_Mayoreo_General' => $precioMayoreo,
+										'NombreArea' => $row[0]["NombreArea"],
+										'Detalles' => $row[0]["Detalles"],
+										'Fecha_Registro' => $row[0]["Fecha_Registro"],
+										'Existencia' => $row[0]["Existencia"],
+										'ImporteGeneral' => $row[0]["ImporteGeneral"],
+										'ImportePresentacion' => $row[0]["ImportePresentacion"],
+										'Impuestos' => $campoImpuestos
+									);
+									echo json_encode($arreglo);
+								}else{
+									echo "No encontrado";
+								}
+							}
 						}
-					}
+					}		
 				}
 			}
 		}else if($tipo == "ConsultarPrecios"){
@@ -1391,14 +1467,14 @@ class hacerventa {
 		}else if($tipo == "ConsultarBalanceCerrar"){
 			$fecha = date('Y-m-d H:i:s'); 
 			$arreglo = [];
-			$query = "SELECT ID_Detalle_Caja, FK_Caja, Fecha_Abrir, Monto_Abrir, FK_Usuario_Abrir, Fecha_Cierre, Monto_Cierre, FK_Usuario_Cierre, DATE_FORMAT(Fecha_Cierre, '%Y-%m-%d %r') AS FechaCerrar, DATE_FORMAT(Fecha_Abrir, '%Y-%m-%d %r') AS FechaAbrir FROM detalles_caja WHERE ID_Detalle_Caja = '$IDDetalleCaja'";
+			$query = "SELECT ID_Detalle_Caja, FK_Caja, Fecha_Abrir, Monto_Abrir, FK_Usuario_Abrir, (SELECT Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario_Abrir) AS UsuarioAbrir, (SELECT Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario_Cierre) AS UsuarioCerrar, Fecha_Cierre, Monto_Cierre, FK_Usuario_Cierre, DATE_FORMAT(Fecha_Cierre, '%Y-%m-%d %r') AS FechaCerrar, DATE_FORMAT(Fecha_Abrir, '%Y-%m-%d %r') AS FechaAbrir FROM detalles_caja WHERE ID_Detalle_Caja = '$IDDetalleCaja'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			if($row == 'si'){
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
 				if($numerofilas > 0){
-					$totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0; 
+					$totalIngresos = 0; $totalIngresosEfectivo = 0; $totalEgresos = 0; $totalEgresosEfectivo = 0; $totalventas = 0; $totalimportes = 0; 
 					$totalcompras = 0; $totaldevoluciones = 0; $totalpagos = 0; 
 
 					//************************** INGRESOS ***********************//
@@ -1423,6 +1499,7 @@ class hacerventa {
 								$totalventas += $rowv[$ventas]["Total"];
 								if ($rowv[$ventas]["Tipo_Pago"] == "Efectivo") {
 									$totalvefectivo += $rowv[$ventas]["Total"];
+									$totalIngresosEfectivo += $rowv[$ventas]["Total"];
 								}else if ($rowv[$ventas]["Tipo_Pago"] == "Deposito") {
 									$totalvdeposito += $rowv[$ventas]["Total"];
 								}else if ($rowv[$ventas]["Tipo_Pago"] == "Cheque") {
@@ -1448,6 +1525,7 @@ class hacerventa {
 							for ($importes=0; $importes < $numerofilasi; $importes++) { 
 								$totalIngresos += $rowi[$importes]["CantidadImportes"] * $rowi[$importes]["PrecioImporte"];
 								$totalimportes += $rowi[$importes]["CantidadImportes"] * $rowi[$importes]["PrecioImporte"];
+								$totalIngresosEfectivo += $rowi[$importes]["CantidadImportes"] * $rowi[$importes]["PrecioImporte"];
 							}
 						}
 					}
@@ -1468,13 +1546,43 @@ class hacerventa {
 						}
 					}
 
+					//Pagos de compras al contado
+					$pagoscontadoefectivo = 0;
+					$pagoscontadocheque = 0;
+					$pagoscontadodeposito = 0;
+					$pagostarjetacontado = 0;
+					$pagoscontadotransferencia = 0;
+					$queryContado = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row[0]["Fecha_Abrir"]."' AND pagos.Fecha <= '".$row[0]["Fecha_Cierre"]."') AND Estatus = 1 AND Tipo_Compra = 'Contado'";
+					$rowcontado = $omodelo->_consultar($queryContado);
+					$numerofilascontado = $omodelo->numerofilas;
+					if($rowcontado == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilascontado > 0){
+							for ($pagoscontado=0; $pagoscontado < $numerofilascontado; $pagoscontado++) { 
+								if ($rowcontado[$pagoscontado]["Tipo_Pago"] == "Efectivo") {
+									$pagoscontadoefectivo += $rowcontado[$pagoscontado]["Monto"];
+									$totalEgresosEfectivo += $rowcontado[$pagoscontado]["Monto"];
+								}else if ($rowcontado[$pagoscontado]["Tipo_Pago"] == "Deposito") {
+									$pagoscontadodeposito += $rowcontado[$pagoscontado]["Monto"];
+								}else if ($rowcontado[$pagoscontado]["Tipo_Pago"] == "Cheque") {
+									$pagoscontadocheque += $rowcontado[$pagoscontado]["Monto"];
+								}else if ($rowcontado[$pagoscontado]["Tipo_Pago"] == "TransferenciaBancaria") {
+									$pagoscontadotransferencia += $rowcontado[$pagoscontado]["Monto"];
+								}else if ($rowcontado[$pagoscontado]["Tipo_Pago"] == "TarjetaCreditoDebito") {
+									$pagostarjetacontado += $rowcontado[$pagoscontado]["Monto"];	
+								}
+							}
+						}
+					}
+
 					//Pagos
 					$pagosefectivo = 0;
 					$pagoscheque = 0;
 					$pagosdeposito = 0;
 					$pagostarjeta = 0;
 					$pagostransferencia = 0;
-					$query2 = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row[0]["Fecha_Abrir"]."' AND pagos.Fecha <= '".$row[0]["Fecha_Cierre"]."') AND Estatus = 0 AND Tipo_Compra = 'Credito'";
+					$query2 = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row[0]["Fecha_Abrir"]."' AND pagos.Fecha <= '".$row[0]["Fecha_Cierre"]."') AND Tipo_Compra = 'Credito'";
 					$rowp = $omodelo->_consultar($query2);
 					$numerofilasp = $omodelo->numerofilas;
 					if($rowp == 'si'){
@@ -1485,15 +1593,16 @@ class hacerventa {
 								$totalEgresos += $rowp[$pagos]["Monto"];
 								$totalpagos += $rowp[$pagos]["Monto"];
 								if ($rowp[$pagos]["Tipo_Pago"] == "Efectivo") {
-									$pagosefectivo = $rowp[$pagos]["Monto"];
+									$pagosefectivo += $rowp[$pagos]["Monto"];
+									$totalEgresosEfectivo += $rowp[$pagos]["Monto"];
 								}else if ($rowp[$pagos]["Tipo_Pago"] == "Deposito") {
-									$pagosdeposito = $rowp[$pagos]["Monto"];
+									$pagosdeposito += $rowp[$pagos]["Monto"];
 								}else if ($rowp[$pagos]["Tipo_Pago"] == "Cheque") {
-									$pagoscheque = $rowp[$pagos]["Monto"];
+									$pagoscheque += $rowp[$pagos]["Monto"];
 								}else if ($rowp[$pagos]["Tipo_Pago"] == "TransferenciaBancaria") {
-									$pagostransferencia = $rowp[$pagos]["Monto"];
+									$pagostransferencia += $rowp[$pagos]["Monto"];
 								}else if ($rowp[$pagos]["Tipo_Pago"] == "TarjetaCreditoDebito") {
-									$pagostarjeta = $rowp[$pagos]["Monto"];	
+									$pagostarjeta += $rowp[$pagos]["Monto"];	
 								}
 							}
 						}
@@ -1510,6 +1619,7 @@ class hacerventa {
 							for ($devol=0; $devol < $numerofilasdev; $devol++) { 
 								$totalEgresos += $rowdev[$devol]["Total"];
 								$totaldevoluciones += $rowdev[$devol]["Total"];
+								$totalEgresosEfectivo += $rowdev[$devol]["Total"];
 							}
 						}
 					}
@@ -1518,10 +1628,14 @@ class hacerventa {
 						"ID_Detalle_Caja" => $row[0]["ID_Detalle_Caja"],
 						"Fecha_Abrir" => $row[0]["FechaAbrir"],
 						"Fecha_Cerrar" => $row[0]["FechaCerrar"],
+						"Usuario_Abrir" => $row[0]["UsuarioAbrir"],
+						"Usuario_Cerrar" => $row[0]["UsuarioCerrar"],
 						"Monto_Abrir" => $row[0]["Monto_Abrir"],
 						"Monto_Cierre" => $row[0]["Monto_Cierre"],
 						"Total_Ingresos" => $totalIngresos,
+						"Total_Ingresos_Efectivo" => $totalIngresosEfectivo,
 						"Total_Egresos" => $totalEgresos,
+						"Total_Egresos_Efectivo" => $totalEgresosEfectivo,
 						"Total_Ventas" => $totalventas,
 						"Total_Ventas_Efectivo" => $totalvefectivo,
 						"Total_Ventas_Deposito" => $totalvdeposito,
@@ -1531,6 +1645,11 @@ class hacerventa {
 						"Total_Ventas_PagoOnline" => $totalvonline,
 						"Total_Importes" => $totalimportes,
 						"Total_Compras" => $totalcompras,
+						"Total_Compras_Efectivo" => $pagoscontadoefectivo,
+						"Total_Compras_Cheque" => $pagoscontadocheque,
+						"Total_Compras_Deposito" => $pagoscontadodeposito,
+						"Total_Compras_Tarjeta" => $pagostarjetacontado,
+						"Total_Compras_Transferencia" => $pagoscontadotransferencia,
 						"Total_Pagos" => $totalpagos,
 						"Total_Pagos_Efectivo" => $pagosefectivo,
 						"Total_Pagos_Deposito" => $pagosdeposito,

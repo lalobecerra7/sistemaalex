@@ -99,6 +99,22 @@ jQuery(document).ready(function($) {
             },
         },
         submitHandler: function(form) { 
+            $("#spanMontoApertura").text("");
+            $("#spanMontoCierre").text("");
+            $("#spanFechaAbrir").text("");
+            $("#spanFechaCerrar").text("");
+            $("#totalIngresosSpan").text("");
+            $("#totalEgresosSpan").text("");
+            $("#totalUtilidadSpan").text("");
+            $("#spanTotalVentas").text("");
+            $("#spanTotalImportes").text("");
+            $("#spanTotalCompras").text("");
+            $("#spanTotalComprasCredito").text("");
+            $("#spanTotalPagos").text("");
+            $("#spanTotalDevoluciones").text("");
+            $("#DivMostrarVentasDesplegada").html("");
+            $("#DivMostrarComprasDesplegado").html("");
+            $("#DivMostrarPagosDesplegado").html("");
 
             var data = "metodo=detalles&accion=hacerventa&tipo=CerrarCaja&MontoCierre="+$("#MontoCierreCaja").val();
             $.ajax({
@@ -122,13 +138,15 @@ jQuery(document).ready(function($) {
                     })
                     .done(function(res) {
                         var datos = JSON.parse($.trim(res));
+                        console.log(datos);
                         $("#spanMontoApertura").text(datos[0].Monto_Abrir);
                         $("#spanMontoCierre").text(datos[0].Monto_Cierre);
-
+                        $("#spanUsuarioAbrir").text(datos[0].Usuario_Abrir);
+                        $("#spanUsuarioCerrar").text(datos[0].Usuario_Cerrar);
                         $("#spanFechaAbrir").text(datos[0].Fecha_Abrir);
                         $("#spanFechaCerrar").text(datos[0].Fecha_Cerrar);
-
-                        $("#totalIngresosSpan").text(datos[0].Total_Ingresos);
+                        var totalIngresos = parseFloat(datos[0].Monto_Abrir) + parseFloat(datos[0].Total_Ingresos);
+                        $("#totalIngresosSpan").text(totalIngresos);
                         $("#totalEgresosSpan").text(datos[0].Total_Egresos);
                         var utilidad = parseFloat(datos[0].Total_Ingresos) - parseFloat(datos[0].Total_Egresos);
                         $("#totalUtilidadSpan").text(utilidad);
@@ -137,8 +155,17 @@ jQuery(document).ready(function($) {
                         $("#spanTotalImportes").text(datos[0].Total_Importes);
                         //EGRESOS
                         $("#spanTotalCompras").text(datos[0].Total_Compras);
+                        $("#spanTotalComprasCredito").text(datos[0].Total_Pagos);
                         $("#spanTotalPagos").text(datos[0].Total_Pagos);
                         $("#spanTotalDevoluciones").text(datos[0].Total_Devoluciones);
+                        var totalIngresosEfectivo = parseFloat(datos[0].Monto_Abrir) + parseFloat(datos[0].Total_Ingresos_Efectivo);
+                        var totalEgresosEfectivo = parseFloat(datos[0].Total_Egresos_Efectivo)
+                        var totalActualEfectivo = totalIngresosEfectivo - totalEgresosEfectivo;
+                        $("#totalActualEfectivo").text(totalActualEfectivo);
+                        var diferencia = parseFloat(datos[0].Monto_Cierre) - totalActualEfectivo;
+                        $("#totalDiferenciaSpan").text(diferencia);
+                        $("#totalIngresosEfectivo").text(totalIngresosEfectivo);
+                        $("#totalEgresosEfectivo").text(totalEgresosEfectivo);
 
                         if (datos[0].Total_Ventas_Efectivo > 0) {
                             $("#DivMostrarVentasDesplegada").append(`
@@ -190,6 +217,52 @@ jQuery(document).ready(function($) {
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12 mb-3">
                                         Ventas en pago online <span class="dinero">`+datos[0].Total_Ventas_PagoOnline+`</span>
+                                    </div>
+                                </div>`);
+                        }
+
+                        //COMPRAS DESGLOZADAS
+                        if (datos[0].Total_Compras_Efectivo > 0) {
+                            $("#DivMostrarComprasDesplegado").append(`
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3">
+                                        Compras en efectivo <span class="dinero">`+datos[0].Total_Compras_Efectivo+`</span>
+                                    </div>
+                                </div>`);
+                        }
+
+                        if (datos[0].Total_Compras_Cheque > 0) {
+                            $("#DivMostrarComprasDesplegado").append(`
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3">
+                                        Compras en cheque <span class="dinero">`+datos[0].Total_Compras_Cheque+`</span>
+                                    </div>
+                                </div>`);
+                        }
+
+                        if (datos[0].Total_Compras_Deposito > 0) {
+                            $("#DivMostrarComprasDesplegado").append(`
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3">
+                                        Compras en deposito <span class="dinero">`+datos[0].Total_Compras_Deposito+`</span>
+                                    </div>
+                                </div>`);
+                        }
+
+                        if (datos[0].Total_Compras_Tarjeta > 0) {
+                            $("#DivMostrarComprasDesplegado").append(`
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3">
+                                        Compras en transferencia bancaria <span class="dinero">`+datos[0].Total_Compras_Tarjeta+`</span>
+                                    </div>
+                                </div>`);
+                        }
+
+                        if (datos[0].Total_Compras_Transferencia > 0) {
+                            $("#DivMostrarComprasDesplegado").append(`
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3">
+                                        Compras en tarjeta de crédito / debito <span class="dinero">`+datos[0].Total_Compras_Transferencia+`</span>
                                     </div>
                                 </div>`);
                         }
