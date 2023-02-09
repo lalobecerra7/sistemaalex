@@ -24,7 +24,7 @@ class ventas {
 			}
 		}
 		
-		$query = "SELECT ID_Venta, Mensaje_Cancelada, Facturada, ventas.FK_Usuario, ventas.FK_Direccion, ventas.FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = ventas.FK_Sucursal) AS NombreSucursal, FK_Caja, FK_Cliente, ventas.Descuento, Total, Total_Importes, Tipo_Pago, Estatus, Pago, Cambio, Notas, ventas.Fecha_Registro AS Datos, DATE_FORMAT(ventas.Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS NombreCliente, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda) AS Num FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Venta, Mensaje_Cancelada, Facturada, Contar_Venta, ventas.FK_Usuario, ventas.FK_Direccion, ventas.FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = ventas.FK_Sucursal) AS NombreSucursal, FK_Caja, FK_Cliente, ventas.Descuento, Total, Total_Importes, Tipo_Pago, Estatus, Pago, Cambio, Notas, ventas.Fecha_Registro AS Datos, DATE_FORMAT(ventas.Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS NombreCliente, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda) AS Num FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -76,9 +76,14 @@ class ventas {
 						$totalFinal = $row[$i]['Total'] - $TotalDevolucion;
 						$MostrarDevolucion = "<br>Devuelto: <b>$".number_format($TotalDevolucion, 2)."</b><br>
 						Total final: <b>$".number_format($totalFinal, 2)."</b>";
-						$SumarVentas += $totalFinal;
+
+						if($row[$i]['Contar_Venta'] == '0'){
+							$SumarVentas += $totalFinal;
+						}
 					}else{
-						$SumarVentas += $row[$i]['Total'];
+						if($row[$i]['Contar_Venta'] == '0'){
+							$SumarVentas += $row[$i]['Total'];
+						}
 					}
 
 					if ($row[$i]['Estatus'] == "Cancelada") {
@@ -96,7 +101,9 @@ class ventas {
 
 					$botonPermisosCancelar = "";
 					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][3] == '1') {
-						$botonPermisosCancelar = $botondeCancelar;
+						if($row[$i]['Contar_Venta'] == '0'){
+							$botonPermisosCancelar = $botondeCancelar;
+						}
 					}
 
 					$botonPermisosEliminar = "";
@@ -111,7 +118,9 @@ class ventas {
 
 					$botonPermisosDevoluciones = "";
 					//if ($row[$i]['Facturada'] == '1' && ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][6] == '1')) {
+					if($row[$i]['Contar_Venta'] == '0'){ //Si cuenta en el balance
 						$botonPermisosDevoluciones = $botonDevolucion;
+					}
 					//}
 
 					$botonPermisosTicket = "";
@@ -177,6 +186,13 @@ class ventas {
 						}
 					}
 
+					$contarVenta = '';
+					if($row[$i]['Contar_Venta'] == '1'){
+						$contarVenta = '<br><b>Esta venta no afectó al balance de caja ni al inventario.</b>';
+					}
+
+
+
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Venta'],
 						'Datos' => "Fecha: <b>".$row[$i]['Fecha_Registro']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b><br>Sucursal: <b>".$row[$i]["NombreSucursal"]."</b>",
@@ -190,7 +206,7 @@ class ventas {
 						<hr>
 						Total de importes: <b>$".number_format($row[$i]['Total_Importes'], 2)."</b>",
 						'Facturada' => $facturada.'<br>'.$row[$i]['Mensaje_Cancelada'],
-						'Detalles' => $estatus."<br>".$motivocancelada.$fechacancelada.'<button class="btn btn-link btn-sm" id="VerProductosVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'">Ver productos</button><br>Tipo de pago: <b>'.$row[$i]['Tipo_Pago']."</b>",
+						'Detalles' => $estatus."<br>".$motivocancelada.$fechacancelada.'<button class="btn btn-link btn-sm" id="VerProductosVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'">Ver productos</button><br>Tipo de pago: <b>'.$row[$i]['Tipo_Pago']."</b>".$contarVenta,
 						'Acciones' => $botonPermisosEliminar.' '.$botonPermisosCancelar .' '.$botonPermisosTicket.' '.$botonPermisosFacturar.' '.$botonPermisosDevoluciones,
 					);
 				}

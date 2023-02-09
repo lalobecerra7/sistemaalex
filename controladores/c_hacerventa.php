@@ -120,7 +120,7 @@ class hacerventa {
 					}*/
 
 					$idDetalleVenta = "";
-					$query = "INSERT INTO detalles_ventas SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]', Cobrar_Importe = '$fila[7]'";
+					$query = "INSERT INTO detalles_ventas SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]', Cobrar_Importe = '$fila[7]', Contar_Venta = '$contarVenta'";
 					$error = $omodelo->_insertar($query);
 
 					if ($error == "si") {
@@ -1489,7 +1489,7 @@ class hacerventa {
 					$totalvtransferencia = 0;
 					$totalvonline = 0;
 
-					$queryv = "SELECT Total, Tipo_Pago FROM ventas WHERE (Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row[0]["Fecha_Cierre"]."') AND Estatus = 'Completada'";
+					$queryv = "SELECT Total, Tipo_Pago FROM ventas WHERE (Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row[0]["Fecha_Cierre"]."') AND Estatus = 'Completada' AND Contar_Venta = 0";
 					$rowv = $omodelo->_consultar($queryv);
 					$numerofilasv = $omodelo->numerofilas;
 					if($rowv == 'si'){

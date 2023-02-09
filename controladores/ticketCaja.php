@@ -140,7 +140,7 @@ echo $_GET["idsucursal"];
       $totalvtransferencia = 0;
       $totalvonline = 0;
 
-      $queryv = "SELECT Total, Tipo_Pago FROM ventas WHERE (Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row["Fecha_Cierre"]."') AND Estatus = 'Completada'";
+      $queryv = "SELECT Total, Tipo_Pago FROM ventas WHERE (Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row["Fecha_Cierre"]."') AND Estatus = 'Completada' AND Contar_Venta = 0";
       if($resv=$con->query($queryv)){
         if ($resv->num_rows > 0) {
           while($rowv = $resv->fetch_assoc()){
