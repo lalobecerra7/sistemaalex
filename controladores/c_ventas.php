@@ -190,7 +190,7 @@ class ventas {
 						<hr>
 						Total de importes: <b>$".number_format($row[$i]['Total_Importes'], 2)."</b>",
 						'Facturada' => $facturada.'<br>'.$row[$i]['Mensaje_Cancelada'],
-						'Detalles' => $estatus."<br>".$motivocancelada.$fechacancelada.'<button class="btn btn-link btn-sm" id="VerProductosVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'">Ver productos</button>',
+						'Detalles' => $estatus."<br>".$motivocancelada.$fechacancelada.'<button class="btn btn-link btn-sm" id="VerProductosVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'">Ver productos</button><br>Tipo de pago: <b>'.$row[$i]['Tipo_Pago']."</b>",
 						'Acciones' => $botonPermisosEliminar.' '.$botonPermisosCancelar .' '.$botonPermisosTicket.' '.$botonPermisosFacturar.' '.$botonPermisosDevoluciones,
 					);
 				}

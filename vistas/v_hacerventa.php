@@ -450,7 +450,7 @@
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" value="" id="ContarVenta" name="ContarVenta">
                   <label class="form-check-label" for="ContarVenta">
-                    Esta venta no cuenta para el balance ni los reportes
+                    Esta venta no cuenta para el balance ni afecta el inventario
                   </label>
                 </div>
             </div>
