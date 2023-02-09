@@ -728,8 +728,16 @@ jQuery(document).ready(function($) {
 				});
 				productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto, cantidadImportes, precioImporte]);
 			});
+			var contarventa = "";
+
+			if ($("#ContarVenta").prop("checked") == true) {
+				contarventa = "1";
+			}else{
+				contarventa = "0";
+			}
+
 			console.log(productos);
-			var data = "metodo=insertar&accion=hacerventa&tipo=RealizarVenta&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&TipoPago="+tipopago+"&Importe="+pago+"&totalventa="+totalventa+"&totalfinalimporte="+totalimporte;
+			var data = "metodo=insertar&accion=hacerventa&tipo=RealizarVenta&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&TipoPago="+tipopago+"&Importe="+pago+"&totalventa="+totalventa+"&totalfinalimporte="+totalimporte+"&contarVenta="+contarventa;
 			$.ajax({
 				url: 'index.php',
 			    type: 'POST',
@@ -1130,8 +1138,16 @@ jQuery(document).ready(function($) {
 		var precio = $(this).attr("precio");
 		var importegeneral = $(this).attr("importegeneral");
 		var importepresentacion = $(this).attr("importepresentacion");
+		var codigopresentacion = $(this).attr("codigopresentacion");
+		var codigoproducto = $(this).attr("codigoproducto");
 		if (idpresentacion == 0) {
 			idpresentacion = null;
+		}
+		var codigoactual = "";
+		if (codigopresentacion != "") {
+			codigoactual = codigopresentacion;
+		}else{
+			codigoactual = codigoproducto;
 		}
 		$("#ModalPresentacionesProducto").modal("hide");
 		
@@ -1140,6 +1156,9 @@ jQuery(document).ready(function($) {
            	var cantidadactual = $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(3)").find(".campoCantidadProducto").val();
             $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(3)").find(".campoCantidadProducto").val(parseFloat(cantidad) + parseFloat(cantidadactual));
             $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+presentacionanterior+']').remove();
+
+            $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(0)").text(codigoactual);
+
             $(".campoCantidadProducto").trigger("change");
         }else{
         	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+presentacionanterior+']').attr("importegeneral", importegeneral);
@@ -1157,6 +1176,8 @@ jQuery(document).ready(function($) {
 		    }else{
 		    	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(2)").find(".campoPrecioImporte").text(importegeneral);
 		    }
+
+		    $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(0)").text(codigoactual);
 
 	    	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(2)").find(".cambiarPrecio").attr("precio", precio);
 	    	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(2)").find(".cambiarPrecio").text(precio);

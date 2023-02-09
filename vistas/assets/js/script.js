@@ -99,7 +99,7 @@ jQuery(document).ready(function($) {
             },
         },
         submitHandler: function(form) { 
-            $("#spanMontoApertura").text("");
+            /*$("#spanMontoApertura").text("");
             $("#spanMontoCierre").text("");
             $("#spanFechaAbrir").text("");
             $("#spanFechaCerrar").text("");
@@ -114,7 +114,7 @@ jQuery(document).ready(function($) {
             $("#spanTotalDevoluciones").text("");
             $("#DivMostrarVentasDesplegada").html("");
             $("#DivMostrarComprasDesplegado").html("");
-            $("#DivMostrarPagosDesplegado").html("");
+            $("#DivMostrarPagosDesplegado").html("");*/
 
             var data = "metodo=detalles&accion=hacerventa&tipo=CerrarCaja&MontoCierre="+$("#MontoCierreCaja").val();
             $.ajax({
@@ -139,8 +139,65 @@ jQuery(document).ready(function($) {
                     .done(function(res) {
                         var datos = JSON.parse($.trim(res));
                         console.log(datos);
+                        $("#spanVentasTotales").text(datos[0].Total_Ventas);
                         $("#spanMontoApertura").text(datos[0].Monto_Abrir);
-                        $("#spanMontoCierre").text(datos[0].Monto_Cierre);
+                        $("#spanVentasEfectivo").text(datos[0].Total_Ventas_Efectivo);
+                        $("#spanTotalImportes").text(datos[0].Total_Importes);
+                        $("#spanTotalCompras").text(datos[0].Total_Compras_Efectivo);
+                        $("#spanPagosEfectivo").text(datos[0].Total_Pagos_Efectivo);
+                        $("#spanTotalDevoluciones").text(datos[0].Total_Devoluciones);
+
+                        var ingresosefectivo = parseFloat(datos[0].Monto_Abrir) + parseFloat(datos[0].Total_Ventas_Efectivo) + parseFloat(datos[0].Total_Importes);
+                        var egresosefectivo = parseFloat(datos[0].Total_Compras_Efectivo) + parseFloat(datos[0].Total_Pagos_Efectivo) + parseFloat(datos[0].Total_Devoluciones);
+                        var total = ingresosefectivo - egresosefectivo;
+                        $("#spanTotalEfectivo").text("$"+total.toFixed(2));
+                        if (total < 0) {
+                            $("#spanTotalEfectivo").css("color", "red");
+                        }else{
+                            $("#spanTotalEfectivo").css("color", "green");
+                        }
+                        $("#spanVentasEnEfectivo").text(datos[0].Total_Ventas_Efectivo);
+                        $("#spanVentasDeposito").text(datos[0].Total_Ventas_Deposito);
+                        $("#spanVentasCheque").text(datos[0].Total_Ventas_Cheque);
+                        $("#spanVentasTransferencia").text(datos[0].Total_Ventas_TransferenciaBancaria);
+                        $("#spanVentasTarjeta").text(datos[0].Total_Ventas_TarjetaCreditoDebito);
+                        $("#spanVentasPagoOnline").text(datos[0].Total_Ventas_PagoOnline);
+                        $("#spanTotalDevolucionesVenta").text(datos[0].Total_Devoluciones);
+
+                        var ventas = parseFloat(datos[0].Total_Ventas_Efectivo) + parseFloat(datos[0].Total_Ventas_Deposito) + parseFloat(datos[0].Total_Ventas_Cheque) + parseFloat(datos[0].Total_Ventas_TransferenciaBancaria) + parseFloat(datos[0].Total_Ventas_TarjetaCreditoDebito) + parseFloat(datos[0].Total_Ventas_PagoOnline); 
+                        var totalventas= ventas - parseFloat(datos[0].Total_Devoluciones);
+                        $("#spanTotalVentas").text("$"+totalventas.toFixed(2));
+                        if (totalventas < 0) {
+                            $("#spanTotalVentas").css("color", "red");
+                        }else{
+                            $("#spanTotalVentas").css("color", "green");
+                        }
+
+                        $("#spanComprasEnEfectivo").text(datos[0].Total_Compras_Efectivo);
+                        $("#spanComprasDeposito").text(datos[0].Total_Compras_Cheque);
+                        $("#spanComprasCheque").text(datos[0].Total_Compras_Deposito);
+                        $("#spanComprasTransferencia").text(datos[0].Total_Compras_Tarjeta);
+                        $("#spanComprasTarjeta").text(datos[0].Total_Compras_Transferencia);
+                        $("#spanComprasTotal").text(datos[0].Total_Compras);
+
+                        $("#spanPagosEnEfectivo").text(datos[0].Total_Pagos_Efectivo);
+                        $("#spanPagosDeposito").text(datos[0].Total_Pagos_Deposito);
+                        $("#spanPagosCheque").text(datos[0].Total_Pagos_Cheque);
+                        $("#spanPagosTransferencia").text(datos[0].Total_Pagos_TransferenciaBancaria);
+                        $("#spanPagosTarjeta").text(datos[0].Total_Pagos_TarjetaCreditoDebito);
+                        $("#spanPagosTotal").text(datos[0].Total_Pagos);
+                        $("#spanMontoCierre").text(datos[0].Monto_Cierre); 
+
+                        var diferencia = parseFloat(datos[0].Monto_Cierre) - total;
+                        $("#spanTotalDiferencia").text("$"+diferencia.toFixed(2));
+                        if (diferencia < 0) {
+                            $("#spanTotalDiferencia").css("color", "red");
+                        }else{
+                            $("#spanTotalDiferencia").css("color", "green");
+                        }
+
+                        /*
+                        
                         $("#spanUsuarioAbrir").text(datos[0].Usuario_Abrir);
                         $("#spanUsuarioCerrar").text(datos[0].Usuario_Cerrar);
                         $("#spanFechaAbrir").text(datos[0].Fecha_Abrir);
@@ -151,10 +208,10 @@ jQuery(document).ready(function($) {
                         var utilidad = parseFloat(datos[0].Total_Ingresos) - parseFloat(datos[0].Total_Egresos);
                         $("#totalUtilidadSpan").text(utilidad);
                         //INGRESOS
-                        $("#spanTotalVentas").text(datos[0].Total_Ventas);
-                        $("#spanTotalImportes").text(datos[0].Total_Importes);
+                        $("#spanTotalVentas").text(datos[0].Total_Ventas); **************
+                        $("#spanTotalImportes").text(datos[0].Total_Importes); **************
                         //EGRESOS
-                        $("#spanTotalCompras").text(datos[0].Total_Compras);
+                        $("#spanTotalCompras").text(datos[0].Total_Compras); 
                         $("#spanTotalComprasCredito").text(datos[0].Total_Pagos);
                         $("#spanTotalPagos").text(datos[0].Total_Pagos);
                         $("#spanTotalDevoluciones").text(datos[0].Total_Devoluciones);
@@ -167,7 +224,7 @@ jQuery(document).ready(function($) {
                         $("#totalIngresosEfectivo").text(totalIngresosEfectivo);
                         $("#totalEgresosEfectivo").text(totalEgresosEfectivo);
 
-                        if (datos[0].Total_Ventas_Efectivo > 0) {
+                        if (datos[0].Total_Ventas_Efectivo > 0) { **************
                             $("#DivMostrarVentasDesplegada").append(`
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12 mb-3">
@@ -222,8 +279,8 @@ jQuery(document).ready(function($) {
                         }
 
                         //COMPRAS DESGLOZADAS
-                        if (datos[0].Total_Compras_Efectivo > 0) {
-                            $("#DivMostrarComprasDesplegado").append(`
+                        if (datos[0].Total_Compras_Efectivo > 0) {**************
+                            $("#DivMostrarComprasDesplegado").append(` 
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12 mb-3">
                                         Compras en efectivo <span class="dinero">`+datos[0].Total_Compras_Efectivo+`</span>
@@ -311,10 +368,10 @@ jQuery(document).ready(function($) {
                                         Pagos en tarjeta de crédito / debito <span class="dinero">`+datos[0].Total_Pagos_TarjetaCreditoDebito+`</span>
                                     </div>
                                 </div>`);
-                        }
+                        }*/
 
                         $("#ImprimirBalance").attr("attrid", datos[0].ID_Detalle_Caja);
-                        moneda();
+                        //moneda();
                     })
                     .fail(function() {
                         console.log("Error ajax");
@@ -344,6 +401,10 @@ jQuery(document).ready(function($) {
     $(document).on('click', '#ImprimirBalance', function() {
         var iddetalle = $(this).attr("attrid");
         var idsucursal = $("#SucursalVenta").attr("attrid");
+        console.log(idsucursal);
+        if (idsucursal == undefined) {
+            idsucursal = "";
+        }
         var altura=50;
         var anchura=310;
         var y= parseInt((window.screen.height/2)-(altura/2));

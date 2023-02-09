@@ -495,7 +495,7 @@ $arregloVenta = '';
                     }
 
                     //CONSULTAR PRODUCTOS POR CATEGORIA
-                    $sql = "SELECT ID_Detalle_Venta, FK_Venta, detalles_ventas.FK_Producto, productos.FK_Categoria AS IDCategoria, categorias.Nombre AS NombreCategoria, productos.Codigo, FK_Presentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS Abreviatura, detalles_ventas.Descripcion, detalles_ventas.Precio, Cantidad, detalles_ventas.Descuento, Total, Regreso_Inventario FROM detalles_ventas LEFT JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion LEFT JOIN categorias ON productos.FK_Categoria = ID_Categoria WHERE FK_Venta = '".$arregloVenta['ID_Venta']."' AND FK_Categoria = '".$row1["FK_Categoria"]."' ORDER BY IDCategoria";
+                    $sql = "SELECT ID_Detalle_Venta, FK_Venta, detalles_ventas.FK_Producto, productos.FK_Categoria AS IDCategoria, categorias.Nombre AS NombreCategoria, productos.Codigo AS CodigoProducto, presentaciones.Codigo AS CodigoPresentacion, FK_Presentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS Abreviatura, detalles_ventas.Descripcion, detalles_ventas.Precio, Cantidad, detalles_ventas.Descuento, Total, Regreso_Inventario FROM detalles_ventas LEFT JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion LEFT JOIN categorias ON productos.FK_Categoria = ID_Categoria WHERE FK_Venta = '".$arregloVenta['ID_Venta']."' AND FK_Categoria = '".$row1["FK_Categoria"]."' ORDER BY IDCategoria";
                     if($res=$con->query($sql)){
                       if ($res->num_rows > 0) {
                         while($row = $res->fetch_assoc()){
@@ -525,10 +525,13 @@ $arregloVenta = '';
                             }
 
                             $nombrePresentacion = "";
+                            $codigoactual = "";
                             if ($row['Presentacion'] != "") {
                               $nombrePresentacion = " ".$row['Presentacion']." (".$row['Abreviatura'].")";
+                              $codigoactual = $row['CodigoPresentacion'];
                             }else{
                               $nombrePresentacion = "";
+                              $codigoactual = $row['CodigoProducto'];
                             }
 
                             $subtotalProducto = ($row['Cantidad'] * $row['Precio']);
@@ -547,7 +550,7 @@ $arregloVenta = '';
                                 <td colspan='5' style='text-align: left;'>".$row["Descripcion"].$nombrePresentacion."</td>      
                             </tr>
                             <tr>
-                                <td class='codigo'>".$row["Codigo"]."</td>
+                                <td class='codigo'>".$codigoactual."</td>
                                 <td class='cantidad'>".(round($row['Cantidad']*100)/100)." ".$devuelto."</td> 
                                 <td class='precio'>$".(round($row['Precio']*100)/100)."</td>
                                 <td class='impuestos'>".$mostrarImpuestos."</td>

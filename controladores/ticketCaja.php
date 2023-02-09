@@ -9,6 +9,7 @@ $con = mysqli_connect('localhost','root','','wits_sistemaalex');
 $arreglo = '';
 $arreglo2 = '';
 $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $totalcompras = 0; $totaldevoluciones = 0; $totalpagos = 0; $totalIngresosEfectivo = 0; $totalEgresosEfectivo = 0;
+echo $_GET["idsucursal"];
 ?>
 
 <!DOCTYPE html>
@@ -288,42 +289,99 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
     }
   }
 
-  $sql2 = "SELECT ID_Ticket, FK_Sucursal, Imagen, Ruta_Imagen, tickets.Nombre AS MostrarNombre, Domicilio, tickets.Telefono AS MostrarTelefono, tickets.Email AS MostrarEmail, Total_Letras, Incluir_Mensaje, Mensaje, Moneda, Simbolo, Origen, sucursales.Nombre AS NombreSucursal, FK_Encargado, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, sucursales.Email AS CorreoSucursal, sucursales.Telefono AS TelefonoSucursal, Segundo_Telefono, FK_Zona FROM tickets INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE FK_Sucursal = '".$_GET["idsucursal"]."'";
-  if($res2=$con->query($sql2)){
-    if ($res2->num_rows > 0) {
-      $row2 = $res2->fetch_assoc();
+  /*if ($_GET["idsucursal"] != "") {
+    $sql2 = "SELECT ID_Ticket, FK_Sucursal, Imagen, Ruta_Imagen, tickets.Nombre AS MostrarNombre, Domicilio, tickets.Telefono AS MostrarTelefono, tickets.Email AS MostrarEmail, Total_Letras, Incluir_Mensaje, Mensaje, Moneda, Simbolo, Origen, sucursales.Nombre AS NombreSucursal, FK_Encargado, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, sucursales.Email AS CorreoSucursal, sucursales.Telefono AS TelefonoSucursal, Segundo_Telefono, FK_Zona FROM tickets INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE FK_Sucursal = '".$_GET["idsucursal"]."'";
+    if($res2=$con->query($sql2)){
+      if ($res2->num_rows > 0) {
+        $row2 = $res2->fetch_assoc();
 
-      $arreglo2 = array(
-        'ID_Ticket' => $row2["ID_Ticket"],
-        'FK_Sucursal' => $row2["FK_Sucursal"],
-        'MostrarNombre' => $row2["MostrarNombre"],
-        'Domicilio' => $row2["Domicilio"],
-        'MostrarTelefono' => $row2["MostrarTelefono"],
-        'MostrarEmail' => $row2["MostrarEmail"],
-        'Total_Letras' => $row2["Total_Letras"],
-        'Incluir_Mensaje' => $row2["Incluir_Mensaje"],
-        'Mensaje' => $row2["Mensaje"],
-        'Moneda' => $row2["Moneda"],
-        'Simbolo' => $row2["Simbolo"],
-        'Origen' => $row2["Origen"],
-        'NombreSucursal' => $row2["NombreSucursal"],
-        'Calle' => $row2["Calle"],
-        'No_Exterior' => $row2["No_Exterior"],
-        'No_Interior' => $row2["No_Interior"],
-        'Colonia' => $row2["Colonia"],
-        'CP' => $row2["CP"],
-        'Ciudad' => $row2["Ciudad"],
-        'Estado' => $row2["Estado"],
-        'Pais' => $row2["Pais"],
-        'TelefonoSucursal' => $row2["TelefonoSucursal"],
-        'CorreoSucursal' => $row2["CorreoSucursal"],
-        'Segundo_Telefono' => $row2["Segundo_Telefono"],
-        'FK_Zona' => $row2["FK_Zona"],
-      );
-    }else{
-      echo "No se encontraron resultados ticket";
+        $arreglo2 = array(
+          'ID_Ticket' => $row2["ID_Ticket"],
+          'FK_Sucursal' => $row2["FK_Sucursal"],
+          'MostrarNombre' => $row2["MostrarNombre"],
+          'Domicilio' => $row2["Domicilio"],
+          'MostrarTelefono' => $row2["MostrarTelefono"],
+          'MostrarEmail' => $row2["MostrarEmail"],
+          'Total_Letras' => $row2["Total_Letras"],
+          'Incluir_Mensaje' => $row2["Incluir_Mensaje"],
+          'Mensaje' => $row2["Mensaje"],
+          'Moneda' => $row2["Moneda"],
+          'Simbolo' => $row2["Simbolo"],
+          'Origen' => $row2["Origen"],
+          'NombreSucursal' => $row2["NombreSucursal"],
+          'Calle' => $row2["Calle"],
+          'No_Exterior' => $row2["No_Exterior"],
+          'No_Interior' => $row2["No_Interior"],
+          'Colonia' => $row2["Colonia"],
+          'CP' => $row2["CP"],
+          'Ciudad' => $row2["Ciudad"],
+          'Estado' => $row2["Estado"],
+          'Pais' => $row2["Pais"],
+          'TelefonoSucursal' => $row2["TelefonoSucursal"],
+          'CorreoSucursal' => $row2["CorreoSucursal"],
+          'Segundo_Telefono' => $row2["Segundo_Telefono"],
+          'FK_Zona' => $row2["FK_Zona"],
+        );
+      }else{
+        echo "No se encontraron resultados ticket";
+      }
     }
-  }
+  }else{*/
+    $idSucursal = 1;
+    //CONSULTAR SUCURSAL USUARIO
+    $sqlSucursal = "SELECT FK_Sucursal FROM usuarios WHERE ID_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
+    if($resSucursal=$con->query($sqlSucursal)){
+      if ($resSucursal->num_rows > 0) {
+        $rowSucursal = $resSucursal->fetch_assoc();
+        if ($rowSucursal["FK_Sucursal"] == 0) {
+          $idSucursal = 1;
+        }else{
+          $idSucursal = $rowSucursal["FK_Sucursal"];
+        }
+      }
+    }
+    $sql2 = "SELECT ID_Ticket, FK_Sucursal, Imagen, Ruta_Imagen, tickets.Nombre AS MostrarNombre, Domicilio, tickets.Telefono AS MostrarTelefono, tickets.Email AS MostrarEmail, Total_Letras, Incluir_Mensaje, Mensaje, Moneda, Simbolo, Origen, sucursales.Nombre AS NombreSucursal, FK_Encargado, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, sucursales.Email AS CorreoSucursal, sucursales.Telefono AS TelefonoSucursal, Segundo_Telefono, FK_Zona FROM tickets INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE FK_Sucursal = '".$idSucursal."'";
+    if($res2=$con->query($sql2)){
+      if ($res2->num_rows > 0) {
+        $row2 = $res2->fetch_assoc();
+
+        $arreglo2 = array(
+          'ID_Ticket' => $row2["ID_Ticket"],
+          'FK_Sucursal' => $row2["FK_Sucursal"],
+          'MostrarNombre' => $row2["MostrarNombre"],
+          'Domicilio' => $row2["Domicilio"],
+          'MostrarTelefono' => $row2["MostrarTelefono"],
+          'MostrarEmail' => $row2["MostrarEmail"],
+          'Total_Letras' => $row2["Total_Letras"],
+          'Incluir_Mensaje' => $row2["Incluir_Mensaje"],
+          'Mensaje' => $row2["Mensaje"],
+          'Moneda' => $row2["Moneda"],
+          'Simbolo' => $row2["Simbolo"],
+          'Origen' => $row2["Origen"],
+          'NombreSucursal' => $row2["NombreSucursal"],
+          'Calle' => $row2["Calle"],
+          'No_Exterior' => $row2["No_Exterior"],
+          'No_Interior' => $row2["No_Interior"],
+          'Colonia' => $row2["Colonia"],
+          'CP' => $row2["CP"],
+          'Ciudad' => $row2["Ciudad"],
+          'Estado' => $row2["Estado"],
+          'Pais' => $row2["Pais"],
+          'TelefonoSucursal' => $row2["TelefonoSucursal"],
+          'CorreoSucursal' => $row2["CorreoSucursal"],
+          'Segundo_Telefono' => $row2["Segundo_Telefono"],
+          'FK_Zona' => $row2["FK_Zona"],
+        );
+      }else{
+        echo "No se encontraron resultados ticket";
+      }
+    }
+
+
+
+  //}
+
+  
 
   ?>
 
@@ -448,13 +506,6 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
     if ($arreglo["Total_Pagos_TarjetaCreditoDebito"]) {
       echo '<p class="">PAGOS EN TARJETA DE CRÉDITO / DEBITO: $'.number_format($arreglo["Total_Pagos_TarjetaCreditoDebito"], 2).'</p>';
     }
-
-    echo "</br>
-    <p class='derecha'><b style='font-size: 15px;'>INGRESOS TOTALES: $".number_format($arreglo["Total_Ingresos"], 2)."</b></p>
-    ";
-    echo "</br>
-    <p class='derecha'><b style='font-size: 15px;'>EGRESOS TOTALES: $".number_format($arreglo["Total_Egresos"], 2)."</b></p>
-    ";
     echo "</br>
     <p class='centrado'><b style='font-size: 12px;'>INGRESOS EN EFECTIVO: $".number_format($arreglo["Total_Ingresos_Efectivo"], 2)."</b></p>
     ";

@@ -657,21 +657,25 @@ function tablaFinanzas() {
 				month = (fecha.getMonth() + 1).toString().padStart(2, '0');
     			today = meses[month]+' '+fecha.getFullYear();
 
-    			for (var i = datos['Compras'].length - 1; i >= 0; i--) {
-    				if(datos['Compras'][i]['Fecha'] == fecha.getFullYear()+'-'+(fecha.getMonth() + 1).toString().padStart(2, '0')){
-    					compras = parseFloat(datos['Compras'][i]['Total']);
-    					totalC += parseFloat(datos['Compras'][i]['Total']);
-    					break;
-    				}
+    			if (datos['Compras'] != undefined) {
+    				for (var i = datos['Compras'].length - 1; i >= 0; i--) {
+	    				if(datos['Compras'][i]['Fecha'] == fecha.getFullYear()+'-'+(fecha.getMonth() + 1).toString().padStart(2, '0')){
+	    					compras = parseFloat(datos['Compras'][i]['Total']);
+	    					totalC += parseFloat(datos['Compras'][i]['Total']);
+	    					break;
+	    				}
+	    			}
     			}
-
-    			for (var i = datos['Ventas'].length - 1; i >= 0; i--) {
-    				if(datos['Ventas'][i]['Fecha'] == fecha.getFullYear()+'-'+(fecha.getMonth() + 1).toString().padStart(2, '0')){
-    					ventas = parseFloat(datos['Ventas'][i]['Total']);
-    					totalV += parseFloat(datos['Ventas'][i]['Total']);
-    					break;
-    				}
-    			}
+    			//NOS QUEDAMOS EN REVISAR ESTE REPORTE Y PONER EL CHECKBOX PARA QUE LAS VENTAS CUENTE EN EN BALANCE DE CAJA Y REPORTES
+    			if (datos['Ventas'] != undefined) {
+	    			for (var i = datos['Ventas'].length - 1; i >= 0; i--) {
+	    				if(datos['Ventas'][i]['Fecha'] == fecha.getFullYear()+'-'+(fecha.getMonth() + 1).toString().padStart(2, '0')){
+	    					ventas = parseFloat(datos['Ventas'][i]['Total']);
+	    					totalV += parseFloat(datos['Ventas'][i]['Total']);
+	    					break;
+	    				}
+	    			}
+	    		}
 
     			var color = 'green';
     			if((ventas - compras) < 0){

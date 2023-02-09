@@ -134,7 +134,23 @@ class reportes {
 			}else{
 				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
-						$arreglo['Ventas'][$i] = array('Fecha' => $row[$i]['Fecha'], 'Total' => $row[$i]['Total']);	
+						$arreglo['Ventas'][$i] = array('Fecha' => $row[$i]['Fecha'], 'Total' => $row[$i]['Total']);
+
+
+						/*
+						$query2 = "SELECT SUM(Total) AS TotalDevolucion FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE FK_Venta = '".$row[$i]['ID_Venta']."'";
+						$row2 = $omodelo->_consultar($query2);
+						$numerofilas2 = $omodelo->numerofilas;
+
+						if($row2 == 'si'){
+							echo "Error: ".mysqli_error($omodelo->link);
+						}else{
+							if($numerofilas2 > 0){
+								$TotalDevolucion = $row2[0]["TotalDevolucion"];
+							}
+						}
+
+						$Total = $row[$i]['Total'] - $TotalDevolucion;*/	
 					}
 				}
 			}
