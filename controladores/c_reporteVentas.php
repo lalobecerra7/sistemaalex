@@ -1,30 +1,14 @@
 <?php
-class reporteCaja {
+class reporteVentas {
 
 	public function _consultar(){
 		$omodelo = new m_modelo();
 		extract($_POST);
 
-		$buscar =  $omodelo->link->real_escape_string($buscar);
-		$limit =  $omodelo->link->real_escape_string($limit);
-		$pagina =  $omodelo->link->real_escape_string($pagina);
-		$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
-		$orden =  $omodelo->link->real_escape_string($orden);
-		$arreglo = array();
+		$fechaInicio = $omodelo->link->real_escape_string($fechaInicio);
+		$fechaFin = $omodelo->link->real_escape_string($fechaFin);
 
-		$busqueda = '';
-		if(trim($buscar) != ''){
-			$separa = explode(' ', trim($buscar));
-			$busqueda = 'WHERE ';
-			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(Fecha_Abrir, Monto_Abrir, Fecha_Cierre, Monto_Cierre, usuarios.Nombre, usuarios.Primer_Apellido, usuarios.Segundo_Apellido) REGEXP '".$separa[$i]."'";
-				if($i < (count($separa)-1)){
-					$busqueda .= ' AND ';
-				}
-			}
-		}
-		
-		$query = "SELECT ID_Detalle_Caja, FK_Caja, cajas.FK_Sucursal AS IDSucursal, Fecha_Abrir AS Abrir, CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) AS NombreUsuarioAbrir, Monto_Abrir AS MontoAbrir, FK_Usuario_Abrir, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario_Cierre) AS NombreUsuarioCerrar, Fecha_Cierre AS Cerrar, Monto_Cierre AS MontoCerrar, FK_Usuario_Cierre, (SELECT COUNT(*) FROM detalles_caja INNER JOIN usuarios ON FK_Usuario_Abrir = ID_Usuario INNER JOIN cajas ON FK_Caja = ID_Caja $busqueda) AS Num FROM detalles_caja INNER JOIN usuarios ON FK_Usuario_Abrir = ID_Usuario INNER JOIN cajas ON FK_Caja = ID_Caja $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Venta, Foto, FK_Usuario, CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) AS NombreUsuario, (SUM(Total) - IFNULL((SELECT SUM(Total) FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE FK_Venta = ID_Venta), 0)) AS Total FROM ventas INNER JOIN usuarios ON FK_Usuario = ID_Usuario WHERE ventas.Estatus = 'Completada' AND Contar_Venta = 0 AND (DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') >= '$fechaInicio' AND DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') <= '$fechaFin') GROUP BY FK_Usuario ORDER BY Total DESC LIMIT 10";
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -33,106 +17,19 @@ class reporteCaja {
 		}else{
 			if($numerofilas > 0){
 				for($i=0; $i<$numerofilas; $i++){
-					$totalIngresos = 0; $totalEgresos = 0; $totalUtilidad = 0;
-					$botonTicket = '<button title="Imprimir ticket" class="btn btn-success btn-sm" id="ReimprimirTicketCaja" attrid="'.$row[$i]['ID_Detalle_Caja'].'" sucursal="'.$row[$i]['IDSucursal'].'"><i class="fas fa-print"></i></button>';
+					$foto = 'vistas/assets/archivos/default.jpg';
 
-					$querydetallecaja = "SELECT ID_Detalle_Caja, FK_Caja, Fecha_Abrir, Monto_Abrir, FK_Usuario_Abrir, Fecha_Cierre, Monto_Cierre, FK_Usuario_Cierre, DATE_FORMAT(Fecha_Cierre, '%Y-%m-%d %r') AS FechaCerrar, DATE_FORMAT(Fecha_Abrir, '%Y-%m-%d %r') AS FechaAbrir FROM detalles_caja WHERE ID_Detalle_Caja = '".$row[$i]['ID_Detalle_Caja']."'";
-					$rowdetallecaja = $omodelo->_consultar($querydetallecaja);
-					$numerofilas2 = $omodelo->numerofilas;
-					if($rowdetallecaja == 'si'){
-						echo "Error: ".mysqli_error($omodelo->link);
-					}else{
-						if($numerofilas2 > 0){
-							///*****************************INGRESOS********************************///
-							$queryv = "SELECT Total, Tipo_Pago, Contar_Venta FROM ventas WHERE (Fecha_Registro >= '".$rowdetallecaja[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$rowdetallecaja[0]["Fecha_Cierre"]."') AND Estatus = 'Completada'";
-							$rowv = $omodelo->_consultar($queryv);
-							$numerofilasv = $omodelo->numerofilas;
-							if($rowv == 'si'){
-								echo "Error: ".mysqli_error($omodelo->link);
-							}else{
-								if($numerofilasv > 0){
-									for ($ventas=0; $ventas < $numerofilasv; $ventas++) { 
-										if($row[$i]['Contar_Venta'] == '0'){
-											$totalIngresos += $rowv[$ventas]["Total"];
-										}
-									}
-								}
-							}
+					if ($row[$i]["Foto"] != "") {
+						if($row[$i]["Foto"] != "" && file_exists("vistas/assets/archivos/fotosUsuarios/".$row[$i]["Foto"])){
+							$foto = 'vistas/assets/archivos/fotosUsuarios/'.$row[$i]["Foto"];
+						}	
+					}
 
-							$queryi = "SELECT detalles_importes.Cantidad AS CantidadImportes, importes.Importe AS PrecioImporte FROM detalles_importes INNER JOIN importes ON FK_Importe = ID_Importe WHERE (detalles_importes.Fecha_Registro >= '".$rowdetallecaja[0]["Fecha_Abrir"]."' AND detalles_importes.Fecha_Registro <= '".$rowdetallecaja[0]["Fecha_Cierre"]."')";
-							$rowi = $omodelo->_consultar($queryi);
-							$numerofilasi = $omodelo->numerofilas;
-							if($rowi == 'si'){
-								echo "Error: ".mysqli_error($omodelo->link);
-							}else{
-								if($numerofilasi > 0){
-									for ($importes=0; $importes < $numerofilasi; $importes++) { 
-										$totalIngresos += $rowi[$importes]["CantidadImportes"] * $rowi[$importes]["PrecioImporte"];
-									}
-								}
-							}
-							///*****************************INGRESOS********************************///
-
-							///******************************EGRESOS*******************************///
-							$querycompras = "SELECT Total FROM compras WHERE Estatus = 1 AND Tipo_Compra = 'Contado' AND (Fecha_Registro >= '".$rowdetallecaja[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$rowdetallecaja[0]["Fecha_Cierre"]."')";
-							$rowc = $omodelo->_consultar($querycompras);
-							$numerofilasc = $omodelo->numerofilas;
-							if($rowc == 'si'){
-								echo "Error: ".mysqli_error($omodelo->link);
-							}else{
-								if($numerofilasc > 0){
-									for ($compras=0; $compras < $numerofilasc; $compras++) { 
-										$totalEgresos += $rowc[$compras]["Total"];
-									}
-								}
-							}
-
-							$querypagos = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$rowdetallecaja[0]["Fecha_Abrir"]."' AND pagos.Fecha <= '".$rowdetallecaja[0]["Fecha_Cierre"]."') AND Estatus = 0 AND Tipo_Compra = 'Credito'";
-							$rowp = $omodelo->_consultar($querypagos);
-							$numerofilasp = $omodelo->numerofilas;
-							if($rowp == 'si'){
-								echo "Error: ".mysqli_error($omodelo->link);
-							}else{
-								if($numerofilasp > 0){
-									for ($pagos=0; $pagos < $numerofilasp; $pagos++) { 
-										$totalEgresos += $rowp[$pagos]["Monto"];
-									}
-								}
-							}
-
-							$querydev = "SELECT Total FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE (devoluciones.Fecha_Registro >= '".$rowdetallecaja[0]["Fecha_Abrir"]."' AND devoluciones.Fecha_Registro <= '".$rowdetallecaja[0]["Fecha_Cierre"]."')";
-							$rowdev = $omodelo->_consultar($querydev);
-							$numerofilasdev = $omodelo->numerofilas;
-							if($rowdev == 'si'){
-								echo "Error: ".mysqli_error($omodelo->link);
-							}else{
-								if($numerofilasdev > 0){
-									for ($devol=0; $devol < $numerofilasdev; $devol++) { 
-										$totalEgresos += $rowdev[$devol]["Total"];
-									}
-								}
-							}
-							///******************************EGRESOS*******************************///
-						}
-					}	
-
-
-					$totalUtilidad = $totalIngresos - $totalEgresos;
-
-					$arreglo['data'][$i] = array(
-						'ID' => $row[$i]['ID_Detalle_Caja'],
-						'Abrir' => "La caja se abrio el: <b>".$row[$i]['Abrir']."</b><br>Abierta por: ".$row[$i]['NombreUsuarioAbrir'],
-						'MontoAbrir' => number_format($row[$i]['MontoAbrir'], 2),
-						'Cerrar' => "La caja se cerro el: <b>".$row[$i]['Cerrar']."</b><br>Cerrada por: ".$row[$i]['NombreUsuarioCerrar'],
-						'MontoCerrar' => number_format($row[$i]['MontoCerrar'], 2),
-						'Totales' => "Ingresos: <b class='dinero'>".$totalIngresos."</b><br>Egresos: <b class='dinero'>".$totalEgresos."</b><br>Utilidad: <b class='dinero'>".$totalUtilidad."</b>",
-						'Acciones' => $botonTicket,
-					);	
+					$arreglo[$i] = array('Foto' => $foto, 'Usuario' => $row[$i]['NombreUsuario'], 'Total' => $row[$i]['Total']);	
 				}
-				$arreglo['totales'] = array('NumRows' => $row[0]['Num']);
 			}
-		}	
-		echo json_encode($arreglo);
+			echo json_encode($arreglo);
+		}
 	}
 
 	public function _modificar(){

@@ -31,7 +31,7 @@ class facturacion {
 					}else{
 						if($numerofilas1 > 0){
 							$productos = null;
-							$query2 = "SELECT ID_Detalle_Venta, FK_Presentacion, Codigo, productos.Clave_ProdServ_CFDI AS Clave_ProdServ_CFDI, productos.Clave_Unidad_CFDI AS Clave_Unidad_CFDI, productos.Objeto_Impuesto_CFDI AS Objeto_Impuesto_CFDI, Clave_CFDI, Nombre_Unidad, Abreviatura_Unidad, presentaciones.Nombre AS Nombre_Presentacion, Abreviatura AS Abreviatura_Presentacion, detalles_ventas.Descripcion AS Descripcion, detalles_ventas.Precio AS Precio, Cantidad, Descuento, Total FROM detalles_ventas INNER JOIN productos ON detalles_ventas.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '$id'";
+							$query2 = "SELECT ID_Detalle_Venta, FK_Presentacion, productos.Codigo, productos.Clave_ProdServ_CFDI AS Clave_ProdServ_CFDI, productos.Clave_Unidad_CFDI AS Clave_Unidad_CFDI, productos.Objeto_Impuesto_CFDI AS Objeto_Impuesto_CFDI, Clave_CFDI, Nombre_Unidad, Abreviatura_Unidad, presentaciones.Nombre AS Nombre_Presentacion, Abreviatura AS Abreviatura_Presentacion, detalles_ventas.Descripcion AS Descripcion, detalles_ventas.Precio AS Precio, Cantidad, Descuento, Total FROM detalles_ventas INNER JOIN productos ON detalles_ventas.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '$id'";
 							$row2 = $omodelo->_consultar($query2);
 							$numerofilas2 = $omodelo->numerofilas;
 

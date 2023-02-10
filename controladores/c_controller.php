@@ -26,6 +26,7 @@ include "controladores/c_importes.php";
 include "controladores/c_precios.php";
 include "controladores/c_reportes.php";
 include "controladores/c_reporteCaja.php";
+include "controladores/c_reporteVentas.php";
 
 class controller {
 
@@ -330,9 +331,9 @@ class controller {
 
 		$botonReporteVentas = '';
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][4] == '1') {
-			$botonReporteClientes = '<li class="menu-item cargarVista" carga="v_reporteVentas" titulo="Reporte ventas" id="cargarReporteVentas">
+			$botonReporteVentas = '<li class="menu-item cargarVista" carga="v_reporteVentas" titulo="Reporte ventas" id="cargarReporteVentas">
                   <a href="javascript:void(0)" class="menu-link">
-                    <div data-i18n="Ventas">Ventas</div>
+                    <div data-i18n="Ventas">Vendedores</div>
                   </a>
                 </li>';
 		}
@@ -366,6 +367,19 @@ class controller {
               </a>';
     }
     $pagina = str_replace('#menuReportes#', $botonReportes, $pagina);
+
+    $botonCorteCaja = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][8] == '1') {
+    		$botonCorteCaja = '<button type="button" class="btn btn-outline-danger oculto" data-bs-toggle="modal" data-bs-target="#ModalCerrarCaja" id="BotonCerrarCaja" attrid="">
+                  <i class="fas fa-times"></i> Hacer corte de caja
+                </button>';
+    }
+
+    $pagina = str_replace('#BotonCorteCaja#', $botonCorteCaja, $pagina);
+
+    
+
+
 
     $venta = '';
     /*if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][2] == '1') {

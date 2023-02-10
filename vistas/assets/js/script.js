@@ -146,11 +146,10 @@ jQuery(document).ready(function($) {
                         $("#spanTotalCompras").text(datos[0].Total_Compras_Efectivo);
                         $("#spanPagosEfectivo").text(datos[0].Total_Pagos_Efectivo);
                         $("#spanTotalDevoluciones").text(datos[0].Total_Devoluciones);
-
                         var ingresosefectivo = parseFloat(datos[0].Monto_Abrir) + parseFloat(datos[0].Total_Ventas_Efectivo) + parseFloat(datos[0].Total_Importes);
                         var egresosefectivo = parseFloat(datos[0].Total_Compras_Efectivo) + parseFloat(datos[0].Total_Pagos_Efectivo) + parseFloat(datos[0].Total_Devoluciones);
                         var total = ingresosefectivo - egresosefectivo;
-                        $("#spanTotalEfectivo").text("$"+total.toFixed(2));
+                        $("#spanTotalEfectivo").text(total.toFixed(2));
                         if (total < 0) {
                             $("#spanTotalEfectivo").css("color", "red");
                         }else{
@@ -166,7 +165,7 @@ jQuery(document).ready(function($) {
 
                         var ventas = parseFloat(datos[0].Total_Ventas_Efectivo) + parseFloat(datos[0].Total_Ventas_Deposito) + parseFloat(datos[0].Total_Ventas_Cheque) + parseFloat(datos[0].Total_Ventas_TransferenciaBancaria) + parseFloat(datos[0].Total_Ventas_TarjetaCreditoDebito) + parseFloat(datos[0].Total_Ventas_PagoOnline); 
                         var totalventas= ventas - parseFloat(datos[0].Total_Devoluciones);
-                        $("#spanTotalVentas").text("$"+totalventas.toFixed(2));
+                        $("#spanTotalVentas").text(totalventas.toFixed(2));
                         if (totalventas < 0) {
                             $("#spanTotalVentas").css("color", "red");
                         }else{
@@ -189,7 +188,7 @@ jQuery(document).ready(function($) {
                         $("#spanMontoCierre").text(datos[0].Monto_Cierre); 
 
                         var diferencia = parseFloat(datos[0].Monto_Cierre) - total;
-                        $("#spanTotalDiferencia").text("$"+diferencia.toFixed(2));
+                        $("#spanTotalDiferencia").text(diferencia.toFixed(2));
                         if (diferencia < 0) {
                             $("#spanTotalDiferencia").css("color", "red");
                         }else{
@@ -371,7 +370,7 @@ jQuery(document).ready(function($) {
                         }*/
 
                         $("#ImprimirBalance").attr("attrid", datos[0].ID_Detalle_Caja);
-                        //moneda();
+                        moneda();
                     })
                     .fail(function() {
                         console.log("Error ajax");

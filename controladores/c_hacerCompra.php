@@ -139,8 +139,10 @@ class hacerCompra {
 				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
 						$clase = '';
-						if(@$omodelo->permisos()['v_compras'][2] == '0' || @$omodelo->permisos()['v_ordenes_compra'][5] == '0'){
-							$clase = 'oculto';
+						if($omodelo->permisos() != 'Administrador'){
+							if (@$omodelo->permisos()['v_compras'][2] == '0' || @$omodelo->permisos()['v_ordenes_compra'][5] == '0') {
+								$clase = 'oculto';
+							}
 						}
 
 						$presentacion = '';

@@ -11,7 +11,7 @@ class reportes {
 			$fechaInicio = $omodelo->link->real_escape_string($fechaInicio);
 			$fechaFin = $omodelo->link->real_escape_string($fechaFin);
 
-			$query = "SELECT ID_Detalle_Venta, FK_Presentacion, Imagen, productos.Descripcion AS Producto, Nombre_Unidad, Abreviatura_Unidad, Nombre, Abreviatura, (SUM(Cantidad) - IFNULL((SELECT SUM(Cantidad) FROM `detalles_devolucion` WHERE FK_Detalle_Venta = ID_Detalle_Venta), 0)) AS Cantidad FROM detalles_ventas INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN productos ON detalles_ventas.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE Estatus = 'Completada' AND (ventas.Fecha_Registro >= '$fechaInicio' AND ventas.Fecha_Registro <= '$fechaFin') GROUP BY detalles_ventas.FK_Producto, FK_Presentacion ORDER BY Cantidad DESC LIMIT 10";
+			$query = "SELECT ID_Detalle_Venta, FK_Presentacion, Imagen, productos.Descripcion AS Producto, Nombre_Unidad, Abreviatura_Unidad, Nombre, Abreviatura, (SUM(Cantidad) - IFNULL((SELECT SUM(Cantidad) FROM `detalles_devolucion` WHERE FK_Detalle_Venta = ID_Detalle_Venta), 0)) AS Cantidad FROM detalles_ventas INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN productos ON detalles_ventas.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE Estatus = 'Completada' AND (DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') >= '$fechaInicio' AND DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') <= '$fechaFin') GROUP BY detalles_ventas.FK_Producto, FK_Presentacion ORDER BY Cantidad DESC LIMIT 10";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -52,7 +52,7 @@ class reportes {
 			$fechaInicio = $omodelo->link->real_escape_string($fechaInicio);
 			$fechaFin = $omodelo->link->real_escape_string($fechaFin);
 
-			$query = "SELECT ID_Venta, Foto, Nombre, (SUM(Total) - IFNULL((SELECT SUM(Total) FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE FK_Venta = ID_Venta), 0)) AS Total FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE Estatus = 'Completada' AND (ventas.Fecha_Registro >= '$fechaInicio' AND ventas.Fecha_Registro <= '$fechaFin') GROUP BY FK_Cliente ORDER BY Total DESC LIMIT 10";
+			$query = "SELECT ID_Venta, Foto, Nombre, (SUM(Total) - IFNULL((SELECT SUM(Total) FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE FK_Venta = ID_Venta), 0)) AS Total FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE Estatus = 'Completada' AND Contar_Venta = 0 AND (DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') >= '$fechaInicio' AND DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') <= '$fechaFin') GROUP BY FK_Cliente ORDER BY Total DESC LIMIT 10";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -77,7 +77,7 @@ class reportes {
 			$fechaInicio = $omodelo->link->real_escape_string($fechaInicio);
 			$fechaFin = $omodelo->link->real_escape_string($fechaFin);
 
-			$query = "SELECT ID_Venta, DATE_FORMAT(Fecha_Registro, '%Y-%m-%d') AS Fecha, (SUM(Total) - IFNULL((SELECT SUM(Total) FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE FK_Venta = ID_Venta), 0)) AS Total FROM ventas WHERE Estatus = 'Completada' AND (Fecha_Registro >= '$fechaInicio' AND Fecha_Registro <= '$fechaFin') GROUP BY Fecha ORDER BY Fecha";
+			$query = "SELECT ID_Venta, DATE_FORMAT(Fecha_Registro, '%Y-%m-%d') AS Fecha, (SUM(Total) - IFNULL((SELECT SUM(Total) FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE FK_Venta = ID_Venta), 0)) AS Total FROM ventas WHERE Estatus = 'Completada' AND Contar_Venta = 0 AND (DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') >= '$fechaInicio' AND DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') <= '$fechaFin') GROUP BY Fecha ORDER BY Fecha";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -94,7 +94,7 @@ class reportes {
 			$fechaInicio = $omodelo->link->real_escape_string($fechaInicio);
 			$fechaFin = $omodelo->link->real_escape_string($fechaFin);
 
-			$query = "SELECT ID_Compra, DATE_FORMAT(Fecha_Registro, '%Y-%m-%d') AS Fecha, SUM(Total) AS Total FROM compras WHERE (Fecha_Registro >= '$fechaInicio' AND Fecha_Registro <= '$fechaFin') GROUP BY Fecha ORDER BY Fecha";
+			$query = "SELECT ID_Compra, DATE_FORMAT(Fecha_Registro, '%Y-%m-%d') AS Fecha, SUM(Total) AS Total FROM compras WHERE (DATE_FORMAT(compras.Fecha_Registro, '%Y-%m-%d') >= '$fechaInicio' AND DATE_FORMAT(compras.Fecha_Registro, '%Y-%m-%d') <= '$fechaFin') GROUP BY Fecha ORDER BY Fecha";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -125,7 +125,7 @@ class reportes {
 				}
 			}
 
-			$query = "SELECT ID_Venta, DATE_FORMAT(Fecha_Registro, '%Y-%m') AS Fecha, (SUM(Total) - IFNULL((SELECT SUM(Total) FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE FK_Venta = ID_Venta), 0)) AS Total FROM ventas WHERE Estatus = 'Completada' AND (DATE_FORMAT(Fecha_Registro, '%Y-%m') >= '$fechaInicio' AND DATE_FORMAT(Fecha_Registro, '%Y-%m') <= '$fechaFin') GROUP BY Fecha ORDER BY Fecha";
+			$query = "SELECT ID_Venta, DATE_FORMAT(Fecha_Registro, '%Y-%m') AS Fecha, (SUM(Total) - IFNULL((SELECT SUM(Total) FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE FK_Venta = ID_Venta), 0)) AS Total FROM ventas WHERE Estatus = 'Completada' AND Contar_Venta = 0 AND (DATE_FORMAT(Fecha_Registro, '%Y-%m') >= '$fechaInicio' AND DATE_FORMAT(Fecha_Registro, '%Y-%m') <= '$fechaFin') GROUP BY Fecha ORDER BY Fecha";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 

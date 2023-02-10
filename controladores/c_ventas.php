@@ -117,11 +117,11 @@ class ventas {
 					}
 
 					$botonPermisosDevoluciones = "";
-					//if ($row[$i]['Facturada'] == '1' && ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][6] == '1')) {
-					if($row[$i]['Contar_Venta'] == '0'){ //Si cuenta en el balance
-						$botonPermisosDevoluciones = $botonDevolucion;
+					if ($row[$i]['Facturada'] == '0' && ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][6] == '1')) {
+						if($row[$i]['Contar_Venta'] == '0'){ //Si cuenta en el balance
+							$botonPermisosDevoluciones = $botonDevolucion;
+						}
 					}
-					//}
 
 					$botonPermisosTicket = "";
 					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][7] == '1') {

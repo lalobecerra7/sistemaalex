@@ -601,7 +601,7 @@
                                 <h3>Ventas totales</h3>
                               </div>
                               <div class="col-md-6 text-end col-sm-12">
-                                <h3 class="dinero">$<span id="spanVentasTotales"></span></h3>
+                                <h3><span class="dinero" id="spanVentasTotales"></span></h3>
                               </div>
                             </div>
                             <div class="row">
@@ -614,39 +614,39 @@
                                 <table class="table table-hover">
                                   <tr>
                                     <td class="text-start">Fondo de caja</td>
-                                    <td class="dinero text-end" style="color: green;">$<span id="spanMontoApertura"></span></td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanMontoApertura"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">Ventas en efectivo</td>
-                                    <td class="dinero text-end" style="color: green;">$<span id="spanVentasEfectivo"></span></td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasEfectivo"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">Importes</td>
-                                    <td class="dinero text-end" style="color: green;">$<span id="spanTotalImportes"></span></td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanTotalImportes"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">Compras en efectivo</td>
-                                    <td class="dinero text-end" style="color: red;">-$<span id="spanTotalCompras"></span></td>
+                                    <td class="text-end" style="color: red;">-<span class="dinero" id="spanTotalCompras"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">Pagos en efectivo</td>
-                                    <td class="dinero text-end" style="color: red;">-$<span id="spanPagosEfectivo"></span></td>
+                                    <td class="text-end" style="color: red;">-<span class="dinero" id="spanPagosEfectivo"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">Devoluciones</td>
-                                    <td class="dinero text-end" style="color: red;">-$<span id="spanTotalDevoluciones"></span></td>
+                                    <td class="text-end" style="color: red;">-<span class="dinero" id="spanTotalDevoluciones"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start"><b>Total de efectivo en caja</b></td>
-                                    <td class="dinero text-end" style="font-weight: bold;"><span id="spanTotalEfectivo"></span></td>
+                                    <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanTotalEfectivo"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start" style="font-weight: bold;">Monto de cierre</td>
-                                    <td class="dinero text-end" style="font-weight: bold;">$<span id="spanMontoCierre"></span></td>
+                                    <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanMontoCierre"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start"><b>Diferencia de efectivo</b></td>
-                                    <td class="dinero text-end" style="font-weight: bold;"><span id="spanTotalDiferencia"></span></td>
+                                    <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanTotalDiferencia"></span></td>
                                   </tr>
                                 </table>
                               </div>
@@ -663,35 +663,35 @@
                                 <table class="table table-hover">
                                   <tr>
                                     <td class="text-start">En efectivo</td>
-                                    <td class="dinero text-end" style="color: green;">$<span id="spanVentasEnEfectivo"></span></td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasEnEfectivo"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">En depósito</td>
-                                    <td class="dinero text-end" style="color: green;">$<span id="spanVentasDeposito"></span></td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasDeposito"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">En cheque</td>
-                                    <td class="dinero text-end" style="color: green;">$<span id="spanVentasCheque"></span></td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasCheque"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">En transferencia</td>
-                                    <td class="dinero text-end" style="color: green;">$<span id="spanVentasTransferencia"></span></td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasTransferencia"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">En tarjeta de crédito / debito</td>
-                                    <td class="dinero text-end" style="color: green;">$<span id="spanVentasTarjeta"></span></td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasTarjeta"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">En pago online</td>
-                                    <td class="dinero text-end" style="color: green;">$<span id="spanVentasPagoOnline"></span></td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasPagoOnline"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">Devoluciones</td>
-                                    <td class="dinero text-end" style="color: red;">-$<span id="spanTotalDevolucionesVenta"></span></td>
+                                    <td class="text-end" style="color: red;">-<span class="dinero" id="spanTotalDevolucionesVenta"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start"><b>Total</b></td>
-                                    <td class="dinero text-end" style="font-weight: bold;"><span id="spanTotalVentas"></span></td>
+                                    <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanTotalVentas"></span></td>
                                   </tr>
                                 </table>
                               </div>
@@ -710,27 +710,27 @@
                                 <table class="table table-hover">
                                   <tr>
                                     <td class="text-start">En efectivo</td>
-                                    <td class="dinero text-end" style="color: red;">$<span id="spanComprasEnEfectivo"></span></td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanComprasEnEfectivo"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">En depósito</td>
-                                    <td class="dinero text-end" style="color: red;">$<span id="spanComprasDeposito"></span></td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanComprasDeposito"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">En cheque</td>
-                                    <td class="dinero text-end" style="color: red;">$<span id="spanComprasCheque"></span></td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanComprasCheque"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">En transferencia</td>
-                                    <td class="dinero text-end" style="color: red;">$<span id="spanComprasTransferencia"></span></td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanComprasTransferencia"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">En tarjeta de crédito / debito</td>
-                                    <td class="dinero text-end" style="color: red;">$<span id="spanComprasTarjeta"></span></td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanComprasTarjeta"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start"><b>Total</b></td>
-                                    <td class="dinero text-end" style="font-weight: bold;">$<span id="spanComprasTotal"></span></td>
+                                    <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanComprasTotal"></span></td>
                                   </tr>
                                 </table>
                               </div>
@@ -747,27 +747,27 @@
                                 <table class="table table-hover">
                                   <tr>
                                     <td class="text-start">En efectivo</td>
-                                    <td class="dinero text-end" style="color: red;">$<span id="spanPagosEnEfectivo"></span></td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanPagosEnEfectivo"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">En depósito</td>
-                                    <td class="dinero text-end" style="color: red;">$<span id="spanPagosDeposito"></span></td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanPagosDeposito"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">En cheque</td>
-                                    <td class="dinero text-end" style="color: red;">$<span id="spanPagosCheque"></span></td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanPagosCheque"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">En transferencia</td>
-                                    <td class="dinero text-end" style="color: red;">$<span id="spanPagosTransferencia"></span></td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanPagosTransferencia"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start">En tarjeta de crédito / debito</td>
-                                    <td class="dinero text-end" style="color: red;">$<span id="spanPagosTarjeta"></span></td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanPagosTarjeta"></span></td>
                                   </tr>
                                   <tr>
                                     <td class="text-start"><b>Total</b></td>
-                                    <td class="dinero text-end" style="font-weight: bold;">$<span id="spanPagosTotal"></span></td>
+                                    <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanPagosTotal"></span></td>
                                   </tr>
                                 </table>
                               </div>
@@ -970,9 +970,7 @@
             </div>
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <div class="">
-                <button type="button" class="btn btn-outline-danger oculto" data-bs-toggle="modal" data-bs-target="#ModalCerrarCaja" id="BotonCerrarCaja" attrid="">
-                  <i class="fas fa-times"></i> Hacer corte de caja
-                </button>
+                #BotonCorteCaja#
               </div>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -1578,5 +1576,6 @@
     <script type="text/javascript" src="vistas/assets/js/precios.js"></script>
     <script type="text/javascript" src="vistas/assets/js/reportes.js"></script>
     <script type="text/javascript" src="vistas/assets/js/reporteCaja.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/reporteVentas.js"></script>
   </body>
 </html>
