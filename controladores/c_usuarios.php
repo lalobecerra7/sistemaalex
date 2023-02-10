@@ -24,8 +24,11 @@ class usuarios {
 				}
 			}
 		}
-
-		$query = "SELECT ID_Usuario, usuarios.Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta, sucursales.Nombre AS NombreSucursal, FK_Sucursal, (SELECT COUNT(*) FROM usuarios WHERE ID_Usuario <> '".$_SESSION['user_admin']['ID_Usuario']."' $busqueda) AS Num FROM usuarios LEFT JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE ID_Usuario <> '".$_SESSION['user_admin']['ID_Usuario']."' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		if ($_SESSION['user_admin']['Tipo_Usuario'] == "Administrador") {
+			$query = "SELECT ID_Usuario, usuarios.Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta, sucursales.Nombre AS NombreSucursal, FK_Sucursal, (SELECT COUNT(*) FROM usuarios WHERE ID_Usuario <> '".$_SESSION['user_admin']['ID_Usuario']."' $busqueda) AS Num FROM usuarios LEFT JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE ID_Usuario <> '".$_SESSION['user_admin']['ID_Usuario']."' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);	
+		}else{
+			$query = "SELECT ID_Usuario, usuarios.Nombre, Primer_Apellido, Segundo_Apellido, Correo, Contrasena, Tipo_Usuario, Permisos, BD, Estatus, Intentos, Ultimo_Intento, Tiempo_Inicio, Tiempo_Final, Foto, Temporal, Activo, Tipo_Login, Conectado, Fecha_Alta, sucursales.Nombre AS NombreSucursal, FK_Sucursal, (SELECT COUNT(*) FROM usuarios WHERE ID_Usuario <> '".$_SESSION['user_admin']['ID_Usuario']."' $busqueda) AS Num FROM usuarios LEFT JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE Tipo_Usuario = 'Normal' AND ID_Usuario <> '".$_SESSION['user_admin']['ID_Usuario']."' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		}
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
