@@ -22,7 +22,7 @@ class inventario {
 			}
 
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(Codigo, Descripcion, IF(FK_Presentacion = 0, CONCAT(Nombre_Unidad, ' ', Abreviatura_Unidad), CONCAT(IFNULL((SELECT Nombre FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), ''), ' ', IFNULL((SELECT Abreviatura FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), ''))), inventario.Cantidad, sucursales.Nombre) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(productos.Codigo, Descripcion, IF(FK_Presentacion = 0, CONCAT(Nombre_Unidad, ' ', Abreviatura_Unidad), CONCAT(IFNULL((SELECT Nombre FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), ''), ' ', IFNULL((SELECT Abreviatura FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), ''))), inventario.Cantidad, sucursales.Nombre) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
@@ -31,10 +31,10 @@ class inventario {
 
 		$where = '';
 		if ($omodelo->permisos() != 'Administrador' && $_SESSION['user_admin']['FK_Sucursal'] != '0') {
-			$where = "WHERE inventario.FK_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal'];
+			$where = "WHERE inventario.FK_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."'";
 		}
 
-		$query =  "SELECT ID_Inventario, inventario.FK_Producto AS FK_Producto, Imagen, Codigo, Descripcion, Precio, Nombre_Unidad, Abreviatura_Unidad, inventario.FK_Presentacion AS FK_Presentacion, IFNULL((SELECT Nombre FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), '') AS Presentacion, IFNULL((SELECT Abreviatura FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), '') AS Abreviatura, inventario.Cantidad AS Existencia, inventario.FK_Sucursal AS FK_Sucursal, sucursales.Nombre AS Sucursal, IFNULL((SELECT SUM(Costo * Cantidad) FROM merma WHERE FK_Inventario = ID_Inventario), 0) AS Costo, productos.Costo AS Costo_Producto, IFNULL((SELECT Costo FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), '') AS Costo_Presentacion, IFNULL((SELECT SUM(Cantidad) FROM merma WHERE FK_Inventario = ID_Inventario), 0) AS Merma, (SELECT COUNT(*) FROM inventario INNER JOIN productos ON inventario.FK_Producto = ID_Producto INNER JOIN sucursales ON inventario.FK_Sucursal = ID_Sucursal $where $busqueda) AS 'Num' FROM inventario INNER JOIN productos ON inventario.FK_Producto = ID_Producto INNER JOIN sucursales ON inventario.FK_Sucursal = ID_Sucursal $where $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query =  "SELECT ID_Inventario, inventario.FK_Producto AS FK_Producto, Imagen, productos.Codigo, Descripcion, Precio, Nombre_Unidad, Abreviatura_Unidad, inventario.FK_Presentacion AS FK_Presentacion, IFNULL((SELECT Nombre FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), '') AS Presentacion, IFNULL((SELECT Abreviatura FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), '') AS Abreviatura, inventario.Cantidad AS Existencia, inventario.FK_Sucursal AS FK_Sucursal, sucursales.Nombre AS Sucursal, IFNULL((SELECT SUM(Costo * Cantidad) FROM merma WHERE FK_Inventario = ID_Inventario), 0) AS Costo, productos.Costo AS Costo_Producto, IFNULL((SELECT Costo FROM presentaciones WHERE ID_Presentacion = FK_Presentacion), '') AS Costo_Presentacion, IFNULL((SELECT SUM(Cantidad) FROM merma WHERE FK_Inventario = ID_Inventario), 0) AS Merma, (SELECT COUNT(*) FROM inventario INNER JOIN productos ON inventario.FK_Producto = ID_Producto INNER JOIN sucursales ON inventario.FK_Sucursal = ID_Sucursal $where $busqueda) AS 'Num' FROM inventario INNER JOIN productos ON inventario.FK_Producto = ID_Producto INNER JOIN sucursales ON inventario.FK_Sucursal = ID_Sucursal $where $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -1021,7 +1021,7 @@ class inventario {
 			$id = $omodelo->link->real_escape_string($id);
 			$tabla = '';
 
-			$query = "SELECT ID_Detalle_Traslado, Codigo, Descripcion, Nombre_Unidad, Abreviatura_Unidad, FK_Presentacion, Cantidad, Nombre, Abreviatura FROM detalles_traslados INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Traslado = '$id'";
+			$query = "SELECT ID_Detalle_Traslado, productos.Codigo, Descripcion, Nombre_Unidad, Abreviatura_Unidad, FK_Presentacion, Cantidad, Nombre, Abreviatura FROM detalles_traslados INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Traslado = '$id'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 

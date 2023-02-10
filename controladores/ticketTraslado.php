@@ -258,7 +258,7 @@ $arreglo2 = '';
         </thead>
         <tbody> 
           <?php 
-            $sql = "SELECT ID_Detalle_Traslado, Codigo, Descripcion, Nombre_Unidad, Abreviatura_Unidad, FK_Presentacion, Cantidad, Nombre, Abreviatura FROM detalles_traslados INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Traslado = '".$_GET['id']."'";
+            $sql = "SELECT ID_Detalle_Traslado, productos.Codigo, Descripcion, Nombre_Unidad, Abreviatura_Unidad, FK_Presentacion, Cantidad, Nombre, Abreviatura FROM detalles_traslados INNER JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Traslado = '".$_GET['id']."'";
             $mostrar= "";
             $subtotal = 0;
             $contador = 0;
