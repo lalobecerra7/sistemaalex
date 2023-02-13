@@ -52,7 +52,7 @@ class reporteCaja {
 							}else{
 								if($numerofilasv > 0){
 									for ($ventas=0; $ventas < $numerofilasv; $ventas++) { 
-										if($row[$i]['Contar_Venta'] == '0'){
+										if($rowv[$ventas]['Contar_Venta'] == '0'){
 											$totalIngresos += $rowv[$ventas]["Total"];
 										}
 									}
