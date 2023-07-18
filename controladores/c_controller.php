@@ -38,6 +38,7 @@ class controller {
 			$fechahoy = date('Y-m-d H:i:s');
 			$pagina = file_get_contents('vistas/v_html.php');
 			$pagina = str_replace('#NombreUsuario#',$_SESSION['user_admin']['Nombre'],$pagina);
+			$pagina = str_replace('#NombreUsuarioNavBar#',$_SESSION['user_admin']['Nombre'],$pagina);
 			$pagina = str_replace('#PermisosUsuario#',$_SESSION['user_admin']['Tipo_Usuario'],$pagina);
 			$pagina = str_replace('#IDUsuario#',$_SESSION['user_admin']['ID_Usuario'],$pagina);
 			$pagina = str_replace('#usuario#',$_SESSION['user_admin']['Nombre'],$pagina);

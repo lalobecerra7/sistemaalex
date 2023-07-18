@@ -28,7 +28,7 @@ function v_clientes() {
             }else{
                 var direcciones = '';
                 $("#TablaUbicacionClientes tbody tr").each(function(index, el){
-                    direcciones += $(this).find("#CalleCliente").val()+"~"+$(this).find("#NoExteriorCliente").val()+"~"+$(this).find("#NoInteriorCliente").val()+"~"+$(this).find("#CPCliente").val()+"~"+$(this).find("#ColoniaCliente").val()+"~"+$(this).find("#CiudadCliente").val()+"~"+$(this).find("#EstadoCliente").val()+"~"+$(this).find("#PaisCliente").val()+"~"+$(this).find("#NombreContactoCliente").val()+"~"+$(this).find("#PuestoContactoCliente").val()+"~"+$(this).find("#CorreoContactoCliente").val()+"~"+$(this).find("#TelefonoContactoCliente").val()+"~"+$(this).find("#ReferenciaCliente").val()+",";
+                    direcciones += $(this).find("#CalleCliente").val()+"~"+$(this).find("#NoExteriorCliente").val()+"~"+$(this).find("#NoInteriorCliente").val()+"~"+$(this).find("#CPCliente").val()+"~"+$(this).find("#ColoniaCliente").val()+"~"+$(this).find("#CiudadCliente").val()+"~"+$(this).find("#EstadoCliente").val()+"~"+$(this).find("#PaisCliente").val()+"~"+$(this).find("#NombreContactoCliente").val()+"~"+$(this).find("#PuestoContactoCliente").val()+"~"+$(this).find("#CorreoContactoCliente").val()+"~"+$(this).find("#TelefonoContactoCliente").val()+"~"+$(this).find("#ReferenciaCliente").val()+"~"+$(this).find("#LatitudCliente").val()+"~"+$(this).find("#LongitudCliente").val()+"~"+$(this).find("#EntreQueCalles").val()+",";
                 });
 
                 var data = new FormData(document.getElementById("FormClientes"));
@@ -117,6 +117,7 @@ jQuery(document).ready(function($) {
         $("#TipoDescuentoCliente").trigger("change");
         $("#DescuentoCliente").val("");
         $("#TipoPersona").trigger("change");
+        $("#TablaUbicacionClientes tbody").html("");
     });
 
     $(document).on('hidden.bs.modal', '#ModalNuevaDireccionCliente', function() {
@@ -200,6 +201,17 @@ jQuery(document).ready(function($) {
                         <input type="text" class="form-control" id="ColoniaCliente" name="ColoniaCliente" placeholder="Ingresa la colonia del cliente">
                      </div>
                 </div> 
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="LatitudCliente">Latitud</label>
+                        <input type="text" class="form-control" id="LatitudCliente" name="LatitudCliente" placeholder="Latitud de la ubicación">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="LongitudCliente">Longitud</label>
+                        <input type="text" class="form-control" id="LongitudCliente" name="LongitudCliente" placeholder="Longitud de la ubicación">
+                    </div>
+                </div>
             </td>
             <td>
                 <label for="CiudadCliente">Ciudad</label>
@@ -212,7 +224,10 @@ jQuery(document).ready(function($) {
                 <input type="text" class="form-control" id="PaisCliente" name="PaisCliente" placeholder="Ingresa el país del cliente">
                 <br>
                 <label for="ReferenciaCliente">Referencia visual / Detalles</label>
-                <input type="text" class="form-control" id="ReferenciaCliente" name="ReferenciaCliente" placeholder="Ingresa el país del cliente">
+                <input type="text" class="form-control" id="ReferenciaCliente" name="ReferenciaCliente" placeholder="Ingresa una referencia visual o detalles de la ubicación">
+                <br>
+                <label for="EntreQueCalles">Entre que calles se encuentra</label>
+                <input type="text" class="form-control" id="EntreQueCalles" name="EntreQueCalles" placeholder="Ingresa que calles colindan con la ubicación">
             </td>
             <td>
                 <label for="NombreContactoCliente">Nombre</label>
@@ -404,6 +419,9 @@ jQuery(document).ready(function($) {
                     var PuestoContactoCliente = datos.Extras[i].Puesto_Contacto;
                     var CorreoContactoCliente = datos.Extras[i].Email_Contacto;
                     var TelefonoContactoCliente = datos.Extras[i].Telefono_Contacto;
+                    var Latitud = datos.Extras[i].Latitud;
+                    var Longitud = datos.Extras[i].Longitud;
+                    var Entre_Calles = datos.Extras[i].Entre_Calles;
                     var tabla = `\
                     <tr>
                         <td>
@@ -431,6 +449,17 @@ jQuery(document).ready(function($) {
                                     <input type="text" class="form-control" value="`+ColoniaCliente+`" id="ColoniaCliente" name="ColoniaCliente" placeholder="Ingresa la colonia del cliente">
                                  </div>
                             </div> 
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="LatitudCliente">Latitud</label>
+                                    <input type="text" class="form-control" value="`+Latitud+`" id="LatitudCliente" name="LatitudCliente" placeholder="Latitud de la ubicación">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="LongitudCliente">Longitud</label>
+                                    <input type="text" class="form-control" value="`+Longitud+`" id="LongitudCliente" name="LongitudCliente" placeholder="Longitud de la ubicación">
+                                </div>
+                            </div>
                         </td>
                         <td>
                             <label for="CiudadCliente">Ciudad</label>
@@ -443,7 +472,10 @@ jQuery(document).ready(function($) {
                             <input type="text" class="form-control" value="`+PaisCliente+`" id="PaisCliente" name="PaisCliente" placeholder="Ingresa el país del cliente">
                             <br>
                             <label for="ReferenciaCliente">Referencia visual / Detalles</label>
-                            <input type="text" class="form-control" value="`+ReferenciaCliente+`" id="ReferenciaCliente" name="ReferenciaCliente" placeholder="Ingresa el país del cliente">
+                            <input type="text" class="form-control" value="`+ReferenciaCliente+`" id="ReferenciaCliente" name="ReferenciaCliente" placeholder="Ingresa una referencia visual o detalles">
+                            <br>
+                            <label for="EntreQueCalles">Entre que calles se encuentra</label>
+                            <input type="text" class="form-control" value="`+Entre_Calles+`" id="EntreQueCalles" name="EntreQueCalles" placeholder="Ingresa que calles colindan con la dirección">
                         </td>
                         <td>
                             <label for="NombreContactoCliente">Nombre</label>
@@ -488,14 +520,14 @@ jQuery(document).ready(function($) {
             $("#DatosInt").text("No hay datos registrados");
         }
         if ($(this).attr("Colonia") != "") {
-            $("#DatosCP").text($(this).attr("Colonia"));
-        }else{  
-            $("#DatosCP").text("No hay datos registrados");
-        }
-        if ($(this).attr("Codigo_Postal") != "") {
-            $("#DatosColonia").text($(this).attr("Codigo_Postal"));
+            $("#DatosColonia").text($(this).attr("Colonia"));
         }else{  
             $("#DatosColonia").text("No hay datos registrados");
+        }
+        if ($(this).attr("Codigo_Postal") != "") {
+            $("#DatosCP").text($(this).attr("Codigo_Postal"));
+        }else{  
+            $("#DatosCP").text("No hay datos registrados");
         }
         if ($(this).attr("Ciudad") != "") {
             $("#DatosCiudad").text($(this).attr("Ciudad"));
@@ -537,6 +569,24 @@ jQuery(document).ready(function($) {
             $("#DatosReferencia").text($(this).attr("Detalles"));
         }else{  
             $("#DatosReferencia").text("No hay datos registrados");
+        }
+
+        if ($(this).attr("Latitud") != "") {
+            $("#DatosLatitud").text($(this).attr("Latitud"));
+        }else{  
+            $("#DatosLatitud").text("No hay datos registrados");
+        }
+
+        if ($(this).attr("Longitud") != "") {
+            $("#DatosLongitud").text($(this).attr("Longitud"));
+        }else{  
+            $("#DatosLongitud").text("No hay datos registrados");
+        }
+
+        if ($(this).attr("EntreCalles") != "") {
+            $("#DatosEntreCalles").text($(this).attr("EntreCalles"));
+        }else{  
+            $("#DatosEntreCalles").text("No hay datos registrados");
         }
 
         

@@ -352,6 +352,15 @@
 					<div class="col-md-12 col-sm-12 mb-2">
 						Referencia visual / Detalles: <span style="font-weight: bold;" id="DatosReferencia"></span>
 					</div>
+					<div class="col-md-12 col-sm-12 mb-2">
+						Latitud: <span style="font-weight: bold;" id="DatosLatitud"></span>
+					</div>
+					<div class="col-md-12 col-sm-12 mb-2">
+						Longitud: <span style="font-weight: bold;" id="DatosLongitud"></span>
+					</div>
+					<div class="col-md-12 col-sm-12 mb-2">
+						Entre que calles se encuentra: <span style="font-weight: bold;" id="DatosEntreCalles"></span>
+					</div>
 					<hr>
 					<h6>Datos del contacto</h6>
 					<div class="col-md-12 col-sm-12 mt-2">

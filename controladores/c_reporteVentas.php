@@ -4,7 +4,7 @@ class reporteVentas {
 	public function _consultar(){
 		$omodelo = new m_modelo();
 		extract($_POST);
-
+		$arreglo = array();
 		$fechaInicio = $omodelo->link->real_escape_string($fechaInicio);
 		$fechaFin = $omodelo->link->real_escape_string($fechaFin);
 
