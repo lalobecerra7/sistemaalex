@@ -44,6 +44,7 @@
 				<h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;"><span id="TituloModalCliente"></span> cliente</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
+			<form id="formSucursalesCliente"><button type="submit" id="bGuardarSucursal" hidden></button></form>
 			<form id="FormClientes">
 				<div class="modal-body">
 					<div class="row">
@@ -103,7 +104,7 @@
 								<label for="CorreoCliente">Correo electrónico</label>
 							</div>
 						</div>
-						<div class="col-md-4">
+						<!-- <div class="col-md-4">
 							<div class="form-floating mb-3">
 								<select class="form-select" name="SucursalCliente" id="SucursalCliente" >
 									<option value="0">- Seleccione una opción -</option>
@@ -111,7 +112,7 @@
 								</select>
 								<label for="SucursalCliente">Sucursal</label>
 							</div>
-						</div>
+						</div> -->
 						<div class="col-md-4 col-sm-12 mb-3 camposFisica">
 							<div class="form-floating">
 								<input type="date" class="form-control " id="FechaNacimientoCliente" name="FechaNacimientoCliente" placeholder="Ingresa la fecha de nacimiento del cliente">
@@ -283,6 +284,49 @@
 							</div>
 						</div>
 						<hr>
+						<div class="row mb-3">
+							<div class="col-md-6 col-sm-12 text-start">
+								<b class="mb-3">Sucursales</b>
+							</div>
+						</div>
+
+
+
+						<div class="col-md-12 col-sm-12">
+					      	<div class="table-responsive">
+					       		<table class="table table table-hover table-striped table-bordered text-center" id="tablaSucursalesCliente" width="100%" style="font-size: 12px;">
+							        <thead>
+							          <th>Nombre</th>
+							        	<th>Acciones</th>
+							        </thead>
+							        <tbody id="verSucursalesCliente">
+
+							        </tbody>
+							        <tfoot>
+							        	<tr>
+							        		<td>
+							        			<!-- <select form="formProveedoresProd" class="form-select" name="proveedorProducto" id="proveedorProducto" required>
+				                      				<option value="">--Seleccione una opción--</option>  
+				                      				#proveedores# 
+			                    				</select> -->	
+			                    				<div class="form-floating mb-3">
+													<select form="formSucursalesCliente" class="form-select" name="SucursalCliente" id="SucursalCliente" required>
+														<option value="">- Seleccione una opción -</option>
+														#SucursalesCliente#
+													</select>
+													<label for="SucursalCliente">Sucursal</label>
+												</div>
+					                		</td>
+					                		<td>
+					                			<button  type="button" class="btn btn-sm btn-success" id="bAgregarSucursal"><i class="fas fa-plus"></i></button>
+					                		</td>
+							        	</tr>
+							        </tfoot>
+							    </table>
+					      	</div>
+					    </div>
+
+
 						<div class="row mb-3">
 							<div class="col-md-6 col-sm-12 text-start">
 								<b class="mb-3">Direcciones</b>

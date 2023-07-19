@@ -31,11 +31,19 @@ function v_clientes() {
                     direcciones += $(this).find("#CalleCliente").val()+"~"+$(this).find("#NoExteriorCliente").val()+"~"+$(this).find("#NoInteriorCliente").val()+"~"+$(this).find("#CPCliente").val()+"~"+$(this).find("#ColoniaCliente").val()+"~"+$(this).find("#CiudadCliente").val()+"~"+$(this).find("#EstadoCliente").val()+"~"+$(this).find("#PaisCliente").val()+"~"+$(this).find("#NombreContactoCliente").val()+"~"+$(this).find("#PuestoContactoCliente").val()+"~"+$(this).find("#CorreoContactoCliente").val()+"~"+$(this).find("#TelefonoContactoCliente").val()+"~"+$(this).find("#ReferenciaCliente").val()+"~"+$(this).find("#LatitudCliente").val()+"~"+$(this).find("#LongitudCliente").val()+"~"+$(this).find("#EntreQueCalles").val()+",";
                 });
 
+                var sucursales = [];
+                if($("#verSucursalesCliente").children('tr').length > 0){
+                    $("#verSucursalesCliente").children('tr').each(function(index, el) {
+                        sucursales.push({'ID_Sucursal': $.trim($(this).children('td:eq(0)').attr('attrID'))});
+                    });
+                }
+
                 var data = new FormData(document.getElementById("FormClientes"));
                 data.append("metodo", $("#GuardarCliente").attr("tipo"));
                 data.append("accion", "clientes");
                 data.append("direcciones", direcciones);
                 data.append("IDCliente", $("#GuardarCliente").attr("attrid"));
+                data.append('sucursales', JSON.stringify(sucursales));
 
                 var btn = $('#GuardarCliente');
                 $.ajax({
@@ -118,6 +126,7 @@ jQuery(document).ready(function($) {
         $("#DescuentoCliente").val("");
         $("#TipoPersona").trigger("change");
         $("#TablaUbicacionClientes tbody").html("");
+        $("#verSucursalesCliente").html("");
     });
 
     $(document).on('hidden.bs.modal', '#ModalNuevaDireccionCliente', function() {
@@ -346,6 +355,7 @@ jQuery(document).ready(function($) {
     $(document).on('click', '#ModificarCliente', function() {
         var id = $(this).attr('attrid');
         $("#TablaUbicacionClientes tbody").html("");
+        $("#verSucursalesCliente").html("");
         var data = "metodo=detalles&accion=clientes&IDCliente="+id;
         $.ajax({
             url: 'index.php',
@@ -495,6 +505,17 @@ jQuery(document).ready(function($) {
                     $("#TablaUbicacionClientes tbody").append(tabla);
                 }
             }
+
+
+            if(datos.Sucursales != null){
+                datos.Sucursales.forEach(sucursal => {
+                    $("#verSucursalesCliente").append(`<tr id="`+sucursal.FK_Sucursal+`">
+                        <td attrID="`+sucursal.FK_Sucursal+`">`+sucursal.Nombre+`</td>
+                        <td><button type="button" class="btn btn-danger btn-sm bQuitarSucursal"><i class="fas fa-trash"></i></button></td>
+                    </tr>`);
+                });
+            }
+
             $("#ModalCliente").modal("show");
         })
         .fail(function() {
@@ -592,6 +613,33 @@ jQuery(document).ready(function($) {
         
         $("#ModalDetallesDireccion").modal("show");
 
+    });
+
+    $(document).on('click', '#bAgregarSucursal', function() {
+        $("#bGuardarSucursal").trigger('click');
+    });
+
+    $(document).on('submit', '#formSucursalesCliente', function(event) {
+        event.preventDefault();
+
+        if($("#verSucursalesCliente").children('tr[id="'+$.trim($("#SucursalCliente").val())+'"]').length == 0){
+            $("#verSucursalesCliente").append(`<tr id="`+$.trim($("#SucursalCliente").val())+`">
+                <td attrID="`+$.trim($("#SucursalCliente").val())+`">`+$.trim($('#SucursalCliente option:selected').text())+`</td>
+                <td><button type="button" class="btn btn-danger btn-sm bQuitarSucursal"><i class="fas fa-trash"></i></button></td>
+            </tr>`);
+
+            document.getElementById('formSucursalesCliente').reset();
+        }else{
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'La sucursal ya existe, por favor agrega otra.'
+            });  
+        }
+    });
+
+    $(document).on('click', '.bQuitarSucursal', function() {
+        $(this).parent().parent().remove();
     });
 
 });
