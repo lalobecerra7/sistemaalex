@@ -44,6 +44,7 @@
 				<h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;"><span id="TituloModalCliente"></span> cliente</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
+			<form id="formSucursalesCliente"><button type="submit" id="bGuardarSucursal" hidden></button></form>
 			<form id="FormClientes">
 				<div class="modal-body">
 					<div class="row">
@@ -58,21 +59,30 @@
 					<br>
 					<div class="row">
 						<b class="mb-3">Datos del cliente</b>
+						<div class="col-md-4">
+							<div class="form-floating mb-3">
+								<select class="form-select" name="TipoPersona" id="TipoPersona" >
+									<option value="Fisica">Fisica</option>
+									<option value="Moral">Moral</option>
+								</select>
+								<label for="TipoPersona">Tipo de persona</label>
+							</div>
+						</div>
 						<div class="col-md-4 col-sm-12 mb-3">
 							<div class="form-floating">
 								<input type="text" class="form-control" id="NombreCliente" name="NombreCliente" placeholder="Ingresa el nombre del cliente">
 								<label for="NombreCliente">Nombre</label>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-12 mb-3">
+						<div class="col-md-4 col-sm-12 mb-3 camposFisica">
 							<div class="form-floating">
-								<input type="text" class="form-control" id="primerApellidoCliente" name="primerApellidoCliente" placeholder="Ingresa el primer apellido">
+								<input type="text" class="form-control " id="primerApellidoCliente" name="primerApellidoCliente" placeholder="Ingresa el primer apellido">
 								<label for="NombreCliente">Primer Apellido</label>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-12 mb-3">
+						<div class="col-md-4 col-sm-12 mb-3 camposFisica">
 							<div class="form-floating">
-								<input type="text" class="form-control" id="segundoApellidoCliente" name="segundoApellidoCliente" placeholder="Ingresa el segundo apellido">
+								<input type="text" class="form-control " id="segundoApellidoCliente" name="segundoApellidoCliente" placeholder="Ingresa el segundo apellido">
 								<label for="TelefonoCliente">Segundo Apellido</label>
 							</div>
 						</div>
@@ -94,7 +104,7 @@
 								<label for="CorreoCliente">Correo electrónico</label>
 							</div>
 						</div>
-						<div class="col-md-4">
+						<!-- <div class="col-md-4">
 							<div class="form-floating mb-3">
 								<select class="form-select" name="SucursalCliente" id="SucursalCliente" >
 									<option value="0">- Seleccione una opción -</option>
@@ -102,16 +112,16 @@
 								</select>
 								<label for="SucursalCliente">Sucursal</label>
 							</div>
-						</div>
-						<div class="col-md-4 col-sm-12 mb-3">
+						</div> -->
+						<div class="col-md-4 col-sm-12 mb-3 camposFisica">
 							<div class="form-floating">
-								<input type="date" class="form-control" id="FechaNacimientoCliente" name="FechaNacimientoCliente" placeholder="Ingresa la fecha de nacimiento del cliente">
+								<input type="date" class="form-control " id="FechaNacimientoCliente" name="FechaNacimientoCliente" placeholder="Ingresa la fecha de nacimiento del cliente">
 								<label for="FechaNacimientoCliente">Fecha de nacimiento</label>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-12 mb-3">
+						<div class="col-md-4 col-sm-12 mb-3 camposFisica">
 							<div class="form-floating">
-								<select class="form-select" id="SexoCliente" name="SexoCliente">
+								<select class="form-select " id="SexoCliente" name="SexoCliente">
 									<option value="" selected> - Seleccione una opción - </option>
 									<option value="Masculino">Masculino</option>
 									<option value="Femenino">Femenino</option>
@@ -129,7 +139,7 @@
 								<label for="FacturarCliente">Facturar ventas</label>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-12 mb-3">
+						<div class="col-md-4 col-sm-12 mb-3 camposFisica">
 							<div class="form-floating">
 								<input type="text" class="form-control" id="INECliente" name="INECliente" placeholder="Ingresa código del INE">
 								<label>INE</label>
@@ -276,6 +286,49 @@
 						<hr>
 						<div class="row mb-3">
 							<div class="col-md-6 col-sm-12 text-start">
+								<b class="mb-3">Sucursales</b>
+							</div>
+						</div>
+
+
+
+						<div class="col-md-12 col-sm-12">
+					      	<div class="table-responsive">
+					       		<table class="table table table-hover table-striped table-bordered text-center" id="tablaSucursalesCliente" width="100%" style="font-size: 12px;">
+							        <thead>
+							          <th>Nombre</th>
+							        	<th>Acciones</th>
+							        </thead>
+							        <tbody id="verSucursalesCliente">
+
+							        </tbody>
+							        <tfoot>
+							        	<tr>
+							        		<td>
+							        			<!-- <select form="formProveedoresProd" class="form-select" name="proveedorProducto" id="proveedorProducto" required>
+				                      				<option value="">--Seleccione una opción--</option>  
+				                      				#proveedores# 
+			                    				</select> -->	
+			                    				<div class="form-floating mb-3">
+													<select form="formSucursalesCliente" class="form-select" name="SucursalCliente" id="SucursalCliente" required>
+														<option value="">- Seleccione una opción -</option>
+														#SucursalesCliente#
+													</select>
+													<label for="SucursalCliente">Sucursal</label>
+												</div>
+					                		</td>
+					                		<td>
+					                			<button  type="button" class="btn btn-sm btn-success" id="bAgregarSucursal"><i class="fas fa-plus"></i></button>
+					                		</td>
+							        	</tr>
+							        </tfoot>
+							    </table>
+					      	</div>
+					    </div>
+
+
+						<div class="row mb-3">
+							<div class="col-md-6 col-sm-12 text-start">
 								<b class="mb-3">Direcciones</b>
 							</div>
 							<div class="col-md-6 col-sm-12 text-end">
@@ -342,6 +395,15 @@
 					</div>
 					<div class="col-md-12 col-sm-12 mb-2">
 						Referencia visual / Detalles: <span style="font-weight: bold;" id="DatosReferencia"></span>
+					</div>
+					<div class="col-md-12 col-sm-12 mb-2">
+						Latitud: <span style="font-weight: bold;" id="DatosLatitud"></span>
+					</div>
+					<div class="col-md-12 col-sm-12 mb-2">
+						Longitud: <span style="font-weight: bold;" id="DatosLongitud"></span>
+					</div>
+					<div class="col-md-12 col-sm-12 mb-2">
+						Entre que calles se encuentra: <span style="font-weight: bold;" id="DatosEntreCalles"></span>
 					</div>
 					<hr>
 					<h6>Datos del contacto</h6>

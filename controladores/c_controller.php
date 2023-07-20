@@ -26,6 +26,7 @@ include "controladores/c_importes.php";
 include "controladores/c_precios.php";
 include "controladores/c_reportes.php";
 include "controladores/c_reporteCaja.php";
+include "controladores/c_reporteVentas.php";
 
 class controller {
 
@@ -37,6 +38,7 @@ class controller {
 			$fechahoy = date('Y-m-d H:i:s');
 			$pagina = file_get_contents('vistas/v_html.php');
 			$pagina = str_replace('#NombreUsuario#',$_SESSION['user_admin']['Nombre'],$pagina);
+			$pagina = str_replace('#NombreUsuarioNavBar#',$_SESSION['user_admin']['Nombre'],$pagina);
 			$pagina = str_replace('#PermisosUsuario#',$_SESSION['user_admin']['Tipo_Usuario'],$pagina);
 			$pagina = str_replace('#IDUsuario#',$_SESSION['user_admin']['ID_Usuario'],$pagina);
 			$pagina = str_replace('#usuario#',$_SESSION['user_admin']['Nombre'],$pagina);
@@ -52,7 +54,9 @@ class controller {
 			}     
 
 			$alertas = '';
-			$query = "SELECT ID_Stock, stock_productos.FK_Producto, Descripcion, Nombre_Unidad, FK_Presentacion, FK_Sucursal, Minimo, Maximo, Nombre, IFNULL((SELECT Cantidad FROM inventario WHERE FK_Producto = stock_productos.FK_Producto AND FK_Presentacion = FK_Presentacion AND FK_Sucursal = FK_Sucursal), 0) AS Cantidad FROM stock_productos INNER JOIN productos ON stock_productos.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion";
+			//QUERY ORIGINAL, MANDARLO A JUANCHO PARA QUE LO CHEQUE MAÑANA, SE AGREGO EL SUM
+			//SELECT ID_Stock, stock_productos.FK_Producto, Descripcion, Nombre_Unidad, FK_Presentacion, FK_Sucursal, Minimo, Maximo, Nombre, IFNULL((SELECT Cantidad FROM inventario WHERE FK_Producto = stock_productos.FK_Producto AND FK_Presentacion = FK_Presentacion AND FK_Sucursal = FK_Sucursal), 0) AS Cantidad FROM stock_productos INNER JOIN productos ON stock_productos.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion";
+			$query = "SELECT ID_Stock, stock_productos.FK_Producto, Descripcion, Nombre_Unidad, FK_Presentacion, FK_Sucursal, Minimo, Maximo, Nombre, IFNULL((SELECT Cantidad FROM inventario WHERE FK_Producto = stock_productos.FK_Producto AND FK_Presentacion = stock_productos.FK_Presentacion AND FK_Sucursal = stock_productos.FK_Sucursal), 0) AS Cantidad FROM stock_productos INNER JOIN productos ON stock_productos.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -330,9 +334,9 @@ class controller {
 
 		$botonReporteVentas = '';
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][4] == '1') {
-			$botonReporteClientes = '<li class="menu-item cargarVista" carga="v_reporteVentas" titulo="Reporte ventas" id="cargarReporteVentas">
+			$botonReporteVentas = '<li class="menu-item cargarVista" carga="v_reporteVentas" titulo="Reporte ventas" id="cargarReporteVentas">
                   <a href="javascript:void(0)" class="menu-link">
-                    <div data-i18n="Ventas">Ventas</div>
+                    <div data-i18n="Ventas">Vendedores</div>
                   </a>
                 </li>';
 		}
@@ -366,6 +370,19 @@ class controller {
               </a>';
     }
     $pagina = str_replace('#menuReportes#', $botonReportes, $pagina);
+
+    $botonCorteCaja = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][8] == '1') {
+    		$botonCorteCaja = '<button type="button" class="btn btn-outline-danger oculto" data-bs-toggle="modal" data-bs-target="#ModalCerrarCaja" id="BotonCerrarCaja" attrid="">
+                  <i class="fas fa-times"></i> Hacer corte de caja
+                </button>';
+    }
+
+    $pagina = str_replace('#BotonCorteCaja#', $botonCorteCaja, $pagina);
+
+    
+
+
 
     $venta = '';
     /*if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][2] == '1') {
@@ -521,6 +538,7 @@ class controller {
 
 			$pagina = str_replace('#botonTraslados#', $botonPermisosTraslados, $pagina);
 
+			$botonAgregarTras = "";
 			if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_inventario'][11] == '1') {
 					$botonAgregarTras = '<button type="button" class="btn btn-primary" id="bAgregarTraslado"><i class="fas fa-plus"></i> Agregar</button>';
 			}

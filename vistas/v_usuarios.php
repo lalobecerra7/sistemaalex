@@ -433,8 +433,14 @@
                                                 <td>Facturar</td>
                                                 <td>Devoluciones</td>
                                                 <td>Ticket</td>
+                                                <td>Cerrar Caja</td>
                                             </tr>
                                             <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <div>
                                                         <input class="form-check-input checkPermisos" type="checkbox">
@@ -483,14 +489,8 @@
                                             <tr>
                                                 <td>Ver</td>
                                                 <td>Modificar</td>
-                                                <td>Ticket</td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <div>
-                                                        <input class="form-check-input checkPermisos" type="checkbox">
-                                                    </div>
-                                                </td>
                                                 <td>
                                                     <div>
                                                         <input class="form-check-input checkPermisos" type="checkbox">

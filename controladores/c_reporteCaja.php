@@ -44,7 +44,7 @@ class reporteCaja {
 					}else{
 						if($numerofilas2 > 0){
 							///*****************************INGRESOS********************************///
-							$queryv = "SELECT Total, Tipo_Pago FROM ventas WHERE (Fecha_Registro >= '".$rowdetallecaja[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$rowdetallecaja[0]["Fecha_Cierre"]."') AND Estatus = 'Completada'";
+							$queryv = "SELECT Total, Tipo_Pago, Contar_Venta FROM ventas WHERE (Fecha_Registro >= '".$rowdetallecaja[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$rowdetallecaja[0]["Fecha_Cierre"]."') AND Estatus = 'Completada'";
 							$rowv = $omodelo->_consultar($queryv);
 							$numerofilasv = $omodelo->numerofilas;
 							if($rowv == 'si'){
@@ -52,7 +52,9 @@ class reporteCaja {
 							}else{
 								if($numerofilasv > 0){
 									for ($ventas=0; $ventas < $numerofilasv; $ventas++) { 
-										$totalIngresos += $rowv[$ventas]["Total"];
+										if($rowv[$ventas]['Contar_Venta'] == '0'){
+											$totalIngresos += $rowv[$ventas]["Total"];
+										}
 									}
 								}
 							}

@@ -361,7 +361,7 @@ jQuery(document).ready(function($) {
         }).then((result) => {
             if (result.value) {
                 //Cada que se agreguen o modifiquen permisos modificar esta cadena
-                var cadena = 'v_sucursales,0,0,0,0~v_proveedores,0,0,0,0~v_clientes,0,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0~v_importes,0,0,0~v_productos,0,0,0,0,0~v_inventario,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~';
+                var cadena = 'v_sucursales,0,0,0,0~v_proveedores,0,0,0,0~v_clientes,0,0,0,0~v_orden_compra,0,0,0,0,0~v_compras,0,0,0,0,0~v_ventas,0,0,0,0,0,0,0,0~v_importes,0,0~v_productos,0,0,0,0,0~v_inventario,0,0,0,0,0,0,0,0,0,0,0,0,0,0~v_categorias,0,0,0,0~v_zonas,0,0,0,0~v_areas,0,0,0,0~v_precios,0~v_impuestos,0,0,0,0~v_tickets,0~v_facturacion,0~v_usuarios,0,0,0,0,0~v_reportes,0,0,0,0,0,0~';
                 var data = "metodo=detalles&accion=usuarios&tipo=ModificarPermisos&id="+boton.attr('attrid')+"&cadena="+cadena;
 
                 $.ajax({

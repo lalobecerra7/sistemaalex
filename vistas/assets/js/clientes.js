@@ -6,9 +6,6 @@ function v_clientes() {
             NombreCliente: {
                 required: true
             },
-            primerApellidoCliente: {
-                required: true
-            },
             SucursalCliente: {
                 required: true
             }
@@ -17,85 +14,107 @@ function v_clientes() {
             NombreCliente: {
                 required: "El nombre es requerido."
             },
-            primerApellidoCliente: {
-                required: "El primer apellido es requerido."
-            },
             SucursalCliente: {
                 required: "La sucursal es requerdia."
             }
         },
         submitHandler: function(form) { 
-            var direcciones = '';
-            $("#TablaUbicacionClientes tbody tr").each(function(index, el){
-                direcciones += $(this).find("#CalleCliente").val()+"~"+$(this).find("#NoExteriorCliente").val()+"~"+$(this).find("#NoInteriorCliente").val()+"~"+$(this).find("#CPCliente").val()+"~"+$(this).find("#ColoniaCliente").val()+"~"+$(this).find("#CiudadCliente").val()+"~"+$(this).find("#EstadoCliente").val()+"~"+$(this).find("#PaisCliente").val()+"~"+$(this).find("#NombreContactoCliente").val()+"~"+$(this).find("#PuestoContactoCliente").val()+"~"+$(this).find("#CorreoContactoCliente").val()+"~"+$(this).find("#TelefonoContactoCliente").val()+"~"+$(this).find("#ReferenciaCliente").val()+",";
-            });
+            if ($("#TipoPersona").val() == "Fisica" && $("#primerApellidoCliente").val() == "") {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Ingresa el primer apellido del cliente',
+                });
+                $("#primerApellidoCliente").focus();
+            }else{
+                var direcciones = '';
+                $("#TablaUbicacionClientes tbody tr").each(function(index, el){
+                    direcciones += $(this).find("#CalleCliente").val()+"~"+$(this).find("#NoExteriorCliente").val()+"~"+$(this).find("#NoInteriorCliente").val()+"~"+$(this).find("#CPCliente").val()+"~"+$(this).find("#ColoniaCliente").val()+"~"+$(this).find("#CiudadCliente").val()+"~"+$(this).find("#EstadoCliente").val()+"~"+$(this).find("#PaisCliente").val()+"~"+$(this).find("#NombreContactoCliente").val()+"~"+$(this).find("#PuestoContactoCliente").val()+"~"+$(this).find("#CorreoContactoCliente").val()+"~"+$(this).find("#TelefonoContactoCliente").val()+"~"+$(this).find("#ReferenciaCliente").val()+"~"+$(this).find("#LatitudCliente").val()+"~"+$(this).find("#LongitudCliente").val()+"~"+$(this).find("#EntreQueCalles").val()+",";
+                });
 
-            var data = new FormData(document.getElementById("FormClientes"));
-            data.append("metodo", $("#GuardarCliente").attr("tipo"));
-            data.append("accion", "clientes");
-            data.append("direcciones", direcciones);
-            data.append("IDCliente", $("#GuardarCliente").attr("attrid"));
-
-            var btn = $('#GuardarCliente');
-            $.ajax({
-                url: 'index.php',
-                type: 'POST',
-                data: data,
-                processData: false,
-                contentType: false,
-                beforeSend: function() {
-                    $("#carga").show();
+                var sucursales = [];
+                if($("#verSucursalesCliente").children('tr').length > 0){
+                    $("#verSucursalesCliente").children('tr').each(function(index, el) {
+                        sucursales.push({'ID_Sucursal': $.trim($(this).children('td:eq(0)').attr('attrID'))});
+                    });
                 }
-            })
-            .done(function(res) {
-                var datos = $.trim(res).split("~");
-                if ($.trim(datos[0]) == "Correcto") {
-                    $("#ModalCliente").modal("hide");
-                    var footer = "";
-                    if ($("#GuardarCliente").attr("tipo") == "modificar") {
-                        var tipoAlerta = "modificado";
+
+                var data = new FormData(document.getElementById("FormClientes"));
+                data.append("metodo", $("#GuardarCliente").attr("tipo"));
+                data.append("accion", "clientes");
+                data.append("direcciones", direcciones);
+                data.append("IDCliente", $("#GuardarCliente").attr("attrid"));
+                data.append('sucursales', JSON.stringify(sucursales));
+
+                var btn = $('#GuardarCliente');
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        $("#carga").show();
+                    }
+                })
+                .done(function(res) {
+                    var datos = $.trim(res).split("~");
+                    if ($.trim(datos[0]) == "Correcto") {
+                        $("#ModalCliente").modal("hide");
+                        var footer = "";
+                        if ($("#GuardarCliente").attr("tipo") == "modificar") {
+                            var tipoAlerta = "modificado";
+                        }else{
+                            var tipoAlerta = "guardado";
+                        }
+
+                        if ($.trim(datos[1]) == "Error 2 Formato") {
+                            footer = "El formato de la imagen es incorrecto";
+                        }else if ($.trim(datos[1]) == "Error 3 Peso") {
+                            footer = "La imagen debe de pesar menos de 10MB";
+                        }
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Cliente '+tipoAlerta+' correctamente',
+                            footer: footer
+                        });
+                        TablaClientes();
+                    }else if ($.trim(res) == "ErrorInsertar: Duplicate entry '"+$("#RFCCliente").val()+"' for key 'RFC'"){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Este RFC ya se encuentra registrado, intenta con otro.'
+                        });
                     }else{
-                        var tipoAlerta = "guardado";
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error inesperado al '+$("#GuardarCliente").attr("tipo")+' cliente.'
+                        });
+                        console.log($.trim(res));
                     }
-
-                    if ($.trim(datos[1]) == "Error 2 Formato") {
-                        footer = "El formato de la imagen es incorrecto";
-                    }else if ($.trim(datos[1]) == "Error 3 Peso") {
-                        footer = "La imagen debe de pesar menos de 10MB";
-                    }
-
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Cliente '+tipoAlerta+' correctamente',
-                        footer: footer
-                    });
-                    TablaClientes();
-                }else if ($.trim(res) == "ErrorInsertar: Duplicate entry '"+$("#RFCCliente").val()+"' for key 'RFC'"){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Este RFC ya se encuentra registrado, intenta con otro.'
-                    });
-                }else{
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Error inesperado al '+$("#GuardarCliente").attr("tipo")+' cliente.'
-                    });
-                    console.log($.trim(res));
-                }
-            })
-            .fail(function() {
-                console.log("Error ajax");
-            })
-            .always(function() {
-                $("#carga").hide();
-            });            
+                })
+                .fail(function() {
+                    console.log("Error ajax");
+                })
+                .always(function() {
+                    $("#carga").hide();
+                }); 
+            }           
         }
     });       
 }
 
 jQuery(document).ready(function($) {
+
+    $(document).on('change', '#TipoPersona', function() {
+        if ($(this).val() == "Fisica") {
+            $(".camposFisica").removeClass("oculto");
+        }else if ($(this).val() == "Moral") {
+            $(".camposFisica").addClass("oculto");
+            $(".camposFisica").find("input").val("");
+        }
+    });                
 
     $(document).on('click', '#botonNuevoCliente', function() {
         $("#GuardarCliente").attr('tipo', "insertar");
@@ -105,7 +124,9 @@ jQuery(document).ready(function($) {
         $("#TituloModalCliente").text("Agregar nuevo");
         $("#TipoDescuentoCliente").trigger("change");
         $("#DescuentoCliente").val("");
+        $("#TipoPersona").trigger("change");
         $("#TablaUbicacionClientes tbody").html("");
+        $("#verSucursalesCliente").html("");
     });
 
     $(document).on('hidden.bs.modal', '#ModalNuevaDireccionCliente', function() {
@@ -189,6 +210,17 @@ jQuery(document).ready(function($) {
                         <input type="text" class="form-control" id="ColoniaCliente" name="ColoniaCliente" placeholder="Ingresa la colonia del cliente">
                      </div>
                 </div> 
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="LatitudCliente">Latitud</label>
+                        <input type="text" class="form-control" id="LatitudCliente" name="LatitudCliente" placeholder="Latitud de la ubicación">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="LongitudCliente">Longitud</label>
+                        <input type="text" class="form-control" id="LongitudCliente" name="LongitudCliente" placeholder="Longitud de la ubicación">
+                    </div>
+                </div>
             </td>
             <td>
                 <label for="CiudadCliente">Ciudad</label>
@@ -201,7 +233,10 @@ jQuery(document).ready(function($) {
                 <input type="text" class="form-control" id="PaisCliente" name="PaisCliente" placeholder="Ingresa el país del cliente">
                 <br>
                 <label for="ReferenciaCliente">Referencia visual / Detalles</label>
-                <input type="text" class="form-control" id="ReferenciaCliente" name="ReferenciaCliente" placeholder="Ingresa el país del cliente">
+                <input type="text" class="form-control" id="ReferenciaCliente" name="ReferenciaCliente" placeholder="Ingresa una referencia visual o detalles de la ubicación">
+                <br>
+                <label for="EntreQueCalles">Entre que calles se encuentra</label>
+                <input type="text" class="form-control" id="EntreQueCalles" name="EntreQueCalles" placeholder="Ingresa que calles colindan con la ubicación">
             </td>
             <td>
                 <label for="NombreContactoCliente">Nombre</label>
@@ -320,6 +355,7 @@ jQuery(document).ready(function($) {
     $(document).on('click', '#ModificarCliente', function() {
         var id = $(this).attr('attrid');
         $("#TablaUbicacionClientes tbody").html("");
+        $("#verSucursalesCliente").html("");
         var data = "metodo=detalles&accion=clientes&IDCliente="+id;
         $.ajax({
             url: 'index.php',
@@ -368,6 +404,15 @@ jQuery(document).ready(function($) {
             }else{
                 $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/default.jpg');
             }
+
+            if (datos.Tipo_Persona == "Fisica") {
+                $("#TipoPersona").val("Fisica");
+            }else if (datos.Tipo_Persona == "Moral") {
+                $("#TipoPersona").val("Moral");
+            }else{
+                $("#TipoPersona").val("Fisica");
+            }
+            $("#TipoPersona").trigger("change");
             $("#TablaUbicacionClientes tbody").html("");
             if (datos.Extras != null && datos.Extras.length > 0) {
                 for (var i = 0; i < datos.Extras.length; i++) {
@@ -384,6 +429,9 @@ jQuery(document).ready(function($) {
                     var PuestoContactoCliente = datos.Extras[i].Puesto_Contacto;
                     var CorreoContactoCliente = datos.Extras[i].Email_Contacto;
                     var TelefonoContactoCliente = datos.Extras[i].Telefono_Contacto;
+                    var Latitud = datos.Extras[i].Latitud;
+                    var Longitud = datos.Extras[i].Longitud;
+                    var Entre_Calles = datos.Extras[i].Entre_Calles;
                     var tabla = `\
                     <tr>
                         <td>
@@ -411,6 +459,17 @@ jQuery(document).ready(function($) {
                                     <input type="text" class="form-control" value="`+ColoniaCliente+`" id="ColoniaCliente" name="ColoniaCliente" placeholder="Ingresa la colonia del cliente">
                                  </div>
                             </div> 
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="LatitudCliente">Latitud</label>
+                                    <input type="text" class="form-control" value="`+Latitud+`" id="LatitudCliente" name="LatitudCliente" placeholder="Latitud de la ubicación">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="LongitudCliente">Longitud</label>
+                                    <input type="text" class="form-control" value="`+Longitud+`" id="LongitudCliente" name="LongitudCliente" placeholder="Longitud de la ubicación">
+                                </div>
+                            </div>
                         </td>
                         <td>
                             <label for="CiudadCliente">Ciudad</label>
@@ -423,7 +482,10 @@ jQuery(document).ready(function($) {
                             <input type="text" class="form-control" value="`+PaisCliente+`" id="PaisCliente" name="PaisCliente" placeholder="Ingresa el país del cliente">
                             <br>
                             <label for="ReferenciaCliente">Referencia visual / Detalles</label>
-                            <input type="text" class="form-control" value="`+ReferenciaCliente+`" id="ReferenciaCliente" name="ReferenciaCliente" placeholder="Ingresa el país del cliente">
+                            <input type="text" class="form-control" value="`+ReferenciaCliente+`" id="ReferenciaCliente" name="ReferenciaCliente" placeholder="Ingresa una referencia visual o detalles">
+                            <br>
+                            <label for="EntreQueCalles">Entre que calles se encuentra</label>
+                            <input type="text" class="form-control" value="`+Entre_Calles+`" id="EntreQueCalles" name="EntreQueCalles" placeholder="Ingresa que calles colindan con la dirección">
                         </td>
                         <td>
                             <label for="NombreContactoCliente">Nombre</label>
@@ -443,6 +505,17 @@ jQuery(document).ready(function($) {
                     $("#TablaUbicacionClientes tbody").append(tabla);
                 }
             }
+
+
+            if(datos.Sucursales != null){
+                datos.Sucursales.forEach(sucursal => {
+                    $("#verSucursalesCliente").append(`<tr id="`+sucursal.FK_Sucursal+`">
+                        <td attrID="`+sucursal.FK_Sucursal+`">`+sucursal.Nombre+`</td>
+                        <td><button type="button" class="btn btn-danger btn-sm bQuitarSucursal"><i class="fas fa-trash"></i></button></td>
+                    </tr>`);
+                });
+            }
+
             $("#ModalCliente").modal("show");
         })
         .fail(function() {
@@ -468,14 +541,14 @@ jQuery(document).ready(function($) {
             $("#DatosInt").text("No hay datos registrados");
         }
         if ($(this).attr("Colonia") != "") {
-            $("#DatosCP").text($(this).attr("Colonia"));
-        }else{  
-            $("#DatosCP").text("No hay datos registrados");
-        }
-        if ($(this).attr("Codigo_Postal") != "") {
-            $("#DatosColonia").text($(this).attr("Codigo_Postal"));
+            $("#DatosColonia").text($(this).attr("Colonia"));
         }else{  
             $("#DatosColonia").text("No hay datos registrados");
+        }
+        if ($(this).attr("Codigo_Postal") != "") {
+            $("#DatosCP").text($(this).attr("Codigo_Postal"));
+        }else{  
+            $("#DatosCP").text("No hay datos registrados");
         }
         if ($(this).attr("Ciudad") != "") {
             $("#DatosCiudad").text($(this).attr("Ciudad"));
@@ -519,9 +592,54 @@ jQuery(document).ready(function($) {
             $("#DatosReferencia").text("No hay datos registrados");
         }
 
+        if ($(this).attr("Latitud") != "") {
+            $("#DatosLatitud").text($(this).attr("Latitud"));
+        }else{  
+            $("#DatosLatitud").text("No hay datos registrados");
+        }
+
+        if ($(this).attr("Longitud") != "") {
+            $("#DatosLongitud").text($(this).attr("Longitud"));
+        }else{  
+            $("#DatosLongitud").text("No hay datos registrados");
+        }
+
+        if ($(this).attr("EntreCalles") != "") {
+            $("#DatosEntreCalles").text($(this).attr("EntreCalles"));
+        }else{  
+            $("#DatosEntreCalles").text("No hay datos registrados");
+        }
+
         
         $("#ModalDetallesDireccion").modal("show");
 
+    });
+
+    $(document).on('click', '#bAgregarSucursal', function() {
+        $("#bGuardarSucursal").trigger('click');
+    });
+
+    $(document).on('submit', '#formSucursalesCliente', function(event) {
+        event.preventDefault();
+
+        if($("#verSucursalesCliente").children('tr[id="'+$.trim($("#SucursalCliente").val())+'"]').length == 0){
+            $("#verSucursalesCliente").append(`<tr id="`+$.trim($("#SucursalCliente").val())+`">
+                <td attrID="`+$.trim($("#SucursalCliente").val())+`">`+$.trim($('#SucursalCliente option:selected').text())+`</td>
+                <td><button type="button" class="btn btn-danger btn-sm bQuitarSucursal"><i class="fas fa-trash"></i></button></td>
+            </tr>`);
+
+            document.getElementById('formSucursalesCliente').reset();
+        }else{
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'La sucursal ya existe, por favor agrega otra.'
+            });  
+        }
+    });
+
+    $(document).on('click', '.bQuitarSucursal', function() {
+        $(this).parent().parent().remove();
     });
 
 });

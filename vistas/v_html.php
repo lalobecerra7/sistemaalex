@@ -517,6 +517,326 @@
       </div>
     </div>
 
+    <!--/////////////////////////////////////////////////////////////-->
+    <div class="modal fade" id="ModalCerrarCaja" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+            <div class="modal-content">
+                <div class="modal-header bg-inverse bd-inverse-darken">
+                    <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Cerrar Caja / Hacer corte de caja</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="FormCerrarCaja">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-3">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" id="MontoCierreCaja" name="MontoCierreCaja" min="1" placeholder="Ingresa el monto de cierre de la caja">
+                                    <label for="MontoCierreCaja">¿Cuánto dinero hay en caja?</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                        <button type="submit" class="btn btn-primary" id="CerrarCajaVentas" attrid=""><i class="fa fa-check-circle"></i> <strong>Cerrar caja</strong></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+
+    <!--/////////////////////////////////////////////////////////////-->
+    <div class="modal fade" id="ModalBalanceCaja" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+       <div class="modal-dialog modal-lg modal-dialog-centered" style="z-index: 9999 !important;">
+            <div class="modal-content">
+                <div class="modal-header bg-inverse bd-inverse-darken">
+                    <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Cerrar Caja / Hacer corte de caja</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- <div class="row text-center">
+                        <div class="col-md-6">
+                            Usuario que abrio la caja:
+                            <br>
+                            <span id="spanUsuarioAbrir"></span>
+                        </div>
+                        <div class="col-md-6">
+                            Usuario que cerro la caja:
+                            <br>
+                            <span id="spanUsuarioCerrar"></span>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row text-center">
+                        <div class="col-md-6">
+                            Abrio caja
+                            <br>
+                            <span id="spanFechaAbrir"></span>
+                        </div>
+                        <div class="col-md-6">
+                            Cerro caja
+                            <br>
+                            <span id="spanFechaCerrar"></span>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            Monto de cierre
+                            <h2 class="dinero" id="spanMontoCierre"></h2>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            Monto actual en caja (Efectivo)
+                            <h2 class="dinero" id="totalActualEfectivo" title="Ingresos en efectivo - Egresos en efectivo"></h2>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            Diferencia (Efectivo)
+                            <h2 class="dinero" id="totalDiferenciaSpan"></h2>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                              <div class="col-md-6 text-start col-sm-12">
+                                <h3>Ventas totales</h3>
+                              </div>
+                              <div class="col-md-6 text-end col-sm-12">
+                                <h3><span class="dinero" id="spanVentasTotales"></span></h3>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12 col-sm-12">
+                                <h3>Dinero en caja</h3>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12 col-sm-12 table-responsive">
+                                <table class="table table-hover">
+                                  <tr>
+                                    <td class="text-start">Fondo de caja</td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanMontoApertura"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">Ventas en efectivo</td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasEfectivo"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">Importes</td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanTotalImportes"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">Compras en efectivo</td>
+                                    <td class="text-end" style="color: red;">-<span class="dinero" id="spanTotalCompras"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">Pagos en efectivo</td>
+                                    <td class="text-end" style="color: red;">-<span class="dinero" id="spanPagosEfectivo"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">Devoluciones</td>
+                                    <td class="text-end" style="color: red;">-<span class="dinero" id="spanTotalDevoluciones"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start"><b>Total de efectivo en caja</b></td>
+                                    <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanTotalEfectivo"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start" style="font-weight: bold;">Monto de cierre</td>
+                                    <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanMontoCierre"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start"><b>Diferencia de efectivo</b></td>
+                                    <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanTotalDiferencia"></span></td>
+                                  </tr>
+                                </table>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                              <div class="col-md-12 col-sm-12">
+                                <h3>Ventas</h3>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12 col-sm-12 table-responsive">
+                                <table class="table table-hover">
+                                  <tr>
+                                    <td class="text-start">En efectivo</td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasEnEfectivo"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">En depósito</td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasDeposito"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">En cheque</td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasCheque"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">En transferencia</td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasTransferencia"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">En tarjeta de crédito / debito</td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasTarjeta"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">En pago online</td>
+                                    <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasPagoOnline"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">Devoluciones</td>
+                                    <td class="text-end" style="color: red;">-<span class="dinero" id="spanTotalDevolucionesVenta"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start"><b>Total</b></td>
+                                    <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanTotalVentas"></span></td>
+                                  </tr>
+                                </table>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                              <div class="col-md-12 col-sm-12">
+                                <h3>Compras al contado</h3>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12 col-sm-12 table-responsive">
+                                <table class="table table-hover">
+                                  <tr>
+                                    <td class="text-start">En efectivo</td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanComprasEnEfectivo"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">En depósito</td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanComprasDeposito"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">En cheque</td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanComprasCheque"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">En transferencia</td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanComprasTransferencia"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">En tarjeta de crédito / debito</td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanComprasTarjeta"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start"><b>Total</b></td>
+                                    <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanComprasTotal"></span></td>
+                                  </tr>
+                                </table>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                              <div class="col-md-12 col-sm-12">
+                                <h3>Compras a crédito (Pagos)</h3>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12 col-sm-12 table-responsive">
+                                <table class="table table-hover">
+                                  <tr>
+                                    <td class="text-start">En efectivo</td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanPagosEnEfectivo"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">En depósito</td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanPagosDeposito"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">En cheque</td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanPagosCheque"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">En transferencia</td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanPagosTransferencia"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start">En tarjeta de crédito / debito</td>
+                                    <td class="text-end" style="color: red;"><span class="dinero" id="spanPagosTarjeta"></span></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-start"><b>Total</b></td>
+                                    <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanPagosTotal"></span></td>
+                                  </tr>
+                                </table>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="row">
+                        <div class="col-md-6 text-center">
+                            <h4>Ingresos totales <h4 class="dinero" id="totalIngresosSpan"></h4></h4>
+                            <br>
+                            <h6>Ingresos (Efectivo) <h6 class="dinero" id="totalIngresosEfectivo"></h6></h6>
+                            <br>
+                            <div class="text-start">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                        Monto de apertura: <span class="dinero" id="spanMontoApertura"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                        Total de ventas: <span class="dinero" id="spanTotalVentas"></span>
+                                    </div>
+                                </div>
+                                <div id="DivMostrarVentasDesplegada">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                        Total de importes: <span class="dinero" id="spanTotalImportes"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <h4>Egresos totales: <h4 class="dinero" id="totalEgresosSpan"></h4></h4>
+                            <br>
+                            <h6>Egresos (Efectivo) <h6 class="dinero" id="totalEgresosEfectivo"></h6></h6>
+                            <br>
+                            <div class="text-start">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                        Total de compras al contado: <span class="dinero" id="spanTotalCompras"></span>
+                                    </div>
+                                </div>
+                                <div id="DivMostrarComprasDesplegado">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                        Total de compras a credito (Pagos): <span class="dinero" id="spanTotalComprasCredito"></span>
+                                    </div>
+                                </div>
+                                <div id="DivMostrarPagosDesplegado">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-3" style="font-weight: bold; font-size: 20px;">
+                                        Total de devoluciones: <span class="dinero" id="spanTotalDevoluciones"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                    <button type="button" class="btn btn-primary" id="ImprimirBalance" attrid=""><i class="fa fa-print"></i> <strong>Imprimir balance</strong></button>
+                </div>
+            </div>
+        </div>
+    </div> 
+
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
         <!-- Menu -->
@@ -650,9 +970,12 @@
               </a>
             </div>
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-              <!-- <div id="DivPedidosPendientes">
-                <a href="javascript:void(0)" style="font-size: 25x" id="cargarVenta" ><i class="fas fa-shopping-cart"></i></a>
-              </div>  -->
+              <div class="">
+                #BotonCorteCaja#
+              </div>
+              <div class="" style="margin-left: 15px">
+                Usuario actual: <b>#NombreUsuarioNavBar#</b>
+              </div>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -1257,5 +1580,6 @@
     <script type="text/javascript" src="vistas/assets/js/precios.js"></script>
     <script type="text/javascript" src="vistas/assets/js/reportes.js"></script>
     <script type="text/javascript" src="vistas/assets/js/reporteCaja.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/reporteVentas.js"></script>
   </body>
 </html>

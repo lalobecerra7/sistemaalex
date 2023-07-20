@@ -35,7 +35,7 @@ function v_productos() {
             var presentaciones = [];
             if($("#verPresentaciones").children('tr').length > 0){
                 $("#verPresentaciones").children('tr').each(function(index, el){
-                    presentaciones.push({'ID_Presentacion': $.trim($(this).attr('id')),'Clave': $.trim($(this).children('td:eq(0)').text()), 'Nombre': $.trim($(this).children('td:eq(1)').text()), 'Abreviatura': $.trim($(this).children('td:eq(2)').text()), 'Costo': $.trim($(this).children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')), 'Importe': $.trim($(this).children('td:eq(4)').text().replace('$', '').replace(searchRegExp, ''))});
+                    presentaciones.push({'ID_Presentacion': $.trim($(this).attr('id')),'Clave': $.trim($(this).children('td:eq(0)').text()), 'Nombre': $.trim($(this).children('td:eq(1)').text()), 'Abreviatura': $.trim($(this).children('td:eq(2)').text()), 'Costo': $.trim($(this).children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')), 'Importe': $.trim($(this).children('td:eq(4)').text().replace('$', '').replace(searchRegExp, '')), 'Codigo': $.trim($(this).children('td:eq(5)').text())});
                 });
             }
 
@@ -208,7 +208,10 @@ function v_productos() {
             importePresentacionM: {
                 required: true,
                 min: 0
-            }
+            },
+            CodigoPresentacionM: {
+                required: true
+            },
         },
         messages: {
             nombrePresentacionM: {
@@ -224,31 +227,82 @@ function v_productos() {
             importePresentacionM: {
                 required: "El importe es requerido.",
                 min: "El minimo es 0"
-            }
+            },
+            CodigoPresentacionM: {
+                required: "El codigo de la presentacion es requerido"
+            },
         },
         submitHandler: function(form) {
             var filas = $("#verPresentaciones").children('tr[attrID="'+$.trim($("#nombrePresentacion").val())+'"]'); 
-            if(filas.length <= 1){
-                var nombre = $.trim(filaPre.attr('attrID'));
-                filaPre.attr('attrID', $.trim($("#nombrePresentacionM").val()));
-                filaPre.children('td:eq(0)').html($.trim($("#unidadPresentacionM").val()));
-                filaPre.children('td:eq(1)').html($.trim($("#nombrePresentacionM").val()));
-                filaPre.children('td:eq(2)').html($.trim($("#abreviaturaPresentacionM").val()));
-                filaPre.children('td:eq(3)').html('<span class="dinero">'+$.trim($("#costoPresentacionM").val())+'</span>');
-                filaPre.children('td:eq(4)').html('<span class="dinero">'+$.trim($("#importePresentacionM").val())+'</span>');
+            var codigoActual = $("#bGuardarPresenta").attr("codigoActual");
+            var codigo = $("#CodigoPresentacionM").val();
+            if (codigoActual == codigo) {
+                if(filas.length <= 1){
+                    var nombre = $.trim(filaPre.attr('attrID'));
+                    filaPre.attr('attrID', $.trim($("#nombrePresentacionM").val()));
+                    filaPre.children('td:eq(0)').html($.trim($("#unidadPresentacionM").val()));
+                    filaPre.children('td:eq(1)').html($.trim($("#nombrePresentacionM").val()));
+                    filaPre.children('td:eq(2)').html($.trim($("#abreviaturaPresentacionM").val()));
+                    filaPre.children('td:eq(3)').html('<span class="dinero">'+$.trim($("#costoPresentacionM").val())+'</span>');
+                    filaPre.children('td:eq(4)').html('<span class="dinero">'+$.trim($("#importePresentacionM").val())+'</span>');
+                    filaPre.children('td:eq(5)').html($.trim($("#CodigoPresentacionM").val()));
 
-                $("#presentacionProdSelect").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
-                $("#presentacionProdSelect").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
-                $("#presentacionProdSelect1").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
-                $("#presentacionProdSelect1").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
-                $("#modalPresentaciones").modal('hide');
-
-                moneda();
+                    $("#presentacionProdSelect").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
+                    $("#presentacionProdSelect").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
+                    $("#presentacionProdSelect1").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
+                    $("#presentacionProdSelect1").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
+                    $("#modalPresentaciones").modal('hide');
+                    moneda();
+                }else{
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'La presentación ya existe, por favor utiliza otra.'
+                    });
+                }
             }else{
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Oops...',
-                    text: 'La presentación ya existe, por favor utiliza otra.'
+                var data = "metodo=detalles&accion=productos&tipo=ConsultarValidezCodigo&Codigo="+codigo;
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data
+                })
+                .done(function(res) {
+                    if ($.trim(res) == "Valido") {
+                        if(filas.length <= 1){
+                            var nombre = $.trim(filaPre.attr('attrID'));
+                            filaPre.attr('attrID', $.trim($("#nombrePresentacionM").val()));
+                            filaPre.children('td:eq(0)').html($.trim($("#unidadPresentacionM").val()));
+                            filaPre.children('td:eq(1)').html($.trim($("#nombrePresentacionM").val()));
+                            filaPre.children('td:eq(2)').html($.trim($("#abreviaturaPresentacionM").val()));
+                            filaPre.children('td:eq(3)').html('<span class="dinero">'+$.trim($("#costoPresentacionM").val())+'</span>');
+                            filaPre.children('td:eq(4)').html('<span class="dinero">'+$.trim($("#importePresentacionM").val())+'</span>');
+                            filaPre.children('td:eq(5)').html($.trim($("#CodigoPresentacionM").val()));
+
+                            $("#presentacionProdSelect").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
+                            $("#presentacionProdSelect").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
+                            $("#presentacionProdSelect1").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
+                            $("#presentacionProdSelect1").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
+                            $("#modalPresentaciones").modal('hide');
+
+                            moneda();
+                        }else{
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Oops...',
+                                text: 'La presentación ya existe, por favor utiliza otra.'
+                            });
+                        }
+                    }else{
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops...',
+                            text: 'Este codigo ya existe, intenta con otro.'
+                        });  
+                    }
+                })
+                .fail(function() {
+                    console.log("Error ajax");
                 });
             }
         }              
@@ -482,6 +536,7 @@ jQuery(document).ready(function($) {
                         <td>`+presentacion.Abreviatura+`</td>
                         <td><span class="dinero">`+presentacion.Costo+`</span></td>
                         <td><span class="dinero">`+presentacion.Importe+`</span></td>
+                        <td>`+presentacion.Codigo+`</td>
                         <td>`+botonEli+` <button type="button" class="btn btn-warning btn-sm bModificarPresenta" attrID="`+presentacion.ID_Presentacion+`"><i class="fas fa-pencil"></i></button></td>
                     </tr>`);
 
@@ -674,7 +729,27 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('click', '#bAgergarPresentacion', function() {
-        $("#bGuardarPres").trigger('click');
+        var codigo = $(this).parent().parent().children("td:eq(5)").find("#CodigoPresentacion").val();
+        var data = "metodo=detalles&accion=productos&tipo=ConsultarValidezCodigo&Codigo="+codigo;
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            data: data
+        })
+        .done(function(res) {
+            if ($.trim(res) == "Valido") {
+                $("#bGuardarPres").trigger('click');
+            }else{
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Este codigo ya existe, intenta con otro.'
+                });  
+            }
+        })
+        .fail(function() {
+            console.log("Error ajax");
+        });
     });
 
     $(document).on('submit', '#formPresentaciones', function(event) {
@@ -686,6 +761,7 @@ jQuery(document).ready(function($) {
                 <td>`+$.trim($("#abreviaturaPresentacion").val())+`</td>
                 <td><span class="dinero">`+$.trim($("#costoPresentacion").val())+`</span></td>
                 <td><span class="dinero">`+$.trim($("#importePresentacion").val())+`</span></td>
+                <td>`+$.trim($("#CodigoPresentacion").val())+`</td>
                 <td><button type="button" class="btn btn-danger btn-sm bQuitarPresenta"><i class="fas fa-trash"></i></button> <button type="button" class="btn btn-warning btn-sm bModificarPresenta"><i class="fas fa-pencil"></i></button></td>
             </tr>`);
 
@@ -738,7 +814,9 @@ jQuery(document).ready(function($) {
         $("#abreviaturaPresentacionM").val($.trim(filaPre.children('td:eq(2)').text()));
         $("#costoPresentacionM").val($.trim(filaPre.children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')));
         $("#importePresentacionM").val($.trim(filaPre.children('td:eq(4)').text().replace('$', '').replace(searchRegExp, '')));
+        $("#CodigoPresentacionM").val($.trim(filaPre.children('td:eq(5)').text()));
         $("#bGuardarPresenta").attr('attrID', $(this).attr('attrID'));
+        $("#bGuardarPresenta").attr("codigoActual", filaPre.children('td:eq(5)').text());
         $("#modalPresentaciones").modal('show');
     });
 
