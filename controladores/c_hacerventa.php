@@ -1,16 +1,11 @@
 <?php
 class hacerventa {
 
-	public function _consultar(){
-		$omodelo = new m_modelo();
-		extract($_POST);
-
-	}
-
 	public function _insertar(){
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
+
 		if ($tipo == "GuardarPedido") {
 			if (!isset($cliente) || $cliente == "") {
 				$cliente = 1;
@@ -70,7 +65,7 @@ class hacerventa {
 				$Importe = $total;
 			}
 			$cambio = $Importe - $total;
-			$query = "INSERT INTO ventas SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Sucursal = '$idsucursal', FK_Cliente = '$cliente', FK_Direccion = '$idDireccion', Descuento = '$sumadescuento', Total = '$totalventa', Total_Importes = '$totalfinalimporte', Tipo_Pago = '$TipoPago', Pago = '$Importe', Cambio = '$cambio', Fecha_Registro = '$fecha', Estatus = 'Completada'";
+			$query = "INSERT INTO ventas SET FK_Sucursal = '$idsucursal', FK_Cliente = '$cliente', FK_Direccion = '$idDireccion', Descuento = '$sumadescuento', Total = '$totalventa', Total_Importes = '$totalfinalimporte', Tipo_Pago = '$TipoPago', Pago = '$Importe', Cambio = '$cambio', Fecha_Registro = '$fecha', Estatus = 'Completada', FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
 			$error = $omodelo->_insertar($query);
 
 			if ($error == "si") {
@@ -332,7 +327,6 @@ class hacerventa {
 				echo "Correcto";
 			}
 		}
-			
 	}
 
 	public function _eliminar(){
@@ -355,6 +349,7 @@ class hacerventa {
 	public function _detalles(){
 		$omodelo = new m_modelo();
 		extract($_POST);
+
 		if ($tipo == "ConsultarCliente") {
 			$buscar =  $omodelo->link->real_escape_string($buscar);
 			$limit =  $omodelo->link->real_escape_string($limit);
@@ -1352,6 +1347,7 @@ class hacerventa {
 		}else if($tipo == "ValidarAdministrador"){
 			$correo =  $omodelo->link->real_escape_string($correo);
 			$contra =  $omodelo->link->real_escape_string($contra);
+
 			$query = "SELECT ID_Usuario, Contrasena FROM usuarios WHERE Tipo_Usuario = 'Administrador' AND Correo = '$correo'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
@@ -1366,20 +1362,25 @@ class hacerventa {
 			}
 		}else if($tipo == "CerrarCaja"){
 			$fecha = date('Y-m-d H:i:s'); 
-			$query = "SELECT ID_Detalle_Caja, FK_Caja, Fecha_Abrir, Monto_Abrir, FK_Usuario_Abrir, Fecha_Cierre, Monto_Cierre, FK_Usuario_Cierre FROM detalles_caja WHERE FK_Usuario_Cierre = 0";
+			$MontoCierre =  $omodelo->link->real_escape_string($MontoCierre);
+			$sucursal =  $omodelo->link->real_escape_string($sucursal);
+
+			$query = "SELECT ID_Detalle_Caja FROM detalles_caja WHERE FK_Caja = (SELECT ID_Caja FROM cajas WHERE FK_Sucursal = '$sucursal' ORDER BY ID_Detalle_Caja DESC LIMIT 1)";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			if($row == 'si'){
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
 				if($numerofilas > 0){
-					$query = "UPDATE cajas SET Estado = 0, FK_Usuario = '0' WHERE ID_Caja = 1";
+					$query = "UPDATE cajas SET Estado = 0, FK_Usuario = '0' WHERE FK_Sucursal = '$sucursal'";
 					$error = $omodelo->_insertar($query);
+
 					if($error == 'si'){
 						echo "Error: ".mysqli_error($omodelo->link);
 					}else{
 						$query2 = "UPDATE detalles_caja SET Fecha_Cierre = '$fecha', Monto_Cierre = '$MontoCierre', FK_Usuario_Cierre = '".$_SESSION['user_admin']['ID_Usuario']."' WHERE ID_Detalle_Caja = '".$row[0]["ID_Detalle_Caja"]."'";
 						$error2 = $omodelo->_insertar($query2);
+						
 						if($error2 == 'si'){
 							echo "Error 2: ".mysqli_error($omodelo->link);
 						}else{

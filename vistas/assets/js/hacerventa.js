@@ -1,6 +1,7 @@
 function v_hacerventa() {
 	//TablaReporteCompras();
 	EstatusCaja();
+
 	$('#FormAdmin').validate({
         rules: {
             correoAdmin: {
@@ -70,8 +71,8 @@ function v_hacerventa() {
             },
         },
         submitHandler: function(form) { 
-
-            var data = "metodo=detalles&accion=hacerventa&tipo=CerrarCaja&MontoCierre="+$("#MontoCierreCaja").val();
+            var data = "metodo=detalles&accion=hacerventa&tipo=CerrarCaja&MontoCierre="+$("#MontoCierreCaja").val()+"&sucursal="+$("#SucursalVenta").attr('attrID');
+			
 			$.ajax({
 				url: 'index.php',
 				type: 'POST',
@@ -245,10 +246,10 @@ jQuery(document).ready(function($) {
 	$(document).on('click', '#ImprimirBalance', function() {
 		var iddetalle = $(this).attr("attrid");
 		var idsucursal = $("#SucursalVenta").attr("attrid");
-		var altura=50;
-		var anchura=310;
-		var y= parseInt((window.screen.height/2)-(altura/2));
-		var x= parseInt((window.screen.width/2)-(anchura/2));
+		var altura = 50;
+		var anchura = 310;
+		var y = parseInt((window.screen.height/2)-(altura/2));
+		var x = parseInt((window.screen.width/2)-(anchura/2));
 		window.open("controladores/ticketCaja.php?id="+iddetalle+"&idsucursal="+idsucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
 		$("#ModalBalanceCaja").modal("hide");
 	});
@@ -1551,21 +1552,23 @@ function TablaReporteCompras(){
 
 
 function EstatusCaja(){
-	var data = "metodo=detalles&accion=ventas&tipo=ConsultarCaja";
+	/*var data = "metodo=detalles&accion=ventas&tipo=ConsultarCaja";
 	$.ajax({
 		url: 'index.php',
 		type: 'POST',
 		data: data,
 	})
 	.done(function(res) {
-		if ($.trim(res) == "Abierta") {
+		var separa = $.trim(res).split('~');
+
+		if (separa[0] == "Abierta") {*/
 			$("#BotonCerrarCaja").removeClass("oculto");
-		}else{
+		/*}else{
 			$("#BotonCerrarCaja").addClass("oculto");
 			$("#cargarVentas").trigger("click");
 		}
 	})
 	.fail(function() {
 		console.log("Error ajax");
-	});
+	});*/
 }

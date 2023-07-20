@@ -132,7 +132,7 @@
 				<div class="col-md-4">
 	            	<div class="form-floating mb-3">
 						<select class="form-select" name="SucursalUsuario" id="SucursalUsuario" >
-							<option value="0">- Seleccione una opción -</option>
+							<option value="">- Seleccione una opción -</option>
 							#SucursalesUsuarios#
 					    </select>
 						<label for="SucursalUsuario">Sucursal</label>
@@ -380,6 +380,31 @@
                                                         <input class="form-check-input checkPermisos" type="checkbox">
                                                     </div>
                                                 </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="10%" style="vertical-align: middle;" class="permisoMo" id="v_compras">Cajas</th>
+                                <td class="table-responsive">
+                                    <table class="table table-bordered text-center" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Ver</td>
+                                                <td>Modificar</td>
+                                            </tr>
+                                            <tr>
                                                 <td>
                                                     <div>
                                                         <input class="form-check-input checkPermisos" type="checkbox">

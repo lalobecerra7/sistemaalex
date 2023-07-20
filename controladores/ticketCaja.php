@@ -8,7 +8,8 @@ if (!isset($_SESSION['user_admin']['ID_Usuario'])) {
 $con = mysqli_connect('localhost','root','','wits_sistemaalex');
 $arreglo = '';
 $arreglo2 = '';
-$totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $totalcompras = 0; $totaldevoluciones = 0; $totalpagos = 0; 
+$totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $totalcompras = 0; $totaldevoluciones = 0; $totalpagos = 0; $totalIngresosEfectivo = 0; $totalEgresosEfectivo = 0;
+echo $_GET["idsucursal"];
 ?>
 
 <!DOCTYPE html>
@@ -139,7 +140,7 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
       $totalvtransferencia = 0;
       $totalvonline = 0;
 
-      $queryv = "SELECT Total, Tipo_Pago FROM ventas WHERE (Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row["Fecha_Cierre"]."') AND Estatus = 'Completada'";
+      $queryv = "SELECT Total, Tipo_Pago FROM ventas WHERE (Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row["Fecha_Cierre"]."') AND Estatus = 'Completada' AND Contar_Venta = 0";
       if($resv=$con->query($queryv)){
         if ($resv->num_rows > 0) {
           while($rowv = $resv->fetch_assoc()){
@@ -147,6 +148,7 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
             $totalventas += $rowv["Total"];
             if ($rowv["Tipo_Pago"] == "Efectivo") {
               $totalvefectivo += $rowv["Total"];
+              $totalIngresosEfectivo +=  $rowv["Total"];
             }else if ($rowv["Tipo_Pago"] == "Deposito") {
               $totalvdeposito += $rowv["Total"];
             }else if ($rowv["Tipo_Pago"] == "Cheque") {
@@ -168,6 +170,7 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
           while($rowi = $resi->fetch_assoc()){
             $totalIngresos += $rowi["CantidadImportes"] * $rowi["PrecioImporte"];
             $totalimportes += $rowi["CantidadImportes"] * $rowi["PrecioImporte"];
+            $totalIngresosEfectivo += $rowi["CantidadImportes"] * $rowi["PrecioImporte"];
           }
         }
       }
@@ -184,28 +187,55 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
         }
       }
 
+      //Pagos de compras al contado
+      $pagoscontadoefectivo = 0;
+      $pagoscontadocheque = 0;
+      $pagoscontadodeposito = 0;
+      $pagostarjetacontado = 0;
+      $pagoscontadotransferencia = 0;
+      $queryContado = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row["Fecha_Abrir"]."' AND pagos.Fecha <= '".$row["Fecha_Cierre"]."') AND Estatus = 1 AND Tipo_Compra = 'Contado'";
+      if($rescontado=$con->query($queryContado)){
+        if ($rescontado->num_rows > 0) {
+          while($rowcontado = $rescontado->fetch_assoc()){
+            if ($rowcontado["Tipo_Pago"] == "Efectivo") {
+              $pagoscontadoefectivo += $rowcontado["Monto"];
+              $totalEgresosEfectivo += $rowcontado["Monto"];
+            }else if ($rowcontado["Tipo_Pago"] == "Deposito") {
+              $pagoscontadodeposito += $rowcontado["Monto"];
+            }else if ($rowcontado["Tipo_Pago"] == "Cheque") {
+              $pagoscontadocheque += $rowcontado["Monto"];
+            }else if ($rowcontado["Tipo_Pago"] == "TransferenciaBancaria") {
+              $pagoscontadotransferencia += $rowcontado["Monto"];
+            }else if ($rowcontado["Tipo_Pago"] == "TarjetaCreditoDebito") {
+              $pagostarjetacontado += $rowcontado["Monto"];  
+            }
+          }
+        }
+      }
+
       //Pagos
       $pagosefectivo = 0;
       $pagoscheque = 0;
       $pagosdeposito = 0;
       $pagostarjeta = 0;
       $pagostransferencia = 0;
-      $querypagos = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row["Fecha_Abrir"]."' AND pagos.Fecha <= '".$row["Fecha_Cierre"]."') AND Estatus = 0 AND Tipo_Compra = 'Credito'";
+      $querypagos = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row["Fecha_Abrir"]."' AND pagos.Fecha <= '".$row["Fecha_Cierre"]."') AND Tipo_Compra = 'Credito'";
       if($resp=$con->query($querypagos)){
         if ($resp->num_rows > 0) {
           while($rowp = $resp->fetch_assoc()){
             $totalEgresos += $rowp["Monto"];
             $totalpagos += $rowp["Monto"];
             if ($rowp["Tipo_Pago"] == "Efectivo") {
-              $pagosefectivo = $rowp["Monto"];
+              $pagosefectivo += $rowp["Monto"];
+              $totalEgresosEfectivo += $rowp["Monto"];
             }else if ($rowp["Tipo_Pago"] == "Deposito") {
-              $pagosdeposito = $rowp["Monto"];
+              $pagosdeposito += $rowp["Monto"];
             }else if ($rowp["Tipo_Pago"] == "Cheque") {
-              $pagoscheque = $rowp["Monto"];
+              $pagoscheque += $rowp["Monto"];
             }else if ($rowp["Tipo_Pago"] == "TransferenciaBancaria") {
-              $pagostransferencia = $rowp["Monto"];
+              $pagostransferencia += $rowp["Monto"];
             }else if ($rowp["Tipo_Pago"] == "TarjetaCreditoDebito") {
-              $pagostarjeta = $rowp["Monto"]; 
+              $pagostarjeta += $rowp["Monto"]; 
             }
           }
         }
@@ -218,6 +248,7 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
           while($rowdev = $resdev->fetch_assoc()){
             $totalEgresos += $rowdev["Total"];
             $totaldevoluciones += $rowdev["Total"];
+            $totalEgresosEfectivo += $rowdev["Total"];
           }
         }
       }
@@ -228,7 +259,9 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
         "Fecha_Cerrar" => $row["FechaCerrar"],
         "Monto_Abrir" => $row["Monto_Abrir"],
         "Monto_Cierre" => $row["Monto_Cierre"],
-        "Total_Ingresos" => $totalIngresos,
+        "Total_Ingresos" => ($totalIngresos + $row["Monto_Abrir"]),
+        "Total_Ingresos_Efectivo" => $totalIngresosEfectivo,
+        "Total_Egresos_Efectivo" => $totalEgresosEfectivo,
         "Total_Egresos" => $totalEgresos,
         "Total_Utilidad" => ($totalIngresos - $totalEgresos),
         "Total_Ventas" => $totalventas,
@@ -240,6 +273,11 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
         "Total_Ventas_PagoOnline" => $totalvonline,
         "Total_Importes" => $totalimportes,
         "Total_Compras" => $totalcompras,
+        "Total_Compras_Efectivo" => $pagoscontadoefectivo,
+        "Total_Compras_Cheque" => $pagoscontadocheque,
+        "Total_Compras_Deposito" => $pagoscontadodeposito,
+        "Total_Compras_Tarjeta" => $pagostarjetacontado,
+        "Total_Compras_Transferencia" => $pagoscontadotransferencia,
         "Total_Pagos" => $totalpagos,
         "Total_Pagos_Efectivo" => $pagosefectivo,
         "Total_Pagos_Deposito" => $pagosdeposito,
@@ -251,42 +289,99 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
     }
   }
 
-  $sql2 = "SELECT ID_Ticket, FK_Sucursal, Imagen, Ruta_Imagen, tickets.Nombre AS MostrarNombre, Domicilio, tickets.Telefono AS MostrarTelefono, tickets.Email AS MostrarEmail, Total_Letras, Incluir_Mensaje, Mensaje, Moneda, Simbolo, Origen, sucursales.Nombre AS NombreSucursal, FK_Encargado, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, sucursales.Email AS CorreoSucursal, sucursales.Telefono AS TelefonoSucursal, Segundo_Telefono, FK_Zona FROM tickets INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE FK_Sucursal = '".$_GET["idsucursal"]."'";
-  if($res2=$con->query($sql2)){
-    if ($res2->num_rows > 0) {
-      $row2 = $res2->fetch_assoc();
+  /*if ($_GET["idsucursal"] != "") {
+    $sql2 = "SELECT ID_Ticket, FK_Sucursal, Imagen, Ruta_Imagen, tickets.Nombre AS MostrarNombre, Domicilio, tickets.Telefono AS MostrarTelefono, tickets.Email AS MostrarEmail, Total_Letras, Incluir_Mensaje, Mensaje, Moneda, Simbolo, Origen, sucursales.Nombre AS NombreSucursal, FK_Encargado, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, sucursales.Email AS CorreoSucursal, sucursales.Telefono AS TelefonoSucursal, Segundo_Telefono, FK_Zona FROM tickets INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE FK_Sucursal = '".$_GET["idsucursal"]."'";
+    if($res2=$con->query($sql2)){
+      if ($res2->num_rows > 0) {
+        $row2 = $res2->fetch_assoc();
 
-      $arreglo2 = array(
-        'ID_Ticket' => $row2["ID_Ticket"],
-        'FK_Sucursal' => $row2["FK_Sucursal"],
-        'MostrarNombre' => $row2["MostrarNombre"],
-        'Domicilio' => $row2["Domicilio"],
-        'MostrarTelefono' => $row2["MostrarTelefono"],
-        'MostrarEmail' => $row2["MostrarEmail"],
-        'Total_Letras' => $row2["Total_Letras"],
-        'Incluir_Mensaje' => $row2["Incluir_Mensaje"],
-        'Mensaje' => $row2["Mensaje"],
-        'Moneda' => $row2["Moneda"],
-        'Simbolo' => $row2["Simbolo"],
-        'Origen' => $row2["Origen"],
-        'NombreSucursal' => $row2["NombreSucursal"],
-        'Calle' => $row2["Calle"],
-        'No_Exterior' => $row2["No_Exterior"],
-        'No_Interior' => $row2["No_Interior"],
-        'Colonia' => $row2["Colonia"],
-        'CP' => $row2["CP"],
-        'Ciudad' => $row2["Ciudad"],
-        'Estado' => $row2["Estado"],
-        'Pais' => $row2["Pais"],
-        'TelefonoSucursal' => $row2["TelefonoSucursal"],
-        'CorreoSucursal' => $row2["CorreoSucursal"],
-        'Segundo_Telefono' => $row2["Segundo_Telefono"],
-        'FK_Zona' => $row2["FK_Zona"],
-      );
-    }else{
-      echo "No se encontraron resultados ticket";
+        $arreglo2 = array(
+          'ID_Ticket' => $row2["ID_Ticket"],
+          'FK_Sucursal' => $row2["FK_Sucursal"],
+          'MostrarNombre' => $row2["MostrarNombre"],
+          'Domicilio' => $row2["Domicilio"],
+          'MostrarTelefono' => $row2["MostrarTelefono"],
+          'MostrarEmail' => $row2["MostrarEmail"],
+          'Total_Letras' => $row2["Total_Letras"],
+          'Incluir_Mensaje' => $row2["Incluir_Mensaje"],
+          'Mensaje' => $row2["Mensaje"],
+          'Moneda' => $row2["Moneda"],
+          'Simbolo' => $row2["Simbolo"],
+          'Origen' => $row2["Origen"],
+          'NombreSucursal' => $row2["NombreSucursal"],
+          'Calle' => $row2["Calle"],
+          'No_Exterior' => $row2["No_Exterior"],
+          'No_Interior' => $row2["No_Interior"],
+          'Colonia' => $row2["Colonia"],
+          'CP' => $row2["CP"],
+          'Ciudad' => $row2["Ciudad"],
+          'Estado' => $row2["Estado"],
+          'Pais' => $row2["Pais"],
+          'TelefonoSucursal' => $row2["TelefonoSucursal"],
+          'CorreoSucursal' => $row2["CorreoSucursal"],
+          'Segundo_Telefono' => $row2["Segundo_Telefono"],
+          'FK_Zona' => $row2["FK_Zona"],
+        );
+      }else{
+        echo "No se encontraron resultados ticket";
+      }
     }
-  }
+  }else{*/
+    $idSucursal = 1;
+    //CONSULTAR SUCURSAL USUARIO
+    $sqlSucursal = "SELECT FK_Sucursal FROM usuarios WHERE ID_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
+    if($resSucursal=$con->query($sqlSucursal)){
+      if ($resSucursal->num_rows > 0) {
+        $rowSucursal = $resSucursal->fetch_assoc();
+        if ($rowSucursal["FK_Sucursal"] == 0) {
+          $idSucursal = 1;
+        }else{
+          $idSucursal = $rowSucursal["FK_Sucursal"];
+        }
+      }
+    }
+    $sql2 = "SELECT ID_Ticket, FK_Sucursal, Imagen, Ruta_Imagen, tickets.Nombre AS MostrarNombre, Domicilio, tickets.Telefono AS MostrarTelefono, tickets.Email AS MostrarEmail, Total_Letras, Incluir_Mensaje, Mensaje, Moneda, Simbolo, Origen, sucursales.Nombre AS NombreSucursal, FK_Encargado, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, sucursales.Email AS CorreoSucursal, sucursales.Telefono AS TelefonoSucursal, Segundo_Telefono, FK_Zona FROM tickets INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE FK_Sucursal = '".$idSucursal."'";
+    if($res2=$con->query($sql2)){
+      if ($res2->num_rows > 0) {
+        $row2 = $res2->fetch_assoc();
+
+        $arreglo2 = array(
+          'ID_Ticket' => $row2["ID_Ticket"],
+          'FK_Sucursal' => $row2["FK_Sucursal"],
+          'MostrarNombre' => $row2["MostrarNombre"],
+          'Domicilio' => $row2["Domicilio"],
+          'MostrarTelefono' => $row2["MostrarTelefono"],
+          'MostrarEmail' => $row2["MostrarEmail"],
+          'Total_Letras' => $row2["Total_Letras"],
+          'Incluir_Mensaje' => $row2["Incluir_Mensaje"],
+          'Mensaje' => $row2["Mensaje"],
+          'Moneda' => $row2["Moneda"],
+          'Simbolo' => $row2["Simbolo"],
+          'Origen' => $row2["Origen"],
+          'NombreSucursal' => $row2["NombreSucursal"],
+          'Calle' => $row2["Calle"],
+          'No_Exterior' => $row2["No_Exterior"],
+          'No_Interior' => $row2["No_Interior"],
+          'Colonia' => $row2["Colonia"],
+          'CP' => $row2["CP"],
+          'Ciudad' => $row2["Ciudad"],
+          'Estado' => $row2["Estado"],
+          'Pais' => $row2["Pais"],
+          'TelefonoSucursal' => $row2["TelefonoSucursal"],
+          'CorreoSucursal' => $row2["CorreoSucursal"],
+          'Segundo_Telefono' => $row2["Segundo_Telefono"],
+          'FK_Zona' => $row2["FK_Zona"],
+        );
+      }else{
+        echo "No se encontraron resultados ticket";
+      }
+    }
+
+
+
+  //}
+
+  
 
   ?>
 
@@ -342,11 +437,12 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
     echo '<p class="centrado">CORTE DE CAJA</p>';
     echo '<p class="centrado">ABRIR CAJA: '.$arreglo["Fecha_Abrir"].'</p>';
     echo '<p class="centrado">CERRAR CAJA: '.$arreglo["Fecha_Cerrar"].'</p>';
-    echo '<p class="centrado">MONTO DE APERTURA: $'.number_format($arreglo["Monto_Abrir"], 2).'</p>';
-    echo '<p class="centrado">MONTO DE CIERRE: $'.number_format($arreglo["Monto_Cierre"], 2).'</p>';
+    /*echo '<p class="centrado">MONTO DE APERTURA: $'.number_format($arreglo["Monto_Abrir"], 2).'</p>';
+    echo '<p class="centrado">MONTO DE CIERRE: $'.number_format($arreglo["Monto_Cierre"], 2).'</p>';*/
     echo "</br>
     <p class='centrado'><b style='font-size: 20px;'>INGRESOS</b></p>
     ";
+    echo '<p class="centrado">MONTO DE APERTURA: $'.number_format($arreglo["Monto_Abrir"], 2).'</p>';
     echo '<p class="centrado">TOTAL DE VENTAS: $'.number_format($arreglo["Total_Ventas"], 2).'</p>';
 
     if ($arreglo["Total_Ventas_Efectivo"]) {
@@ -375,9 +471,25 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
 
     echo '<p class="centrado">TOTAL DE COMPRAS: $'.number_format($arreglo["Total_Compras"], 2).'</p>';
 
+    if ($arreglo["Total_Compras_Efectivo"]) {
+      echo '<p class="">COMPRAS EN EFECTIVO: $'.number_format($arreglo["Total_Compras_Efectivo"], 2).'</p>';
+    }
+    if ($arreglo["Total_Compras_Deposito"]) {
+      echo '<p class="">COMPRAS EN DEPÓSITO: $'.number_format($arreglo["Total_Compras_Deposito"], 2).'</p>';
+    }
+    if ($arreglo["Total_Compras_Cheque"]) {
+      echo '<p class="">COMPRAS EN CHEQUE: $'.number_format($arreglo["Total_Compras_Cheque"], 2).'</p>';
+    }
+    if ($arreglo["Total_Compras_Transferencia"]) {
+      echo '<p class="">COMPRAS EN TRANSFERENCIA: $'.number_format($arreglo["Total_Compras_Transferencia"], 2).'</p>';
+    }
+    if ($arreglo["Total_Compras_Tarjeta"]) {
+      echo '<p class="">COMPRAS EN TARJETA DE CRÉDITO / DEBITO: $'.number_format($arreglo["Total_Compras_Tarjeta"], 2).'</p>';
+    }
+
     echo '<p class="centrado">TOTAL DE DEVOLUCIONES: $'.number_format($arreglo["Total_Devoluciones"], 2).'</p>';
 
-    echo '<p class="centrado">TOTAL DE PAGOS: $'.number_format($arreglo["Total_Ventas"], 2).'</p>';
+    echo '<p class="centrado">TOTAL DE PAGOS: $'.number_format($arreglo["Total_Pagos"], 2).'</p>';
 
     if ($arreglo["Total_Pagos_Efectivo"]) {
       echo '<p class="">PAGOS EN EFECTIVO: $'.number_format($arreglo["Total_Pagos_Efectivo"], 2).'</p>';
@@ -394,17 +506,26 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
     if ($arreglo["Total_Pagos_TarjetaCreditoDebito"]) {
       echo '<p class="">PAGOS EN TARJETA DE CRÉDITO / DEBITO: $'.number_format($arreglo["Total_Pagos_TarjetaCreditoDebito"], 2).'</p>';
     }
-
     echo "</br>
-    <p class='derecha'><b style='font-size: 20px;'>INGRESOS: $".number_format($arreglo["Total_Ingresos"], 2)."</b></p>
+    <p class='centrado'><b style='font-size: 12px;'>INGRESOS EN EFECTIVO: $".number_format($arreglo["Total_Ingresos_Efectivo"], 2)."</b></p>
     ";
     echo "</br>
-    <p class='derecha'><b style='font-size: 20px;'>EGRESOS: $".number_format($arreglo["Total_Egresos"], 2)."</b></p>
+    <p class='centrado'><b style='font-size: 12px;'>EGRESOS EN EFECTIVO: $".number_format($arreglo["Total_Egresos_Efectivo"], 2)."</b></p>
+    ";
+    $totalActualCaja = $arreglo["Total_Ingresos_Efectivo"] - $arreglo["Total_Egresos_Efectivo"]; 
+    echo "</br>
+    <p class='centrado'><b style='font-size: 12px;'>TOTAL EFECTIVO: $".number_format($totalActualCaja, 2)."</b></p><hr>
     ";
     echo "</br>
-    <p class='derecha'><b style='font-size: 20px;'>UTILIDAD: $".number_format($arreglo["Total_Utilidad"], 2)."</b></p>
+    <p class='centrado'><b style='font-size: 17px;'>MONTO DE CIERRE: $".number_format($arreglo["Monto_Cierre"], 2)."</b></p>
     ";
-    
+    echo "</br>
+    <p class='centrado'><b style='font-size: 17px;'>MONTO EN LA CAJA (Efectivo): $".number_format($totalActualCaja, 2)."</b></p>
+    ";
+    $diferenciacaja = $arreglo["Monto_Cierre"] - $totalActualCaja;
+    echo "</br>
+    <p class='centrado'><b style='font-size: 17px;'>DIFERENCIA: $".number_format($diferenciacaja, 2)."</b></p>
+    ";
     ?>
     
   </div>

@@ -573,6 +573,8 @@
 
             #MenuClientes#
 
+            #MenuCajas#
+
             #MenuVentas#
 
             <li class="menu-item cargarVista oculto" carga="v_hacerCompra" titulo="Compras" id="cargarHacerCompra">
@@ -597,7 +599,6 @@
               </a>
             </li>
 
-            <!-- #MenuCajas# -->
             #MenuUsuarios#
 
             <li class="menu-item">

@@ -15,6 +15,9 @@ function v_usuarios() {
             NuevaContrasena:{
                 required: true
             },
+            SucursalUsuario: {
+                required: true
+            },
             RepetirNuevaContrasena:{
                 equalTo: "#NuevaContrasena"
             }
@@ -28,6 +31,9 @@ function v_usuarios() {
             },
             NuevaContrasena:{
                 required: "La contraseña es obligatoria"
+            },
+            SucursalUsuario: {
+                required: "La sucursal es requerida"
             },
             CorreoUsuario:{
                 required: "El correo electrónico del usuario es obligatorio"

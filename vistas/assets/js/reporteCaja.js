@@ -21,6 +21,7 @@ function TablaReporteCajas(){
 		"table": $("#TablaReporteCajas"), 
 		"colums": [
 			"Abrir",
+			"Caja",
 			"MontoAbrir",
 			"Cerrar",
 			"MontoCerrar",
