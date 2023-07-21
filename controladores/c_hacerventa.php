@@ -366,7 +366,7 @@ class hacerventa {
 			$busqueda = '';
 			if(trim($buscar) != ''){
 				$separa = explode(' ', trim($buscar));
-				$busqueda = 'WHERE ';
+				$busqueda = 'AND ';
 				for ($i=0; $i < count($separa); $i++) { 
 					$busqueda .= "CONCAT(Nombre, Calle, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais, Telefono, Celular, Correo, RFC) REGEXP '".$separa[$i]."'";
 					if($i < (count($separa)-1)){
@@ -375,7 +375,7 @@ class hacerventa {
 				}
 			}
 
-			$query = "SELECT ID_Cliente, Nombre, Calle AS Direccion, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais, Telefono, Celular, Correo AS Contacto, RFC, Facturar, (SELECT COUNT(*) FROM clientes $busqueda) AS Num FROM clientes $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Cliente, Nombre, Calle AS Direccion, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais, Telefono, Celular, Correo AS Contacto, RFC, Facturar, (SELECT COUNT(*) FROM clientes $busqueda) AS Num FROM clientes INNER JOIN detalles_clientes_sucursal ON FK_Cliente = ID_Cliente WHERE detalles_clientes_sucursal.FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 

@@ -261,11 +261,16 @@ class ventas {
 				}
 			}
 		}
-		$query = "UPDATE ventas SET Notas = '$Motivo', Estatus = 'Cancelada',  Fecha_Cancelacion = '$fecha' $queryRegresar WHERE ID_Venta = '$IDVenta'";
+		$query = "UPDATE ventas SET Total_Importes = 0, Notas = '$Motivo', Estatus = 'Cancelada',  Fecha_Cancelacion = '$fecha' $queryRegresar WHERE ID_Venta = '$IDVenta'";
 		$error = $omodelo->_insertar($query);
 		if ($error == "si") {
 			echo "Error 5: ".mysqli_error($omodelo->link);
 		}else{
+			$query2 = "DELETE FROM importes WHERE FK_Venta = '$IDVenta'";
+			$error2 = $omodelo->_insertar($query2);
+			if ($error2 == "si") {
+				echo "Error 6: ".mysqli_error($omodelo->link);
+			}
 			echo "Correcto";
 			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}	

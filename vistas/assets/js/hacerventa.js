@@ -1245,7 +1245,8 @@ function TablaClienteVenta(){
 		"params":{
 			"metodo": "detalles",
 			"accion": "hacerventa",
-			"tipo": "ConsultarCliente"
+			"tipo": "ConsultarCliente",
+			"sucursal": $("#SucursalVenta").val()
 		}
 	});
 }
