@@ -67,7 +67,7 @@ function TablaCajas(){
         "colums": [
             "Caja",
             "Sucursal",
-            "Detalles",
+            //"Detalles",
             "Estatus",
             "Usuario",
             "Acciones"
@@ -164,7 +164,8 @@ jQuery(document).ready(function($) {
             data: data
         })
         .done(function(res) {
-            console.log(res);
+            //console.log(res);
+            
             $("#GuardarCaja").attr('tipo', 'modificar');
             $("#GuardarCaja").attr('attrid', id);
             $("#TituloModalCajas").text("Modificar");

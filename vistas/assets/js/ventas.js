@@ -14,8 +14,8 @@ function v_ventas() {
             },
         },
         submitHandler: function(form) { 
-
-            var data = "metodo=detalles&accion=ventas&tipo=AbrirCaja&MontoAbrir="+$("#MontoInicialCaja").val();
+            var data = "metodo=detalles&accion=ventas&tipo=AbrirCaja&MontoAbrir="+$("#MontoInicialCaja").val()+'&sucursal='+$("#SucursalCaja").val();
+			
 			$.ajax({
 				url: 'index.php',
 				type: 'POST',
@@ -27,6 +27,7 @@ function v_ventas() {
 			.done(function(res) {
 				var datos = res.split("~");
 				if ($.trim(datos[0]) == "Correcto") {
+					$("#cargarHacerVenta").attr('atri', $("#SucursalCaja").val());
 					$("#cargarHacerVenta").trigger("click");	
 					$("#ModalAbrirCaja").modal("hide");
 				}else{
@@ -129,7 +130,105 @@ function v_ventas() {
     });  
 }
 
+function ComprobarDevuelta(idventa){
+	var data = "metodo=detalles&accion=ventas&tipo=ComprobarDevolucionProducto&idventa="+idventa;
+	$.ajax({
+		url: 'index.php',
+		type: 'POST',
+		data: data,
+	})
+	.done(function(res) {
+		console.log(res);
+	})
+	.fail(function() {
+		console.log("Error ajax");
+	})	
+}
+
+function tablaCajasVenta(){
+	ajaxMyDatatable({
+		"table": $("#tablaCajasVenta"), 
+		"colums": [
+			"Nombre",
+			"Sucursal",
+			"Estatus",
+			"Usuario",
+			"Acciones"
+		], 
+		"sort": [
+			0,
+			"asc"
+		],
+		"url": "index.php", 
+		"params":{
+			"metodo": "detalles",
+			"accion": "ventas",
+			"tipo": "verCajas"
+		}
+	});
+}
+
+function TablaReporteVentas(){
+	ajaxMyDatatable({
+		"table": $("#TablaReporteVentas"), 
+		"colums": [
+			"Datos",
+			"Cliente",
+			"Total",
+			"Facturada",
+			"Detalles",
+			"Acciones"
+		], 
+		"totals":[
+			"Datos",
+			"Cliente",
+			"Total"
+		],
+		"sort": [
+			0,
+			"desc"
+		],
+		"url": "index.php", 
+		"params":{
+			"metodo": "consultar",
+			"accion": "ventas"
+		}
+	});
+}
+
+function TablaProductosDevolucion(idventa){
+	ajaxMyDatatable({
+		"table": $("#TablaProductosDevolucion"), 
+		"colums": [
+			"Producto",
+			"Cantidad",
+			"Precio",
+			"TotalVenta",
+			"Devuelto",
+			"Total",
+			"Devolver",
+		], 
+		"sort": [
+			0,
+			"asc"
+		],
+		"url": "index.php", 
+		"params":{
+			"metodo": "detalles",
+			"accion": "ventas",
+			"tipo": "ConsultarProductosVentaDevolucion",
+			"idventa": idventa
+		}
+	});
+}
+
 jQuery(document).ready(function($) {
+
+	$(document).on('click', '.bUsarCaja', function() {
+		$("#modalVerCajas").modal("hide");
+		$("#cargarHacerVenta").attr("atri", $(this).attr('attrID'));
+		$("#cargarHacerVenta").trigger("click");
+	});
 
 	$(document).on('click', '#BotonNuevaVenta', function() {
 		var data = "metodo=detalles&accion=ventas&tipo=ConsultarCaja";
@@ -139,8 +238,32 @@ jQuery(document).ready(function($) {
 			data: data,
 		})
 		.done(function(res) {
-			if ($.trim(res) == "Abierta") {
-				$("#cargarHacerVenta").trigger("click");	
+			var separa = $.trim(res).split('~'); 
+			//console.log(separa);
+
+			if (separa[0] == "Abierta") {
+				if(separa[1] == "Administrador"){
+					Swal.fire({
+				        title: '¿La caja de tu sucursal esta abierta, deseas utilizar alguna otra?',
+				        icon: 'warning',
+				        showCancelButton: true,
+				        confirmButtonColor: '#3085d6',
+				        cancelButtonColor: '#d33',
+				        cancelButtonText: '¡No, continuar!',
+				        confirmButtonText: '¡Si, cambiar!'
+				    }).then((result) => {
+				        if (result.value) {
+				        	$("#modalVerCajas").modal("show");
+				        	tablaCajasVenta();
+				        }else{
+				        	$("#cargarHacerVenta").attr("atri", '');
+				        	$("#cargarHacerVenta").trigger("click");	
+				        }
+				    });
+				}else{
+					$("#cargarHacerVenta").attr("atri", '');
+					$("#cargarHacerVenta").trigger("click");	
+				}
 			}else{
 				$("#ModalAbrirCaja").modal("show");
 			}
@@ -148,6 +271,11 @@ jQuery(document).ready(function($) {
 		.fail(function() {
 			console.log("Error ajax");
 		});
+	});
+
+	$(document).on('click', '#bAbrirNuevaCaja', function() {
+		$("#modalVerCajas").modal("hide");
+		$("#ModalAbrirCaja").modal("show");
 	});
 
 	$(document).on('change', '#motivoCancelarFactura', function() {
@@ -492,76 +620,4 @@ jQuery(document).ready(function($) {
 			});
 		}
 	});
-
-
 });
-
-function ComprobarDevuelta(idventa){
-	var data = "metodo=detalles&accion=ventas&tipo=ComprobarDevolucionProducto&idventa="+idventa;
-	$.ajax({
-		url: 'index.php',
-		type: 'POST',
-		data: data,
-	})
-	.done(function(res) {
-		console.log(res);
-	})
-	.fail(function() {
-		console.log("Error ajax");
-	})	
-}
-
-function TablaReporteVentas(){
-	ajaxMyDatatable({
-		"table": $("#TablaReporteVentas"), 
-		"colums": [
-			"Datos",
-			"Cliente",
-			"Total",
-			"Facturada",
-			"Detalles",
-			"Acciones"
-		], 
-		"totals":[
-			"Datos",
-			"Cliente",
-			"Total"
-		],
-		"sort": [
-			0,
-			"desc"
-		],
-		"url": "index.php", 
-		"params":{
-			"metodo": "consultar",
-			"accion": "ventas"
-		}
-	});
-}
-
-function TablaProductosDevolucion(idventa){
-	ajaxMyDatatable({
-		"table": $("#TablaProductosDevolucion"), 
-		"colums": [
-			"Producto",
-			"Cantidad",
-			"Precio",
-			"TotalVenta",
-			"Devuelto",
-			"Total",
-			"Devolver",
-		], 
-		"sort": [
-			0,
-			"asc"
-		],
-		"url": "index.php", 
-		"params":{
-			"metodo": "detalles",
-			"accion": "ventas",
-			"tipo": "ConsultarProductosVentaDevolucion",
-			"idventa": idventa
-		}
-	});
-}
-

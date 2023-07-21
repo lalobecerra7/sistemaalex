@@ -644,7 +644,28 @@ class controller {
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_ventas'][2] == '0') {
 				echo '<script>$("#BotonNuevaVenta").remove();</script>';
 			}
+
+			$tipo = '';
+			if($_SESSION['user_admin']['Tipo_Usuario'] == 'Normal'){
+					$tipo = "WHERE ID_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."'";
+			}
 			
+			$query = "SELECT ID_Sucursal, sucursales.Nombre AS Nombre FROM sucursales INNER JOIN cajas ON FK_Sucursal = ID_Sucursal AND cajas.Estado = 0 $tipo ORDER BY (ID_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."') DESC";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Sucursal'] . '" >' . $row[$i]['Nombre']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#SucursalesVentas#', $opciones, $pagina);
 		}else if($nombre == "v_zonas"){
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_zonas'][2] == '0') {
 				echo '<script>$("#botonNuevaZona").remove();</script>';
@@ -764,7 +785,12 @@ class controller {
 			$pagina = str_replace('#sucursal#', $sucursal, $pagina);
                     
 		}else if($nombre == "v_hacerventa"){
-			$query = "SELECT FK_Sucursal, sucursales.Nombre AS NombreSucursal FROM usuarios INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal  WHERE ID_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
+			$idSucursal = $_SESSION['user_admin']['FK_Sucursal'];
+			if($atri != ''){
+				$idSucursal = $atri;
+			}
+
+			$query = "SELECT ID_Sucursal, Nombre FROM sucursales WHERE ID_Sucursal = '$idSucursal'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			$sucursal = '';
@@ -772,8 +798,8 @@ class controller {
 				echo "Error: " . mysqli_error($omodelo->link);
 			} else {
 				if ($numerofilas > 0) {
-					$sucursal = 'Sucursal: <br><b id="SucursalVenta" attrid="'.$row[0]["FK_Sucursal"].'">'.$row[0]["NombreSucursal"].'</b>';
-				}else{
+					$sucursal = 'Sucursal: <br><b id="SucursalVenta" attrid="'.$row[0]["ID_Sucursal"].'">'.$row[0]["Nombre"].'</b>';
+				/*}else{
 					$query2 = "SELECT ID_Sucursal, Nombre FROM sucursales";
 					$row2 = $omodelo->_consultar($query2);
 					$numerofilas2 = $omodelo->numerofilas;
@@ -791,7 +817,7 @@ class controller {
 		          </select>
 		        	<label for="SucursalVenta">Sucursal</label>
 						</div>';
-					}
+					}*/
 				}
 			}
 			$pagina = str_replace('#MostrarSucursal#', $sucursal, $pagina);            

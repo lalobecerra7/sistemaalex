@@ -24,7 +24,7 @@ class reporteCaja {
 			}
 		}
 		
-		$query = "SELECT ID_Detalle_Caja, FK_Caja, cajas.FK_Sucursal AS IDSucursal, Fecha_Abrir AS Abrir, CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) AS NombreUsuarioAbrir, Monto_Abrir AS MontoAbrir, FK_Usuario_Abrir, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario_Cierre) AS NombreUsuarioCerrar, Fecha_Cierre AS Cerrar, Monto_Cierre AS MontoCerrar, FK_Usuario_Cierre, (SELECT COUNT(*) FROM detalles_caja INNER JOIN usuarios ON FK_Usuario_Abrir = ID_Usuario INNER JOIN cajas ON FK_Caja = ID_Caja $busqueda) AS Num FROM detalles_caja INNER JOIN usuarios ON FK_Usuario_Abrir = ID_Usuario INNER JOIN cajas ON FK_Caja = ID_Caja $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Detalle_Caja, cajas.Nombre AS Caja, FK_Caja, cajas.FK_Sucursal AS IDSucursal, Fecha_Abrir AS Abrir, CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) AS NombreUsuarioAbrir, Monto_Abrir AS MontoAbrir, FK_Usuario_Abrir, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario_Cierre) AS NombreUsuarioCerrar, Fecha_Cierre AS Cerrar, Monto_Cierre AS MontoCerrar, FK_Usuario_Cierre, (SELECT COUNT(*) FROM detalles_caja INNER JOIN usuarios ON FK_Usuario_Abrir = ID_Usuario INNER JOIN cajas ON FK_Caja = ID_Caja $busqueda) AS Num FROM detalles_caja INNER JOIN usuarios ON FK_Usuario_Abrir = ID_Usuario INNER JOIN cajas ON FK_Caja = ID_Caja $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -121,6 +121,7 @@ class reporteCaja {
 
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Detalle_Caja'],
+						'Caja' => $row[$i]['Caja'],
 						'Abrir' => "La caja se abrio el: <b>".$row[$i]['Abrir']."</b><br>Abierta por: ".$row[$i]['NombreUsuarioAbrir'],
 						'MontoAbrir' => number_format($row[$i]['MontoAbrir'], 2),
 						'Cerrar' => "La caja se cerro el: <b>".$row[$i]['Cerrar']."</b><br>Cerrada por: ".$row[$i]['NombreUsuarioCerrar'],

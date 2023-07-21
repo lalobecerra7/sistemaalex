@@ -17,14 +17,14 @@ class productos {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Producto, Codigo, productos.Descripcion, Tipo, Costo, Precio, Precio_Mayoreo, Detalles, Imagen, areas.Nombre, areas.Descripcion, areas.Nivel) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(Codigo, productos.Descripcion, Detalles) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Producto, Codigo, productos.Descripcion, Tipo, Costo, Precio, Precio_Mayoreo, Detalles, Imagen, areas.Nombre, areas.Descripcion AS DescripcionArea, areas.Nivel, (SELECT COUNT(*) FROM productos $busqueda) AS Num, ((SELECT COUNT(*) FROM detalles_ventas WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras WHERE FK_Producto = ID_Producto)) AS numProd FROM productos LEFT JOIN areas ON FK_Area = ID_Area $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Producto, Codigo, productos.Descripcion, Tipo, Costo, Precio, Precio_Mayoreo, Detalles, Imagen, areas.Nombre, areas.Descripcion AS DescripcionArea, areas.Nivel, (SELECT COUNT(*) FROM productos LEFT JOIN areas ON FK_Area = ID_Area $busqueda) AS Num, ((SELECT COUNT(*) FROM detalles_ventas WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras WHERE FK_Producto = ID_Producto)) AS numProd FROM productos LEFT JOIN areas ON FK_Area = ID_Area $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 

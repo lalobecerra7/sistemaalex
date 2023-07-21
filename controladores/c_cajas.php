@@ -18,7 +18,7 @@ class cajas {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(ID_Caja, cajas.FK_Sucursal, cajas.Nombre, Detalles, cajas.Estado, FK_Usuario) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(cajas.Nombre, cajas.Estado, sucursales.Nombre, usuarios.Nombre) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
@@ -47,20 +47,20 @@ class cajas {
 						$detalles = $row[$i]['Detalles'];
 					}
 
-					$usuario = "No hay un usuario utilizando la caja actualmente";
+					$usuario = "No se está utilizando la caja actualmente";
 					if ($row[$i]['UsuarioActual'] != "") {
-						$usuario = $row[$i]['UsuarioActual'];
+						$usuario = 'Abrio Caja: '.$row[$i]['UsuarioActual'];
 					}
 
 					$botonPermisosModificar = "";
-					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cajas'][3] == '1') {
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cajas'][2] == '1') {
 						$botonPermisosModificar = '<button class="btn btn-primary btn-sm mb-2" id="ModificarCaja" attrid="'.$row[$i]['ID_Caja'].'" nombre="'.$row[$i]['Caja'].'"><i class="fas fa-edit"></i></button>';
 					}
 
 					$botonPermisosEliminar = "";
-					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cajas'][4] == '1') {
+					/*if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cajas'][4] == '1') {
 						$botonPermisosEliminar = '<button class="btn btn-danger btn-sm" id="EliminarCaja" attrid="'.$row[$i]['ID_Caja'].'" nombre="'.$row[$i]['Caja'].'"><i class="fas fa-trash"></i></button>';
-					}
+					}*/
 
 					if($row[$i]['Estado'] == "1"){
 						$botonPermisosEliminar = "";
@@ -71,12 +71,13 @@ class cajas {
 						'ID' => $row[$i]['ID_Caja'],
 						'Caja' => $row[$i]['Caja'],
 						'Sucursal' => $row[$i]['NombreSucursal'],
-						'Detalles' => $detalles,
+						//'Detalles' => $detalles,
 						'Estatus' => $estatus,
 						'Usuario' => $usuario,
-						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar,
+						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar
 					);
 				}
+
 				$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
 			}
 		}
@@ -110,10 +111,10 @@ class cajas {
 		$fecha = date('Y-m-d H:i:s'); 
 		$IDCaja =  $omodelo->link->real_escape_string($IDCaja);
 		$Nombre =  $omodelo->link->real_escape_string($Nombre);
-		$Detalles =  $omodelo->link->real_escape_string($Detalles);
-		$Sucursal =  $omodelo->link->real_escape_string($Sucursal);
+		//$Detalles =  $omodelo->link->real_escape_string($Detalles);
+		//$Sucursal =  $omodelo->link->real_escape_string($Sucursal);
 
-		$query = "UPDATE cajas SET Nombre = '$Nombre', Detalles = '$Detalles', FK_Sucursal = '$Sucursal' WHERE ID_Caja = '$IDCaja'";
+		$query = "UPDATE cajas SET Nombre = '$Nombre' WHERE ID_Caja = '$IDCaja'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {

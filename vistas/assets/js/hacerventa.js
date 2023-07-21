@@ -1,5 +1,7 @@
 function v_hacerventa() {
 	//TablaReporteCompras();
+	EstatusCaja();
+
 	$('#FormAdmin').validate({
         rules: {
             correoAdmin: {
@@ -53,10 +55,204 @@ function v_hacerventa() {
 	            $("#carga").hide();
 	        });          
         }
-    });    
+    });  
+
+    //CERRAR CAJA
+    $('#FormCerrarCaja').validate({
+        rules: {
+            MontoCierreCaja: {
+                required: true,
+                min: 1,
+            },
+        },
+        messages: {
+            MontoCierreCaja: {
+                required: "Ingresa el monto de cierre de la caja"
+            },
+        },
+        submitHandler: function(form) { 
+            var data = "metodo=detalles&accion=hacerventa&tipo=CerrarCaja&MontoCierre="+$("#MontoCierreCaja").val()+"&sucursal="+$("#SucursalVenta").attr('attrID');
+			
+			$.ajax({
+				url: 'index.php',
+				type: 'POST',
+				data: data,
+				beforeSend: function() {
+				    $("#carga").show();
+				}
+			})
+			.done(function(res) {
+				var datos = res.split("~");
+				if ($.trim(datos[0]) == "Correcto") {
+					$("#ModalCerrarCaja").modal("hide");
+					$("#ModalBalanceCaja").modal("show");
+					var data = "metodo=detalles&accion=hacerventa&tipo=ConsultarBalanceCerrar&IDDetalleCaja="+datos[1];
+					$.ajax({
+						url: 'index.php',
+						type: 'POST',
+						data: data
+					})
+					.done(function(res) {
+						var datos = JSON.parse($.trim(res));
+						$("#spanMontoApertura").text(datos[0].Monto_Abrir);
+						$("#spanMontoCierre").text(datos[0].Monto_Cierre);
+
+						$("#spanFechaAbrir").text(datos[0].Fecha_Abrir);
+						$("#spanFechaCerrar").text(datos[0].Fecha_Cerrar);
+
+						$("#totalIngresosSpan").text(datos[0].Total_Ingresos);
+						$("#totalEgresosSpan").text(datos[0].Total_Egresos);
+						var utilidad = parseFloat(datos[0].Total_Ingresos) - parseFloat(datos[0].Total_Egresos);
+						$("#totalUtilidadSpan").text(utilidad);
+						//INGRESOS
+						$("#spanTotalVentas").text(datos[0].Total_Ventas);
+						$("#spanTotalImportes").text(datos[0].Total_Importes);
+						//EGRESOS
+						$("#spanTotalCompras").text(datos[0].Total_Compras);
+						$("#spanTotalPagos").text(datos[0].Total_Pagos);
+						$("#spanTotalDevoluciones").text(datos[0].Total_Devoluciones);
+
+						if (datos[0].Total_Ventas_Efectivo > 0) {
+							$("#DivMostrarVentasDesplegada").append(`
+								<div class="row">
+		                            <div class="col-md-12 col-sm-12 mb-3">
+		                                Ventas en efectivo <span class="dinero">`+datos[0].Total_Ventas_Efectivo+`</span>
+		                            </div>
+		                        </div>`);
+						}
+
+						if (datos[0].Total_Ventas_Deposito > 0) {
+							$("#DivMostrarVentasDesplegada").append(`
+								<div class="row">
+		                            <div class="col-md-12 col-sm-12 mb-3">
+		                                Ventas en depósito <span class="dinero">`+datos[0].Total_Ventas_Deposito+`</span>
+		                            </div>
+		                        </div>`);
+						}
+
+						if (datos[0].Total_Ventas_Cheque > 0) {
+							$("#DivMostrarVentasDesplegada").append(`
+								<div class="row">
+		                            <div class="col-md-12 col-sm-12 mb-3">
+		                                Ventas en cheque <span class="dinero">`+datos[0].Total_Ventas_Cheque+`</span>
+		                            </div>
+		                        </div>`);
+						}
+
+						if (datos[0].Total_Ventas_TransferenciaBancaria > 0) {
+							$("#DivMostrarVentasDesplegada").append(`
+								<div class="row">
+		                            <div class="col-md-12 col-sm-12 mb-3">
+		                                Ventas en transferencia bancaria <span class="dinero">`+datos[0].Total_Ventas_TransferenciaBancaria+`</span>
+		                            </div>
+		                        </div>`);
+						}
+
+						if (datos[0].Total_Ventas_TarjetaCreditoDebito > 0) {
+							$("#DivMostrarVentasDesplegada").append(`
+								<div class="row">
+		                            <div class="col-md-12 col-sm-12 mb-3">
+		                                Ventas en tarjeta de crédito / debito <span class="dinero">`+datos[0].Total_Ventas_TarjetaCreditoDebito+`</span>
+		                            </div>
+		                        </div>`);
+						}
+
+						if (datos[0].Total_Ventas_PagoOnline > 0) {
+							$("#DivMostrarVentasDesplegada").append(`
+								<div class="row">
+		                            <div class="col-md-12 col-sm-12 mb-3">
+		                                Ventas en pago online <span class="dinero">`+datos[0].Total_Ventas_PagoOnline+`</span>
+		                            </div>
+		                        </div>`);
+						}
+
+						///PAGOS
+						if (datos[0].Total_Pagos_Efectivo > 0) {
+							$("#DivMostrarPagosDesplegado").append(`
+								<div class="row">
+		                            <div class="col-md-12 col-sm-12 mb-3">
+		                                Pagos en efectivo <span class="dinero">`+datos[0].Total_Pagos_Efectivo+`</span>
+		                            </div>
+		                        </div>`);
+						}
+
+						if (datos[0].Total_Pagos_Deposito > 0) {
+							$("#DivMostrarPagosDesplegado").append(`
+								<div class="row">
+		                            <div class="col-md-12 col-sm-12 mb-3">
+		                                Pagos en deposito <span class="dinero">`+datos[0].Total_Pagos_Deposito+`</span>
+		                            </div>
+		                        </div>`);
+						}
+
+						if (datos[0].Total_Pagos_Cheque > 0) {
+							$("#DivMostrarPagosDesplegado").append(`
+								<div class="row">
+		                            <div class="col-md-12 col-sm-12 mb-3">
+		                                Pagos en cheques <span class="dinero">`+datos[0].Total_Pagos_Cheque+`</span>
+		                            </div>
+		                        </div>`);
+						}
+
+						if (datos[0].Total_Pagos_TransferenciaBancaria > 0) {
+							$("#DivMostrarPagosDesplegado").append(`
+								<div class="row">
+		                            <div class="col-md-12 col-sm-12 mb-3">
+		                                Pagos en transferencia bancaria <span class="dinero">`+datos[0].Total_Pagos_TransferenciaBancaria+`</span>
+		                            </div>
+		                        </div>`);
+						}
+
+						if (datos[0].Total_Pagos_TarjetaCreditoDebito > 0) {
+							$("#DivMostrarPagosDesplegado").append(`
+								<div class="row">
+		                            <div class="col-md-12 col-sm-12 mb-3">
+		                                Pagos en tarjeta de crédito / debito <span class="dinero">`+datos[0].Total_Pagos_TarjetaCreditoDebito+`</span>
+		                            </div>
+		                        </div>`);
+						}
+
+						$("#ImprimirBalance").attr("attrid", datos[0].ID_Detalle_Caja);
+						moneda();
+					})
+					.fail(function() {
+						console.log("Error ajax");
+					})
+				}else{
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Error inesperado al cerrar caja.'
+					});
+					console.log($.trim(res));
+				}
+			})
+			.fail(function() {
+				console.log("Error ajax");
+			})
+			.always(function() {
+				$("#carga").hide();
+			});         
+        }
+    });   
 }
 
 jQuery(document).ready(function($) {
+
+	$(document).on('hidden.bs.modal', '#ModalBalanceCaja',function(){
+		$("#cargarVentas").trigger("click");
+	});
+
+	$(document).on('click', '#ImprimirBalance', function() {
+		var iddetalle = $(this).attr("attrid");
+		var idsucursal = $("#SucursalVenta").attr("attrid");
+		var altura = 50;
+		var anchura = 310;
+		var y = parseInt((window.screen.height/2)-(altura/2));
+		var x = parseInt((window.screen.width/2)-(anchura/2));
+		window.open("controladores/ticketCaja.php?id="+iddetalle+"&idsucursal="+idsucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
+		$("#ModalBalanceCaja").modal("hide");
+	});
 
 	$(document).on('click', '#CargarClientesModalVentas', function() {
 		TablaClienteVenta();
@@ -728,16 +924,8 @@ jQuery(document).ready(function($) {
 				});
 				productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto, cantidadImportes, precioImporte]);
 			});
-			var contarventa = "";
-
-			if ($("#ContarVenta").prop("checked") == true) {
-				contarventa = "1";
-			}else{
-				contarventa = "0";
-			}
-
 			console.log(productos);
-			var data = "metodo=insertar&accion=hacerventa&tipo=RealizarVenta&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&TipoPago="+tipopago+"&Importe="+pago+"&totalventa="+totalventa+"&totalfinalimporte="+totalimporte+"&contarVenta="+contarventa;
+			var data = "metodo=insertar&accion=hacerventa&tipo=RealizarVenta&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&TipoPago="+tipopago+"&Importe="+pago+"&totalventa="+totalventa+"&totalfinalimporte="+totalimporte;
 			$.ajax({
 				url: 'index.php',
 			    type: 'POST',
@@ -1138,16 +1326,8 @@ jQuery(document).ready(function($) {
 		var precio = $(this).attr("precio");
 		var importegeneral = $(this).attr("importegeneral");
 		var importepresentacion = $(this).attr("importepresentacion");
-		var codigopresentacion = $(this).attr("codigopresentacion");
-		var codigoproducto = $(this).attr("codigoproducto");
 		if (idpresentacion == 0) {
 			idpresentacion = null;
-		}
-		var codigoactual = "";
-		if (codigopresentacion != "") {
-			codigoactual = codigopresentacion;
-		}else{
-			codigoactual = codigoproducto;
 		}
 		$("#ModalPresentacionesProducto").modal("hide");
 		
@@ -1156,9 +1336,6 @@ jQuery(document).ready(function($) {
            	var cantidadactual = $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(3)").find(".campoCantidadProducto").val();
             $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(3)").find(".campoCantidadProducto").val(parseFloat(cantidad) + parseFloat(cantidadactual));
             $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+presentacionanterior+']').remove();
-
-            $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(0)").text(codigoactual);
-
             $(".campoCantidadProducto").trigger("change");
         }else{
         	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+presentacionanterior+']').attr("importegeneral", importegeneral);
@@ -1176,8 +1353,6 @@ jQuery(document).ready(function($) {
 		    }else{
 		    	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(2)").find(".campoPrecioImporte").text(importegeneral);
 		    }
-
-		    $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(0)").text(codigoactual);
 
 	    	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(2)").find(".cambiarPrecio").attr("precio", precio);
 	    	$("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idproducto+'][idPresentacion='+idpresentacion+']').children("td:eq(2)").find(".cambiarPrecio").text(precio);
@@ -1378,20 +1553,23 @@ function TablaReporteCompras(){
 
 
 function EstatusCaja(){
-	var data = "metodo=detalles&accion=ventas&tipo=ConsultarCaja";
+	/*var data = "metodo=detalles&accion=ventas&tipo=ConsultarCaja";
 	$.ajax({
 		url: 'index.php',
 		type: 'POST',
 		data: data,
 	})
 	.done(function(res) {
-		if ($.trim(res) == "Abierta") {
+		var separa = $.trim(res).split('~');
+
+		if (separa[0] == "Abierta") {*/
 			$("#BotonCerrarCaja").removeClass("oculto");
-		}else{
+		/*}else{
 			$("#BotonCerrarCaja").addClass("oculto");
+			$("#cargarVentas").trigger("click");
 		}
 	})
 	.fail(function() {
 		console.log("Error ajax");
-	});
+	});*/
 }

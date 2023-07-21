@@ -297,6 +297,7 @@ class ventas {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s'); 
+		
 		if($tipo == 'productos'){
 			$IDVenta = $omodelo->link->real_escape_string($IDVenta);
 			$tabla = "";
@@ -583,34 +584,102 @@ class ventas {
 				echo "No";
 			}
 		}else if($tipo == "ConsultarCaja"){
-			$query = "SELECT ID_Caja, Estado, FK_Usuario FROM cajas WHERE ID_Caja = 1";
+			$query = "SELECT Estado, FK_Usuario FROM cajas WHERE FK_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."' LIMIT 1";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
+
 			if($row == 'si'){
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
 				if($numerofilas > 0){
 					if ($row[0]["Estado"] == 1) {
-						echo "Abierta";
+						echo 'Abierta~'.$_SESSION['user_admin']['Tipo_Usuario'];
 					}else{
-						echo "Cerrada";
+						echo 'Cerrada';
 					}
 				}
 			}
 		}else if($tipo == "AbrirCaja"){
-			$query = "UPDATE cajas SET Estado = 1, FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."' WHERE ID_Caja = 1";
+			$sucursal = $omodelo->link->real_escape_string($sucursal);
+			$MontoAbrir = $omodelo->link->real_escape_string($MontoAbrir);
+
+			$query = "UPDATE cajas SET Estado = 1, FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."' WHERE FK_Sucursal = '$sucursal'";
 			$error = $omodelo->_insertar($query);
+
 			if($error == 'si'){
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
-				$query2 = "INSERT INTO detalles_caja SET FK_Caja = '1', Fecha_Abrir = '$fecha', 	Monto_Abrir = '$MontoAbrir', FK_Usuario_Abrir = '".$_SESSION['user_admin']['ID_Usuario']."'";
+				$query2 = "INSERT INTO detalles_caja SET FK_Caja = (SELECT ID_Caja FROM cajas WHERE FK_Sucursal = '$sucursal'), Fecha_Abrir = '$fecha', Monto_Abrir = '$MontoAbrir', FK_Usuario_Abrir = '".$_SESSION['user_admin']['ID_Usuario']."'";
 				$error2 = $omodelo->_insertar($query2);
+				
 				if($error2 == 'si'){
 					echo "Error 2: ".mysqli_error($omodelo->link);
 				}else{
 					echo "Correcto";
 				}
 			}
+		}else if($tipo == "verCajas"){
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(cajas.Nombre, cajas.Estado, sucursales.Nombre, usuarios.Nombre) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+
+			$query = "SELECT ID_Caja, cajas.FK_Sucursal AS FK_Sucursal, sucursales.Nombre AS NombreSucursal, cajas.Nombre AS Nombre, Detalles, cajas.Estado, FK_Usuario, usuarios.Nombre AS UsuarioActual, (SELECT COUNT(*) FROM cajas INNER JOIN sucursales ON cajas.FK_Sucursal = ID_Sucursal LEFT JOIN usuarios ON FK_Usuario = ID_Usuario WHERE cajas.Estado = 1 $busqueda) AS Num FROM cajas INNER JOIN sucursales ON cajas.FK_Sucursal = ID_Sucursal LEFT JOIN usuarios ON FK_Usuario = ID_Usuario WHERE cajas.Estado = 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+
+						$estatus = "";
+						if ($row[$i]['Estado'] == "0") {
+							$estatus = '<span class="badge rounded-pill bg-danger">Caja cerrada</span>';
+						}else if($row[$i]['Estado'] == "1"){
+							$estatus = '<span class="badge rounded-pill bg-success">Caja abierta</span>';
+						}
+
+						$detalles = "No hay datos ingresados";
+						if ($row[$i]['Detalles'] != "") {
+							$detalles = $row[$i]['Detalles'];
+						}
+
+						$usuario = "No se está utilizando la caja actualmente";
+						if ($row[$i]['UsuarioActual'] != "") {
+							$usuario = 'Abrio Caja: '.$row[$i]['UsuarioActual'];
+						}
+						
+						$arreglo['data'][$i] = array(
+							'ID' => $row[$i]['ID_Caja'],
+							'Nombre' => $row[$i]['Nombre'],
+							'Sucursal' => $row[$i]['NombreSucursal'],
+							'Estatus' => $estatus,
+							'Usuario' => $usuario,
+							'Acciones' => '<button type="button" class="btn btn-info btn-sm bUsarCaja" attrID="'.$row[$i]['FK_Sucursal'].'">Usar <i class="fas fa-check"></i></button>'
+						);
+					}
+
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+				}
+			}
+
+			echo json_encode($arreglo);
 		}
 	}
 }

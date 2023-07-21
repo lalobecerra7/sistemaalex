@@ -19,9 +19,10 @@
 		        <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaReporteCajas" width="100%" style="font-size: 12px;">
                     <thead>
                         <th style="width: 20%;">Abrir</th>
-                        <th style="width: 20%;">Monto Abrir</th>
+						<th style="width: 10%;">Caja</th>
+                        <th style="width: 15%;">Monto Abrir</th>
                         <th style="width: 20%;">Cerrar</th>
-                        <th style="width: 20%;">Monto Cerrar</th>
+                        <th style="width: 15%;">Monto Cerrar</th>
                         <th style="width: 20%;" orden="No">Totales</th>
                         <th style="width: 20%;" orden="No">Acciones</th>
                     </thead>
