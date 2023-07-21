@@ -446,14 +446,7 @@
                 <h5>Cambio</h5>
                 <h5 class="dinero" id="verCambio">$0.00</h5>
             </div>
-            <div class="col-md-12 col-sm-12 mb-3">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="ContarVenta" name="ContarVenta">
-                  <label class="form-check-label" for="ContarVenta">
-                    Esta venta no cuenta para el balance ni afecta el inventario
-                  </label>
-                </div>
-            </div>
+            #BotonAfectarBalance#
         </div>
     </div>
     <div class="modal-footer">

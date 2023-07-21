@@ -434,8 +434,14 @@
                                                 <td>Devoluciones</td>
                                                 <td>Ticket</td>
                                                 <td>Cerrar Caja</td>
+                                                <td>Afectar balance</td>
                                             </tr>
                                             <tr>
+                                                <td>
+                                                    <div>
+                                                        <input class="form-check-input checkPermisos" type="checkbox">
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <div>
                                                         <input class="form-check-input checkPermisos" type="checkbox">
@@ -953,3 +959,138 @@
         </div>
     </div>
 </div>
+
+
+<!-- ///////////////////////////Modal////////////////////////////// 
+<div class="modal" id="modalPermisos" tabindex="-2">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class="h5 modal-title">Permisos</p>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body table-responsive">
+        <table class="table table-hover table-bordered text-center" id="tablaPermisos">
+          <thead>
+            <tr>
+              <th>Menú</th>
+              <th>Permisos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Productos</td>
+              <td>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Ver</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Insertar</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Modificar</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Eliminar</label>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Inventario</td>
+              <td>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Ver</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Agregar</label>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Ventas</td>
+              <td>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Ver</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Cancelar</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Eliminar</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Reimprimir</label>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Cajas</td>
+              <td>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Ver</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Insertar</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Modificar</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Eliminar</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Ver cortes</label>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Empleados</td>
+              <td>
+                <div class="form-check">
+                  <input id="verEmpleados" type="checkbox" class="form-check-input checkPermisos">
+                  <label for="verEmpleados" class="form-check-label">Ver</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Insertar</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Modificar</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Eliminar</label>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Reportes</td>
+              <td>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Ver</label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>-->

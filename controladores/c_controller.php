@@ -820,7 +820,24 @@ class controller {
 					}*/
 				}
 			}
-			$pagina = str_replace('#MostrarSucursal#', $sucursal, $pagina);            
+			$pagina = str_replace('#MostrarSucursal#', $sucursal, $pagina);    
+
+			$botonAfectarBalance = "";
+			if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][9] == '1') {
+				$botonAfectarBalance = '
+						<div class="col-md-12 col-sm-12 mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="ContarVenta" name="ContarVenta">
+                  <label class="form-check-label" for="ContarVenta">
+                    Esta venta no cuenta para el balance ni afecta el inventario
+                  </label>
+                </div>
+            </div>';
+			}
+
+			$pagina = str_replace('#BotonAfectarBalance#', $botonAfectarBalance, $pagina);    
+
+
 		}else if($nombre == "v_facturacion"){
 				$query = "SELECT RFC, Nombre, Regimen FROM general WHERE ID_General = '1'";
 				$row = $omodelo->_consultar($query);

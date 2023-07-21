@@ -1441,16 +1441,16 @@ class hacerventa {
 		}else if($tipo == "CerrarCaja"){
 			$fecha = date('Y-m-d H:i:s'); 
 			$MontoCierre =  $omodelo->link->real_escape_string($MontoCierre);
-			$sucursal =  $omodelo->link->real_escape_string($sucursal);
+			//$sucursal =  $omodelo->link->real_escape_string($sucursal);
 
-			$query = "SELECT ID_Detalle_Caja FROM detalles_caja WHERE FK_Caja = (SELECT ID_Caja FROM cajas WHERE FK_Sucursal = '$sucursal' ORDER BY ID_Detalle_Caja DESC LIMIT 1)";
+			$query = "SELECT ID_Detalle_Caja FROM detalles_caja WHERE FK_Caja = (SELECT ID_Caja FROM cajas WHERE FK_Sucursal = '1' ORDER BY ID_Detalle_Caja DESC LIMIT 1)";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			if($row == 'si'){
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
 				if($numerofilas > 0){
-					$query = "UPDATE cajas SET Estado = 0, FK_Usuario = '0' WHERE FK_Sucursal = '$sucursal'";
+					$query = "UPDATE cajas SET Estado = 0, FK_Usuario = '0' WHERE FK_Sucursal = '1'";
 					$error = $omodelo->_insertar($query);
 
 					if($error == 'si'){
