@@ -189,7 +189,7 @@ jQuery(document).ready(function($) {
 
             $("#mapaSucursal").html("");
             if($.trim(res.Latitud) != "" && $.trim(res.Longitud) != ""){
-                $("#mapaSucursal").html('<iframe id="iframeUbicacion" src="http://maps.google.com/maps?q='+$.trim(res.Latitud)+', '+$.trim(res.Longitud)+'&z=15&output=embed" width="100%" height="400" allowfullscreen="" loading="lazy"></iframe>');
+                $("#mapaSucursal").html('<iframe id="iframeUbicacion" src="https://maps.google.com/maps?q='+$.trim(res.Latitud)+', '+$.trim(res.Longitud)+'&z=15&output=embed" width="100%" height="400" allowfullscreen="" loading="lazy"></iframe>');
             }
 
             $("#ModalSucursal").modal("show");
@@ -202,14 +202,14 @@ jQuery(document).ready(function($) {
     $(document).on('keyup', '#latitudSucursal', function() {
         $("#mapaSucursal").html("");
         if($.trim($(this).val()) != "" && $.trim($("#longitudSucursal").val()) != ""){
-            $("#mapaSucursal").html('<iframe id="iframeUbicacion" src="http://maps.google.com/maps?q='+$.trim($(this).val())+', '+$.trim($("#longitudSucursal").val())+'&z=15&output=embed" width="100%" height="400" allowfullscreen="" loading="lazy"></iframe>');
+            $("#mapaSucursal").html('<iframe id="iframeUbicacion" src="https://maps.google.com/maps?q='+$.trim($(this).val())+', '+$.trim($("#longitudSucursal").val())+'&z=15&output=embed" width="100%" height="400" allowfullscreen="" loading="lazy"></iframe>');
         }
     });
 
     $(document).on('keyup', '#longitudSucursal', function() {
         $("#mapaSucursal").html("");
         if($.trim($(this).val()) != "" && $.trim($("#latitudSucursal").val()) != ""){
-            $("#mapaSucursal").html('<iframe id="iframeUbicacion" src="http://maps.google.com/maps?q='+$.trim($("#latitudSucursal").val())+', '+$.trim($(this).val())+'&z=15&output=embed" width="100%" height="400" allowfullscreen="" loading="lazy"></iframe>');
+            $("#mapaSucursal").html('<iframe id="iframeUbicacion" src="https://maps.google.com/maps?q='+$.trim($("#latitudSucursal").val())+', '+$.trim($(this).val())+'&z=15&output=embed" width="100%" height="400" allowfullscreen="" loading="lazy"></iframe>');
         }
     });
 });

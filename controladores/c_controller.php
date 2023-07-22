@@ -631,6 +631,10 @@ class controller {
 			}
 			
 		}else if($nombre == "v_ventas"){
+			if ($omodelo->permisos() != 'Administrador') {
+				echo '<script>$("#bUsarCajaDif").remove();</script>';
+			}
+
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_ventas'][2] == '0') {
 				echo '<script>$("#BotonNuevaVenta").remove();</script>';
 			}

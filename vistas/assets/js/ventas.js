@@ -224,6 +224,12 @@ function TablaProductosDevolucion(idventa){
 
 jQuery(document).ready(function($) {
 
+	$(document).on('click', '#bUsarCajaDif', function() {
+		$("#ModalAbrirCaja").modal("hide");
+		tablaCajasVenta();
+		$("#modalVerCajas").modal("show");
+	});
+
 	$(document).on('click', '.bUsarCaja', function() {
 		$("#modalVerCajas").modal("hide");
 		$("#cargarHacerVenta").attr("atri", $(this).attr('attrID'));

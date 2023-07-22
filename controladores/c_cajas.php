@@ -49,7 +49,7 @@ class cajas {
 
 					$usuario = "No se está utilizando la caja actualmente";
 					if ($row[$i]['UsuarioActual'] != "") {
-						$usuario = 'Abrio Caja: '.$row[$i]['UsuarioActual'];
+						$usuario = 'Abrió Caja: '.$row[$i]['UsuarioActual'];
 					}
 
 					$botonPermisosModificar = "";

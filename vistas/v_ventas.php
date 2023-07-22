@@ -180,6 +180,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-info" id="bUsarCajaDif"><i class="fa fa-times-circle"></i> Usar otra caja</button>
                 <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
                 <button type="submit" class="btn btn-primary" id="AbrirCajaVentas" attrid=""><i class="fa fa-check-circle"></i> <strong>Abrir caja</strong></button>
             </div>
