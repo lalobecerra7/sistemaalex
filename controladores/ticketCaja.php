@@ -5,7 +5,8 @@ if (!isset($_SESSION['user_admin']['ID_Usuario'])) {
   header('Location: ../index.php');
 }
 
-$con = mysqli_connect('localhost','root','','wits_sistemaalex');
+//$con = mysqli_connect('localhost','root','','wits_sistemaalex');
+$con = mysqli_connect('localhost','wits_userBD','ZfX7y99GSs','wits_sistemaalex');
 $arreglo = '';
 $arreglo2 = '';
 $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $totalcompras = 0; $totaldevoluciones = 0; $totalpagos = 0; $totalIngresosEfectivo = 0; $totalEgresosEfectivo = 0;
@@ -125,10 +126,11 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
 <body>
   <?php 
   $FechaHoy = date('Y-m-d H:i:s');
-  $sql = "SELECT ID_Detalle_Caja, FK_Caja, Fecha_Abrir, Monto_Abrir, FK_Usuario_Abrir, Fecha_Cierre, Monto_Cierre, FK_Usuario_Cierre, DATE_FORMAT(Fecha_Cierre, '%Y-%m-%d %r') AS FechaCerrar, DATE_FORMAT(Fecha_Abrir, '%Y-%m-%d %r') AS FechaAbrir FROM detalles_caja WHERE ID_Detalle_Caja = '".$_GET["id"]."'";
+  $sql = "SELECT ID_Detalle_Caja, FK_Sucursal, FK_Caja, Fecha_Abrir, Monto_Abrir, FK_Usuario_Abrir, Fecha_Cierre, Monto_Cierre, FK_Usuario_Cierre, DATE_FORMAT(Fecha_Cierre, '%Y-%m-%d %r') AS FechaCerrar, DATE_FORMAT(Fecha_Abrir, '%Y-%m-%d %r') AS FechaAbrir FROM detalles_caja INNER JOIN cajas ON FK_Caja = ID_Caja  WHERE ID_Detalle_Caja = '".$_GET["id"]."'";
   if($res=$con->query($sql)){
     if ($res->num_rows > 0) {
       $row = $res->fetch_assoc();
+      $sucursal = $row["FK_Sucursal"];
       //************************** INGRESOS ***********************//
       //Ventas
       //Importes
@@ -141,7 +143,7 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
       
       $totalIngresosEfectivo +=  $row["Monto_Abrir"];
 
-      $queryv = "SELECT Total, Tipo_Pago FROM ventas WHERE (Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row["Fecha_Cierre"]."') AND Estatus = 'Completada' AND Contar_Venta = 0";
+      $queryv = "SELECT Total, Tipo_Pago FROM ventas WHERE (Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row["Fecha_Cierre"]."') AND Estatus = 'Completada' AND Contar_Venta = 0 AND FK_Sucursal = '$sucursal'";
       if($resv=$con->query($queryv)){
         if ($resv->num_rows > 0) {
           while($rowv = $resv->fetch_assoc()){
@@ -165,7 +167,7 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
         }
       }
 
-      $queryi = "SELECT detalles_importes.Cantidad AS CantidadImportes, importes.Importe AS PrecioImporte FROM detalles_importes INNER JOIN importes ON FK_Importe = ID_Importe WHERE (detalles_importes.Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND detalles_importes.Fecha_Registro <= '".$row["Fecha_Cierre"]."')";
+      $queryi = "SELECT detalles_importes.Cantidad AS CantidadImportes, importes.Importe AS PrecioImporte FROM detalles_importes INNER JOIN importes ON FK_Importe = ID_Importe INNER JOIN ventas ON FK_Venta = ID_Venta WHERE (detalles_importes.Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND detalles_importes.Fecha_Registro <= '".$row["Fecha_Cierre"]."') AND ventas.FK_Sucursal = '$sucursal'";
       if($resi=$con->query($queryi)){
         if ($resi->num_rows > 0) {
           while($rowi = $resi->fetch_assoc()){
@@ -178,7 +180,7 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
 
       //************************** EGRESOS ************************//
       //Compras al contado
-      $query2 = "SELECT Total FROM compras WHERE Estatus = 1 AND Tipo_Compra = 'Contado' AND (Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row["Fecha_Cierre"]."')";
+      $query2 = "SELECT Total FROM compras WHERE Estatus = 1 AND Tipo_Compra = 'Contado' AND (Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row["Fecha_Cierre"]."')  AND FK_Sucursal = '$sucursal'";
       if($resc=$con->query($query2)){
         if ($resc->num_rows > 0) {
           while($rowc = $resc->fetch_assoc()){
@@ -194,7 +196,7 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
       $pagoscontadodeposito = 0;
       $pagostarjetacontado = 0;
       $pagoscontadotransferencia = 0;
-      $queryContado = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row["Fecha_Abrir"]."' AND pagos.Fecha <= '".$row["Fecha_Cierre"]."') AND Estatus = 1 AND Tipo_Compra = 'Contado'";
+      $queryContado = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row["Fecha_Abrir"]."' AND pagos.Fecha <= '".$row["Fecha_Cierre"]."') AND Estatus = 1 AND Tipo_Compra = 'Contado' AND compras.FK_Sucursal = '$sucursal'";
       if($rescontado=$con->query($queryContado)){
         if ($rescontado->num_rows > 0) {
           while($rowcontado = $rescontado->fetch_assoc()){
@@ -220,7 +222,7 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
       $pagosdeposito = 0;
       $pagostarjeta = 0;
       $pagostransferencia = 0;
-      $querypagos = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row["Fecha_Abrir"]."' AND pagos.Fecha <= '".$row["Fecha_Cierre"]."') AND Tipo_Compra = 'Credito'";
+      $querypagos = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row["Fecha_Abrir"]."' AND pagos.Fecha <= '".$row["Fecha_Cierre"]."') AND Tipo_Compra = 'Credito' AND compras.FK_Sucursal = '$sucursal'";
       if($resp=$con->query($querypagos)){
         if ($resp->num_rows > 0) {
           while($rowp = $resp->fetch_assoc()){
@@ -243,7 +245,7 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
       }
 
       //Devoluciones
-      $querydev = "SELECT Total FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE (devoluciones.Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND devoluciones.Fecha_Registro <= '".$row["Fecha_Cierre"]."')";
+      $querydev = "SELECT detalles_devolucion.Total FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion INNER JOIN ventas ON FK_Venta = ID_Venta  WHERE (devoluciones.Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND devoluciones.Fecha_Registro <= '".$row["Fecha_Cierre"]."') AND ventas.FK_Sucursal = '$sucursal'";
       if($resdev=$con->query($querydev)){
         if ($resdev->num_rows > 0) {
           while($rowdev = $resdev->fetch_assoc()){

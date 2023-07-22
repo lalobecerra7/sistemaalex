@@ -1442,8 +1442,10 @@ class hacerventa {
 			$fecha = date('Y-m-d H:i:s'); 
 			$MontoCierre =  $omodelo->link->real_escape_string($MontoCierre);
 			$sucursal =  $omodelo->link->real_escape_string($sucursal);
+			$iddetallecaja =  $omodelo->link->real_escape_string($iddetallecaja);
 
-			$query = "SELECT ID_Detalle_Caja FROM detalles_caja WHERE FK_Caja = (SELECT ID_Caja FROM cajas WHERE FK_Sucursal = '$sucursal') ORDER BY ID_Detalle_Caja DESC LIMIT 1";
+			//$query = "SELECT ID_Detalle_Caja FROM detalles_caja WHERE FK_Caja = (SELECT ID_Caja FROM cajas WHERE FK_Sucursal = '$sucursal') ORDER BY ID_Detalle_Caja DESC LIMIT 1";
+			$query = "SELECT ID_Detalle_Caja FROM detalles_caja WHERE ID_Detalle_Caja = '$iddetallecaja'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			if($row == 'si'){
@@ -1457,6 +1459,7 @@ class hacerventa {
 						echo "Error: ".mysqli_error($omodelo->link);
 					}else{
 						$query2 = "UPDATE detalles_caja SET Fecha_Cierre = '$fecha', Monto_Cierre = '$MontoCierre', FK_Usuario_Cierre = '".$_SESSION['user_admin']['ID_Usuario']."' WHERE ID_Detalle_Caja = '".$row[0]["ID_Detalle_Caja"]."'";
+
 						$error2 = $omodelo->_insertar($query2);
 						
 						if($error2 == 'si'){
@@ -1467,8 +1470,24 @@ class hacerventa {
 					}
 				}
 			}
+		}else if($tipo == "ConsultarDetalleCaja"){
+			$fecha = date('Y-m-d H:i:s'); 
+			$sucursal =  $omodelo->link->real_escape_string($sucursal);
+
+			$query = "SELECT ID_Detalle_Caja FROM detalles_caja WHERE FK_Caja = (SELECT ID_Caja FROM cajas WHERE FK_Sucursal = '$sucursal') ORDER BY ID_Detalle_Caja DESC LIMIT 1";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					echo $row[0]["ID_Detalle_Caja"];
+				}
+			}
 		}else if($tipo == "ConsultarBalanceCerrar"){
 			$fecha = date('Y-m-d H:i:s'); 
+
+			$sucursal =  $omodelo->link->real_escape_string($sucursal);
 			$arreglo = [];
 			$query = "SELECT ID_Detalle_Caja, FK_Caja, Fecha_Abrir, Monto_Abrir, FK_Usuario_Abrir, (SELECT Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario_Abrir) AS UsuarioAbrir, (SELECT Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario_Cierre) AS UsuarioCerrar, Fecha_Cierre, Monto_Cierre, FK_Usuario_Cierre, DATE_FORMAT(Fecha_Cierre, '%Y-%m-%d %r') AS FechaCerrar, DATE_FORMAT(Fecha_Abrir, '%Y-%m-%d %r') AS FechaAbrir FROM detalles_caja WHERE ID_Detalle_Caja = '$IDDetalleCaja'";
 			$row = $omodelo->_consultar($query);
@@ -1490,7 +1509,7 @@ class hacerventa {
 					$totalvtransferencia = 0;
 					$totalvonline = 0;
 
-					$queryv = "SELECT Total, Tipo_Pago FROM ventas WHERE (Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row[0]["Fecha_Cierre"]."') AND Estatus = 'Completada' AND Contar_Venta = 0";
+					$queryv = "SELECT ventas.Total, ventas.Tipo_Pago FROM ventas WHERE (Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$fecha."') AND Estatus = 'Completada' AND Contar_Venta = 0 AND FK_Sucursal = '$sucursal'";
 					$rowv = $omodelo->_consultar($queryv);
 					$numerofilasv = $omodelo->numerofilas;
 					if($rowv == 'si'){
@@ -1518,7 +1537,7 @@ class hacerventa {
 						}
 					}
 
-					$queryi = "SELECT detalles_importes.Cantidad AS CantidadImportes, importes.Importe AS PrecioImporte FROM detalles_importes INNER JOIN importes ON FK_Importe = ID_Importe WHERE (detalles_importes.Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND detalles_importes.Fecha_Registro <= '".$row[0]["Fecha_Cierre"]."')";
+					$queryi = "SELECT detalles_importes.Cantidad AS CantidadImportes, importes.Importe AS PrecioImporte FROM detalles_importes INNER JOIN importes ON FK_Importe = ID_Importe INNER JOIN ventas ON FK_Venta = ID_Venta WHERE (detalles_importes.Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND detalles_importes.Fecha_Registro <= '".$fecha."') AND ventas.FK_Sucursal = '$sucursal'";
 					$rowi = $omodelo->_consultar($queryi);
 					$numerofilasi = $omodelo->numerofilas;
 					if($rowi == 'si'){
@@ -1535,7 +1554,7 @@ class hacerventa {
 
 					//************************** EGRESOS ************************//
 					//Compras al contado
-					$query2 = "SELECT Total FROM compras WHERE Estatus = 1 AND Tipo_Compra = 'Contado' AND (Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row[0]["Fecha_Cierre"]."')";
+					$query2 = "SELECT Total FROM compras WHERE Estatus = 1 AND Tipo_Compra = 'Contado' AND (Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND Fecha_Registro <= '".$fecha."') AND FK_Sucursal = '$sucursal'";
 					$rowc = $omodelo->_consultar($query2);
 					$numerofilasc = $omodelo->numerofilas;
 					if($rowc == 'si'){
@@ -1555,7 +1574,7 @@ class hacerventa {
 					$pagoscontadodeposito = 0;
 					$pagostarjetacontado = 0;
 					$pagoscontadotransferencia = 0;
-					$queryContado = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row[0]["Fecha_Abrir"]."' AND pagos.Fecha <= '".$row[0]["Fecha_Cierre"]."') AND Estatus = 1 AND Tipo_Compra = 'Contado'";
+					$queryContado = "SELECT pagos.Monto, pagos.Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row[0]["Fecha_Abrir"]."' AND pagos.Fecha <= '".$fecha."') AND Estatus = 1 AND Tipo_Compra = 'Contado' AND compras.FK_Sucursal = '$sucursal'";
 					$rowcontado = $omodelo->_consultar($queryContado);
 					$numerofilascontado = $omodelo->numerofilas;
 					if($rowcontado == 'si'){
@@ -1585,7 +1604,7 @@ class hacerventa {
 					$pagosdeposito = 0;
 					$pagostarjeta = 0;
 					$pagostransferencia = 0;
-					$query2 = "SELECT Monto, Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row[0]["Fecha_Abrir"]."' AND pagos.Fecha <= '".$row[0]["Fecha_Cierre"]."') AND Tipo_Compra = 'Credito'";
+					$query2 = "SELECT pagos.Monto, pagos.Tipo_Pago FROM pagos INNER JOIN compras ON FK_Compra = ID_Compra WHERE (pagos.Fecha >= '".$row[0]["Fecha_Abrir"]."' AND pagos.Fecha <= '".$fecha."') AND Tipo_Compra = 'Credito' AND compras.FK_Sucursal = '$sucursal'";
 					$rowp = $omodelo->_consultar($query2);
 					$numerofilasp = $omodelo->numerofilas;
 					if($rowp == 'si'){
@@ -1612,7 +1631,7 @@ class hacerventa {
 					}
 
 					//Devoluciones
-					$querydev = "SELECT Total FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE (devoluciones.Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND devoluciones.Fecha_Registro <= '".$row[0]["Fecha_Cierre"]."')";
+					$querydev = "SELECT detalles_devolucion.Total FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE (devoluciones.Fecha_Registro >= '".$row[0]["Fecha_Abrir"]."' AND devoluciones.Fecha_Registro <= '".$fecha."') AND ventas.FK_Sucursal = '$sucursal'";
 					$rowdev = $omodelo->_consultar($querydev);
 					$numerofilasdev = $omodelo->numerofilas;
 					if($rowdev == 'si'){

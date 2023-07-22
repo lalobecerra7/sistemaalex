@@ -57,8 +57,109 @@ function v_hacerventa() {
         }
     });  
 
+    $(document).on('change keyup', '#MontoCierreCaja', function() {
+    	const searchRegExp = new RegExp(',', 'g');
+    	var montocierre = $(this).val() || 0;
+    	var montoTotal = $("#spanTotalEfectivo").text().replace("$","").replace(searchRegExp, '');
+    	var diferencia = parseFloat(montocierre) - parseFloat(montoTotal);
+    	console.log("cierre: "+montocierre);
+    	console.log("total: "+montoTotal);
+    	console.log("diferencia: "+diferencia);
+        $("#spanTotalDiferencia").text(diferencia.toFixed(2));
+        if (diferencia < 0) {
+        	$("#spanTotalDiferencia").css("color", "red");
+        }else{
+        	$("#spanTotalDiferencia").css("color", "green");
+        }
+        moneda();
+    });
+
     $(document).on('click', '#BotonCerrarCaja', function() {
-   		$("#MontoCierreCaja").val("");
+    	$("#MontoCierreCaja").focus();
+   		var data = "metodo=detalles&accion=hacerventa&tipo=ConsultarDetalleCaja&sucursal="+$("#SucursalVenta").attr("attrid");
+        $.ajax({
+        	url: 'index.php',
+            type: 'POST',
+            data: data,
+            beforeSend: function() {
+            	$("#carga").show();
+            }
+        })
+        .done(function(res) {
+        	var iddetallecaja = $.trim(res);
+        	$("#CerrarCajaVentas").attr("iddetallecaja", iddetallecaja);
+        	var data = "metodo=detalles&accion=hacerventa&tipo=ConsultarBalanceCerrar&IDDetalleCaja="+iddetallecaja+"&sucursal="+$("#SucursalVenta").attr("attrid");
+            $.ajax({
+            	url: 'index.php',
+                type: 'POST',
+                data: data
+            })
+            .done(function(res) {
+                var datos = JSON.parse($.trim(res));
+                console.log(datos);
+                $("#spanVentasTotales").text(datos[0].Total_Ventas);
+                $("#spanMontoApertura").text(datos[0].Monto_Abrir);
+                $("#spanVentasEfectivo").text(datos[0].Total_Ventas_Efectivo);
+                $("#spanTotalImportes").text(datos[0].Total_Importes);
+                $("#spanTotalCompras").text(datos[0].Total_Compras_Efectivo);
+                $("#spanPagosEfectivo").text(datos[0].Total_Pagos_Efectivo);
+                $("#spanTotalDevoluciones").text(datos[0].Total_Devoluciones);
+                var ingresosefectivo = parseFloat(datos[0].Monto_Abrir) + parseFloat(datos[0].Total_Ventas_Efectivo) + parseFloat(datos[0].Total_Importes);
+                var egresosefectivo = parseFloat(datos[0].Total_Compras_Efectivo) + parseFloat(datos[0].Total_Pagos_Efectivo) + parseFloat(datos[0].Total_Devoluciones);
+                var total = ingresosefectivo - egresosefectivo;
+                $("#spanTotalEfectivo").text(total.toFixed(2));
+                if (total < 0) {
+                	$("#spanTotalEfectivo").css("color", "red");
+                }else{
+                	$("#spanTotalEfectivo").css("color", "green");
+                }
+                $("#MontoCierreCaja").val(total);
+                $("#spanVentasEnEfectivo").text(datos[0].Total_Ventas_Efectivo);
+                $("#spanVentasDeposito").text(datos[0].Total_Ventas_Deposito);
+                $("#spanVentasCheque").text(datos[0].Total_Ventas_Cheque);
+                $("#spanVentasTransferencia").text(datos[0].Total_Ventas_TransferenciaBancaria);
+                $("#spanVentasTarjeta").text(datos[0].Total_Ventas_TarjetaCreditoDebito);
+                $("#spanVentasPagoOnline").text(datos[0].Total_Ventas_PagoOnline);
+                $("#spanTotalDevolucionesVenta").text(datos[0].Total_Devoluciones);
+
+                var ventas = parseFloat(datos[0].Total_Ventas_Efectivo) + parseFloat(datos[0].Total_Ventas_Deposito) + parseFloat(datos[0].Total_Ventas_Cheque) + parseFloat(datos[0].Total_Ventas_TransferenciaBancaria) + parseFloat(datos[0].Total_Ventas_TarjetaCreditoDebito) + parseFloat(datos[0].Total_Ventas_PagoOnline); 
+                var totalventas= ventas - parseFloat(datos[0].Total_Devoluciones);
+                $("#spanTotalVentas").text(totalventas.toFixed(2));
+                if (totalventas < 0) {
+                	$("#spanTotalVentas").css("color", "red");
+                }else{
+                	$("#spanTotalVentas").css("color", "green");
+                }
+
+                $("#spanComprasEnEfectivo").text(datos[0].Total_Compras_Efectivo);
+                $("#spanComprasDeposito").text(datos[0].Total_Compras_Cheque);
+                $("#spanComprasCheque").text(datos[0].Total_Compras_Deposito);
+                $("#spanComprasTransferencia").text(datos[0].Total_Compras_Tarjeta);
+                $("#spanComprasTarjeta").text(datos[0].Total_Compras_Transferencia);
+                $("#spanComprasTotal").text(datos[0].Total_Compras);
+
+                $("#spanPagosEnEfectivo").text(datos[0].Total_Pagos_Efectivo);
+                $("#spanPagosDeposito").text(datos[0].Total_Pagos_Deposito);
+                $("#spanPagosCheque").text(datos[0].Total_Pagos_Cheque);
+                $("#spanPagosTransferencia").text(datos[0].Total_Pagos_TransferenciaBancaria);
+                $("#spanPagosTarjeta").text(datos[0].Total_Pagos_TarjetaCreditoDebito);
+                $("#spanPagosTotal").text(datos[0].Total_Pagos);
+
+                $("#ImprimirBalance").attr("attrid", datos[0].ID_Detalle_Caja);
+                $("#MontoCierreCaja").trigger("keyup");
+            	moneda();
+            })
+            .fail(function() {
+            	console.log("Error ajax");
+            })
+
+        })
+        .fail(function() {
+        	console.log("Error ajax");
+        }) 
+        .always(function() {
+	    	$("#carga").hide();
+	    }); 
     });
 
     //CERRAR CAJA
@@ -66,7 +167,7 @@ function v_hacerventa() {
         rules: {
             MontoCierreCaja: {
                 required: true,
-                min: 1,
+                min: 0,
             },
         },
         messages: {
@@ -75,24 +176,8 @@ function v_hacerventa() {
             },
         },
         submitHandler: function(form) { 
-            /*$("#spanMontoApertura").text("");
-            $("#spanMontoCierre").text("");
-            $("#spanFechaAbrir").text("");
-            $("#spanFechaCerrar").text("");
-            $("#totalIngresosSpan").text("");
-            $("#totalEgresosSpan").text("");
-            $("#totalUtilidadSpan").text("");
-            $("#spanTotalVentas").text("");
-            $("#spanTotalImportes").text("");
-            $("#spanTotalCompras").text("");
-            $("#spanTotalComprasCredito").text("");
-            $("#spanTotalPagos").text("");
-            $("#spanTotalDevoluciones").text("");
-            $("#DivMostrarVentasDesplegada").html("");
-            $("#DivMostrarComprasDesplegado").html("");
-            $("#DivMostrarPagosDesplegado").html("");*/
 
-            var data = "metodo=detalles&accion=hacerventa&tipo=CerrarCaja&MontoCierre="+$("#MontoCierreCaja").val()+"&sucursal="+$("#SucursalVenta").attr("attrid");
+            var data = "metodo=detalles&accion=hacerventa&tipo=CerrarCaja&MontoCierre="+$("#MontoCierreCaja").val()+"&sucursal="+$("#SucursalVenta").attr("attrid")+"&iddetallecaja="+$("#CerrarCajaVentas").attr("iddetallecaja");
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
@@ -105,252 +190,22 @@ function v_hacerventa() {
                 var datos = res.split("~");
                 if ($.trim(datos[0]) == "Correcto") {
                     $("#ModalCerrarCaja").modal("hide");
-                    $("#ModalBalanceCaja").modal("show");
-                    var data = "metodo=detalles&accion=hacerventa&tipo=ConsultarBalanceCerrar&IDDetalleCaja="+datos[1];
-                    $.ajax({
-                        url: 'index.php',
-                        type: 'POST',
-                        data: data
-                    })
-                    .done(function(res) {
-                        var datos = JSON.parse($.trim(res));
-                        console.log(datos);
-                        $("#spanVentasTotales").text(datos[0].Total_Ventas);
-                        $("#spanMontoApertura").text(datos[0].Monto_Abrir);
-                        $("#spanVentasEfectivo").text(datos[0].Total_Ventas_Efectivo);
-                        $("#spanTotalImportes").text(datos[0].Total_Importes);
-                        $("#spanTotalCompras").text(datos[0].Total_Compras_Efectivo);
-                        $("#spanPagosEfectivo").text(datos[0].Total_Pagos_Efectivo);
-                        $("#spanTotalDevoluciones").text(datos[0].Total_Devoluciones);
-                        var ingresosefectivo = parseFloat(datos[0].Monto_Abrir) + parseFloat(datos[0].Total_Ventas_Efectivo) + parseFloat(datos[0].Total_Importes);
-                        var egresosefectivo = parseFloat(datos[0].Total_Compras_Efectivo) + parseFloat(datos[0].Total_Pagos_Efectivo) + parseFloat(datos[0].Total_Devoluciones);
-                        var total = ingresosefectivo - egresosefectivo;
-                        $("#spanTotalEfectivo").text(total.toFixed(2));
-                        if (total < 0) {
-                            $("#spanTotalEfectivo").css("color", "red");
-                        }else{
-                            $("#spanTotalEfectivo").css("color", "green");
-                        }
-                        $("#spanVentasEnEfectivo").text(datos[0].Total_Ventas_Efectivo);
-                        $("#spanVentasDeposito").text(datos[0].Total_Ventas_Deposito);
-                        $("#spanVentasCheque").text(datos[0].Total_Ventas_Cheque);
-                        $("#spanVentasTransferencia").text(datos[0].Total_Ventas_TransferenciaBancaria);
-                        $("#spanVentasTarjeta").text(datos[0].Total_Ventas_TarjetaCreditoDebito);
-                        $("#spanVentasPagoOnline").text(datos[0].Total_Ventas_PagoOnline);
-                        $("#spanTotalDevolucionesVenta").text(datos[0].Total_Devoluciones);
-
-                        var ventas = parseFloat(datos[0].Total_Ventas_Efectivo) + parseFloat(datos[0].Total_Ventas_Deposito) + parseFloat(datos[0].Total_Ventas_Cheque) + parseFloat(datos[0].Total_Ventas_TransferenciaBancaria) + parseFloat(datos[0].Total_Ventas_TarjetaCreditoDebito) + parseFloat(datos[0].Total_Ventas_PagoOnline); 
-                        var totalventas= ventas - parseFloat(datos[0].Total_Devoluciones);
-                        $("#spanTotalVentas").text(totalventas.toFixed(2));
-                        if (totalventas < 0) {
-                            $("#spanTotalVentas").css("color", "red");
-                        }else{
-                            $("#spanTotalVentas").css("color", "green");
-                        }
-
-                        $("#spanComprasEnEfectivo").text(datos[0].Total_Compras_Efectivo);
-                        $("#spanComprasDeposito").text(datos[0].Total_Compras_Cheque);
-                        $("#spanComprasCheque").text(datos[0].Total_Compras_Deposito);
-                        $("#spanComprasTransferencia").text(datos[0].Total_Compras_Tarjeta);
-                        $("#spanComprasTarjeta").text(datos[0].Total_Compras_Transferencia);
-                        $("#spanComprasTotal").text(datos[0].Total_Compras);
-
-                        $("#spanPagosEnEfectivo").text(datos[0].Total_Pagos_Efectivo);
-                        $("#spanPagosDeposito").text(datos[0].Total_Pagos_Deposito);
-                        $("#spanPagosCheque").text(datos[0].Total_Pagos_Cheque);
-                        $("#spanPagosTransferencia").text(datos[0].Total_Pagos_TransferenciaBancaria);
-                        $("#spanPagosTarjeta").text(datos[0].Total_Pagos_TarjetaCreditoDebito);
-                        $("#spanPagosTotal").text(datos[0].Total_Pagos);
-                        $("#spanMontoCierre").text(datos[0].Monto_Cierre); 
-
-                        var diferencia = parseFloat(datos[0].Monto_Cierre) - total;
-                        $("#spanTotalDiferencia").text(diferencia.toFixed(2));
-                        if (diferencia < 0) {
-                            $("#spanTotalDiferencia").css("color", "red");
-                        }else{
-                            $("#spanTotalDiferencia").css("color", "green");
-                        }
-
-                        /*
-                        
-                        $("#spanUsuarioAbrir").text(datos[0].Usuario_Abrir);
-                        $("#spanUsuarioCerrar").text(datos[0].Usuario_Cerrar);
-                        $("#spanFechaAbrir").text(datos[0].Fecha_Abrir);
-                        $("#spanFechaCerrar").text(datos[0].Fecha_Cerrar);
-                        var totalIngresos = parseFloat(datos[0].Monto_Abrir) + parseFloat(datos[0].Total_Ingresos);
-                        $("#totalIngresosSpan").text(totalIngresos);
-                        $("#totalEgresosSpan").text(datos[0].Total_Egresos);
-                        var utilidad = parseFloat(datos[0].Total_Ingresos) - parseFloat(datos[0].Total_Egresos);
-                        $("#totalUtilidadSpan").text(utilidad);
-                        //INGRESOS
-                        $("#spanTotalVentas").text(datos[0].Total_Ventas); **************
-                        $("#spanTotalImportes").text(datos[0].Total_Importes); **************
-                        //EGRESOS
-                        $("#spanTotalCompras").text(datos[0].Total_Compras); 
-                        $("#spanTotalComprasCredito").text(datos[0].Total_Pagos);
-                        $("#spanTotalPagos").text(datos[0].Total_Pagos);
-                        $("#spanTotalDevoluciones").text(datos[0].Total_Devoluciones);
-                        var totalIngresosEfectivo = parseFloat(datos[0].Monto_Abrir) + parseFloat(datos[0].Total_Ingresos_Efectivo);
-                        var totalEgresosEfectivo = parseFloat(datos[0].Total_Egresos_Efectivo)
-                        var totalActualEfectivo = totalIngresosEfectivo - totalEgresosEfectivo;
-                        $("#totalActualEfectivo").text(totalActualEfectivo);
-                        var diferencia = parseFloat(datos[0].Monto_Cierre) - totalActualEfectivo;
-                        $("#totalDiferenciaSpan").text(diferencia);
-                        $("#totalIngresosEfectivo").text(totalIngresosEfectivo);
-                        $("#totalEgresosEfectivo").text(totalEgresosEfectivo);
-
-                        if (datos[0].Total_Ventas_Efectivo > 0) { **************
-                            $("#DivMostrarVentasDesplegada").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Ventas en efectivo <span class="dinero">`+datos[0].Total_Ventas_Efectivo+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        if (datos[0].Total_Ventas_Deposito > 0) {
-                            $("#DivMostrarVentasDesplegada").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Ventas en depósito <span class="dinero">`+datos[0].Total_Ventas_Deposito+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        if (datos[0].Total_Ventas_Cheque > 0) {
-                            $("#DivMostrarVentasDesplegada").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Ventas en cheque <span class="dinero">`+datos[0].Total_Ventas_Cheque+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        if (datos[0].Total_Ventas_TransferenciaBancaria > 0) {
-                            $("#DivMostrarVentasDesplegada").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Ventas en transferencia bancaria <span class="dinero">`+datos[0].Total_Ventas_TransferenciaBancaria+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        if (datos[0].Total_Ventas_TarjetaCreditoDebito > 0) {
-                            $("#DivMostrarVentasDesplegada").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Ventas en tarjeta de crédito / debito <span class="dinero">`+datos[0].Total_Ventas_TarjetaCreditoDebito+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        if (datos[0].Total_Ventas_PagoOnline > 0) {
-                            $("#DivMostrarVentasDesplegada").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Ventas en pago online <span class="dinero">`+datos[0].Total_Ventas_PagoOnline+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        //COMPRAS DESGLOZADAS
-                        if (datos[0].Total_Compras_Efectivo > 0) {**************
-                            $("#DivMostrarComprasDesplegado").append(` 
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Compras en efectivo <span class="dinero">`+datos[0].Total_Compras_Efectivo+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        if (datos[0].Total_Compras_Cheque > 0) {
-                            $("#DivMostrarComprasDesplegado").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Compras en cheque <span class="dinero">`+datos[0].Total_Compras_Cheque+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        if (datos[0].Total_Compras_Deposito > 0) {
-                            $("#DivMostrarComprasDesplegado").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Compras en deposito <span class="dinero">`+datos[0].Total_Compras_Deposito+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        if (datos[0].Total_Compras_Tarjeta > 0) {
-                            $("#DivMostrarComprasDesplegado").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Compras en transferencia bancaria <span class="dinero">`+datos[0].Total_Compras_Tarjeta+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        if (datos[0].Total_Compras_Transferencia > 0) {
-                            $("#DivMostrarComprasDesplegado").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Compras en tarjeta de crédito / debito <span class="dinero">`+datos[0].Total_Compras_Transferencia+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        ///PAGOS
-                        if (datos[0].Total_Pagos_Efectivo > 0) {
-                            $("#DivMostrarPagosDesplegado").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Pagos en efectivo <span class="dinero">`+datos[0].Total_Pagos_Efectivo+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        if (datos[0].Total_Pagos_Deposito > 0) {
-                            $("#DivMostrarPagosDesplegado").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Pagos en deposito <span class="dinero">`+datos[0].Total_Pagos_Deposito+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        if (datos[0].Total_Pagos_Cheque > 0) {
-                            $("#DivMostrarPagosDesplegado").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Pagos en cheques <span class="dinero">`+datos[0].Total_Pagos_Cheque+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        if (datos[0].Total_Pagos_TransferenciaBancaria > 0) {
-                            $("#DivMostrarPagosDesplegado").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Pagos en transferencia bancaria <span class="dinero">`+datos[0].Total_Pagos_TransferenciaBancaria+`</span>
-                                    </div>
-                                </div>`);
-                        }
-
-                        if (datos[0].Total_Pagos_TarjetaCreditoDebito > 0) {
-                            $("#DivMostrarPagosDesplegado").append(`
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 mb-3">
-                                        Pagos en tarjeta de crédito / debito <span class="dinero">`+datos[0].Total_Pagos_TarjetaCreditoDebito+`</span>
-                                    </div>
-                                </div>`);
-                        }*/
-
-                        $("#ImprimirBalance").attr("attrid", datos[0].ID_Detalle_Caja);
-                        moneda();
-                    })
-                    .fail(function() {
-                        console.log("Error ajax");
-                    })
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Corte de caja realizado correctamente'
+                    });
+                    var iddetalle = $("#CerrarCajaVentas").attr("iddetallecaja");
+			        var idsucursal = $("#SucursalVenta").attr("attrid");
+			        if (idsucursal == undefined) {
+			            idsucursal = "";
+			        }
+			        var altura=50;
+			        var anchura=310;
+			        var y= parseInt((window.screen.height/2)-(altura/2));
+			        var x= parseInt((window.screen.width/2)-(anchura/2));
+			        window.open("controladores/ticketCaja.php?id="+iddetalle+"&idsucursal="+idsucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
+                   
+                  	$("#cargarVentas").trigger("click");
                 }else{
                     Swal.fire({
                         icon: 'error',
@@ -372,7 +227,7 @@ function v_hacerventa() {
 
 jQuery(document).ready(function($) {
 
-	$(document).on('hidden.bs.modal', '#ModalBalanceCaja',function(){
+	/*$(document).on('hidden.bs.modal', '#ModalBalanceCaja',function(){
         $("#cargarVentas").trigger("click");
     });
 
@@ -389,7 +244,7 @@ jQuery(document).ready(function($) {
         var x= parseInt((window.screen.width/2)-(anchura/2));
         window.open("controladores/ticketCaja.php?id="+iddetalle+"&idsucursal="+idsucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
         $("#ModalBalanceCaja").modal("hide");
-    });
+    });*/
 
 	$(document).on('click', '#CargarClientesModalVentas', function() {
 		TablaClienteVenta();
