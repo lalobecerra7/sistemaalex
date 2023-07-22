@@ -440,7 +440,7 @@ jQuery(document).ready(function($) {
 			data.append('TipoCompra', tipoCompra);
 			data.append('Descuento', descuento);
 			data.append('TipoPago', tipoPago);
-			data.append('Sucursal', $('#Sucursales').val());
+			data.append('Sucursal', $('#Sucursales').attr("value"));
 			data.append('idOrden', $.trim($("#bGuardarOrden").attr('attrID')));
 
 			$.ajax({

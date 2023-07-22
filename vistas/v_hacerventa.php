@@ -33,7 +33,7 @@
         </div>
         <br>
         <form id="FormAgregarProductoVenta" class="row">
-            <div class="col-md-6 col-sm-12 mb-3">
+            <div class="col-md-4 col-sm-12 mb-3">
                 <div class="input-group">
                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-barcode"></i></span>
                     <input type="text" class="form-control" id="CodigoProductoVenta" name="CodigoProductoVenta" placeholder="Código del producto" required>
@@ -46,6 +46,9 @@
                 <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ModalVerProductosVenta" id="CargarProductosModalVentas">
                     <i class="fas fa-search"></i> Buscar
                 </button>
+            </div>
+            <div class="col-md-2 d-grid mb-2">
+                #BotonCorteCaja#
             </div>
         </form>
         <div class="row mt-3">

@@ -370,16 +370,6 @@ class controller {
               </a>';
     }
     $pagina = str_replace('#menuReportes#', $botonReportes, $pagina);
-
-    $botonCorteCaja = '';
-		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][8] == '1') {
-    		$botonCorteCaja = '<button type="button" class="btn btn-outline-danger oculto" data-bs-toggle="modal" data-bs-target="#ModalCerrarCaja" id="BotonCerrarCaja" attrid="">
-                  <i class="fas fa-times"></i> Hacer corte de caja
-                </button>';
-    }
-
-    $pagina = str_replace('#BotonCorteCaja#', $botonCorteCaja, $pagina);
-
     
 
 
@@ -835,7 +825,18 @@ class controller {
             </div>';
 			}
 
-			$pagina = str_replace('#BotonAfectarBalance#', $botonAfectarBalance, $pagina);    
+			$pagina = str_replace('#BotonAfectarBalance#', $botonAfectarBalance, $pagina); 
+
+
+		  $botonCorteCaja = '';
+			if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][8] == '1') {
+		 		$botonCorteCaja = '<button type="button" class="btn btn-outline-danger oculto" data-bs-toggle="modal" data-bs-target="#ModalCerrarCaja" id="BotonCerrarCaja" attrid="">
+		                  <i class="fas fa-times"></i> Hacer corte de caja
+		                </button>';
+	    }
+
+	    $pagina = str_replace('#BotonCorteCaja#', $botonCorteCaja, $pagina);
+   
 
 
 		}else if($nombre == "v_facturacion"){

@@ -613,7 +613,7 @@
                               <div class="col-md-12 col-sm-12 table-responsive">
                                 <table class="table table-hover">
                                   <tr>
-                                    <td class="text-start">Fondo de caja</td>
+                                    <td class="text-start">Monto de apertura</td>
                                     <td class="text-end" style="color: green;"><span class="dinero" id="spanMontoApertura"></span></td>
                                   </tr>
                                   <tr>
@@ -636,16 +636,16 @@
                                     <td class="text-start">Devoluciones</td>
                                     <td class="text-end" style="color: red;">-<span class="dinero" id="spanTotalDevoluciones"></span></td>
                                   </tr>
-                                  <tr>
+                                  <!-- <tr>
                                     <td class="text-start"><b>Total de efectivo en caja</b></td>
                                     <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanTotalEfectivo"></span></td>
-                                  </tr>
+                                  </tr> -->
                                   <tr>
                                     <td class="text-start" style="font-weight: bold;">Monto de cierre</td>
                                     <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanMontoCierre"></span></td>
                                   </tr>
                                   <tr>
-                                    <td class="text-start"><b>Diferencia de efectivo</b></td>
+                                    <td class="text-start"><b>Balance de efectivo</b></td>
                                     <td class="text-end" style="font-weight: bold;"><span class="dinero" id="spanTotalDiferencia"></span></td>
                                   </tr>
                                 </table>
@@ -970,9 +970,6 @@
               </a>
             </div>
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-              <div class="">
-                #BotonCorteCaja#
-              </div>
               <div class="" style="margin-left: 15px">
                 Usuario actual: <b>#NombreUsuarioNavBar#</b>
               </div>

@@ -9,7 +9,6 @@ $con = mysqli_connect('localhost','root','','wits_sistemaalex');
 $arreglo = '';
 $arreglo2 = '';
 $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $totalcompras = 0; $totaldevoluciones = 0; $totalpagos = 0; $totalIngresosEfectivo = 0; $totalEgresosEfectivo = 0;
-echo $_GET["idsucursal"];
 ?>
 
 <!DOCTYPE html>
@@ -139,6 +138,8 @@ echo $_GET["idsucursal"];
       $totalvtarjeta = 0;
       $totalvtransferencia = 0;
       $totalvonline = 0;
+      
+      $totalIngresosEfectivo +=  $row["Monto_Abrir"];
 
       $queryv = "SELECT Total, Tipo_Pago FROM ventas WHERE (Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row["Fecha_Cierre"]."') AND Estatus = 'Completada' AND Contar_Venta = 0";
       if($resv=$con->query($queryv)){
