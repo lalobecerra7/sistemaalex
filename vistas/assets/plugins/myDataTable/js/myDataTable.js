@@ -230,7 +230,7 @@ function crearDataTable() {
 				<div class='col'>
 					<div class="input-group mb-3">
 					  	<span class="input-group-text" style="color: #909090;"><i class="fas fa-search"></i></span>
-					  	<input type="text" class="form-control form-control-sm buscadorMyDataTable" tabla="`+id+`" placeholder="Buscar...">
+					  	<input type="text" class="form-control form-control-sm buscadorMyDataTable BuscadorTabla`+id+`" tabla="`+id+`" placeholder="Buscar..." autofocus>
 					</div>
 				</div>
 			</div>

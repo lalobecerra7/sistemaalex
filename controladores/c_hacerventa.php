@@ -121,6 +121,17 @@ class hacerventa {
 					if ($error == "si") {
 						echo "Error 1: ".mysqli_error($omodelo->link);
 					}else{
+
+						/*if ($contarVenta == 0) {
+							$query2 = "UPDATE inventario SET Cantidad = (Cantidad - $fila[2]) WHERE FK_Producto = '$fila[0]' AND FK_Presentacion = '$fila[1]' AND FK_Sucursal = '$idsucursal'";
+							echo $query2;
+							$error2 = $omodelo->_insertar($query2);
+
+							if ($error2 == "si") {
+								echo "Error 2: ".mysqli_error($omodelo->link);
+							}
+						}*/
+
 						$idDetalleVenta = mysqli_insert_id($omodelo->link);
 					}
 
@@ -627,7 +638,7 @@ class hacerventa {
 				$separa = explode(' ', trim($buscar));
 				$busqueda = 'AND ';
 				for ($i=0; $i < count($separa); $i++) { 
-					$busqueda .= "CONCAT(ID_Producto, productos.Codigo, productos.Descripcion, presentaciones.Nombre, areas.Nombre, inventario.Cantidad, productos.Precio, productos.Precio_Mayoreo) REGEXP '".$separa[$i]."'";
+					$busqueda .= "CONCAT(ID_Producto, productos.Codigo, productos.Descripcion, inventario.Cantidad, productos.Precio, productos.Precio_Mayoreo) REGEXP '".$separa[$i]."'";
 					if($i < (count($separa)-1)){
 						$busqueda .= ' AND ';
 					}

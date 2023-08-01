@@ -5,8 +5,8 @@
   }
 
 date_default_timezone_set('America/Mexico_City');
-//$con = mysqli_connect('localhost','wits_userBD','ZfX7y99GSs','wits_sistemaalex');
-$con = mysqli_connect('localhost','root','','wits_sistemaalex');
+$con = mysqli_connect('localhost','wits_userBD','ZfX7y99GSs','wits_sistemaalex');
+//$con = mysqli_connect('localhost','root','','wits_sistemaalex');
 $arreglo = '';
 $arregloVenta = '';
 
@@ -453,7 +453,7 @@ $arregloVenta = '';
         ?>
       </div>
       <?php  
-        echo '<p class="centrado">FOLIO: '.$arreglo['Folio'].'</p>
+        echo '<p class="centrado">FOLIO: <b>'.$arreglo['Folio'].'</b></p>
           <p class="centrado">ESTATUS: '.$arregloVenta['Estatus'].'</p>';
         if ($arregloVenta['Estatus'] == "Cancelada") {
           echo '<p class="centrado">MOTIVO: '.$arregloVenta['Notas'].'</p>';
@@ -551,7 +551,7 @@ $arregloVenta = '';
                             </tr>
                             <tr>
                                 <td class='codigo'>".$codigoactual."</td>
-                                <td class='cantidad'>".(round($row['Cantidad']*100)/100)." ".$devuelto."</td> 
+                                <td class='cantidad'><b style='font-size: 17px;'>".(round($row['Cantidad']*100)/100)." ".$devuelto."</b></td> 
                                 <td class='precio'>$".(round($row['Precio']*100)/100)."</td>
                                 <td class='impuestos'>".$mostrarImpuestos."</td>
                                 <td class=''>$".$subtotalProducto."<br>Desc: ".(round($row['Descuento']*100)/100)."% <br>$".(round($row['Total']*100)/100)."</td>

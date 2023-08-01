@@ -105,6 +105,11 @@ class productos {
 					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_productos'][5] == '1') {
 						$botonAumentarExistencias = '<button class="btn btn-warning btn-sm mb-1 AumentarExistencias" title="Aumentar existencias" attrid="'.$row[$i]['ID_Producto'].'"><i class="fas fa-plus"></i></button>';
 					}
+
+					$botonModificarExistencia = '';
+					if ($omodelo->permisos() == 'Administrador') {
+						$botonModificarExistencia = '<button class="btn btn-success btn-sm mb-1 ModificarExistencia" title="Modificar existencias" attrid="'.$row[$i]['ID_Producto'].'"><i class="fas fa-cog"></i></button>';
+					}
 					
 					
 					$arreglo['data'][$i] = array(
@@ -114,7 +119,7 @@ class productos {
 						'Costo' => '<b class="dinero">$'.number_format($row[$i]['Costo'], 2).'</b>',
 						'Precio' => 'General: <b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b><br>'.$precios,
 						'Detalles' => $area."Detalles: ".$row[$i]['Detalles']."<br>".$presentacion,
-						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar.' '.$botonAumentarExistencias,
+						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar.' '.$botonAumentarExistencias.' '.$botonModificarExistencia,
 					);
 					
 				}
@@ -855,6 +860,88 @@ class productos {
 							echo "Valido";
 						}
 					}
+				}
+			}
+		}else if($tipo == "ConsultarContraAdmin"){
+			$contrasena = $omodelo->link->real_escape_string($contrasena);
+			if ($omodelo->permisos() == 'Administrador'){
+				if ($contrasena == "458") {
+					echo "Correcto";
+				}else{
+					echo "Error";
+				}
+			}else{
+				echo "Error";
+			}
+		}else if($tipo == 'ModificarExistenciaProducto'){
+			/*$IDProducto = $omodelo->link->real_escape_string($IDProducto);
+			$PresentacionesProductoMod = $omodelo->link->real_escape_string($PresentacionesProductoMod);
+			$SucursalExistenciaMod = $omodelo->link->real_escape_string($SucursalExistenciaMod);
+			$ExistenciaProductoMod = $omodelo->link->real_escape_string($ExistenciaProductoMod);
+
+			$query1 = "UPDATE inventario SET Cantidad = $ExistenciaProductoMod WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalExistenciaMod' AND FK_Presentacion = '$PresentacionesProductoMod'";
+			$error = $omodelo->_insertar($query1);
+					
+			if ($error == "si") {
+				echo "Error 2: ".mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+				$omodelo->movimiento($query1, $_SESSION['user_admin']["ID_Usuario"]);
+			}*/
+
+
+			$IDProducto = $omodelo->link->real_escape_string($IDProducto);
+			$PresentacionesProductoMod = $omodelo->link->real_escape_string($PresentacionesProductoMod);
+			$SucursalExistenciaMod = $omodelo->link->real_escape_string($SucursalExistenciaMod);
+			$ExistenciaProductoMod = $omodelo->link->real_escape_string($ExistenciaProductoMod);
+
+			$query = "SELECT ID_Inventario FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalExistenciaMod' AND FK_Presentacion = '$PresentacionesProductoMod'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if ($row == "si") {
+				echo "Error 1: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					$query1 = "UPDATE inventario SET Cantidad = $ExistenciaProductoMod WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$SucursalExistenciaMod' AND FK_Presentacion = '$PresentacionesProductoMod'";
+					$error = $omodelo->_insertar($query1);
+					
+					if ($error == "si") {
+						echo "Error 2: ".mysqli_error($omodelo->link);
+					}else{
+						echo "Correcto";
+
+						$omodelo->movimiento($query1, $_SESSION['user_admin']["ID_Usuario"]);
+					}
+				}else{
+					$query1 = "INSERT INTO inventario SET Cantidad = $ExistenciaProductoMod, FK_Producto = '$IDProducto', FK_Sucursal = '$SucursalExistenciaMod', FK_Presentacion = '$PresentacionesProductoMod'";
+					$error = $omodelo->_insertar($query1);
+					
+					if ($error == "si") {
+						echo "Error 3: ".mysqli_error($omodelo->link);
+					}else{
+						echo "Correcto";
+
+						$omodelo->movimiento($query1, $_SESSION['user_admin']["ID_Usuario"]);
+					}
+				}
+			}
+
+		}else if($tipo == "ConsultarExistenciaActual"){
+			$IDProducto = $omodelo->link->real_escape_string($IDProducto);
+			$Presentacion = $omodelo->link->real_escape_string($presentacion);
+			$Sucursal = $omodelo->link->real_escape_string($sucursal);
+
+			$query = "SELECT Cantidad FROM inventario WHERE FK_Producto = '$IDProducto' AND FK_Sucursal = '$Sucursal' AND FK_Presentacion = '$Presentacion'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					echo $row[0]["Cantidad"];
+				}else{
+					echo 0;
 				}
 			}
 		}

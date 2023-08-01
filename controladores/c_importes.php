@@ -209,18 +209,37 @@ class importes {
 			$orden =  $omodelo->link->real_escape_string($orden);
 			$arreglo = array();
 
-			$busqueda = '';
-			if(trim($buscar) != ''){
-				$separa = explode(' ', trim($buscar));
-				$busqueda = 'AND ';
-				for ($i=0; $i < count($separa); $i++) { 
-					$busqueda .= "CONCAT(Cantidad, importes.Total, importes.Estatus, productos.Descripcion) REGEXP '".$separa[$i]."'";
-					if($i < (count($separa)-1)){
-						$busqueda .= ' AND ';
+			$sucursal = $_SESSION['user_admin']['FK_Sucursal'];
+
+			if ($omodelo->permisos() == 'Administrador'){
+				$busqueda = '';
+				if(trim($buscar) != ''){
+					$separa = explode(' ', trim($buscar));
+					$busqueda = 'AND ';
+					for ($i=0; $i < count($separa); $i++) { 
+						$busqueda .= "CONCAT(Cantidad, importes.Total, importes.Estatus, productos.Descripcion) REGEXP '".$separa[$i]."'";
+						if($i < (count($separa)-1)){
+							$busqueda .= ' AND ';
+						}
 					}
 				}
+				$query = "SELECT ID_Importe, importes.Pagados AS ImportesPagados, FK_Venta AS Venta, FK_Cliente, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, importes.Total, importes.Estatus, productos.Descripcion AS Producto FROM importes INNER JOIN productos ON importes.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			}else{
+				$busqueda = '';
+				if(trim($buscar) != ''){
+					$separa = explode(' ', trim($buscar));
+					$busqueda = 'AND ';
+					for ($i=0; $i < count($separa); $i++) { 
+						$busqueda .= "CONCAT(Cantidad, importes.Total, importes.Estatus, productos.Descripcion) REGEXP '".$separa[$i]."'";
+						if($i < (count($separa)-1)){
+							$busqueda .= ' AND ';
+						}
+					}
+				}
+				$query = "SELECT ID_Importe, importes.Pagados AS ImportesPagados, FK_Venta AS Venta, FK_Cliente, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, importes.Total, importes.Estatus, productos.Descripcion AS Producto FROM importes INNER JOIN productos ON importes.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente' AND FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			}
-			$query = "SELECT ID_Importe, importes.Pagados AS ImportesPagados, FK_Venta AS Venta, FK_Cliente, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, importes.Total, importes.Estatus, productos.Descripcion AS Producto FROM importes INNER JOIN productos ON importes.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+
+			
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 

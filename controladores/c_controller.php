@@ -485,6 +485,7 @@ class controller {
 			}
 
 			$pagina = str_replace('#sucursales#', $opciones, $pagina);
+			$pagina = str_replace('#sucursalesModificar#', $opciones, $pagina);
 
 			$query = "SELECT ID_Zona, Nombre FROM zonas";
 			$row = $omodelo->_consultar($query);
@@ -834,8 +835,8 @@ class controller {
 
 		  $botonCorteCaja = '';
 			if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][8] == '1') {
-		 		$botonCorteCaja = '<button type="button" class="btn btn-outline-danger oculto" data-bs-toggle="modal" data-bs-target="#ModalCerrarCaja" id="BotonCerrarCaja" attrid="">
-		                  <i class="fas fa-times"></i> Hacer corte de caja
+		 		$botonCorteCaja = '<button type="button" style="height: 40px;" class="btn btn-outline-danger oculto" id="BotonCerrarCaja" attrid="">
+		                  <i class="fas fa-times"></i> Hacer corte
 		                </button>';
 	    }
 
