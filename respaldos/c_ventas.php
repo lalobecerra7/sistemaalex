@@ -19,28 +19,28 @@ class ventas {
 				$separa = explode(' ', trim($buscar));
 				$busqueda = 'WHERE ';
 				for ($i=0; $i < count($separa); $i++) { 
-					$busqueda .= "CONCAT(DATE_FORMAT(ventas.Fecha_Registro, '%d-%m-%Y %r'), LPAD(ID_Venta, 8, '0'), (SELECT Nombre FROM sucursales WHERE ID_Sucursal = ventas.FK_Sucursal), clientes.Nombre, ventas.Descuento, Total, Tipo_Pago, Notas, clientes.Correo, Total_Importes) REGEXP '".$separa[$i]."'";
+					$busqueda .= "CONCAT(DATE_FORMAT(ventas.Fecha_Registro, '%d-%m-%Y %r'), LPAD(ID_Venta, 8, '0'), clientes.Nombre, ventas.Descuento, Total, Tipo_Pago, Notas, clientes.Correo, Total_Importes) REGEXP '".$separa[$i]."'";
 					if($i < (count($separa)-1)){
 						$busqueda .= ' AND ';
 					}
 				}
 			}
 			
-			$query = "SELECT ID_Venta, Mensaje_Cancelada, Facturada, Contar_Venta, ventas.FK_Usuario, ventas.FK_Direccion, ventas.FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = ventas.FK_Sucursal) AS NombreSucursal, FK_Caja, FK_Cliente, ventas.Descuento, Total, Total_Importes, Tipo_Pago, Pago_Efectivo, Pago_Transferencia, Pago_Cheque, Pago_Tarjeta_Credito, Pago_Tarjeta_Debito, Estatus, Pago, Cambio, Notas, ventas.Fecha_Registro AS Datos, DATE_FORMAT(ventas.Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS NombreCliente, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda) AS Num FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Venta, Mensaje_Cancelada, Facturada, Contar_Venta, ventas.FK_Usuario, ventas.FK_Direccion, ventas.FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = ventas.FK_Sucursal) AS NombreSucursal, FK_Caja, FK_Cliente, ventas.Descuento, Total, Total_Importes, Tipo_Pago, Estatus, Pago, Cambio, Notas, ventas.Fecha_Registro AS Datos, DATE_FORMAT(ventas.Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS NombreCliente, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda) AS Num FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		}else{
 			$busqueda = '';
 			if(trim($buscar) != ''){
 				$separa = explode(' ', trim($buscar));
 				$busqueda = 'AND ';
 				for ($i=0; $i < count($separa); $i++) { 
-					$busqueda .= "CONCAT(DATE_FORMAT(ventas.Fecha_Registro, '%d-%m-%Y %r'), LPAD(ID_Venta, 8, '0'), (SELECT Nombre FROM sucursales WHERE ID_Sucursal = ventas.FK_Sucursal), clientes.Nombre, ventas.Descuento, Total, Tipo_Pago, Notas, clientes.Correo, Total_Importes) REGEXP '".$separa[$i]."'";
+					$busqueda .= "CONCAT(DATE_FORMAT(ventas.Fecha_Registro, '%d-%m-%Y %r'), LPAD(ID_Venta, 8, '0'), clientes.Nombre, ventas.Descuento, Total, Tipo_Pago, Notas, clientes.Correo, Total_Importes) REGEXP '".$separa[$i]."'";
 					if($i < (count($separa)-1)){
 						$busqueda .= ' AND ';
 					}
 				}
 			}
 			
-			$query = "SELECT ID_Venta, Mensaje_Cancelada, Facturada, Contar_Venta, ventas.FK_Usuario, ventas.FK_Direccion, ventas.FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = ventas.FK_Sucursal) AS NombreSucursal, FK_Caja, FK_Cliente, ventas.Descuento, Total, Total_Importes, Tipo_Pago, Pago_Efectivo, Pago_Transferencia, Pago_Cheque, Pago_Tarjeta_Credito, Pago_Tarjeta_Debito, Estatus, Pago, Cambio, Notas, ventas.Fecha_Registro AS Datos, DATE_FORMAT(ventas.Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS NombreCliente, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ventas.FK_Sucursal = '".$sucursal."' $busqueda) AS Num FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ventas.FK_Sucursal = '".$sucursal."' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Venta, Mensaje_Cancelada, Facturada, Contar_Venta, ventas.FK_Usuario, ventas.FK_Direccion, ventas.FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = ventas.FK_Sucursal) AS NombreSucursal, FK_Caja, FK_Cliente, ventas.Descuento, Total, Total_Importes, Tipo_Pago, Estatus, Pago, Cambio, Notas, ventas.Fecha_Registro AS Datos, DATE_FORMAT(ventas.Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS NombreCliente, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ventas.FK_Sucursal = '".$sucursal."' $busqueda) AS Num FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ventas.FK_Sucursal = '".$sucursal."' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		}
 		
 		$row = $omodelo->_consultar($query);
@@ -209,28 +209,7 @@ class ventas {
 						$contarVenta = '<br><b>Esta venta no afectó al balance de caja ni al inventario.</b>';
 					}
 
-					$TipoDePago = '';
 
-					if ($row[$i]["Pago_Efectivo"] > 0) {
-						$TipoDePago .= 'Efectivo: <b>$'.number_format($row[$i]["Pago_Efectivo"], 2).'</b><br>';
-					}
-
-					if ($row[$i]["Pago_Transferencia"] > 0) {
-						$TipoDePago .= 'Transferencia: <b>$'.number_format($row[$i]["Pago_Transferencia"], 2).'</b><br>';
-					}
-					if ($row[$i]["Pago_Cheque"] > 0) {
-						$TipoDePago .= 'Cheque: <b>$'.number_format($row[$i]["Pago_Cheque"], 2).'</b><br>';
-					}
-					if ($row[$i]["Pago_Tarjeta_Credito"] > 0) {
-						$TipoDePago .= 'Tarjeta de crédito: <b>$'.number_format($row[$i]["Pago_Tarjeta_Credito"], 2).'</b><br>';
-					}
-					if ($row[$i]["Pago_Tarjeta_Debito"] > 0) {
-						$TipoDePago .= 'Tarjeta de debito: <b>$'.number_format($row[$i]["Pago_Tarjeta_Debito"], 2).'</b><br>';
-					}
-
-					if ($TipoDePago == "") {
-						$TipoDePago = $row[$i]["Tipo_Pago"];
-					}
 
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Venta'],
@@ -245,7 +224,7 @@ class ventas {
 						<hr>
 						Total de importes: <b>$".number_format($row[$i]['Total_Importes'], 2)."</b>",
 						'Facturada' => $facturada.'<br>'.$row[$i]['Mensaje_Cancelada'],
-						'Detalles' => $estatus."<br>".$motivocancelada.$fechacancelada.'<button class="btn btn-link btn-sm" id="VerProductosVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'">Ver productos</button><br>Tipo de pago: <b>'.$TipoDePago."</b>".$contarVenta,
+						'Detalles' => $estatus."<br>".$motivocancelada.$fechacancelada.'<button class="btn btn-link btn-sm" id="VerProductosVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'">Ver productos</button><br>Tipo de pago: <b>'.$row[$i]['Tipo_Pago']."</b>".$contarVenta,
 						'Acciones' => $botonPermisosEliminar.' '.$botonPermisosCancelar .' '.$botonPermisosTicket.' '.$botonPermisosFacturar.' '.$botonPermisosDevoluciones,
 					);
 				}

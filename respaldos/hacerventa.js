@@ -1,7 +1,6 @@
 function v_hacerventa() {
 	//TablaReporteCompras();
 	EstatusCaja();
-    $("#CodigoProductoVenta").focus();
 
 	$('#FormAdmin').validate({
         rules: {
@@ -76,7 +75,6 @@ function v_hacerventa() {
     });
 
     $(document).on('click', '#BotonCerrarCaja', function() {
-        $("#ModalCerrarCaja").modal("show");
     	$("#MontoCierreCaja").focus();
    		var data = "metodo=detalles&accion=hacerventa&tipo=ConsultarDetalleCaja&sucursal="+$("#SucursalVenta").attr("attrid");
         $.ajax({
@@ -102,13 +100,12 @@ function v_hacerventa() {
                 $("#spanVentasTotales").text(datos[0].Total_Ventas);
                 $("#spanMontoApertura").text(datos[0].Monto_Abrir);
                 $("#spanVentasEfectivo").text(datos[0].Total_Ventas_Efectivo);
-                //$("#spanTotalImportes").text(datos[0].Total_Importes);
-                $("#spanTotalPagoImportes").text(datos[0].Total_Importes_Egresos);
+                $("#spanTotalImportes").text(datos[0].Total_Importes);
                 $("#spanTotalCompras").text(datos[0].Total_Compras_Efectivo);
                 $("#spanPagosEfectivo").text(datos[0].Total_Pagos_Efectivo);
                 $("#spanTotalDevoluciones").text(datos[0].Total_Devoluciones);
-                var ingresosefectivo = parseFloat(datos[0].Monto_Abrir) + parseFloat(datos[0].Total_Ventas_Efectivo);
-                var egresosefectivo = parseFloat(datos[0].Total_Compras_Efectivo) + parseFloat(datos[0].Total_Pagos_Efectivo) + parseFloat(datos[0].Total_Devoluciones) + parseFloat(datos[0].Total_Importes_Egresos);
+                var ingresosefectivo = parseFloat(datos[0].Monto_Abrir) + parseFloat(datos[0].Total_Ventas_Efectivo) + parseFloat(datos[0].Total_Importes);
+                var egresosefectivo = parseFloat(datos[0].Total_Compras_Efectivo) + parseFloat(datos[0].Total_Pagos_Efectivo) + parseFloat(datos[0].Total_Devoluciones);
                 var total = ingresosefectivo - egresosefectivo;
                 $("#spanTotalEfectivo").text(total.toFixed(2));
                 if (total < 0) {
@@ -121,13 +118,11 @@ function v_hacerventa() {
                 $("#spanVentasDeposito").text(datos[0].Total_Ventas_Deposito);
                 $("#spanVentasCheque").text(datos[0].Total_Ventas_Cheque);
                 $("#spanVentasTransferencia").text(datos[0].Total_Ventas_TransferenciaBancaria);
-                $("#spanVentasTarjeta").text(datos[0].Total_Ventas_TarjetaCredito);
-                $("#spanVentasTarjetaDebito").text(datos[0].Total_Ventas_TarjetaDebito);
+                $("#spanVentasTarjeta").text(datos[0].Total_Ventas_TarjetaCreditoDebito);
                 $("#spanVentasPagoOnline").text(datos[0].Total_Ventas_PagoOnline);
                 $("#spanTotalDevolucionesVenta").text(datos[0].Total_Devoluciones);
 
-                //var ventas = parseFloat(datos[0].Total_Ventas_Efectivo) + parseFloat(datos[0].Total_Ventas_Deposito) + parseFloat(datos[0].Total_Ventas_Cheque) + parseFloat(datos[0].Total_Ventas_TransferenciaBancaria) + parseFloat(datos[0].Total_Ventas_TarjetaCreditoDebito) + parseFloat(datos[0].Total_Ventas_PagoOnline); 
-                var ventas = parseFloat(datos[0].Total_Ventas_Efectivo) + parseFloat(datos[0].Total_Ventas_Cheque) + parseFloat(datos[0].Total_Ventas_TransferenciaBancaria) + parseFloat(datos[0].Total_Ventas_TarjetaCredito) + parseFloat(datos[0].Total_Ventas_TarjetaDebito); 
+                var ventas = parseFloat(datos[0].Total_Ventas_Efectivo) + parseFloat(datos[0].Total_Ventas_Deposito) + parseFloat(datos[0].Total_Ventas_Cheque) + parseFloat(datos[0].Total_Ventas_TransferenciaBancaria) + parseFloat(datos[0].Total_Ventas_TarjetaCreditoDebito) + parseFloat(datos[0].Total_Ventas_PagoOnline); 
                 var totalventas= ventas - parseFloat(datos[0].Total_Devoluciones);
                 $("#spanTotalVentas").text(totalventas.toFixed(2));
                 if (totalventas < 0) {
@@ -227,66 +222,10 @@ function v_hacerventa() {
                 $("#carga").hide();
             });         
         }
-    }); 
-
-    
-
-    /*   */
-
-    document.onkeydown = function(evt) {
-        evt = evt || window.event;
-        if(evt.key === "F2"){
-            $("#CargarProductosModalVentas").trigger("click");
-        }else if(evt.key === "F8"){
-            $("#RealizarVenta").trigger("click");
-        }
-
-        //METODO PARA DESPLAZARSE CON LAS FLECHAS EN EL MODAL DE PRODUCTOS
-        /*var fila = $("#VentaTablaProductos").children('tbody').children('tr.activa').index();
-
-        if($("#VentaTablaProductos").children('tbody').children('tr').length > 1){
-            if(evt.key === "ArrowUp"){
-                if((fila - 1) >= 0){
-                    $("#VentaTablaProductos").children('tbody').children('tr').removeClass('activa');
-                    $("#VentaTablaProductos").children('tbody').children('tr:eq('+(fila - 1)+')').addClass('activa');
-                }
-            }else if(evt.key === "ArrowDown"){
-                if($("#VentaTablaProductos").children('tbody').children('tr:eq('+(fila + 1)+')').length > 0){
-                    $("#VentaTablaProductos").children('tbody').children('tr').removeClass('activa');
-                    $("#VentaTablaProductos").children('tbody').children('tr:eq('+(fila + 1)+')').addClass('activa');
-                }
-            }
-        }*/
-    }
+    });    
 }
 
-
 jQuery(document).ready(function($) {
-
-    $(document).on('hidden.bs.modal', '#ModalVerProductosVenta',function(){
-       $("#CodigoProductoVenta").focus();
-       //$("#AgregarProductoVenta").trigger("click");
-    });
-
-    $(document).on('hidden.bs.modal', '#ModalCerrarCaja',function(){
-       $("#CodigoProductoVenta").focus();
-       console.log("entro caja");
-    });
-
-    $(document).on('hidden.bs.modal', '#ModalVerClientesVenta',function(){
-       $("#CodigoProductoVenta").focus();
-       console.log("entro clientes");
-    });
-
-    $(document).on('hidden.bs.modal', '#ModalVerDireccionesCliente',function(){
-       $("#CodigoProductoVenta").focus();
-       console.log("entro direcciones");
-    });
-
-    $(document).on('hidden.bs.modal', '#ModalVerPedidosVenta',function(){
-       $("#CodigoProductoVenta").focus();
-       console.log("entro pedidos");
-    });
 
 	/*$(document).on('hidden.bs.modal', '#ModalBalanceCaja',function(){
         $("#cargarVentas").trigger("click");
@@ -347,11 +286,7 @@ jQuery(document).ready(function($) {
 	});
 
 	$(document).on('click', '#CargarProductosModalVentas', function() {
-        $("#ModalVerProductosVenta").modal("show");
 		VentaTablaProductos();
-        $(".BuscadorTablaVentaTablaProductos").val("");
-        $(".BuscadorTablaVentaTablaProductos").trigger("keyup");
-        $(".BuscadorTablaVentaTablaProductos").focus();
 	});
 
 
@@ -386,7 +321,7 @@ jQuery(document).ready(function($) {
                 }else{
                 	var campoImportes = ""; var precioimporte ="";
                 	if (datos.ImportePresentacion > 0 || datos.ImporteGeneral > 0) {
-                		campoImportes = "<span>Importes</span><input type='number' value='1' min='0' step='any' class='form-control form-control-sm campoCantidadImporte'>";
+                		campoImportes = "<br><span>Importes</span><input type='number' value='1' min='0' step='any' class='form-control form-control-sm campoCantidadImporte'>";
                 		if (datos.ImportePresentacion > 0) {
 	                		precioimporte = "<br>Importe: <br><span class='dinero campoPrecioImporte'>"+datos.ImportePresentacion+"</span>";
 	                	}else{
@@ -408,6 +343,7 @@ jQuery(document).ready(function($) {
 		                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-percentage"></i></span>
 		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProducto">
 		                        </div>
+		                        <br>
 		                        <div class="input-group">
 		                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-dollar-sign"></i></span>
 		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProductoCantidad">
@@ -432,7 +368,6 @@ jQuery(document).ready(function($) {
     	var codigo = $(this).children("td:eq(0)").find("#CodigoProducto").text();
     	var presentacion = $(this).children("td:eq(1)").find("#IdPresentacionProd").text();
     	var data = "metodo=detalles&accion=hacerventa&tipo=AgregarProducto&codigo="+codigo+"&sucursal="+$("#SucursalVenta").attr("attrid")+"&presentacion="+presentacion;
-        console.log(data);
         $.ajax({
             url: 'index.php',
             type: 'POST',
@@ -465,7 +400,7 @@ jQuery(document).ready(function($) {
                 }else{
                 	var campoImportes = ""; var precioimporte = "";
                 	if (datos.ImportePresentacion > 0 || datos.ImporteGeneral > 0) {
-                		campoImportes = "<span>Importes</span><input type='number' value='1' min='0' step='any' class='form-control form-control-sm campoCantidadImporte'>";
+                		campoImportes = "<br><span>Importes</span><input type='number' value='1' min='0' step='any' class='form-control form-control-sm campoCantidadImporte'>";
                 		if (datos.ImportePresentacion > 0) {
 	                		precioimporte = "<br>Importe: <br><span class='dinero campoPrecioImporte'>"+datos.ImportePresentacion+"</span>";
 	                	}else{
@@ -486,6 +421,7 @@ jQuery(document).ready(function($) {
 		                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-percentage"></i></span>
 		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProducto">
 		                        </div>
+		                        <br>
 		                        <div class="input-group">
 		                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-dollar-sign"></i></span>
 		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProductoCantidad">
@@ -534,7 +470,7 @@ jQuery(document).ready(function($) {
 		}
 
 		$(this).parent().find(".campoCantidadImporte").attr('max', parseFloat($(this).val()));
-		//$(this).parent().find(".campoCantidadImporte").val(0);
+		$(this).parent().find(".campoCantidadImporte").val(parseFloat($(this).val()));
 		
 		var precio = $(this).parent().parent().children("td:eq(2)").find(".cambiarPrecio").attr("precio");
 		//var cantidad = $(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val();
@@ -920,7 +856,6 @@ jQuery(document).ready(function($) {
 					$("#GuardarVenta").attr("idpedido", $("#CargaPedidosModalVentas").attr("attrid"));
 					$("#GuardarVenta").attr("foliopedido", $("#CargaPedidosModalVentas").attr("folio"));
 					$("#ImportePagadoVenta").val(total);
-                    $("#PagoEfectivo").trigger("keyup");
 				}
 			})
 			.fail(function() {
@@ -930,33 +865,13 @@ jQuery(document).ready(function($) {
 	});
 
 	$(document).on('click', '#GuardarVenta', function() {
-        var efectivo = $("#PagoEfectivo").val() || 0;  
-        var transferencia = $("#PagoTransferencia").val() || 0;  
-        var cheque = $("#PagoCheque").val() || 0;  
-        var tcredito = $("#PagoTCredito").val() || 0;  
-        var tdebito = $("#PagoTDebito").val() || 0;  
-        var pagado = parseFloat(efectivo) + parseFloat(transferencia) + parseFloat(cheque) + parseFloat(tcredito) + parseFloat(tdebito);
-        var total = $("#RealizarVenta").attr("total");
-
 		if ($("#TablaProductosAgregadoVenta tbody tr").length == 0) {
 			Swal.fire({
 			    icon: 'error',
 			    title: 'No se puede realizar una venta sin productos',
 			    timer: 1000
 			});
-		}else if ($("#PagoEfectivo").val() == "" && $("#PagoTransferencia").val() == "" && $("#PagoCheque").val() == "" && $("#PagoTCredito").val() == "" && $("#PagoTDebito").val() == "") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Ingresa al menos un metodo de pago',
-                timer: 1000
-            });
-        }else if (parseFloat(pagado) < parseFloat(total)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Los pagos no cubren el total de la venta',
-                timer: 1000
-            });
-        }else{
+		}else{
 			var idDireccion = 0;
 			var idsucursal = $("#SucursalVenta").attr("attrid");
 			if ($("#CargarClientesModalVentas").attr("attrid") == "") {
@@ -968,23 +883,14 @@ jQuery(document).ready(function($) {
 			if ($("#CargarClientesModalDirecciones").attr("iddireccion") != "") {
 				idDireccion = $("#CargarClientesModalDirecciones").attr("iddireccion");
 			}
-            const searchRegExp = new RegExp(',', 'g');
 			var productos = new Array();
 			var sumadescuento = 0;
+			var total = $("#RealizarVenta").attr("total");
 			var totalventa = $("#RealizarVenta").attr("totalventa");
 			var totalimporte = $("#RealizarVenta").attr("totalimportes");
 			var tipopago = $("#TipoPagoVenta").val();
 			var pago = $("#ImportePagadoVenta").val();
-            var cambio = $("#verCambio").text().replace("$","").replace(searchRegExp, '');
-            //CAMPOS DE PAGO MIXTO//
-
-            var pagoEfectivo = $("#PagoEfectivo").val();
-            var pagoTransferencia = $("#PagoTransferencia").val();
-            var pagoCheque = $("#PagoCheque").val();
-            var pagoTCredito = $("#PagoTCredito").val();
-            var pagoTDebito = $("#PagoTDebito").val();
-
-            ////////////////////////
+			const searchRegExp = new RegExp(',', 'g');
 			$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 				var idProducto = $(this).attr("attrid");
 				var Presentacion = $(this).attr("idpresentacion");
@@ -1016,7 +922,8 @@ jQuery(document).ready(function($) {
 				contarVenta = 1;
 			}
 
-			var data = "metodo=insertar&accion=hacerventa&tipo=RealizarVenta&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&TipoPago="+tipopago+"&Importe="+pago+"&totalventa="+totalventa+"&totalfinalimporte="+totalimporte+"&contarVenta="+contarVenta+"&pagoEfectivo="+pagoEfectivo+"&pagoTransferencia="+pagoTransferencia+"&pagoCheque="+pagoCheque+"&pagoTCredito="+pagoTCredito+"&pagoTDebito="+pagoTDebito+"&cambio="+cambio;
+			console.log(contarVenta);
+			var data = "metodo=insertar&accion=hacerventa&tipo=RealizarVenta&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&TipoPago="+tipopago+"&Importe="+pago+"&totalventa="+totalventa+"&totalfinalimporte="+totalimporte+"&contarVenta="+contarVenta;
 			$.ajax({
 				url: 'index.php',
 			    type: 'POST',
@@ -1224,7 +1131,6 @@ jQuery(document).ready(function($) {
 
     $(document).on('click', '#CargaPedidosModalVentas', function() {
     	TablaVerPedidosGuardados();
-        $("#ModalVerPedidosVenta").modal("show");
     });
 
     $(document).on('click', '#VerProductosPedido', function() {
@@ -1309,7 +1215,7 @@ jQuery(document).ready(function($) {
 
 				var campoImportes = ""; var precioimporte = "";
                 if (datos.data.Productos.data[i].ImportePresentacion > 0 || datos.data.Productos.data[i].ImporteGeneral > 0) {
-                	campoImportes = "<span>Importes</span><input type='number' value='1' min='0' max='"+datos.data.Productos.data[i].Cantidad+"' step='any' class='form-control form-control-sm campoCantidadImporte'>";
+                	campoImportes = "<br><span>Importes</span><input type='number' value='1' min='0' max='"+datos.data.Productos.data[i].Cantidad+"' step='any' class='form-control form-control-sm campoCantidadImporte'>";
                 	if (datos.data.Productos.data[i].ImportePresentacion > 0) {
                 		precioimporte = "<br>Importe: <br><span class='dinero campoPrecioImporte'>"+datos.data.Productos.data[i].ImportePresentacion+"</span>";
                 	}else{
@@ -1454,49 +1360,14 @@ jQuery(document).ready(function($) {
 
 	});
 
-	/*$(document).on('change keyup', '#ImportePagadoVenta', function() {
+	$(document).on('change keyup', '#ImportePagadoVenta', function() {
 		const searchRegExp = new RegExp(',', 'g');
 		var pagado = parseFloat($(this).val()) || 0;
 		$("#verCambio").html(pagado - parseFloat($("#TotalVentaFinal").text().replace('$', '').replace(searchRegExp, '')));
 		moneda();
-	});*/
-
-    $(document).on('change keyup', '#PagoEfectivo', function() {
-        CalcularCambio();
-    });
-
-    $(document).on('change keyup', '#PagoTransferencia', function() {
-        CalcularCambio();
-    });
-
-    $(document).on('change keyup', '#PagoCheque', function() {
-        CalcularCambio();
-    });
-
-    $(document).on('change keyup', '#PagoTCredito', function() {
-        CalcularCambio();
-    });
-
-    $(document).on('change keyup', '#PagoTDebito', function() {
-        CalcularCambio();
-    });
-
-
+	});
 
 });
-
-function CalcularCambio(){
-    const searchRegExp = new RegExp(',', 'g');
-    var efectivo = $("#PagoEfectivo").val() || 0;  
-    var transferencia = $("#PagoTransferencia").val() || 0;  
-    var cheque = $("#PagoCheque").val() || 0;  
-    var tcredito = $("#PagoTCredito").val() || 0;  
-    var tdebito = $("#PagoTDebito").val() || 0;  
-    var pagado = parseFloat(efectivo) + parseFloat(transferencia) + parseFloat(cheque) + parseFloat(tcredito) + parseFloat(tdebito);
-    console.log(pagado);
-    $("#verCambio").html(pagado - parseFloat($("#TotalVentaFinal").text().replace('$', '').replace(searchRegExp, '')));
-    moneda();
-}
 
 function TablaVerPedidosGuardados(){
 	ajaxMyDatatable({

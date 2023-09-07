@@ -139,21 +139,18 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
       $totalvdeposito = 0;
       $totalvtarjeta = 0;
       $totalvtransferencia = 0;
-      $totalvtarjetadebito = 0;
       $totalvonline = 0;
-      $totalimportesEgresos = 0; 
       
       $totalIngresosEfectivo +=  $row["Monto_Abrir"];
 
-      $queryv = "SELECT ventas.Total, ventas.Total_Importes, ventas.Tipo_Pago, Pago_Efectivo, Pago_Transferencia, Pago_Cheque, Pago_Tarjeta_Credito, Pago_Tarjeta_Debito FROM ventas WHERE (Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row["Fecha_Cierre"]."') AND Estatus = 'Completada' AND Contar_Venta = 0 AND FK_Sucursal = '$sucursal'";
+      $queryv = "SELECT Total, Tipo_Pago FROM ventas WHERE (Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row["Fecha_Cierre"]."') AND Estatus = 'Completada' AND Contar_Venta = 0 AND FK_Sucursal = '$sucursal'";
       if($resv=$con->query($queryv)){
         if ($resv->num_rows > 0) {
           while($rowv = $resv->fetch_assoc()){
             $totalIngresos += $rowv["Total"];
-            //$totalventas += $rowv["Total"];
-            $totalventas += $rowv["Total"] + $rowv["Total_Importes"];
+            $totalventas += $rowv["Total"];
             if ($rowv["Tipo_Pago"] == "Efectivo") {
-              //$totalvefectivo += $rowv["Total"];
+              $totalvefectivo += $rowv["Total"];
               $totalIngresosEfectivo +=  $rowv["Total"];
             }else if ($rowv["Tipo_Pago"] == "Deposito") {
               $totalvdeposito += $rowv["Total"];
@@ -166,63 +163,22 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
             }else if ($rowv["Tipo_Pago"] == "PagoOnline") {
               $totalvonline += $rowv["Total"];
             }
-
-            if ($rowv["Pago_Efectivo"] > 0) {
-              $totalvefectivo += $rowv["Pago_Efectivo"];
-              $totalIngresosEfectivo +=  $rowv["Pago_Efectivo"];
-            }
-
-            if ($rowv["Pago_Transferencia"] > 0) {
-              $totalvtransferencia += $rowv["Pago_Transferencia"];
-            }
-
-            if ($rowv["Pago_Cheque"] > 0) {
-              $totalvcheque += $rowv["Pago_Cheque"];
-            }
-
-            if ($rowv["Pago_Tarjeta_Credito"] > 0) {
-              $totalvtarjeta += $rowv["Pago_Tarjeta_Credito"];
-            }
-
-            if ($rowv["Pago_Tarjeta_Debito"] > 0) {
-              $totalvtarjetadebito += $rowv["Pago_Tarjeta_Debito"];
-            }
-
-
           }
         }
       }
 
-      $queryi = "SELECT importes.Total FROM importes INNER JOIN ventas ON FK_Venta = ID_Venta WHERE (ventas.Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND ventas.Fecha_Registro <= '".$row["Fecha_Cierre"]."') AND ventas.FK_Sucursal = '$sucursal'";
-      if($resi=$con->query($queryi)){
-        if ($resi->num_rows > 0) {
-          while($rowi = $resi->fetch_assoc()){
-            /*$totalIngresos += $rowi["CantidadImportes"] * $rowi["PrecioImporte"];
-            $totalimportes += $rowi["CantidadImportes"] * $rowi["PrecioImporte"];
-            $totalIngresosEfectivo += $rowi["CantidadImportes"] * $rowi["PrecioImporte"];*/
-
-            $totalIngresos += $rowi["Total"];
-            $totalimportes += $rowi["Total"];
-            //$totalIngresosEfectivo += $rowi["Total"];
-          }
-        }
-      }
-
-
-      //************************** EGRESOS ************************//
-      //Importes pagados, entran como egresos
       $queryi = "SELECT detalles_importes.Cantidad AS CantidadImportes, importes.Importe AS PrecioImporte FROM detalles_importes INNER JOIN importes ON FK_Importe = ID_Importe INNER JOIN ventas ON FK_Venta = ID_Venta WHERE (detalles_importes.Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND detalles_importes.Fecha_Registro <= '".$row["Fecha_Cierre"]."') AND ventas.FK_Sucursal = '$sucursal'";
       if($resi=$con->query($queryi)){
         if ($resi->num_rows > 0) {
           while($rowi = $resi->fetch_assoc()){
-            $totalEgresos += $rowi["CantidadImportes"] * $rowi["PrecioImporte"];
-            $totalimportesEgresos += $rowi["CantidadImportes"] * $rowi["PrecioImporte"];
-            $totalEgresosEfectivo += $rowi["CantidadImportes"] * $rowi["PrecioImporte"];
+            $totalIngresos += $rowi["CantidadImportes"] * $rowi["PrecioImporte"];
+            $totalimportes += $rowi["CantidadImportes"] * $rowi["PrecioImporte"];
+            $totalIngresosEfectivo += $rowi["CantidadImportes"] * $rowi["PrecioImporte"];
           }
         }
       }
 
-
+      //************************** EGRESOS ************************//
       //Compras al contado
       $query2 = "SELECT Total FROM compras WHERE Estatus = 1 AND Tipo_Compra = 'Contado' AND (Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row["Fecha_Cierre"]."')  AND FK_Sucursal = '$sucursal'";
       if($resc=$con->query($query2)){
@@ -317,11 +273,8 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
         "Total_Ventas_Cheque" => $totalvcheque,
         "Total_Ventas_TransferenciaBancaria" => $totalvtransferencia,
         "Total_Ventas_TarjetaCreditoDebito" => $totalvtarjeta,
-        "Total_Ventas_TarjetaCredito" => $totalvtarjeta,
-        "Total_Ventas_TarjetaDebito" => $totalvtarjetadebito,
         "Total_Ventas_PagoOnline" => $totalvonline,
         "Total_Importes" => $totalimportes,
-        "Total_Importes_Egresos" => $totalimportesEgresos,
         "Total_Compras" => $totalcompras,
         "Total_Compras_Efectivo" => $pagoscontadoefectivo,
         "Total_Compras_Cheque" => $pagoscontadocheque,
@@ -510,21 +463,15 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
     if ($arreglo["Total_Ventas_TarjetaCreditoDebito"]) {
       echo '<p class="">VENTAS EN TARJETA DE CRÉDITO / DEBITO: $'.number_format($arreglo["Total_Ventas_TarjetaCreditoDebito"], 2).'</p>';
     }
-    if ($arreglo["Total_Ventas_TarjetaCredito"]) {
-      echo '<p class="">VENTAS EN TARJETA DE CRÉDITO: $'.number_format($arreglo["Total_Ventas_TarjetaCredito"], 2).'</p>';
-    }
-    if ($arreglo["Total_Ventas_TarjetaDebito"]) {
-      echo '<p class="">VENTAS EN TARJETA DE DÉBITO: $'.number_format($arreglo["Total_Ventas_TarjetaDebito"], 2).'</p>';
-    }
     if ($arreglo["Total_Ventas_PagoOnline"]) {
       echo '<p class="">VENTAS EN PAGOS ONLINE: $'.number_format($arreglo["Total_Ventas_PagoOnline"], 2).'</p>';
     }
 
-    //echo '<p class="centrado">TOTAL DE IMPORTES: $'.number_format($arreglo["Total_Importes"], 2).'</p>';
+    echo '<p class="centrado">TOTAL DE IMPORTES: $'.number_format($arreglo["Total_Importes"], 2).'</p>';
     echo "</br>
     <p class='centrado'><b style='font-size: 20px;'>EGRESOS</b></p>
     ";
-    echo '<p class="centrado">IMPORTES PAGADOS: $'.number_format($arreglo["Total_Importes_Egresos"], 2).'</p>';
+
     echo '<p class="centrado">TOTAL DE COMPRAS: $'.number_format($arreglo["Total_Compras"], 2).'</p>';
 
     if ($arreglo["Total_Compras_Efectivo"]) {

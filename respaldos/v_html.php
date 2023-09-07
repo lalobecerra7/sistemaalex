@@ -540,7 +540,7 @@
                         <div class="col-md-6">
                           <div class="row">
                             <div class="col-md-6 text-start col-sm-12">
-                              <h5>Ventas totales (con importes)</h5>
+                              <h3>Ventas totales</h3>
                             </div>
                             <div class="col-md-6 text-end col-sm-12">
                               <h3><span class="dinero" id="spanVentasTotales"></span></h3>
@@ -562,13 +562,9 @@
                                   <td class="text-start">Ventas en efectivo</td>
                                   <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasEfectivo"></span></td>
                                 </tr>
-                                <!-- <tr>
+                                <tr>
                                   <td class="text-start">Importes</td>
                                   <td class="text-end" style="color: green;"><span class="dinero" id="spanTotalImportes"></span></td>
-                                </tr> -->
-                                <tr>
-                                  <td class="text-start">Pago de Importes</td>
-                                  <td class="text-end" style="color: red;">-<span class="dinero" id="spanTotalPagoImportes"></span></td>
                                 </tr>
                                 <tr>
                                   <td class="text-start">Compras en efectivo</td>
@@ -612,6 +608,10 @@
                                   <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasEnEfectivo"></span></td>
                                 </tr>
                                 <tr>
+                                  <td class="text-start">En depósito</td>
+                                  <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasDeposito"></span></td>
+                                </tr>
+                                <tr>
                                   <td class="text-start">En cheque</td>
                                   <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasCheque"></span></td>
                                 </tr>
@@ -620,12 +620,12 @@
                                   <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasTransferencia"></span></td>
                                 </tr>
                                 <tr>
-                                  <td class="text-start">En tarjeta de crédito</td>
+                                  <td class="text-start">En tarjeta de crédito / debito</td>
                                   <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasTarjeta"></span></td>
                                 </tr>
                                 <tr>
-                                  <td class="text-start">En tarjeta de debito</td>
-                                  <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasTarjetaDebito"></span></td>
+                                  <td class="text-start">En pago online</td>
+                                  <td class="text-end" style="color: green;"><span class="dinero" id="spanVentasPagoOnline"></span></td>
                                 </tr>
                                 <tr>
                                   <td class="text-start">Devoluciones</td>

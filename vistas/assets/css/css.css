@@ -198,7 +198,7 @@ html, body{
     background-color: #F0F0F0;
 }
 
-#tablaCaja thead th { 
+#VentaTablaProductos thead th { 
     position: sticky; 
     top: 0; 
     z-index: 1; 
@@ -209,7 +209,7 @@ html, body{
     font-size: 12px;
 }
 
-#tablaCaja tbody tr.activa td{
+#VentaTablaProductos tbody tr.activa td{
     background-color: #AED6F1;
     color:  black;
 }
