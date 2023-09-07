@@ -225,7 +225,7 @@ class compras {
 			$IDCompra = $omodelo->link->real_escape_string($IDCompra);
 			$tabla = "";
 
-			$query = "SELECT ID_Detalle_Compra, FK_Compra, FK_Presentacion, Codigo, Descripcion, Imagen, detalle_compras.Costo AS Costo, Cantidad, Subtotal, Nombre_Unidad, Abreviatura_Unidad, presentaciones.Nombre AS Presentacion, Abreviatura FROM detalle_compras INNER JOIN productos ON detalle_compras.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Compra = '$IDCompra'";
+			$query = "SELECT ID_Detalle_Compra, FK_Compra, FK_Presentacion, productos.Codigo AS Codigo, Descripcion, Imagen, detalle_compras.Costo AS Costo, Cantidad, Subtotal, Nombre_Unidad, Abreviatura_Unidad, presentaciones.Nombre AS Presentacion, Abreviatura FROM detalle_compras INNER JOIN productos ON detalle_compras.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Compra = '$IDCompra'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 

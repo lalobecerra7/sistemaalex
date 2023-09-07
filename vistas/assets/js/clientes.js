@@ -370,7 +370,8 @@ jQuery(document).ready(function($) {
             data: data
         })
         .done(function(res) {
-            //console.log($.trim(res));
+            console.log($.trim(res));
+            
             $("#GuardarCliente").attr('tipo', 'modificar');
             $("#GuardarCliente").attr('attrid', id);
             $("#TituloModalCliente").text("Modificar");

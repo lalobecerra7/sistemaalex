@@ -27,6 +27,8 @@ include "controladores/c_precios.php";
 include "controladores/c_reportes.php";
 include "controladores/c_reporteCaja.php";
 include "controladores/c_reporteVentas.php";
+include "controladores/c_rutas.php";
+include "controladores/c_vehiculos.php";
 
 class controller {
 
@@ -206,6 +208,28 @@ class controller {
             </li>';
 		}
 		$pagina = str_replace('#MenuImportes#', $botonImportes, $pagina);
+
+		$botonRutas = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_importes'][1] == '1') {
+			$botonRutas = '<li class="menu-item cargarVista" carga="v_rutas" titulo="Rutas" id="cargarRutas">
+              <a href="javascript:void(0)" class="menu-link">
+                <i class="menu-icon fas fa-road"></i>
+                <div data-i18n="Rutas">Rutas</div>
+              </a>
+            </li>';
+		}
+		$pagina = str_replace('#MenuRutas#', $botonRutas, $pagina);
+
+		$botonVehiculos= '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_importes'][1] == '1') {
+			$botonVehiculos = '<li class="menu-item cargarVista" carga="v_vehiculos" titulo="Vehículos" id="cargarVehiculos">
+              <a href="javascript:void(0)" class="menu-link">
+                <i class="menu-icon fas fa-truck"></i>
+                <div data-i18n="Vehículos">Vehículos</div>
+              </a>
+            </li>';
+		}
+		$pagina = str_replace('#MenuVehiculos#', $botonVehiculos, $pagina);
 
 		$botonPrecios = '';
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_precios'][1] == '1') {
@@ -661,6 +685,14 @@ class controller {
 			}
 
 			$pagina = str_replace('#SucursalesVentas#', $opciones, $pagina);
+		}else if($nombre == "v_rutas"){
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_rutas'][2] == '0') {
+				echo '<script>$("#botonNuevaRuta").remove();</script>';
+			}
+		}else if($nombre == "v_vehiculos"){
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_vehiculos'][2] == '0') {
+				echo '<script>$("#bNuevoVehiculo").remove();</script>';
+			}
 		}else if($nombre == "v_zonas"){
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_zonas'][2] == '0') {
 				echo '<script>$("#botonNuevaZona").remove();</script>';
