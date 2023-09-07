@@ -8,6 +8,9 @@ function v_clientes() {
             },
             SucursalCliente: {
                 required: true
+            },
+            RFCCliente: {
+                required: true
             }
         },
         messages: {
@@ -16,6 +19,9 @@ function v_clientes() {
             },
             SucursalCliente: {
                 required: "La sucursal es requerdia."
+            },
+            RFCCliente: {
+                required: "El RFC es obligatorio"
             }
         },
         submitHandler: function(form) { 
@@ -58,6 +64,7 @@ function v_clientes() {
                 })
                 .done(function(res) {
                     var datos = $.trim(res).split("~");
+                    var str = $.trim(res);
                     if ($.trim(datos[0]) == "Correcto") {
                         $("#ModalCliente").modal("hide");
                         var footer = "";
@@ -79,7 +86,7 @@ function v_clientes() {
                             footer: footer
                         });
                         TablaClientes();
-                    }else if ($.trim(res) == "ErrorInsertar: Duplicate entry '"+$("#RFCCliente").val()+"' for key 'RFC'"){
+                    }else if ((str.includes("Duplicate entry")) == true){
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',

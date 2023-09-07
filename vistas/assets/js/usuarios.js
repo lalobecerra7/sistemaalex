@@ -240,7 +240,7 @@ jQuery(document).ready(function($) {
         }
     });
 
-    var botonPerP = null;
+    /*var botonPerP = null;
     $(document).on('click', '#VerPermisosUsuario', function() {
         botonPerP = $(this);
         var id = $(this).attr("attrid");
@@ -328,8 +328,6 @@ jQuery(document).ready(function($) {
                     if($.trim(res) == "Correcto"){
                         botonPerP.attr('cadena', cadena+perfil);
                         TablaUsuarios();
-                        /*var separa = botonPerP.parent().parent().children('td:eq(4)').text().split(':');
-                        botonPerP.parent().parent().children('td:eq(4)').html(separa[0]+': '+perfil);*/
                     }else{
                         Swal.fire({
                             icon: 'error',
@@ -461,6 +459,105 @@ jQuery(document).ready(function($) {
         .always(function() {
            //$("#carga").hide();
         });      
+    });*/
+
+    var botonP = null;
+    $(document).on('click', '#VerPermisosUsuario', function() {
+        $("#carga").show();
+        botonP = $(this);
+        $(".checkPermisos").prop('checked', false);
+
+        if($(this).attr('cadena') != ""){
+          var cadena = $(this).attr('cadena').split('~'), x = 0, y = 1;
+          $("#tablaPermisos").children('tbody').children('tr').each(function(index, el) {
+            if(cadena[x] != undefined){
+              var separa = cadena[x].split(',');
+              y = 1;
+
+              if(separa[0] == $.trim($(this).children('td:eq(0)').attr("vista"))){
+                $(this).children('td:eq(1)').children('div.form-check').each(function(index, el) {
+                  if(separa[y] == '1'){
+                    $(this).children('input.form-check-input').prop('checked', true);
+                  }else{
+                    $(this).children('input.form-check-input').prop('checked', false);
+                  }
+
+                  y++;
+                });
+              }
+            }
+            
+            x++;
+          });
+        }
+
+        $("#ModalPermisos").modal("show");
+        $("#carga").hide();
+    });
+
+    $(document).on('click', '.checkPermisos', function() {
+        if($.trim($(this).parent().children('label').text()) == "Ver" && $(this).prop("checked") == false){
+          $(this).parent().parent().children('div.form-check').children('input.form-check-input').prop('checked', false);
+        }else if($.trim($(this).parent().children('label').text()) != "Ver" && $(this).prop("checked") == true && $.trim($(this).parent().parent().children('div.form-check:eq(0)').children('label').text()) == "Ver"){
+          $(this).parent().parent().children('div.form-check:eq(0)').children('input.form-check-input').prop('checked', true);
+        }
+
+        var cadena = "", x = 0, y = 0;
+        $("#tablaPermisos").children('tbody').children('tr').each(function(index, el) {
+          y = 0;
+          x++;
+          cadena += $.trim($(this).children('td:eq(0)').attr("vista"))+',';
+
+          var padre = $(this);
+          padre.children('td:eq(1)').children('div.form-check').each(function(index, el) {
+            y++;
+
+            if($(this).children('input.form-check-input').prop('checked')){
+              cadena += '1';
+            }else{
+              cadena += '0';
+            }
+
+            if(padre.children('td:eq(1)').children('div.form-check').length > y){
+              cadena += ',';
+            }
+          });
+
+          if($("#tablaPermisos").children('tbody').children('tr').length > x){
+            cadena += '~';
+          }
+        });
+
+        botonP.attr('cadena', cadena);
+        console.log(cadena);
+
+        var data = "metodo=detalles&accion=usuarios&tipo=ModificarPermisos&id="+botonP.attr('attrID')+"&cadena="+cadena;
+
+        $.ajax({
+          url: 'index.php',
+          type: 'POST',
+          data: data,
+          beforeSend: function() {
+            $("#carga").show();
+          }
+        })
+        .done(function(res) {
+          if($.trim(res) != "Correcto"){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Error inesperado al camibar los permisos.'
+            });
+
+            console.log($.trim(res));
+          }
+        })
+        .fail(function() {
+          console.log("error");
+        })
+        .always(function() {
+          $("#carga").hide();
+        });
     });
 
 });

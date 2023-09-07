@@ -1,6 +1,7 @@
 function v_hacerventa() {
 	//TablaReporteCompras();
 	EstatusCaja();
+    $("#CodigoProductoVenta").focus();
 
 	$('#FormAdmin').validate({
         rules: {
@@ -75,6 +76,7 @@ function v_hacerventa() {
     });
 
     $(document).on('click', '#BotonCerrarCaja', function() {
+        $("#ModalCerrarCaja").modal("show");
     	$("#MontoCierreCaja").focus();
    		var data = "metodo=detalles&accion=hacerventa&tipo=ConsultarDetalleCaja&sucursal="+$("#SucursalVenta").attr("attrid");
         $.ajax({
@@ -222,10 +224,49 @@ function v_hacerventa() {
                 $("#carga").hide();
             });         
         }
-    });    
+    }); 
+
+    
+
+    /*   */
+
+    document.onkeydown = function(evt) {
+        evt = evt || window.event;
+        if(evt.key === "F2"){
+            $("#CargarProductosModalVentas").trigger("click");
+        }else if(evt.key === "F8"){
+            $("#RealizarVenta").trigger("click");
+        }
+    }
 }
 
+
 jQuery(document).ready(function($) {
+
+    $(document).on('hidden.bs.modal', '#ModalVerProductosVenta',function(){
+       $("#CodigoProductoVenta").focus();
+       //$("#AgregarProductoVenta").trigger("click");
+    });
+
+    $(document).on('hidden.bs.modal', '#ModalCerrarCaja',function(){
+       $("#CodigoProductoVenta").focus();
+       console.log("entro caja");
+    });
+
+    $(document).on('hidden.bs.modal', '#ModalVerClientesVenta',function(){
+       $("#CodigoProductoVenta").focus();
+       console.log("entro clientes");
+    });
+
+    $(document).on('hidden.bs.modal', '#ModalVerDireccionesCliente',function(){
+       $("#CodigoProductoVenta").focus();
+       console.log("entro direcciones");
+    });
+
+    $(document).on('hidden.bs.modal', '#ModalVerPedidosVenta',function(){
+       $("#CodigoProductoVenta").focus();
+       console.log("entro pedidos");
+    });
 
 	/*$(document).on('hidden.bs.modal', '#ModalBalanceCaja',function(){
         $("#cargarVentas").trigger("click");
@@ -286,7 +327,11 @@ jQuery(document).ready(function($) {
 	});
 
 	$(document).on('click', '#CargarProductosModalVentas', function() {
+        $("#ModalVerProductosVenta").modal("show");
 		VentaTablaProductos();
+        $(".BuscadorTablaVentaTablaProductos").val("");
+        $(".BuscadorTablaVentaTablaProductos").trigger("keyup");
+        $(".BuscadorTablaVentaTablaProductos").focus();
 	});
 
 
@@ -321,7 +366,7 @@ jQuery(document).ready(function($) {
                 }else{
                 	var campoImportes = ""; var precioimporte ="";
                 	if (datos.ImportePresentacion > 0 || datos.ImporteGeneral > 0) {
-                		campoImportes = "<br><span>Importes</span><input type='number' value='1' min='0' step='any' class='form-control form-control-sm campoCantidadImporte'>";
+                		campoImportes = "<span>Importes</span><input type='number' value='1' min='0' step='any' class='form-control form-control-sm campoCantidadImporte'>";
                 		if (datos.ImportePresentacion > 0) {
 	                		precioimporte = "<br>Importe: <br><span class='dinero campoPrecioImporte'>"+datos.ImportePresentacion+"</span>";
 	                	}else{
@@ -343,7 +388,6 @@ jQuery(document).ready(function($) {
 		                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-percentage"></i></span>
 		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProducto">
 		                        </div>
-		                        <br>
 		                        <div class="input-group">
 		                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-dollar-sign"></i></span>
 		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProductoCantidad">
@@ -400,7 +444,7 @@ jQuery(document).ready(function($) {
                 }else{
                 	var campoImportes = ""; var precioimporte = "";
                 	if (datos.ImportePresentacion > 0 || datos.ImporteGeneral > 0) {
-                		campoImportes = "<br><span>Importes</span><input type='number' value='1' min='0' step='any' class='form-control form-control-sm campoCantidadImporte'>";
+                		campoImportes = "<span>Importes</span><input type='number' value='1' min='0' step='any' class='form-control form-control-sm campoCantidadImporte'>";
                 		if (datos.ImportePresentacion > 0) {
 	                		precioimporte = "<br>Importe: <br><span class='dinero campoPrecioImporte'>"+datos.ImportePresentacion+"</span>";
 	                	}else{
@@ -421,7 +465,6 @@ jQuery(document).ready(function($) {
 		                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-percentage"></i></span>
 		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProducto">
 		                        </div>
-		                        <br>
 		                        <div class="input-group">
 		                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-dollar-sign"></i></span>
 		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProductoCantidad">
@@ -470,7 +513,7 @@ jQuery(document).ready(function($) {
 		}
 
 		$(this).parent().find(".campoCantidadImporte").attr('max', parseFloat($(this).val()));
-		$(this).parent().find(".campoCantidadImporte").val(parseFloat($(this).val()));
+		//$(this).parent().find(".campoCantidadImporte").val(0);
 		
 		var precio = $(this).parent().parent().children("td:eq(2)").find(".cambiarPrecio").attr("precio");
 		//var cantidad = $(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val();
@@ -917,12 +960,12 @@ jQuery(document).ready(function($) {
 				productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto, cantidadImportes, precioImporte]);
 			});
 
-			var contarVenta = 1;
+			var contarVenta = 0;
 			if ($("#ContarVenta").prop("checked")) {
-				contarVenta = 0;
+				contarVenta = 1;
 			}
 
-			console.log(productos);
+			console.log(contarVenta);
 			var data = "metodo=insertar&accion=hacerventa&tipo=RealizarVenta&idsucursal="+idsucursal+"&cliente="+cliente+"&idDireccion="+idDireccion+"&productos="+JSON.stringify(productos)+"&sumadescuento="+sumadescuento+"&total="+total+"&TipoPago="+tipopago+"&Importe="+pago+"&totalventa="+totalventa+"&totalfinalimporte="+totalimporte+"&contarVenta="+contarVenta;
 			$.ajax({
 				url: 'index.php',
@@ -1131,6 +1174,7 @@ jQuery(document).ready(function($) {
 
     $(document).on('click', '#CargaPedidosModalVentas', function() {
     	TablaVerPedidosGuardados();
+        $("#ModalVerPedidosVenta").modal("show");
     });
 
     $(document).on('click', '#VerProductosPedido', function() {
@@ -1215,7 +1259,7 @@ jQuery(document).ready(function($) {
 
 				var campoImportes = ""; var precioimporte = "";
                 if (datos.data.Productos.data[i].ImportePresentacion > 0 || datos.data.Productos.data[i].ImporteGeneral > 0) {
-                	campoImportes = "<br><span>Importes</span><input type='number' value='1' min='0' max='"+datos.data.Productos.data[i].Cantidad+"' step='any' class='form-control form-control-sm campoCantidadImporte'>";
+                	campoImportes = "<span>Importes</span><input type='number' value='1' min='0' max='"+datos.data.Productos.data[i].Cantidad+"' step='any' class='form-control form-control-sm campoCantidadImporte'>";
                 	if (datos.data.Productos.data[i].ImportePresentacion > 0) {
                 		precioimporte = "<br>Importe: <br><span class='dinero campoPrecioImporte'>"+datos.data.Productos.data[i].ImportePresentacion+"</span>";
                 	}else{

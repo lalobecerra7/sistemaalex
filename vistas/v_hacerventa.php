@@ -6,12 +6,12 @@
                  <div class="col-md-3 text-center">
                   #MostrarSucursal#
               </div>
-              <div class="col-md-3 d-grid mb-2">
-                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ModalVerClientesVenta" id="CargarClientesModalVentas" attrid="">
+              <div class="col-md-3 d-grid ">
+                <button type="button" class="btn btn-outline-primary" id="CargarClientesModalVentas" attrid="">
                     <i class="fas fa-user"></i> Seleccionar cliente
                 </button>
             </div>
-            <div class="col-md-2 BotonLimpiarCliente oculto d-grid mb-2">
+            <div class="col-md-2 BotonLimpiarCliente oculto d-grid ">
                 <button type="button" class="btn btn-outline-primary" id="CargarClientesModalDirecciones" attrid="">
                     <i class="fas fa-map-marker"></i> Dirección
                 </button>
@@ -21,8 +21,8 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="col-md-3 text-end BotonSeleccionarPedido d-grid mb-2">
-                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#ModalVerPedidosVenta" id="CargaPedidosModalVentas" folio="" attrid="">
+            <div class="col-md-3 text-end BotonSeleccionarPedido d-grid ">
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="CargaPedidosModalVentas" folio="" attrid="">
                     <i class="fas fa-arrow-down"></i> Seleccionar pedido
                 </button>
                 <br>
@@ -36,22 +36,22 @@
             <div class="col-md-4 col-sm-12 mb-3">
                 <div class="input-group">
                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-barcode"></i></span>
-                    <input type="text" class="form-control" id="CodigoProductoVenta" name="CodigoProductoVenta" placeholder="Código del producto" required>
+                    <input type="text" class="form-control" id="CodigoProductoVenta" name="CodigoProductoVenta" placeholder="Código del producto" required autofocus>
                 </div>
             </div>
             <div class="col-md-3 col-sm-6 d-grid mb-3">
-                <button type="submit" class="btn btn-outline-danger" id="AgregarProductoVenta">Agregar producto <i class="fas fa-check"></i></button>
+                <button type="submit" style="height: 40px;" class="btn btn-outline-danger" id="AgregarProductoVenta">Agregar producto <i class="fas fa-check"></i></button>
             </div>
             <div class="col-md-3 col-sm-6 d-grid mb-3">
-                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ModalVerProductosVenta" id="CargarProductosModalVentas">
-                    <i class="fas fa-search"></i> Buscar
+                <button type="button" style="height: 40px;" class="btn btn-outline-secondary" id="CargarProductosModalVentas">
+                    <i class="fas fa-search"></i> Buscar (F2)
                 </button>
             </div>
-            <div class="col-md-2 d-grid mb-2">
+            <div class="col-md-2 d-grid ">
                 #BotonCorteCaja#
             </div>
         </form>
-        <div class="row mt-3">
+        <div class="row">
             <div class="table-responsive" style="height: 300px; overflow-y: scroll;">
                 <table class="table table table-hover table-striped table-bordered text-center" id="TablaProductosAgregadoVenta" width="100%" style="font-size: 12px; vertical-align: middle;">
                     <thead>
@@ -82,16 +82,16 @@
                         <h5 style="font-weight: bold;">Subtotal (Importes)</h5>
                         <h4 style="font-weight: bold;" class="dinero" id="MostrarSubtotalImportes">0.00</h4> -->
                     </div>
-                    <div class="col-md-9 text-center mb-2">
+                    <div class="col-md-9 text-center">
                         <div class="row" style="vertical-align: middle;">
                             <div class="col-md-3 d-grid">
-                                <button class="btn btn-outline-primary" id="GuardarPedido" total="" style="font-size: 15px;"><b>Guardar como pedido</b></button>
+                                <button class="btn btn-outline-primary" id="GuardarPedido" total="" style="font-size: 15px; height: 40px; font-size: 13px;"><b>Guardar pedido</b></button>
                             </div>
                             <div class="col-md-3 d-grid">
-                                <button class="btn btn-outline-primary" id="CobrarFacturar" total="" style="font-size: 15px;"><b>Cobrar y facturar</b></button>
+                                <button class="btn btn-outline-primary" id="CobrarFacturar" total="" style="font-size: 15px; height: 40px; font-size: 13px;"><b>Cobrar y facturar</b></button>
                             </div>
                             <div class="col-md-3 d-grid">
-                                <button class="btn btn-outline-primary" id="RealizarVenta" total="" style="font-size: 15px;"><b>Finalizar venta</b></button>
+                                <button class="btn btn-outline-primary" id="RealizarVenta" total="" style="font-size: 15px; height: 40px; font-size: 13px;"><b>Finalizar venta (F8)</b></button>
                             </div>
                             <div class="col-md-3">
                                 <h5 style="font-weight: bold;">Total</h5>

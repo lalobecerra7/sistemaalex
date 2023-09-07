@@ -307,6 +307,119 @@ function v_productos() {
             }
         }              
     });
+
+    $('#FormExistenciaProductoMod').validate({
+        rules: {
+            SucursalExistenciaMod: {
+                required: true
+            },
+            ExistenciaProductoMod: {
+                required: true
+            },
+        },
+        messages: {
+            SucursalExistenciaMod: {
+                required: "La sucursal es obligatoria"
+            },
+            ExistenciaProductoMod: {
+                required: "La existencia es obligatoria"
+            },
+        },
+        submitHandler: function(form) { 
+            Swal.fire({
+              title: '¿Estás a punto de modificar las existencias de este producto?',
+              footer: "<b style='color: red;'>Una vez modificada ya no podrá recuperarse la existencia anterior</b>",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              cancelButtonText: 'No, cancelar',
+              confirmButtonText: 'Si, continuar'
+            }).then((result) => {
+                if (result.value) {
+                    var data = new FormData(document.getElementById('FormExistenciaProductoMod'));
+                    data.append('metodo', "detalles");
+                    data.append('accion', 'productos');
+                    data.append('tipo', 'ModificarExistenciaProducto');
+                    data.append('IDProducto',  $("#GuardarExistenciaProductoMod").attr("attrid"));
+
+                    var btn = $('#GuardarExistenciaProductoMod');
+                    $.ajax({
+                        url: 'index.php',
+                        type: 'POST',
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        beforeSend: function() {
+                            $("#carga").show();
+                        }
+                    })
+                    .done(function(res) {
+                        if ($.trim(res) == "Correcto") {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Existencia modificada correctamente'
+                            });
+                            $("#FormExistenciaProductoMod").trigger("reset");
+                            $("#ModalModificarExistencias").modal("hide");
+                        }else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Error inesperado al modificar la existencia.'
+                            });
+
+                            console.log($.trim(res));
+                        }
+                    })
+                    .fail(function() {
+                        console.log("Error ajax");
+                    })
+                    .always(function() {
+                        $("#carga").hide();
+                    });   
+                }
+            }); 
+        }              
+    }); 
+
+    $(document).on('change', '#SucursalExistenciaMod', function() {
+        var sucursal = $(this).val();
+        var presentacion = $("#PresentacionesProductoMod").val() || 0;
+        var idproducto = $("#GuardarExistenciaProductoMod").attr("attrid");
+
+        var data = "metodo=detalles&accion=productos&tipo=ConsultarExistenciaActual&IDProducto="+idproducto+"&sucursal="+sucursal+"&presentacion="+presentacion;
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            data: data
+        })
+        .done(function(res) {
+            $("#ExistenciaProductoMod").val(parseFloat($.trim(res)));
+        })
+        .fail(function() {
+            console.log("Error ajax");
+        });
+    });
+
+    $(document).on('change', '#PresentacionesProductoMod', function() {
+        var sucursal = $("#SucursalExistenciaMod").val();
+        var presentacion = $(this).val() || 0;
+        var idproducto = $("#GuardarExistenciaProductoMod").attr("attrid");
+
+        var data = "metodo=detalles&accion=productos&tipo=ConsultarExistenciaActual&IDProducto="+idproducto+"&sucursal="+sucursal+"&presentacion="+presentacion;
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            data: data
+        })
+        .done(function(res) {
+            $("#ExistenciaProductoMod").val(res);
+        })
+        .fail(function() {
+            console.log("Error ajax");
+        });
+    });
 }
 
 function TablaProductos(){
@@ -619,6 +732,62 @@ jQuery(document).ready(function($) {
         })
         .fail(function() {
             console.log("Error ajax");
+        });
+    });
+
+    $(document).on('click', '.ModificarExistencia', function() {
+        var id = $(this).attr('attrid');
+        Swal.fire({
+          title: 'Ingresa la contraseña',
+          text: 'Solo los administradores pueden ingresar a esta opción',
+          html: "<input class='form-control' type='password' id='contraAdmin' placeholder='Ingresa la contraseña'>",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Cancelar',
+          confirmButtonText: 'Continuar'
+        }).then((result) => {
+            if (result.value) {
+                var data = "metodo=detalles&accion=productos&tipo=ConsultarContraAdmin&contrasena="+$("#contraAdmin").val();
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data
+                })
+                .done(function(res) {
+                    if ($.trim(res) == "Correcto") {
+                        $("#ModalModificarExistencias").modal("show");
+                        $("#PresentacionesProductoMod").html("");
+                        $("#GuardarExistenciaProductoMod").attr("attrid", "");
+                        $("#FormExistenciaProductoMod").trigger("reset");
+
+                        var data = "metodo=detalles&accion=productos&tipo=ConsultarPresentacionesExistencia&IDProducto="+id;
+                        $.ajax({
+                            url: 'index.php',
+                            type: 'POST',
+                            data: data
+                        })
+                        .done(function(res) {
+                            $("#PresentacionesProductoMod").html(res);
+                            $("#GuardarExistenciaProductoMod").attr("attrid", id);
+                            $('#ModalExistenciasProductoMod').modal('show');
+                        })
+                        .fail(function() {
+                            console.log("Error ajax");
+                        });
+                    }else{
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops...',
+                            text: 'No tienes permiso de acceder a esta función'
+                        });
+                    }
+                })
+                .fail(function() {
+                    console.log("Error ajax");
+                });
+            }
         });
     });
 

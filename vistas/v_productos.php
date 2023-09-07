@@ -447,6 +447,45 @@
   </div>
 </div> 
 
+<div class="modal fade" id="ModalModificarExistencias" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-centered" style="z-index: 9999 !important;">
+    <div class="modal-content">
+      <div class="modal-header bg-inverse bd-inverse-darken">
+        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Modificar existencias</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="FormExistenciaProductoMod">
+	      <div class="modal-body">
+	       	<div class="row">
+				   	<div class="col-md-12">
+				   		<div class="form-floating mb-3">
+								<select class="form-select" name="PresentacionesProductoMod" id="PresentacionesProductoMod" >
+								</select>
+								<label for="PresentacionesProductoMod">Presentación</label>
+							</div>
+							<div class="form-floating mb-3">
+								<select class="form-select" name="SucursalExistenciaMod" id="SucursalExistenciaMod" >
+									<option value="">- Seleccione una opción -</option>
+									#sucursalesModificar#
+								</select>
+								<label for="SucursalExistenciaMod">Sucursal</label>
+							</div>
+							<div class="form-floating mb-3">
+								<input type="number" class="form-control" id="ExistenciaProductoMod" name="ExistenciaProductoMod" placeholder="Ingresa la existencia">
+								<label for="ExistenciaProductoMod">Existencia actual</label>
+							</div>
+				   	</div>
+					</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="submit" class="btn btn-primary" id="GuardarExistenciaProductoMod"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+	      </div>
+  		</form>
+    </div>
+  </div>
+</div> 
+
 <!--/////////////////////////Modal///////////////////////////////////-->
 <div class="modal fade" id="modalImpuestosProducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" style="z-index: 9999 !important;">

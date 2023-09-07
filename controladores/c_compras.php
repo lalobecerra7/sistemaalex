@@ -12,19 +12,39 @@ class compras {
 		$orden =  $omodelo->link->real_escape_string($orden);
 		$arreglo = array();
 
-		$busqueda = '';
-		if(trim($buscar) != ''){
-			$separa = explode(' ', trim($buscar));
-			$busqueda = 'WHERE ';
-			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(DATE_FORMAT(compras.Fecha_Registro, '%d-%m-%Y %r'), LPAD(ID_Compra, 8, '0'), proveedores.Nombre, proveedores.Empresa, Anticipo, Total, Estatus, Tipo_Compra) REGEXP '".$separa[$i]."'";
-				if($i < (count($separa)-1)){
-					$busqueda .= ' AND ';
+		$sucursal = $_SESSION['user_admin']['FK_Sucursal'];
+
+		if ($omodelo->permisos() == 'Administrador'){
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'WHERE ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(DATE_FORMAT(compras.Fecha_Registro, '%d-%m-%Y %r'), LPAD(ID_Compra, 8, '0'), proveedores.Nombre, proveedores.Empresa, Anticipo, Total, Estatus, Tipo_Compra) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
 				}
 			}
+
+			$query = "SELECT ID_Compra, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Proveedor, proveedores.Nombre AS Proveedor, proveedores.Empresa AS Empresa, proveedores.Telefono AS Telefono, proveedores.Razon_Social AS RazonSocial, Tipo_Compra, proveedores.Credito as Credito, Anticipo, Total, Estatus, compras.Fecha_Registro AS Datos, DATE_FORMAT(compras.Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, sucursales.Nombre AS Sucursal, FK_Sucursal, IFNULL((SELECT SUM(Monto) FROM pagos WHERE FK_Compra = ID_Compra), 0) AS Pagado, (SELECT COUNT(*) FROM compras INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal $busqueda) AS Num FROM compras INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		}else{
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(DATE_FORMAT(compras.Fecha_Registro, '%d-%m-%Y %r'), LPAD(ID_Compra, 8, '0'), proveedores.Nombre, proveedores.Empresa, Anticipo, Total, Estatus, Tipo_Compra) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+
+			$query = "SELECT ID_Compra, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Proveedor, proveedores.Nombre AS Proveedor, proveedores.Empresa AS Empresa, proveedores.Telefono AS Telefono, proveedores.Razon_Social AS RazonSocial, Tipo_Compra, proveedores.Credito as Credito, Anticipo, Total, Estatus, compras.Fecha_Registro AS Datos, DATE_FORMAT(compras.Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, sucursales.Nombre AS Sucursal, FK_Sucursal, IFNULL((SELECT SUM(Monto) FROM pagos WHERE FK_Compra = ID_Compra), 0) AS Pagado, (SELECT COUNT(*) FROM compras INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE compras.FK_Sucursal = '$sucursal' $busqueda) AS Num FROM compras INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE compras.FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		}
 
-		$query = "SELECT ID_Compra, FK_Usuario, (SELECT usuarios.Nombre FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Proveedor, proveedores.Nombre AS Proveedor, proveedores.Empresa AS Empresa, proveedores.Telefono AS Telefono, proveedores.Razon_Social AS RazonSocial, Tipo_Compra, proveedores.Credito as Credito, Anticipo, Total, Estatus, compras.Fecha_Registro AS Datos, DATE_FORMAT(compras.Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, sucursales.Nombre AS Sucursal, FK_Sucursal, IFNULL((SELECT SUM(Monto) FROM pagos WHERE FK_Compra = ID_Compra), 0) AS Pagado, (SELECT COUNT(*) FROM compras INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal $busqueda) AS Num FROM compras INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 

@@ -205,7 +205,6 @@ class clientes {
 			$query = "INSERT INTO clientes SET Nombre = '$NombreCliente', Calle = '$CalleClienteGeneral', No_Exterior = '$NoExteriorClienteGeneral', No_Interior = '$NoInteriorClienteGeneral', Codigo_Postal = '$CPClienteGeneral', Colonia = '$ColoniaClienteGeneral', Ciudad = '$CiudadClienteGeneral', Estado = '$EstadoClienteGeneral', Pais = '$PaisClienteGeneral', Telefono = '$TelefonoCliente', Celular = '$CelularCliente', Correo = '$CorreoCliente',  Fecha_Registro = '$fecha', RFC = '$RFCCliente', Facturar = '$FacturarCliente',  No_Cuenta = '$CuentaBancoCliente', Banco = '$BancoCliente', Titular = '$TitularBancoCliente',  Razon_CFDI = '$razonCliente', Regimen_CFDI = '$regimenCliente', Nombre_Contacto = '$contactoCliente', Puesto_Contacto = '$puestoContactoCliente', Email_Contacto = '$correoContactoCliente', Tel_Contacto = '$telefonoContactoCliente', Tipo_Persona = '$TipoPersona'";	
 		}
 		$error = $omodelo->_insertar($query);
-
 		if ($error == "si") {
 			echo "ErrorInsertar: ".mysqli_error($omodelo->link);
 		}else{
@@ -216,9 +215,7 @@ class clientes {
 			$direcciones = explode(",", $direcciones);
 			for ($i=0; $i < sizeof($direcciones) - 1; $i++) { 
 				$datosdireccion = explode("~", $direcciones[$i]);
-				$queryDirecciones = "INSERT INTO detalles_clientes SET FK_Cliente = '$IDCliente', Calle = '$datosdireccion[0]', No_Exterior = '$datosdireccion[1]', No_Interior = '$datosdireccion[2]', Colonia = '$datosdireccion[4]', Codigo_Postal = '$datosdireccion[3]', Ciudad = '$datosdireccion[5]', Estado = '$datosdireccion[6]', Pais = '$datosdireccion[7]', Nombre_Contacto = '$datosdireccion[8]', Puesto_Contacto = '$datosdireccion[9]', Email_Contacto = '$datosdireccion[10]', Telefono_Contacto  = '$datosdireccion[11]', Detalles  = '$datosdireccion[12]', Latitud  = '$datosdireccion[13]', Longitud  = '$datosdireccion[14]', Entre_Calles  = '$datosdireccion[15]',
-
-				";
+				$queryDirecciones = "INSERT INTO detalles_clientes SET FK_Cliente = '$IDCliente', Calle = '$datosdireccion[0]', No_Exterior = '$datosdireccion[1]', No_Interior = '$datosdireccion[2]', Colonia = '$datosdireccion[4]', Codigo_Postal = '$datosdireccion[3]', Ciudad = '$datosdireccion[5]', Estado = '$datosdireccion[6]', Pais = '$datosdireccion[7]', Nombre_Contacto = '$datosdireccion[8]', Puesto_Contacto = '$datosdireccion[9]', Email_Contacto = '$datosdireccion[10]', Telefono_Contacto  = '$datosdireccion[11]', Detalles  = '$datosdireccion[12]', Latitud  = '$datosdireccion[13]', Longitud  = '$datosdireccion[14]', Entre_Calles  = '$datosdireccion[15]'";
 				$errorDirecciones = $omodelo->_insertar($queryDirecciones);	
 
 				if ($errorDirecciones == "si") {
