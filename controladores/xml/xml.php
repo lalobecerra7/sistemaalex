@@ -41,9 +41,9 @@
 									if($row1[$i]['Objeto_Impuesto_CFDI'] != '01' && $row1[$i]['Objeto_Impuesto_CFDI'] != '03'){
 										if($row2[$x]['Tipo_Impuesto_CFDI'] == 'Trasladado'){
 											if($row2[$x]['Tipo_Factor_CFDI'] == 'Exento'){
-												$impuestosTras .= '<cfdi:Traslado Base="'.number_format((($row1[$i]['Cantidad'] * $row1[$i]['Precio']) - $row1[$i]['Descuento']), 2).'" Impuesto="'.$row2[$x]['Clave_CFDI'].'" TipoFactor="'.$row2[$x]['Tipo_Factor_CFDI'].'"/>';
+												$impuestosTras .= '<cfdi:Traslado Base="'.number_format((($row1[$i]['Cantidad'] * $row1[$i]['Precio']) - $row1[$i]['Descuento']), 2, '.', '').'" Impuesto="'.$row2[$x]['Clave_CFDI'].'" TipoFactor="'.$row2[$x]['Tipo_Factor_CFDI'].'"/>';
 											}else{
-												$impuestosTras .= '<cfdi:Traslado Base="'.number_format((($row1[$i]['Cantidad'] * $row1[$i]['Precio']) - $row1[$i]['Descuento']), 2).'" Impuesto="'.$row2[$x]['Clave_CFDI'].'" TipoFactor="'.$row2[$x]['Tipo_Factor_CFDI'].'" TasaOCuota="'.number_format(($row2[$x]['Tasa_Cuota_CFDI'] / 100), 6).'" Importe="'.number_format(((($row1[$i]['Cantidad'] * $row1[$i]['Precio']) - $row1[$i]['Descuento']) * ($row2[$x]['Tasa_Cuota_CFDI'] / 100)), 2).'"/>';
+												$impuestosTras .= '<cfdi:Traslado Base="'.number_format((($row1[$i]['Cantidad'] * $row1[$i]['Precio']) - $row1[$i]['Descuento']), 2, '.', '').'" Impuesto="'.$row2[$x]['Clave_CFDI'].'" TipoFactor="'.$row2[$x]['Tipo_Factor_CFDI'].'" TasaOCuota="'.number_format(($row2[$x]['Tasa_Cuota_CFDI'] / 100), 6, '.', '').'" Importe="'.number_format(((($row1[$i]['Cantidad'] * $row1[$i]['Precio']) - $row1[$i]['Descuento']) * ($row2[$x]['Tasa_Cuota_CFDI'] / 100)), 2, '.', '').'"/>';
 
 												$totalImTras += (($row1[$i]['Cantidad'] * $row1[$i]['Precio']) - $row1[$i]['Descuento']) * ($row2[$x]['Tasa_Cuota_CFDI'] / 100);
 
@@ -66,7 +66,7 @@
 												}
 											}
 										}else{
-											$impuestosRet .= '<cfdi:Retencion Base="'.number_format((($row1[$i]['Cantidad'] * $row1[$i]['Precio']) - $row1[$i]['Descuento']), 2).'" Impuesto="'.$row2[$x]['Clave_CFDI'].'" TipoFactor="'.$row2[$x]['Tipo_Factor_CFDI'].'" TasaOCuota="'.number_format(($row2[$x]['Tasa_Cuota_CFDI'] / 100), 6).'" Importe="'.number_format(((($row1[$i]['Cantidad'] * $row1[$i]['Precio']) - $row1[$i]['Descuento']) * ($row2[$x]['Tasa_Cuota_CFDI'] / 100)), 2).'"/>';
+											$impuestosRet .= '<cfdi:Retencion Base="'.number_format((($row1[$i]['Cantidad'] * $row1[$i]['Precio']) - $row1[$i]['Descuento']), 2, '.', '').'" Impuesto="'.$row2[$x]['Clave_CFDI'].'" TipoFactor="'.$row2[$x]['Tipo_Factor_CFDI'].'" TasaOCuota="'.number_format(($row2[$x]['Tasa_Cuota_CFDI'] / 100), 6, '.', '').'" Importe="'.number_format(((($row1[$i]['Cantidad'] * $row1[$i]['Precio']) - $row1[$i]['Descuento']) * ($row2[$x]['Tasa_Cuota_CFDI'] / 100)), 2, '.', '').'"/>';
 
 											$totalImRete += (($row1[$i]['Cantidad'] * $row1[$i]['Precio']) - $row2[$i]['Descuento']) * ($row2[$x]['Tasa_Cuota_CFDI'] / 100);
 
@@ -116,7 +116,7 @@
 						</cfdi:Impuestos>';
 					}
 
-					$productos .= '<cfdi:Concepto ClaveProdServ="'.$row1[$i]['Clave_ProdServ_CFDI'].'" NoIdentificacion="'.$row1[$i]['Identificacion_CFDI'].'" Cantidad="'.number_format($row1[$i]['Cantidad'], 2).'" ClaveUnidad="'.$row1[$i]['Clave_Unidad_CFDI'].'" Unidad="'.$row1[$i]['Unidad_CFDI'].'" Descripcion="'.$row1[$i]['Descripcion'].'" ValorUnitario="'.number_format($row1[$i]['Precio'], 2).'" Importe="'.number_format(($row1[$i]['Cantidad'] * $row1[$i]['Precio']), 2).'" Descuento="'.number_format($row1[$i]['Descuento'], 2).'" ObjetoImp="'.$row1[$i]['Objeto_Impuesto_CFDI'].'">'.$impuestos.'</cfdi:Concepto>';
+					$productos .= '<cfdi:Concepto ClaveProdServ="'.$row1[$i]['Clave_ProdServ_CFDI'].'" NoIdentificacion="'.$row1[$i]['Identificacion_CFDI'].'" Cantidad="'.number_format($row1[$i]['Cantidad'], 2, '.', '').'" ClaveUnidad="'.$row1[$i]['Clave_Unidad_CFDI'].'" Unidad="'.$row1[$i]['Unidad_CFDI'].'" Descripcion="'.$row1[$i]['Descripcion'].'" ValorUnitario="'.number_format($row1[$i]['Precio'], 2, '.', '').'" Importe="'.number_format(($row1[$i]['Cantidad'] * $row1[$i]['Precio']), 2, '.', '').'" Descuento="'.number_format($row1[$i]['Descuento'], 2, '.', '').'" ObjetoImp="'.$row1[$i]['Objeto_Impuesto_CFDI'].'">'.$impuestos.'</cfdi:Concepto>';
 
 					$subtotal += $row1[$i]['Cantidad'] * $row1[$i]['Precio'];
 				}
@@ -150,11 +150,11 @@
 		$totalImpuestos = '';
 		if($totalImTras > 0 || $totalImRete > 0){
 			if($totalImTras > 0 && $totalImRete > 0){
-				$totalImpuestos .= '<cfdi:Impuestos TotalImpuestosRetenidos="'.number_format($totalImRete, 2).'" TotalImpuestosTrasladados="'.number_format($totalImTras, 2).'">';
+				$totalImpuestos .= '<cfdi:Impuestos TotalImpuestosRetenidos="'.number_format($totalImRete, 2, '.', '').'" TotalImpuestosTrasladados="'.number_format($totalImTras, 2, '.', '').'">';
 			}else if($totalImTras > 0){
-				$totalImpuestos .= '<cfdi:Impuestos TotalImpuestosTrasladados="'.number_format($totalImTras, 2).'">';
+				$totalImpuestos .= '<cfdi:Impuestos TotalImpuestosTrasladados="'.number_format($totalImTras, 2, '.', '').'">';
 			}else{
-				$totalImpuestos .= '<cfdi:Impuestos TotalImpuestosRetenidos="'.number_format($totalImRete, 2).'">';
+				$totalImpuestos .= '<cfdi:Impuestos TotalImpuestosRetenidos="'.number_format($totalImRete, 2, '.', '').'">';
 			}
 
 			if(count($imAgrupadosRete) > 0){
@@ -163,7 +163,7 @@
 
 				foreach ($imAgrupadosRete as $imp) {
 					$totalImpuestos .= '
-					<cfdi:Retencion Base="'.number_format($imp['Base'], 2).'" Impuesto="'.$imp['Impuesto'].'" TipoFactor="'.$imp['TipoFactor'].'" TasaOCuota="'.number_format($imp['TasaOCuota'], 6).'" Importe="'.number_format($imp['Importe'], 2).'"/>';
+					<cfdi:Retencion Base="'.number_format($imp['Base'], 2, '.', '').'" Impuesto="'.$imp['Impuesto'].'" TipoFactor="'.$imp['TipoFactor'].'" TasaOCuota="'.number_format($imp['TasaOCuota'], 6, '.', '').'" Importe="'.number_format($imp['Importe'], 2, '.', '').'"/>';
 				}
 
 				$totalImpuestos .= '
@@ -176,7 +176,7 @@
 
 				foreach ($imAgrupadosTras as $imp) {
 					$totalImpuestos .= '
-					<cfdi:Traslado Base="'.number_format($imp['Base'], 2).'" Impuesto="'.$imp['Impuesto'].'" TipoFactor="'.$imp['TipoFactor'].'" TasaOCuota="'.number_format($imp['TasaOCuota'], 6).'" Importe="'.number_format($imp['Importe'], 2).'"/>';
+					<cfdi:Traslado Base="'.number_format($imp['Base'], 2, '.', '').'" Impuesto="'.$imp['Impuesto'].'" TipoFactor="'.$imp['TipoFactor'].'" TasaOCuota="'.number_format($imp['TasaOCuota'], 6, '.', '').'" Importe="'.number_format($imp['Importe'], 2, '.', '').'"/>';
 				}
 
 				$totalImpuestos .= '
@@ -194,7 +194,7 @@
 		}
 
 		$textoXML = '<?xml version="1.0" encoding="UTF-8"?>
-			<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd" Version="4.0" Serie="'.$id.'" Folio="'.str_pad($id, 8, '0', STR_PAD_LEFT).'" Fecha="'.str_replace(' ', 'T', $row[0]['Fecha_Expedicion_CFDI']).'" Sello="'.$row[0]['Sello_CFDI'].'" FormaPago="'.$row[0]['Forma_Pago_CFDI'].'" NoCertificado="'.$row[0]['No_Certificado_CFDI'].'" Certificado="'.$row[0]['Certificado_CFDI'].'" SubTotal="'.number_format($subtotal, 2).'" Descuento="'.number_format($row[0]['Descuento'], 2).'" Moneda="'.$row[0]['Moneda_CFDI'].'" Total="'.number_format($row[0]['Total'], 2).'" TipoDeComprobante="'.$row[0]['Tipo_Comprobante_CFDI'].'" Exportacion="'.$row[0]['Exportacion_CFDI'].'" MetodoPago="'.$row[0]['Metodo_Pago_CFDI'].'" LugarExpedicion="'.trim($row[0]['Lugar_Expedicion_CFDI']).'">'.$global.$uuids.'
+			<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd" Version="4.0" Serie="'.$id.'" Folio="'.str_pad($id, 8, '0', STR_PAD_LEFT).'" Fecha="'.str_replace(' ', 'T', $row[0]['Fecha_Expedicion_CFDI']).'" Sello="'.$row[0]['Sello_CFDI'].'" FormaPago="'.$row[0]['Forma_Pago_CFDI'].'" NoCertificado="'.$row[0]['No_Certificado_CFDI'].'" Certificado="'.$row[0]['Certificado_CFDI'].'" SubTotal="'.number_format($subtotal, 2, '.', '').'" Descuento="'.number_format($row[0]['Descuento'], 2, '.', '').'" Moneda="'.$row[0]['Moneda_CFDI'].'" Total="'.number_format($row[0]['Total'], 2, '.', '').'" TipoDeComprobante="'.$row[0]['Tipo_Comprobante_CFDI'].'" Exportacion="'.$row[0]['Exportacion_CFDI'].'" MetodoPago="'.$row[0]['Metodo_Pago_CFDI'].'" LugarExpedicion="'.trim($row[0]['Lugar_Expedicion_CFDI']).'">'.$global.$uuids.'
 				<cfdi:Emisor Rfc="'.$row[0]['Emisor_RFC_CFDI'].'" Nombre="'.$row[0]['Emisor_Nombre_CFDI'].'" RegimenFiscal="'.$row[0]['Emisor_Regimen_Fiscal_CFDI'].'"/>
 				<cfdi:Receptor Rfc="'.$row[0]['Receptor_RFC_CFDI'].'" Nombre="'.$row[0]['Receptor_Nombre_CFDI'].'" DomicilioFiscalReceptor="'.$row[0]['Receptor_Domicilio_CFDI'].'" RegimenFiscalReceptor="'.$row[0]['Receptor_Regimen_Fiscal_CFDI'].'" UsoCFDI="'.$row[0]['Receptor_Regimen_Fiscal_CFDI'].'"/>
 				<cfdi:Conceptos>

@@ -1131,7 +1131,8 @@ jQuery(document).ready(function($) {
 	$(document).on('click', '#CobrarFacturar', function() {
 		//CONSULTAR SI ES ADMINISTRADOR
 		var data = "metodo=detalles&accion=hacerventa&tipo=ConsultarAdministrador";
-		$.ajax({
+		
+        $.ajax({
 			url: 'index.php',
 		    type: 'POST',
 		    data: data,
@@ -1151,10 +1152,12 @@ jQuery(document).ready(function($) {
 					    timer: 1000
 					});
 				}else{
+                    var total = $("#RealizarVenta").attr("total");
 					$("#ModalRealizarVenta").modal("show");
 					$("#GuardarVenta").attr("idpedido", $("#CargaPedidosModalVentas").attr("attrid"));
 					$("#GuardarVenta").attr("tipo", "facturar");
 					$("#GuardarVenta").attr("foliopedido", $("#CargaPedidosModalVentas").attr("folio"));
+                    $("#ImportePagadoVenta").val(total);
 				}
 			}
 		})
