@@ -616,6 +616,7 @@ jQuery(document).ready(function($) {
             $("#Area").val(datos.FK_Area);
             $("#DetallesProducto").val(datos.Detalles);
             $("#ImporteProducto").val(datos.Importe);
+            $("#ReferenciaProducto").val(datos.Referencia)
             $("#claveProdServ").val(datos.Clave_ProdServ_CFDI);
             $("#claveUnidadProd").val(datos.Clave_Unidad_CFDI);
             $("#unidadProd").val(datos.Nombre_Unidad);
@@ -737,7 +738,80 @@ jQuery(document).ready(function($) {
 
     $(document).on('click', '.ModificarExistencia', function() {
         var id = $(this).attr('attrid');
+        var contra = '';
+
         Swal.fire({
+          title: "Ingresa la contraseña de administrador",
+          input: "text",
+          inputAttributes: {
+            autocapitalize: "off"
+          },
+          showCancelButton: true,
+          cancelButtonText: "Cancelar",
+          confirmButtonText: "Continuar",
+          showLoaderOnConfirm: true,
+          preConfirm: async (login) => {
+            try {
+                contra = login;
+            } catch (error) {
+              Swal.showValidationMessage(`
+                Request failed: ${error}
+              `);
+            }
+          },
+          allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+          if (result.isConfirmed) {
+            var data = "metodo=detalles&accion=productos&tipo=ConsultarContraAdmin&contrasena="+contra;
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data
+            })
+            .done(function(res) {
+                console.log(res);
+                if ($.trim(res) == "Correcto") {
+                    $("#ModalModificarExistencias").modal("show");
+                    $("#PresentacionesProductoMod").html("");
+                    $("#GuardarExistenciaProductoMod").attr("attrid", "");
+                    $("#FormExistenciaProductoMod").trigger("reset");
+
+                    var data = "metodo=detalles&accion=productos&tipo=ConsultarPresentacionesExistencia&IDProducto="+id;
+                    $.ajax({
+                        url: 'index.php',
+                        type: 'POST',
+                        data: data
+                    })
+                    .done(function(res) {
+                        $("#PresentacionesProductoMod").html(res);
+                        $("#GuardarExistenciaProductoMod").attr("attrid", id);
+                        $('#ModalExistenciasProductoMod').modal('show');
+                    })
+                    .fail(function() {
+                        console.log("Error ajax");
+                    });
+                }else{
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'No tienes permiso de acceder a esta función'
+                    });
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            });
+
+
+            /*Swal.fire({
+              title: contra
+            });*/
+          }
+        });
+
+
+
+       /* Swal.fire({
           title: 'Ingresa la contraseña',
           text: 'Solo los administradores pueden ingresar a esta opción',
           html: "<input class='form-control' type='password' id='contraAdmin' placeholder='Ingresa la contraseña'>",
@@ -788,7 +862,7 @@ jQuery(document).ready(function($) {
                     console.log("Error ajax");
                 });
             }
-        });
+        });*/
     });
 
     $(document).on('click', '#verImagenProducto', function () {

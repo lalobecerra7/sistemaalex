@@ -95,11 +95,11 @@ class ventas {
 						$MostrarDevolucion = "<br>Devuelto: <b>$".number_format($TotalDevolucion, 2)."</b><br>
 						Total final: <b>$".number_format($totalFinal, 2)."</b>";
 
-						if($row[$i]['Contar_Venta'] == '0'){
+						if($row[$i]['Contar_Venta'] == '0' && $row[$i]['Estatus'] != "Cancelada"){
 							$SumarVentas += $totalFinal;
 						}
 					}else{
-						if($row[$i]['Contar_Venta'] == '0'){
+						if($row[$i]['Contar_Venta'] == '0' && $row[$i]['Estatus'] != "Cancelada"){
 							$SumarVentas += $row[$i]['Total'];
 						}
 					}

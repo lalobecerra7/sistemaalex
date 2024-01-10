@@ -1,5 +1,22 @@
 function v_hacerventa() {
 	//TablaReporteCompras();
+    //SI HAY MODALES ABIERTOS QUE NO SE EJECUTE ESTE CODIGO
+    /*var inputElement = document.getElementById("CodigoProductoVenta");
+    inputElement.focus();
+    inputElement.addEventListener("blur", function(event){
+        inputElement.focus();
+    }); */
+
+    $(document).on("mousedown", function(e) {
+      clicked = $(e.target)
+    })
+
+    $("input").on("blur", function() {
+      if (!clicked.is(".campoCantidadProducto") && !clicked.is("#CodigoProductoVenta")  && !clicked.is("#DescuentoDineroProducto")) {
+        $(this).focus()
+      }
+    })
+
 	EstatusCaja();
     $("#CodigoProductoVenta").focus();
 
@@ -258,6 +275,32 @@ function v_hacerventa() {
             }
         }*/
     }
+
+
+    $('#FormDescuentoProducto').validate({
+        rules: {
+            DescuentoDineroProducto: {
+                required: true,
+                min: 0
+            },
+        },
+        messages: {
+            DescuentoDineroProducto: {
+                required: "El monto de descuento es obligatorio",
+                min: "El valor mínimo es 0"
+            },
+        },
+        submitHandler: function(form) { 
+            var idProducto = $("#GuardarDescuentoProducto").attr("attrid");
+            var idPresentacion = $("#GuardarDescuentoProducto").attr("presentacion");  
+
+            if($("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idProducto+'][idPresentacion='+idPresentacion+']').length > 0){  
+                $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idProducto+'][idPresentacion='+idPresentacion+']').children("td:eq(5)").find("#SpanTextoDescuento").text($("#DescuentoDineroProducto").val());
+                $("#ModalDescuentoProducto").modal("hide");
+                moneda();
+            }     
+        }
+    });  
 }
 
 
@@ -270,23 +313,25 @@ jQuery(document).ready(function($) {
 
     $(document).on('hidden.bs.modal', '#ModalCerrarCaja',function(){
        $("#CodigoProductoVenta").focus();
-       console.log("entro caja");
     });
 
     $(document).on('hidden.bs.modal', '#ModalVerClientesVenta',function(){
        $("#CodigoProductoVenta").focus();
-       console.log("entro clientes");
     });
 
     $(document).on('hidden.bs.modal', '#ModalVerDireccionesCliente',function(){
        $("#CodigoProductoVenta").focus();
-       console.log("entro direcciones");
     });
 
     $(document).on('hidden.bs.modal', '#ModalVerPedidosVenta',function(){
        $("#CodigoProductoVenta").focus();
-       console.log("entro pedidos");
     });
+
+    $(document).on('hidden.bs.modal', '#ModalDescuentoProducto',function(){
+       $("#CodigoProductoVenta").focus();
+    });
+
+    
 
 	/*$(document).on('hidden.bs.modal', '#ModalBalanceCaja',function(){
         $("#cargarVentas").trigger("click");
@@ -318,14 +363,23 @@ jQuery(document).ready(function($) {
 		$("#ModalVerDireccionesCliente").modal("show");
 	});
 
+    /*$('#CodigoProductoVenta').on('blur',function () { 
+        var blurEl = $(this); 
+        setTimeout(function() {
+            blurEl.focus()
+        }, 10);
+    });*/
+
 	$(document).on('click', '#TablaClienteVenta tbody tr', function() {
-		var idcliente = $(this).attr("id");
-		var nombre = $(this).children("td:eq(0)").text();
-		var RFC = $(this).children("td:eq(2)").text();
-		$("#ModalVerClientesVenta").modal("hide");
-		$("#CargarClientesModalVentas").html("Cliente: "+nombre+"<br>RFC: "+RFC);
-		$("#CargarClientesModalVentas").attr("attrid", idcliente);
-		$(".BotonLimpiarCliente").removeClass("oculto");
+        if ($(this).attr("id") != undefined) {
+            var idcliente = $(this).attr("id");
+            var nombre = $(this).children("td:eq(0)").text();
+            var RFC = $(this).children("td:eq(2)").text();
+            $("#ModalVerClientesVenta").modal("hide");
+            $("#CargarClientesModalVentas").html("<span style='font-size: 10px;'>Cliente: "+nombre+"<br>RFC: "+RFC+"</span>");
+            $("#CargarClientesModalVentas").attr("attrid", idcliente);
+            $(".BotonLimpiarCliente").removeClass("oculto");
+        }
 	});
 
 	$(document).on('click', '#TablaDireccionesClientes tbody tr', function() {
@@ -333,7 +387,7 @@ jQuery(document).ready(function($) {
 		if (idDireccion != "No") {
 			var direccion = $(this).children("td:eq(0)").html();
 			$("#ModalVerDireccionesCliente").modal("hide");
-			$("#CargarClientesModalDirecciones").html(direccion);
+			$("#CargarClientesModalDirecciones").html("<span style='font-size: 10px;'>"+direccion+"</span>");
 			$("#CargarClientesModalDirecciones").attr("iddireccion", idDireccion);
 		}
 	});
@@ -401,19 +455,12 @@ jQuery(document).ready(function($) {
 	                        <td>`+datos.Codigo+`</td>
 	                        <td>`+datos.Descripcion+` <br><button class="btn btn-secondary btn-sm CambiarPresentacion" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Presentacion+`</button></td>
 	                        <td><button class="btn btn-sm btn-primary cambiarPrecio dinero" precio="`+datos.Precio_General+`" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Precio_General+`</button>`+precioimporte+`</td>
-	                        <td><span>Productos</span><input type='number' value='1' min='1' step='any' class='form-control form-control-sm campoCantidadProducto'>`+campoImportes+`</td>
+	                        <td><span>Productos</span><input type='number' value='1' min='1' step='any' class='form-control form-control-sm campoCantidadProducto' onfocusout="$('#CodigoProductoVenta').focus()">`+campoImportes+`</td>
 	                        <td>`+datos.Impuestos+`</td>
 	                        <td>
-		                        <div class="input-group">
-		                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-percentage"></i></span>
-		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProducto">
-		                        </div>
-		                        <div class="input-group">
-		                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-dollar-sign"></i></span>
-		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProductoCantidad">
-		                        </div>
+                                <button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`"><span id="SpanTextoDescuento" class="dinero">$0.00</span></button>
 		                    </td>
-	                        <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Total de importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
+	                        <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
 	                        <td>
 	                        	<button class="btn btn-sm btn-danger eliminarFila"><i class="fas fa-trash"></i></button>
 	                        </td>
@@ -427,6 +474,7 @@ jQuery(document).ready(function($) {
             console.log("Error ajax");
         }); 
     });
+
 
     $(document).on('click', '#VentaTablaProductos tbody tr', function() {
     	var codigo = $(this).children("td:eq(0)").find("#CodigoProducto").text();
@@ -479,19 +527,12 @@ jQuery(document).ready(function($) {
 	                        <td>`+datos.Codigo+`</td>
 	                        <td>`+datos.Descripcion+` <br> <button class="btn btn-secondary btn-sm CambiarPresentacion" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Presentacion+`</button></td>
 	                        <td><button class="btn btn-sm btn-primary cambiarPrecio dinero" precio="`+datos.Precio_General+`" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`">`+datos.Precio_General+`</button>`+precioimporte+`</td>
-	                        <td><span>Productos</span><input type='number' value='1' min='1' step='any' class='form-control form-control-sm campoCantidadProducto'>`+campoImportes+`</td>
+	                        <td><span>Productos</span><input type='number' value='1' min='1' step='any' class='form-control form-control-sm campoCantidadProducto' onfocusout="$('#CodigoProductoVenta').focus()">`+campoImportes+`</td>
 	                        <td>`+datos.Impuestos+`</td>
 	                        <td>
-		                        <div class="input-group">
-		                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-percentage"></i></span>
-		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProducto">
-		                        </div>
-		                        <div class="input-group">
-		                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-dollar-sign"></i></span>
-		                            <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProductoCantidad">
-		                        </div>
+                                <button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`"><span id="SpanTextoDescuento" class="dinero">$0.00</span></button>
 	                        </td>
-	                        <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Total de importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
+	                        <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
 	                        <td>
 	                        	<button class="btn btn-sm btn-danger eliminarFila"><i class="fas fa-trash"></i></button></td>
 	                    </tr>`);
@@ -1295,7 +1336,7 @@ jQuery(document).ready(function($) {
 			var datos = JSON.parse($.trim(res));
 			$("#bQuitarLimpiarPedido").removeClass("oculto");
 			$("#CargarClientesModalDirecciones").attr("iddireccion", "");
-			$("#CargarClientesModalVentas").html("Cliente: "+datos.data.NombreCliente+"<br>RFC: "+datos.data.RFCCliente);
+             $("#CargarClientesModalVentas").html("<span style='font-size: 10px;'>Cliente: "+datos.data.NombreCliente+"<br>RFC: "+datos.data.RFCCliente+"</span>");
 			$("#CargarClientesModalVentas").attr("attrid", datos.data.FK_Cliente);
 			$("#ModalVerPedidosVenta").modal("hide");
 			for (var i = 0; i < datos.data.Productos.data.length; i++) {
@@ -1327,17 +1368,9 @@ jQuery(document).ready(function($) {
 		            <td><span>Productos</span><input type='number' value='`+datos.data.Productos.data[i].Cantidad+`' min='1' step='any' class='form-control form-control-sm campoCantidadProducto'>`+campoImportes+`</td>
 		            <td>`+datos.data.Productos.data[i].Impuestos+`</td>
 		            <td>
-			        	<div class="input-group">
-			            	<span class="input-group-text" id="basic-addon1"><i class="fas fa-percentage"></i></span>
-			                <input type="number" value="0" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProducto">
-			            </div>
-			            <br>
-			            <div class="input-group">
-			            	<span class="input-group-text" id="basic-addon1"><i class="fas fa-dollar-sign"></i></span>
-			                <input type="number" value="`+datos.data.Productos.data[i].Descuento+`" min="0" max="100" step="any" class="form-control form-control-sm campoDescuentoProductoCantidad">
-			            </div>
+			        	<button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.data.Productos.data[i].FK_Producto+`" idPresentacion="`+presentacion+`"><span id="SpanTextoDescuento" class="dinero">$0.00</span></button>
 		            </td>
-		            <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Total de importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
+		            <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
 		            <td>
 						<button class="btn btn-sm btn-danger eliminarFila"><i class="fas fa-trash"></i></button></td>
 		        </tr>`);
@@ -1454,6 +1487,21 @@ jQuery(document).ready(function($) {
 
 	});
 
+    $(document).on('click', '.AbrirDescuentoProducto', function() {
+        const searchRegExp = new RegExp(',', 'g');
+        var actual = $(this).children("span").text().replace('$', '').replace(searchRegExp, '');
+        var idProducto = $(this).attr("attrid");
+        var idPresentacion = $(this).attr("idPresentacion");
+        $("#DescuentoDineroProducto").focus();
+        $("#ModalDescuentoProducto").modal("show");
+        $("#GuardarDescuentoProducto").attr("attrid", idProducto);
+        $("#GuardarDescuentoProducto").attr("presentacion", idPresentacion);
+        $("#GuardarDescuentoProducto").attr("actual", actual);
+    });
+
+    $(document).on('click', '#GuardarDescuentoProducto', function() {
+        $("#FormDescuentoProducto").submit();
+    });
 	/*$(document).on('change keyup', '#ImportePagadoVenta', function() {
 		const searchRegExp = new RegExp(',', 'g');
 		var pagado = parseFloat($(this).val()) || 0;
@@ -1548,7 +1596,7 @@ function TablaClienteVenta(){
 			"metodo": "detalles",
 			"accion": "hacerventa",
 			"tipo": "ConsultarCliente",
-			"sucursal": $("#SucursalVenta").val()
+			"sucursal": $("#SucursalVenta").attr("attrid")
 		}
 	});
 }

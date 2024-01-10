@@ -402,14 +402,14 @@ class hacerventa {
 				$separa = explode(' ', trim($buscar));
 				$busqueda = 'AND ';
 				for ($i=0; $i < count($separa); $i++) { 
-					$busqueda .= "CONCAT(Nombre, Calle, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais, Telefono, Celular, Correo, RFC) REGEXP '".$separa[$i]."'";
+					$busqueda .= "CONCAT(Nombre, Primer_Apellido, Segundo_Apellido, Calle, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais, Telefono, Celular, Correo, RFC) REGEXP '".$separa[$i]."'";
 					if($i < (count($separa)-1)){
 						$busqueda .= ' AND ';
 					}
 				}
 			}
 
-			$query = "SELECT ID_Cliente, Nombre, Calle AS Direccion, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais, Telefono, Celular, Correo AS Contacto, RFC, Facturar, (SELECT COUNT(*) FROM clientes $busqueda) AS Num FROM clientes INNER JOIN detalles_clientes_sucursal ON FK_Cliente = ID_Cliente WHERE detalles_clientes_sucursal.FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Cliente, Nombre, Primer_Apellido, Segundo_Apellido, Calle AS Direccion, No_Exterior, No_Interior, Colonia, Ciudad, Codigo_Postal, Estado, Pais, Telefono, Celular, Correo AS Contacto, RFC, Facturar, (SELECT COUNT(*) FROM clientes INNER JOIN detalles_clientes_sucursal ON FK_Cliente = ID_Cliente WHERE detalles_clientes_sucursal.FK_Sucursal = '$sucursal' $busqueda) AS Num FROM clientes INNER JOIN detalles_clientes_sucursal ON FK_Cliente = ID_Cliente WHERE detalles_clientes_sucursal.FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -479,7 +479,7 @@ class hacerventa {
 
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Cliente'],
-							'Nombre' => $row[$i]['Nombre'],
+							'Nombre' => $row[$i]['Nombre'].' '.$row[$i]["Primer_Apellido"].' '.$row[$i]["Segundo_Apellido"],
 							'Direccion' => $direccion,
 							'RFC' => $row[$i]['RFC'],
 							'Contacto' => $contacto,

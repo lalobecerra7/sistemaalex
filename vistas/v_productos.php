@@ -122,10 +122,16 @@
 		        </div>
 	       	</div>
 					<div class="row">
-		        <div class="col-md-6 col-sm-12 mb-3">
+		        <div class="col-md-3 col-sm-12 mb-3">
 		        	<div class="form-floating">
 		            <input type="text" class="form-control" id="DetallesProducto" name="DetallesProducto" placeholder="Ingresa los detalles adicionales del producto">
 		            <label for="DetallesProducto">Detalles adicionales</label>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-12 mb-3">
+		        	<div class="form-floating">
+		           	<input type="text" class="form-control" id="ReferenciaProducto" name="ReferenciaProducto" placeholder="Ingresa la referencia del producto(deiman)">
+		            <label for="ReferenciaProducto">Referencia</label>
 		          </div>
 		        </div>
 		        <div class="col-md-3 col-sm-12 mb-3">

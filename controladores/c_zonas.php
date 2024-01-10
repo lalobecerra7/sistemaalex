@@ -73,7 +73,7 @@ class zonas {
 		$Nombre =  $omodelo->link->real_escape_string($Nombre);
 		$Descripcion =  $omodelo->link->real_escape_string($Descripcion);
 
-		$query = "INSERT INTO zona SET Nombre = '$Nombre', Descripcion = '$Descripcion'";
+		$query = "INSERT INTO zonas SET Nombre = '$Nombre', Descripcion = '$Descripcion'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -93,7 +93,7 @@ class zonas {
 		$Nombre =  $omodelo->link->real_escape_string($Nombre);
 		$Descripcion =  $omodelo->link->real_escape_string($Descripcion);
 
-		$query = "UPDATE zona SET Nombre = '$Nombre', Descripcion = '$Descripcion' WHERE ID_Zona = '$IDZona'";
+		$query = "UPDATE zonas SET Nombre = '$Nombre', Descripcion = '$Descripcion' WHERE ID_Zona = '$IDZona'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {

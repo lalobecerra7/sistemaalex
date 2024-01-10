@@ -630,7 +630,7 @@ jQuery(document).ready(function($) {
     $(document).on('submit', '#formSucursalesCliente', function(event) {
         event.preventDefault();
 
-        if($("#verSucursalesCliente").children('tr[id="'+$.trim($("#SucursalCliente").val())+'"]').length == 0){
+        if($("#verSucursalesCliente").children('tr[id="'+$.trim($("#SucursalCliente").val())+'"]').length == 0 && $("#SucursalCliente").val() != ""){
             $("#verSucursalesCliente").append(`<tr id="`+$.trim($("#SucursalCliente").val())+`">
                 <td attrID="`+$.trim($("#SucursalCliente").val())+`">`+$.trim($('#SucursalCliente option:selected').text())+`</td>
                 <td><button type="button" class="btn btn-danger btn-sm bQuitarSucursal"><i class="fas fa-trash"></i></button></td>

@@ -17,14 +17,14 @@ class productos {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(Codigo, productos.Descripcion, Detalles) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(Codigo, productos.Descripcion, Detalles, Referencia) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Producto, Codigo, productos.Descripcion, Tipo, Costo, Precio, Precio_Mayoreo, Detalles, Imagen, areas.Nombre, areas.Descripcion AS DescripcionArea, areas.Nivel, (SELECT COUNT(*) FROM productos LEFT JOIN areas ON FK_Area = ID_Area $busqueda) AS Num, ((SELECT COUNT(*) FROM detalles_ventas WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras WHERE FK_Producto = ID_Producto)) AS numProd FROM productos LEFT JOIN areas ON FK_Area = ID_Area $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Producto, Codigo, Referencia, productos.Descripcion, Tipo, Costo, Precio, Precio_Mayoreo, Detalles, Imagen, areas.Nombre, areas.Descripcion AS DescripcionArea, areas.Nivel, (SELECT COUNT(*) FROM productos LEFT JOIN areas ON FK_Area = ID_Area $busqueda) AS Num, ((SELECT COUNT(*) FROM detalles_ventas WHERE FK_Producto = ID_Producto) + (SELECT COUNT(*) FROM detalle_compras WHERE FK_Producto = ID_Producto)) AS numProd FROM productos LEFT JOIN areas ON FK_Area = ID_Area $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -110,6 +110,11 @@ class productos {
 					if ($omodelo->permisos() == 'Administrador') {
 						$botonModificarExistencia = '<button class="btn btn-success btn-sm mb-1 ModificarExistencia" title="Modificar existencias" attrid="'.$row[$i]['ID_Producto'].'"><i class="fas fa-cog"></i></button>';
 					}
+
+					$referenciaDeiman = "";
+					if ($row[$i]['Referencia'] != "") {
+						$referenciaDeiman = "Referencia(Deiman): <b>".$row[$i]['Referencia']."</b><br>";
+					}
 					
 					
 					$arreglo['data'][$i] = array(
@@ -118,7 +123,7 @@ class productos {
 						'Descripcion' => $row[$i]['Descripcion'],
 						'Costo' => '<b class="dinero">$'.number_format($row[$i]['Costo'], 2).'</b>',
 						'Precio' => 'General: <b class="dinero">$'.number_format($row[$i]['Precio'], 2).'</b><br>'.$precios,
-						'Detalles' => $area."Detalles: ".$row[$i]['Detalles']."<br>".$presentacion,
+						'Detalles' => $referenciaDeiman.$area."Detalles: ".$row[$i]['Detalles']."<br>".$presentacion,
 						'Acciones' => $botonPermisosModificar.' '.$botonPermisosEliminar.' '.$botonAumentarExistencias.' '.$botonModificarExistencia,
 					);
 					
@@ -151,8 +156,9 @@ class productos {
 		$abreUnudadProd = $omodelo->link->real_escape_string($abreUnudadProd);
 		$objImProducto = $omodelo->link->real_escape_string($objImProducto);
 		$bloqueado = $omodelo->link->real_escape_string($bloqueado);
+		$ReferenciaProducto = $omodelo->link->real_escape_string($ReferenciaProducto);
 
-		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion',  FK_Categoria = '$Categoria', Tipo = '1', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Fecha_Registro = '$Fecha', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto', Importe = '$ImporteProducto', Bloqueado = '$bloqueado'";
+		$query = "INSERT INTO productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion',  FK_Categoria = '$Categoria', Tipo = '1', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Fecha_Registro = '$Fecha', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto', Importe = '$ImporteProducto', Bloqueado = '$bloqueado', Referencia = '$ReferenciaProducto'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -290,8 +296,9 @@ class productos {
 		$abreUnudadProd = $omodelo->link->real_escape_string($abreUnudadProd);
 		$objImProducto = $omodelo->link->real_escape_string($objImProducto);
 		$bloqueado = $omodelo->link->real_escape_string($bloqueado);
+		$ReferenciaProducto = $omodelo->link->real_escape_string($ReferenciaProducto);
 
-		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', FK_Categoria = '$Categoria', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto', Importe = '$ImporteProducto', Bloqueado = '$bloqueado' WHERE ID_Producto = '$IDProducto'";
+		$query = "UPDATE productos SET Codigo = '$CodigoBarras', Descripcion = '$Descripcion', FK_Categoria = '$Categoria', Costo = '$Costo', Precio = '$Precio', Precio_Mayoreo = '$PrecioMayoreo', FK_Area = '$Area', Detalles = '$Detalles', Clave_ProdServ_CFDI = '$claveProdServ', Clave_Unidad_CFDI = '$claveUnidadProd', Nombre_Unidad = '$unidadProd', Abreviatura_Unidad = '$abreUnudadProd', Objeto_Impuesto_CFDI = '$objImProducto', Importe = '$ImporteProducto', Bloqueado = '$bloqueado', Referencia = '$ReferenciaProducto' WHERE ID_Producto = '$IDProducto'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -499,7 +506,7 @@ class productos {
 		if($tipo == 'modificarProducto'){
 			$IDProducto =  $omodelo->link->real_escape_string($IDProducto);
 
-			$query = "SELECT ID_Producto, Codigo, Descripcion, Tipo, FK_Categoria, Costo, Precio, Precio_Mayoreo, FK_Area, Detalles, importe, Fecha_Registro, Imagen, Clave_ProdServ_CFDI, Clave_Unidad_CFDI, Nombre_Unidad, Abreviatura_Unidad, Objeto_Impuesto_CFDI, Bloqueado FROM productos WHERE ID_Producto = '$IDProducto'";
+			$query = "SELECT ID_Producto, Codigo, Descripcion, Tipo, FK_Categoria, Costo, Precio, Precio_Mayoreo, FK_Area, Detalles, importe, Fecha_Registro, Imagen, Clave_ProdServ_CFDI, Clave_Unidad_CFDI, Nombre_Unidad, Abreviatura_Unidad, Objeto_Impuesto_CFDI, Bloqueado, Referencia FROM productos WHERE ID_Producto = '$IDProducto'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -623,6 +630,7 @@ class productos {
 					$arreglo = array(
 						'ID_Producto' => $row[0]['ID_Producto'],
 						'Codigo' => $row[0]["Codigo"],
+						'Referencia' => $row[0]["Referencia"],
 						'Descripcion' => $row[0]["Descripcion"],
 						'FK_Categoria' => $row[0]["FK_Categoria"],
 						'Costo' => $row[0]["Costo"],
