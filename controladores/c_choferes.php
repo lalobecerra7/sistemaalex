@@ -24,7 +24,7 @@ class choferes {
 			}
 		}
 
-		$query = "SELECT ID_Chofer, Nombre, Primer_Apellido, Segundo_Apellido, Fecha_Registro AS Fecha, DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, (SELECT COUNT(*) FROM choferes $busqueda) AS Num FROM choferes $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Chofer, Nombre, Primer_Apellido, Segundo_Apellido, choferes.Fecha_Registro AS Fecha, DATE_FORMAT(choferes.Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, Marca, Modelo, Descripcion, (SELECT COUNT(*) FROM choferes $busqueda) AS Num FROM choferes LEFT JOIN vehiculos ON ID_Vehiculo = FK_Vehiculo $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -49,6 +49,7 @@ class choferes {
 						'Nombre' => $row[$i]['Nombre'],
 						'Primer_Apellido' => $row[$i]['Primer_Apellido'],
 						'Segundo_Apellido' => $row[$i]['Segundo_Apellido'],
+						'Vehiculo' => $row[$i]['Marca'] && $row[$i]['Modelo'] ? 'Marca: <b>'. $row[$i]['Marca'] .'</b></br>'.'Modelo: <b>'. $row[$i]['Modelo'] .'</b></br>'.'Descripcion: <b>'. $row[$i]['Descripcion'] .'</b></br>' : 'No cuenta con vehiculo asignado',
 						'Acciones' => $bModificar.' '.$bEliminar
 					);
 					
@@ -69,8 +70,9 @@ class choferes {
 		$nombre = $omodelo->link->real_escape_string($nombre);
 		$primerApellido = $omodelo->link->real_escape_string($primerApellido);
 		$segundoApellido = $omodelo->link->real_escape_string($segundoApellido);
+		$vehiculo = $omodelo->link->real_escape_string($vehiculosChofer);
 
-		$query = "INSERT INTO choferes SET Nombre = '$nombre', Primer_Apellido = '$primerApellido', Segundo_Apellido = '$segundoApellido', Fecha_Registro = '$fecha'";
+		$query = "INSERT INTO choferes SET Nombre = '$nombre', Primer_Apellido = '$primerApellido', Segundo_Apellido = '$segundoApellido', FK_Vehiculo = '$vehiculo', Fecha_Registro = '$fecha'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -90,8 +92,9 @@ class choferes {
 		$nombre = $omodelo->link->real_escape_string($nombre);
 		$primerApellido = $omodelo->link->real_escape_string($primerApellido);
 		$segundoApellido = $omodelo->link->real_escape_string($segundoApellido);
+		$vehiculo = $omodelo->link->real_escape_string($vehiculosChofer);
 
-		$query = "UPDATE choferes SET Nombre = '$nombre', Primer_Apellido = '$primerApellido', Segundo_Apellido = '$segundoApellido' WHERE ID_Chofer = '$id'";
+		$query = "UPDATE choferes SET Nombre = '$nombre', Primer_Apellido = '$primerApellido', Segundo_Apellido = '$segundoApellido', FK_Vehiculo = '$vehiculo' WHERE ID_Chofer = '$id'";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {

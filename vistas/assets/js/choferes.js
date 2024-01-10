@@ -19,7 +19,8 @@ function v_choferes() {
             }
         },
         submitHandler: function(form) { 
-            var data = "metodo="+$("#bGuardarChofer").attr('tipo')+"&accion=choferes&nombre="+$.trim($("#nombreChofer").val())+"&primerApellido="+$.trim($("#primerApellidoChofer").val())+"&segundoApellido="+$.trim($("#segundoApellidoChofer").val())+"&id="+$("#bGuardarChofer").attr('attrID');
+            var data = "metodo="+$("#bGuardarChofer").attr('tipo')+"&accion=choferes&nombre="+$.trim($("#nombreChofer").val())+"&primerApellido="+$.trim($("#primerApellidoChofer").val())+"&segundoApellido="+$.trim($("#segundoApellidoChofer").val())+"&vehiculosChofer="+$("#vehiculosChofer").val()+"&id="+$("#bGuardarChofer").attr('attrID');
+            //Añadir al formulario el behiculo
 
             $.ajax({
                 url: 'index.php',
@@ -72,6 +73,7 @@ function tablaChoferes() {
             "Nombre",
             "Primer_Apellido",
             "Segundo_Apellido",
+            "Vehiculo",
             "Acciones"
         ], 
         "sort": [0, "desc"],
