@@ -1094,7 +1094,9 @@
 
             #MenuImportes#
             #MenuRutas#
+            #MenuChoferes#
             #MenuVehiculos#
+            #MenuCortesRuta#
 
             <li class="menu-item cargarVista" carga="v_hacerCompra" titulo="Hacer compra" id="cargarHacerCompra" hidden>
               <a href="javascript:void(0)"  class="menu-link">
@@ -1763,5 +1765,7 @@
     <script type="text/javascript" src="vistas/assets/js/reporteVentas.js"></script>
     <script type="text/javascript" src="vistas/assets/js/rutas.js"></script>
     <script type="text/javascript" src="vistas/assets/js/vehiculos.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/choferes.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/cortesRuta.js"></script>
   </body>
 </html>

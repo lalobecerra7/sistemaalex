@@ -1,25 +1,25 @@
-function v_vehiculos() {
-	tablaVehiculos();
+function v_choferes() {
+	tablaChoferes();
 
-	$('#formVehiculos').validate({
+	$('#formChoferes').validate({
         rules: {
-            marcaVehiculo: {
+            nombreChofer: {
                 required: true
             },
-            modeloVehiculo: {
+            primerApellidoChofer: {
                 required: true
             }
         },
         messages: {
-            marcaVehiculo: {
-                required: "La marca es requerida."
+            nombreChofer: {
+                required: "El nombre es requerido."
             },
-            modeloVehiculo: {
-                required: "El modelo es requerido."
+            primerApellidoChofer: {
+                required: "El primer apellido es requerido."
             }
         },
         submitHandler: function(form) { 
-            var data = "metodo="+$("#bGuardarVehiculo").attr('tipo')+"&accion=vehiculos&marca="+$.trim($("#marcaVehiculo").val())+"&modelo="+$.trim($("#modeloVehiculo").val())+"&matricula="+$.trim($("#matriculaVehiculo").val())+"&descripcion="+$.trim($("#descripcionVehiculo").val())+"&id="+$("#bGuardarVehiculo").attr('attrID');
+            var data = "metodo="+$("#bGuardarChofer").attr('tipo')+"&accion=choferes&nombre="+$.trim($("#nombreChofer").val())+"&primerApellido="+$.trim($("#primerApellidoChofer").val())+"&segundoApellido="+$.trim($("#segundoApellidoChofer").val())+"&id="+$("#bGuardarChofer").attr('attrID');
 
             $.ajax({
                 url: 'index.php',
@@ -31,7 +31,7 @@ function v_vehiculos() {
             })
             .done(function(res) {
                 if ($.trim(res) == "Correcto") {
-                    if ($("#bGuardarVehiculo").attr("tipo") == "modificar") {
+                    if ($("#bGuardarChofer").attr("tipo") == "modificar") {
                         var tipoAlerta = "modificado";
                     }else{
                         var tipoAlerta = "guardado";
@@ -39,16 +39,16 @@ function v_vehiculos() {
 
                     Swal.fire({
                         icon: 'success',
-                        title: 'Vehículo '+tipoAlerta+' correctamente'
+                        title: 'Chofer '+tipoAlerta+' correctamente'
                     });
 
-                    tablaVehiculos(); 
-                    $("#modalVehiculo").modal("hide");
+                    tablaChoferes(); 
+                    $("#modalChofer").modal("hide");
                 }else{
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Error inesperado al '+$("#bGuardarVehiculo").attr("tipo")+' el vehículo.'
+                        text: 'Error inesperado al '+$("#bGuardarChofer").attr("tipo")+' el chofer.'
                     });
 
                     console.log($.trim(res));
@@ -64,51 +64,49 @@ function v_vehiculos() {
     }); 
 }
 
-function tablaVehiculos() {
+function tablaChoferes() {
 	ajaxMyDatatable({
-        "table": $("#tablaVehiculos"), 
+        "table": $("#tablaChoferes"), 
         "colums": [
             "Fecha",
-            "Marca",
-            "Modelo",
-            "Matricula",
-            "Descripcion",
+            "Nombre",
+            "Primer_Apellido",
+            "Segundo_Apellido",
             "Acciones"
         ], 
         "sort": [0, "desc"],
         "url": "index.php", 
         "params":{
             "metodo": "consultar",
-            "accion": "vehiculos"
+            "accion": "choferes"
         }
     });
 }
 
 jQuery(document).ready(function($) {
-	$(document).on('click', '#bNuevoVehiculo', function() {
-		$("#formVehiculos")[0].reset();
+	$(document).on('click', '#bNuevoChofer', function() {
+		$("#formChoferes")[0].reset();
 
-		$("#bGuardarVehiculo").attr('tipo', 'insertar');
-		$("#modalVehiculo").modal('show');
+		$("#bGuardarChofer").attr('tipo', 'insertar');
+		$("#modalChofer").modal('show');
 	});
 
-	$(document).on('click', '.bModificarVehiculo', function() {
+	$(document).on('click', '.bModificarChofer', function() {
 		var padre = $(this).parent().parent();
-		$("#formVehiculos")[0].reset();
-		$("#marcaVehiculo").val(padre.children('td:eq(1)').text());
-        $("#modeloVehiculo").val(padre.children('td:eq(2)').text());
-        $("#matriculaVehiculo").val(padre.children('td:eq(3)').text());
-		$("#descripcionVehiculo").val(padre.children('td:eq(4)').text());
+		$("#formChoferes")[0].reset();
+		$("#nombreChofer").val(padre.children('td:eq(1)').text());
+        $("#primerApellidoChofer").val(padre.children('td:eq(2)').text());
+        $("#segundoApellidoChofer").val(padre.children('td:eq(3)').text());
 
-		$("#bGuardarVehiculo").attr('attrID', $(this).attr('attrID'));
-		$("#bGuardarVehiculo").attr('tipo', 'modificar');
-		$("#modalVehiculo").modal('show');
+		$("#bGuardarChofer").attr('attrID', $(this).attr('attrID'));
+		$("#bGuardarChofer").attr('tipo', 'modificar');
+		$("#modalChofer").modal('show');
 	});
 
-	$(document).on('click', '.bEliminarVehiculo', function() {
+	$(document).on('click', '.bEliminarChofer', function() {
 		var btn = $(this);
 		Swal.fire({
-			title: '¿Estás seguro de eliminar el vehículo?',
+			title: '¿Estás seguro de eliminar el chofer?',
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
@@ -116,7 +114,7 @@ jQuery(document).ready(function($) {
 			cancelButtonText: 'No, cancelar',
 			confirmButtonText: 'Si, eliminar'
         }).then((result) => {
-        	var data = "metodo=eliminar&accion=vehiculos&id="+btn.attr('attrID');
+        	var data = "metodo=eliminar&accion=choferes&id="+btn.attr('attrID');
 
             $.ajax({
                 url: 'index.php',
@@ -130,15 +128,15 @@ jQuery(document).ready(function($) {
                 if ($.trim(res) == "Correcto") {
                     Swal.fire({
                         icon: 'success',
-                        title: 'El vehículo ha sido eliminado correctamente'
+                        title: 'El chofer ha sido eliminado correctamente'
                     });
 
-                    tablaVehiculos(); 
+                    tablaChoferes(); 
                 }else{
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Error inesperado al eliminar el vehículo.'
+                        text: 'Error inesperado al eliminar el chofer.'
                     });
 
                     console.log($.trim(res));

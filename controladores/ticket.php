@@ -5,8 +5,8 @@
   }
 
 date_default_timezone_set('America/Mexico_City');
-$con = mysqli_connect('localhost','wits_userBD','ZfX7y99GSs','wits_sistemaalex');
-//$con = mysqli_connect('localhost','root','','wits_sistemaalex');
+//$con = mysqli_connect('localhost','wits_userBD','ZfX7y99GSs','wits_sistemaalex');
+$con = mysqli_connect('localhost','root','','wits_sistemaalex');
 $arreglo = '';
 $arregloVenta = '';
 

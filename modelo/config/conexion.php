@@ -5,7 +5,7 @@ class conexion {
     private $_host = "localhost";
     private $_username = "root";
     private $_password = "";
-    private $_database = "wits_sistemaalex3";
+    private $_database = "wits_sistemaalex";
 
     public function __construct()
     {
