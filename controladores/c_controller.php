@@ -29,6 +29,8 @@ include "controladores/c_reporteCaja.php";
 include "controladores/c_reporteVentas.php";
 include "controladores/c_rutas.php";
 include "controladores/c_vehiculos.php";
+include "controladores/c_choferes.php";
+include "controladores/c_cortesRuta.php";
 
 class controller {
 
@@ -210,7 +212,7 @@ class controller {
 		$pagina = str_replace('#MenuImportes#', $botonImportes, $pagina);
 
 		$botonRutas = '';
-		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_importes'][1] == '1') {
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_rutas'][1] == '1') {
 			$botonRutas = '<li class="menu-item cargarVista" carga="v_rutas" titulo="Rutas" id="cargarRutas">
               <a href="javascript:void(0)" class="menu-link">
                 <i class="menu-icon fas fa-road"></i>
@@ -220,8 +222,19 @@ class controller {
 		}
 		$pagina = str_replace('#MenuRutas#', $botonRutas, $pagina);
 
+		$botonChoferes = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_choferes'][1] == '1') {
+			$botonChoferes = '<li class="menu-item cargarVista" carga="v_choferes" titulo="Choferes" id="cargarChoferes">
+              <a href="javascript:void(0)" class="menu-link">
+                <i class="menu-icon fas fa-user-tie"></i>
+                <div data-i18n="Choferes">Choferes</div>
+              </a>
+            </li>';
+		}
+		$pagina = str_replace('#MenuChoferes#', $botonChoferes, $pagina);
+
 		$botonVehiculos= '';
-		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_importes'][1] == '1') {
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_vehiculos'][1] == '1') {
 			$botonVehiculos = '<li class="menu-item cargarVista" carga="v_vehiculos" titulo="Vehículos" id="cargarVehiculos">
               <a href="javascript:void(0)" class="menu-link">
                 <i class="menu-icon fas fa-truck"></i>
@@ -230,6 +243,18 @@ class controller {
             </li>';
 		}
 		$pagina = str_replace('#MenuVehiculos#', $botonVehiculos, $pagina);
+
+
+		$botonCortesRuta= '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][1] == '1') {
+			$botonCortesRuta = '<li class="menu-item cargarVista" carga="v_cortesRuta" titulo="Cortes Ruta" id="cargarCortesRuta">
+              <a href="javascript:void(0)" class="menu-link">
+                <i class="menu-icon fas fa-clipboard-list"></i>
+                <div data-i18n="Cortes Ruta">Cortes Ruta</div>
+              </a>
+            </li>';
+		}
+		$pagina = str_replace('#MenuCortesRuta#', $botonCortesRuta, $pagina);
 
 		$botonPrecios = '';
 		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_precios'][1] == '1') {

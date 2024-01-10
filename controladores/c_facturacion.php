@@ -22,7 +22,7 @@ class facturacion {
 					echo "Error 2 Datos Facturacion";
 				}else{
 					$query1 = "SELECT ID_Venta, FK_Cliente, Razon_CFDI, Regimen_CFDI, clientes.Calle AS Calle_Cliente, clientes.No_Exterior AS No_Exterior_Cliente, clientes.No_Interior AS No_Interior_Cliente, clientes.Colonia AS Colonia_Cliente, clientes.Ciudad AS Ciudad_Cliente, clientes.Codigo_Postal AS Codigo_Postal_Cliente, clientes.Estado AS Estado_Cliente, clientes.Pais AS Pais_Cliente, RFC AS RFC_Cliente, sucursales.Nombre AS Sucursal, sucursales.Calle AS Calle_Sucursal, sucursales.No_Exterior AS No_Exterior_Sucursal, sucursales.No_Interior AS No_Interior_Sucursal, sucursales.Colonia AS Colonia_Sucursal, sucursales.CP AS CP_Sucursal, sucursales.Ciudad AS Ciudad_Sucursal, sucursales.Estado AS Estado_Sucursal, sucursales.Pais AS Pais_Sucursal, ventas.Descuento AS Descuento, Total, ventas.Fecha_Registro AS Fecha_Registro FROM ventas INNER JOIN sucursales ON ID_Sucursal = 1 INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ID_Venta = '$id' AND Facturada = '0' AND Estatus = 'Completada'";
-					//ID_Sucursal
+					//FK_Sucursal = ID_Sucursal
 					$row1 = $omodelo->_consultar($query1);
 					$numerofilas1 = $omodelo->numerofilas;
 
@@ -305,17 +305,17 @@ class facturacion {
 																	}else{
 																		$impuestosTras .= '<cfdi:Traslado Base="'.number_format((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']), 2, '.', '').'" Impuesto="'.$row3[$x]['Clave_CFDI'].'" TipoFactor="'.$row3[$x]['Tipo_Factor_CFDI'].'" TasaOCuota="'.number_format(($row3[$x]['Tasa_Cuota_CFDI'] / 100), 6, '.', '').'" Importe="'.number_format(((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100)), 2, '.', '').'"/>';
 
-																		$totalImTras += (($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100);
+																		$totalImTras += number_format((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100), 2, '.', '');
 
 																		if(count($imAgrupadosTras) == 0){
-																			array_push($imAgrupadosTras, array('Base' => (($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']), 'Impuesto' => $row3[$x]['Clave_CFDI'], 'TipoFactor' => $row3[$x]['Tipo_Factor_CFDI'], 'TasaOCuota' => ($row3[$x]['Tasa_Cuota_CFDI'] / 100), 'Importe' => ((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100))));
+																			array_push($imAgrupadosTras, array('Base' => (($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']), 'Impuesto' => $row3[$x]['Clave_CFDI'], 'TipoFactor' => $row3[$x]['Tipo_Factor_CFDI'], 'TasaOCuota' => ($row3[$x]['Tasa_Cuota_CFDI'] / 100), 'Importe' => number_format(((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100)), 2, '.', '')));
 																		}else{
 																			$encontro = false;
 																			for ($y=0; $y < count($imAgrupadosTras); $y++) { 
 																				if($imAgrupadosTras[$y]['Impuesto'] == $row3[$x]['Clave_CFDI'] && $imAgrupadosTras[$y]['TipoFactor'] == $row3[$x]['Tipo_Factor_CFDI'] && $imAgrupadosTras[$y]['TasaOCuota'] == ($row3[$x]['Tasa_Cuota_CFDI'] / 100)){
 
 																					$imAgrupadosTras[$y]['Base'] += ($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento'];
-																					$imAgrupadosTras[$y]['Importe'] += (($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100);
+																					$imAgrupadosTras[$y]['Importe'] += number_format((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100), 2, '.', '');
 
 																					$encontro = true;
 																					break;
@@ -323,24 +323,24 @@ class facturacion {
 																			}
 
 																			if($encontro == false){
-																				array_push($imAgrupadosTras, array('Base' => (($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']), 'Impuesto' => $row3[$x]['Clave_CFDI'], 'TipoFactor' => $row3[$x]['Tipo_Factor_CFDI'], 'TasaOCuota' => ($row3[$x]['Tasa_Cuota_CFDI'] / 100), 'Importe' => ((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100))));
+																				array_push($imAgrupadosTras, array('Base' => (($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']), 'Impuesto' => $row3[$x]['Clave_CFDI'], 'TipoFactor' => $row3[$x]['Tipo_Factor_CFDI'], 'TasaOCuota' => ($row3[$x]['Tasa_Cuota_CFDI'] / 100), 'Importe' => number_format(((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100)), 2, '.', '')));
 																			}
 																		}
 																	}
 																}else{
 																	$impuestosRet .= '<cfdi:Retencion Base="'.number_format((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']), 2, '.', '').'" Impuesto="'.$row3[$x]['Clave_CFDI'].'" TipoFactor="'.$row3[$x]['Tipo_Factor_CFDI'].'" TasaOCuota="'.number_format(($row3[$x]['Tasa_Cuota_CFDI'] / 100), 6, '.', '').'" Importe="'.number_format(((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100)), 2, '.', '').'"/>';
 
-																	$totalImRete += (($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100);
+																	$totalImRete += number_format((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100), 2, '.', '');
 
 																	if(count($imAgrupadosRete) == 0){
-																		array_push($imAgrupadosRete, array('Base' => (($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']), 'Impuesto' => $row3[$x]['Clave_CFDI'], 'TipoFactor' => $row3[$x]['Tipo_Factor_CFDI'], 'TasaOCuota' => ($row3[$x]['Tasa_Cuota_CFDI'] / 100), 'Importe' => ((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100))));
+																		array_push($imAgrupadosRete, array('Base' => (($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']), 'Impuesto' => $row3[$x]['Clave_CFDI'], 'TipoFactor' => $row3[$x]['Tipo_Factor_CFDI'], 'TasaOCuota' => ($row3[$x]['Tasa_Cuota_CFDI'] / 100), 'Importe' => number_format(((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100)), 2, '.', '')));
 																	}else{
 																		$encontro = false;
 																		for ($y=0; $y < count($imAgrupadosRete); $y++) { 
 																			if($imAgrupadosRete[$y]['Impuesto'] == $row3[$x]['Clave_CFDI'] && $imAgrupadosRete[$y]['TipoFactor'] == $row3[$x]['Tipo_Factor_CFDI'] && $imAgrupadosRete[$y]['TasaOCuota'] == ($row3[$x]['Tasa_Cuota_CFDI'] / 100)){
 
 																				$imAgrupadosRete[$y]['Base'] += ($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento'];
-																				$imAgrupadosRete[$y]['Importe'] += (($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100);
+																				$imAgrupadosRete[$y]['Importe'] += number_format((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100), 2, '.', '');
 
 																				$encontro = true;
 																				break;
@@ -348,7 +348,7 @@ class facturacion {
 																		}
 
 																		if($encontro == false){
-																			array_push($imAgrupadosRete, array('Base' => (($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']), 'Impuesto' => $row3[$x]['Clave_CFDI'], 'TipoFactor' => $row3[$x]['Tipo_Factor_CFDI'], 'TasaOCuota' => ($row3[$x]['Tasa_Cuota_CFDI'] / 100), 'Importe' => ((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100))));
+																			array_push($imAgrupadosRete, array('Base' => (($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']), 'Impuesto' => $row3[$x]['Clave_CFDI'], 'TipoFactor' => $row3[$x]['Tipo_Factor_CFDI'], 'TasaOCuota' => ($row3[$x]['Tasa_Cuota_CFDI'] / 100), 'Importe' => number_format(((($row2[$i]['Cantidad'] * $row2[$i]['Precio']) - $row2[$i]['Descuento']) * ($row3[$x]['Tasa_Cuota_CFDI'] / 100)), 2, '.', '')));
 																		}
 																	}
 																}

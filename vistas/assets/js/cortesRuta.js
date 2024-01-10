@@ -1,7 +1,7 @@
-function v_vehiculos() {
-	tablaVehiculos();
+function v_cortesRuta() {
+	tablaCortesRuta();
 
-	$('#formVehiculos').validate({
+	/*$('#formVehiculos').validate({
         rules: {
             marcaVehiculo: {
                 required: true
@@ -61,31 +61,32 @@ function v_vehiculos() {
                 $("#carga").hide();
             });                
         }
-    }); 
+    }); */
 }
 
-function tablaVehiculos() {
+function tablaCortesRuta() {
 	ajaxMyDatatable({
-        "table": $("#tablaVehiculos"), 
+        "table": $("#tablaCortesRuta"), 
         "colums": [
             "Fecha",
-            "Marca",
-            "Modelo",
-            "Matricula",
-            "Descripcion",
+            "Ruta",
+            "Fecha_Inicio",
+            "Fecha_Fin",
+            "Total",
+            "Verificado",
             "Acciones"
         ], 
         "sort": [0, "desc"],
         "url": "index.php", 
         "params":{
             "metodo": "consultar",
-            "accion": "vehiculos"
+            "accion": "cortesRuta"
         }
     });
 }
 
 jQuery(document).ready(function($) {
-	$(document).on('click', '#bNuevoVehiculo', function() {
+	/*$(document).on('click', '#bNuevoVehiculo', function() {
 		$("#formVehiculos")[0].reset();
 
 		$("#bGuardarVehiculo").attr('tipo', 'insertar');
@@ -151,5 +152,5 @@ jQuery(document).ready(function($) {
                 $("#carga").hide();
             });
         });
-	});
+	});*/
 });
