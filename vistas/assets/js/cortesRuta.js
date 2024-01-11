@@ -1,25 +1,31 @@
 function v_cortesRuta() {
 	tablaCortesRuta();
 
-	/*$('#formVehiculos').validate({
+	$('#formCorteDeRuta').validate({
         rules: {
-            marcaVehiculo: {
+            rutasCorte: {
                 required: true
             },
-            modeloVehiculo: {
+            FechaInicioCorte: {
+                required: true
+            },
+            FechaFinCorte: {
                 required: true
             }
         },
         messages: {
-            marcaVehiculo: {
+            rutasCorte: {
                 required: "La marca es requerida."
             },
-            modeloVehiculo: {
-                required: "El modelo es requerido."
+            FechaInicioCorte: {
+                required: "La fecha de inicio es requerida."
+            },
+            FechaFinCorte: {
+                required: "La fecha de fin es requerida."
             }
         },
         submitHandler: function(form) { 
-            var data = "metodo="+$("#bGuardarVehiculo").attr('tipo')+"&accion=vehiculos&marca="+$.trim($("#marcaVehiculo").val())+"&modelo="+$.trim($("#modeloVehiculo").val())+"&matricula="+$.trim($("#matriculaVehiculo").val())+"&descripcion="+$.trim($("#descripcionVehiculo").val())+"&id="+$("#bGuardarVehiculo").attr('attrID');
+            var data = "metodo="+$("#bGuardarCorte").attr('tipo')+"&accion=cortesRuta&rutasCorte="+$.trim($("#rutasCorte").val())+"&FechaInicioCorte="+$.trim($("#FechaInicioCorte").val())+"&FechaFinCorte="+$.trim($("#FechaFinCorte").val())+"&selectChofer="+$.trim($("#selectChofer").val())+"&selectVehiculo="+$.trim($("#selectVehiculo").val())+"&id="+$("#bGuardarCorte").attr('attrID');
 
             $.ajax({
                 url: 'index.php',
@@ -31,7 +37,7 @@ function v_cortesRuta() {
             })
             .done(function(res) {
                 if ($.trim(res) == "Correcto") {
-                    if ($("#bGuardarVehiculo").attr("tipo") == "modificar") {
+                    if ($("#bGuardarCorte").attr("tipo") == "modificar") {
                         var tipoAlerta = "modificado";
                     }else{
                         var tipoAlerta = "guardado";
@@ -39,16 +45,16 @@ function v_cortesRuta() {
 
                     Swal.fire({
                         icon: 'success',
-                        title: 'Vehículo '+tipoAlerta+' correctamente'
+                        title: 'Corte '+tipoAlerta+' correctamente'
                     });
 
-                    tablaVehiculos(); 
-                    $("#modalVehiculo").modal("hide");
+                    tablaCortesRuta(); 
+                    $("#modalCorteRuta").modal("hide");
                 }else{
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Error inesperado al '+$("#bGuardarVehiculo").attr("tipo")+' el vehículo.'
+                        text: 'Error inesperado al '+$("#bGuardarCorte").attr("tipo")+' la ruta.'
                     });
 
                     console.log($.trim(res));
@@ -61,7 +67,7 @@ function v_cortesRuta() {
                 $("#carga").hide();
             });                
         }
-    }); */
+    }); 
 }
 
 function tablaCortesRuta() {
@@ -74,26 +80,53 @@ function tablaCortesRuta() {
             "Fecha_Fin",
             "Total",
             "Verificado",
+            "Detalles",
             "Acciones"
         ], 
         "sort": [0, "desc"],
         "url": "index.php", 
         "params":{
             "metodo": "consultar",
+            "tipo": "cortesRutas",
+            "accion": "cortesRuta"
+        }
+    });
+}
+
+function tablaClientesRuta() {
+    ajaxMyDatatable({
+        "table": $("#tablaClientesRuta"), 
+        "colums": [
+            "Orden_Ruta",
+            "Nombre",
+            "Domicilio",
+            "Total",
+            "Acciones"
+        ], 
+        "sort": [0, "desc"],
+        "url": "index.php", 
+        "params":{
+            "metodo": "consultar",
+            "tipo": "clientesRuta",
+            "Ruta": $("#rutasCorte").val(),
             "accion": "cortesRuta"
         }
     });
 }
 
 jQuery(document).ready(function($) {
-	/*$(document).on('click', '#bNuevoVehiculo', function() {
-		$("#formVehiculos")[0].reset();
+    $(document).on('click', '#bNuevoCorteRuta', function() {
+        $("#modalCorteRuta").modal('show');
+        $("#formCorteDeRuta")[0].reset();
+        $("#bGuardarCorte").attr('tipo', 'insertar');
+    });
 
-		$("#bGuardarVehiculo").attr('tipo', 'insertar');
-		$("#modalVehiculo").modal('show');
+	$(document).on('click', '#bGenerarClientes', function() {
+		tablaClientesRuta();
 	});
 
-	$(document).on('click', '.bModificarVehiculo', function() {
+
+	/*$(document).on('click', '.bModificarVehiculo', function() {
 		var padre = $(this).parent().parent();
 		$("#formVehiculos")[0].reset();
 		$("#marcaVehiculo").val(padre.children('td:eq(1)').text());
