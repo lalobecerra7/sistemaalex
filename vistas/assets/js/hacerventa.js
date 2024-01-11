@@ -279,26 +279,67 @@ function v_hacerventa() {
 
     $('#FormDescuentoProducto').validate({
         rules: {
-            DescuentoDineroProducto: {
+            TokenDescuento: {
                 required: true,
-                min: 0
             },
         },
         messages: {
-            DescuentoDineroProducto: {
-                required: "El monto de descuento es obligatorio",
-                min: "El valor mínimo es 0"
+            TokenDescuento: {
+                required: "El código de descuento es obligatorio",
             },
         },
         submitHandler: function(form) { 
             var idProducto = $("#GuardarDescuentoProducto").attr("attrid");
-            var idPresentacion = $("#GuardarDescuentoProducto").attr("presentacion");  
+            var idPresentacion = $("#GuardarDescuentoProducto").attr("presentacion");
+            //CONSULTAR VALIDEZ CODIGO
+            var data = "metodo=detalles&accion=hacerventa&tipo=ConsultarToken&codigo="+$("#TokenDescuento").val();
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+            })
+            .done(function(res) {
+                var datos = $.trim(res).split("~");
+                if ($.trim(datos[0]) == "Correcto") {
+                    if($("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idProducto+'][idPresentacion='+idPresentacion+']').length > 0){  
+                        $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idProducto+'][idPresentacion='+idPresentacion+']').children("td:eq(5)").find("#SpanTextoDescuento").text(datos[1]);
+                        $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idProducto+'][idPresentacion='+idPresentacion+']').children("td:eq(5)").find("#SpanTextoDescuento").attr("actual", datos[1]);
+                        $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idProducto+'][idPresentacion='+idPresentacion+']').children("td:eq(5)").find("#SpanTextoDescuento").attr("codigo", $("#TokenDescuento").val());
+                        $("#ModalDescuentoProducto").modal("hide");
 
-            if($("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idProducto+'][idPresentacion='+idPresentacion+']').length > 0){  
-                $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idProducto+'][idPresentacion='+idPresentacion+']').children("td:eq(5)").find("#SpanTextoDescuento").text($("#DescuentoDineroProducto").val());
-                $("#ModalDescuentoProducto").modal("hide");
-                moneda();
-            }     
+                        var descuento = parseFloat(datos[1]);
+                        var subtotalActual = $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idProducto+'][idPresentacion='+idPresentacion+']').children("td:eq(6)").find(".totalColumna").attr("subtotal");
+                        var total = parseFloat(subtotalActual) - descuento;
+                        $("#TablaProductosAgregadoVenta").children('tbody').children('tr[attrID='+idProducto+'][idPresentacion='+idPresentacion+']').children("td:eq(6)").find(".totalColumna").attr("subtotal", total);
+                        //CalcularSubtotalVenta();
+                        $(".campoCantidadProducto").trigger("change");
+                        console.log(total);
+                        /*var cantidad = parseFloat($("#DescuentoDineroProducto").val());
+                        var importe = 0;
+                        if ($(this).parent().parent().attr("importepresentacion") != 0) {
+                            importe = $(this).parent().parent().attr("importepresentacion");
+                        }else{
+                            importe = $(this).parent().parent().attr("importegeneral");    
+                        }
+                        var total = parseFloat(cantidad) * parseFloat(importe);
+                        $(this).parent().parent().children("td:eq(6)").find(".totalColumnaImporte").text(parseFloat(total) || 0);
+                        moneda();    
+                        CalcularSubtotalVenta();*/
+
+                        
+                        moneda();
+                    } 
+                }else{
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'Este token no está disponible, intenta con otro.'
+                    });    
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            }); 
         }
     });  
 }
@@ -458,7 +499,7 @@ jQuery(document).ready(function($) {
 	                        <td><span>Productos</span><input type='number' value='1' min='1' step='any' class='form-control form-control-sm campoCantidadProducto' onfocusout="$('#CodigoProductoVenta').focus()">`+campoImportes+`</td>
 	                        <td>`+datos.Impuestos+`</td>
 	                        <td>
-                                <button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`"><span id="SpanTextoDescuento" class="dinero">$0.00</span></button>
+                                <button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`"><span id="SpanTextoDescuento" class="dinero" codigo actual>$0.00</span></button>
 		                    </td>
 	                        <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
 	                        <td>
@@ -530,7 +571,7 @@ jQuery(document).ready(function($) {
 	                        <td><span>Productos</span><input type='number' value='1' min='1' step='any' class='form-control form-control-sm campoCantidadProducto' onfocusout="$('#CodigoProductoVenta').focus()">`+campoImportes+`</td>
 	                        <td>`+datos.Impuestos+`</td>
 	                        <td>
-                                <button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`"><span id="SpanTextoDescuento" class="dinero">$0.00</span></button>
+                                <button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`"><span id="SpanTextoDescuento" class="dinero" codigo actual>$0.00</span></button>
 	                        </td>
 	                        <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
 	                        <td>
@@ -578,9 +619,10 @@ jQuery(document).ready(function($) {
 		//$(this).parent().find(".campoCantidadImporte").val(0);
 		
 		var precio = $(this).parent().parent().children("td:eq(2)").find(".cambiarPrecio").attr("precio");
+        var descuento = parseFloat($(this).parent().parent().children("td:eq(5)").find("#SpanTextoDescuento").attr("actual")) || 0;
 		//var cantidad = $(this).parent().parent().children("td:eq(3)").find(".campoCantidadProducto").val();
 		var cantidad = $(this).val();
-		var subtotal = parseFloat(precio) * parseFloat(cantidad);
+		var subtotal = (parseFloat(precio) * parseFloat(cantidad)) - descuento;
 		var descuento = parseFloat($(this).parent().parent().children("td:eq(5)").find(".campoDescuentoProducto").val()) / 100;
 		if (isNaN(descuento)) {
 			descuento = 0;
@@ -606,8 +648,6 @@ jQuery(document).ready(function($) {
 			}
 		});
 		var totalfinal = parseFloat(total) + parseFloat(totalImpuestos);
-		/*console.log($(this).parent().find(".campoCantidadImporte").length);
-		if ($(this).parent().find(".campoCantidadImporte").length > 0) {*/
 		$(".campoCantidadImporte").trigger("keyup");
 
 		$(this).parent().parent().children("td:eq(6)").find(".totalColumna").text(totalfinal);
@@ -756,6 +796,7 @@ jQuery(document).ready(function($) {
 					}else{
 						Swal.fire({
 				            title: 'Selecciona la fecha de entrega del pedido',
+                            footer: '<b style="color: red;">Los descuentos no se guardan en los pedidos</b>',
 				            html: '<input type="date" class="form-control" id="FechaEntregaPedido">',
 				            icon:  'info',
 				            showCancelButton: true,
@@ -782,6 +823,7 @@ jQuery(document).ready(function($) {
 								var totalimporte = $(this).attr("totalimportes");
 								var fechaEntrega = $("#FechaEntregaPedido").val();
 								const searchRegExp = new RegExp(',', 'g');
+                                //SI SE GUARDA COMO PEDIDO NO SE GUARDA EL DESCUENTO
 								$("#TablaProductosAgregadoVenta tbody tr").each(function(index, el) {
 									var idProducto = $(this).attr("attrid");
 									var Presentacion = $(this).attr("idpresentacion");
@@ -789,9 +831,9 @@ jQuery(document).ready(function($) {
 									var cantidadImportes = $(this).children("td:eq(3)").find(".campoCantidadImporte").val();
 									var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
 									var precioImporte = $(this).children("td:eq(2)").find(".campoPrecioImporte").text().replace("$","").replace(searchRegExp, '');
-									var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val();
+									//var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val();
 									var totalproducto = $(this).children("td:eq(6)").find(".totalColumna").text().replace("$","").replace(searchRegExp, '');
-									sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
+									//sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
 
 									var impuestos = "";
 									$(this).children("td:eq(4)").find(".impuesto").each(function(index, el) {
@@ -941,8 +983,15 @@ jQuery(document).ready(function($) {
 			    timer: 1000
 			});
 		}else{
+            $("#ModalRealizarVenta").modal("show");
+            $("#GuardarVenta").attr("tipo", "");
+            $("#GuardarVenta").attr("idpedido", $("#CargaPedidosModalVentas").attr("attrid"));
+            $("#GuardarVenta").attr("foliopedido", $("#CargaPedidosModalVentas").attr("folio"));
+            $("#ImportePagadoVenta").val(total);
+            $("#PagoEfectivo").trigger("keyup");
+
 			//CONSULTAR SI ES ADMINISTRADOR
-			var data = "metodo=detalles&accion=hacerventa&tipo=ConsultarAdministrador";
+			/*var data = "metodo=detalles&accion=hacerventa&tipo=ConsultarAdministrador";
 			$.ajax({
 				url: 'index.php',
 			    type: 'POST',
@@ -966,7 +1015,7 @@ jQuery(document).ready(function($) {
 			})
 			.fail(function() {
 				console.log("Error ajax");
-			});
+			});*/
 		}
 	});
 
@@ -1371,7 +1420,7 @@ jQuery(document).ready(function($) {
 		            <td><span>Productos</span><input type='number' value='`+datos.data.Productos.data[i].Cantidad+`' min='1' step='any' class='form-control form-control-sm campoCantidadProducto'>`+campoImportes+`</td>
 		            <td>`+datos.data.Productos.data[i].Impuestos+`</td>
 		            <td>
-			        	<button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.data.Productos.data[i].FK_Producto+`" idPresentacion="`+presentacion+`"><span id="SpanTextoDescuento" class="dinero">$0.00</span></button>
+			        	<button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.data.Productos.data[i].FK_Producto+`" idPresentacion="`+presentacion+`"><span id="SpanTextoDescuento" class="dinero" codigo actual>$0.00</span></button>
 		            </td>
 		            <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
 		            <td>
@@ -1492,6 +1541,7 @@ jQuery(document).ready(function($) {
 
     $(document).on('click', '.AbrirDescuentoProducto', function() {
         const searchRegExp = new RegExp(',', 'g');
+        var codigoUsado = $(this).children("span").attr("codigo");
         var actual = $(this).children("span").text().replace('$', '').replace(searchRegExp, '');
         var idProducto = $(this).attr("attrid");
         var idPresentacion = $(this).attr("idPresentacion");
@@ -1500,6 +1550,7 @@ jQuery(document).ready(function($) {
         $("#GuardarDescuentoProducto").attr("attrid", idProducto);
         $("#GuardarDescuentoProducto").attr("presentacion", idPresentacion);
         $("#GuardarDescuentoProducto").attr("actual", actual);
+        $("#GuardarDescuentoProducto").attr("codigo", codigoUsado);
     });
 
     $(document).on('click', '#GuardarDescuentoProducto', function() {

@@ -506,8 +506,8 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12 mb-3">
                         <div class="form-floating">
-                            <input type="number" class="form-control" id="DescuentoDineroProducto" name="DescuentoDineroProducto" placeholder="$0.00">
-                            <label for="DescuentoDineroProducto">Descuento</label>
+                            <input type="text" class="form-control" id="TokenDescuento" name="TokenDescuento" placeholder="Código de descuento">
+                            <label for="TokenDescuento">Token de descuento</label>
                         </div>
                     </div>
                 </div>

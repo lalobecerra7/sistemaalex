@@ -31,6 +31,7 @@ include "controladores/c_rutas.php";
 include "controladores/c_vehiculos.php";
 include "controladores/c_choferes.php";
 include "controladores/c_cortesRuta.php";
+include "controladores/c_tokens.php";
 
 class controller {
 
@@ -419,9 +420,20 @@ class controller {
               </a>';
     }
     $pagina = str_replace('#menuReportes#', $botonReportes, $pagina);
-    
 
 
+
+    $botonTokens = '';
+		if ($omodelo->permisos() == 'Administrador') {
+			$botonTokens = ' <ul class="menu-sub">
+                <li class="menu-item cargarVista" carga="v_tokens" titulo="Tokens" id="cargarTokens">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Tokens">Tokens</div>
+                  </a>
+                </li>
+              </ul>';
+		}
+		$pagina = str_replace('#MenuTokens#', $botonTokens, $pagina);
 
     $venta = '';
     /*if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][2] == '1') {

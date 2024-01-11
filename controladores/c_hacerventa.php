@@ -1769,6 +1769,26 @@ class hacerventa {
 				}
 				echo json_encode($arreglo);
 			}
+		}else if($tipo == "ConsultarToken"){
+			$codigo=  $omodelo->link->real_escape_string($codigo);
+
+			//if ($_SESSION['user_admin']['Tipo_Usuario'] == "Administrador") {
+				$query = "SELECT Codigo, Cantidad FROM tokens_descuentos WHERE Codigo = '".$codigo."' AND Activo = 0";
+				$row = $omodelo->_consultar($query);
+				$numerofilas2 = $omodelo->numerofilas;
+				$tabla ="";
+				if($row == 'si'){
+					echo "Error: ".mysqli_error($omodelo->link);
+				}else{
+					if($numerofilas2 > 0){
+						echo "Correcto~".$row[0]["Cantidad"];
+					}else{
+						echo "Invalido~";	
+					}
+				}
+			/*}else{
+				echo "NoAdmin~";
+			}*/
 		}
 	}
 }

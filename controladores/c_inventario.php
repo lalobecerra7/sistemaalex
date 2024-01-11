@@ -762,7 +762,7 @@ class inventario {
 				if($numerofilas > 0){
 					if($presentacion != 0){
 						if(trim($row[0]['Nombre_Unidad']) != ''){ 
-							if(trim($row[0]['Abreviatura_Unidad']) != ''){
+							/*if(trim($row[0]['Abreviatura_Unidad']) != ''){
 								$tabla = '<tr attrID="0">
 									<td>'.trim($row[0]['Nombre_Unidad']).'('.trim($row[0]['Abreviatura_Unidad']).')</td>
 									<td><input type="number" class="form-control" step="any" value="0"></td>
@@ -772,7 +772,11 @@ class inventario {
 									<td>'.trim($row[0]['Nombre_Unidad']).'</td>
 									<td><input type="number" class="form-control" step="any" value="0"></td>
 								</tr>';
-							}
+							}*/
+							$tabla = '<tr attrID="0">
+								<td>'.trim($row[0]['Nombre_Unidad']).'</td>
+								<td><input type="number" class="form-control" step="any" value="0"></td>
+							</tr>';
 						}else{
 							$tabla = '<tr attrID="0">
 								<td>Sin presentación</td>

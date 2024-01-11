@@ -1112,10 +1112,11 @@
               #MenuTicket#
 
               #MenuFacturacion#
+
+              #MenuTokens#
             </li>
 
             #MenuImpuestos#
-
             <!--#MenuMovimientos#-->
 
             <!-- Layouts -->
@@ -1767,5 +1768,6 @@
     <script type="text/javascript" src="vistas/assets/js/vehiculos.js"></script>
     <script type="text/javascript" src="vistas/assets/js/choferes.js"></script>
     <script type="text/javascript" src="vistas/assets/js/cortesRuta.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/tokens.js"></script>
   </body>
 </html>
