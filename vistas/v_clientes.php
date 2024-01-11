@@ -349,6 +349,30 @@
 								</table>
 							</div>
 						</div>
+						<hr>
+
+						<div class="row mb-3">
+							<div class="col-md-6 col-sm-12 text-start">
+								<b class="mb-3">Rutas</b>
+							</div>
+						</div>
+						<div class="row mb-3">
+							<div class="col-md-4 col-sm-12 mb-3">
+								<div class="form-floating mb-3">
+									<select class="form-select" name="rutasCliente" id="rutasCliente">
+										<option value="">- Seleccione una opción -</option>
+										#RutasCliente#
+									</select>
+									<label>Ruta</label>
+								</div>
+							</div>
+							<div class="col-md-4 col-sm-12 mb-3">
+								<div class="form-floating">
+									<input type="number" class="form-control" id="ordenRuta" name="ordenRuta" placeholder="Orden de la Ruta">
+									<label for="ordenRuta">Orden</label>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
