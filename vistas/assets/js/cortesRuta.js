@@ -25,7 +25,7 @@ function v_cortesRuta() {
             }
         },
         submitHandler: function(form) { 
-            var data = "metodo="+$("#bGuardarCorte").attr('tipo')+"&accion=cortesRuta&rutasCorte="+$.trim($("#rutasCorte").val())+"&FechaInicioCorte="+$.trim($("#FechaInicioCorte").val())+"&FechaFinCorte="+$.trim($("#FechaFinCorte").val())+"&selectChofer="+$.trim($("#selectChofer").val())+"&selectVehiculo="+$.trim($("#selectVehiculo").val())+"&id="+$("#bGuardarCorte").attr('attrID');
+            var data = "metodo="+$("#bGuardarCorte").attr('tipo')+"&accion=cortesRuta&tipo=insertar&rutasCorte="+$.trim($("#rutasCorte").val())+"&FechaInicioCorte="+$.trim($("#FechaInicioCorte").val())+"&FechaFinCorte="+$.trim($("#FechaFinCorte").val())+"&selectChofer="+$.trim($("#selectChofer").val())+"&selectVehiculo="+$.trim($("#selectVehiculo").val())+"&id="+$("#bGuardarCorte").attr('attrID');
 
             $.ajax({
                 url: 'index.php',
@@ -109,21 +109,148 @@ function tablaClientesRuta() {
             "metodo": "consultar",
             "tipo": "clientesRuta",
             "Ruta": $("#rutasCorte").val(),
+            "FechaInicioCorte": $("#FechaInicioCorte").val(),
+            "FechaFinCorte": $("#FechaFinCorte").val(),
             "accion": "cortesRuta"
         }
     });
 }
+
 
 jQuery(document).ready(function($) {
     $(document).on('click', '#bNuevoCorteRuta', function() {
         $("#modalCorteRuta").modal('show');
         $("#formCorteDeRuta")[0].reset();
         $("#bGuardarCorte").attr('tipo', 'insertar');
+        $("#tablaClientesruta").addClass('d-none');
     });
 
 	$(document).on('click', '#bGenerarClientes', function() {
+        $("#tablaClientesruta").removeClass('d-none');
 		tablaClientesRuta();
 	});
+
+    $(document).on('click', '.bDetallesCorteClientes', function() {
+        $("#modalCorteClientes").modal('show');
+  
+
+        ajaxMyDatatable({
+            "table": $("#tablaClientesDetalles"), 
+            "colums": [
+                "ID_Detalle_Venta",
+                "Venta",
+                "Producto",
+                "Cantidad",
+                "Precio",
+                "Subtotal",
+                "Acciones"
+            ], 
+            "sort": [0, "desc"],
+            "url": "index.php", 
+            "params":{
+                "metodo": "consultar",
+                "tipo": "clientesDetalles",
+                "idCliente": $(this).attr('attrID'),
+                "accion": "cortesRuta"
+            }
+        });
+    });
+
+    $(document).on('click', '.bEliminarDetalle', function() {
+        var btn = $(this);
+        Swal.fire({
+            title: '¿Estás seguro de eliminar el detalle?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'No, cancelar',
+            confirmButtonText: 'Si, eliminar'
+        }).then((result) => {
+            var data = "metodo=insertar&accion=cortesRuta&tipo=eliminarTemporal&id="+btn.attr('attrID');
+
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+                beforeSend: function() {
+                    $("#carga").show();
+                }
+            })
+            .done(function(res) {
+                if ($.trim(res) == "Correcto") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'El detalle ha sido eliminado correctamente'
+                    });
+
+                    tablaVehiculos(); 
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Error inesperado al eliminar el detalle.'
+                    });
+
+                    console.log($.trim(res));
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            })
+            .always(function() {
+                $("#carga").hide();
+            });
+        });
+     });
+
+    $(document).on('click', '.bAgregarDetalleVuelta', function() {
+        var btn = $(this);
+        Swal.fire({
+            title: '¿Estás seguro de agregar el detalle?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'No, cancelar',
+            confirmButtonText: 'Si, eliminar'
+        }).then((result) => {
+            var data = "metodo=eliminar&accion=cortesRuta&tipo=agregarTemporal&id="+btn.attr('attrID');
+
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+                beforeSend: function() {
+                    $("#carga").show();
+                }
+            })
+            .done(function(res) {
+                if ($.trim(res) == "Correcto") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'El detalle ha sido agregado correctamente'
+                    });
+
+                    tablaVehiculos(); 
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Error inesperado al agregar el detalle.'
+                    });
+
+                    console.log($.trim(res));
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            })
+            .always(function() {
+                $("#carga").hide();
+            });
+        });
+     });
 
 
 	/*$(document).on('click', '.bModificarVehiculo', function() {

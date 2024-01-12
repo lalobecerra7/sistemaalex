@@ -9,6 +9,8 @@ class cortesRuta {
 
 		if ($tipo == 'clientesRuta') {
 			$Ruta =  $omodelo->link->real_escape_string($Ruta);
+			$FechaInicioCorte = $omodelo->link->real_escape_string($FechaInicioCorte);
+			$FechaFinCorte = $omodelo->link->real_escape_string($FechaFinCorte);
 
 			$buscar =  $omodelo->link->real_escape_string($buscar);
 			$limit =  $omodelo->link->real_escape_string($limit);
@@ -29,15 +31,7 @@ class cortesRuta {
 				}
 			}
 
-			$query = "SELECT
-	c.ID_Cliente,
-	c.Orden_Ruta,
-    CONCAT(c.Nombre, ' ', c.Primer_Apellido, ' ', c.Segundo_Apellido ) AS Nombre_Cliente, Nombre,
-    (SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.Fecha_Registro BETWEEN '2023-01-01 00:00:00' AND '2023-12-30 23:59:59' AND v.Estatus = 'Completada') AS Total_Cliente,
-    CONCAT('C. ',c.Calle, ', No. ', c.No_Exterior, (CASE WHEN NULLIF(c.No_Interior, '') IS NOT NULL THEN CONCAT(', Int. ', c.No_Interior, ', ') ELSE ', ' END), c.Colonia, ', ', c.Ciudad, ', ', c.Estado, ', ', c.Pais) AS Domicilio_Cliente, (SELECT COUNT(*) FROM clientes WHERE FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda) AS Num
-FROM clientes AS c
-WHERE
-	c.FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT c.ID_Cliente, c.Orden_Ruta, CONCAT(c.Nombre, ' ', c.Primer_Apellido, ' ', c.Segundo_Apellido ) AS Nombre_Cliente, Nombre, (SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND v.Estatus = 'Completada') AS Total_Cliente, CONCAT('C. ',c.Calle, ', No. ', c.No_Exterior, (CASE WHEN NULLIF(c.No_Interior, '') IS NOT NULL THEN CONCAT(', Int. ', c.No_Interior, ', ') ELSE ', ' END), c.Colonia, ', ', c.Ciudad, ', ', c.Estado, ', ', c.Pais) AS Domicilio_Cliente, (SELECT COUNT(*) FROM clientes WHERE FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda) AS Num FROM clientes AS c WHERE c.FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -46,9 +40,11 @@ WHERE
 			}else{
 				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
-						$bModificar = '';
 
-						$bEliminar = '';
+						$bDetalles = '';
+						if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][3] == '1') {
+							$bDetalles = '<button type="button" class="btn btn-sm btn-outline-secondary bDetallesCorteClientes" attrID="'.$row[$i]['ID_Cliente'].'" title="Detalles">Detalles <i class="fas fa-check"></i></button>';
+						}
 						
 						
 						$arreglo['data'][$i] = array(
@@ -56,7 +52,7 @@ WHERE
 							'Nombre' => $row[$i]['Nombre_Cliente'],
 							'Domicilio' => $row[$i]['Domicilio_Cliente'],
 							'Total' => $row[$i]['Total_Cliente'],
-							'Acciones' => $bModificar.' '.$bEliminar
+							'Acciones' => $bDetalles
 						);
 					}
 
@@ -66,6 +62,74 @@ WHERE
 
 			echo json_encode($arreglo);
 
+
+		}else if ($tipo == 'clientesDetalles') {
+			
+			$idCliente =  $omodelo->link->real_escape_string($idCliente);
+
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'WHERE ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(Nombre) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+
+			$query = "SELECT ID_Detalle_Venta,v.ID_Venta AS Venta, p.Descripcion as Producto, dv.Cantidad AS Cantidad, dv.Total AS Total, dv.Precio AS Precio, (CASE WHEN EXISTS (SELECT 1 FROM temporal_excluir_detalle_venta WHERE FK_Detalle_Venta = dv.ID_Detalle_Venta) THEN TRUE ELSE FALSE END) AS Excluir, (SELECT COUNT(*) FROM detalles_ventas AS dv JOIN ventas AS v ON v.ID_Venta = dv.FK_Venta WHERE FK_Cliente = 2 AND v.Fecha_Registro BETWEEN '2023-10-01' AND '2023-12-30' AND v.Estatus = 'Completada' $busqueda) AS Num FROM detalles_ventas AS dv JOIN ventas AS v ON v.ID_Venta = dv.FK_Venta JOIN productos AS p ON p.ID_Producto = dv.FK_Producto WHERE FK_Cliente = 2 AND v.Fecha_Registro BETWEEN '2023-10-01' AND '2023-12-30' AND v.Estatus = 'Completada' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			$query2 = "SELECT FK_Detalle_Venta FROM temporal_excluir_detalle_venta";
+			$row2 = $omodelo->_consultar($query2);
+			$numerofilas2 = $omodelo->numerofilas;
+
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+
+
+						$bDetalles = '';
+						if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][3] == '1') {
+
+							if ($row[$i]['Excluir']) {
+								$bDetalles = '<button type="button" class="btn btn-sm btn-success bAgregarDetalleVuelta" attrID="'.$row[$i]['ID_Detalle_Venta'].'"><i class="fa-solid fa-eye"></i></button>';
+							}else{
+								$bDetalles = '<button type="button" class="btn btn-sm btn-danger bEliminarDetalle" attrID="'.$row[$i]['ID_Detalle_Venta'].'"><i class="fa-solid fa-eye-slash"></i></button>';
+							}
+							
+						}
+						
+						
+						$arreglo['data'][$i] = array(
+							'ID_Detalle_Venta'=> $row[$i]['ID_Detalle_Venta'],
+							'Venta'=> $row[$i]['Venta'],
+							'Producto'=> $row[$i]['Producto'],
+							'Cantidad'=> $row[$i]['Cantidad'],
+							'Precio'=> $row[$i]['Precio'],
+							'Subtotal'=> $row[$i]['Total'],
+							'Acciones'=> $bDetalles
+						);
+					}
+
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+				}
+			}
+
+			echo json_encode($arreglo);
 
 		}else{
 			$buscar =  $omodelo->link->real_escape_string($buscar);
@@ -150,22 +214,43 @@ WHERE
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s');
-		$rutasCorte = $omodelo->link->real_escape_string($rutasCorte);
-		$FechaInicioCorte = $omodelo->link->real_escape_string($FechaInicioCorte);
-		$FechaFinCorte = $omodelo->link->real_escape_string($FechaFinCorte);
-		$selectChofer = $omodelo->link->real_escape_string($selectChofer);
-		$selectVehiculo = $omodelo->link->real_escape_string($selectVehiculo);
+		$tipo = $omodelo->link->real_escape_string($tipo);
 
-		$query = "INSERT INTO cortes_ruta SET Ruta = '$rutasCorte', Fecha_Inicio = '$FechaInicioCorte', Fecha_Fin = '$FechaFinCorte', Verificado = false, Imagen = '', Fecha_Registro = '$fecha', Fk_Chofer = '$selectChofer', FK_Vehiculo = '$selectVehiculo', Estado = 'Pendiente' ";
-		$row = $omodelo->_insertar($query);
+		if ($tipo == 'eliminarTemporal') {
 
-		if ($row == "si") {
-			echo "Error: ".mysqli_error($omodelo->link);
+			$id = $omodelo->link->real_escape_string($id);
+
+
+			$query = "INSERT INTO temporal_excluir_detalle_venta SET FK_Detalle_Venta = '$id'";
+			$row = $omodelo->_insertar($query);
+
+			if ($row == "si") {
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
 		}else{
-			echo "Correcto";
 
-			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			$rutasCorte = $omodelo->link->real_escape_string($rutasCorte);
+			$FechaInicioCorte = $omodelo->link->real_escape_string($FechaInicioCorte);
+			$FechaFinCorte = $omodelo->link->real_escape_string($FechaFinCorte);
+			$selectChofer = $omodelo->link->real_escape_string($selectChofer);
+			$selectVehiculo = $omodelo->link->real_escape_string($selectVehiculo);
+
+			$query = "INSERT INTO cortes_ruta SET Ruta = '$rutasCorte', Fecha_Inicio = '$FechaInicioCorte', Fecha_Fin = '$FechaFinCorte', Verificado = false, Imagen = '', Fecha_Registro = '$fecha', Fk_Chofer = '$selectChofer', FK_Vehiculo = '$selectVehiculo', Estado = 'Pendiente' ";
+			$row = $omodelo->_insertar($query);
+
+			if ($row == "si") {
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
 		}
+		
 	}
 
 	/*public function _modificar()
@@ -190,13 +275,15 @@ WHERE
 		}
 	}
 
+	*/
+
 	public function _eliminar()
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$id =  $omodelo->link->real_escape_string($id);
 
-		$query = "DELETE FROM vehiculos WHERE ID_Vehiculo = '$id'";
+		$query = "DELETE FROM temporal_excluir_detalle_venta WHERE FK_Detalle_Venta = '$id'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
@@ -206,6 +293,6 @@ WHERE
 
 			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);			
 		}
-	}*/
+	}
 }
 ?>
