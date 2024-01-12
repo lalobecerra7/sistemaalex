@@ -499,7 +499,7 @@ jQuery(document).ready(function($) {
 	                        <td><span>Productos</span><input type='number' value='1' min='1' step='any' class='form-control form-control-sm campoCantidadProducto' onfocusout="$('#CodigoProductoVenta').focus()">`+campoImportes+`</td>
 	                        <td>`+datos.Impuestos+`</td>
 	                        <td>
-                                <button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`"><span id="SpanTextoDescuento" class="dinero" codigo actual>$0.00</span></button>
+                                <button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`"><span id="SpanTextoDescuento" class="dinero" codigo actual>$0</span></button>
 		                    </td>
 	                        <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
 	                        <td>
@@ -571,7 +571,7 @@ jQuery(document).ready(function($) {
 	                        <td><span>Productos</span><input type='number' value='1' min='1' step='any' class='form-control form-control-sm campoCantidadProducto' onfocusout="$('#CodigoProductoVenta').focus()">`+campoImportes+`</td>
 	                        <td>`+datos.Impuestos+`</td>
 	                        <td>
-                                <button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`"><span id="SpanTextoDescuento" class="dinero" codigo actual>$0.00</span></button>
+                                <button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.ID_Producto+`" idPresentacion="`+datos.IDPresentacion+`"><span id="SpanTextoDescuento" class="dinero" codigo actual>$0</span></button>
 	                        </td>
 	                        <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
 	                        <td>
@@ -742,10 +742,9 @@ jQuery(document).ready(function($) {
 						var cantidadImportes = $(this).children("td:eq(3)").find(".campoCantidadImporte").val();
 						var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
 						var precioImporte = $(this).children("td:eq(2)").find(".campoPrecioImporte").text().replace("$","").replace(searchRegExp, '');
-						var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val();
-						var totalproducto = $(this).children("td:eq(6)").find(".totalColumna").text().replace("$","").replace(searchRegExp, '');
-						sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
-						var impuestos = "";
+						var totalproducto = parseFloat(cantidad * precio) + parseFloat(cantidadImportes * precioImporte);
+                        var descuento = 0;
+                        var impuestos = "";
 						$(this).children("td:eq(4)").find(".impuesto").each(function(index, el) {
 							var impuesto = $(this).find(".seleccionarImpuesto");
 							if (impuesto.prop("checked") == true) {
@@ -831,8 +830,10 @@ jQuery(document).ready(function($) {
 									var cantidadImportes = $(this).children("td:eq(3)").find(".campoCantidadImporte").val();
 									var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
 									var precioImporte = $(this).children("td:eq(2)").find(".campoPrecioImporte").text().replace("$","").replace(searchRegExp, '');
-									//var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val();
-									var totalproducto = $(this).children("td:eq(6)").find(".totalColumna").text().replace("$","").replace(searchRegExp, '');
+									var totalproducto = parseFloat(cantidad * precio) + parseFloat(cantidadImportes * precioImporte);
+                                    var descuento = 0;
+                                    //var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val();
+									//var totalproducto = $(this).children("td:eq(6)").find(".totalColumna").text().replace("$","").replace(searchRegExp, '');
 									//sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
 
 									var impuestos = "";
@@ -1082,9 +1083,10 @@ jQuery(document).ready(function($) {
 				var cantidadImportes = $(this).children("td:eq(3)").find(".campoCantidadImporte").val();
 				var precio = $(this).children("td:eq(2)").find(".cambiarPrecio").attr("precio");
 				var precioImporte = $(this).children("td:eq(2)").find(".campoPrecioImporte").text().replace("$","").replace(searchRegExp, '');
-				var descuento = $(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val();
+				var descuento = $(this).children("td:eq(5)").find("#SpanTextoDescuento").attr("actual");
+                var codigoDescuento = $(this).children("td:eq(5)").find("#SpanTextoDescuento").attr("codigo");
 				var totalproducto = $(this).children("td:eq(6)").find(".totalColumna").text().replace("$","").replace(searchRegExp, '');
-				sumadescuento += parseFloat($(this).children("td:eq(5)").find(".campoDescuentoProductoCantidad").val());
+				sumadescuento += parseFloat($(this).children("td:eq(5)").find("#SpanTextoDescuento").attr("actual"));
 				var Cobrarimporte = $(this).children("td:eq(7)").find("#CobrarImporteProducto").prop("checked");
 				if (Cobrarimporte == true) {
 					Cobrarimporte = 1;
@@ -1098,7 +1100,7 @@ jQuery(document).ready(function($) {
 						impuestos += impuesto.attr("attrid")+","+impuesto.attr("nombre")+","+impuesto.attr("porcentaje")+","+impuesto.attr("clavecfdi")+","+impuesto.attr("tipofactor")+","+impuesto.attr("clase")+"~";
 					}
 				});
-				productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto, cantidadImportes, precioImporte]);
+				productos.push([idProducto, Presentacion, cantidad, precio, descuento, impuestos, totalproducto, cantidadImportes, precioImporte, codigoDescuento]);
 			});
 
 			var contarVenta = 0;
@@ -1420,14 +1422,14 @@ jQuery(document).ready(function($) {
 		            <td><span>Productos</span><input type='number' value='`+datos.data.Productos.data[i].Cantidad+`' min='1' step='any' class='form-control form-control-sm campoCantidadProducto'>`+campoImportes+`</td>
 		            <td>`+datos.data.Productos.data[i].Impuestos+`</td>
 		            <td>
-			        	<button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.data.Productos.data[i].FK_Producto+`" idPresentacion="`+presentacion+`"><span id="SpanTextoDescuento" class="dinero" codigo actual>$0.00</span></button>
+			        	<button class="btn btn-sm btn-primary AbrirDescuentoProducto" attrid="`+datos.data.Productos.data[i].FK_Producto+`" idPresentacion="`+presentacion+`"><span id="SpanTextoDescuento" class="dinero" codigo actual>$0</span></button>
 		            </td>
 		            <td><span class='totalColumna dinero' style="font-weight: bold; font-size: 15px;"></span><br>Importes: <br><span class='totalColumnaImporte dinero'>0</span></td>
 		            <td>
 						<button class="btn btn-sm btn-danger eliminarFila"><i class="fas fa-trash"></i></button></td>
 		        </tr>`);
 
-				$(".campoDescuentoProductoCantidad").trigger("keyup");
+				$(".campoCantidadProducto").trigger("keyup");
 				$(".BotonLimpiarCliente").removeClass("oculto");
 				$("#CargaPedidosModalVentas").text("Pedido: "+folio);
 				$("#CargaPedidosModalVentas").attr("attrid", id);

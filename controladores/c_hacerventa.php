@@ -142,6 +142,16 @@ class hacerventa {
 						}
 					}*/
 
+					if ($fila[9] != "") {
+						$codigo = $fila[9];
+						$queryToken = "UPDATE tokens_descuentos SET Activo = 1 WHERE Codigo = '$codigo'";
+						$errorToken = $omodelo->_insertar($queryToken);
+
+						if ($errorToken == "si") {
+							echo "Error token: ".mysqli_error($omodelo->link);
+						}
+					}
+					
 					$idDetalleVenta = "";
 					$query = "INSERT INTO detalles_ventas SET FK_Venta = '$idVenta', FK_Producto = '$fila[0]', FK_Presentacion = '$fila[1]', Descripcion = '$nombreProducto', Precio = '$fila[3]', Cantidad = '$fila[2]', Descuento = '$fila[4]', Total = '$fila[6]', Cobrar_Importe = '$fila[7]', Contar_Venta = '$contarVenta'";
 					$error = $omodelo->_insertar($query);
