@@ -43,7 +43,12 @@ class cortesRuta {
 
 						$bDetalles = '';
 						if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][3] == '1') {
-							$bDetalles = '<button type="button" class="btn btn-sm btn-outline-secondary bDetallesCorteClientes" attrID="'.$row[$i]['ID_Cliente'].'" title="Detalles">Detalles <i class="fas fa-check"></i></button>';
+							$bDetalles = '<button type="button" class="btn btn-sm btn-outline-info bDetallesCorteClientes" attrID="'.$row[$i]['ID_Cliente'].'" title="Detalles"> <i class="fa-solid fa-list"></i></button>';
+						}
+
+						$bOrdenRuta = '';
+						if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][3] == '1') {
+							$bOrdenRuta = '<button type="button" class="btn btn-sm btn-outline-warning ml-1 bOrdenDetalle" attrID="'.$row[$i]['ID_Cliente'].'" title="Orden Ruta"> <i class="fa-solid fa-rotate"></i></button>';
 						}
 						
 						
@@ -52,7 +57,7 @@ class cortesRuta {
 							'Nombre' => $row[$i]['Nombre_Cliente'],
 							'Domicilio' => $row[$i]['Domicilio_Cliente'],
 							'Total' => $row[$i]['Total_Cliente'],
-							'Acciones' => $bDetalles
+							'Acciones' => $bDetalles .''. $bOrdenRuta
 						);
 					}
 

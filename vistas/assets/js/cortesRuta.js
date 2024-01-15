@@ -93,6 +93,29 @@ function tablaCortesRuta() {
     });
 }
 
+function tablaDetallesClientes(idCliente){
+    ajaxMyDatatable({
+            "table": $("#tablaClientesDetalles"), 
+            "colums": [
+                "ID_Detalle_Venta",
+                "Venta",
+                "Producto",
+                "Cantidad",
+                "Precio",
+                "Subtotal",
+                "Acciones"
+            ], 
+            "sort": [0, "desc"],
+            "url": "index.php", 
+            "params":{
+                "metodo": "consultar",
+                "tipo": "clientesDetalles",
+                "idCliente": idCliente,
+                "accion": "cortesRuta"
+            }
+        });
+}
+
 function tablaClientesRuta() {
     ajaxMyDatatable({
         "table": $("#tablaClientesRuta"), 
@@ -131,29 +154,10 @@ jQuery(document).ready(function($) {
 	});
 
     $(document).on('click', '.bDetallesCorteClientes', function() {
-        $("#modalCorteClientes").modal('show');
-  
 
-        ajaxMyDatatable({
-            "table": $("#tablaClientesDetalles"), 
-            "colums": [
-                "ID_Detalle_Venta",
-                "Venta",
-                "Producto",
-                "Cantidad",
-                "Precio",
-                "Subtotal",
-                "Acciones"
-            ], 
-            "sort": [0, "desc"],
-            "url": "index.php", 
-            "params":{
-                "metodo": "consultar",
-                "tipo": "clientesDetalles",
-                "idCliente": $(this).attr('attrID'),
-                "accion": "cortesRuta"
-            }
-        });
+        $("#modalCorteClientes").modal('show');
+        tablaDetallesClientes($(this).attr('attrID'));
+        
     });
 
     $(document).on('click', '.bEliminarDetalle', function() {
@@ -184,7 +188,7 @@ jQuery(document).ready(function($) {
                         title: 'El detalle ha sido eliminado correctamente'
                     });
 
-                    tablaVehiculos(); 
+                    tablaDetallesClientes($(".bDetallesCorteClientes").attr('attrID'));
                 }else{
                     Swal.fire({
                         icon: 'error',
@@ -232,7 +236,7 @@ jQuery(document).ready(function($) {
                         title: 'El detalle ha sido agregado correctamente'
                     });
 
-                    tablaVehiculos(); 
+                    tablaDetallesClientes($(".bDetallesCorteClientes").attr('attrID'));
                 }else{
                     Swal.fire({
                         icon: 'error',
@@ -251,6 +255,20 @@ jQuery(document).ready(function($) {
             });
         });
      });
+
+    $(document).on('click', '.bOrdenDetalle', async function() {
+
+        const { value: email } = await Swal.fire({
+  title: "Input email address",
+  input: "email",
+  inputLabel: "Your email address",
+  inputPlaceholder: "Enter your email address"
+});
+if (email) {
+  Swal.fire(`Entered email: ${email}`);
+}
+        
+    });
 
 
 	/*$(document).on('click', '.bModificarVehiculo', function() {
