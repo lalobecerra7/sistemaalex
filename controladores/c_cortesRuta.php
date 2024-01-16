@@ -31,7 +31,7 @@ class cortesRuta {
 				}
 			}
 
-			$query = "SELECT c.ID_Cliente, c.Orden_Ruta, CONCAT(c.Nombre, ' ', c.Primer_Apellido, ' ', c.Segundo_Apellido ) AS Nombre_Cliente, Nombre, (SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.Fecha_Registro BETWEEN '$' AND '$FechaFinCorte' AND v.Estatus = 'Completada') AS Total_Cliente, CONCAT('C. ',c.Calle, ', No. ', c.No_Exterior, (CASE WHEN NULLIF(c.No_Interior, '') IS NOT NULL THEN CONCAT(', Int. ', c.No_Interior, ', ') ELSE ', ' END), c.Colonia, ', ', c.Ciudad, ', ', c.Estado, ', ', c.Pais) AS Domicilio_Cliente, (SELECT COUNT(*) FROM clientes WHERE FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda) AS Num FROM clientes AS c WHERE c.FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT c.ID_Cliente, c.Orden_Ruta, CONCAT(c.Nombre, ' ', c.Primer_Apellido, ' ', c.Segundo_Apellido ) AS Nombre_Cliente, Nombre, (SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND v.Estatus = 'Completada') AS Total_Cliente, CONCAT('C. ',c.Calle, ', No. ', c.No_Exterior, (CASE WHEN NULLIF(c.No_Interior, '') IS NOT NULL THEN CONCAT(', Int. ', c.No_Interior, ', ') ELSE ', ' END), c.Colonia, ', ', c.Ciudad, ', ', c.Estado, ', ', c.Pais) AS Domicilio_Cliente, (SELECT COUNT(*) FROM clientes WHERE FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda) AS Num FROM clientes AS c WHERE c.FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -48,7 +48,7 @@ class cortesRuta {
 						
 						
 						$arreglo['data'][$i] = array(
-							'Orden_Ruta' => $row[$i]['Orden_Ruta'],
+							'Orden_Ruta' =>'<span class="orden" attrID="'.$row[$i]['ID_Cliente'].'">'.$row[$i]['Orden_Ruta'].'</span>',
 							'Nombre' => $row[$i]['Nombre_Cliente'],
 							'Domicilio' => $row[$i]['Domicilio_Cliente'],
 							'Total' => $row[$i]['Total_Cliente'],
@@ -66,8 +66,10 @@ class cortesRuta {
 		}else if ($tipo == 'clientesDetalles') {
 			
 			$idCliente =  $omodelo->link->real_escape_string($idCliente);
+			$FechaInicioCorte = $omodelo->link->real_escape_string($FechaInicioCorte);
+			$FechaFinCorte = $omodelo->link->real_escape_string($FechaFinCorte);
 
-			$query = "SELECT ID_Venta, Fecha_Registro, Total FROM ventas WHERE FK_Cliente = $idCliente AND Fecha_Registro BETWEEN '2023-07-01' AND '2023-12-31'";
+			$query = "SELECT ID_Venta, Fecha_Registro, Total FROM ventas WHERE FK_Cliente = $idCliente AND Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -256,29 +258,31 @@ class cortesRuta {
 		
 	}
 
-	/*public function _modificar()
+	public function _modificar()
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$id = $omodelo->link->real_escape_string($id);
-		$marca = $omodelo->link->real_escape_string($marca);
-		$modelo = $omodelo->link->real_escape_string($modelo);
-		$matricula = $omodelo->link->real_escape_string($matricula);
-		$descripcion = $omodelo->link->real_escape_string($descripcion);
+		$tipo = $omodelo->link->real_escape_string($tipo);
 
-		$query = "UPDATE vehiculos SET Marca = '$marca', Modelo = '$modelo', Matricula = '$matricula', Descripcion = '$descripcion' WHERE ID_Vehiculo = '$id'";
-		$row = $omodelo->_insertar($query);
+		if ($tipo == 'ordenRuta') {
 
-		if ($row == "si") {
-			echo "Error: ".mysqli_error($omodelo->link);
-		}else{
-			echo "Correcto";
+			$id = $omodelo->link->real_escape_string($id);
+			$valor = $omodelo->link->real_escape_string($valor);
 
-			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			$query = "UPDATE clientes SET Orden_Ruta = $valor WHERE ID_Cliente = '$id'";
+			$row = $omodelo->_insertar($query);
+
+			if ($row == "si") {
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
 		}
+
 	}
 
-	*/
 
 	public function _eliminar()
 	{

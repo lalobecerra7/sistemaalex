@@ -94,7 +94,7 @@ function tablaCortesRuta() {
 }
 
 function tablaDetallesClientes(idCliente){
-    var data = `metodo=consultar&accion=cortesRuta&tipo=clientesDetalles&idCliente=${idCliente}`;
+    var data = `metodo=consultar&accion=cortesRuta&tipo=clientesDetalles&idCliente=${idCliente}&FechaInicioCorte=${$("#FechaInicioCorte").val()}&FechaFinCorte=${$("#FechaFinCorte").val()}`;
 
     $.ajax({
         url: 'index.php',
@@ -259,6 +259,53 @@ if (email) {
   Swal.fire(`Entered email: ${email}`);
 }
         
+    });
+
+    $(document).on('dblclick', '#tablaClientesruta tbody td', function() {
+        if($(this).children('span.orden').text() != ""){
+            const searchRegExp = new RegExp(',', 'g'); 
+
+            $(this).html('<input type="number" style="width: 100px;" class="inputOrdenRuta" attrID="'+$(this).attr('attrID')+'" value="'+$(this).text().replace('$', '').replace(searchRegExp, '')+'">');
+            $(this).children('input.inputOrdenRuta').focus();
+        }
+    });
+
+
+    $(document).on('focusout', '.inputOrdenRuta', function() {
+        var input = $(this);
+        var padre = $(this).parent();
+        
+
+        var data = "metodo=modificar&accion=cortesRuta&tipo=ordenRuta&valor="+$(this).val()+"&id="+$(this).attr('attrID');
+    
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            data: data,
+            beforeSend: function() {
+                $("#carga").show();
+            }
+        })
+        .done(function(res) {
+            if ($.trim(res) == "Correcto") {
+                padre.html('<span class="orden" attrID = "'+$(this).attr('attrID')+'">'+input.val()+'</span>');
+                moneda();
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Error inesperado al cambiar el orden.'
+                });
+
+                console.log($.trim(res));
+            }
+        })
+        .fail(function() {
+            console.log("Error ajax");
+        })
+        .always(function() {
+            $("#carga").hide();
+        }); 
     });
 
 
