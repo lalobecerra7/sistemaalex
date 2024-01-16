@@ -94,26 +94,17 @@ function tablaCortesRuta() {
 }
 
 function tablaDetallesClientes(idCliente){
-    ajaxMyDatatable({
-            "table": $("#tablaClientesDetalles"), 
-            "colums": [
-                "ID_Detalle_Venta",
-                "Venta",
-                "Producto",
-                "Cantidad",
-                "Precio",
-                "Subtotal",
-                "Acciones"
-            ], 
-            "sort": [0, "desc"],
-            "url": "index.php", 
-            "params":{
-                "metodo": "consultar",
-                "tipo": "clientesDetalles",
-                "idCliente": idCliente,
-                "accion": "cortesRuta"
-            }
-        });
+    var data = `metodo=consultar&accion=cortesRuta&tipo=clientesDetalles&idCliente=${idCliente}`;
+
+    $.ajax({
+        url: 'index.php',
+        type: 'POST',
+        data: data
+    }).done(function(res){
+        $('#lista-ventas-cliente').html($.trim(res));
+    }).fail(function(){
+        console.log('Error ajax');
+    })
 }
 
 function tablaClientesRuta() {

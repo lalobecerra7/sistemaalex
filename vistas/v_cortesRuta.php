@@ -126,47 +126,28 @@
 
 <!--///////////////////////////////////////////////////////-->
 <div class="modal fade" id="modalCorteClientes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-inverse bd-inverse-darken">
-        <h5 class="modal-title" style="font-weight: bold;">Clientes Detalles De Ruta</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="formCorteClientes">
-	      <div class="modal-body">
-	       	<div class="row">
-	       		<div class="col-md-4 col-sm-12 mb-3">
-							<div class="col-md-4 col-sm-12 mb-3">
-								<button class="btn btn-lg btn-primary" type="button" id="bGenerarNueva" name="bGenerarNueva"><i class="fa-solid fa-search"></i> Nueva</button>
-
-							</div>
+	<div class="modal-dialog modal-lg modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header bg-inverse bd-inverse-darken">
+				<h5 class="modal-title" style="font-weight: bold;">Clientes Detalles De Ruta</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form id="formCorteClientes">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-9 sticky-top" id="lista-ventas-cliente">
+							
 						</div>
-	       	</div>
-	       	<br>
-	       	<div class="row mb-5">
-			      <div class="col-12">
-			        <table class="table table table-hover table-bordered text-center myDataTable" id="tablaClientesDetalles" width="100%" style="font-size: 12px;">
-			          <thead>
-			          	<th>ID</th>
-			          	<th>Venta</th>
-			          	<th>Producto</th>
-			            <th>Cantidad</th>
-			            <th>Precio U</th>
-			            <th>Subtotal</th>
-			            <th orden="No" class="gap-2">Acciones</th>
-			          </thead>
-			          <tbody> 
-
-			          </tbody>
-			        </table>
-		      	</div>
-		    	</div>
-	      </div>
-	      <div class="modal-footer">
+						<div class="col-3 mx-auto">
+							<button class="btn btn-lg btn-outline-primary m-0 w-100"><i class="fa-solid fa-plus"></i> Añadir venta</button>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
 					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
-	      </div>
-  		</form>
-    </div>
-  </div>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
 

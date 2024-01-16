@@ -31,7 +31,7 @@ class cortesRuta {
 				}
 			}
 
-			$query = "SELECT c.ID_Cliente, c.Orden_Ruta, CONCAT(c.Nombre, ' ', c.Primer_Apellido, ' ', c.Segundo_Apellido ) AS Nombre_Cliente, Nombre, (SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND v.Estatus = 'Completada') AS Total_Cliente, CONCAT('C. ',c.Calle, ', No. ', c.No_Exterior, (CASE WHEN NULLIF(c.No_Interior, '') IS NOT NULL THEN CONCAT(', Int. ', c.No_Interior, ', ') ELSE ', ' END), c.Colonia, ', ', c.Ciudad, ', ', c.Estado, ', ', c.Pais) AS Domicilio_Cliente, (SELECT COUNT(*) FROM clientes WHERE FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda) AS Num FROM clientes AS c WHERE c.FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT c.ID_Cliente, c.Orden_Ruta, CONCAT(c.Nombre, ' ', c.Primer_Apellido, ' ', c.Segundo_Apellido ) AS Nombre_Cliente, Nombre, (SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.Fecha_Registro BETWEEN '$' AND '$FechaFinCorte' AND v.Estatus = 'Completada') AS Total_Cliente, CONCAT('C. ',c.Calle, ', No. ', c.No_Exterior, (CASE WHEN NULLIF(c.No_Interior, '') IS NOT NULL THEN CONCAT(', Int. ', c.No_Interior, ', ') ELSE ', ' END), c.Colonia, ', ', c.Ciudad, ', ', c.Estado, ', ', c.Pais) AS Domicilio_Cliente, (SELECT COUNT(*) FROM clientes WHERE FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda) AS Num FROM clientes AS c WHERE c.FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -45,11 +45,6 @@ class cortesRuta {
 						if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][3] == '1') {
 							$bDetalles = '<button type="button" class="btn btn-sm btn-outline-info bDetallesCorteClientes" attrID="'.$row[$i]['ID_Cliente'].'" title="Detalles"> <i class="fa-solid fa-list"></i></button>';
 						}
-
-						$bOrdenRuta = '';
-						if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][3] == '1') {
-							$bOrdenRuta = '<button type="button" class="btn btn-sm btn-outline-warning ml-1 bOrdenDetalle" attrID="'.$row[$i]['ID_Cliente'].'" title="Orden Ruta"> <i class="fa-solid fa-rotate"></i></button>';
-						}
 						
 						
 						$arreglo['data'][$i] = array(
@@ -57,7 +52,7 @@ class cortesRuta {
 							'Nombre' => $row[$i]['Nombre_Cliente'],
 							'Domicilio' => $row[$i]['Domicilio_Cliente'],
 							'Total' => $row[$i]['Total_Cliente'],
-							'Acciones' => $bDetalles .''. $bOrdenRuta
+							'Acciones' => $bDetalles
 						);
 					}
 
@@ -72,32 +67,9 @@ class cortesRuta {
 			
 			$idCliente =  $omodelo->link->real_escape_string($idCliente);
 
-			$buscar =  $omodelo->link->real_escape_string($buscar);
-			$limit =  $omodelo->link->real_escape_string($limit);
-			$pagina =  $omodelo->link->real_escape_string($pagina);
-			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
-			$orden =  $omodelo->link->real_escape_string($orden);
-			$arreglo = array();
-
-			$busqueda = '';
-			if(trim($buscar) != ''){
-				$separa = explode(' ', trim($buscar));
-				$busqueda = 'WHERE ';
-				for ($i=0; $i < count($separa); $i++) { 
-					$busqueda .= "CONCAT(Nombre) REGEXP '".$separa[$i]."'";
-					if($i < (count($separa)-1)){
-						$busqueda .= ' AND ';
-					}
-				}
-			}
-
-			$query = "SELECT ID_Detalle_Venta,v.ID_Venta AS Venta, p.Descripcion as Producto, dv.Cantidad AS Cantidad, dv.Total AS Total, dv.Precio AS Precio, (CASE WHEN EXISTS (SELECT 1 FROM temporal_excluir_detalle_venta WHERE FK_Detalle_Venta = dv.ID_Detalle_Venta) THEN TRUE ELSE FALSE END) AS Excluir, (SELECT COUNT(*) FROM detalles_ventas AS dv JOIN ventas AS v ON v.ID_Venta = dv.FK_Venta WHERE FK_Cliente = 2 AND v.Fecha_Registro BETWEEN '2023-10-01' AND '2023-12-30' AND v.Estatus = 'Completada' $busqueda) AS Num FROM detalles_ventas AS dv JOIN ventas AS v ON v.ID_Venta = dv.FK_Venta JOIN productos AS p ON p.ID_Producto = dv.FK_Producto WHERE FK_Cliente = 2 AND v.Fecha_Registro BETWEEN '2023-10-01' AND '2023-12-30' AND v.Estatus = 'Completada' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Venta, Fecha_Registro, Total FROM ventas WHERE FK_Cliente = $idCliente AND Fecha_Registro BETWEEN '2023-07-01' AND '2023-12-31'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
-
-			$query2 = "SELECT FK_Detalle_Venta FROM temporal_excluir_detalle_venta";
-			$row2 = $omodelo->_consultar($query2);
-			$numerofilas2 = $omodelo->numerofilas;
 
 
 			if($row == 'si'){
@@ -105,37 +77,63 @@ class cortesRuta {
 			}else{
 				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
+						$query2 = "SELECT Descripcion, Cantidad, (Total / Cantidad) as Precio, Total FROM detalles_ventas WHERE FK_Venta ='".$row[$i]['ID_Venta']."'";
+						$row2 = $omodelo->_consultar($query2);
+						$numerofilas2 = $omodelo->numerofilas;
+						
 
+						$card = "<div class='row border border-secondary rounded px-2 py-3 mb-3'>
+									<div class='col'>
+										<div class='ventas-header row justify-content-between align-items-center mb-2'>
+											<div class='col-8 px-2'>
+												<div class='row'>
+													<p class='py-0 my-0 col-4 pl-2'><b>Id:</b> ".$row[$i]['ID_Venta']."</p>
+													<p class=py-0 my-0 col-8'><b>Fecha de Venta:</b> ".date('d-m-Y', strtotime($row[$i]['Fecha_Registro']))."</p>
+												</div>
+											</div>
+											<div class='col text-end'>
+												<button class='btn btn-danger'><i class='fa-solid fa-trash'></i> Eliminar</button>
+											</div>
+										</div>
+										<div class='ventas-detalle row px-3'>
+											<table class='table'>
+											<thead>
+												<tr>
+													<th scope='col'>Producto</th>
+													<th scope='col'>Cantidad</th>
+													<th scope='col'>Precio U</th>
+													<th scope='col'>Subtotal</th>
+												</tr>
+											</thead>
+											<tbody>
+											";
 
-						$bDetalles = '';
-						if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][3] == '1') {
-
-							if ($row[$i]['Excluir']) {
-								$bDetalles = '<button type="button" class="btn btn-sm btn-success bAgregarDetalleVuelta" attrID="'.$row[$i]['ID_Detalle_Venta'].'"><i class="fa-solid fa-eye"></i></button>';
-							}else{
-								$bDetalles = '<button type="button" class="btn btn-sm btn-danger bEliminarDetalle" attrID="'.$row[$i]['ID_Detalle_Venta'].'"><i class="fa-solid fa-eye-slash"></i></button>';
+						if($numerofilas2 > 0){
+							for ($j=0; $j < $numerofilas2; $j++) { 
+								$card .= "
+									<tr>
+										<th>".$row2[$j]['Descripcion']."</th>
+										<th>".$row2[$j]['Cantidad']."</th>
+										<th>".$row2[$j]['Precio']."</th>
+										<th>".$row2[$j]['Total']."</th>
+									</tr>
+								";
 							}
-							
 						}
-						
-						
-						$arreglo['data'][$i] = array(
-							'ID_Detalle_Venta'=> $row[$i]['ID_Detalle_Venta'],
-							'Venta'=> $row[$i]['Venta'],
-							'Producto'=> $row[$i]['Producto'],
-							'Cantidad'=> $row[$i]['Cantidad'],
-							'Precio'=> $row[$i]['Precio'],
-							'Subtotal'=> $row[$i]['Total'],
-							'Acciones'=> $bDetalles
-						);
-					}
 
-					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+						$card .= "</tbody>
+								</table>
+										</div>
+										<div class='ventas-footer text-end'>
+											<p class='p-0 m-0 fs-3'><b>Total:</b> ".$row[$i]['Total']."</p>
+										</div>
+									</div>
+								</div>";
+
+						echo $card;
+					}
 				}
 			}
-
-			echo json_encode($arreglo);
-
 		}else{
 			$buscar =  $omodelo->link->real_escape_string($buscar);
 			$limit =  $omodelo->link->real_escape_string($limit);
