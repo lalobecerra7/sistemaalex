@@ -102,6 +102,7 @@ function tablaDetallesClientes(idCliente){
         data: data
     }).done(function(res){
         $('#lista-ventas-cliente').html($.trim(res));
+        $("#agregarVentaACorte").attr('clienteId', idCliente);
     }).fail(function(){
         console.log('Error ajax');
     })
@@ -145,16 +146,15 @@ jQuery(document).ready(function($) {
 	});
 
     $(document).on('click', '.bDetallesCorteClientes', function() {
-
         $("#modalCorteClientes").modal('show');
         tablaDetallesClientes($(this).attr('attrID'));
-        
     });
 
-    $(document).on('click', '.bEliminarDetalle', function() {
+    $(document).on('click', '.borrarDeCorteDeRuta', function() {
         var btn = $(this);
         Swal.fire({
-            title: '¿Estás seguro de eliminar el detalle?',
+            title: 'Quitar venta del corte de ruta',
+            text: '¿Estas seguro de quitar esta venta del corte de ruta actual?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -162,7 +162,7 @@ jQuery(document).ready(function($) {
             cancelButtonText: 'No, cancelar',
             confirmButtonText: 'Si, eliminar'
         }).then((result) => {
-            var data = "metodo=insertar&accion=cortesRuta&tipo=eliminarTemporal&id="+btn.attr('attrID');
+            var data = "metodo=insertar&accion=cortesRuta&tipo=eliminarTemporal&id="+btn.attr('ID_Venta');
 
             $.ajax({
                 url: 'index.php',
@@ -179,7 +179,8 @@ jQuery(document).ready(function($) {
                         title: 'El detalle ha sido eliminado correctamente'
                     });
 
-                    tablaDetallesClientes($(".bDetallesCorteClientes").attr('attrID'));
+                    tablaDetallesClientes(btn.attr('ID_Venta'));
+                    tablaClientesRuta();
                 }else{
                     Swal.fire({
                         icon: 'error',
@@ -197,68 +198,22 @@ jQuery(document).ready(function($) {
                 $("#carga").hide();
             });
         });
-     });
+    });
 
-    $(document).on('click', '.bAgregarDetalleVuelta', function() {
-        var btn = $(this);
-        Swal.fire({
-            title: '¿Estás seguro de agregar el detalle?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'No, cancelar',
-            confirmButtonText: 'Si, eliminar'
-        }).then((result) => {
-            var data = "metodo=eliminar&accion=cortesRuta&tipo=agregarTemporal&id="+btn.attr('attrID');
+    $(document).on('click', '#agregarVentaACorte', function(){
+        console.log($(this).attr('clienteId'));
 
-            $.ajax({
-                url: 'index.php',
-                type: 'POST',
-                data: data,
-                beforeSend: function() {
-                    $("#carga").show();
-                }
-            })
-            .done(function(res) {
-                if ($.trim(res) == "Correcto") {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'El detalle ha sido agregado correctamente'
-                    });
+        var data = `metodo=consultar&accion=cortesRuta&tipo=obtenerExcluidos&id=${$(this).attr('clienteId')}&FechaInicioCorte=${$("#FechaInicioCorte").val()}&FechaFinCorte=${$("#FechaFinCorte").val()}`;
 
-                    tablaDetallesClientes($(".bDetallesCorteClientes").attr('attrID'));
-                }else{
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Error inesperado al agregar el detalle.'
-                    });
-
-                    console.log($.trim(res));
-                }
-            })
-            .fail(function() {
-                console.log("Error ajax");
-            })
-            .always(function() {
-                $("#carga").hide();
-            });
-        });
-     });
-
-    $(document).on('click', '.bOrdenDetalle', async function() {
-
-        const { value: email } = await Swal.fire({
-  title: "Input email address",
-  input: "email",
-  inputLabel: "Your email address",
-  inputPlaceholder: "Enter your email address"
-});
-if (email) {
-  Swal.fire(`Entered email: ${email}`);
-}
-        
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            data: data
+        }).done(function(res){
+            $("#agregarVentasContainer").html($.trim(res));
+        }).fail(function(){
+            console.log('Error ajax')
+        })
     });
 
     $(document).on('dblclick', '#tablaClientesruta tbody td', function() {

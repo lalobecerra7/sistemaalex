@@ -138,8 +138,8 @@
 						<div class="col-9 sticky-top" id="lista-ventas-cliente">
 							
 						</div>
-						<div class="col-3 mx-auto">
-							<button class="btn btn-lg btn-outline-primary m-0 w-100"><i class="fa-solid fa-plus"></i> Añadir venta</button>
+						<div class="col-3 mx-auto" id="agregarVentasContainer">
+							<button class="btn btn-lg btn-outline-primary m-0 w-100" id="agregarVentaACorte" type="button"><i class="fa-solid fa-plus"></i> Añadir venta</button>
 						</div>
 					</div>
 				</div>

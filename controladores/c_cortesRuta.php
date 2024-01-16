@@ -31,7 +31,7 @@ class cortesRuta {
 				}
 			}
 
-			$query = "SELECT c.ID_Cliente, c.Orden_Ruta, CONCAT(c.Nombre, ' ', c.Primer_Apellido, ' ', c.Segundo_Apellido ) AS Nombre_Cliente, Nombre, (SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND v.Estatus = 'Completada') AS Total_Cliente, CONCAT('C. ',c.Calle, ', No. ', c.No_Exterior, (CASE WHEN NULLIF(c.No_Interior, '') IS NOT NULL THEN CONCAT(', Int. ', c.No_Interior, ', ') ELSE ', ' END), c.Colonia, ', ', c.Ciudad, ', ', c.Estado, ', ', c.Pais) AS Domicilio_Cliente, (SELECT COUNT(*) FROM clientes WHERE FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda) AS Num FROM clientes AS c WHERE c.FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT c.ID_Cliente, c.Orden_Ruta, CONCAT(c.Nombre, ' ', c.Primer_Apellido, ' ', c.Segundo_Apellido ) AS Nombre_Cliente, Nombre, (SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND v.Estatus = 'Completada' AND NOT EXISTS (SELECT tev.FK_Venta FROM temporal_excluir_venta AS tev WHERE tev.FK_Venta = v.ID_Venta)) AS Total_Cliente, CONCAT('C. ',c.Calle, ', No. ', c.No_Exterior, (CASE WHEN NULLIF(c.No_Interior, '') IS NOT NULL THEN CONCAT(', Int. ', c.No_Interior, ', ') ELSE ', ' END), c.Colonia, ', ', c.Ciudad, ', ', c.Estado, ', ', c.Pais) AS Domicilio_Cliente, (SELECT COUNT(*) FROM clientes WHERE FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda) AS Num FROM clientes AS c WHERE c.FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -69,7 +69,7 @@ class cortesRuta {
 			$FechaInicioCorte = $omodelo->link->real_escape_string($FechaInicioCorte);
 			$FechaFinCorte = $omodelo->link->real_escape_string($FechaFinCorte);
 
-			$query = "SELECT ID_Venta, Fecha_Registro, Total FROM ventas WHERE FK_Cliente = $idCliente AND Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte'";
+			$query = "SELECT ID_Venta, Fecha_Registro, Total FROM ventas WHERE FK_Cliente = $idCliente AND Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND NOT EXISTS (SELECT FK_Venta FROM temporal_excluir_venta WHERE FK_Venta = ID_Venta)";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -94,7 +94,7 @@ class cortesRuta {
 												</div>
 											</div>
 											<div class='col text-end'>
-												<button class='btn btn-danger'><i class='fa-solid fa-trash'></i> Eliminar</button>
+												<button class='btn btn-danger borrarDeCorteDeRuta'ID_Venta='".$row[$i]['ID_Venta']."' type='button'><i class='fa-solid fa-trash'></i> Eliminar</button>
 											</div>
 										</div>
 										<div class='ventas-detalle row px-3'>
@@ -136,6 +136,12 @@ class cortesRuta {
 					}
 				}
 			}
+		}else if ($tipo == 'obtenerExcluidos'){
+
+			$id					 =  $omodelo->link->real_escape_string($id);
+			$FechaInicioCorte	 =  $omodelo->link->real_escape_string($FechaInicioCorte);
+			$FechaFinCorte		 =  $omodelo->link->real_escape_string($FechaFinCorte);
+			
 		}else{
 			$buscar =  $omodelo->link->real_escape_string($buscar);
 			$limit =  $omodelo->link->real_escape_string($limit);
@@ -226,7 +232,7 @@ class cortesRuta {
 			$id = $omodelo->link->real_escape_string($id);
 
 
-			$query = "INSERT INTO temporal_excluir_detalle_venta SET FK_Detalle_Venta = '$id'";
+			$query = "INSERT INTO temporal_excluir_venta SET FK_Venta = '$id'";
 			$row = $omodelo->_insertar($query);
 
 			if ($row == "si") {
