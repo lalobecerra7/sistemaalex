@@ -1,6 +1,14 @@
 <?php
 class cortesRuta {
 
+	function encontrarVentasPorCliente($ventas_cliente, $clienteID){
+		foreach ($ventas_cliente as $venta){
+			if($venta["cliente"] === $clienteID){
+				return $venta;
+			}
+		}
+	}
+
 	public function _consultar(){
 		$omodelo = new m_modelo();
 		extract($_POST);
@@ -16,7 +24,7 @@ class cortesRuta {
 			$pagina =  $omodelo->link->real_escape_string($pagina);
 			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
 			$orden =  $omodelo->link->real_escape_string($orden);
-			// $ventas = json_decode($ventas);
+			// $ventas = json_decode($ventas, true);
 
 			$busqueda = '';
 			if(trim($buscar) != ''){
@@ -250,6 +258,7 @@ class cortesRuta {
 			$pagina =  $omodelo->link->real_escape_string($pagina);
 			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
 			$orden =  $omodelo->link->real_escape_string($orden);
+			$ventas = json_decode($ventas, true);
 			$arreglo = array();
 
 			$busqueda = '';
@@ -328,42 +337,46 @@ class cortesRuta {
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s');
 		$tipo = $omodelo->link->real_escape_string($tipo);
-
-		if ($tipo == 'eliminarTemporal') {
-
-			$id = $omodelo->link->real_escape_string($id);
-
-
-			$query = "INSERT INTO temporal_excluir_venta SET FK_Venta = '$id'";
-			$row = $omodelo->_insertar($query);
-
-			if ($row == "si") {
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				echo "Correcto";
-
-				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
-			}
-		}else{
-
-			$rutasCorte = $omodelo->link->real_escape_string($rutasCorte);
-			$FechaInicioCorte = $omodelo->link->real_escape_string($FechaInicioCorte);
-			$FechaFinCorte = $omodelo->link->real_escape_string($FechaFinCorte);
-			$selectChofer = $omodelo->link->real_escape_string($selectChofer);
-			$selectVehiculo = $omodelo->link->real_escape_string($selectVehiculo);
-
-			$query = "INSERT INTO cortes_ruta SET Ruta = '$rutasCorte', Fecha_Inicio = '$FechaInicioCorte', Fecha_Fin = '$FechaFinCorte', Verificado = false, Imagen = '', Fecha_Registro = '$fecha', Fk_Chofer = '$selectChofer', FK_Vehiculo = '$selectVehiculo', Estado = 'Pendiente' ";
-			$row = $omodelo->_insertar($query);
-
-			if ($row == "si") {
-				echo "Error: ".mysqli_error($omodelo->link);
-			}else{
-				echo "Correcto";
-
-				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
-			}
-		}
 		
+		$rutasCorte = $omodelo->link->real_escape_string($rutasCorte);
+		$FechaInicioCorte = $omodelo->link->real_escape_string($FechaInicioCorte);
+		$FechaFinCorte = $omodelo->link->real_escape_string($FechaFinCorte);
+		$selectChofer = $omodelo->link->real_escape_string($selectChofer);
+		$selectVehiculo = $omodelo->link->real_escape_string($selectVehiculo);
+		$detalleVentas = json_decode($detalleVentas, true);
+
+		$query = "INSERT INTO cortes_ruta SET Ruta = '$rutasCorte', Fecha_Inicio = '$FechaInicioCorte', Fecha_Fin = '$FechaFinCorte', Verificado = false, Imagen = '', Fecha_Registro = '$fecha', Fk_Chofer = '$selectChofer', FK_Vehiculo = '$selectVehiculo', Estado = 'Pendiente' ";
+		$row = $omodelo->_insertar($query);
+
+		if ($row == "si") {
+			echo "Error: ".mysqli_error($omodelo->link);
+		}else{
+			$last_corte_ruta = mysqli_insert_id($omodelo->link);
+			
+			foreach ($detalleVentas as $detalle){
+				$inserted = "";
+				for ($i=0; $i < count($detalle['ventas']); $i++) { 
+					if($i === count($detalle['ventas'])-1){
+						$inserted .= $detalle['ventas'][$i];
+					}else{
+						$inserted .= $detalle['ventas'][$i].',';
+					}
+				}
+
+				$sum_inserted = str_replace('"', '', $inserted );
+				
+				$query2 = "INSERT INTO detalles_corte_ruta SET FK_Corte_Ruta = '$last_corte_ruta', FK_Cliente = '$detalle[cliente]', Ventas = '$inserted', Total = (SELECT SUM(Total) FROM ventas WHERE ID_Venta IN ($sum_inserted))";
+				$row2 = $omodelo->_insertar($query2);
+
+				if($row2 == "si"){
+					echo "Error: ".mysqli_error($omodelo->link);
+					return false;
+				}
+			}
+
+			echo "Correcto";
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+		}
 	}
 
 	public function _modificar()
