@@ -206,6 +206,8 @@ jQuery(document).ready(function($) {
     $(document).on('click', '#agregarVentaACorte', function(){
         console.log($(this).attr('clienteId'));
 
+        $("#modalAgregarVenta").modal('show');
+
         var data = `metodo=consultar&accion=cortesRuta&tipo=obtenerExcluidos&id=${$(this).attr('clienteId')}&FechaInicioCorte=${$("#FechaInicioCorte").val()}&FechaFinCorte=${$("#FechaFinCorte").val()}`;
 
         $.ajax({
@@ -213,11 +215,13 @@ jQuery(document).ready(function($) {
             type: 'POST',
             data: data
         }).done(function(res){
-            $("#agregarVentasContainer").html($.trim(res));
+            $("#lista-ventas-cliente-excluidas").html($.trim(res));
         }).fail(function(){
             console.log('Error ajax')
         })
     });
+
+
 
     $(document).on('dblclick', '#tablaClientesruta tbody td', function() {
         if($(this).children('span.orden').text() != ""){
@@ -226,6 +230,7 @@ jQuery(document).ready(function($) {
             $(this).html('<input type="number" style="width: 100px;" class="inputOrdenRuta" attrID="'+$(this).attr('attrID')+'" value="'+$(this).text().replace('$', '').replace(searchRegExp, '')+'">');
             $(this).children('input.inputOrdenRuta').focus();
         }
+
     });
 
 

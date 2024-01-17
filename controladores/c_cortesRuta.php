@@ -145,6 +145,76 @@ class cortesRuta {
 			$id					 =  $omodelo->link->real_escape_string($id);
 			$FechaInicioCorte	 =  $omodelo->link->real_escape_string($FechaInicioCorte);
 			$FechaFinCorte		 =  $omodelo->link->real_escape_string($FechaFinCorte);
+
+			$query = "SELECT ID_Venta, Fecha_Registro, Total FROM ventas AS v WHERE v.FK_Cliente = $id AND EXISTS ( SELECT tev.FK_Venta FROM temporal_excluir_venta AS tev WHERE tev.FK_Venta = v.ID_Venta ) OR  v.Fecha_Registro NOT BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						$query2 = "SELECT Descripcion, Cantidad, (Total / Cantidad) as Precio, Total FROM detalles_ventas WHERE FK_Venta ='".$row[$i]['ID_Venta']."'";
+						$row2 = $omodelo->_consultar($query2);
+						$numerofilas2 = $omodelo->numerofilas;
+
+
+						$card = "<div class='row border border-secondary rounded px-2 py-3 mb-3'>
+									<div class='col'>
+										<div class='ventas-header row justify-content-between align-items-center mb-2'>
+											<div class='col-8 px-2'>
+												<div class='row'>
+													<p class='py-0 my-0 col-4 pl-2'><b>Id:</b> ".$row[$i]['ID_Venta']."</p>
+													<p class='py-0 '><b>Fecha de Venta:</b> ".date('d-m-Y', strtotime($row[$i]['Fecha_Registro']))."</p>
+												</div>
+											</div>
+											<div class='col text-end align-items-center'>
+												<button class='btn btn-primary btn-sm agregarDeCorteDeRuta'ID_Venta='".$row[$i]['ID_Venta']."' type='button'><i class='fa-solid fa-plus'></i> Agregar</button>
+											</div>
+										</div>
+										<div class='ventas-detalle row table-responsive'>
+											<table class='table w-100'>
+											<thead>
+												<tr>
+													<th scope='col'>Prod.</th>
+													<th scope='col'>Cant.</th>
+													<th scope='col'>Precio</th>
+													<th scope='col'>Subt.</th>
+												</tr>
+											</thead>
+											<tbody>
+											";
+
+						if($numerofilas2 > 0){
+							for ($j=0; $j < $numerofilas2; $j++) { 
+								$card .= "
+									<tr>
+										<th>".$row2[$j]['Descripcion']."</th>
+										<th>".$row2[$j]['Cantidad']."</th>
+										<th>".$row2[$j]['Precio']."</th>
+										<th>".$row2[$j]['Total']."</th>
+									</tr>
+								";
+							}
+						}
+
+						$card .= "</tbody>
+								</table>
+										</div>
+										<div class='ventas-footer text-end'>
+											<p class='p-0 m-0 fs-6'><b>Total:</b> ".$row[$i]['Total']."</p>
+										</div>
+									</div>
+								</div>";
+
+						echo $card;
+
+
+
+					}
+				}
+			}			
 			
 		}else{
 			$buscar =  $omodelo->link->real_escape_string($buscar);

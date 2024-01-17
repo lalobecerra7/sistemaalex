@@ -135,10 +135,10 @@
 			<form id="formCorteClientes">
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-9 sticky-top" id="lista-ventas-cliente">
+						<div class="col-9" id="lista-ventas-cliente">
 							
 						</div>
-						<div class="col-3 mx-auto" id="agregarVentasContainer">
+						<div class="col-3 sticky-top mx-auto" id="agregarVentasContainer">
 							<button class="btn btn-lg btn-outline-primary m-0 w-100" id="agregarVentaACorte" type="button"><i class="fa-solid fa-plus"></i> Añadir venta</button>
 						</div>
 					</div>
@@ -151,3 +151,27 @@
 	</div>
 </div>
 
+
+<!--///////////////////////////////////////////////////////-->
+<div class="modal fade" id="modalAgregarVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header bg-inverse bd-inverse-darken">
+				<h5 class="modal-title" style="font-weight: bold;">Clientes Detalles De Ruta</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form id="formCorteClientes">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-12 " id="lista-ventas-cliente-excluidas">
+							
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
