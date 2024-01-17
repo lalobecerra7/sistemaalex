@@ -31,6 +31,8 @@ class cortesRuta {
 				}
 			}
 
+			//TODO Cmabiar consulta y llenar objeto
+
 			$query = "SELECT c.ID_Cliente, c.Orden_Ruta, CONCAT(c.Nombre, ' ', c.Primer_Apellido, ' ', c.Segundo_Apellido ) AS Nombre_Cliente, Nombre, (SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND v.Estatus = 'Completada' AND NOT EXISTS (SELECT tev.FK_Venta FROM temporal_excluir_venta AS tev WHERE tev.FK_Venta = v.ID_Venta)) AS Total_Cliente, CONCAT('C. ',c.Calle, ', No. ', c.No_Exterior, (CASE WHEN NULLIF(c.No_Interior, '') IS NOT NULL THEN CONCAT(', Int. ', c.No_Interior, ', ') ELSE ', ' END), c.Colonia, ', ', c.Ciudad, ', ', c.Estado, ', ', c.Pais) AS Domicilio_Cliente, (SELECT COUNT(*) FROM clientes WHERE FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda) AS Num FROM clientes AS c WHERE c.FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
@@ -79,6 +81,8 @@ class cortesRuta {
 			}else{
 				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
+						//TODO: Hacer la concat en un string y hacer una sola consulta con un OR en php
+						//Recibir Objeto AJAX con json_decode
 						$query2 = "SELECT Descripcion, Cantidad, (Total / Cantidad) as Precio, Total FROM detalles_ventas WHERE FK_Venta ='".$row[$i]['ID_Venta']."'";
 						$row2 = $omodelo->_consultar($query2);
 						$numerofilas2 = $omodelo->numerofilas;

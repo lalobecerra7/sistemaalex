@@ -1,3 +1,5 @@
+var ventas_cliente = [];
+
 function v_cortesRuta() {
 	tablaCortesRuta();
 
@@ -96,6 +98,7 @@ function tablaCortesRuta() {
 function tablaDetallesClientes(idCliente){
     var data = `metodo=consultar&accion=cortesRuta&tipo=clientesDetalles&idCliente=${idCliente}&FechaInicioCorte=${$("#FechaInicioCorte").val()}&FechaFinCorte=${$("#FechaFinCorte").val()}`;
 
+    //Enviar objeot con los id de ventas con json_stringify
     $.ajax({
         url: 'index.php',
         type: 'POST',
