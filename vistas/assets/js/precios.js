@@ -129,4 +129,8 @@ jQuery(document).ready(function($) {
 		$("#modalProductosPrecios").modal("hide");
 		tablaPrecios();
 	});
+
+    $(document).on('click', '#CargarPreciosDeiman', function() {
+        $("#ModalCargarPreciosDeiman").modal("show");
+    });
 });

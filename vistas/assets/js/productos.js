@@ -35,7 +35,7 @@ function v_productos() {
             var presentaciones = [];
             if($("#verPresentaciones").children('tr').length > 0){
                 $("#verPresentaciones").children('tr').each(function(index, el){
-                    presentaciones.push({'ID_Presentacion': $.trim($(this).attr('id')),'Clave': $.trim($(this).children('td:eq(0)').text()), 'Nombre': $.trim($(this).children('td:eq(1)').text()), 'Abreviatura': $.trim($(this).children('td:eq(2)').text()), 'Costo': $.trim($(this).children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')), 'Importe': $.trim($(this).children('td:eq(4)').text().replace('$', '').replace(searchRegExp, '')), 'Codigo': $.trim($(this).children('td:eq(5)').text())});
+                    presentaciones.push({'ID_Presentacion': $.trim($(this).attr('id')),'Clave': $.trim($(this).children('td:eq(0)').text()), 'Nombre': $.trim($(this).children('td:eq(1)').text()), 'Abreviatura': $.trim($(this).children('td:eq(2)').text()), 'Costo': $.trim($(this).children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')), 'Importe': $.trim($(this).children('td:eq(4)').text().replace('$', '').replace(searchRegExp, '')), 'Codigo': $.trim($(this).children('td:eq(5)').text()), 'Referencia': $.trim($(this).children('td:eq(6)').text())});
                 });
             }
 
@@ -246,6 +246,7 @@ function v_productos() {
                     filaPre.children('td:eq(3)').html('<span class="dinero">'+$.trim($("#costoPresentacionM").val())+'</span>');
                     filaPre.children('td:eq(4)').html('<span class="dinero">'+$.trim($("#importePresentacionM").val())+'</span>');
                     filaPre.children('td:eq(5)').html($.trim($("#CodigoPresentacionM").val()));
+                    filaPre.children('td:eq(6)').html($.trim($("#ReferenciaPresentacionM").val()));
 
                     $("#presentacionProdSelect").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
                     $("#presentacionProdSelect").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
@@ -269,29 +270,79 @@ function v_productos() {
                 })
                 .done(function(res) {
                     if ($.trim(res) == "Valido") {
-                        if(filas.length <= 1){
-                            var nombre = $.trim(filaPre.attr('attrID'));
-                            filaPre.attr('attrID', $.trim($("#nombrePresentacionM").val()));
-                            filaPre.children('td:eq(0)').html($.trim($("#unidadPresentacionM").val()));
-                            filaPre.children('td:eq(1)').html($.trim($("#nombrePresentacionM").val()));
-                            filaPre.children('td:eq(2)').html($.trim($("#abreviaturaPresentacionM").val()));
-                            filaPre.children('td:eq(3)').html('<span class="dinero">'+$.trim($("#costoPresentacionM").val())+'</span>');
-                            filaPre.children('td:eq(4)').html('<span class="dinero">'+$.trim($("#importePresentacionM").val())+'</span>');
-                            filaPre.children('td:eq(5)').html($.trim($("#CodigoPresentacionM").val()));
 
-                            $("#presentacionProdSelect").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
-                            $("#presentacionProdSelect").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
-                            $("#presentacionProdSelect1").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
-                            $("#presentacionProdSelect1").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
-                            $("#modalPresentaciones").modal('hide');
+                        if ($("#ReferenciaPresentacionM").val() != "") {
+                            var referencia = $("#ReferenciaPresentacionM").val();
+                            var data = "metodo=detalles&accion=productos&tipo=ConsultarValidezReferencia&Referencia="+referencia;
+                            $.ajax({
+                                url: 'index.php',
+                                type: 'POST',
+                                data: data
+                            })
+                            .done(function(res) {
+                                if ($.trim(res) == "Valido") {
+                                    if(filas.length <= 1){
+                                        var nombre = $.trim(filaPre.attr('attrID'));
+                                        filaPre.attr('attrID', $.trim($("#nombrePresentacionM").val()));
+                                        filaPre.children('td:eq(0)').html($.trim($("#unidadPresentacionM").val()));
+                                        filaPre.children('td:eq(1)').html($.trim($("#nombrePresentacionM").val()));
+                                        filaPre.children('td:eq(2)').html($.trim($("#abreviaturaPresentacionM").val()));
+                                        filaPre.children('td:eq(3)').html('<span class="dinero">'+$.trim($("#costoPresentacionM").val())+'</span>');
+                                        filaPre.children('td:eq(4)').html('<span class="dinero">'+$.trim($("#importePresentacionM").val())+'</span>');
+                                        filaPre.children('td:eq(5)').html($.trim($("#CodigoPresentacionM").val()));
+                                        filaPre.children('td:eq(6)').html($.trim($("#ReferenciaPresentacionM").val()));
 
-                            moneda();
-                        }else{
-                            Swal.fire({
-                                icon: 'warning',
-                                title: 'Oops...',
-                                text: 'La presentación ya existe, por favor utiliza otra.'
+                                        $("#presentacionProdSelect").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
+                                        $("#presentacionProdSelect").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
+                                        $("#presentacionProdSelect1").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
+                                        $("#presentacionProdSelect1").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
+                                        $("#modalPresentaciones").modal('hide');
+
+                                        moneda();
+                                    }else{
+                                        Swal.fire({
+                                            icon: 'warning',
+                                            title: 'Oops...',
+                                            text: 'La presentación ya existe, por favor utiliza otra.'
+                                        });
+                                    }  
+                                }else{
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Oops...',
+                                        text: 'Esta referencia ya existe, intenta con otra.'
+                                    });  
+                                }
+                            })
+                            .fail(function() {
+                                console.log("Error ajax");
                             });
+                        }else{
+                            if(filas.length <= 1){
+                                var nombre = $.trim(filaPre.attr('attrID'));
+                                filaPre.attr('attrID', $.trim($("#nombrePresentacionM").val()));
+                                filaPre.children('td:eq(0)').html($.trim($("#unidadPresentacionM").val()));
+                                filaPre.children('td:eq(1)').html($.trim($("#nombrePresentacionM").val()));
+                                filaPre.children('td:eq(2)').html($.trim($("#abreviaturaPresentacionM").val()));
+                                filaPre.children('td:eq(3)').html('<span class="dinero">'+$.trim($("#costoPresentacionM").val())+'</span>');
+                                filaPre.children('td:eq(4)').html('<span class="dinero">'+$.trim($("#importePresentacionM").val())+'</span>');
+                                filaPre.children('td:eq(5)').html($.trim($("#CodigoPresentacionM").val()));
+                                filaPre.children('td:eq(6)').html($.trim($("#ReferenciaPresentacionM").val()));
+
+                                $("#presentacionProdSelect").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
+                                $("#presentacionProdSelect").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
+                                $("#presentacionProdSelect1").children('option[value="'+nombre+'"]').attr('value', $.trim($("#nombrePresentacionM").val()));
+                                $("#presentacionProdSelect1").children('option[value="'+nombre+'"]').html($.trim($("#nombrePresentacionM").val()));
+                                $("#modalPresentaciones").modal('hide');
+
+                                moneda();
+                            }else{
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Oops...',
+                                    text: 'La presentación ya existe, por favor utiliza otra.'
+                                });
+                            }
                         }
                     }else{
                         Swal.fire({
@@ -651,6 +702,7 @@ jQuery(document).ready(function($) {
                         <td><span class="dinero">`+presentacion.Costo+`</span></td>
                         <td><span class="dinero">`+presentacion.Importe+`</span></td>
                         <td>`+presentacion.Codigo+`</td>
+                        <td>`+presentacion.Referencia+`</td>
                         <td>`+botonEli+` <button type="button" class="btn btn-warning btn-sm bModificarPresenta" attrID="`+presentacion.ID_Presentacion+`"><i class="fas fa-pencil"></i></button></td>
                     </tr>`);
 
@@ -742,7 +794,7 @@ jQuery(document).ready(function($) {
 
         Swal.fire({
           title: "Ingresa la contraseña de administrador",
-          input: "text",
+          input: "password",
           inputAttributes: {
             autocapitalize: "off"
           },
@@ -981,7 +1033,31 @@ jQuery(document).ready(function($) {
         })
         .done(function(res) {
             if ($.trim(res) == "Valido") {
-                $("#bGuardarPres").trigger('click');
+                if ($(this).parent().parent().children("td:eq(6)").find("#ReferenciaPresentacion").val() != "") {
+                    var referencia = $(this).parent().parent().children("td:eq(6)").find("#ReferenciaPresentacion").val();
+                    var data = "metodo=detalles&accion=productos&tipo=ConsultarValidezReferencia&Referencia="+referencia;
+                    $.ajax({
+                        url: 'index.php',
+                        type: 'POST',
+                        data: data
+                    })
+                    .done(function(res) {
+                        if ($.trim(res) == "Valido") {
+                                $("#bGuardarPres").trigger('click');
+                        }else{
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Oops...',
+                                text: 'Esta referencia ya existe, intenta con otra.'
+                            });  
+                        }
+                    })
+                    .fail(function() {
+                        console.log("Error ajax");
+                    });
+                }else{
+                    $("#bGuardarPres").trigger('click');
+                }
             }else{
                 Swal.fire({
                     icon: 'warning',
@@ -1005,6 +1081,7 @@ jQuery(document).ready(function($) {
                 <td><span class="dinero">`+$.trim($("#costoPresentacion").val())+`</span></td>
                 <td><span class="dinero">`+$.trim($("#importePresentacion").val())+`</span></td>
                 <td>`+$.trim($("#CodigoPresentacion").val())+`</td>
+                <td>`+$.trim($("#ReferenciaPresentacion").val())+`</td>
                 <td><button type="button" class="btn btn-danger btn-sm bQuitarPresenta"><i class="fas fa-trash"></i></button> <button type="button" class="btn btn-warning btn-sm bModificarPresenta"><i class="fas fa-pencil"></i></button></td>
             </tr>`);
 
@@ -1058,6 +1135,7 @@ jQuery(document).ready(function($) {
         $("#costoPresentacionM").val($.trim(filaPre.children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')));
         $("#importePresentacionM").val($.trim(filaPre.children('td:eq(4)').text().replace('$', '').replace(searchRegExp, '')));
         $("#CodigoPresentacionM").val($.trim(filaPre.children('td:eq(5)').text()));
+        $("#ReferenciaPresentacionM").val($.trim(filaPre.children('td:eq(6)').text()));
         $("#bGuardarPresenta").attr('attrID', $(this).attr('attrID'));
         $("#bGuardarPresenta").attr("codigoActual", filaPre.children('td:eq(5)').text());
         $("#modalPresentaciones").modal('show');

@@ -2,11 +2,16 @@
 	<div id="content" class="card">
 		<div class="card-body">
 			<div class="row">
-				<div class="col-10">
+				<div class="col-8">
 					<h1 style="font-weight: bold;" id="vistaTitulo"></h1>
 				</div>
 				<div class="col-2">
 					<a href="javascript:void(0)" class="btn btn-light btn-reload cargarVista" carga="v_precios" titulo="Precios"><i class="fa fa-retweet"></i></a>
+				</div>
+				<div class="col-2">
+					<button class="btn btn-sm btn-primary" id="CargarPreciosDeiman">
+						Cargar precios Deiman
+					</button>
 				</div>
 			</div>
 			<br>
@@ -89,6 +94,34 @@
 						</table>
 					</div>
 				</div>
+	    	</div>
+	    	<div class="modal-footer">
+				<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
+	    	</div>
+    	</div>
+  	</div>
+</div> 
+
+<!--/////////////////////////Modal///////////////////////////////////-->
+<div class="modal fade" id="ModalCargarPreciosDeiman" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  	<div class="modal-dialog modal-lg modal-dialog-centered" style="z-index: 9999 !important;">
+    	<div class="modal-content">
+      		<div class="modal-header bg-inverse bd-inverse-darken">
+        		<h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Cargar precios de Deiman</h5>
+        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      		</div>
+      		<div class="modal-body">
+      			<div class="row">
+      				<div class="col-md-4">
+	      				<select form="formPreciosProd" class="form-select" name="ZonaCargarPrecioProducto" id="ZonaCargarPrecioProducto" required>
+	                      	<option value="">--Seleccione una opción--</option>  
+	                      	#CargarZonasPrecio# 
+                    	</select>
+      				</div>
+      				<div class="col-md-8">
+      					
+      				</div>
+      			</div>
 	    	</div>
 	    	<div class="modal-footer">
 				<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>

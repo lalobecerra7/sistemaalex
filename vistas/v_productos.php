@@ -245,6 +245,7 @@
 				        	<th>Costo</th>
 				        	<th>Importe</th>
 				        	<th>Codigo</th>
+				        	<th>Referencia</th>
 				        	<th>Acciones</th>
 				        </thead>
 				        <tbody id="verPresentaciones">
@@ -272,6 +273,9 @@
 		                </td>
 		                <td>
 		                  <input type="text" form="formPresentaciones" class="form-control" id="CodigoPresentacion" name="CodigoPresentacion" placeholder="Ingresa el codigo de barras de la presentación" required>
+		                </td>
+		                <td>
+		                  <input type="text" form="formPresentaciones" class="form-control" id="ReferenciaPresentacion" name="ReferenciaPresentacion" placeholder="Referencia deiman">
 		                </td>
 		                <td>
 		                	<button  type="button" class="btn btn-sm btn-success" id="bAgergarPresentacion"><i class="fas fa-plus"></i></button>
@@ -567,7 +571,7 @@
   <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
     <div class="modal-content">
       <div class="modal-header bg-inverse bd-inverse-darken">
-        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Presetación</h5>
+        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Presentación</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form id="formModiPresentacion">
@@ -600,6 +604,10 @@
 					<div class="form-floating mb-3">
 						<input type="text" form="formPresentaciones" class="form-control" id="CodigoPresentacionM" name="CodigoPresentacionM" placeholder="Ingresa el codigo de barras de la presentación"> 
 						<label>Codigo de barras</label>	
+					</div>	
+					<div class="form-floating mb-3">
+						<input type="text" form="formPresentaciones" class="form-control" id="ReferenciaPresentacionM" name="ReferenciaPresentacionM" placeholder="Ingresa la referencia de la presentación"> 
+						<label>Referencia Deiman</label>	
 					</div>	
 	      </div>
 	      <div class="modal-footer">
