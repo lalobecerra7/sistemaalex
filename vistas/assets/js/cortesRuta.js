@@ -8,14 +8,11 @@ function check_and_push(idCliente, data){
 }
 
 function remove_venta(idCliente, idVenta){
-    ventas_cliente.forEach(function(obj){
-        if(obj.cliente === idCliente){
-            var indexToRemove = obj.ventas.indexOf(idVenta);
-
-            if(indexToRemove !== -1){
-                obj.ventas.splice(indexToRemove, 1);
-            }
+    ventas_cliente.map(item => {
+        if(item.cliente === idCliente){
+            item.ventas = item.ventas.filter(venta => !idVenta.includes(venta));
         }
+        return item;
     })
 }
 
@@ -204,22 +201,9 @@ jQuery(document).ready(function($) {
 
     $(document).on('click', '.bDetallesCorteClientes', function() {
         var clientID = $(this).attr('attrID');
-        var data = `metodo=consultar&accion=cortesRuta&tipo=ventas_cliente&idCliente=${$(this).attr('attrID')}&FechaInicioCorte=${$("#FechaInicioCorte").val()}&FechaFinCorte=${$("#FechaFinCorte").val()}`;
-        var jsonData;
-
-        $.ajax({
-            url: 'index.php',
-            type: 'POST',
-            data: data
-        }).done(function(res){
-            jsonData = JSON.parse(res);
-            check_and_push(jsonData.cliente, jsonData);
-            
-            const ventas_val = ventas_cliente.find(obj => obj.cliente === clientID);
-
-            $("#modalCorteClientes").modal('show');
-            tablaDetallesClientes(clientID, ventas_val ? ventas_val.ventas : jsonData.ventas);
-        })
+        const ventas_val = ventas_cliente.find(obj => obj.cliente === clientID);
+        $("#modalCorteClientes").modal('show');
+        tablaDetallesClientes(clientID, ventas_val ? ventas_val.ventas : jsonData.ventas);
     });
 
     $(document).on('click', '.borrarDeCorteDeRuta', function() {
@@ -237,7 +221,12 @@ jQuery(document).ready(function($) {
             if (result.isConfirmed) {
                 remove_venta(btn.attr('ID_Cliente'), btn.attr('ID_Venta'))
 
-                const ventas_val = ventas_cliente.find(obj => obj.cliente === btn.attr('ID_Cliente'));
+                console.log(btn.attr('ID_Cliente'));
+                console.log(btn.attr('ID_Venta'));
+                console.log(ventas_cliente);
+                
+                const ventas_val = ventas_cliente.find(obj => obj.cliente == btn.attr('ID_Cliente'));
+                console.log(ventas_val);
                 tablaDetallesClientes(btn.attr('ID_Cliente'), ventas_val.ventas);
                 tablaClientesRuta();
 

@@ -124,25 +124,6 @@ class cortesRuta {
 
 			echo json_encode($ventas_cliente);
 			
-		}else if ($tipo == 'ventas_cliente'){
-
-			$idCliente =  $omodelo->link->real_escape_string($idCliente);
-			$FechaInicioCorte = $omodelo->link->real_escape_string($FechaInicioCorte);
-			$FechaFinCorte = $omodelo->link->real_escape_string($FechaFinCorte);
-
-			$ventas_cliente = array();
-			$ventas_cliente['cliente'] = $idCliente;
-			$ventas_cliente['ventas'] = array();
-
-			$query = "SELECT ID_Venta FROM ventas WHERE FK_Cliente = $idCliente AND Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte'";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-
-			for ($i=0; $i < $numerofilas; $i++) { 
-				array_push($ventas_cliente['ventas'], $row[$i]['ID_Venta']);
-			}
-			echo json_encode($ventas_cliente);
-
 		}else if ($tipo == 'clientesDetalles') {
 			
 			$idCliente =  $omodelo->link->real_escape_string($idCliente);
