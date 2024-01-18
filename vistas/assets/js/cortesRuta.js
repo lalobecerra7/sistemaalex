@@ -175,6 +175,7 @@ jQuery(document).ready(function($) {
         var threeMoreDays = new Date(today);
         threeMoreDays.setDate(today.getDate() + 3);
 
+
         $("#modalCorteRuta").modal('show');
         $("#formCorteDeRuta")[0].reset();
         $("#bGuardarCorte").attr('tipo', 'insertar');
@@ -185,8 +186,20 @@ jQuery(document).ready(function($) {
     });
 
 	$(document).on('click', '#bGenerarClientes', function() {
-        $("#tablaClientesruta").removeClass('d-none');
-		tablaClientesRuta();
+
+        var data = `metodo=consultar&accion=cortesRuta&tipo=all_ventas_clientes&Ruta=${$("#rutasCorte").val()}&FechaInicioCorte=${$("#FechaInicioCorte").val()}&FechaFinCorte=${$("#FechaFinCorte").val()}`;
+
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            data: data
+        }).done(function(res){
+            var jsonData = JSON.parse(res);
+            ventas_cliente = jsonData;
+            $("#tablaClientesruta").removeClass('d-none');
+            tablaClientesRuta();
+        })
+
 	});
 
     $(document).on('click', '.bDetallesCorteClientes', function() {
@@ -271,7 +284,7 @@ jQuery(document).ready(function($) {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             cancelButtonText: 'No, cancelar',
-            confirmButtonText: 'Si, agergar'
+            confirmButtonText: 'Si, agregar'
         }).then((result) => {
             if (result.isConfirmed) {
                 add_venta(btn.attr('ID_Cliente'), btn.attr('ID_Venta'))
@@ -290,7 +303,7 @@ jQuery(document).ready(function($) {
                         $("#lista-ventas-cliente-excluidas").html($.trim(res));
                         $("#searchedForAdd").attr('ID_Cliente', btn.attr('ID_Cliente'));
                     }else{
-                        $("#lista-ventas-cliente-excluidas").html('<h1>No hay nada we</h1>');
+                        $("#lista-ventas-cliente-excluidas").html('<h3>Sin registros</h3>');
                     }
                 }).fail(function(){
                     console.log('Error ajax')
@@ -384,12 +397,62 @@ jQuery(document).ready(function($) {
                 $("#lista-ventas-cliente-excluidas").html($.trim(res));
                 $("#searchedForAdd").attr('ID_Cliente', clientId);
             }else{
-                $("#lista-ventas-cliente-excluidas").html('<h1>No hay nada we</h1>');
+                $("#lista-ventas-cliente-excluidas").html('<h3>Sin registros</h3>');
             }
         }).fail(function(){
             console.log('Error ajax')
         });
     })
+
+    $(document).on('click', '.bEliminarCorteRuta', function() {
+        var btn = $(this);
+        Swal.fire({
+            title: '¿Estás seguro de eliminar el corte venta?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'No, cancelar',
+            confirmButtonText: 'Si, eliminar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var data = "metodo=eliminar&accion=cortesRuta&id="+btn.attr('attrID');
+
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data,
+                    beforeSend: function() {
+                        $("#carga").show();
+                    }
+                })
+                .done(function(res) {
+                    if ($.trim(res) == "Correcto") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'El corte de ruta ha sido eliminado correctamente'
+                        });
+
+                        tablaCortesRuta(); 
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error inesperado al eliminar el corte de ruta.'
+                        });
+
+                        console.log($.trim(res));
+                    }
+                })
+                .fail(function() {
+                    console.log("Error ajax");
+                })
+                .always(function() {
+                    $("#carga").hide();
+                });
+            }
+        });
+    });
 
 	/*$(document).on('click', '.bModificarVehiculo', function() {
 		var padre = $(this).parent().parent();
@@ -404,51 +467,5 @@ jQuery(document).ready(function($) {
 		$("#modalVehiculo").modal('show');
 	});
 
-	$(document).on('click', '.bEliminarVehiculo', function() {
-		var btn = $(this);
-		Swal.fire({
-			title: '¿Estás seguro de eliminar el vehículo?',
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-          	cancelButtonColor: '#d33',
-			cancelButtonText: 'No, cancelar',
-			confirmButtonText: 'Si, eliminar'
-        }).then((result) => {
-        	var data = "metodo=eliminar&accion=vehiculos&id="+btn.attr('attrID');
-
-            $.ajax({
-                url: 'index.php',
-                type: 'POST',
-                data: data,
-                beforeSend: function() {
-                    $("#carga").show();
-                }
-            })
-            .done(function(res) {
-                if ($.trim(res) == "Correcto") {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'El vehículo ha sido eliminado correctamente'
-                    });
-
-                    tablaVehiculos(); 
-                }else{
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Error inesperado al eliminar el vehículo.'
-                    });
-
-                    console.log($.trim(res));
-                }
-            })
-            .fail(function() {
-                console.log("Error ajax");
-            })
-            .always(function() {
-                $("#carga").hide();
-            });
-        });
-	});*/
+	*/
 });

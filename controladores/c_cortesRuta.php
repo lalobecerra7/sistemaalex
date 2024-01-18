@@ -95,6 +95,35 @@ class cortesRuta {
 			echo json_encode($arreglo);
 
 
+		}else if ($tipo == 'all_ventas_clientes') {
+			$FechaInicioCorte = $omodelo->link->real_escape_string($FechaInicioCorte);
+			$FechaFinCorte = $omodelo->link->real_escape_string($FechaFinCorte);
+			$Ruta =  $omodelo->link->real_escape_string($Ruta);
+
+			$query = "SELECT  c.ID_Cliente, (SELECT GROUP_CONCAT(vn.ID_Venta SEPARATOR ',') FROM ventas AS vn WHERE vn.FK_Cliente = C.ID_Cliente AND vn.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte') AS Cliente_Ventas  FROM clientes AS c WHERE FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta')";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			$ventas_cliente = array();
+
+			for ($i=0; $i < $numerofilas; $i++) { 
+
+				$temp_helper = array();
+				$temp_helper['cliente'] = $row[$i]['ID_Cliente'];
+				$temp_helper['ventas'] = array();  
+
+				$numberArray = array_map('intval', explode(',' , $row[$i]['Cliente_Ventas']));
+
+				for ($j=0; $j < count($numberArray); $j++) { 
+					array_push($temp_helper['ventas'] , $numberArray[$j]);
+				}
+
+				array_push($ventas_cliente , $temp_helper);
+
+			}
+
+			echo json_encode($ventas_cliente);
+			
 		}else if ($tipo == 'ventas_cliente'){
 
 			$idCliente =  $omodelo->link->real_escape_string($idCliente);
@@ -304,7 +333,7 @@ class cortesRuta {
 				}
 			}
 
-			$query = "SELECT ID_Corte, Ruta, Fecha_Inicio, DATE_FORMAT(Fecha_Inicio, '%d-%m-%Y') AS FechaI, Fecha_Fin,  DATE_FORMAT(Fecha_Fin, '%d-%m-%Y') AS FechaF, Verificado, FK_Chofer, FK_Vehiculo, Estado, Imagen, Fecha_Registro AS Fecha, DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, (SELECT COUNT(*) FROM cortes_ruta $busqueda) AS Num FROM cortes_ruta $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Corte, Ruta, Fecha_Inicio, DATE_FORMAT(Fecha_Inicio, '%d-%m-%Y') AS FechaI, Fecha_Fin,  DATE_FORMAT(Fecha_Fin, '%d-%m-%Y') AS FechaF, Verificado, FK_Chofer, FK_Vehiculo, Estado, Imagen, Fecha_Registro AS Fecha, Total, DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, (SELECT COUNT(*) FROM cortes_ruta $busqueda) AS Num FROM cortes_ruta $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -344,7 +373,7 @@ class cortesRuta {
 							'Ruta' => $row[$i]['Ruta'],
 							'Fecha_Inicio' => $row[$i]['FechaI'],
 							'Fecha_Fin' => $row[$i]['FechaF'],
-							'Total' => '',
+							'Total' => $row[$i]['Total'],
 							'Verificado' => $verificado,
 							'Detalles' => $row[$i]['FK_Chofer'].$row[$i]['FK_Vehiculo'],
 							'Acciones' => $bModificar.' '.$bEliminar
@@ -374,7 +403,13 @@ class cortesRuta {
 		$selectVehiculo = $omodelo->link->real_escape_string($selectVehiculo);
 		$detalleVentas = json_decode($detalleVentas, true);
 
-		$query = "INSERT INTO cortes_ruta SET Ruta = '$rutasCorte', Fecha_Inicio = '$FechaInicioCorte', Fecha_Fin = '$FechaFinCorte', Verificado = false, Imagen = '', Fecha_Registro = '$fecha', Fk_Chofer = '$selectChofer', FK_Vehiculo = '$selectVehiculo', Estado = 'Pendiente' ";
+		$idventas = array_merge(...array_column($detalleVentas, 'ventas'));
+
+		$idventasstr = implode(',' , $idventas);
+
+		$idventasnumber = str_replace('"' , '', $idventasstr );
+
+		$query = "INSERT INTO cortes_ruta SET Ruta = '$rutasCorte', Fecha_Inicio = '$FechaInicioCorte', Fecha_Fin = '$FechaFinCorte', Verificado = false, Imagen = '', Fecha_Registro = '$fecha', Fk_Chofer = '$selectChofer', FK_Vehiculo = '$selectVehiculo', Estado = 'Pendiente', Total = (SELECT SUM(v.Total) as Total FROM ventas AS v WHERE v.ID_Venta IN ($idventasnumber)) ";
 		$row = $omodelo->_insertar($query);
 
 		if ($row == "si") {
@@ -440,7 +475,10 @@ class cortesRuta {
 		extract($_POST);
 		$id =  $omodelo->link->real_escape_string($id);
 
-		$query = "DELETE FROM temporal_excluir_detalle_venta WHERE FK_Detalle_Venta = '$id'";
+		$query2 = "DELETE FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$id'";
+		$error2 = $omodelo->_insertar($query2);
+
+		$query = "DELETE FROM cortes_ruta WHERE ID_Corte = '$id'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
