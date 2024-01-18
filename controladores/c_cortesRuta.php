@@ -9,6 +9,7 @@ class cortesRuta {
 		}
 	}
 
+
 	public function _consultar(){
 		$omodelo = new m_modelo();
 		extract($_POST);
@@ -24,7 +25,6 @@ class cortesRuta {
 			$pagina =  $omodelo->link->real_escape_string($pagina);
 			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
 			$orden =  $omodelo->link->real_escape_string($orden);
-			// $ventas = json_decode($ventas, true);
 
 			$busqueda = '';
 			if(trim($buscar) != ''){
@@ -54,13 +54,36 @@ class cortesRuta {
 						if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][3] == '1') {
 							$bDetalles = '<button type="button" class="btn btn-sm btn-outline-info bDetallesCorteClientes" attrID="'.$row[$i]['ID_Cliente'].'" title="Detalles"> <i class="fa-solid fa-list"></i></button>';
 						}
+
+						$total_calc = "";
 						
+						if(isset($ventas)){
+							$ventas = json_decode($ventas, true);
+							$tempVentasCliente = $this->encontrarVentasPorCliente($ventas, $row[$i]['ID_Cliente']);
+
+							if(isset($tempVentasCliente)){
+								$looked = "";
+
+								for ($j=0; $j < count($tempVentasCliente['ventas']); $j++) { 
+									if($j === count($tempVentasCliente['ventas'])-1){
+										$looked .= $tempVentasCliente['ventas'][$j];
+									}else{
+										$looked .= $tempVentasCliente['ventas'][$j].',';
+									}
+								}
+
+								$query2 = "SELECT SUM(Total) as Total FROM ventas WHERE ID_Venta IN ($looked)";
+								$row2 = $omodelo->_consultar($query2);
+								
+								$total_calc = $row2[0]['Total'];
+							}
+						}
 						
 						$arreglo['data'][$i] = array(
 							'Orden_Ruta' =>'<span class="orden" attrID="'.$row[$i]['ID_Cliente'].'">'.$row[$i]['Orden_Ruta'].'</span>',
 							'Nombre' => $row[$i]['Nombre_Cliente'],
 							'Domicilio' => $row[$i]['Domicilio_Cliente'],
-							'Total' => $row[$i]['Total_Cliente'],
+							'Total' => $total_calc != "" ? $total_calc : $row[$i]['Total_Cliente'],
 							'Acciones' => $bDetalles
 						);
 					}
@@ -177,16 +200,25 @@ class cortesRuta {
 
 			$id =  $omodelo->link->real_escape_string($id);
 			$ventas = json_decode($ventas);
-
+			
 			if(!$ventas){
 				//TODO: Cortar ejecucicion
 			}
 
+			$busqueda = "";
+			if(isset($buscado)){
+				$buscado = $omodelo->link->real_escape_string($buscado);
+				if(trim($buscado) != ''){
+					$busqueda = "AND v.ID_Venta = $buscado";
+				}
+			}
+
 			$ventasIDs = implode(', ', $ventas);
 
-			$query = "SELECT ID_Venta, Fecha_Registro, Total FROM ventas AS v WHERE v.FK_Cliente = $id AND v.ID_Venta NOT IN ($ventasIDs)";
+			$query = "SELECT ID_Venta, Fecha_Registro, Total FROM ventas AS v WHERE v.FK_Cliente = $id AND v.ID_Venta NOT IN ($ventasIDs) $busqueda";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
+
 
 			if($row == 'si'){
 				echo "Error: ".mysqli_error($omodelo->link);
@@ -258,7 +290,6 @@ class cortesRuta {
 			$pagina =  $omodelo->link->real_escape_string($pagina);
 			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
 			$orden =  $omodelo->link->real_escape_string($orden);
-			$ventas = json_decode($ventas, true);
 			$arreglo = array();
 
 			$busqueda = '';
@@ -327,8 +358,6 @@ class cortesRuta {
 			echo json_encode($arreglo);
 
 		}
-
-		
 	}
 
 	public function _insertar()

@@ -117,7 +117,7 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="submit" class="btn btn-primary" id="bGuardarCorte"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
-			<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+			<button type="button" class="btn" id="cerrarModalCorteRuta"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
 	      </div>
   		</form>
     </div>
@@ -162,6 +162,12 @@
 			</div>
 			<form id="formCorteClientes">
 				<div class="modal-body">
+					<div class="row px-3">
+						<div class="input-group mb-3">
+							<input class="form-control" name="searched" id="searchedForAdd" type="search" placeholder="Buscar por ID de la venta">
+							<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
+						</div>
+					</div>
 					<div class="row">
 						<div class="col-12 " id="lista-ventas-cliente-excluidas">
 							
