@@ -275,7 +275,7 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('click', '.agregarDeCorteDeRuta', function(){
-        var btn = $(this);
+        var btn = $(this); 
         Swal.fire({
             title: 'Agregar venta a corte',
             text: '¿Estas seguro de agregar esta venta al corte de ruta actual?',
@@ -452,6 +452,10 @@ jQuery(document).ready(function($) {
                 });
             }
         });
+    });
+
+    $(document).on('click', '.bVerificarCorteRuta', function() {
+        $("#modalVerificar").modal('show');
     });
 
 	/*$(document).on('click', '.bModificarVehiculo', function() {
