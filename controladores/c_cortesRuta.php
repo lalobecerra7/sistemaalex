@@ -337,6 +337,48 @@ class cortesRuta {
 	
 				echo json_encode($cortes_route_data);
 			}
+		}else if ($tipo == 'verificarCorte') {
+			$idCorte =  $omodelo->link->real_escape_string($idCorte);
+
+			$query = "SELECT productos.Codigo AS Codigo, productos.Descripcion AS Producto, (SELECT SUM(Cantidad) FROM detalles_ventas WHERE FK_Producto = productos.ID_Producto) AS Cantidadtol, (SELECT SUM(Cantidad_Verificada) FROM detalles_ventas WHERE FK_Producto = productos.ID_Producto) AS Verificacion FROM  detalles_ventas JOIN productos ON detalles_ventas.FK_Producto = productos.ID_Producto WHERE detalles_ventas.FK_Venta IN (SELECT ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$idCorte');";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$verificacion = 0;
+			$cantidad = 0;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+
+					for($j=0; $j<$numerofilas; $j++){
+						$verificacion = $verificacion + $row[$j]['Verificacion'];
+						$cantidad = $cantidad + $row[$j]['Cantidadtol'];
+					}
+
+					if ($cantidad == $verificacion) {
+						$query1 = "UPDATE cortes_ruta SET Verificado = '1' WHERE ID_Corte = '$idCorte'";
+						$row1 = $omodelo->_insertar($query1);
+
+						echo '1' ;
+
+					}else{
+						for($i=0; $i<$numerofilas; $i++){
+
+						$card = "<tr>
+								  <td>".$row[$i]['Codigo']."</td>
+							      <th>".$row[$i]['Producto']."</th>
+							      <td>".$row[$i]['Cantidadtol']."</td>
+							      <td>".$row[$i]['Verificacion']."</td>
+							    </tr>";
+
+						echo $card ;
+
+						}
+
+					}
+				}
+			}
 		}else{
 			$buscar =  $omodelo->link->real_escape_string($buscar);
 			$limit =  $omodelo->link->real_escape_string($limit);
@@ -477,8 +519,33 @@ class cortesRuta {
 
 			$id = $omodelo->link->real_escape_string($id);
 			$valor = $omodelo->link->real_escape_string($valor);
+			$valorAntes = $omodelo->link->real_escape_string($valorAntes);
 
 			$query = "UPDATE clientes SET Orden_Ruta = $valor WHERE ID_Cliente = '$id'";
+			$row = $omodelo->_insertar($query);
+
+			if ($valorAntes < $valor) {
+				$query2 = "UPDATE clientes SET Orden_Ruta = Orden_Ruta + 1 WHERE Orden_Ruta >= '$valor' AND FK_Ruta = (SELECT FK_Ruta FROM clientes WHERE ID_Cliente = '$id') AND ID_Cliente != '$id'";
+				$row2 = $omodelo->_insertar($query2);
+			}else if ($valorAntes > $valor) {
+				$query3 = "UPDATE clientes SET Orden_Ruta = Orden_Ruta - 1 WHERE Orden_Ruta <= '$valor' AND FK_Ruta = (SELECT FK_Ruta FROM clientes WHERE ID_Cliente = '$id') AND ID_Cliente != '$id'";
+				$row3 = $omodelo->_insertar($query3);
+			}
+
+
+			if ($row == "si") {
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
+		}else if($tipo == 'verificar'){
+
+			$IDCodigo = $omodelo->link->real_escape_string($IDCodigo);
+			$IDCorte = $omodelo->link->real_escape_string($IDCorte);
+
+			$query = "UPDATE detalles_ventas SET Cantidad_Verificada = Cantidad_Verificada + 1 WHERE FK_Producto = (SELECT ID_Producto FROM productos WHERE Codigo = '$IDCodigo' AND ID_Producto = (SELECT FK_Producto FROM detalles_ventas WHERE FK_Venta IN (SELECT ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$IDCorte')) LIMIT 1) AND Cantidad != Cantidad_Verificada;";
 			$row = $omodelo->_insertar($query);
 
 			if ($row == "si") {

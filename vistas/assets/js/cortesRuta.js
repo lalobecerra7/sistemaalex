@@ -96,6 +96,56 @@ function v_cortesRuta() {
             });                
         }
     }); 
+
+
+    $('#formVerificar').validate({
+        rules: {
+            codigoProducto: {
+                required: true
+            }
+        },
+        messages: {
+            codigoProducto: {
+                required: "El codigo es requerido"
+            }
+        },
+        submitHandler: function(form) { 
+            var data = "metodo=modificar&accion=cortesRuta&tipo=verificar&IDCodigo="+$.trim($("#codigoProducto").val())+"&IDCorte="+$.trim($('#codigoProducto').attr('attrID'));
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+                beforeSend: function() {
+                    $("#carga").show();
+                }
+            })
+            .done(function(res) {
+                if ($.trim(res) == "Correcto") {
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Verificado'
+                    });
+                    var IDCor = $('#codigoProducto').attr('attrID');
+                    tablaVerificarCorte(IDCor); 
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Error inesperado al verificar'
+                    });
+
+                    console.log($.trim(res));
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            })
+            .always(function() {
+                $("#carga").hide();
+            });                
+        }
+    }); 
 }
 
 function tablaCortesRuta() {
@@ -163,6 +213,31 @@ function tablaClientesRuta() {
             "ventas": ventas_cliente.length > 0 ? JSON.stringify(ventas_cliente) : []
         }
     });
+}
+
+
+function tablaVerificarCorte(idCorte){
+        var data = `metodo=consultar&accion=cortesRuta&tipo=verificarCorte&idCorte=${idCorte}`;
+
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            data: data
+        }).done(function(res){
+            if (res == 1) {
+                $("#modalVerificar").modal('hide');
+                Swal.fire({
+                        icon: 'success',
+                        title: 'Verificacion',
+                        text: 'Verificacion Terminada'
+                });
+                tablaCortesRuta();
+            }else{
+                $('#tbodyVerificar').html($.trim(res));
+            }
+        }).fail(function(){
+            console.log('Error ajax');
+        })
 }
 
 
@@ -302,7 +377,7 @@ jQuery(document).ready(function($) {
             const searchRegExp = new RegExp(',', 'g'); 
 
             var idClienteVar = $(this).children('span.orden').attr('attrID');
-            $(this).html('<input type="number" style="width: 100px;" class="inputOrdenRuta" attrID="'+idClienteVar+'" value="'+$(this).text().replace('$', '').replace(searchRegExp, '')+'">');
+            $(this).html('<input type="number" style="width: 100px;" class="inputOrdenRuta" attrID="'+idClienteVar+'" attrValor="'+$(this).text()+'" value="'+$(this).text().replace('$', '').replace(searchRegExp, '')+'">');
             $(this).children('input.inputOrdenRuta').focus();
         }
 
@@ -315,7 +390,7 @@ jQuery(document).ready(function($) {
         
         console.log($(this).val())
         console.log($(this).attr('attrID'))
-        var data = "metodo=modificar&accion=cortesRuta&tipo=ordenRuta&valor="+$(this).val()+"&id="+$(this).attr('attrID');
+        var data = "metodo=modificar&accion=cortesRuta&tipo=ordenRuta&valor="+$(this).val()+"&id="+$(this).attr('attrID')+"&valorAntes="+$(this).attr('attrValor');
     
         $.ajax({
             url: 'index.php',
@@ -346,6 +421,7 @@ jQuery(document).ready(function($) {
             $("#carga").hide();
         }); 
     });
+
 
     $(document).on('click', "#cerrarModalCorteRuta", function(){
         Swal.fire({
@@ -440,7 +516,20 @@ jQuery(document).ready(function($) {
 
     $(document).on('click', '.bVerificarCorteRuta', function() {
         $("#modalVerificar").modal('show');
+        $("#modalVerificar").on('shown.bs.modal', function(){
+            $("#codigoProducto").focus();
+        });
+
+        $("#codigoProducto").attr('attrID', $(this).attr('attrID'));
+        var corteID = $(this).attr('attrID');
+        tablaVerificarCorte(corteID);
     });
+
+    $(document).on('focusout', '#codigoProducto', function() {
+        $("#codigoProducto").focus();
+    });
+
+    
 
     $(document).on('click', '.bModificarCorteRuta', function(){
         var data = `metodo=consultar&accion=cortesRuta&tipo=obtenerCorteGuardado&idCorte=${$(this).attr('attrID')}`;

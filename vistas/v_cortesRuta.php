@@ -191,11 +191,34 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-					
+				<form id="formVerificar">
+					<div class="row">
+						<div class="input-group col-12">
+								<input class="form-control" name="codigoProducto" id="codigoProducto" type="text" placeholder="Codigo...">
+							</div>
+					</div>
+					<div class="row">
+						<div class="mb-3 col-12">
+							<table class="table">
+							  <thead>
+							    <tr>
+							    	<th>Codigo</th>
+							      <th>Producto</th>
+							      <th>Cantidad</th>
+							      <th>Verificados</th>
+							    </tr>
+							  </thead>
+							  <tbody id="tbodyVerificar">
+							    
+							  </tbody>
+							</table>
+						</div>
+					</div>
 			</div>
 				<div class="modal-footer">
 					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
 				</div>
+			</form>	
 		</div>
 	</div>
 </div>
