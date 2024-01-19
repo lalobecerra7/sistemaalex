@@ -221,12 +221,7 @@ jQuery(document).ready(function($) {
             if (result.isConfirmed) {
                 remove_venta(btn.attr('ID_Cliente'), btn.attr('ID_Venta'))
 
-                console.log(btn.attr('ID_Cliente'));
-                console.log(btn.attr('ID_Venta'));
-                console.log(ventas_cliente);
-                
                 const ventas_val = ventas_cliente.find(obj => obj.cliente == btn.attr('ID_Cliente'));
-                console.log(ventas_val);
                 tablaDetallesClientes(btn.attr('ID_Cliente'), ventas_val.ventas);
                 tablaClientesRuta();
 
@@ -446,6 +441,34 @@ jQuery(document).ready(function($) {
     $(document).on('click', '.bVerificarCorteRuta', function() {
         $("#modalVerificar").modal('show');
     });
+
+    $(document).on('click', '.bModificarCorteRuta', function(){
+        var data = `metodo=consultar&accion=cortesRuta&tipo=obtenerCorteGuardado&idCorte=${$(this).attr('attrID')}`;
+
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            data: data,
+            beforeSend: function(){
+                $("#carga").show();
+            }
+        }).done(function(res){
+            const resData = JSON.parse(res);
+
+            $("#rutasCorte").val(resData.Ruta);
+            $("#FechaInicioCorte").val(resData.Fecha_Inicio);
+            $("#FechaFinCorte").val(resData.Fecha_Fin);
+            $("#selectChofer").val(resData.FK_Chofer);
+            $("#selectVehiculo").val(resData.FK_Vehiculo);
+            ventas_cliente = JSON.parse(resData.Detalles);
+
+            $("#tablaClientesruta").removeClass('d-none');
+            tablaClientesRuta();
+            $("#modalCorteRuta").modal('show');
+        }).always(function(){
+            $("#carga").hide();
+        })
+    })
 
 	/*$(document).on('click', '.bModificarVehiculo', function() {
 		var padre = $(this).parent().parent();

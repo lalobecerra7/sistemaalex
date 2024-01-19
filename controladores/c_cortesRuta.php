@@ -294,6 +294,49 @@ class cortesRuta {
 				}
 			}			
 			
+		}else if ($tipo == 'obtenerCorteGuardado'){
+			$idCorte = $omodelo->link->real_escape_string($idCorte);
+
+			$query = "SELECT Ruta, Fecha_Inicio, Fecha_Fin, Verificado, FK_Chofer, FK_Vehiculo, Estado, Total FROM cortes_ruta WHERE ID_Corte = $idCorte";
+			$row = $omodelo->_consultar($query);
+			
+
+			$query2 = "SELECT FK_Cliente, Ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = $idCorte";
+			$row2 = $omodelo->_consultar($query2);
+			$numerofilas2 = $omodelo->numerofilas;
+
+			if($row === "si" || $row2 === "si"){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+
+				$detalles_corte = array();
+
+				for ($i=0; $i < $numerofilas2; $i++) { 
+					$ventas_temp = array_map('intval', explode(",", $row2[$i]['Ventas']));
+					
+					$objEntry = [
+						"cliente" => $row2[$i]['FK_Cliente'],
+						"ventas" => $ventas_temp
+					];
+
+					$detalles_corte[] = $objEntry;
+				}
+
+				$cortes_route_data = array(
+					'ID_Corte' => $idCorte,
+					'Ruta' => $row[0]['Ruta'],
+					'Fecha_Inicio' => $row[0]['Fecha_Inicio'],
+					'Fecha_Fin' => $row[0]['Fecha_Fin'],
+					'Verificado' => $row[0]['Verificado'],
+					'FK_Chofer' => $row[0]['FK_Chofer'],
+					'FK_Vehiculo' => $row[0]['FK_Vehiculo'],
+					'Estado' => $row[0]['Estado'],
+					'Total' => $row[0]['Total'],
+					'Detalles' => json_encode($detalles_corte)
+				);
+	
+				echo json_encode($cortes_route_data);
+			}
 		}else{
 			$buscar =  $omodelo->link->real_escape_string($buscar);
 			$limit =  $omodelo->link->real_escape_string($limit);
