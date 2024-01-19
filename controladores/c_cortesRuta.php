@@ -149,7 +149,7 @@ class cortesRuta {
 					for($i=0; $i<$numerofilas; $i++){
 						//TODO: Hacer la concat en un string y hacer una sola consulta con un OR en php
 						//Recibir Objeto AJAX con json_decode
-						$query2 = "SELECT Descripcion, Cantidad, (Total / Cantidad) as Precio, Total FROM detalles_ventas WHERE FK_Venta ='".$row[$i]['ID_Venta']."'";
+						$query2 = "SELECT Descripcion, Cantidad, (Total / Cantidad) as Precio, Total, (CASE WHEN FK_Presentacion <> 0 THEN (SELECT Codigo FROM presentaciones WHERE ID_Presentacion = FK_Presentacion) ELSE (SELECT Codigo FROM productos WHERE ID_Producto = FK_Producto) END) AS Codigo FROM detalles_ventas WHERE FK_Venta ='".$row[$i]['ID_Venta']."'";
 						$row2 = $omodelo->_consultar($query2);
 						$numerofilas2 = $omodelo->numerofilas;
 						
@@ -171,10 +171,11 @@ class cortesRuta {
 											<table class='table'>
 											<thead>
 												<tr>
-													<th scope='col'>Producto</th>
-													<th scope='col'>Cantidad</th>
-													<th scope='col'>Precio U</th>
-													<th scope='col'>Subtotal</th>
+													<th scope='col'>Prod</th>
+													<th scope='col'>Cod.</th>
+													<th scope='col'>Cant</th>
+													<th scope='col'>Precio</th>
+													<th scope='col'>Subt</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -185,6 +186,7 @@ class cortesRuta {
 								$card .= "
 									<tr>
 										<th>".$row2[$j]['Descripcion']."</th>
+										<th>".$row2[$j]['Codigo']."</th>
 										<th>".$row2[$j]['Cantidad']."</th>
 										<th>".$row2[$j]['Precio']."</th>
 										<th>".$row2[$j]['Total']."</th>
@@ -235,7 +237,7 @@ class cortesRuta {
 			}else{
 				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
-						$query2 = "SELECT Descripcion, Cantidad, (Total / Cantidad) as Precio, Total FROM detalles_ventas WHERE FK_Venta ='".$row[$i]['ID_Venta']."'";
+						$query2 = "SELECT Descripcion, Cantidad, (Total / Cantidad) as Precio, Total, (CASE WHEN FK_Presentacion <> 0 THEN (SELECT Codigo FROM presentaciones WHERE ID_Presentacion = FK_Presentacion) ELSE (SELECT Codigo FROM productos WHERE ID_Producto = FK_Producto) END) AS Codigo FROM detalles_ventas WHERE FK_Venta ='".$row[$i]['ID_Venta']."'";
 						$row2 = $omodelo->_consultar($query2);
 						$numerofilas2 = $omodelo->numerofilas;
 
@@ -258,6 +260,7 @@ class cortesRuta {
 											<thead>
 												<tr>
 													<th scope='col'>Prod.</th>
+													<th scope='col'>Cod.</th>
 													<th scope='col'>Cant.</th>
 													<th scope='col'>Precio</th>
 													<th scope='col'>Subt.</th>
@@ -271,6 +274,7 @@ class cortesRuta {
 								$card .= "
 									<tr>
 										<th>".$row2[$j]['Descripcion']."</th>
+										<th>".$row2[$j]['Codigo']."</th>
 										<th>".$row2[$j]['Cantidad']."</th>
 										<th>".$row2[$j]['Precio']."</th>
 										<th>".$row2[$j]['Total']."</th>

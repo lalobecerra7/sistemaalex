@@ -180,6 +180,10 @@ jQuery(document).ready(function($) {
         ventas_cliente = [];
         $("#FechaInicioCorte").val(today.toISOString().split('T')[0])
         $("#FechaFinCorte").val(threeMoreDays.toISOString().split('T')[0])
+        $("#rutasCorte").attr('disabled', false);
+        $("#FechaInicioCorte").attr('readonly', false);
+        $("#FechaFinCorte").attr('readonly', false);
+        $("#bGenerarClientes").removeClass('d-none');
     });
 
 	$(document).on('click', '#bGenerarClientes', function() {
@@ -464,6 +468,11 @@ jQuery(document).ready(function($) {
 
             $("#tablaClientesruta").removeClass('d-none');
             tablaClientesRuta();
+
+            $("#rutasCorte").attr('disabled', true);
+            $("#FechaInicioCorte").attr('readonly', true);
+            $("#FechaFinCorte").attr('readonly', true);
+            $("#bGenerarClientes").addClass('d-none');
             $("#modalCorteRuta").modal('show');
         }).always(function(){
             $("#carga").hide();
