@@ -95,10 +95,11 @@
 							<button class="btn btn-lg btn-primary" type="button" id="bGenerarClientes" name="bGenerarClientes"><i class="fa-solid fa-search"></i> Generar</button>
 						</div>
 	       	</div>
+		</form>
 	       	<br>
 	       	<hr>
 	       	<br>
-	       	<div class="row mb-5 d-none" id="tablaClientesruta">
+	       	<div class="row mb-3 d-none" id="tablaClientesruta">
 			      <div class="col-12">
 			        <table class="table table table-hover table-bordered text-center myDataTable" id="tablaClientesRuta" width="100%" style="font-size: 12px;">
 			          <thead>
@@ -115,11 +116,88 @@
 		      	</div>
 		    	</div>
 	      </div>
-	      <div class="modal-footer">
-	        <button type="submit" class="btn btn-primary" id="bGuardarCorte"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
-			<button type="button" class="btn" id="cerrarModalCorteRuta"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-	      </div>
-  		</form>
+		  <div class="row mx-2 justify-content-between" id="contenedorBalance">
+			<div class="col-5">
+				<div class="row text-start">
+					<h5><b>Balance de corte</b></h5>
+				</div>
+				<div class="row">
+					<div class="d-flex justify-content-between">
+						<p class="p-0 m-0 fs-5">Total</p>
+						<p class="p-0 m-0 fs-5" id="total_corte_bruto"></p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="d-flex justify-content-between">
+						<p class="p-0 m-0 fs-5">Gastos</p>
+						<p class="p-0 m-0 fs-5" id="total_gastos_corte"></p>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="d-flex justify-content-between">
+						<p class="p-0 m-0 fs-5">Total neto</p>
+						<p class="p-0 m-0 fs-5" id="total_neto_corte"></p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="d-flex justify-content-between">
+						<p class="p-0 m-0 fs-5">Dinero recaudado</p>
+						<div id="contenedor_recaudado">
+							
+						</div>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="d-flex gap-3 justify-content-center">
+						<p class="p-0 m-0 fs-5">Balance:</p>
+						<p class="p-0 m-0 fs-5 col-2" id="balance_final">-$1,044.00</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="row text-end">
+					<h5><b>Gastos del corte</b></h5>
+				</div>
+				<div class="row align-items-end">
+					<form id="gastosFormulario">
+						<div class="row align-items-end">
+							<div class="col-md-6 col-sm-12 mb-3">
+								<label>Descripcion</label>
+								<input type="text" class="form-control" id="gastoDescripcion" placeholder="Descripcion">
+							</div>
+							<div class="col-md-3 col-sm-12 mb-3">
+								<label>Coste</label>
+								<input type="text" class="form-control" id="gastoCoste" placeholder="$0.00">
+							</div>
+							<div class="col-3 mb-3 justify-content-center align-items-center">
+								<button type="submit" class="btn btn-sm btn-primary py-2" id="añadirGastoACorte">
+									<i class="fa-solid fa-plus"></i> Añadir Gasto
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="row mb-3">
+					<div class="col-12">
+						<table class="table table table-hover table-bordered text-center" id="tablaCostesRuta" width="100%" style="font-size: 12px;">
+							<thead>
+								<th>Descripcion</th>
+								<th>Coste</th>
+								<th orden="No">Acciones</th>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary" id="bGuardarCorte"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+				<button type="button" class="btn" id="cerrarModalCorteRuta"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+			</div>
     </div>
   </div>
 </div>

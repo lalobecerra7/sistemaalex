@@ -301,7 +301,7 @@ class cortesRuta {
 		}else if ($tipo == 'obtenerCorteGuardado'){
 			$idCorte = $omodelo->link->real_escape_string($idCorte);
 
-			$query = "SELECT Ruta, Fecha_Inicio, Fecha_Fin, Verificado, FK_Chofer, FK_Vehiculo, Estado, Total FROM cortes_ruta WHERE ID_Corte = $idCorte";
+			$query = "SELECT Ruta, Fecha_Inicio, Fecha_Fin, Verificado, FK_Chofer, FK_Vehiculo, Estado, Total, Recaudado FROM cortes_ruta WHERE ID_Corte = $idCorte";
 			$row = $omodelo->_consultar($query);
 			
 
@@ -336,10 +336,40 @@ class cortesRuta {
 					'FK_Vehiculo' => $row[0]['FK_Vehiculo'],
 					'Estado' => $row[0]['Estado'],
 					'Total' => $row[0]['Total'],
+					'Recaudado' => '<span class="fs-5 recaudado" ID_Ruta="'.$idCorte.'">'.$row[0]['Recaudado'].'</span>',
+					'Recaudado_numero' => $row[0]['Recaudado'],
 					'Detalles' => json_encode($detalles_corte)
 				);
 	
 				echo json_encode($cortes_route_data);
+			}
+		}else if($tipo == "obtener_balance_datos"){
+			$ID_Ruta = $omodelo->link->real_escape_string($ID_Ruta);
+
+			$query = "SELECT ID_Gasto_Corte_Ruta, Descripcion, Coste FROM gastos_cortes_ruta WHERE FK_Corte_Ruta = $ID_Ruta";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row === "si"){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				$costes = "";
+				$total_costes = 0;
+				if($numerofilas > 0){
+					for ($j=0; $j < $numerofilas; $j++) { 
+						$costes .= "<tr><td class='fs-6'>".$row[$j]['Descripcion']."</td><td class='fs-6'>".$row[$j]['Coste']."</td><td><button class='btn btn-sm btn-danger eliminateCoste' ID_Corte='".$ID_Ruta."' ID_Coste='".$row[$j]['ID_Gasto_Corte_Ruta']."'><i class='fa-solid fa-trash'></button></td></tr>";
+						$total_costes+=$row[$j]['Coste'];
+					}
+				}else{
+					$costes = "<tr><td class='fs-6 text-center' colspan='3'>No existen gastos</td></tr>";
+				}
+
+				$balances_ruta = array(
+					'Costes' => $costes,
+					'Total_Costes' => $total_costes
+				);
+
+				echo json_encode($balances_ruta);
 			}
 		}else{
 			$buscar =  $omodelo->link->real_escape_string($buscar);
@@ -423,51 +453,68 @@ class cortesRuta {
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s');
 		$tipo = $omodelo->link->real_escape_string($tipo);
-		
-		$rutasCorte = $omodelo->link->real_escape_string($rutasCorte);
-		$FechaInicioCorte = $omodelo->link->real_escape_string($FechaInicioCorte);
-		$FechaFinCorte = $omodelo->link->real_escape_string($FechaFinCorte);
-		$selectChofer = $omodelo->link->real_escape_string($selectChofer);
-		$selectVehiculo = $omodelo->link->real_escape_string($selectVehiculo);
-		$detalleVentas = json_decode($detalleVentas, true);
 
-		$idventas = array_merge(...array_column($detalleVentas, 'ventas'));
+		if ($tipo == "insertar_gastos"){
+			$ID_Ruta = $omodelo->link->real_escape_string($ID_Ruta);
+			$Descripcion = $omodelo->link->real_escape_string($Descripcion);
+			$Coste = $omodelo->link->real_escape_string($Coste);
+			$FloatingCost = floatval($Coste);
 
-		$idventasstr = implode(',' , $idventas);
+			$query = "INSERT INTO gastos_cortes_ruta SET FK_Corte_Ruta = '$ID_Ruta', Descripcion = '$Descripcion', Coste = $FloatingCost";
+			$row = $omodelo->_insertar($query);
 
-		$idventasnumber = str_replace('"' , '', $idventasstr );
-
-		$query = "INSERT INTO cortes_ruta SET Ruta = '$rutasCorte', Fecha_Inicio = '$FechaInicioCorte', Fecha_Fin = '$FechaFinCorte', Verificado = false, Imagen = '', Fecha_Registro = '$fecha', Fk_Chofer = '$selectChofer', FK_Vehiculo = '$selectVehiculo', Estado = 'Pendiente', Total = (SELECT SUM(v.Total) as Total FROM ventas AS v WHERE v.ID_Venta IN ($idventasnumber)) ";
-		$row = $omodelo->_insertar($query);
-
-		if ($row == "si") {
-			echo "Error: ".mysqli_error($omodelo->link);
+			if($row == "si"){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
 		}else{
-			$last_corte_ruta = mysqli_insert_id($omodelo->link);
-			
-			foreach ($detalleVentas as $detalle){
-				$inserted = "";
-				for ($i=0; $i < count($detalle['ventas']); $i++) { 
-					if($i === count($detalle['ventas'])-1){
-						$inserted .= $detalle['ventas'][$i];
-					}else{
-						$inserted .= $detalle['ventas'][$i].',';
+			$rutasCorte = $omodelo->link->real_escape_string($rutasCorte);
+			$FechaInicioCorte = $omodelo->link->real_escape_string($FechaInicioCorte);
+			$FechaFinCorte = $omodelo->link->real_escape_string($FechaFinCorte);
+			$selectChofer = $omodelo->link->real_escape_string($selectChofer);
+			$selectVehiculo = $omodelo->link->real_escape_string($selectVehiculo);
+			$detalleVentas = json_decode($detalleVentas, true);
+
+			$idventas = array_merge(...array_column($detalleVentas, 'ventas'));
+
+			$idventasstr = implode(',' , $idventas);
+
+			$idventasnumber = str_replace('"' , '', $idventasstr );
+
+			$query = "INSERT INTO cortes_ruta SET Ruta = '$rutasCorte', Fecha_Inicio = '$FechaInicioCorte', Fecha_Fin = '$FechaFinCorte', Verificado = false, Imagen = '', Fecha_Registro = '$fecha', Fk_Chofer = '$selectChofer', FK_Vehiculo = '$selectVehiculo', Estado = 'Pendiente', Total = (SELECT SUM(v.Total) as Total FROM ventas AS v WHERE v.ID_Venta IN ($idventasnumber)) ";
+			$row = $omodelo->_insertar($query);
+
+			if ($row == "si") {
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				$last_corte_ruta = mysqli_insert_id($omodelo->link);
+				
+				foreach ($detalleVentas as $detalle){
+					$inserted = "";
+					for ($i=0; $i < count($detalle['ventas']); $i++) { 
+						if($i === count($detalle['ventas'])-1){
+							$inserted .= $detalle['ventas'][$i];
+						}else{
+							$inserted .= $detalle['ventas'][$i].',';
+						}
+					}
+
+					$sum_inserted = str_replace('"', '', $inserted );
+					
+					$query2 = "INSERT INTO detalles_corte_ruta SET FK_Corte_Ruta = '$last_corte_ruta', FK_Cliente = '$detalle[cliente]', Ventas = '$inserted', Total = (SELECT SUM(Total) FROM ventas WHERE ID_Venta IN ($sum_inserted))";
+					$row2 = $omodelo->_insertar($query2);
+
+					if($row2 == "si"){
+						echo "Error: ".mysqli_error($omodelo->link);
+						return false;
 					}
 				}
 
-				$sum_inserted = str_replace('"', '', $inserted );
-				
-				$query2 = "INSERT INTO detalles_corte_ruta SET FK_Corte_Ruta = '$last_corte_ruta', FK_Cliente = '$detalle[cliente]', Ventas = '$inserted', Total = (SELECT SUM(Total) FROM ventas WHERE ID_Venta IN ($sum_inserted))";
-				$row2 = $omodelo->_insertar($query2);
-
-				if($row2 == "si"){
-					echo "Error: ".mysqli_error($omodelo->link);
-					return false;
-				}
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 			}
-
-			echo "Correcto";
-			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
@@ -492,6 +539,19 @@ class cortesRuta {
 
 				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 			}
+		}else if($tipo == 'actualizar_dinero_obtenido'){
+			$ID_Ruta = $omodelo->link->real_escape_string($ID_Ruta);
+			$Monto = $omodelo->link->real_escape_string($Monto);
+
+			$query = "UPDATE cortes_ruta SET Recaudado = $Monto WHERE ID_Corte = '$ID_Ruta'";
+			$row = $omodelo->_insertar($query);
+
+			if($row == "si"){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
 		}
 
 	}
@@ -501,20 +561,35 @@ class cortesRuta {
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$id =  $omodelo->link->real_escape_string($id);
+		if($tipo == 'eliminar_gasto'){
+			$ID_Gasto = $omodelo->link->real_escape_string($ID_Gasto);
 
-		$query2 = "DELETE FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$id'";
-		$error2 = $omodelo->_insertar($query2);
+			$query = "DELETE FROM gastos_cortes_ruta WHERE ID_Gasto_Corte_Ruta = '$ID_Gasto'";
+			$error = $omodelo->_insertar($query);
 
-		$query = "DELETE FROM cortes_ruta WHERE ID_Corte = '$id'";
-		$error = $omodelo->_insertar($query);
+			if($error == "si"){
+				echo "Error: " . mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);	
+			}
 
-		if ($error == "si") {
-			echo "Error: " . mysqli_error($omodelo->link);
-		} else {
-			echo "Correcto";
+		}else{
+			$id =  $omodelo->link->real_escape_string($id);
 
-			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);			
+			$query2 = "DELETE FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$id'";
+			$error2 = $omodelo->_insertar($query2);
+
+			$query = "DELETE FROM cortes_ruta WHERE ID_Corte = '$id'";
+			$error = $omodelo->_insertar($query);
+
+			if ($error == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				echo "Correcto";
+
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);			
+			}
 		}
 	}
 }

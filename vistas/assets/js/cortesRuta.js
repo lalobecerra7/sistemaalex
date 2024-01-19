@@ -165,6 +165,40 @@ function tablaClientesRuta() {
     });
 }
 
+function getBalanceData(idCorteRuta, total, recaudado){
+    var data = `metodo=consultar&accion=cortesRuta&tipo=obtener_balance_datos&ID_Ruta=${idCorteRuta}`;
+    $.ajax({
+        url: 'index.php',
+        type: 'POST',
+        data: data,
+        beforeSend: function(){
+            $("#carga").show();
+        }
+    }).done(function(res){
+        var jsonData = JSON.parse($.trim(res));
+        $("#tablaCostesRuta tbody").html(jsonData.Costes);
+        $("#total_gastos_corte").text(jsonData.Total_Costes);
+        $("#total_neto_corte").text(total - jsonData.Total_Costes);
+
+        if(recaudado){
+            calcBalance(parseFloat(total - jsonData.Total_Costes), recaudado);
+        }
+    }).fail(function(){
+        console.log('Error ajax');
+    }).always(function(){
+        $("#carga").hide();
+    })
+}
+
+function calcBalance(neto, obtenido){
+    var balance = obtenido - neto;
+    $("#balance_final").text(balance);
+    if(balance > 0){
+        $("#balance_final").addClass('text-success');
+    }else{
+        $("#balance_final").addClass('text-danger');
+    }
+}
 
 jQuery(document).ready(function($) {
     $(document).on('click', '#bNuevoCorteRuta', function() {
@@ -184,6 +218,7 @@ jQuery(document).ready(function($) {
         $("#FechaInicioCorte").attr('readonly', false);
         $("#FechaFinCorte").attr('readonly', false);
         $("#bGenerarClientes").removeClass('d-none');
+        $("#contenedorBalance").addClass('d-none');
     });
 
 	$(document).on('click', '#bGenerarClientes', function() {
@@ -300,7 +335,6 @@ jQuery(document).ready(function($) {
         });
     })
 
-
     $(document).on('dblclick', '#tablaClientesruta tbody td', function() {
         if($(this).children('span.orden').text() != ""){
             const searchRegExp = new RegExp(',', 'g'); 
@@ -312,13 +346,9 @@ jQuery(document).ready(function($) {
 
     });
 
-
     $(document).on('focusout', '.inputOrdenRuta', function() {
         var input = $(this);
         var padre = $(this).parent();
-        
-        console.log($(this).val())
-        console.log($(this).attr('attrID'))
         var data = "metodo=modificar&accion=cortesRuta&tipo=ordenRuta&valor="+$(this).val()+"&id="+$(this).attr('attrID');
     
         $.ajax({
@@ -447,6 +477,7 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('click', '.bModificarCorteRuta', function(){
+        var idCorte = $(this).attr('attrID');
         var data = `metodo=consultar&accion=cortesRuta&tipo=obtenerCorteGuardado&idCorte=${$(this).attr('attrID')}`;
 
         $.ajax({
@@ -473,10 +504,169 @@ jQuery(document).ready(function($) {
             $("#FechaInicioCorte").attr('readonly', true);
             $("#FechaFinCorte").attr('readonly', true);
             $("#bGenerarClientes").addClass('d-none');
+
+            $("#contenedor_recaudado").html(resData.Recaudado);
+            $("#total_corte_bruto").text(resData.Total);
+            getBalanceData(idCorte, resData.Total, resData.Recaudado_numero);
+
+            $("#contenedorBalance").removeClass('d-none');
+            $("#añadirGastoACorte").attr('ID_Ruta', idCorte);
             $("#modalCorteRuta").modal('show');
         }).always(function(){
             $("#carga").hide();
         })
+    });
+
+    $.validator.addMethod("soloNumerosDecimales", function(value, element) {
+        return this.optional(element) || /^[0-9]+(\.[0-9]+)?$/.test(value);
+    }, "Por favor, ingresa un número válido.");
+
+    $(document).on('click', '#añadirGastoACorte', function(){
+        var corteId = $("#añadirGastoACorte").attr('ID_Ruta');
+        $("#gastosFormulario").validate({
+            rules: {
+                gastoDescripcion: {
+                    required: true
+                },
+                gastoCoste: {
+                    required: true,
+                    soloNumerosDecimales: true
+                }
+            },
+            messages: {
+                gastoDescripcion: {
+                    required: "La descripcion es requerida"
+                },
+                gastoCoste: {
+                    required: "El coste es requerido",
+                    soloNumerosDecimales: "Por favor, ingresa un número válido."
+                }
+            },
+            submitHandler: function(form){
+                var total = parseFloat($("#total_corte_bruto").text());
+                var data = `metodo=insertar&accion=cortesRuta&tipo=insertar_gastos&ID_Ruta=${corteId}&Descripcion=`+$.trim($("#gastoDescripcion").val())+"&Coste="+$.trim($("#gastoCoste").val());
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data,
+                    beforeSend: function() {
+                        $("#carga").show();
+                    }
+                }).done(function(res){
+                    if($.trim(res) == "Correcto"){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Gasto añadido correctamente'
+                        });
+                        getBalanceData(corteId, total);
+                        $("#gastosFormulario")[0].reset();
+                    }
+                }).fail(function(){
+                    console.log("Error ajax");
+                }).always(function(){
+                    $("#carga").hide();
+                })
+            }
+        });
+    });
+
+    $(document).on('click', '.eliminateCoste', function(){
+        var deleteId = $(this).attr('ID_Coste');
+        var corteId = $(this).attr('ID_Corte');
+        var total = parseFloat($("#total_corte_bruto").text());
+        Swal.fire({
+            title: '¿Estás seguro de eliminar el gasto del corte?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'No, cancelar',
+            confirmButtonText: 'Si, eliminar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var data = "metodo=eliminar&accion=cortesRuta&tipo=eliminar_gasto&ID_Gasto="+deleteId;
+
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data,
+                    beforeSend: function() {
+                        $("#carga").show();
+                    }
+                })
+                .done(function(res) {
+                    if ($.trim(res) == "Correcto") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'El gasto se elimino del corte correctamente.'
+                        });
+
+                        getBalanceData(corteId, total);
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error inesperado al eliminar el gasto del corte.'
+                        });
+
+                        console.log($.trim(res));
+                    }
+                })
+                .fail(function() {
+                    console.log("Error ajax");
+                })
+                .always(function() {
+                    $("#carga").hide();
+                });
+            }
+        });
+    });
+
+    $(document).on('dblclick', '#contenedor_recaudado', function(){
+        var ID_Ruta = $(this).children('span.recaudado').attr('ID_Ruta');
+        var Ctty = $(this).children('span.recaudado').text();
+        $(this).html('<input type="text" class="form-control inputRecaudado" ID_Ruta = "'+ID_Ruta+'" value="'+Ctty+'">');
+        $(this).children('input.inputRecaudado').focus();
+    });
+
+    $(document).on('focusout', '.inputRecaudado', function(){
+        var workingFocus = $(this);
+        if (/^[0-9]+(\.[0-9]+)?$/.test(workingFocus.val())) {
+            var data = `metodo=modificar&accion=cortesRuta&tipo=actualizar_dinero_obtenido&Monto=${parseFloat(workingFocus.val())}&ID_Ruta=${workingFocus.attr('ID_Ruta')}`;
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+                beforeSend: function(){
+                    $("#carga").show()
+                }
+            }).done(function(res){
+                if($.trim(res) == "Correcto"){
+                    workingFocus.parent().html('<span class="fs-5 recaudado" ID_Ruta="'+workingFocus.attr('ID_Ruta')+'">'+workingFocus.val()+'</span>');
+                    calcBalance(parseFloat($("#total_corte_bruto").text()), parseFloat(workingFocus.val()));
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Error inesperado al ingresar el monto recaudado.'
+                    });
+
+                    console.log($.trim(res));
+                }
+            }).fail(function(){
+                console.log("Error ajax");
+            }).always(function(){
+                $("#carga").hide();
+            })
+        }else{
+            Swal.fire({
+                icon: "error",
+                title: "Porfavor introduce solo una cantidad numerica",
+                didClose: () => {
+                    workingFocus.focus();
+                }
+            });
+        }
     })
 
 	/*$(document).on('click', '.bModificarVehiculo', function() {
