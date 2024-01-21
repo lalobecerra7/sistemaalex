@@ -1,4 +1,5 @@
 var ventas_cliente = [];
+var recaud = 0;
 
 function check_and_push(idCliente, data){
     const existingObject = ventas_cliente.find((indice) => indice.cliente === idCliente);
@@ -54,7 +55,7 @@ function v_cortesRuta() {
         },
         submitHandler: function(form) { 
             var data = "metodo="+$("#bGuardarCorte").attr('tipo')+"&accion=cortesRuta&tipo=insertar&rutasCorte="+$.trim($("#rutasCorte").val())+"&FechaInicioCorte="+$.trim($("#FechaInicioCorte").val())+"&FechaFinCorte="+$.trim($("#FechaFinCorte").val())+"&selectChofer="+$.trim($("#selectChofer").val())+"&selectVehiculo="+$.trim($("#selectVehiculo").val())+"&id="+$("#bGuardarCorte").attr('attrID')+"&detalleVentas="+JSON.stringify(ventas_cliente);
-
+            
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
@@ -84,8 +85,6 @@ function v_cortesRuta() {
                         title: 'Oops...',
                         text: 'Error inesperado al '+$("#bGuardarCorte").attr("tipo")+' la ruta.'
                     });
-
-                    console.log($.trim(res));
                 }
             })
             .fail(function() {
@@ -192,7 +191,9 @@ function getBalanceData(idCorteRuta, total, recaudado){
 
 function calcBalance(neto, obtenido){
     var balance = obtenido - neto;
+
     $("#balance_final").text(balance);
+    moneda();
     if(balance > 0){
         $("#balance_final").addClass('text-success');
     }else{
@@ -200,7 +201,26 @@ function calcBalance(neto, obtenido){
     }
 }
 
+function recalcTotalLocal(){
+    var data = `metodo=consultar&accion=cortesRuta&tipo=obtener_total_recalc&ventas=${JSON.stringify(ventas_cliente)}`;
+    $.ajax({
+        url: 'index.php',
+        type: 'POST',
+        data: data
+    }).done(function(res){
+        $("#total_corte_bruto").text($.trim(res));
+        getBalanceData($("#bGuardarCorte").attr('attrID'), $.trim(res), recaud);
+    }).fail(function(){
+        console.log('Error ajax');
+    })
+}
+
 jQuery(document).ready(function($) {
+
+    $(document).on('click', "#bGuardarCorte", function(){
+        $("#formCorteDeRuta").submit();
+    })
+
     $(document).on('click', '#bNuevoCorteRuta', function() {
         var today = new Date();
         var threeMoreDays = new Date(today);
@@ -219,6 +239,7 @@ jQuery(document).ready(function($) {
         $("#FechaFinCorte").attr('readonly', false);
         $("#bGenerarClientes").removeClass('d-none');
         $("#contenedorBalance").addClass('d-none');
+        $("#accionesCorteGeneral").addClass('d-none');
     });
 
 	$(document).on('click', '#bGenerarClientes', function() {
@@ -263,6 +284,7 @@ jQuery(document).ready(function($) {
                 const ventas_val = ventas_cliente.find(obj => obj.cliente == btn.attr('ID_Cliente'));
                 tablaDetallesClientes(btn.attr('ID_Cliente'), ventas_val.ventas);
                 tablaClientesRuta();
+                recalcTotalLocal();
 
                 if(ventas_val.ventas.length > 0){
                 }else{
@@ -288,6 +310,7 @@ jQuery(document).ready(function($) {
             if($.trim(res).length > 0){
                 $("#lista-ventas-cliente-excluidas").html($.trim(res));
                 $("#searchedForAdd").attr('ID_Cliente', clientId);
+                //Recalc
             }else{
                 $("#lista-ventas-cliente-excluidas").html('<h1>No hay nada we</h1>');
             }
@@ -316,6 +339,7 @@ jQuery(document).ready(function($) {
                 var data = `metodo=consultar&accion=cortesRuta&tipo=obtenerExcluidos&id=${btn.attr('ID_Cliente')}&ventas=${JSON.stringify(ventas_val.ventas)}`;
                 tablaDetallesClientes(btn.attr('ID_Cliente'), ventas_val.ventas);
                 tablaClientesRuta();
+                recalcTotalLocal();
 
                 $.ajax({
                     url: 'index.php',
@@ -496,6 +520,7 @@ jQuery(document).ready(function($) {
             $("#selectChofer").val(resData.FK_Chofer);
             $("#selectVehiculo").val(resData.FK_Vehiculo);
             ventas_cliente = JSON.parse(resData.Detalles);
+            recaud = resData.Recaudado_numero;
 
             $("#tablaClientesruta").removeClass('d-none');
             tablaClientesRuta();
@@ -510,7 +535,11 @@ jQuery(document).ready(function($) {
             getBalanceData(idCorte, resData.Total, resData.Recaudado_numero);
 
             $("#contenedorBalance").removeClass('d-none');
+            $("#accionesCorteGeneral").removeClass('d-none');
             $("#añadirGastoACorte").attr('ID_Ruta', idCorte);
+
+            $("#bGuardarCorte").attr('attrID', idCorte);
+            $("#bGuardarCorte").attr('tipo', 'modificar');
             $("#modalCorteRuta").modal('show');
         }).always(function(){
             $("#carga").hide();
@@ -543,7 +572,7 @@ jQuery(document).ready(function($) {
                 }
             },
             submitHandler: function(form){
-                var total = parseFloat($("#total_corte_bruto").text());
+                var total = parseFloat($("#total_corte_bruto").text().replace(/[$,]/g, ''));
                 var data = `metodo=insertar&accion=cortesRuta&tipo=insertar_gastos&ID_Ruta=${corteId}&Descripcion=`+$.trim($("#gastoDescripcion").val())+"&Coste="+$.trim($("#gastoCoste").val());
                 $.ajax({
                     url: 'index.php',
@@ -558,7 +587,7 @@ jQuery(document).ready(function($) {
                             icon: 'success',
                             title: 'Gasto añadido correctamente'
                         });
-                        getBalanceData(corteId, total);
+                        getBalanceData(corteId, total, recaud);
                         $("#gastosFormulario")[0].reset();
                     }
                 }).fail(function(){
@@ -573,7 +602,7 @@ jQuery(document).ready(function($) {
     $(document).on('click', '.eliminateCoste', function(){
         var deleteId = $(this).attr('ID_Coste');
         var corteId = $(this).attr('ID_Corte');
-        var total = parseFloat($("#total_corte_bruto").text());
+        var total = parseFloat($("#total_corte_bruto").text().replace(/[$,]/g, ''));
         Swal.fire({
             title: '¿Estás seguro de eliminar el gasto del corte?',
             icon: 'warning',
@@ -601,7 +630,7 @@ jQuery(document).ready(function($) {
                             title: 'El gasto se elimino del corte correctamente.'
                         });
 
-                        getBalanceData(corteId, total);
+                        getBalanceData(corteId, total, recaud);
                     }else{
                         Swal.fire({
                             icon: 'error',
@@ -625,7 +654,7 @@ jQuery(document).ready(function($) {
     $(document).on('dblclick', '#contenedor_recaudado', function(){
         var ID_Ruta = $(this).children('span.recaudado').attr('ID_Ruta');
         var Ctty = $(this).children('span.recaudado').text();
-        $(this).html('<input type="text" class="form-control inputRecaudado" ID_Ruta = "'+ID_Ruta+'" value="'+Ctty+'">');
+        $(this).html('<input type="text" class="form-control inputRecaudado dinero" ID_Ruta = "'+ID_Ruta+'" value="'+Ctty+'">');
         $(this).children('input.inputRecaudado').focus();
     });
 
@@ -642,7 +671,8 @@ jQuery(document).ready(function($) {
                 }
             }).done(function(res){
                 if($.trim(res) == "Correcto"){
-                    workingFocus.parent().html('<span class="fs-5 recaudado" ID_Ruta="'+workingFocus.attr('ID_Ruta')+'">'+workingFocus.val()+'</span>');
+                    workingFocus.parent().html('<span class="fs-5 recaudado dinero" ID_Ruta="'+workingFocus.attr('ID_Ruta')+'">'+workingFocus.val()+'</span>');
+                    recaud = parseFloat(workingFocus.val());
                     calcBalance(parseFloat($("#total_corte_bruto").text()), parseFloat(workingFocus.val()));
                 }else{
                     Swal.fire({

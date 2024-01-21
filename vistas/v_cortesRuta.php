@@ -115,8 +115,11 @@
 			        </table>
 		      	</div>
 		    	</div>
-	      </div>
-		  <div class="row mx-2 justify-content-between" id="contenedorBalance">
+		</div>
+		<div class="row mx-2 justify-content-between" id="contenedorBalance">
+			<div class="col-12 mb-2">
+				<hr>
+			</div>
 			<div class="col-5">
 				<div class="row text-start">
 					<h5><b>Balance de corte</b></h5>
@@ -124,20 +127,20 @@
 				<div class="row">
 					<div class="d-flex justify-content-between">
 						<p class="p-0 m-0 fs-5">Total</p>
-						<p class="p-0 m-0 fs-5" id="total_corte_bruto"></p>
+						<p class="p-0 m-0 fs-5 dinero" id="total_corte_bruto"></p>
 					</div>
 				</div>
 				<div class="row">
 					<div class="d-flex justify-content-between">
 						<p class="p-0 m-0 fs-5">Gastos</p>
-						<p class="p-0 m-0 fs-5" id="total_gastos_corte"></p>
+						<p class="p-0 m-0 fs-5 dinero" id="total_gastos_corte"></p>
 					</div>
 				</div>
 				<hr>
 				<div class="row">
 					<div class="d-flex justify-content-between">
 						<p class="p-0 m-0 fs-5">Total neto</p>
-						<p class="p-0 m-0 fs-5" id="total_neto_corte"></p>
+						<p class="p-0 m-0 fs-5 dinero" id="total_neto_corte"></p>
 					</div>
 				</div>
 				<div class="row">
@@ -152,7 +155,7 @@
 				<div class="row">
 					<div class="d-flex gap-3 justify-content-center">
 						<p class="p-0 m-0 fs-5">Balance:</p>
-						<p class="p-0 m-0 fs-5 col-2" id="balance_final">-$1,044.00</p>
+						<p class="p-0 m-0 fs-5 col-2 dinero" id="balance_final"></p>
 					</div>
 				</div>
 			</div>
@@ -194,10 +197,19 @@
 				</div>
 			</div>
 		</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-primary" id="bGuardarCorte"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
-				<button type="button" class="btn" id="cerrarModalCorteRuta"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+		<div class="row" id="accionesCorteGeneral">
+			<div class="col-12 mb-2 mt-2">
+				<hr class="mx-3">
 			</div>
+			<div class="col-12 d-flex justify-content-center gap-2">
+				<button class="btn btn-info"><i class="fa-solid fa-file-export" style="margin-right: 10px;"></i> <strong>Cerrar Corte</strong></button>
+				<button class="btn btn-warning"><i class="fa-solid fa-upload" style="margin-right: 10px;"></i> <strong>Subir imagen</strong></button>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-primary" id="bGuardarCorte"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
+			<button type="button" class="btn" id="cerrarModalCorteRuta"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+		</div>
     </div>
   </div>
 </div>

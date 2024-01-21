@@ -83,7 +83,7 @@ class cortesRuta {
 							'Orden_Ruta' =>'<span class="orden" attrID="'.$row[$i]['ID_Cliente'].'">'.$row[$i]['Orden_Ruta'].'</span>',
 							'Nombre' => $row[$i]['Nombre_Cliente'],
 							'Domicilio' => $row[$i]['Domicilio_Cliente'],
-							'Total' => $total_calc != "" ? $total_calc : $row[$i]['Total_Cliente'],
+							'Total' => '<span class="dinero">'.$total_calc != "" ? $total_calc : $row[$i]['Total_Cliente'].'</span>',
 							'Acciones' => $bDetalles
 						);
 					}
@@ -160,7 +160,7 @@ class cortesRuta {
 											<div class='col-8 px-2'>
 												<div class='row'>
 													<p class='py-0 my-0 col-4 pl-2'><b>Id:</b> ".$row[$i]['ID_Venta']."</p>
-													<p class=py-0 my-0 col-8'><b>Fecha de Venta:</b> ".date('d-m-Y', strtotime($row[$i]['Fecha_Registro']))."</p>
+													<p class=py-0 my-0 col-8'><b>Fecha de Venta:</b> ".date('d-m-Y', strtotime($row[$i]['Fecha_Registro']))."</span>
 												</div>
 											</div>
 											<div class='col text-end'>
@@ -336,7 +336,7 @@ class cortesRuta {
 					'FK_Vehiculo' => $row[0]['FK_Vehiculo'],
 					'Estado' => $row[0]['Estado'],
 					'Total' => $row[0]['Total'],
-					'Recaudado' => '<span class="fs-5 recaudado" ID_Ruta="'.$idCorte.'">'.$row[0]['Recaudado'].'</span>',
+					'Recaudado' => '<span class="fs-5 recaudado dinero" ID_Ruta="'.$idCorte.'">'.$row[0]['Recaudado'].'</span>',
 					'Recaudado_numero' => $row[0]['Recaudado'],
 					'Detalles' => json_encode($detalles_corte)
 				);
@@ -370,6 +370,21 @@ class cortesRuta {
 				);
 
 				echo json_encode($balances_ruta);
+			}
+		}else if($tipo == "obtener_total_recalc"){
+			$ventas = json_decode($ventas, true);
+
+			$idventas = array_merge(...array_column($ventas, 'ventas'));
+			$idventasstr = implode(',' , $idventas);
+			$idventasnumber = str_replace('"' , '', $idventasstr );
+
+			$query = "SELECT SUM(v.Total) as Total FROM ventas AS v WHERE v.ID_Venta IN ($idventasnumber)";
+			$row = $omodelo->_consultar($query);
+
+			if($row == "si"){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				echo $row[0]['Total'];
 			}
 		}else{
 			$buscar =  $omodelo->link->real_escape_string($buscar);
@@ -431,7 +446,7 @@ class cortesRuta {
 							'Ruta' => $row[$i]['Ruta'],
 							'Fecha_Inicio' => $row[$i]['FechaI'],
 							'Fecha_Fin' => $row[$i]['FechaF'],
-							'Total' => $row[$i]['Total'],
+							'Total' => '<span class="dinero">'.$row[$i]['Total'].'</span>',
 							'Verificado' => $verificado,
 							'Detalles' => $row[$i]['FK_Chofer'].$row[$i]['FK_Vehiculo'],
 							'Acciones' => $bModificar.' '.$bEliminar
@@ -552,8 +567,44 @@ class cortesRuta {
 				echo "Correcto";
 				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 			}
-		}
+		}else {
+			$selectChofer = $omodelo->link->real_escape_string($selectChofer);
+			$selectVehiculo = $omodelo->link->real_escape_string($selectVehiculo);
+			$id = $omodelo->link->real_escape_string($id);
+			$ventas_obj = json_decode($detalleVentas, true);
 
+			$idventas = array_merge(...array_column($ventas_obj, 'ventas'));
+			$idventasstr = implode(',' , $idventas);
+			$idventasnumber = str_replace('"' , '', $idventasstr );
+
+			$query = "UPDATE cortes_ruta SET FK_Vehiculo = '$selectChofer', FK_Chofer = '$selectVehiculo', Total = (SELECT SUM(v.Total) as Total FROM ventas AS v WHERE v.ID_Venta IN ($idventasnumber)) WHERE ID_Corte = $id";
+			$error = $omodelo->_insertar($query);
+
+			if($error == "si"){
+				echo "ErrorModificar: ".mysqli_error($omodelo->link);
+			}else{
+				if(isset($ventas_obj)){
+					foreach($ventas_obj as $venta){
+						$cliente = (int) $venta['cliente'];
+						$ventas_upt = implode(',', $venta['ventas']);
+
+						$query2 = "UPDATE detalles_corte_ruta SET Ventas = '$ventas_upt' WHERE FK_Cliente = $cliente AND FK_Corte_Ruta = $id";
+						$error2 = $omodelo->_insertar($query2);
+
+						if($error2 == "si"){
+							echo "ErrorModificar: ".mysqli_error($omodelo->link);
+						}else{
+							$omodelo->movimiento($query2, $_SESSION['user_admin']['ID_Usuario']);
+						}
+					}
+					echo "Correcto";
+				}else{
+					echo "Correcto";
+					$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+				}
+			}
+
+		}
 	}
 
 
