@@ -567,6 +567,60 @@ class cortesRuta {
 				echo "Correcto";
 				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 			}
+		}else if($tipo == 'subirArchivo'){
+			$ID_Corte_Ruta = $omodelo->link->real_escape_string($ID_Corte_Ruta);
+
+			$status = 0;
+			$nombreArchivo = '';
+			$ruta = '';
+			$rutaProvisional = '';
+			$carpeta = 'vistas/assets/archivos/cortesRuta/';
+
+			if($_FILES['imageInput']['size'] > 0 && $_FILES['imageInput']['error'] == 0){
+				$file = $_FILES['imageInput'];
+				$nombreArchivo = $file['name'];
+				$tipoImg = $file['type'];
+				$rutaProvisional = $file['tmp_name'];
+				$sizeImg = $file['size'];
+			
+				if($tipoImg != 'image/jpeg' && $tipoImg != 'image/jpg' && $tipoImg != 'image/png' && $tipoImg != 'image/svg' && $tipo != 'application/pdf' && $tipoImg != ''){
+					echo 'Error 1 formato ' . $tipoImg;
+					$status = 1;
+				}else if($sizeImg > (1024 * 1024 * 10)){
+					echo 'Error 2 peso';
+					$status = 1;
+				}else {
+					$ruta = $carpeta . $ID_Corte_Ruta . '_' . $nombreArchivo;
+				}
+
+				if($status == 0 && $nombreArchivo != ''){
+					$query = "UPDATE cortes_ruta SET Imagen = '".$ID_Corte_Ruta . "_" . $nombreArchivo."' WHERE ID_Corte = $ID_Corte_Ruta";
+					$error = $omodelo->_insertar($query);
+
+					if($error == "si"){
+						echo "Error 3: " . mysqli_error($omodelo->link);
+					}else{
+						move_uploaded_file($rutaProvisional, $ruta);
+					}
+				}
+			}
+
+			if($status == 0){
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
+		}else if($tipo == 'terminarCorte'){
+			$ID_Corte_Ruta = $omodelo->link->real_escape_string($ID_Corte_Ruta);
+
+			$query = "UPDATE cortes_ruta SET Estado = 'Finalizado' WHERE ID_Corte = $ID_Corte_Ruta";
+			$error = $omodelo->_insertar($query);
+
+			if($error == "si"){
+				echo "Error 3: " . mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
 		}else {
 			$selectChofer = $omodelo->link->real_escape_string($selectChofer);
 			$selectVehiculo = $omodelo->link->real_escape_string($selectVehiculo);

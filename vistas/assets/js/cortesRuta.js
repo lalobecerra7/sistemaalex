@@ -697,6 +697,121 @@ jQuery(document).ready(function($) {
                 }
             });
         }
+    });
+
+    $(document).on('click', '#uploadImgBtn', function(){
+        $("#imageInput").click();
+    });
+
+    $(document).on('change', '#imageInput', function(){
+        if($(this).val()){
+            Swal.fire({
+                title: '¿Estás seguro de querer subir el archivo seleccionado?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'No, cancelar',
+                confirmButtonText: 'Si, subir'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var formData = new FormData(document.querySelector("#imageUploadForm"));
+                    formData.append("metodo", "modificar");
+                    formData.append("accion", "cortesRuta");
+                    formData.append("tipo", "subirArchivo");
+                    formData.append('ID_Corte_Ruta', $("#bGuardarCorte").attr('attrID'));
+
+                    $.ajax({
+                        url: 'index.php',
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function () {
+                            $('#carga').show();
+                        }
+                    }).done(function(res){
+                        if($.trim(res) == "Correcto"){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'El archivo se ha subido y añadido al corte de ruta correctamente',
+                            });
+                            //TODO: Realizar cambios en interfaz necesarios
+                        }else if($.trim(res) === 'Error 1 formato'){
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Oops...',
+                                text: 'El formato del archivo no está permitido, los formatos permitidos son .png, .jpg, .svg o .pdf'
+                            })
+                        }else if($.trim(res) === 'Error 2 peso'){
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Oops...',
+                                text: 'El tamaño del archivo excedió el peso máximo permitido, el peso máximo es de 10MB.'
+                            })
+                        }else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Error inesperado para modificar el producto'
+                            });
+                            console.log($.trim(res));
+                        }
+                    }).fail(function(){
+                        console.log('Error ajax');
+                    }).always(function(){
+                        $('#carga').hide();
+                    })
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '#cerrarCorteRuta', function(){
+        Swal.fire({
+            title: '¿Estas seguro de marcar como finalizado el corte de ruta?',
+            text: 'Una vez terminado el corte de ruta no se podra modificar las ventas del corte o sus gastos',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'No, cancelar',
+            confirmButtonText: 'Si, subir'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var data = `metodo=modificar&accion=cortesRuta&tipo=terminarCorte&ID_Corte_Ruta=${$("#bGuardarCorte").attr('attrID')}`;
+
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data,
+                    beforeSend: function(){
+                        $("#carga").show();
+                    }
+                }).done(function(res){
+                    if($.trim(res) == "Correcto"){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'El corte de ruta se finalizo correctamente.'
+                        });
+                        //TODO: Modificar la interfaz
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error inesperado para finalizar el corte de ruta'
+                        });
+                        console.log($.trim(res));
+                    }
+                }).fail(function(){
+                    console.log('Error ajax');
+                }).always(function(){
+                    $("#carga").hide();
+                })
+            }
+        });
     })
 
 	/*$(document).on('click', '.bModificarVehiculo', function() {
