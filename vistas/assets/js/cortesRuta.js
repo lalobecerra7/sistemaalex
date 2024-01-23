@@ -95,6 +95,53 @@ function v_cortesRuta() {
             });                
         }
     }); 
+
+
+    $('#formVerificar').validate({
+        rules: {
+            codigoProducto: {
+                required: true
+            }
+        },
+        messages: {
+            codigoProducto: {
+                required: "El codigo es requerido"
+            }
+        },
+        submitHandler: function(form) { 
+            var data = "metodo=modificar&accion=cortesRuta&tipo=verificar&IDCodigo="+$.trim($("#codigoProducto").val())+"&IDCorte="+$.trim($('#codigoProducto').attr('attrID'));
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+                beforeSend: function() {
+                    $("#carga").show();
+                }
+            })
+            .done(function(res) {
+                if ($.trim(res) == "Correcto") {
+
+                    var IDCor = $('#codigoProducto').attr('attrID');
+                    $('#codigoProducto').val('');
+                    tablaVerificarCorte(IDCor); 
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Error inesperado al verificar'
+                    });
+
+                    console.log($.trim(res));
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            })
+            .always(function() {
+                $("#carga").hide();
+            });                
+        }
+    }); 
 }
 
 function tablaCortesRuta() {
@@ -226,6 +273,24 @@ function recalcTotalLocal(){
         console.log('Error ajax');
     })
 }
+
+function tablaVerificarCorte(idCorte){
+        var data = `metodo=consultar&accion=cortesRuta&tipo=verificarCorte&idCorte=${idCorte}`;
+
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            data: data
+        }).done(function(res){
+
+            $('#tbodyVerificar').html($.trim(res));
+            tablaCortesRuta();
+            
+        }).fail(function(){
+            console.log('Error ajax');
+        })
+}
+
 
 jQuery(document).ready(function($) {
 
@@ -376,7 +441,7 @@ jQuery(document).ready(function($) {
             const searchRegExp = new RegExp(',', 'g'); 
 
             var idClienteVar = $(this).children('span.orden').attr('attrID');
-            $(this).html('<input type="number" style="width: 100px;" class="inputOrdenRuta" attrID="'+idClienteVar+'" value="'+$(this).text().replace('$', '').replace(searchRegExp, '')+'">');
+            $(this).html('<input type="number" style="width: 100px;" class="inputOrdenRuta" attrID="'+idClienteVar+'" attrValor="'+$(this).text()+'" value="'+$(this).text().replace('$', '').replace(searchRegExp, '')+'">');
             $(this).children('input.inputOrdenRuta').focus();
         }
 
@@ -385,7 +450,7 @@ jQuery(document).ready(function($) {
     $(document).on('focusout', '.inputOrdenRuta', function() {
         var input = $(this);
         var padre = $(this).parent();
-        var data = "metodo=modificar&accion=cortesRuta&tipo=ordenRuta&valor="+$(this).val()+"&id="+$(this).attr('attrID');
+        var data = "metodo=modificar&accion=cortesRuta&tipo=ordenRuta&valor="+$(this).val()+"&id="+$(this).attr('attrID')+"&valorAntes="+$(this).attr('attrValor');
     
         $.ajax({
             url: 'index.php',
@@ -416,6 +481,7 @@ jQuery(document).ready(function($) {
             $("#carga").hide();
         }); 
     });
+
 
     $(document).on('click', "#cerrarModalCorteRuta", function(){
         if($(this).attr('corteFinalizado') == 'si'){
@@ -514,7 +580,21 @@ jQuery(document).ready(function($) {
 
     $(document).on('click', '.bVerificarCorteRuta', function() {
         $("#modalVerificar").modal('show');
+        $("#modalVerificar").on('shown.bs.modal', function(){
+            $("#codigoProducto").focus();
+        });
+
+        $("#codigoProducto").attr('attrID', $(this).attr('attrID'));
+        var corteID = $(this).attr('attrID');
+        tablaVerificarCorte(corteID);
+        $('#bImprimirVerificacion').attr('href', "controladores/pdf/ticketCorteRuta.php?id="+corteID);
     });
+
+    $(document).on('focusout', '#codigoProducto', function() {
+        $("#codigoProducto").focus();
+    });
+
+    
 
     $(document).on('click', '.bModificarCorteRuta', function(){
         var idCorte = $(this).attr('attrID');
