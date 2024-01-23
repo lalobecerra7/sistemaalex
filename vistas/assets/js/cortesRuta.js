@@ -783,7 +783,6 @@ jQuery(document).ready(function($) {
                         }
                     }).done(function(res){
                         console.log(res);
-                        var jsonData = JSON.parse($.trim(res));
                         if(jsonData.status == "Correcto"){
                             Swal.fire({
                                 icon: 'success',
@@ -792,19 +791,19 @@ jQuery(document).ready(function($) {
                             $("#downloadTheFile").attr('href', `vistas/assets/archivos/cortesRuta/${jsonData.newImage}`);
                             $("#uploadImgBtn").attr('nombre_photo', jsonData.newImage);
                             tablaCortesRuta();
-                        }else if($.trim(res) === 'Error 1 formato'){
+                        }else if($.trim(res).includes('Error 1 formato')){
                             Swal.fire({
                                 icon: 'warning',
                                 title: 'Oops...',
                                 text: 'El formato del archivo no está permitido, los formatos permitidos son .png, .jpg, .svg o .pdf'
                             })
-                        }else if($.trim(res) === 'Error 2 peso'){
+                        }else if($.trim(res).includes('Error 2 peso')){
                             Swal.fire({
                                 icon: 'warning',
                                 title: 'Oops...',
                                 text: 'El tamaño del archivo excedió el peso máximo permitido, el peso máximo es de 10MB.'
                             })
-                        }else if($.trim(res) === 'Error 4 Borrar'){
+                        }else if($.trim(res).includes('Error 4 Borrar')){
                             Swal.fire({
                                 icon: 'warning',
                                 title: 'Oops...',
