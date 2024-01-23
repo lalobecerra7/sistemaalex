@@ -1,4 +1,8 @@
 ﻿//formato de modeda a la clase .dinero
+function monedaToNumber(textMoneda){
+  return parseFloat(textMoneda.replace(/\$|,/g, ''));
+}
+
 function moneda() {
     $(".dinero").each(function(index, el) {
         if(parseFloat($(this).html().replace('$', '').replace(/,/g, '')) < 0){

@@ -1030,6 +1030,13 @@ class controller {
 				}
 			}
 			$pagina = str_replace('#SelectVehiculo#', $opcionesVehiculosCorte, $pagina);
+
+			$botonSubirFile = '';
+			if($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][6] == '1'){
+				$botonSubirFile = '<button class="btn btn-warning" type="button" id="uploadImgBtn"><i class="fa-solid fa-upload" style="margin-right: 10px;"></i> <strong>Subir archivo</strong></button>';
+			}
+
+			$pagina = str_replace('#botonSubirArchivo#', $botonSubirFile, $pagina);
 		}
 		
 		return $pagina;
