@@ -387,21 +387,6 @@ class cortesRuta {
 			}else{
 				echo $row[0]['Total'];
 			}
-		}else if ($tipo == 'descargarArchivo'){
-
-			$archivo = $omodelo->link->real_escape_string($archivo);
-			$carpeta = 'vistas/assets/archivos/cortesRuta/';
-
-			if(file_exists($carpeta.$archivo)){
-				$fileContent = @file_get_contents($carpeta.$archivo);
-				header('Content-Type: application/octet-stream');
-				header('Content-Disposition: attachment; filename="nombre_archivo.txt"');
-				header('Content-Length: ' . strlen($fileContent));
-				echo $fileContent;
-			}else{
-				echo 'Error';
-			}
-
 		}else{
 			$buscar =  $omodelo->link->real_escape_string($buscar);
 			$limit =  $omodelo->link->real_escape_string($limit);
@@ -468,6 +453,11 @@ class cortesRuta {
 						}
 
 						$generatePDF = '<button type="button" class="btn btn-sm btn-success bGenerarPDFCorteRuta" attrID="'.$row[$i]['ID_Corte'].'"><i class="fas fa-file"></i></button>';
+
+						$verImagen = '';
+						if($row[$i]['Imagen'] && $row[$i]['Imagen'] != ''){
+							$verImagen = '<a href="vistas/assets/archivos/cortesRuta/'.$row[$i]['Imagen'].'" data-fancybox data-caption="Single image"><button type="button" class="btn btn-sm btn-warning bVerImagenSubida" attrID="'.$row[$i]['ID_Corte'].'"><i class="fa-solid fa-file-contract"></i></button></a>';
+						}
 						
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Corte'],
@@ -478,7 +468,7 @@ class cortesRuta {
 							'Total' => '<span class="dinero">'.$row[$i]['Total'].'</span>',
 							'Verificado' => $verificado,
 							'Detalles' => $estado.'</br>'.$row[$i]['FK_Chofer'].'</br>'.$row[$i]['FK_Vehiculo'],
-							'Acciones' => $bModificar.' '.$bEliminar.' '.$generatePDF
+							'Acciones' => $bModificar.' '.$bEliminar.' '.$generatePDF.' '.$verImagen
 						);
 					}
 

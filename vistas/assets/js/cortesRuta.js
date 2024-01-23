@@ -578,10 +578,12 @@ jQuery(document).ready(function($) {
 
             if(resData.Imagen && resData.Imagen != ''){
                 $("#downloadTheFile").removeClass('d-none');
+                $("#downloadTheFile").attr('href', `vistas/assets/archivos/cortesRuta/${resData.Imagen}`);
                 $("#uploadImgBtn strong").text('Resubir archivo');
                 $("#uploadImgBtn").attr('nombre_photo', resData.Imagen);
             }else{
                 $("#downloadTheFile").addClass('d-none');
+                $("#downloadTheFile").attr('href', ``);
                 $("#uploadImgBtn strong").text('Subir archivo');
                 $("#uploadImgBtn").attr('nombre_photo', '');
             }
@@ -786,7 +788,9 @@ jQuery(document).ready(function($) {
                                 icon: 'success',
                                 title: 'El archivo se ha subido y añadido al corte de ruta correctamente',
                             });
+                            $("#downloadTheFile").attr('href', `vistas/assets/archivos/cortesRuta/${jsonData.newImage}`);
                             $("#uploadImgBtn").attr('nombre_photo', jsonData.newImage);
+                            tablaCortesRuta();
                         }else if($.trim(res) === 'Error 1 formato'){
                             Swal.fire({
                                 icon: 'warning',
@@ -914,38 +918,6 @@ jQuery(document).ready(function($) {
                 })
             }
         });
-    });
-
-    $(document).on('click', "#downloadTheFile", function(){
-        var data = `metodo=consultar&accion=cortesRuta&tipo=descargarArchivo&archivo=${$("#uploadImgBtn").attr('nombre_photo')}`;
-
-        $.ajax({
-            url: 'index.php',
-            type: 'POST',
-            data: data,
-            beforeSend: function(){
-                $("#carga").show();
-            }
-        }).done(function(res){
-            if($.trim(res) == 'Error'){
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'El archivo a descargar no existe'
-                });
-            }else{
-                var blob = new Blob([$.trim(res)]);
-
-                var link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = $("#uploadImgBtn").attr('nombre_photo');
-                link.click();
-            }
-        }).fail(function(){
-            console.log('Error ajax');
-        }).always(function(){
-            $("#carga").hide();
-        })
     });
 
     $(document).on('click', '.bGenerarPDFCorteRuta', function(){
