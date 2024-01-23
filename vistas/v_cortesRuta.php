@@ -203,7 +203,9 @@
 			</div>
 			<div class="col-12 d-flex justify-content-center gap-2">
 				<button class="btn btn-info" type="button" id="cerrarCorteRuta"><i class="fa-solid fa-file-export" style="margin-right: 10px;"></i> <strong>Cerrar Corte</strong></button>
+				<button class="btn btn-success d-none" type="button" id="reabrirCorteRuta"><i class="fa-solid fa-file-import" style="margin-right: 10px;"></i> <strong>Reabrir Corte</strong></button>
 				<button class="btn btn-warning" type="button" id="uploadImgBtn"><i class="fa-solid fa-upload" style="margin-right: 10px;"></i> <strong>Subir archivo</strong></button>
+				<button class="btn btn-danger d-none" type="button" id="downloadTheFile"><i class="fa-solid fa-download" style="margin-right: 10px;"></i> <strong>Descargar archivo</strong></button>
 				<form style="display: none;" id="imageUploadForm">
 					<input type="file" name="imageInput" id="imageInput" accept="image/*,application/pdf">
 				</form>

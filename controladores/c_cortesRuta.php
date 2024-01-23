@@ -301,7 +301,7 @@ class cortesRuta {
 		}else if ($tipo == 'obtenerCorteGuardado'){
 			$idCorte = $omodelo->link->real_escape_string($idCorte);
 
-			$query = "SELECT Ruta, Fecha_Inicio, Fecha_Fin, Verificado, FK_Chofer, FK_Vehiculo, Estado, Total, Recaudado FROM cortes_ruta WHERE ID_Corte = $idCorte";
+			$query = "SELECT Ruta, Fecha_Inicio, Fecha_Fin, Verificado, FK_Chofer, FK_Vehiculo, Estado, Total, Recaudado, Imagen FROM cortes_ruta WHERE ID_Corte = $idCorte";
 			$row = $omodelo->_consultar($query);
 			
 
@@ -336,6 +336,7 @@ class cortesRuta {
 					'FK_Vehiculo' => $row[0]['FK_Vehiculo'],
 					'Estado' => $row[0]['Estado'],
 					'Total' => $row[0]['Total'],
+					'Imagen' => $row[0]['Imagen'],
 					'Recaudado' => '<span class="fs-5 recaudado dinero" ID_Ruta="'.$idCorte.'">'.$row[0]['Recaudado'].'</span>',
 					'Recaudado_numero' => $row[0]['Recaudado'],
 					'Detalles' => json_encode($detalles_corte)
@@ -343,7 +344,7 @@ class cortesRuta {
 	
 				echo json_encode($cortes_route_data);
 			}
-		}else if($tipo == "obtener_balance_datos"){
+		}else if ($tipo == 'obtener_balance_datos'){
 			$ID_Ruta = $omodelo->link->real_escape_string($ID_Ruta);
 
 			$query = "SELECT ID_Gasto_Corte_Ruta, Descripcion, Coste FROM gastos_cortes_ruta WHERE FK_Corte_Ruta = $ID_Ruta";
@@ -371,7 +372,7 @@ class cortesRuta {
 
 				echo json_encode($balances_ruta);
 			}
-		}else if($tipo == "obtener_total_recalc"){
+		}else if ($tipo == 'obtener_total_recalc'){
 			$ventas = json_decode($ventas, true);
 
 			$idventas = array_merge(...array_column($ventas, 'ventas'));
@@ -386,6 +387,21 @@ class cortesRuta {
 			}else{
 				echo $row[0]['Total'];
 			}
+		}else if ($tipo == 'descargarArchivo'){
+
+			$archivo = $omodelo->link->real_escape_string($archivo);
+			$carpeta = 'vistas/assets/archivos/cortesRuta/';
+
+			if(file_exists($carpeta.$archivo)){
+				$fileContent = @file_get_contents($carpeta.$archivo);
+				header('Content-Type: application/octet-stream');
+				header('Content-Disposition: attachment; filename="nombre_archivo.txt"');
+				header('Content-Length: ' . strlen($fileContent));
+				echo $fileContent;
+			}else{
+				echo 'Error';
+			}
+
 		}else{
 			$buscar =  $omodelo->link->real_escape_string($buscar);
 			$limit =  $omodelo->link->real_escape_string($limit);
@@ -417,7 +433,11 @@ class cortesRuta {
 					for($i=0; $i<$numerofilas; $i++){
 						$bModificar = '';
 						if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][3] == '1') {
-							$bModificar = '<button type="button" class="btn btn-sm btn-warning bModificarCorteRuta" attrID="'.$row[$i]['ID_Corte'].'"><i class="fas fa-pencil"></i></button>';
+							if($row[$i]['Estado'] == 'Pendiente'){
+								$bModificar = '<button type="button" class="btn btn-sm btn-warning bModificarCorteRuta" attrID="'.$row[$i]['ID_Corte'].'"><i class="fas fa-pencil"></i></button>';
+							}else if($row[$i]['Estado'] == 'Finalizado'){
+								$bModificar = '<button type="button" class="btn btn-sm btn-info bModificarCorteRuta" attrID="'.$row[$i]['ID_Corte'].'"><i class="fas fa-eye"></i></button>';
+							}
 						}
 
 						$bEliminar = '';
@@ -439,6 +459,15 @@ class cortesRuta {
 						if($row[$i]['Verificado'] == '1'){
 							$verificado = '<span class="badge rounded-pill bg-success">Si</span>';
 						}
+
+						$estado = '';
+						if($row[$i]['Estado'] == 'Pendiente'){
+							$estado = '<span class="badge rounded-pill bg-warning">Pendiente</span>';
+						}else if($row[$i]['Estado'] == 'Finalizado'){
+							$estado = '<span class="badge rounded-pill bg-success">Finalizado</span>';
+						}
+
+						$generatePDF = '<button type="button" class="btn btn-sm btn-success bGenerarPDFCorteRuta" attrID="'.$row[$i]['ID_Corte'].'"><i class="fas fa-file"></i></button>';
 						
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Corte'],
@@ -448,8 +477,8 @@ class cortesRuta {
 							'Fecha_Fin' => $row[$i]['FechaF'],
 							'Total' => '<span class="dinero">'.$row[$i]['Total'].'</span>',
 							'Verificado' => $verificado,
-							'Detalles' => $row[$i]['FK_Chofer'].$row[$i]['FK_Vehiculo'],
-							'Acciones' => $bModificar.' '.$bEliminar
+							'Detalles' => $estado.'</br>'.$row[$i]['FK_Chofer'].'</br>'.$row[$i]['FK_Vehiculo'],
+							'Acciones' => $bModificar.' '.$bEliminar.' '.$generatePDF
 						);
 					}
 
@@ -569,6 +598,7 @@ class cortesRuta {
 			}
 		}else if($tipo == 'subirArchivo'){
 			$ID_Corte_Ruta = $omodelo->link->real_escape_string($ID_Corte_Ruta);
+			$ImagenAnterior = $omodelo->link->real_escape_string($ImagenAnterior);
 
 			$status = 0;
 			$nombreArchivo = '';
@@ -599,20 +629,48 @@ class cortesRuta {
 
 					if($error == "si"){
 						echo "Error 3: " . mysqli_error($omodelo->link);
+						$status = 1;
 					}else{
 						move_uploaded_file($rutaProvisional, $ruta);
+						if($ImagenAnterior && $ImagenAnterior != ''){
+							if(file_exists($carpeta.$ImagenAnterior)){
+								if(unlink($carpeta.$ImagenAnterior)){
+
+								}else{
+									echo "Error 4 Borrar";
+									$status = 1;
+								}
+							}
+						}
 					}
 				}
 			}
 
 			if($status == 0){
-				echo "Correcto";
+				$uploadResponse = array(
+					'status' => "Correcto",
+					'newImage' => $ID_Corte_Ruta . '_' . $nombreArchivo
+				);
+
+				echo json_encode($uploadResponse);
 				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 			}
 		}else if($tipo == 'terminarCorte'){
 			$ID_Corte_Ruta = $omodelo->link->real_escape_string($ID_Corte_Ruta);
 
 			$query = "UPDATE cortes_ruta SET Estado = 'Finalizado' WHERE ID_Corte = $ID_Corte_Ruta";
+			$error = $omodelo->_insertar($query);
+
+			if($error == "si"){
+				echo "Error 3: " . mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
+		}else if($tipo == 'reabrirCorteRuta'){
+			$ID_Corte_Ruta = $omodelo->link->real_escape_string($ID_Corte_Ruta);
+
+			$query = "UPDATE cortes_ruta SET Estado = 'Pendiente' WHERE ID_Corte = $ID_Corte_Ruta";
 			$error = $omodelo->_insertar($query);
 
 			if($error == "si"){
@@ -631,7 +689,7 @@ class cortesRuta {
 			$idventasstr = implode(',' , $idventas);
 			$idventasnumber = str_replace('"' , '', $idventasstr );
 
-			$query = "UPDATE cortes_ruta SET FK_Vehiculo = '$selectChofer', FK_Chofer = '$selectVehiculo', Total = (SELECT SUM(v.Total) as Total FROM ventas AS v WHERE v.ID_Venta IN ($idventasnumber)) WHERE ID_Corte = $id";
+			$query = "UPDATE cortes_ruta SET FK_Vehiculo = '$selectVehiculo', FK_Chofer = '$selectChofer', Total = (SELECT SUM(v.Total) as Total FROM ventas AS v WHERE v.ID_Venta IN ($idventasnumber)) WHERE ID_Corte = $id";
 			$error = $omodelo->_insertar($query);
 
 			if($error == "si"){
