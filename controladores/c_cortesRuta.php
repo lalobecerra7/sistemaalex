@@ -456,7 +456,7 @@ class cortesRuta {
 
 						$verImagen = '';
 						if($row[$i]['Imagen'] && $row[$i]['Imagen'] != ''){
-							$verImagen = '<a href="vistas/assets/archivos/cortesRuta/'.$row[$i]['Imagen'].'" data-fancybox data-caption="Single image"><button type="button" class="btn btn-sm btn-warning bVerImagenSubida" attrID="'.$row[$i]['ID_Corte'].'"><i class="fa-solid fa-file-contract"></i></button></a>';
+							$verImagen = '<a href="vistas/assets/archivos/cortesRuta/'.$row[$i]['Imagen'].'" data-fancybox><button type="button" class="btn btn-sm btn-warning bVerImagenSubida" attrID="'.$row[$i]['ID_Corte'].'"><i class="fa-solid fa-file-contract"></i></button></a>';
 						}
 						
 						$arreglo['data'][$i] = array(
@@ -603,7 +603,7 @@ class cortesRuta {
 				$rutaProvisional = $file['tmp_name'];
 				$sizeImg = $file['size'];
 			
-				if($tipoImg != 'image/jpeg' && $tipoImg != 'image/jpg' && $tipoImg != 'image/png' && $tipoImg != 'image/svg' && $tipo != 'application/pdf' && $tipoImg != ''){
+				if($tipoImg != 'image/jpg' && $tipoImg != 'image/png' && $tipoImg != 'image/svg' && $tipoImg != 'application/pdf' && $tipoImg != ''){
 					echo 'Error 1 formato ' . $tipoImg;
 					$status = 1;
 				}else if($sizeImg > (1024 * 1024 * 10)){

@@ -782,6 +782,7 @@ jQuery(document).ready(function($) {
                             $('#carga').show();
                         }
                     }).done(function(res){
+                        console.log(res);
                         var jsonData = JSON.parse($.trim(res));
                         if(jsonData.status == "Correcto"){
                             Swal.fire({

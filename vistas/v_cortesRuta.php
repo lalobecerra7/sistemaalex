@@ -205,8 +205,8 @@
 				<button class="btn btn-info" type="button" id="cerrarCorteRuta"><i class="fa-solid fa-file-export" style="margin-right: 10px;"></i> <strong>Cerrar Corte</strong></button>
 				<button class="btn btn-success d-none" type="button" id="reabrirCorteRuta"><i class="fa-solid fa-file-import" style="margin-right: 10px;"></i> <strong>Reabrir Corte</strong></button>
 				<button class="btn btn-warning" type="button" id="uploadImgBtn"><i class="fa-solid fa-upload" style="margin-right: 10px;"></i> <strong>Subir archivo</strong></button>
-				<a class="d-none" data-fancybox data-caption="Single image" id="downloadTheFile">
-					<button class="btn btn-danger" type="button"><i class="fa-solid fa-download" style="margin-right: 10px;"></i> <strong>Ver archivo</strong></button>
+				<a class="d-none" data-fancybox id="downloadTheFile">
+					<button class="btn btn-danger" type="button"><i class="fa-solid fa-file-contract" style="margin-right: 10px;"></i> <strong>Ver archivo</strong></button>
 				</a>
 				<form style="display: none;" id="imageUploadForm">
 					<input type="file" name="imageInput" id="imageInput" accept="image/*,application/pdf">
