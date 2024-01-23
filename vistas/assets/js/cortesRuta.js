@@ -251,6 +251,10 @@ function getBalanceData(idCorteRuta, total, recaudado){
 function calcBalance(neto, obtenido){
     var balance = obtenido - neto;
 
+    console.log('Neto: ',neto);
+    console.log('Obtenido: ',obtenido);
+    console.log('Balance: ',balance);
+
     $("#balance_final").text(balance);
     moneda();
     if(balance > 0){
@@ -626,6 +630,8 @@ jQuery(document).ready(function($) {
             $("#FechaFinCorte").attr('readonly', true);
             $("#bGenerarClientes").addClass('d-none');
 
+            console.log(resData.Recaudado);
+
             $("#contenedor_recaudado").html(resData.Recaudado);
             $("#total_corte_bruto").text(resData.Total);
             getBalanceData(idCorte, resData.Total, resData.Recaudado_numero);
@@ -668,6 +674,7 @@ jQuery(document).ready(function($) {
                 $("#uploadImgBtn").attr('nombre_photo', '');
             }
 
+            moneda();
             $("#modalCorteRuta").modal('show');
         }).always(function(){
             $("#carga").hide();
@@ -789,7 +796,7 @@ jQuery(document).ready(function($) {
     $(document).on('focusout', '.inputRecaudado', function(){
         var workingFocus = $(this);
         if (/^[0-9]+(\.[0-9]+)?$/.test(workingFocus.val())) {
-            var data = `metodo=modificar&accion=cortesRuta&tipo=actualizar_dinero_obtenido&Monto=${parseFloat(workingFocus.val())}&ID_Ruta=${workingFocus.attr('ID_Ruta')}`;
+            var data = `metodo=modificar&accion=cortesRuta&tipo=actualizar_dinero_obtenido&Monto=${parseFloat(workingFocus.val())}&ID_Ruta=${$("#bGuardarCorte").attr('attrID')}`;
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
@@ -799,9 +806,9 @@ jQuery(document).ready(function($) {
                 }
             }).done(function(res){
                 if($.trim(res) == "Correcto"){
-                    workingFocus.parent().html('<span class="fs-5 recaudado dinero" ID_Ruta="'+workingFocus.attr('ID_Ruta')+'">'+workingFocus.val()+'</span>');
+                    workingFocus.parent().html('<span class="fs-5 recaudado dinero" ID_Ruta="'+$("#bGuardarCorte").attr('attrID')+'">'+workingFocus.val()+'</span>');
                     recaud = parseFloat(workingFocus.val());
-                    calcBalance(parseFloat($("#total_corte_bruto").text()), parseFloat(workingFocus.val()));
+                    calcBalance(monedaToNumber($("#total_neto_corte").text()), parseFloat(workingFocus.val()));
                 }else{
                     Swal.fire({
                         icon: 'error',
@@ -862,7 +869,7 @@ jQuery(document).ready(function($) {
                             $('#carga').show();
                         }
                     }).done(function(res){
-                        console.log(res);
+                        var jsonData = JSON.parse(res);
                         if(jsonData.status == "Correcto"){
                             Swal.fire({
                                 icon: 'success',

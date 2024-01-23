@@ -337,7 +337,7 @@ class cortesRuta {
 					'Estado' => $row[0]['Estado'],
 					'Total' => $row[0]['Total'],
 					'Imagen' => $row[0]['Imagen'],
-					'Recaudado' => '<span class="fs-5 recaudado dinero" ID_Ruta="'.$idCorte.'">'.$row[0]['Recaudado'].'</span>',
+					'Recaudado' => '<span class="fs-5 dinero">'.($row[0]['Recaudado'] && $row[0]['Recaudado'] != 0 ? $row[0]['Recaudado'] : $row[0]['Total']).'</span>',
 					'Recaudado_numero' => $row[0]['Recaudado'],
 					'Detalles' => json_encode($detalles_corte)
 				);
@@ -479,7 +479,7 @@ class cortesRuta {
 						}
 
 						$bVerificar = '';
-						if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][3] == '1') {
+						if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][5] == '1') {
 							$bVerificar = '<br><br><button type="button" class="btn btn-sm btn-outline-secondary bVerificarCorteRuta" attrID="'.$row[$i]['ID_Corte'].'" title="Verificar">Verificar <i class="fas fa-check"></i></button>';
 						}
 
@@ -504,7 +504,8 @@ class cortesRuta {
 
 						$verImagen = '';
 						if($row[$i]['Imagen'] && $row[$i]['Imagen'] != ''){
-							$verImagen = '<a href="vistas/assets/archivos/cortesRuta/'.$row[$i]['Imagen'].'" data-fancybox><button type="button" class="btn btn-sm btn-warning bVerImagenSubida" attrID="'.$row[$i]['ID_Corte'].'"><i class="fa-solid fa-file-contract"></i></button></a>';
+							$verImagen = '<a href="vistas/assets/archivos/cortesRuta/'.$row[$i]['Imagen'].'" data-fancybox><div style="background-image: url('."'".'vistas/assets/archivos/cortesRuta/'.$row[$i]["Imagen"]."'".'); width: 50px; height: 50px; background-size: cover; background-position: center; margin: 0 auto; cursor: pointer; border-radius: 100%;">
+							</div></a>';
 						}
 						
 						$arreglo['data'][$i] = array(
@@ -515,8 +516,8 @@ class cortesRuta {
 							'Fecha_Fin' => $row[$i]['FechaF'],
 							'Total' => '<span class="dinero">'.$row[$i]['Total'].'</span>',
 							'Verificado' => $verificado,
-							'Detalles' => $estado.'</br>'.$row[$i]['FK_Chofer'].'</br>'.$row[$i]['FK_Vehiculo'],
-							'Acciones' => $bModificar.' '.$bEliminar.' '.$generatePDF.' '.$verImagen
+							'Detalles' => $estado.'</br>'.$row[$i]['FK_Chofer'].'</br>'.$row[$i]['FK_Vehiculo'].'</br>'.$verImagen,
+							'Acciones' => $bModificar.' '.$bEliminar.' '.$generatePDF
 						);
 					}
 
@@ -676,7 +677,7 @@ class cortesRuta {
 				$rutaProvisional = $file['tmp_name'];
 				$sizeImg = $file['size'];
 			
-				if($tipoImg != 'image/jpg' && $tipoImg != 'image/png' && $tipoImg != 'image/svg' && $tipoImg != 'application/pdf' && $tipoImg != ''){
+				if($tipoImg != 'image/jpeg' && $tipoImg != 'image/jpg' && $tipoImg != 'image/png' && $tipoImg != 'image/svg' && $tipoImg != 'application/pdf' && $tipoImg != ''){
 					echo 'Error 1 formato ' . $tipoImg;
 					$status = 1;
 				}else if($sizeImg > (1024 * 1024 * 10)){
