@@ -340,7 +340,7 @@ class cortesRuta {
 		}else if ($tipo == 'verificarCorte') {
 			$idCorte =  $omodelo->link->real_escape_string($idCorte);
 
-			$query = "SELECT productos.Codigo AS Codigo, productos.Descripcion AS Producto, (SELECT SUM(Cantidad) FROM detalles_ventas WHERE FK_Producto = productos.ID_Producto) AS Cantidadtol, (SELECT SUM(Cantidad_Verificada) FROM detalles_ventas WHERE FK_Producto = productos.ID_Producto) AS Verificacion FROM  detalles_ventas JOIN productos ON detalles_ventas.FK_Producto = productos.ID_Producto WHERE detalles_ventas.FK_Venta IN (SELECT ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$idCorte');";
+			$query = "SELECT productos.Codigo AS Codigo, productos.Descripcion AS Producto, (SELECT SUM(Cantidad) FROM detalles_ventas WHERE FK_Producto = productos.ID_Producto) AS Cantidadtol, (SELECT Cantidad FROM productos_verificados_corte_ruta WHERE FK_Producto = productos.ID_Producto AND FK_Corte_Ruta = '$idCorte') AS Verificacion FROM detalles_ventas JOIN productos ON detalles_ventas.FK_Producto = productos.ID_Producto WHERE detalles_ventas.FK_Venta IN (SELECT ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$idCorte') ORDER BY productos.Importe;";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			$verificacion = 0;
@@ -362,21 +362,27 @@ class cortesRuta {
 
 						echo '1' ;
 
-					}else{
+					}
 						for($i=0; $i<$numerofilas; $i++){
+							if ($row[$i]['Verificacion'] == $row[$i]['Cantidadtol']) {
+								$estado = "<span class='badge rounded-pill bg-success'>Listo</span>";
+							}else{
+								$estado = "<span class='badge rounded-pill bg-danger'>Pendiente</span>";
+							}
 
 						$card = "<tr>
 								  <td>".$row[$i]['Codigo']."</td>
 							      <th>".$row[$i]['Producto']."</th>
 							      <td>".$row[$i]['Cantidadtol']."</td>
 							      <td>".$row[$i]['Verificacion']."</td>
+							      <td>".$estado."</td>
 							    </tr>";
 
 						echo $card ;
 
 						}
 
-					}
+					
 				}
 			}
 		}else{
@@ -430,7 +436,7 @@ class cortesRuta {
 
 						$verificado = '<span class="badge rounded-pill bg-danger">No</span>'.$bVerificar;
 						if($row[$i]['Verificado'] == '1'){
-							$verificado = '<span class="badge rounded-pill bg-success">Si</span>';
+							$verificado = '<span class="badge rounded-pill bg-success">Si</span>'.$bVerificar;
 						}
 						
 						$arreglo['data'][$i] = array(
@@ -545,7 +551,7 @@ class cortesRuta {
 			$IDCodigo = $omodelo->link->real_escape_string($IDCodigo);
 			$IDCorte = $omodelo->link->real_escape_string($IDCorte);
 
-			$query = "UPDATE detalles_ventas SET Cantidad_Verificada = Cantidad_Verificada + 1 WHERE FK_Producto = (SELECT ID_Producto FROM productos WHERE Codigo = '$IDCodigo' AND ID_Producto = (SELECT FK_Producto FROM detalles_ventas WHERE FK_Venta IN (SELECT ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$IDCorte')) LIMIT 1) AND Cantidad != Cantidad_Verificada;";
+			$query = "CALL InsertOrUpdateVerificacion('$IDCorte', '$IDCodigo');";
 			$row = $omodelo->_insertar($query);
 
 			if ($row == "si") {

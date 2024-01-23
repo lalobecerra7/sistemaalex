@@ -184,7 +184,7 @@
 
 <!--///////////////////////////////////////////////////////-->
 <div class="modal fade" id="modalVerificar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
+	<div class="modal-dialog modal-lg modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header bg-inverse bd-inverse-darken">
 				<h5 class="modal-title" style="font-weight: bold;">Verificar corte de ruta</h5>
@@ -193,19 +193,33 @@
 			<div class="modal-body">
 				<form id="formVerificar">
 					<div class="row">
-						<div class="input-group col-12">
-								<input class="form-control" name="codigoProducto" id="codigoProducto" type="text" placeholder="Codigo...">
-							</div>
+						<div class="col-10"></div>
+						<div class="col-2 text-end">
+							<a class="btn btn-sm btn-info" id="bImprimirVerificacion" target="_blank" rel="noopener noreferrer" style="margin-top:5px;" title="Ticket Corte">Imprimir <i class="fa-solid fa-print"></i></a>
+						</div>
 					</div>
+					<br>
+					<div class="row">
+						<div class="col-12">
+							<div class="input-group mb-3 sm-3">
+							  <input type="text" class="form-control" name="codigoProducto" id="codigoProducto" type="text" placeholder="Codigo...">
+							  <div class="input-group-append">
+							    <button class="btn btn-outline-dark" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
+							  </div>
+							</div>
+						</div>
+					</div>
+					<br>
 					<div class="row">
 						<div class="mb-3 col-12">
-							<table class="table">
+							<table class="table text-center">
 							  <thead>
 							    <tr>
 							    	<th>Codigo</th>
 							      <th>Producto</th>
 							      <th>Cantidad</th>
 							      <th>Verificados</th>
+							      <th>Estado</th>
 							    </tr>
 							  </thead>
 							  <tbody id="tbodyVerificar">

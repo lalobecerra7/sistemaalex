@@ -121,12 +121,9 @@ function v_cortesRuta() {
             })
             .done(function(res) {
                 if ($.trim(res) == "Correcto") {
-                    
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Verificado'
-                    });
+
                     var IDCor = $('#codigoProducto').attr('attrID');
+                    $('#codigoProducto').val('');
                     tablaVerificarCorte(IDCor); 
                 }else{
                     Swal.fire({
@@ -224,17 +221,10 @@ function tablaVerificarCorte(idCorte){
             type: 'POST',
             data: data
         }).done(function(res){
-            if (res == 1) {
-                $("#modalVerificar").modal('hide');
-                Swal.fire({
-                        icon: 'success',
-                        title: 'Verificacion',
-                        text: 'Verificacion Terminada'
-                });
-                tablaCortesRuta();
-            }else{
-                $('#tbodyVerificar').html($.trim(res));
-            }
+
+            $('#tbodyVerificar').html($.trim(res));
+            tablaCortesRuta();
+            
         }).fail(function(){
             console.log('Error ajax');
         })
@@ -523,6 +513,7 @@ jQuery(document).ready(function($) {
         $("#codigoProducto").attr('attrID', $(this).attr('attrID'));
         var corteID = $(this).attr('attrID');
         tablaVerificarCorte(corteID);
+        $('#bImprimirVerificacion').attr('href', "controladores/pdf/ticketCorteRuta.php?id="+corteID);
     });
 
     $(document).on('focusout', '#codigoProducto', function() {
