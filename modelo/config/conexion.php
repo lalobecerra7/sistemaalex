@@ -5,7 +5,7 @@ class conexion {
     private $_host = "localhost";
     private $_username = "root";
     private $_password = "";
-    private $_database = "wits_sistemaalex";
+    private $_database = "wits_sistemaalex3";
 
     public function __construct()
     {
@@ -15,7 +15,7 @@ class conexion {
         {
             trigger_error("Error al conectar con la Base de datos:" . mysql_connect_error(),E_USER_ERROR);
         }else{
-             return $this->_connection;
+            return $this->_connection;
         }
     }
 }
