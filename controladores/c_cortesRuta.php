@@ -83,7 +83,7 @@ class cortesRuta {
 							'Orden_Ruta' =>'<span class="orden" attrID="'.$row[$i]['ID_Cliente'].'">'.$row[$i]['Orden_Ruta'].'</span>',
 							'Nombre' => $row[$i]['Nombre_Cliente'],
 							'Domicilio' => $row[$i]['Domicilio_Cliente'],
-							'Total' => $total_calc != "" ? $total_calc : $row[$i]['Total_Cliente'],
+							'Total' => '<span class="dinero">'.$total_calc != "" ? $total_calc : $row[$i]['Total_Cliente'].'</span>',
 							'Acciones' => $bDetalles
 						);
 					}
@@ -149,7 +149,7 @@ class cortesRuta {
 					for($i=0; $i<$numerofilas; $i++){
 						//TODO: Hacer la concat en un string y hacer una sola consulta con un OR en php
 						//Recibir Objeto AJAX con json_decode
-						$query2 = "SELECT Descripcion, Cantidad, (Total / Cantidad) as Precio, Total FROM detalles_ventas WHERE FK_Venta ='".$row[$i]['ID_Venta']."'";
+						$query2 = "SELECT Descripcion, Cantidad, (Total / Cantidad) as Precio, Total, (CASE WHEN FK_Presentacion <> 0 THEN (SELECT Codigo FROM presentaciones WHERE ID_Presentacion = FK_Presentacion) ELSE (SELECT Codigo FROM productos WHERE ID_Producto = FK_Producto) END) AS Codigo FROM detalles_ventas WHERE FK_Venta ='".$row[$i]['ID_Venta']."'";
 						$row2 = $omodelo->_consultar($query2);
 						$numerofilas2 = $omodelo->numerofilas;
 						
@@ -160,7 +160,7 @@ class cortesRuta {
 											<div class='col-8 px-2'>
 												<div class='row'>
 													<p class='py-0 my-0 col-4 pl-2'><b>Id:</b> ".$row[$i]['ID_Venta']."</p>
-													<p class=py-0 my-0 col-8'><b>Fecha de Venta:</b> ".date('d-m-Y', strtotime($row[$i]['Fecha_Registro']))."</p>
+													<p class=py-0 my-0 col-8'><b>Fecha de Venta:</b> ".date('d-m-Y', strtotime($row[$i]['Fecha_Registro']))."</span>
 												</div>
 											</div>
 											<div class='col text-end'>
@@ -171,10 +171,11 @@ class cortesRuta {
 											<table class='table'>
 											<thead>
 												<tr>
-													<th scope='col'>Producto</th>
-													<th scope='col'>Cantidad</th>
-													<th scope='col'>Precio U</th>
-													<th scope='col'>Subtotal</th>
+													<th scope='col'>Prod</th>
+													<th scope='col'>Cod.</th>
+													<th scope='col'>Cant</th>
+													<th scope='col'>Precio</th>
+													<th scope='col'>Subt</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -185,6 +186,7 @@ class cortesRuta {
 								$card .= "
 									<tr>
 										<th>".$row2[$j]['Descripcion']."</th>
+										<th>".$row2[$j]['Codigo']."</th>
 										<th>".$row2[$j]['Cantidad']."</th>
 										<th>".$row2[$j]['Precio']."</th>
 										<th>".$row2[$j]['Total']."</th>
@@ -235,7 +237,7 @@ class cortesRuta {
 			}else{
 				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
-						$query2 = "SELECT Descripcion, Cantidad, (Total / Cantidad) as Precio, Total FROM detalles_ventas WHERE FK_Venta ='".$row[$i]['ID_Venta']."'";
+						$query2 = "SELECT Descripcion, Cantidad, (Total / Cantidad) as Precio, Total, (CASE WHEN FK_Presentacion <> 0 THEN (SELECT Codigo FROM presentaciones WHERE ID_Presentacion = FK_Presentacion) ELSE (SELECT Codigo FROM productos WHERE ID_Producto = FK_Producto) END) AS Codigo FROM detalles_ventas WHERE FK_Venta ='".$row[$i]['ID_Venta']."'";
 						$row2 = $omodelo->_consultar($query2);
 						$numerofilas2 = $omodelo->numerofilas;
 
@@ -258,6 +260,7 @@ class cortesRuta {
 											<thead>
 												<tr>
 													<th scope='col'>Prod.</th>
+													<th scope='col'>Cod.</th>
 													<th scope='col'>Cant.</th>
 													<th scope='col'>Precio</th>
 													<th scope='col'>Subt.</th>
@@ -271,6 +274,7 @@ class cortesRuta {
 								$card .= "
 									<tr>
 										<th>".$row2[$j]['Descripcion']."</th>
+										<th>".$row2[$j]['Codigo']."</th>
 										<th>".$row2[$j]['Cantidad']."</th>
 										<th>".$row2[$j]['Precio']."</th>
 										<th>".$row2[$j]['Total']."</th>
@@ -297,7 +301,7 @@ class cortesRuta {
 		}else if ($tipo == 'obtenerCorteGuardado'){
 			$idCorte = $omodelo->link->real_escape_string($idCorte);
 
-			$query = "SELECT Ruta, Fecha_Inicio, Fecha_Fin, Verificado, FK_Chofer, FK_Vehiculo, Estado, Total FROM cortes_ruta WHERE ID_Corte = $idCorte";
+			$query = "SELECT Ruta, Fecha_Inicio, Fecha_Fin, Verificado, FK_Chofer, FK_Vehiculo, Estado, Total, Recaudado, Imagen FROM cortes_ruta WHERE ID_Corte = $idCorte";
 			$row = $omodelo->_consultar($query);
 			
 
@@ -332,6 +336,9 @@ class cortesRuta {
 					'FK_Vehiculo' => $row[0]['FK_Vehiculo'],
 					'Estado' => $row[0]['Estado'],
 					'Total' => $row[0]['Total'],
+					'Imagen' => $row[0]['Imagen'],
+					'Recaudado' => '<span class="fs-5 recaudado dinero" ID_Ruta="'.$idCorte.'">'.$row[0]['Recaudado'].'</span>',
+					'Recaudado_numero' => $row[0]['Recaudado'],
 					'Detalles' => json_encode($detalles_corte)
 				);
 	
@@ -384,6 +391,48 @@ class cortesRuta {
 
 					
 				}
+		}else if ($tipo == 'obtener_balance_datos'){
+			$ID_Ruta = $omodelo->link->real_escape_string($ID_Ruta);
+
+			$query = "SELECT ID_Gasto_Corte_Ruta, Descripcion, Coste FROM gastos_cortes_ruta WHERE FK_Corte_Ruta = $ID_Ruta";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row === "si"){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				$costes = "";
+				$total_costes = 0;
+				if($numerofilas > 0){
+					for ($j=0; $j < $numerofilas; $j++) { 
+						$costes .= "<tr><td class='fs-6'>".$row[$j]['Descripcion']."</td><td class='fs-6'>".$row[$j]['Coste']."</td><td><button class='btn btn-sm btn-danger eliminateCoste' ID_Corte='".$ID_Ruta."' ID_Coste='".$row[$j]['ID_Gasto_Corte_Ruta']."'><i class='fa-solid fa-trash'></button></td></tr>";
+						$total_costes+=$row[$j]['Coste'];
+					}
+				}else{
+					$costes = "<tr><td class='fs-6 text-center' colspan='3'>No existen gastos</td></tr>";
+				}
+
+				$balances_ruta = array(
+					'Costes' => $costes,
+					'Total_Costes' => $total_costes
+				);
+
+				echo json_encode($balances_ruta);
+			}
+		}else if ($tipo == 'obtener_total_recalc'){
+			$ventas = json_decode($ventas, true);
+
+			$idventas = array_merge(...array_column($ventas, 'ventas'));
+			$idventasstr = implode(',' , $idventas);
+			$idventasnumber = str_replace('"' , '', $idventasstr );
+
+			$query = "SELECT SUM(v.Total) as Total FROM ventas AS v WHERE v.ID_Venta IN ($idventasnumber)";
+			$row = $omodelo->_consultar($query);
+
+			if($row == "si"){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				echo $row[0]['Total'];
 			}
 		}else{
 			$buscar =  $omodelo->link->real_escape_string($buscar);
@@ -416,7 +465,11 @@ class cortesRuta {
 					for($i=0; $i<$numerofilas; $i++){
 						$bModificar = '';
 						if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][3] == '1') {
-							$bModificar = '<button type="button" class="btn btn-sm btn-warning bModificarCorteRuta" attrID="'.$row[$i]['ID_Corte'].'"><i class="fas fa-pencil"></i></button>';
+							if($row[$i]['Estado'] == 'Pendiente'){
+								$bModificar = '<button type="button" class="btn btn-sm btn-warning bModificarCorteRuta" attrID="'.$row[$i]['ID_Corte'].'"><i class="fas fa-pencil"></i></button>';
+							}else if($row[$i]['Estado'] == 'Finalizado'){
+								$bModificar = '<button type="button" class="btn btn-sm btn-info bModificarCorteRuta" attrID="'.$row[$i]['ID_Corte'].'"><i class="fas fa-eye"></i></button>';
+							}
 						}
 
 						$bEliminar = '';
@@ -438,6 +491,20 @@ class cortesRuta {
 						if($row[$i]['Verificado'] == '1'){
 							$verificado = '<span class="badge rounded-pill bg-success">Si</span>'.$bVerificar;
 						}
+
+						$estado = '';
+						if($row[$i]['Estado'] == 'Pendiente'){
+							$estado = '<span class="badge rounded-pill bg-warning">Pendiente</span>';
+						}else if($row[$i]['Estado'] == 'Finalizado'){
+							$estado = '<span class="badge rounded-pill bg-success">Finalizado</span>';
+						}
+
+						$generatePDF = '<button type="button" class="btn btn-sm btn-success bGenerarPDFCorteRuta" attrID="'.$row[$i]['ID_Corte'].'"><i class="fas fa-file"></i></button>';
+
+						$verImagen = '';
+						if($row[$i]['Imagen'] && $row[$i]['Imagen'] != ''){
+							$verImagen = '<a href="vistas/assets/archivos/cortesRuta/'.$row[$i]['Imagen'].'" data-fancybox><button type="button" class="btn btn-sm btn-warning bVerImagenSubida" attrID="'.$row[$i]['ID_Corte'].'"><i class="fa-solid fa-file-contract"></i></button></a>';
+						}
 						
 						$arreglo['data'][$i] = array(
 							'ID' => $row[$i]['ID_Corte'],
@@ -445,10 +512,10 @@ class cortesRuta {
 							'Ruta' => $row[$i]['Ruta'],
 							'Fecha_Inicio' => $row[$i]['FechaI'],
 							'Fecha_Fin' => $row[$i]['FechaF'],
-							'Total' => $row[$i]['Total'],
+							'Total' => '<span class="dinero">'.$row[$i]['Total'].'</span>',
 							'Verificado' => $verificado,
-							'Detalles' => $row[$i]['FK_Chofer'].$row[$i]['FK_Vehiculo'],
-							'Acciones' => $bModificar.' '.$bEliminar
+							'Detalles' => $estado.'</br>'.$row[$i]['FK_Chofer'].'</br>'.$row[$i]['FK_Vehiculo'],
+							'Acciones' => $bModificar.' '.$bEliminar.' '.$generatePDF.' '.$verImagen
 						);
 					}
 
@@ -467,51 +534,68 @@ class cortesRuta {
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s');
 		$tipo = $omodelo->link->real_escape_string($tipo);
-		
-		$rutasCorte = $omodelo->link->real_escape_string($rutasCorte);
-		$FechaInicioCorte = $omodelo->link->real_escape_string($FechaInicioCorte);
-		$FechaFinCorte = $omodelo->link->real_escape_string($FechaFinCorte);
-		$selectChofer = $omodelo->link->real_escape_string($selectChofer);
-		$selectVehiculo = $omodelo->link->real_escape_string($selectVehiculo);
-		$detalleVentas = json_decode($detalleVentas, true);
 
-		$idventas = array_merge(...array_column($detalleVentas, 'ventas'));
+		if ($tipo == "insertar_gastos"){
+			$ID_Ruta = $omodelo->link->real_escape_string($ID_Ruta);
+			$Descripcion = $omodelo->link->real_escape_string($Descripcion);
+			$Coste = $omodelo->link->real_escape_string($Coste);
+			$FloatingCost = floatval($Coste);
 
-		$idventasstr = implode(',' , $idventas);
+			$query = "INSERT INTO gastos_cortes_ruta SET FK_Corte_Ruta = '$ID_Ruta', Descripcion = '$Descripcion', Coste = $FloatingCost";
+			$row = $omodelo->_insertar($query);
 
-		$idventasnumber = str_replace('"' , '', $idventasstr );
-
-		$query = "INSERT INTO cortes_ruta SET Ruta = '$rutasCorte', Fecha_Inicio = '$FechaInicioCorte', Fecha_Fin = '$FechaFinCorte', Verificado = false, Imagen = '', Fecha_Registro = '$fecha', Fk_Chofer = '$selectChofer', FK_Vehiculo = '$selectVehiculo', Estado = 'Pendiente', Total = (SELECT SUM(v.Total) as Total FROM ventas AS v WHERE v.ID_Venta IN ($idventasnumber)) ";
-		$row = $omodelo->_insertar($query);
-
-		if ($row == "si") {
-			echo "Error: ".mysqli_error($omodelo->link);
+			if($row == "si"){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
 		}else{
-			$last_corte_ruta = mysqli_insert_id($omodelo->link);
-			
-			foreach ($detalleVentas as $detalle){
-				$inserted = "";
-				for ($i=0; $i < count($detalle['ventas']); $i++) { 
-					if($i === count($detalle['ventas'])-1){
-						$inserted .= $detalle['ventas'][$i];
-					}else{
-						$inserted .= $detalle['ventas'][$i].',';
+			$rutasCorte = $omodelo->link->real_escape_string($rutasCorte);
+			$FechaInicioCorte = $omodelo->link->real_escape_string($FechaInicioCorte);
+			$FechaFinCorte = $omodelo->link->real_escape_string($FechaFinCorte);
+			$selectChofer = $omodelo->link->real_escape_string($selectChofer);
+			$selectVehiculo = $omodelo->link->real_escape_string($selectVehiculo);
+			$detalleVentas = json_decode($detalleVentas, true);
+
+			$idventas = array_merge(...array_column($detalleVentas, 'ventas'));
+
+			$idventasstr = implode(',' , $idventas);
+
+			$idventasnumber = str_replace('"' , '', $idventasstr );
+
+			$query = "INSERT INTO cortes_ruta SET Ruta = '$rutasCorte', Fecha_Inicio = '$FechaInicioCorte', Fecha_Fin = '$FechaFinCorte', Verificado = false, Imagen = '', Fecha_Registro = '$fecha', Fk_Chofer = '$selectChofer', FK_Vehiculo = '$selectVehiculo', Estado = 'Pendiente', Total = (SELECT SUM(v.Total) as Total FROM ventas AS v WHERE v.ID_Venta IN ($idventasnumber)) ";
+			$row = $omodelo->_insertar($query);
+
+			if ($row == "si") {
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				$last_corte_ruta = mysqli_insert_id($omodelo->link);
+				
+				foreach ($detalleVentas as $detalle){
+					$inserted = "";
+					for ($i=0; $i < count($detalle['ventas']); $i++) { 
+						if($i === count($detalle['ventas'])-1){
+							$inserted .= $detalle['ventas'][$i];
+						}else{
+							$inserted .= $detalle['ventas'][$i].',';
+						}
+					}
+
+					$sum_inserted = str_replace('"', '', $inserted );
+					
+					$query2 = "INSERT INTO detalles_corte_ruta SET FK_Corte_Ruta = '$last_corte_ruta', FK_Cliente = '$detalle[cliente]', Ventas = '$inserted', Total = (SELECT SUM(Total) FROM ventas WHERE ID_Venta IN ($sum_inserted))";
+					$row2 = $omodelo->_insertar($query2);
+
+					if($row2 == "si"){
+						echo "Error: ".mysqli_error($omodelo->link);
+						return false;
 					}
 				}
 
-				$sum_inserted = str_replace('"', '', $inserted );
-				
-				$query2 = "INSERT INTO detalles_corte_ruta SET FK_Corte_Ruta = '$last_corte_ruta', FK_Cliente = '$detalle[cliente]', Ventas = '$inserted', Total = (SELECT SUM(Total) FROM ventas WHERE ID_Venta IN ($sum_inserted))";
-				$row2 = $omodelo->_insertar($query2);
-
-				if($row2 == "si"){
-					echo "Error: ".mysqli_error($omodelo->link);
-					return false;
-				}
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 			}
-
-			echo "Correcto";
-			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 		}
 	}
 
@@ -561,8 +645,140 @@ class cortesRuta {
 
 				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
 			}
-		}
+		}else if($tipo == 'actualizar_dinero_obtenido'){
+			$ID_Ruta = $omodelo->link->real_escape_string($ID_Ruta);
+			$Monto = $omodelo->link->real_escape_string($Monto);
 
+			$query = "UPDATE cortes_ruta SET Recaudado = $Monto WHERE ID_Corte = '$ID_Ruta'";
+			$row = $omodelo->_insertar($query);
+
+			if($row == "si"){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
+		}else if($tipo == 'subirArchivo'){
+			$ID_Corte_Ruta = $omodelo->link->real_escape_string($ID_Corte_Ruta);
+			$ImagenAnterior = $omodelo->link->real_escape_string($ImagenAnterior);
+
+			$status = 0;
+			$nombreArchivo = '';
+			$ruta = '';
+			$rutaProvisional = '';
+			$carpeta = 'vistas/assets/archivos/cortesRuta/';
+
+			if($_FILES['imageInput']['size'] > 0 && $_FILES['imageInput']['error'] == 0){
+				$file = $_FILES['imageInput'];
+				$nombreArchivo = $file['name'];
+				$tipoImg = $file['type'];
+				$rutaProvisional = $file['tmp_name'];
+				$sizeImg = $file['size'];
+			
+				if($tipoImg != 'image/jpg' && $tipoImg != 'image/png' && $tipoImg != 'image/svg' && $tipoImg != 'application/pdf' && $tipoImg != ''){
+					echo 'Error 1 formato ' . $tipoImg;
+					$status = 1;
+				}else if($sizeImg > (1024 * 1024 * 10)){
+					echo 'Error 2 peso';
+					$status = 1;
+				}else {
+					$ruta = $carpeta . $ID_Corte_Ruta . '_' . $nombreArchivo;
+				}
+
+				if($status == 0 && $nombreArchivo != ''){
+					$query = "UPDATE cortes_ruta SET Imagen = '".$ID_Corte_Ruta . "_" . $nombreArchivo."' WHERE ID_Corte = $ID_Corte_Ruta";
+					$error = $omodelo->_insertar($query);
+
+					if($error == "si"){
+						echo "Error 3: " . mysqli_error($omodelo->link);
+						$status = 1;
+					}else{
+						move_uploaded_file($rutaProvisional, $ruta);
+						if($ImagenAnterior && $ImagenAnterior != ''){
+							if(file_exists($carpeta.$ImagenAnterior)){
+								if(unlink($carpeta.$ImagenAnterior)){
+
+								}else{
+									echo "Error 4 Borrar";
+									$status = 1;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			if($status == 0){
+				$uploadResponse = array(
+					'status' => "Correcto",
+					'newImage' => $ID_Corte_Ruta . '_' . $nombreArchivo
+				);
+
+				echo json_encode($uploadResponse);
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
+		}else if($tipo == 'terminarCorte'){
+			$ID_Corte_Ruta = $omodelo->link->real_escape_string($ID_Corte_Ruta);
+
+			$query = "UPDATE cortes_ruta SET Estado = 'Finalizado' WHERE ID_Corte = $ID_Corte_Ruta";
+			$error = $omodelo->_insertar($query);
+
+			if($error == "si"){
+				echo "Error 3: " . mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
+		}else if($tipo == 'reabrirCorteRuta'){
+			$ID_Corte_Ruta = $omodelo->link->real_escape_string($ID_Corte_Ruta);
+
+			$query = "UPDATE cortes_ruta SET Estado = 'Pendiente' WHERE ID_Corte = $ID_Corte_Ruta";
+			$error = $omodelo->_insertar($query);
+
+			if($error == "si"){
+				echo "Error 3: " . mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}
+		}else {
+			$selectChofer = $omodelo->link->real_escape_string($selectChofer);
+			$selectVehiculo = $omodelo->link->real_escape_string($selectVehiculo);
+			$id = $omodelo->link->real_escape_string($id);
+			$ventas_obj = json_decode($detalleVentas, true);
+
+			$idventas = array_merge(...array_column($ventas_obj, 'ventas'));
+			$idventasstr = implode(',' , $idventas);
+			$idventasnumber = str_replace('"' , '', $idventasstr );
+
+			$query = "UPDATE cortes_ruta SET FK_Vehiculo = '$selectVehiculo', FK_Chofer = '$selectChofer', Total = (SELECT SUM(v.Total) as Total FROM ventas AS v WHERE v.ID_Venta IN ($idventasnumber)) WHERE ID_Corte = $id";
+			$error = $omodelo->_insertar($query);
+
+			if($error == "si"){
+				echo "ErrorModificar: ".mysqli_error($omodelo->link);
+			}else{
+				if(isset($ventas_obj)){
+					foreach($ventas_obj as $venta){
+						$cliente = (int) $venta['cliente'];
+						$ventas_upt = implode(',', $venta['ventas']);
+
+						$query2 = "UPDATE detalles_corte_ruta SET Ventas = '$ventas_upt' WHERE FK_Cliente = $cliente AND FK_Corte_Ruta = $id";
+						$error2 = $omodelo->_insertar($query2);
+
+						if($error2 == "si"){
+							echo "ErrorModificar: ".mysqli_error($omodelo->link);
+						}else{
+							$omodelo->movimiento($query2, $_SESSION['user_admin']['ID_Usuario']);
+						}
+					}
+					echo "Correcto";
+				}else{
+					echo "Correcto";
+					$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+				}
+			}
+
+		}
 	}
 
 
@@ -570,20 +786,35 @@ class cortesRuta {
 	{
 		$omodelo = new m_modelo();
 		extract($_POST);
-		$id =  $omodelo->link->real_escape_string($id);
+		if($tipo == 'eliminar_gasto'){
+			$ID_Gasto = $omodelo->link->real_escape_string($ID_Gasto);
 
-		$query2 = "DELETE FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$id'";
-		$error2 = $omodelo->_insertar($query2);
+			$query = "DELETE FROM gastos_cortes_ruta WHERE ID_Gasto_Corte_Ruta = '$ID_Gasto'";
+			$error = $omodelo->_insertar($query);
 
-		$query = "DELETE FROM cortes_ruta WHERE ID_Corte = '$id'";
-		$error = $omodelo->_insertar($query);
+			if($error == "si"){
+				echo "Error: " . mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);	
+			}
 
-		if ($error == "si") {
-			echo "Error: " . mysqli_error($omodelo->link);
-		} else {
-			echo "Correcto";
+		}else{
+			$id =  $omodelo->link->real_escape_string($id);
 
-			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);			
+			$query2 = "DELETE FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$id'";
+			$error2 = $omodelo->_insertar($query2);
+
+			$query = "DELETE FROM cortes_ruta WHERE ID_Corte = '$id'";
+			$error = $omodelo->_insertar($query);
+
+			if ($error == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				echo "Correcto";
+
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);			
+			}
 		}
 	}
 }
