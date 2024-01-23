@@ -391,6 +391,7 @@ class cortesRuta {
 
 					
 				}
+			}	
 		}else if ($tipo == 'obtener_balance_datos'){
 			$ID_Ruta = $omodelo->link->real_escape_string($ID_Ruta);
 
