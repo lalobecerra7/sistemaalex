@@ -85,6 +85,7 @@ function v_cortesRuta() {
                         title: 'Oops...',
                         text: 'Error inesperado al '+$("#bGuardarCorte").attr("tipo")+' la ruta.'
                     });
+                    console.log(res);
                 }
             })
             .fail(function() {
@@ -109,37 +110,60 @@ function v_cortesRuta() {
             }
         },
         submitHandler: function(form) { 
-            var data = "metodo=modificar&accion=cortesRuta&tipo=verificar&IDCodigo="+$.trim($("#codigoProducto").val())+"&IDCorte="+$.trim($('#codigoProducto').attr('attrID'));
-            $.ajax({
-                url: 'index.php',
-                type: 'POST',
-                data: data,
-                beforeSend: function() {
-                    $("#carga").show();
-                }
-            })
-            .done(function(res) {
-                if ($.trim(res) == "Correcto") {
+            var object = $(".codigoProducto").filter(':contains("'+$.trim($("#codigoProducto").val())+'")').parent();
 
-                    var IDCor = $('#codigoProducto').attr('attrID');
-                    $('#codigoProducto').val('');
-                    tablaVerificarCorte(IDCor); 
-                }else{
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Error inesperado al verificar'
-                    });
+            if(object.length > 0){
+                var data = "metodo=modificar&accion=cortesRuta&tipo=verificar&Presentacion="+$.trim(object[0].getAttribute('presentacion'))+"&Producto="+$.trim(object[0].getAttribute('producto'))+"&IDCorte="+$.trim($('#codigoProducto').attr('attrID'));
+               
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data,
+                    beforeSend: function() {
+                        $("#carga").show();
+                    }
+                })
+                .done(function(res) {
+                    if ($.trim(res) == "Correcto") {
 
-                    console.log($.trim(res));
-                }
-            })
-            .fail(function() {
-                console.log("Error ajax");
-            })
-            .always(function() {
-                $("#carga").hide();
-            });                
+                        var IDCor = $('#codigoProducto').attr('attrID');
+                        $('#codigoProducto').val('');
+                        tablaVerificarCorte(IDCor); 
+
+                        Swal.fire({
+                          position: "top-end",
+                          icon: "success",
+                          title: "Producto encontrado",
+                          showConfirmButton: false,
+                          timer: 1000
+                        });
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error inesperado al verificar'
+                        });
+
+                        console.log($.trim(res));
+                    }
+                })
+                .fail(function() {
+                    console.log("Error ajax");
+                })
+                .always(function() {
+                    $("#carga").hide();
+                });  
+            }else{
+                $('#codigoProducto').val('');
+                
+                Swal.fire({
+                    position: "top-end",
+                    icon: "warning",
+                    title: "Producto no encontrado",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+            }             
         }
     }); 
 }
@@ -186,11 +210,12 @@ function tablaDetallesClientes(idCliente, ventas_obj){
                 $(".borrarDeCorteDeRuta").removeClass('d-none');
                 $("#agregarVentaACorte").removeClass('d-none');
             }
+            moneda();
         }).fail(function(){
             console.log('Error ajax');
         })
     }else{
-        $('#lista-ventas-cliente').html('<h1>No hay nada we</h1>');
+        $('#lista-ventas-cliente').html('<h1>No existen registros</h1>');
         $("#agregarVentaACorte").attr('clienteId', idCliente);
     }
 }
@@ -214,7 +239,7 @@ function tablaClientesRuta() {
             "FechaInicioCorte": $("#FechaInicioCorte").val(),
             "FechaFinCorte": $("#FechaFinCorte").val(),
             "accion": "cortesRuta",
-            "ventas": ventas_cliente.length > 0 ? JSON.stringify(ventas_cliente) : []
+            "ventas": ventas_cliente.length > 0 ? JSON.stringify(ventas_cliente) : null
         }
     });
 }
@@ -251,16 +276,14 @@ function getBalanceData(idCorteRuta, total, recaudado){
 function calcBalance(neto, obtenido){
     var balance = obtenido - neto;
 
-    console.log('Neto: ',neto);
-    console.log('Obtenido: ',obtenido);
-    console.log('Balance: ',balance);
-
     $("#balance_final").text(balance);
     moneda();
-    if(balance > 0){
+    if(balance >= 0){
         $("#balance_final").addClass('text-success');
+        $("#balance_final").removeClass('text-danger');
     }else{
         $("#balance_final").addClass('text-danger');
+        $("#balance_final").removeClass('text-success');
     }
 }
 
@@ -332,10 +355,13 @@ jQuery(document).ready(function($) {
             type: 'POST',
             data: data
         }).done(function(res){
+            console.log(res);
             var jsonData = JSON.parse(res);
             ventas_cliente = jsonData;
             $("#tablaClientesruta").removeClass('d-none');
             tablaClientesRuta();
+        }).fail(function(){
+            console.log('Error ajax');
         })
 
 	});
@@ -393,7 +419,7 @@ jQuery(document).ready(function($) {
                 $("#searchedForAdd").attr('ID_Cliente', clientId);
                 //Recalc
             }else{
-                $("#lista-ventas-cliente-excluidas").html('<h1>No hay nada we</h1>');
+                $("#lista-ventas-cliente-excluidas").html('<h1>No existen registros</h1>');
             }
         }).fail(function(){
             console.log('Error ajax')
@@ -598,8 +624,6 @@ jQuery(document).ready(function($) {
         $("#codigoProducto").focus();
     });
 
-    
-
     $(document).on('click', '.bModificarCorteRuta', function(){
         var idCorte = $(this).attr('attrID');
         var data = `metodo=consultar&accion=cortesRuta&tipo=obtenerCorteGuardado&idCorte=${$(this).attr('attrID')}`;
@@ -630,11 +654,9 @@ jQuery(document).ready(function($) {
             $("#FechaFinCorte").attr('readonly', true);
             $("#bGenerarClientes").addClass('d-none');
 
-            console.log(resData.Recaudado);
-
             $("#contenedor_recaudado").html(resData.Recaudado);
             $("#total_corte_bruto").text(resData.Total);
-            getBalanceData(idCorte, resData.Total, resData.Recaudado_numero);
+            getBalanceData(idCorte, resData.Total, resData.Recaudado_numero != 0 ? resData.Recaudado_numero : resData.Total);
 
             $("#contenedorBalance").removeClass('d-none');
             $("#accionesCorteGeneral").removeClass('d-none');
@@ -722,7 +744,7 @@ jQuery(document).ready(function($) {
                             icon: 'success',
                             title: 'Gasto añadido correctamente'
                         });
-                        getBalanceData(corteId, total, recaud);
+                        getBalanceData(corteId, total, recaud != 0 ? recaud : total);
                         $("#gastosFormulario")[0].reset();
                     }
                 }).fail(function(){
@@ -765,7 +787,7 @@ jQuery(document).ready(function($) {
                             title: 'El gasto se elimino del corte correctamente.'
                         });
 
-                        getBalanceData(corteId, total, recaud);
+                        getBalanceData(corteId, total, recaud != 0 ? recaud : total);
                     }else{
                         Swal.fire({
                             icon: 'error',
@@ -902,8 +924,8 @@ jQuery(document).ready(function($) {
                                 title: 'Oops...',
                                 text: 'Error inesperado para modificar el producto'
                             });
-                            console.log($.trim(res));
                         }
+                        console.log($.trim(res));
                     }).fail(function(){
                         console.log('Error ajax');
                     }).always(function(){
@@ -1009,7 +1031,7 @@ jQuery(document).ready(function($) {
 
     $(document).on('click', '.bGenerarPDFCorteRuta', function(){
         var routeId = $(this).attr('attrID');
-        window.open('/sistemaalex/controladores/pdf/mpdf/corteRuta.php'+'?id='+routeId, '_blank');
+        window.open('/rios/controladores/pdf/mpdf/corteRuta.php'+'?id='+routeId, '_blank');
     });
 
 	/*$(document).on('click', '.bModificarVehiculo', function() {

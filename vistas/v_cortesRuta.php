@@ -231,12 +231,14 @@
 			</div>
 			<form id="formCorteClientes">
 				<div class="modal-body">
-					<div class="row">
-						<div class="col-9" id="lista-ventas-cliente">
-							
-						</div>
-						<div class="col-3 sticky-top mx-auto" id="agregarVentasContainer">
+					<div class="row mb-3">
+						<div class="col-12 sticky-top mx-auto text-rigth" id="agregarVentasContainer">
 							<button class="btn btn-lg btn-outline-primary m-0 w-100" id="agregarVentaACorte" type="button"><i class="fa-solid fa-plus"></i> Añadir venta</button>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12" id="lista-ventas-cliente">
+							
 						</div>
 					</div>
 				</div>
@@ -288,7 +290,7 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form id="formVerificar">
+				
 					<div class="row">
 						<div class="col-10"></div>
 						<div class="col-2 text-end">
@@ -298,12 +300,16 @@
 					<br>
 					<div class="row">
 						<div class="col-12">
-							<div class="input-group mb-3 sm-3">
-							  <input type="text" class="form-control" name="codigoProducto" id="codigoProducto" type="text" placeholder="Codigo...">
-							  <div class="input-group-append">
-							    <button class="btn btn-outline-dark" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
-							  </div>
-							</div>
+							<form id="formVerificar">
+								<div class="row mb-3 sm-3">
+								  <div class="col-9">
+								  	<input type="text" class="form-control" name="codigoProducto" id="codigoProducto" type="text" placeholder="Codigo...">
+								  </div>
+								  <div class="col-3">
+								  	<button type="submit" class="btn btn-outline-dark"><i class="fa-solid fa-magnifying-glass"></i></button>
+								  </div>	
+								</div>
+							</form>
 						</div>
 					</div>
 					<br>
@@ -329,7 +335,7 @@
 				<div class="modal-footer">
 					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
 				</div>
-			</form>	
+				
 		</div>
 	</div>
 </div>
