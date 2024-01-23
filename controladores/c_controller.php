@@ -687,6 +687,24 @@ class controller {
 			}
 
 			$pagina = str_replace('#SucursalesCliente#', $opciones, $pagina);
+
+			$opcionesRutas = '';
+			$query = "SELECT ID_Ruta, Nombre FROM rutas";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == "si"){
+				echo "Error: ". mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for ($i=0; $i < $numerofilas; $i++) { 
+						$opcionesRutas .= '<option value="'.$row[$i]['ID_Ruta'].'">'.$row[$i]['Nombre'].'</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#RutasCliente#', $opcionesRutas, $pagina);
+
 		}else if($nombre == "v_areas"){
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_areas'][2] == '0') {
 				echo '<script>$("#botonNuevaArea").remove();</script>';
@@ -928,22 +946,90 @@ class controller {
 						}
 				}		
 		}else if($nombre == "v_precios"){
-				$query = "SELECT ID_Zona, Nombre, Descripcion FROM zonas";
-				$row = $omodelo->_consultar($query);
-				$numerofilas = $omodelo->numerofilas;
-				
-				$zonas = '';	
-				if ($row == "si") {
-						echo "Error: " . mysqli_error($omodelo->link);
-				}else{
-						if($numerofilas > 0){ 
-								for ($i=0; $i < $numerofilas; $i++) { 
-										$zonas .= '<option value="'.$row[$i]['ID_Zona'].'">'.$row[$i]['Nombre'].'</option>';
-								}
-						}
-				}			
+			$query = "SELECT ID_Zona, Nombre, Descripcion FROM zonas";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			
+			$zonas = '';	
+			if ($row == "si") {
+					echo "Error: " . mysqli_error($omodelo->link);
+			}else{
+					if($numerofilas > 0){ 
+							for ($i=0; $i < $numerofilas; $i++) { 
+									$zonas .= '<option value="'.$row[$i]['ID_Zona'].'">'.$row[$i]['Nombre'].'</option>';
+							}
+					}
+			}			
 
-				$pagina = str_replace('#zonas#', $zonas, $pagina);
+			$pagina = str_replace('#zonas#', $zonas, $pagina);
+		}else if($nombre == "v_choferes"){
+			$query = "SELECT ID_Vehiculo, Modelo, Marca, Descripcion FROM vehiculos";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			$opcionesVehiculos = '';
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for ($i=0; $i < $numerofilas; $i++) { 
+						$opcionesVehiculos .= '<option value="'.$row[$i]['ID_Vehiculo'].'">Modelo: '.$row[$i]['Modelo'].', Marca: '.$row[$i]['Marca']. ( $row[$i]['Descripcion'] ? ', Descripcion: '.$row[$i]['Descripcion'].'' : '' ) .'</option>';
+					}
+				}
+			}
+			$pagina = str_replace('#VehiculosChofer#', $opcionesVehiculos, $pagina);
+		}else if($nombre == "v_cortesRuta"){
+
+			$opcionesRutasCorte = '';
+			$query = "SELECT ID_Ruta, Nombre FROM rutas";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == "si"){
+				echo "Error: ". mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for ($i=0; $i < $numerofilas; $i++) { 
+						$opcionesRutasCorte .= '<option value="'.$row[$i]['Nombre'].'">'.$row[$i]['Nombre'].'</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#RutasCorte#', $opcionesRutasCorte, $pagina);
+
+
+			$query = "SELECT ID_Chofer, Nombre, Primer_Apellido, Segundo_Apellido FROM choferes";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			$opcionesChoferesCorte = '';
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for ($i=0; $i < $numerofilas; $i++) { 
+						$opcionesChoferesCorte .= '<option value="'.$row[$i]['Nombre'] .' '.$row[$i]['Primer_Apellido'] .' '.$row[$i]['Segundo_Apellido'] .'">'.$row[$i]['Nombre'] .' '.$row[$i]['Primer_Apellido'] .' '.$row[$i]['Segundo_Apellido'] .'</option>';
+					}
+				}
+			}
+			$pagina = str_replace('#SelectChofer#', $opcionesChoferesCorte, $pagina);
+
+
+			$query = "SELECT ID_Vehiculo, Modelo, Marca, Descripcion FROM vehiculos";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			$opcionesVehiculosCorte = '';
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for ($i=0; $i < $numerofilas; $i++) { 
+						$opcionesVehiculosCorte .= '<option value="Modelo: '.$row[$i]['Modelo'].', Marca: '.$row[$i]['Marca']. ( $row[$i]['Descripcion'] ? ', Descripcion: '.$row[$i]['Descripcion'].'' : '' ) .'">Modelo: '.$row[$i]['Modelo'].', Marca: '.$row[$i]['Marca']. ( $row[$i]['Descripcion'] ? ', Descripcion: '.$row[$i]['Descripcion'].'' : '' ) .'</option>';
+					}
+				}
+			}
+			$pagina = str_replace('#SelectVehiculo#', $opcionesVehiculosCorte, $pagina);
 		}
 		
 		return $pagina;

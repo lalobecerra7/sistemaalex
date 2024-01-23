@@ -407,6 +407,8 @@ jQuery(document).ready(function($) {
             $("#correoContactoCliente").val(datos.Email_Contacto);
             $("#telefonoContactoCliente").val(datos.Tel_Contacto);
             $("#INECliente").val(datos.INE);
+            $("#rutasCliente").val(datos.FK_Ruta);
+            $("#ordenRuta").val(datos.Orden_Ruta);
             if (datos.Foto != "") {
                 $("#verfotoCliente img").attr('src', 'vistas/assets/archivos/fotosClientes/'+datos.Foto);
             }else{

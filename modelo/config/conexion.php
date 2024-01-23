@@ -15,7 +15,7 @@ class conexion {
         {
             trigger_error("Error al conectar con la Base de datos:" . mysql_connect_error(),E_USER_ERROR);
         }else{
-             return $this->_connection;
+            return $this->_connection;
         }
     }
 }

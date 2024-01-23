@@ -23,6 +23,7 @@
 		            <th>Nombre</th>
 		            <th>Primer Apellido</th>
 		            <th>Segundo Apellido</th>
+		            <th>Vehiculo</th>
 		            <th orden="No">Acciones</th>
 		          </thead>
 		          <tbody> 
@@ -65,11 +66,20 @@
 		              <label>Segundo Apellido</label>
 		          </div>
 		        </div>
+		        <div class="col-12 mb-3">
+					<div class="form-floating mb-3">
+						<select class="form-select" name="vehiculosChofer" id="vehiculosChofer">
+							<option value="">- Seleccione una opción -</option>
+							#VehiculosChofer#
+						</select>
+						<label>Vehiculo</label>
+					</div>
+				</div>
 	       	</div>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="submit" class="btn btn-primary" id="bGuardarChofer"><i class="fa fa-check-circle"></i> <strong>Guardar</strong></button>
-					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+			<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
 	      </div>
   		</form>
     </div>
