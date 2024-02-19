@@ -199,7 +199,7 @@ class hacerCompra {
 				}
 			}
 
-			$query = "SELECT ID_Proveedor, Nombre, Calle, No_Exterior, No_Interior, Empresa, Telefono, RFC, Credito, Razon_Social, (SELECT COUNT(*) FROM proveedores $busqueda WHERE ID_Proveedor != 1) AS Num FROM proveedores WHERE ID_Proveedor != 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT ID_Proveedor, Nombre, Calle, No_Exterior, No_Interior, Empresa, Telefono, RFC, Credito, Razon_Social, (SELECT COUNT(*) FROM proveedores WHERE ID_Proveedor != 1 $busqueda) AS Num FROM proveedores WHERE ID_Proveedor != 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -485,7 +485,7 @@ class hacerCompra {
 			}else{
 				if($numerofilas > 0){
 					$productos = array();
-					$query1 = "SELECT ID_Detalle_Orden, detalles_orden.FK_Producto AS FK_Producto, FK_Presentacion, Descripcion, Codigo, Nombre_Unidad, Abreviatura_Unidad, detalles_orden.Costo AS Costo, Cantidad, Subtotal, Nombre, Abreviatura FROM detalles_orden INNER JOIN productos ON detalles_orden.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Orden = '$id' ORDER BY Descripcion";
+					$query1 = "SELECT ID_Detalle_Orden, detalles_orden.FK_Producto AS FK_Producto, FK_Presentacion, Descripcion, productos.Codigo, Nombre_Unidad, Abreviatura_Unidad, detalles_orden.Costo AS Costo, Cantidad, Subtotal, Nombre, Abreviatura FROM detalles_orden INNER JOIN productos ON detalles_orden.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Orden = '$id' ORDER BY Descripcion";
 					$row1 = $omodelo->_consultar($query1);
 					$numerofilas1 = $omodelo->numerofilas;
 

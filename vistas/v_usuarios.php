@@ -349,6 +349,10 @@
                   <input type="checkbox" class="form-check-input checkPermisos">
                   <label class="form-check-label">Afectar balance</label>
                 </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Precio personalizado</label>
+                </div>
               </td>
             </tr>
             <tr>

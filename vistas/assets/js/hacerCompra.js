@@ -415,7 +415,7 @@ jQuery(document).ready(function($) {
 			var productos = [];
 			$("#tbodyTablaProductosAgregados tr").each(function(){
 				var idProducto = $(this).attr("attrid");
-				var Sucursal = $('#Sucursales').val();
+				var Sucursal = $('#Sucursales').attr("value");
 				var Presentacion = $(this).attr("idPresentacion");
 				var Costo = $(this).children("td:eq(3)").find(".campoCosto").val();
 				var Cantidad = $(this).children("td:eq(4)").find(".campoCantidad").val();
@@ -562,7 +562,7 @@ jQuery(document).ready(function($) {
 			var productos = [];
 			$("#tbodyTablaProductosAgregados tr").each(function(){
 				var idProducto = $(this).attr("attrid");
-				var Sucursal = $('#Sucursales').val();
+				var Sucursal = $('#Sucursales').attr("value");
 				var Presentacion = $(this).attr("idPresentacion");
 				var Costo = $(this).children("td:eq(3)").find(".campoCosto").val();
 				var Cantidad = $(this).children("td:eq(4)").find(".campoCantidad").val();
@@ -583,7 +583,7 @@ jQuery(document).ready(function($) {
 			data.append('subtotal', subtotal);
 			data.append('total', total);
 			data.append('Descuento', descuento);
-			data.append('Sucursal', $('#Sucursales').val());
+			data.append('Sucursal', $('#Sucursales').attr("value"));
 			data.append('id', $.trim($(this).attr('attrID')));
 
 			$.ajax({
@@ -741,7 +741,7 @@ jQuery(document).ready(function($) {
 				//console.log(datos);
 				$("#bFolioOrdenCompra").removeClass('oculto');
 				$("#folioOrdenCompra").html(datos.ID_Orden_Compra.padStart(8, '0'));
-				$("#Sucursales").val(datos.FK_Sucursal);
+				$("#Sucursales").attr("value", datos.FK_Sucursal);
 				$(".BotonLimpiarProveedor").removeClass("oculto");
 				if(datos.FK_Proveedor != 1){
 					$("#RealizarCompra").attr("idProveedor", datos.FK_Proveedor);

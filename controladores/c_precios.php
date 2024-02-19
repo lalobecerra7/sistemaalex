@@ -42,14 +42,14 @@ class precios{
 			}
 
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(productos.Descripcion, presentaciones.Nombre, precios.Nombre, IFNULL((SELECT GROUP_CONCAT(Empresa) FROM detalles_proveedores_productos INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor WHERE FK_Producto = ID_Producto), '')) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(productos.Descripcion, (SELECT Nombre FROM zonas WHERE FK_Zona = ID_Zona), IFNULL(presentaciones.Nombre, ''), precios.Nombre, IFNULL((SELECT GROUP_CONCAT(Empresa) FROM detalles_proveedores_productos INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor WHERE FK_Producto = ID_Producto), '')) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Precio, productos.Descripcion AS Producto, IFNULL((SELECT GROUP_CONCAT(Empresa) FROM detalles_proveedores_productos INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor WHERE FK_Producto = ID_Producto), '') AS Proveedores, IFNULL(presentaciones.Nombre, '') AS Presentacion, precios.Nombre AS Nombre, precios.Precio AS Precio, precios.Precio_Mayoreo AS Mayoreo, (SELECT COUNT(*) FROM precios INNER JOIN productos ON precios.FK_Producto = ID_Producto INNER JOIN zonas ON FK_Zona = ID_Zona LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion $busqueda) AS Num FROM precios INNER JOIN productos ON precios.FK_Producto = ID_Producto INNER JOIN zonas ON FK_Zona = ID_Zona LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Precio, productos.Descripcion AS Producto, (SELECT Nombre FROM zonas WHERE FK_Zona = ID_Zona) AS NombreZonaPrecio, IFNULL((SELECT GROUP_CONCAT(Empresa) FROM detalles_proveedores_productos INNER JOIN proveedores ON FK_Proveedor = ID_Proveedor WHERE FK_Producto = ID_Producto), '') AS Proveedores, IFNULL(presentaciones.Nombre, '') AS Presentacion, precios.Nombre AS Nombre, precios.Precio AS Precio, precios.Precio_Mayoreo AS Mayoreo, (SELECT COUNT(*) FROM precios INNER JOIN productos ON precios.FK_Producto = ID_Producto INNER JOIN zonas ON FK_Zona = ID_Zona LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion $busqueda) AS Num FROM precios INNER JOIN productos ON precios.FK_Producto = ID_Producto INNER JOIN zonas ON FK_Zona = ID_Zona LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -60,7 +60,7 @@ class precios{
 				for($i=0; $i<$numerofilas; $i++){
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Precio'],
-						'Producto' => $row[$i]['Producto'],
+						'Producto' => $row[$i]['Producto']."<br>".$row[$i]['NombreZonaPrecio'],
 						'Presentacion' => $row[$i]['Presentacion'],
 						'Proveedores' => $row[$i]['Proveedores'],
 						'Nombre' => $row[$i]['Nombre'],

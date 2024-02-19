@@ -15,7 +15,7 @@
     return;
   }
 
-  $queryDetalles = "SELECT FK_Venta, FK_Producto, productos.Descripcion AS Producto, productos.Codigo AS Codigo, detalles_ventas.Precio AS Precio, Cantidad, Total FROM detalles_ventas JOIN productos ON FK_Producto = productos.ID_Producto WHERE FIND_IN_SET(FK_Venta,  (SELECT Ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$id')) > 0";
+  $queryDetalles = "SELECT FK_Producto, FK_Presentacion, IF (FK_Presentacion <> 0, (SELECT Codigo FROM presentaciones WHERE FK_Presentacion = ID_Presentacion), (SELECT Codigo FROM productos WHERE FK_Producto = ID_Producto)) AS Codigo, Descripcion AS Producto, SUM(Cantidad) as Cantidadtol, IFNULL((SELECT Cantidad FROM productos_verificados_corte_ruta WHERE FK_Corte_Ruta = '$id' AND FK_Producto = detalles_ventas.FK_Producto AND FK_Presentacion = detalles_ventas.FK_Presentacion), 0) AS Verificacion FROM detalles_ventas WHERE FK_Venta IN (SELECT ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$id') GROUP BY Codigo ORDER BY (SELECT Importe FROM productos WHERE ID_Producto = detalles_ventas.FK_Producto )";
   $rowDetalles = $modelo->_consultar($queryDetalles);
 
   if ($rowDetalles == 'si') {
@@ -32,23 +32,28 @@
         <tr>
           <th>Codigo</th>
           <th>Cantidad</th>
-          <th>Precio</th>
-          <th>Total</th>
+          <th>Verificada</th>
+          <th>Estado</th>
         </tr>
       </thead>
       <tbody>';
 
   foreach ($rowDetalles as $detalle) {
     if ($detalle == null) continue;
+      if ($detalle['Cantidadtol'] == $detalle['Verificacion']) {
+        $estado = 'Listo';
+      }else{
+        $estado = 'Pendiente';
+      }
     $tabla .= '
       <tr>
         <td colspan="4">' . $detalle['Producto'] . '</td>
       </tr>
       <tr>
         <td>' . $detalle['Codigo'] . '</td>
-        <td>' . number_format($detalle['Cantidad'], 2) . '</td>
-        <td>$' . number_format($detalle['Precio'], 2) . '</td>
-        <td>$' . number_format($detalle['Total'], 2). '</td>
+        <td>' . $detalle['Cantidadtol'] . '</td>
+        <td>' . $detalle['Verificacion'] . '</td>
+        <td>' . $estado. '</td>
       </tr>';
   }
 

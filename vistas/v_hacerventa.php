@@ -35,7 +35,7 @@
                 <div class="col-md-4 col-sm-12 mb-3">
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1"><i class="fas fa-barcode"></i></span>
-                        <input type="text" class="form-control" id="CodigoProductoVenta" name="CodigoProductoVenta" placeholder="Código del producto" required autofocus onblur="{e => {if (e.relatedTarget === null) { e.target.focus();}}}">
+                        <input type="text" class="form-control" id="CodigoProductoVenta" name="CodigoProductoVenta" autocomplete="off" placeholder="Código del producto" required autofocus onblur="{e => {if (e.relatedTarget === null) { e.target.focus();}}}">
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 d-grid mb-3">
@@ -51,8 +51,8 @@
                 </div>
             </form>
             <div class="row">
-                <div class="table-responsive" style="height: 500px; overflow-y: scroll;">
-                    <table class="table table table-hover table-striped table-bordered text-center" id="TablaProductosAgregadoVenta" width="100%" style="font-size: 12px; vertical-align: middle;">
+                <div class="table-responsive" style="">
+                    <table class="table table table-hover table-bordered text-center" id="TablaProductosAgregadoVenta" width="100%" style="font-size: 12px; vertical-align: middle;">
                         <thead>
                             <th style="width: 10%;">Codigo</th>
                             <th style="width: 20%;">Descripción</th>
@@ -68,7 +68,7 @@
                     </table>
                 </div>
             </div>
-            <div class="totalesFixed">
+            <div class="totalesFixed mt-4">
                 <div class="row">
                     <div class="col-md-12 text-start">
                         <span id="cantidadProductosSpanVenta">0</span> productos en la venta actual
@@ -107,7 +107,7 @@
 
 
 <!--/////////////////////////////////////////////////////////////-->
-<div class="modal fade" id="ModalPreciosProductoVenta" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="ModalPreciosProductoVenta" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -115,9 +115,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-12 table-responsive" id="divTablaProductos">
-                        <table class="table table-responsive table-striped text-center myDataTable" id="TablaPreciosProductosVenta" width="100%">
+                <div class="row table-responsive">
+                    <div class="col-12" id="divTablaProductos">
+                        <table class="table text-center myDataTable" id="TablaPreciosProductosVenta" width="100%">
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
@@ -138,7 +138,7 @@
 </div>
 
 <!--/////////////////////////////////////////////////////////////-->
-<div class="modal fade" id="ModalPresentacionesProducto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="ModalPresentacionesProducto" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -425,11 +425,12 @@
                 <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Finalizar venta</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <form id="FormRealizarVenta">
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12 col-sm-12 mb-3">
                         <div class="form-floating">
-                            <input type="number" readonly class="form-control" min='0.1' step="any" id="ImportePagadoVenta" name="ImportePagadoVenta" placeholder="Ingresa el importe a pagar">
+                            <input type="number" disabled class="form-control" min='0.1' step="any" id="ImportePagadoVenta" name="ImportePagadoVenta" placeholder="Ingresa el importe a pagar">
                             <label for="ImportePagadoVenta">Importe pagado</label>
                         </div>
                     </div>
@@ -464,19 +465,6 @@
                             <label for="PagoTDebito">Pago en tarjeta de debito</label>
                         </div>
                     </div>
-                    <!-- <div class="col-md-12 col-sm-12 mb-3">
-                        <div class="form-floating">
-                            <select class="form-select" id="TipoPagoVenta" name="TipoPagoVenta">
-                                <option value="Efectivo">Efectivo</option>
-                                <option value="Deposito">Depósito</option>
-                                <option value="Cheque">Cheque</option>
-                                <option value="TransferenciaBancaria">Transferencia bancaria</option>
-                                <option value="TarjetaCreditoDebito">Tarjeta de crédito o débito</option>
-                                <option value="PagoOnline">Pago online</option>
-                            </select>
-                            <label for="TipoPagoVenta">Tipo de pago</label>
-                        </div>
-                    </div> -->
                     <div class="col-md-12 col-sm-12 mb-3">
                         <h5>Cambio</h5>
                         <h5 class="dinero" id="verCambio">$0.00</h5>
@@ -486,8 +474,9 @@
             </div>
             <div class="modal-footer">
                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
-               <button type="button" class="btn btn-primary" id="GuardarVenta" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
-           </div>
+               <button type="submit" class="btn btn-primary" id="GuardarVenta" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
+            </div>
+            </form>
         </div>
     </div>
 </div> 
@@ -506,8 +495,15 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12 mb-3">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="TokenDescuento" name="TokenDescuento" placeholder="Código de descuento">
+                            <input type="text" class="form-control" id="TokenDescuento" name="TokenDescuento" placeholder="Código de descuento" autofocus>
                             <label for="TokenDescuento">Token de descuento</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="divErrorToken" style="display: none;">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="alert alert-danger" role="alert">
+                            Este token no está disponible, intenta con otro.
                         </div>
                     </div>
                 </div>

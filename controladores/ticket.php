@@ -1,12 +1,14 @@
 <?php  
+include('pdf/phpqrcode/qrlib.php');
+
   session_start();
   if (!isset($_SESSION['user_admin']['ID_Usuario'])) {
     header('Location: ../index.php');
   }
 
 date_default_timezone_set('America/Mexico_City');
-//$con = mysqli_connect('localhost','wits_userBD','ZfX7y99GSs','wits_sistemaalex');
-$con = mysqli_connect('localhost','root','','wits_sistemaalex');
+$con = mysqli_connect('localhost','wits_userBD','ZfX7y99GSs','wits_sistemaalex');
+//$con = mysqli_connect('localhost','root','','wits_sistemaalex');
 $arreglo = '';
 $arregloVenta = '';
 
@@ -220,7 +222,7 @@ $arregloVenta = '';
   <title>Ticket</title>
   <style>
     * {
-      font-size: 12px;
+      font-size: 20px;
       font-family: Arial;
       text-transform: uppercase;
     }
@@ -368,35 +370,28 @@ $arregloVenta = '';
       }
     }
 
-    $sql2 = "SELECT ID_Venta, Estatus, FK_Usuario, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal) AS NombreSucursal, FK_Cliente, (SELECT Nombre FROM clientes WHERE ID_Cliente = FK_Cliente) AS NombreCliente, Descuento, Total, Total_Importes, Tipo_Pago, Pago, Cambio, Notas, Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario FROM ventas WHERE ID_Venta = '".$_GET["id"]."'";
+    $sql2 = "SELECT ID_Venta, FK_Direccion, Estatus, FK_Usuario, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal) AS NombreSucursal, FK_Cliente, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM clientes WHERE ID_Cliente = FK_Cliente) AS NombreCliente, (SELECT Telefono FROM clientes WHERE ID_Cliente = FK_Cliente) AS TelefonoCliente, (SELECT Celular FROM clientes WHERE ID_Cliente = FK_Cliente) AS CelularCliente,  Descuento, Total, Total_Importes, Tipo_Pago, Pago, Cambio, Notas, Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(Calle,' ',No_Exterior) FROM detalles_clientes WHERE ID_Detalle_Cliente = FK_Direccion) AS DireccionCalleCliente, (SELECT Ciudad FROM detalles_clientes WHERE ID_Detalle_Cliente = FK_Direccion) AS DireccionCiudadCliente, (SELECT CONCAT(Latitud,', ',Longitud) FROM detalles_clientes WHERE ID_Detalle_Cliente = FK_Direccion) AS CoordenadasCliente, (SELECT CONCAT(Calle,' ',No_Exterior) FROM clientes WHERE FK_Cliente = ID_Cliente) AS CalleCliente, IFNULL((SELECT Nombre FROM rutas WHERE ID_Ruta = (SELECT FK_Ruta FROM clientes WHERE ID_Cliente = FK_Cliente)), '') AS Ruta, IFNULL((SELECT Orden_Ruta FROM clientes WHERE ID_Cliente = FK_Cliente), '') AS Orden, (SELECT Ciudad FROM clientes WHERE FK_Cliente = ID_Cliente) AS CiudadCliente, Facturada, Version_CFDI, Fecha_Expedicion_CFDI, Sello_CFDI, Forma_Pago_CFDI, No_Certificado_CFDI, Certificado_CFDI, Moneda_CFDI, Tipo_Comprobante_CFDI, Exportacion_CFDI, Metodo_Pago_CFDI, Lugar_Expedicion_CFDI, Confirmacion_CFDI, Emisor_RFC_CFDI, Emisor_Nombre_CFDI, Emisor_Regimen_Fiscal_CFDI, Receptor_RFC_CFDI, Receptor_Nombre_CFDI, Receptor_Domicilio_CFDI, Receptor_Regimen_Fiscal_CFDI, Receptor_Uso_CFDI, UUID_CFDI, Fecha_Timbrado_CFDI, Rfc_ProvCertif_CFDI, Sello_CFD_CFDI, No_Certificado_SAT_CFDI, Sello_SAT_CFDI, Periodicidad_CFDI, Meses_CFDI, Ano_CFDI, Relacion_CFDI, Cadena_CFDI FROM ventas WHERE ID_Venta = '".$_GET["id"]."'";
 
     if($res=$con->query($sql2)){
       if ($res->num_rows > 0) {
         $row = $res->fetch_assoc();
 
         $folio = str_pad($_GET["id"], 8, "0", STR_PAD_LEFT);
+        $direccionCliente = '';
+        if ($row["FK_Cliente"] == 1) {
+          $direccionCliente = '';
+        }else{
+          if ($row["FK_Direccion"] != 0) {
+            $direccionCliente .= "Dirección: ".$row["DireccionCalleCliente"]."<br>Ciudad: ".$row["DireccionCiudadCliente"]."<br>Coordenadas: ".$row["CoordenadasCliente"];
+          }else{
+            $direccionCliente .= "Dirección: ".$row["CalleCliente"]."<br>Ciudad: ".$row["CiudadCliente"];
+          }
+        }
 
-        $arregloVenta = array(
-          'ID_Venta' => $row["ID_Venta"],
-          'FK_Usuario' => $row["FK_Usuario"],
-          'Estatus' => $row["Estatus"],
-          'NombreUsuario' => $row["NombreUsuario"],
-          'FK_Sucursal' => $row["FK_Sucursal"],
-          'NombreSucursal' => $row["NombreSucursal"],
-          'FK_Cliente' => $row["FK_Cliente"],
-          'NombreCliente' => $row["NombreCliente"],
-          'Descuento' => $row["Descuento"],
-          'Total' => $row["Total"],
-          'Total_Importes' => $row["Total_Importes"],
-          'TotalFinal' => ($row["Total_Importes"] + $row["Total"]),
-          'Tipo_Pago' => $row["Tipo_Pago"],
-          'Pago' => $row["Pago"],
-          'Cambio' => $row["Cambio"],
-          'Notas' => $row["Notas"],
-          'Fecha_Registro' => $row["Fecha_Registro"],
-          'Fecha_Cancelacion' => $row["Fecha_Cancelacion"],
-          'Regreso_Inventario' => $row["Regreso_Inventario"],
-        );
+        $arregloVenta = $row;
+        $arregloVenta['DireccionCliente'] = $direccionCliente;
+        $arregloVenta['TotalFinal'] = ($row["Total_Importes"] + $row["Total"]);
+        
       }else{
         echo "No se encontraron resultados";
       }
@@ -459,6 +454,41 @@ $arregloVenta = '';
           echo '<p class="centrado">MOTIVO: '.$arregloVenta['Notas'].'</p>';
         }
         echo '<p class="centrado">CLIENTE: '.$arregloVenta['NombreCliente'].'</p>';
+        echo '<p class="centrado">TELÉFONO: '.$arregloVenta['TelefonoCliente'].'</p>';
+        echo '<p class="centrado">CELULAR: '.$arregloVenta['CelularCliente'].'</p>';
+        echo '<p class="centrado">'.$arregloVenta['DireccionCliente'].'</p>';
+        echo '<p class="centrado">ATENDIO: '.$arregloVenta['NombreUsuario'].'</p>';
+
+        if($arregloVenta['Ruta'] != "" && $arregloVenta['Ruta'] != 0){
+          echo  '<p class="centrado"><b>Ruta: </b>'.$arregloVenta['Ruta'].'</p>';
+            
+          if($arregloVenta['Orden_Ruta'] != "" && $arregloVenta['Orden_Ruta'] != 0){
+            echo '<p class="centrado"><b>Orden de Ruta: </b>'.$arregloVenta['Orden_Ruta'].'</p>';
+          }
+        }else{
+          echo'<p class="centrado"><b>Ruta: </b>Sin ruta</p>';
+        }
+
+        if($arregloVenta['Facturada'] == '1'){
+          QRcode::png('https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id='.$arregloVenta['UUID_CFDI'].'&re='.$arregloVenta['Emisor_RFC_CFDI'].'&rr='.$arregloVenta['Receptor_RFC_CFDI'].'&tt='.$arregloVenta['Total'].'&fe='.substr($arregloVenta['Sello_CFD_CFDI'], -8), 'qr.png', 'H', 7);
+
+          echo '<br><div class="centrado">
+            <p style="margin: 2px 0px; font-size: 14px;"><b>Versión CFDI:</b> '.$arregloVenta['Version_CFDI'].'</p>
+            <p style="margin: 2px 0px; font-size: 14px;"><b>Fecha Emisión:</b></p>
+            <p style="margin: 2px 0px; font-size: 14px;">'.str_replace('T', ' ', $arregloVenta['Fecha_Expedicion_CFDI']).'</p>
+            <p style="margin: 2px 0px; font-size: 14px;"><b>Fecha Timbrado:</b></p>
+            <p style="margin: 2px 0px; font-size: 14px;">'.str_replace('T', ' ', $arregloVenta['Fecha_Timbrado_CFDI']).'</p>
+            <p style="margin: 2px 0px; font-size: 14px;"><b>Folio Fiscal:</b></p>
+            <p style="margin: 2px 0px; font-size: 14px;">'.$arregloVenta['UUID_CFDI'].'</p>
+            <p style="margin: 2px 0px; font-size: 14px;"><b>No. Certificado Digital:</b></p>
+            <p style="margin: 2px 0px; font-size: 14px;">'.$arregloVenta['No_Certificado_CFDI'].'</p>
+            <p style="margin: 2px 0px; font-size: 14px;"><b>No. Certificado SAT:</b></p>
+            <p style="margin: 2px 0px; font-size: 14px;">'.$arregloVenta['No_Certificado_SAT_CFDI'].'</p>
+          </div>
+          <div style="text-align: center;">
+            <p><img src="qr.png" style="width: 50%"/></p>
+          </div>';
+        }
       ?>
       <br>
       <table class="centrado" width="100%">
@@ -500,6 +530,20 @@ $arregloVenta = '';
                       if ($res->num_rows > 0) {
                         while($row = $res->fetch_assoc()){
                             $subtotalProducto = 0;
+
+                            //CONSULTAR LAS DEVOLUCIONES
+                            $cantidadDevuelto = 0;
+                            $sqldev = "SELECT ID_Detalle_Devolucion, FK_Devolucion, FK_Detalle_Venta, SUM(detalles_devolucion.Cantidad) AS Cantidad, SUM(detalles_devolucion.Total) AS Total FROM detalles_devolucion INNER JOIN detalles_ventas ON FK_Detalle_Venta = ID_Detalle_Venta WHERE detalles_ventas.FK_Venta = '".$arregloVenta['ID_Venta']."' AND FK_Detalle_Venta = '".$row["ID_Detalle_Venta"]."' GROUP BY FK_Detalle_Venta"; 
+                            if($resdev=$con->query($sqldev)){
+                              if ($resdev->num_rows > 0) {
+                                while($rowdev = $resdev->fetch_assoc()){
+                                  $cantidadDevuelto = $rowdev["Cantidad"];
+                                }
+                              }
+                            }
+
+                            $row["Cantidad"] = $row['Cantidad'] - $cantidadDevuelto;
+                            $totalImpuesto = 0;
                             $mostrarImpuestos = "";
                             $sql2 = "SELECT ID_Impuesto, FK_Detalle_Venta, Tipo_Impuesto_CFDI, Impuesto_CFDI, Clave_CFDI, Tipo_Factor_CFDI, Tasa_Cuota_CFDI FROM detalles_impuestos_ventas WHERE FK_Detalle_Venta = '".$row["ID_Detalle_Venta"]."'"; 
                             if($res2=$con->query($sql2)){
@@ -535,27 +579,21 @@ $arregloVenta = '';
                             }
 
                             $subtotalProducto = ($row['Cantidad'] * $row['Precio']);
-                            $devuelto = "";
-                            $sqldev = "SELECT ID_Detalle_Devolucion, FK_Devolucion, FK_Detalle_Venta, SUM(detalles_devolucion.Cantidad) AS Cantidad, SUM(detalles_devolucion.Total) AS Total FROM detalles_devolucion INNER JOIN detalles_ventas ON FK_Detalle_Venta = ID_Detalle_Venta WHERE detalles_ventas.FK_Venta = '".$arregloVenta['ID_Venta']."' AND FK_Detalle_Venta = '".$row["ID_Detalle_Venta"]."' GROUP BY FK_Detalle_Venta"; 
-                            if($resdev=$con->query($sqldev)){
-                              if ($resdev->num_rows > 0) {
-                                while($rowdev = $resdev->fetch_assoc()){
-                                 $devuelto = "<br>(dev. ".$rowdev["Cantidad"].")";
-                                }
-                              }
+                            $row['Total'] = $subtotalProducto + $totalImpuesto - $row['Descuento'];
+                            
+                            if ($row['Cantidad'] > 0) {
+                              $mostrar .= "
+                              <tr>
+                                  <td colspan='5' style='text-align: left;'>".$row["Descripcion"].$nombrePresentacion."</td>      
+                              </tr>
+                              <tr>
+                                  <td class='codigo'>".$codigoactual."</td>
+                                  <td class='cantidad'><b style='font-size: 17px;'>".(round($row['Cantidad']*100)/100)."</b></td> 
+                                  <td class='precio'>$".(round($row['Precio']*100)/100)."</td>
+                                  <td class='impuestos'>".$mostrarImpuestos."</td>
+                                  <td class=''>$".$subtotalProducto."<br>Desc: ".(round($row['Descuento']*100)/100)."$ <br>$".(round($row['Total']*100)/100)."</td>
+                              </tr>";
                             }
-
-                            $mostrar .= "
-                            <tr>
-                                <td colspan='5' style='text-align: left;'>".$row["Descripcion"].$nombrePresentacion."</td>      
-                            </tr>
-                            <tr>
-                                <td class='codigo'>".$codigoactual."</td>
-                                <td class='cantidad'><b style='font-size: 17px;'>".(round($row['Cantidad']*100)/100)." ".$devuelto."</b></td> 
-                                <td class='precio'>$".(round($row['Precio']*100)/100)."</td>
-                                <td class='impuestos'>".$mostrarImpuestos."</td>
-                                <td class=''>$".$subtotalProducto."<br>Desc: ".(round($row['Descuento']*100)/100)."% <br>$".(round($row['Total']*100)/100)."</td>
-                            </tr>";
 
                             $subtotal += ($row['Cantidad'] * $row['Precio']);
                             $sumaTotalDescuentos += $subtotalProducto * ($row['Descuento'] / 100);
@@ -581,9 +619,9 @@ $arregloVenta = '';
         echo '<p class="derecha" style="font-size: 15px;">Descuento: <b style="font-size: 15px;">$'.(round($sumaTotalDescuentos*100)/100).'</b></p>'; 
         echo '<p class="derecha" style="font-size: 15px;">Impuestos: <b style="font-size: 15px;">$'.(round(($sumaTotalImpuestos)*100)/100).'</b></p>'; 
         echo "</br>
-          <p class='derecha'><b style='font-size: 20px;'>TOTAL DE LA VENTA: $".(round($arregloVenta['Total']*100)/100)."</b></p>
+          <p class='derecha'><b style='font-size: 20px;'>TOTAL DE LA VENTA: $".number_format((round($arregloVenta['Total']*100)/100), 2)."</b></p>
           <p class='derecha'><b style='font-size: 20px;'>TOTAL IMPORTES: $".(round($arregloVenta['Total_Importes']*100)/100)."</b></p>
-          <p class='derecha'><b style='font-size: 20px;'>TOTAL: $".(round($arregloVenta['TotalFinal']*100)/100)."</b></p>
+          <p class='derecha'><b style='font-size: 30px;'>TOTAL: $".number_format((round($arregloVenta['TotalFinal']*100)/100), 2)."</b></p>
           <p class='derecha'><b style='font-size: 14px;'>IMPORTE PAGADO: $".number_format($arregloVenta['Pago'], 2)."</b></p>
           <p class='derecha'><b style='font-size: 14px;'>CAMBIO: $".number_format($arregloVenta['Cambio'], 2)."</b></p>
         ";
@@ -611,7 +649,7 @@ $arregloVenta = '';
         }
 
         echo '<p class="derecha">Tipo de pago: '.$arregloVenta['Tipo_Pago'].'</p>'; 
-        echo '<p class="derecha">Administrador: '.$arregloVenta['NombreUsuario'].'</p>';
+        //echo '<p class="derecha">Administrador: '.$arregloVenta['NombreUsuario'].'</p>';
       ?>
       <br>
       <p class="centrado">***********************************************************</p>

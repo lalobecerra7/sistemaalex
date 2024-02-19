@@ -1,9 +1,9 @@
-<?php
-
-namespace Mpdf\Tag;
-
-class Bdi extends InlineTag
-{
-
-
-}
+<?php
+
+namespace Mpdf\Tag;
+
+class Bdi extends InlineTag
+{
+
+
+}

@@ -17,14 +17,14 @@ class clientes {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'AND ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(LPAD(ID_Cliente, 4, '0'), clientes.Nombre, Primer_Apellido, Segundo_Apellido, Foto, clientes.Telefono, Celular, Correo, clientes.RFC, Facturar, Titular, Banco, No_Cuenta, Fecha_Registro) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(LPAD(ID_Cliente, 4, '0'), clientes.Nombre, Primer_Apellido, Segundo_Apellido, Foto, clientes.Telefono, Celular, Correo, clientes.RFC, Facturar, Titular, Banco, No_Cuenta, Fecha_Registro, IFNULL((SELECT rutas.Nombre FROM rutas WHERE rutas.ID_Ruta = clientes.FK_Ruta), '')) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Cliente, LPAD(ID_Cliente, 4, '0') AS IDCliente, clientes.Nombre, (SELECT rutas.Nombre FROM rutas WHERE rutas.ID_Ruta = clientes.FK_Ruta) AS Ruta, clientes.Orden_Ruta, Primer_Apellido, Segundo_Apellido, Foto, clientes.Telefono, Celular, Correo, Fecha_Registro AS Fecha, DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, clientes.RFC, Facturar, Titular, Banco, No_Cuenta, FK_Sucursal, sucursales.Nombre AS NombreSucursal, clientes.Calle AS Direccion, clientes.No_Exterior, clientes.No_Interior, clientes.Colonia, clientes.Ciudad, clientes.Codigo_Postal, clientes.Estado, clientes.Pais, (SELECT COUNT(*) FROM clientes WHERE ID_Cliente <> 1 $busqueda) AS Num FROM clientes LEFT JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE ID_Cliente <> 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Cliente, LPAD(ID_Cliente, 4, '0') AS IDCliente, clientes.Nombre, IFNULL((SELECT rutas.Nombre FROM rutas WHERE rutas.ID_Ruta = clientes.FK_Ruta), '') AS Ruta, clientes.Orden_Ruta, Primer_Apellido, Segundo_Apellido, Foto, clientes.Telefono, Celular, Correo, Fecha_Registro AS Fecha, DATE_FORMAT(Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, clientes.RFC, Facturar, Titular, Banco, No_Cuenta, FK_Sucursal, clientes.Calle AS Direccion, clientes.No_Exterior, clientes.No_Interior, clientes.Colonia, clientes.Ciudad, clientes.Codigo_Postal, clientes.Estado, clientes.Pais, (SELECT COUNT(*) FROM clientes WHERE ID_Cliente <> 1 $busqueda) AS Num FROM clientes WHERE ID_Cliente <> 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -99,7 +99,7 @@ class clientes {
 						$datosbancarios .= "Facturar ventas: <b>No</b><br>";
 					}
 
-					if($row[$i]['Ruta'] != "" && $row[$i]['Ruta'] != 0){
+					if($row[$i]['Ruta'] != ""){
 						$datosbancarios .= "Ruta: <b>".$row[$i]['Ruta']."</b></br>";
 						
 						if($row[$i]['Orden_Ruta'] != "" && $row[$i]['Orden_Ruta'] != 0){
@@ -109,9 +109,9 @@ class clientes {
 						$datosbancarios .= "Ruta: <b>Sin ruta</b></br>";
 					}
 
-					if ($row[$i]['NombreSucursal'] != "") {
+					/*if ($row[$i]['NombreSucursal'] != "") {
 						$datosbancarios .= "Sucursal del cliente: <b>".$row[$i]['NombreSucursal']."</b><br>";
-					}
+					}*/
 
 					if ($row[$i]['RFC'] != "") {
 						$datosbancarios .= "RFC: <b>".$row[$i]['RFC']."</b><br>";

@@ -28,6 +28,7 @@
     <link href="vistas/assets/plugins/sweetalert/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="vistas/assets/vendor/js/helpers.js"></script>
     <link rel="stylesheet" href="vistas/assets/plugins/myDataTable/css/myDataTable.css">
+    <link rel="stylesheet" href="vistas/assets/plugins/select2/select2.min.css">
   </head>
 
   <body>
@@ -1735,6 +1736,7 @@
     <script src="https://cdn.amcharts.com/lib/version/5.2.48/xy.js"></script>
     <script src="https://cdn.amcharts.com/lib/version/5.2.48/themes/Animated.js"></script>
     <script src="https://cdn.amcharts.com/lib/version/5.2.48/locales/es_ES.js"></script>
+    <script type="text/javascript" src="vistas/assets/plugins/select2/select2.min.js"></script>
     <script async defer src="vistas/assets/vendor/js/buttons.js"></script>
     <script src="vistas/assets/plugins/myDataTable/js/myDataTable.js"></script>
     <script type="text/javascript" src="vistas/assets/js/script.js"></script>

@@ -946,22 +946,39 @@ class controller {
 						}
 				}		
 		}else if($nombre == "v_precios"){
-			$query = "SELECT ID_Zona, Nombre, Descripcion FROM zonas";
-			$row = $omodelo->_consultar($query);
-			$numerofilas = $omodelo->numerofilas;
-			
-			$zonas = '';	
-			if ($row == "si") {
-					echo "Error: " . mysqli_error($omodelo->link);
-			}else{
-					if($numerofilas > 0){ 
-							for ($i=0; $i < $numerofilas; $i++) { 
-									$zonas .= '<option value="'.$row[$i]['ID_Zona'].'">'.$row[$i]['Nombre'].'</option>';
-							}
-					}
-			}			
+				$query = "SELECT ID_Zona, Nombre, Descripcion FROM zonas";
+				$row = $omodelo->_consultar($query);
+				$numerofilas = $omodelo->numerofilas;
+				
+				$zonas = '';	
+				if ($row == "si") {
+						echo "Error: " . mysqli_error($omodelo->link);
+				}else{
+						if($numerofilas > 0){ 
+								for ($i=0; $i < $numerofilas; $i++) { 
+										$zonas .= '<option value="'.$row[$i]['ID_Zona'].'">'.$row[$i]['Nombre'].'</option>';
+								}
+						}
+				}			
 
-			$pagina = str_replace('#zonas#', $zonas, $pagina);
+				$pagina = str_replace('#zonas#', $zonas, $pagina);
+
+				$query = "SELECT ID_Zona, Nombre, Descripcion FROM zonas";
+				$row = $omodelo->_consultar($query);
+				$numerofilas = $omodelo->numerofilas;
+				
+				$zonas = '';	
+				if ($row == "si") {
+						echo "Error: " . mysqli_error($omodelo->link);
+				}else{
+						if($numerofilas > 0){ 
+								for ($i=0; $i < $numerofilas; $i++) { 
+										$zonas .= '<option value="'.$row[$i]['ID_Zona'].'">'.$row[$i]['Nombre'].'</option>';
+								}
+						}
+				}			
+
+				$pagina = str_replace('#CargarZonasPrecio#', $zonas, $pagina);
 		}else if($nombre == "v_choferes"){
 			$query = "SELECT ID_Vehiculo, Modelo, Marca, Descripcion FROM vehiculos";
 			$row = $omodelo->_consultar($query);
@@ -1030,6 +1047,29 @@ class controller {
 				}
 			}
 			$pagina = str_replace('#SelectVehiculo#', $opcionesVehiculosCorte, $pagina);
+
+			$botonSubirFile = '';
+			if($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][6] == '1'){
+				$botonSubirFile = '<button class="btn btn-warning" type="button" id="uploadImgBtn"><i class="fa-solid fa-upload" style="margin-right: 10px;"></i> <strong>Subir archivo</strong></button>';
+			}
+
+			$pagina = str_replace('#botonSubirArchivo#', $botonSubirFile, $pagina);
+
+			$opcionesSucursalesCorte = "";
+			$query = "SELECT ID_Sucursal, Nombre, Calle, Ciudad, Estado, Pais FROM sucursales";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for ($j=0; $j < $numerofilas; $j++) { 
+						$opcionesSucursalesCorte .= '<option value="'.$row[$j]['ID_Sucursal'].'">'.$row[$j]['Nombre'].', '.$row[$j]['Calle'].', '.$row[$j]['Ciudad'].', '.$row[$j]['Estado'].', '.$row[$j]['Pais'].'</option>';
+					}
+				}
+			}
+			$pagina = str_replace('#selectSucursal#', $opcionesSucursalesCorte, $pagina);
 
 			$botonSubirFile = '';
 			if($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_cortesRuta'][6] == '1'){

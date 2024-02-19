@@ -1,6 +1,20 @@
 function v_ventas() {
 	TablaReporteVentas();
 
+	$("#ClientesReasignar").select2({
+        placeholder: "-- Seleccione una opcion --",
+        dropdownParent: $('#Padre'),
+        allowClear: true,
+        language: { 
+            noResults: function() {
+                return "No hay resultados";
+            },
+            searching: function() {
+                return "Buscando..";
+            }
+        }
+    });
+
 	$('#FormAbrirCaja').validate({
         rules: {
             MontoInicialCaja: {
@@ -128,6 +142,55 @@ function v_ventas() {
 			});
         }
     });  
+
+    $('#FormReasignarClientes').validate({
+        rules: {
+            ClientesReasignar: {
+                required: true,
+                min: 0,
+            },
+        },
+        messages: {
+            ClientesReasignar: {
+                required: "El cliente es obligatorio"
+            },
+        },
+        submitHandler: function(form) { 
+            var data = "metodo=detalles&accion=ventas&tipo=ReasignarCliente&IDCliente="+$("#ClientesReasignar option:selected").val()+"&IDVenta="+$("#ReasignarVentaCliente").attr("attrid");
+			
+			$.ajax({
+				url: 'index.php',
+				type: 'POST',
+				data: data,
+				beforeSend: function() {
+				    $("#carga").show();
+				}
+			})
+			.done(function(res) {
+				if ($.trim(res) == "Correcto") {
+					Swal.fire({
+						icon: 'success',
+						title: 'Cliente reasigado a la venta '+$("#FolioVentaReasignar").text()
+					});
+					TablaReporteVentas();
+					$("#ModalReasignarCliente").modal("hide");
+				}else{
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Error inesperado al reasignar cliente.'
+					});
+					console.log($.trim(res));
+				}
+			})
+			.fail(function() {
+				console.log("Error ajax");
+			})
+			.always(function() {
+				$("#carga").hide();
+			});         
+        }
+    });
 }
 
 function ComprobarDevuelta(idventa){
@@ -421,6 +484,31 @@ jQuery(document).ready(function($) {
         var x= parseInt((window.screen.width/2)-(anchura/2));
         console.log(sucursal);
 		window.open("controladores/ticket.php?id="+idVenta+"&idSucursal="+sucursal, '_blank', "width="+anchura+", height="+altura+", top="+y+", left="+x+"");
+	});
+
+	//REASIGNAR CLIENTE DE LA VENTA
+	$(document).on('click', '#ReasignarClienteVenta', function() {
+		var folio = $(this).attr("folio");
+		var id = $(this).attr("attrid");
+		$("#ModalReasignarCliente").modal("show");
+		$("#FolioVentaReasignar").text(folio);
+
+		var data = "metodo=detalles&accion=ventas&tipo=ConsultaReasignar&IDVenta="+id;
+		$.ajax({
+			url: 'index.php',
+			type: 'POST',
+			data: data,
+		})
+		.done(function(res) {
+			var datos = res.split("~");
+			$("#ClienteActualVenta").html(datos[0]);
+			$("#ClienteActualVenta").attr("attrid", datos[1]);
+			$("#ReasignarVentaCliente").attr("attrid", id)
+			$("#ClientesReasignar").html(datos[2]);
+		})
+		.fail(function() {
+			console.log("Error ajax");
+		});
 	});
 
 	$(document).on('click', '#VerProductosVenta', function() {

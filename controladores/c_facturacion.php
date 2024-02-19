@@ -21,8 +21,8 @@ class facturacion {
 				if(trim($row[0]['RFC']) == '' || trim($row[0]['Nombre']) == '' || trim($row[0]['Regimen']) == '' || trim($row[0]['Certificado']) == '' || trim($row[0]['Key_Cer']) == '' || trim($row[0]['Contrasena']) == ''){
 					echo "Error 2 Datos Facturacion";
 				}else{
-					$query1 = "SELECT ID_Venta, FK_Cliente, Razon_CFDI, Regimen_CFDI, clientes.Calle AS Calle_Cliente, clientes.No_Exterior AS No_Exterior_Cliente, clientes.No_Interior AS No_Interior_Cliente, clientes.Colonia AS Colonia_Cliente, clientes.Ciudad AS Ciudad_Cliente, clientes.Codigo_Postal AS Codigo_Postal_Cliente, clientes.Estado AS Estado_Cliente, clientes.Pais AS Pais_Cliente, RFC AS RFC_Cliente, sucursales.Nombre AS Sucursal, sucursales.Calle AS Calle_Sucursal, sucursales.No_Exterior AS No_Exterior_Sucursal, sucursales.No_Interior AS No_Interior_Sucursal, sucursales.Colonia AS Colonia_Sucursal, sucursales.CP AS CP_Sucursal, sucursales.Ciudad AS Ciudad_Sucursal, sucursales.Estado AS Estado_Sucursal, sucursales.Pais AS Pais_Sucursal, ventas.Descuento AS Descuento, Total, ventas.Fecha_Registro AS Fecha_Registro FROM ventas INNER JOIN sucursales ON ID_Sucursal = 1 INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ID_Venta = '$id' AND Facturada = '0' AND Estatus = 'Completada'";
-					//FK_Sucursal = ID_Sucursal
+					$query1 = "SELECT ID_Venta, FK_Cliente, Razon_CFDI, Regimen_CFDI, clientes.Calle AS Calle_Cliente, clientes.No_Exterior AS No_Exterior_Cliente, clientes.No_Interior AS No_Interior_Cliente, clientes.Colonia AS Colonia_Cliente, clientes.Ciudad AS Ciudad_Cliente, clientes.Codigo_Postal AS Codigo_Postal_Cliente, clientes.Estado AS Estado_Cliente, clientes.Pais AS Pais_Cliente, RFC AS RFC_Cliente, sucursales.Nombre AS Sucursal, sucursales.Calle AS Calle_Sucursal, sucursales.No_Exterior AS No_Exterior_Sucursal, sucursales.No_Interior AS No_Interior_Sucursal, sucursales.Colonia AS Colonia_Sucursal, sucursales.CP AS CP_Sucursal, sucursales.Ciudad AS Ciudad_Sucursal, sucursales.Estado AS Estado_Sucursal, sucursales.Pais AS Pais_Sucursal, ventas.Descuento AS Descuento, Total, ventas.Fecha_Registro AS Fecha_Registro FROM ventas INNER JOIN sucursales ON ID_Sucursal = 8 INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ID_Venta = '$id' AND Facturada = '0' AND Estatus = 'Completada'";
+					//ID_Sucursal
 					$row1 = $omodelo->_consultar($query1);
 					$numerofilas1 = $omodelo->numerofilas;
 
@@ -233,9 +233,10 @@ class facturacion {
 				if(trim($row[0]['RFC']) == '' || trim($row[0]['Nombre']) == '' || trim($row[0]['Regimen']) == '' || trim($row[0]['Certificado']) == '' || trim($row[0]['Key_Cer']) == '' || trim($row[0]['Contrasena']) == ''){
 					echo "Error 2 Datos Facturacion";
 				}else{
-					$query1 = "SELECT ID_Venta, FK_Cliente, Razon_CFDI, Regimen_CFDI, clientes.Calle AS Calle_Cliente, clientes.No_Exterior AS No_Exterior_Cliente, clientes.No_Interior AS No_Interior_Cliente, clientes.Colonia AS Colonia_Cliente, clientes.Ciudad AS Ciudad_Cliente, clientes.Codigo_Postal AS Codigo_Postal_Cliente, clientes.Estado AS Estado_Cliente, clientes.Pais AS Pais_Cliente, RFC AS RFC_Cliente, sucursales.Nombre AS Sucursal, sucursales.Calle AS Calle_Sucursal, sucursales.No_Exterior AS No_Exterior_Sucursal, sucursales.No_Interior AS No_Interior_Sucursal, sucursales.Colonia AS Colonia_Sucursal, sucursales.CP AS CP_Sucursal, sucursales.Ciudad AS Ciudad_Sucursal, sucursales.Estado AS Estado_Sucursal, sucursales.Pais AS Pais_Sucursal, ventas.Descuento AS Descuento, Total, ventas.Fecha_Registro AS Fecha_Registro FROM ventas INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ID_Venta = '$id' AND Facturada = '0' AND Estatus = 'Completada'";
+					$query1 = "SELECT ID_Venta, FK_Cliente, Razon_CFDI, Regimen_CFDI, clientes.Calle AS Calle_Cliente, clientes.No_Exterior AS No_Exterior_Cliente, clientes.No_Interior AS No_Interior_Cliente, clientes.Colonia AS Colonia_Cliente, clientes.Ciudad AS Ciudad_Cliente, clientes.Codigo_Postal AS Codigo_Postal_Cliente, clientes.Estado AS Estado_Cliente, clientes.Pais AS Pais_Cliente, RFC AS RFC_Cliente, sucursales.Nombre AS Sucursal, sucursales.Calle AS Calle_Sucursal, sucursales.No_Exterior AS No_Exterior_Sucursal, sucursales.No_Interior AS No_Interior_Sucursal, sucursales.Colonia AS Colonia_Sucursal, sucursales.CP AS CP_Sucursal, sucursales.Ciudad AS Ciudad_Sucursal, sucursales.Estado AS Estado_Sucursal, sucursales.Pais AS Pais_Sucursal, ventas.Descuento AS Descuento, Total, ventas.Fecha_Registro AS Fecha_Registro FROM ventas INNER JOIN sucursales ON ID_Sucursal = 8 INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ID_Venta = '$id' AND Facturada = '0' AND Estatus = 'Completada'";
 					$row1 = $omodelo->_consultar($query1);
 					$numerofilas1 = $omodelo->numerofilas;
+					//FK_Sucursal = ID_Sucursal
 
 					if($row1 == 'si'){
 						echo "Error 3: ".mysqli_error($omodelo->link);
@@ -379,7 +380,8 @@ class facturacion {
 													</cfdi:Impuestos>';
 												}
 
-												$productos .= '<cfdi:Concepto ClaveProdServ="'.$row2[$i]['Clave_ProdServ_CFDI'].'" NoIdentificacion="'.$row2[$i]['Codigo'].'" Cantidad="'.number_format($row2[$i]['Cantidad'], 2, '.', '').'" ClaveUnidad="'.$claveUnidad.'" Unidad="'.$presentacion.'" Descripcion="'.$row2[$i]['Descripcion'].'" ValorUnitario="'.number_format($row2[$i]['Precio'], 2, '.', '').'" Importe="'.number_format(($row2[$i]['Cantidad'] * $row2[$i]['Precio']), 2, '.', '').'" Descuento="'.number_format($row2[$i]['Descuento'], 2, '.', '').'" ObjetoImp="'.$row2[$i]['Objeto_Impuesto_CFDI'].'">
+												//Unidad="'.$presentacion.'"
+												$productos .= '<cfdi:Concepto ClaveProdServ="'.$row2[$i]['Clave_ProdServ_CFDI'].'" NoIdentificacion="'.$row2[$i]['Codigo'].'" Cantidad="'.number_format($row2[$i]['Cantidad'], 2, '.', '').'" ClaveUnidad="'.$claveUnidad.'" Descripcion="'.$row2[$i]['Descripcion'].'" ValorUnitario="'.number_format($row2[$i]['Precio'], 2, '.', '').'" Importe="'.number_format(($row2[$i]['Cantidad'] * $row2[$i]['Precio']), 2, '.', '').'" Descuento="'.number_format($row2[$i]['Descuento'], 2, '.', '').'" ObjetoImp="'.$row2[$i]['Objeto_Impuesto_CFDI'].'">
 												      	'.$impuestos.'
 												</cfdi:Concepto>';
 
@@ -468,7 +470,7 @@ class facturacion {
 
 									// Para usar openssl agergar la variable de entorno en windows, nombre: openssl, ruta: C:\xampp\php\extras\openssl\openssl.exe 
 									// Si se ejecuta en openssl.exe quitar la palabra openssl
-									$noCertificado = shell_exec('openssl x509 -inform DER -in "'.__DIR__.'../../vistas/assets/archivos/certificados/'.$row[0]['Certificado'].'" -noout -serial');
+									$noCertificado = shell_exec('openssl x509 -inform DER -in "'.__DIR__.'/../vistas/assets/archivos/certificados/'.$row[0]['Certificado'].'" -noout -serial');
 
 									$Certificado = ''; # Variable vacia para almacenar el número de certificado
 
@@ -483,7 +485,7 @@ class facturacion {
 										}
 									}
 
-									$certificado = str_replace(array('\n', '\r'), '', base64_encode(file_get_contents(__DIR__.'../../vistas/assets/archivos/certificados/'.$row[0]['Certificado'])));
+									$certificado = str_replace(array('\n', '\r'), '', base64_encode(file_get_contents(__DIR__.'/../vistas/assets/archivos/certificados/'.$row[0]['Certificado'])));
 
 									$textoXML = '<?xml version="1.0" encoding="UTF-8"?>
 									<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd" Version="4.0" Serie="'.$id.'" Folio="'.str_pad($id, 8, '0', STR_PAD_LEFT).'" Fecha="'.str_replace(' ', 'T', $fecha).'" Sello="" FormaPago="'.$formaPagoCFDI.'" NoCertificado="'.$Certificado.'" Certificado="'.$certificado.'" SubTotal="'.number_format($subtotal, 2, '.', '').'" Descuento="'.number_format($row1[0]['Descuento'], 2, '.', '').'" Moneda="MXN" Total="'.number_format($row1[0]['Total'], 2, '.', '').'" TipoDeComprobante="I" Exportacion="01" MetodoPago="PUE" LugarExpedicion="'.trim($row1[0]['CP_Sucursal']).'">'.$global.$uuids.'
@@ -504,7 +506,7 @@ class facturacion {
 									// Crear un objeto DOMDocument para cargar el archivo de transformación XSLT
 									// Cambiar la version en todos los archivos de la cadena original (descargar los archivos de tramites y servicios sat)
 									$xsl = new DOMDocument();
-									$xsl->load(__DIR__.'../../vistas/assets/archivos/cadena/cadenaoriginal_4_0.xslt');
+									$xsl->load(__DIR__.'/../vistas/assets/archivos/cadena/cadenaoriginal_4_0.xslt');
 											 
 									// Crear el procesador XSLT que nos generará la cadena original con base en las reglas descritas en el XSLT
 									// Agregar extension=php_xsl.dll o descomentar en xampp windows
@@ -515,9 +517,9 @@ class facturacion {
 									$cadenaOriginal = $proc->transformToXML($xml);
 
 									// Se debe convertir la key a .pem
-									shell_exec('openssl pkcs8 -inform DER -in "'.__DIR__.'../../vistas/assets/archivos/certificados/'.$row[0]['Key_Cer'].'" -passin pass:'.$row[0]['Contrasena'].' -out "'.__DIR__.'../../vistas/assets/archivos/certificados/'.$row[0]['Key_Cer'].'.pem"');
+									shell_exec('openssl pkcs8 -inform DER -in "'.__DIR__.'/../vistas/assets/archivos/certificados/'.$row[0]['Key_Cer'].'" -passin pass:'.$row[0]['Contrasena'].' -out "'.__DIR__.'/../vistas/assets/archivos/certificados/'.$row[0]['Key_Cer'].'.pem"');
 
-									$private = openssl_pkey_get_private(file_get_contents(__DIR__.'../../vistas/assets/archivos/certificados/'.$row[0]['Key_Cer'].'.pem'));
+									$private = openssl_pkey_get_private(file_get_contents(__DIR__.'/../vistas/assets/archivos/certificados/'.$row[0]['Key_Cer'].'.pem'));
 
 									// Se genera el sello mediante la key y la cadena original 
 									// La cadena original se conforma del xml y el xls de la candena original de la version sat 
@@ -532,11 +534,12 @@ class facturacion {
 
 									$nuevoXML = preg_replace('/(\v|\s)+/', ' ', $nuevoXML);
 
-									$response = $client->request('POST', 'https://testapi.facturoporti.com.mx/servicios/timbrar/xml', [
+									$response = $client->request('POST', 'https://api.facturoporti.com.mx/servicios/timbrar/xml', [
 								  		'body' => '{"cfdi": "'.$nuevoXML.'"}',
 								  		'headers' => [
 								    		'accept' => 'application/json',
-								    		'authorization' => 'Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoialYrdVVUYmtWNmUxRmNZb2cvNWtGQT09IiwibmJmIjoxNjY5NzY1MTM1LCJleHAiOjE2NzIzNTcxMzUsImlzcyI6IlNjYWZhbmRyYVNlcnZpY2lvcyIsImF1ZCI6IlNjYWZhbmRyYSBTZXJ2aWNpb3MiLCJJZEVtcHJlc2EiOiJqVit1VVRia1Y2ZTFGY1lvZy81a0ZBPT0iLCJJZFVzdWFyaW8iOiJidXlaYzFMWUl5VURaSGhGR3NqaGdRPT0ifQ.7NfXWvnQSy_2PtWEnzItEtZseWV0VqahTuAS3YPG8TE',
+								    		//'authorization' => 'Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoialYrdVVUYmtWNmUxRmNZb2cvNWtGQT09IiwibmJmIjoxNjY5NzY1MTM1LCJleHAiOjE2NzIzNTcxMzUsImlzcyI6IlNjYWZhbmRyYVNlcnZpY2lvcyIsImF1ZCI6IlNjYWZhbmRyYSBTZXJ2aWNpb3MiLCJJZEVtcHJlc2EiOiJqVit1VVRia1Y2ZTFGY1lvZy81a0ZBPT0iLCJJZFVzdWFyaW8iOiJidXlaYzFMWUl5VURaSGhGR3NqaGdRPT0ifQ.7NfXWvnQSy_2PtWEnzItEtZseWV0VqahTuAS3YPG8TE',
+								    		'authorization' => 'Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMUtJMTNaZjFFUUh5TDIyZ0FyZ0c4QT09IiwibmJmIjoxNzAyNDk5ODkzLCJleHAiOjE3MDUwOTE4OTMsImlzcyI6IlNjYWZhbmRyYVNlcnZpY2lvcyIsImF1ZCI6IlNjYWZhbmRyYSBTZXJ2aWNpb3MiLCJJZEVtcHJlc2EiOiIxS0kxM1pmMUVRSHlMMjJnQXJnRzhBPT0iLCJJZFVzdWFyaW8iOiJrLzB5WVl1Ly9oVXNtT3l1emw4aUVBPT0ifQ.AnVt_GPxZ-L38biL3tCxP-0VSE6peI1IVs6qgllDkwQ',
 								    		'content-type' => 'application/*+json',
 								  		],
 									]);
@@ -607,10 +610,7 @@ class facturacion {
 					echo "Error 2: ".mysqli_error($omodelo->link);
 				}else{
 					if($numerofilas1 > 0){
-						//echo base64_encode(file_get_contents(__DIR__.'../../vistas/assets/archivos/certificados/'.$row[0]['Certificado']));
-						//echo base64_encode(file_get_contents(__DIR__.'../../vistas/assets/archivos/certificados/'.$row[0]['Key_Cer']));
-
-						$response = $client->request('POST', 'https://testapi.facturoporti.com.mx/servicios/cancelar/csd', [
+						$response = $client->request('POST', 'https://api.facturoporti.com.mx/servicios/cancelar/csd', [
 							'body' => '{
 							  	"rfcEmisor": "'.$row[0]['RFC'].'",
 							  	"rfcReceptor": "'.$row1[0]['RFC_Cliente'].'",
@@ -619,13 +619,14 @@ class facturacion {
 							  	"motivo": "'.$motivo.'",
 							  	"folioFiscalSustitucion": "'.$folio.'",
 							  	"sello": "'.substr($row1[0]['Sello_CFD_CFDI'], -8).'",
-							  	"certificado": "'.base64_encode(file_get_contents(__DIR__.'../../vistas/assets/archivos/certificados/'.$row[0]['Certificado'])).'",
-							  	"llavePrivada": "'.base64_encode(file_get_contents(__DIR__.'../../vistas/assets/archivos/certificados/'.$row[0]['Key_Cer'])).'",
+							  	"certificado": "'.base64_encode(file_get_contents(__DIR__.'/../vistas/assets/archivos/certificados/'.$row[0]['Certificado'])).'",
+							  	"llavePrivada": "'.base64_encode(file_get_contents(__DIR__.'/../vistas/assets/archivos/certificados/'.$row[0]['Key_Cer'])).'",
 							  	"password": "'.$row[0]['Contrasena'].'"
 						  	}',
 						  	'headers' => [
 								'accept' => 'application/json',
-								'authorization' => 'Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoialYrdVVUYmtWNmUxRmNZb2cvNWtGQT09IiwibmJmIjoxNjY5NzY1MTM1LCJleHAiOjE2NzIzNTcxMzUsImlzcyI6IlNjYWZhbmRyYVNlcnZpY2lvcyIsImF1ZCI6IlNjYWZhbmRyYSBTZXJ2aWNpb3MiLCJJZEVtcHJlc2EiOiJqVit1VVRia1Y2ZTFGY1lvZy81a0ZBPT0iLCJJZFVzdWFyaW8iOiJidXlaYzFMWUl5VURaSGhGR3NqaGdRPT0ifQ.7NfXWvnQSy_2PtWEnzItEtZseWV0VqahTuAS3YPG8TE',
+								/*'authorization' => 'Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoialYrdVVUYmtWNmUxRmNZb2cvNWtGQT09IiwibmJmIjoxNjY5NzY1MTM1LCJleHAiOjE2NzIzNTcxMzUsImlzcyI6IlNjYWZhbmRyYVNlcnZpY2lvcyIsImF1ZCI6IlNjYWZhbmRyYSBTZXJ2aWNpb3MiLCJJZEVtcHJlc2EiOiJqVit1VVRia1Y2ZTFGY1lvZy81a0ZBPT0iLCJJZFVzdWFyaW8iOiJidXlaYzFMWUl5VURaSGhGR3NqaGdRPT0ifQ.7NfXWvnQSy_2PtWEnzItEtZseWV0VqahTuAS3YPG8TE',*/
+								'authorization' => 'Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMUtJMTNaZjFFUUh5TDIyZ0FyZ0c4QT09IiwibmJmIjoxNzAyNDk5ODkzLCJleHAiOjE3MDUwOTE4OTMsImlzcyI6IlNjYWZhbmRyYVNlcnZpY2lvcyIsImF1ZCI6IlNjYWZhbmRyYSBTZXJ2aWNpb3MiLCJJZEVtcHJlc2EiOiIxS0kxM1pmMUVRSHlMMjJnQXJnRzhBPT0iLCJJZFVzdWFyaW8iOiJrLzB5WVl1Ly9oVXNtT3l1emw4aUVBPT0ifQ.AnVt_GPxZ-L38biL3tCxP-0VSE6peI1IVs6qgllDkwQ',
 								'content-type' => 'application/*+json',
 							],
 						]);

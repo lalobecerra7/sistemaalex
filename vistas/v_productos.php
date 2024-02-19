@@ -319,7 +319,15 @@
 	                    </select>
 	                	</td>
 		                <td>
-		                  <input type="text" form="formPreciosProd" class="form-control" id="nombrePrecio" name="nombrePrecio" placeholder="Ingresa el nombre del precio del producto" required>
+		                  <!-- <input type="text" form="formPreciosProd" class="form-control" id="nombrePrecio" name="nombrePrecio" placeholder="Ingresa el nombre del precio del producto" required> -->
+		                  <select form="formPreciosProd" class="form-select" name="nombrePrecio" id="nombrePrecio" required>
+                      	<option value="">--Seleccione una opción--</option>  
+                      	<option value="Precio 1"> Precio 1</option>  
+                      	<option value="Precio 2"> Precio 2</option>  
+                      	<option value="Precio 3"> Precio 3</option>  
+                      	<option value="Precio 4"> Precio 4</option>  
+                      	<option value="Precio 5"> Precio 5</option>  
+                    	</select>
 		                </td>
 		                <td>
 		                  <input type="number" form="formPreciosProd" class="form-control" id="precioProductoPres" name="precioProductoPres" step="any" min="0" placeholder="$0.00" required>

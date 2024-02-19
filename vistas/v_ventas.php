@@ -47,6 +47,43 @@
 </div>
 
 <!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalReasignarCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Reasignar cliente a la venta <span id="FolioVentaReasignar"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="FormReasignarClientes">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <label>Cliente actual:</label>
+                            <label id="ClienteActualVenta" attrid></label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row"  id="Padre">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-floating mb-3">
+                                <select class="form-select" name="ClientesReasignar" id="ClientesReasignar" style="width: 100%">
+                                    <!-- #ListaClientesReasignar# -->
+                                </select>
+                                <label>Cliente a reasignar</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" id="ReasignarVentaCliente" attrid=""><i class="fa fa-check-circle"></i> <strong>Reasignar</strong></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalVerProductosReporteVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">

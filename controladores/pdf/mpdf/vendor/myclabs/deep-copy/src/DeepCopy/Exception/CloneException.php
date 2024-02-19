@@ -1,9 +1,9 @@
-<?php
-
-namespace DeepCopy\Exception;
-
-use UnexpectedValueException;
-
-class CloneException extends UnexpectedValueException
-{
+<?php
+
+namespace DeepCopy\Exception;
+
+use UnexpectedValueException;
+
+class CloneException extends UnexpectedValueException
+{
 } 

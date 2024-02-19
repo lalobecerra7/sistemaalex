@@ -1,9 +1,9 @@
-<?php
-
-namespace Mpdf\Tag;
-
-class Footer extends BlockTag
-{
-
-
-}
+<?php
+
+namespace Mpdf\Tag;
+
+class Footer extends BlockTag
+{
+
+
+}

@@ -232,6 +232,13 @@ class ventas {
 						$TipoDePago = $row[$i]["Tipo_Pago"];
 					}
 
+					//BOTON PARA REASIGNAR CLIENTE
+					if ($row[$i]['Facturada'] == '0') {
+						$botonReasignar = '<button title="Reasignar cliente" class="btn btn-success btn-sm" id="ReasignarClienteVenta" attrid="'.$row[$i]['ID_Venta'].'" sucursal="'.$row[$i]['FK_Sucursal'].'" folio="'.$folio.'"><i class="fas fa-user"></i></button>';
+					}else{
+						$botonReasignar = '';
+					}
+
 					$arreglo['data'][$i] = array(
 						'ID' => $row[$i]['ID_Venta'],
 						'Datos' => "Fecha: <b>".$row[$i]['Fecha_Registro']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b><br>Sucursal: <b>".$row[$i]["NombreSucursal"]."</b>",
@@ -246,7 +253,7 @@ class ventas {
 						Total de importes: <b>$".number_format($row[$i]['Total_Importes'], 2)."</b>",
 						'Facturada' => $facturada.'<br>'.$row[$i]['Mensaje_Cancelada'],
 						'Detalles' => $estatus."<br>".$motivocancelada.$fechacancelada.'<button class="btn btn-link btn-sm" id="VerProductosVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'">Ver productos</button><br>Tipo de pago: <b>'.$TipoDePago."</b>".$contarVenta,
-						'Acciones' => $botonPermisosEliminar.' '.$botonPermisosCancelar .' '.$botonPermisosTicket.' '.$botonPermisosFacturar.' '.$botonPermisosDevoluciones,
+						'Acciones' => $botonPermisosEliminar.' '.$botonPermisosCancelar .' '.$botonPermisosTicket.' '.$botonPermisosFacturar.' '.$botonPermisosDevoluciones.' '.$botonReasignar,
 					);
 				}
 
@@ -719,6 +726,48 @@ class ventas {
 			}
 
 			echo json_encode($arreglo);
+		}else if($tipo == "ConsultaReasignar"){
+			$IDVenta =  $omodelo->link->real_escape_string($IDVenta);
+			$query = "SELECT ID_Cliente, CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) AS NombreCliente FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ID_Venta = '".$IDVenta."'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+
+					$listaOpciones = '';
+					//CONSULTAR TODOS LOS CLIENTES EXCEPTO EL ACTUAL
+					$query2 = "SELECT ID_Cliente, CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) AS NombreCliente FROM clientes WHERE ID_Cliente != '".$row[0]["ID_Cliente"]."'";
+					$row2 = $omodelo->_consultar($query2);
+					$numerofilas2 = $omodelo->numerofilas;
+
+					if($row2 == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilas2 > 0){
+							for ($i=0; $i < $numerofilas2; $i++) { 
+								$listaOpciones .= '<option value="' . $row2[$i]['ID_Cliente'] . '" >' . $row2[$i]['NombreCliente']. '</option>';
+							}
+						}
+					}
+
+					echo $row[0]["NombreCliente"]."~".$row[0]["ID_Cliente"]."~".$listaOpciones;
+				}
+			}
+		}else if($tipo == "ReasignarCliente"){
+			$IDCliente = $omodelo->link->real_escape_string($IDCliente);
+			$IDVenta = $omodelo->link->real_escape_string($IDVenta);
+
+			$query = "UPDATE ventas SET FK_Cliente = '$IDCliente' WHERE ID_Venta = '$IDVenta'";
+			$error = $omodelo->_insertar($query);
+
+			if($error == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+			}
 		}
 	}
 }

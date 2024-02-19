@@ -110,22 +110,25 @@
         		<h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Cargar precios de Deiman</h5>
         		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       		</div>
+      		<form id="FormPreciosExcel">
       		<div class="modal-body">
       			<div class="row">
       				<div class="col-md-4">
-	      				<select form="formPreciosProd" class="form-select" name="ZonaCargarPrecioProducto" id="ZonaCargarPrecioProducto" required>
+	      				<select form="formPreciosProd" class="form-select" name="ZonaCargarPrecioProducto" id="ZonaCargarPrecioProducto">
 	                      	<option value="">--Seleccione una opción--</option>  
 	                      	#CargarZonasPrecio# 
                     	</select>
       				</div>
       				<div class="col-md-8">
-      					
+                       	<input type="file" class="form-control" name="ExcelPrecios" id="ExcelPrecios">
       				</div>
       			</div>
 	    	</div>
 	    	<div class="modal-footer">
 				<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
+				<button type="submit" class="btn btn-primary" tipo="Insertar" id="bGuardarExcelPrecios">Guardar <i class="fas fa-save"></i></button>
 	    	</div>
+	    	</form>
     	</div>
   	</div>
 </div> 

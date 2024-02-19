@@ -1,8 +1,8 @@
-<?php
-
-namespace Mpdf\Tag;
-
-class ColumnBreak extends NewColumn
-{
-
-}
+<?php
+
+namespace Mpdf\Tag;
+
+class ColumnBreak extends NewColumn
+{
+
+}

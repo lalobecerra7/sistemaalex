@@ -1,9 +1,9 @@
-<?php
-
-namespace Mpdf\Tag;
-
-class SetHtmlPageHeader extends SetHtmlPageFooter
-{
-
-
-}
+<?php
+
+namespace Mpdf\Tag;
+
+class SetHtmlPageHeader extends SetHtmlPageFooter
+{
+
+
+}

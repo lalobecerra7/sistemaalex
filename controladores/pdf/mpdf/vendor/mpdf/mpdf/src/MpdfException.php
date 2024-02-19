@@ -1,8 +1,8 @@
-<?php
-
-namespace Mpdf;
-
-class MpdfException extends \ErrorException
-{
-
-}
+<?php
+
+namespace Mpdf;
+
+class MpdfException extends \ErrorException
+{
+
+}

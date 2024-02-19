@@ -17,14 +17,14 @@ class importes {
 			$separa = explode(' ', trim($buscar));
 			$busqueda = 'WHERE ';
 			for ($i=0; $i < count($separa); $i++) { 
-				$busqueda .= "CONCAT(Nombre, Telefono, Correo, RFC) REGEXP '".$separa[$i]."'";
+				$busqueda .= "CONCAT(Nombre, Primer_Apellido, Segundo_Apellido, Telefono, Correo, RFC) REGEXP '".$separa[$i]."'";
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
 			}
 		}
 
-		$query = "SELECT ID_Cliente, Nombre AS Cliente, Telefono, Correo, RFC FROM `importes` INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda GROUP BY ID_Cliente ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Cliente, CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) AS Cliente, Telefono, Correo, RFC FROM `importes` INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda GROUP BY ID_Cliente ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 

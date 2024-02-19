@@ -1,9 +1,9 @@
-<?php
-
-namespace Mpdf\Tag;
-
-class H2 extends BlockTag
-{
-
-
-}
+<?php
+
+namespace Mpdf\Tag;
+
+class H2 extends BlockTag
+{
+
+
+}

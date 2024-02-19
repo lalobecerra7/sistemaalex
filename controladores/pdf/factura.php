@@ -7,10 +7,8 @@
 	extract($_GET);
 	$fecha = date('Y-m-d H:i:s');
 	$id = $omodelo->link->real_escape_string($id);
-	$enviada = '';
-	$correo = '';
 
-	$query = "SELECT ID_Venta, FK_Cliente, Enviada, Correo, clientes.Calle AS Calle_Cliente, clientes.No_Exterior AS No_Exterior_Cliente, clientes.No_Interior AS No_Interior_Cliente, clientes.Colonia AS Colonia_Cliente, clientes.Ciudad AS Ciudad_Cliente, clientes.Estado AS Estado_Cliente, clientes.Pais AS Pais_Cliente, sucursales.Nombre AS Sucursal, sucursales.Calle AS Calle_Sucursal, sucursales.No_Exterior AS No_Exterior_Sucursal, sucursales.No_Interior AS No_Interior_Sucursal, sucursales.Colonia AS Colonia_Sucursal, sucursales.Ciudad AS Ciudad_Sucursal, sucursales.Estado AS Estado_Sucursal, sucursales.Pais AS Pais_Sucursal, ventas.Descuento AS Descuento, Total, ventas.Fecha_Registro AS Fecha_Registro, Version_CFDI, Fecha_Expedicion_CFDI, Sello_CFDI, Forma_Pago_CFDI, No_Certificado_CFDI, Certificado_CFDI, Moneda_CFDI, Tipo_Comprobante_CFDI, Exportacion_CFDI, Metodo_Pago_CFDI, Lugar_Expedicion_CFDI, Confirmacion_CFDI, Emisor_RFC_CFDI, Emisor_Nombre_CFDI, Emisor_Regimen_Fiscal_CFDI, Receptor_RFC_CFDI, Receptor_Nombre_CFDI, Receptor_Domicilio_CFDI, Receptor_Regimen_Fiscal_CFDI, Receptor_Uso_CFDI, UUID_CFDI, Fecha_Timbrado_CFDI, Rfc_ProvCertif_CFDI, Sello_CFD_CFDI, No_Certificado_SAT_CFDI, Sello_SAT_CFDI, Periodicidad_CFDI, Meses_CFDI, Ano_CFDI, Relacion_CFDI, Cadena_CFDI FROM ventas INNER JOIN sucursales ON ID_Sucursal = 1 INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ID_Venta = '$id' AND Facturada = '1' AND Estatus = 'Completada'";
+	$query = "SELECT ID_Venta, FK_Cliente, clientes.Calle AS Calle_Cliente, clientes.No_Exterior AS No_Exterior_Cliente, clientes.No_Interior AS No_Interior_Cliente, clientes.Colonia AS Colonia_Cliente, clientes.Ciudad AS Ciudad_Cliente, clientes.Estado AS Estado_Cliente, clientes.Pais AS Pais_Cliente, sucursales.Nombre AS Sucursal, sucursales.Calle AS Calle_Sucursal, sucursales.No_Exterior AS No_Exterior_Sucursal, sucursales.No_Interior AS No_Interior_Sucursal, sucursales.Colonia AS Colonia_Sucursal, sucursales.Ciudad AS Ciudad_Sucursal, sucursales.Estado AS Estado_Sucursal, sucursales.Pais AS Pais_Sucursal, ventas.Descuento AS Descuento, Total, ventas.Fecha_Registro AS Fecha_Registro, Version_CFDI, Fecha_Expedicion_CFDI, Sello_CFDI, Forma_Pago_CFDI, No_Certificado_CFDI, Certificado_CFDI, Moneda_CFDI, Tipo_Comprobante_CFDI, Exportacion_CFDI, Metodo_Pago_CFDI, Lugar_Expedicion_CFDI, Confirmacion_CFDI, Emisor_RFC_CFDI, Emisor_Nombre_CFDI, Emisor_Regimen_Fiscal_CFDI, Receptor_RFC_CFDI, Receptor_Nombre_CFDI, Receptor_Domicilio_CFDI, Receptor_Regimen_Fiscal_CFDI, Receptor_Uso_CFDI, UUID_CFDI, Fecha_Timbrado_CFDI, Rfc_ProvCertif_CFDI, Sello_CFD_CFDI, No_Certificado_SAT_CFDI, Sello_SAT_CFDI, Periodicidad_CFDI, Meses_CFDI, Ano_CFDI, Relacion_CFDI, Cadena_CFDI FROM ventas INNER JOIN sucursales ON ID_Sucursal = 8 INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ID_Venta = '$id' AND Facturada = '1' AND Estatus = 'Completada'";
 	//FK_Sucursal = ID_Sucursal
 	$row = $omodelo->_consultar($query);
 	$numerofilas = $omodelo->numerofilas;
@@ -19,9 +17,6 @@
 		echo "Error 1: ".mysqli_error($omodelo->link);
 	}else{
 		if($numerofilas > 0){
-			$enviada = $row[0]['Enviada'];
-			$correo = $row[0]['Correo'];
-
 			$productos = ''; $subtotal = 0; $totalImTras = 0; $totalImRete = 0; $imAgrupadosTras = []; $imAgrupadosRete = []; $error = false;
 			$query1 = "SELECT ID_Detalle_Venta, Identificacion_CFDI, Clave_ProdServ_CFDI, Clave_Unidad_CFDI, Unidad_CFDI, Objeto_Impuesto_CFDI, Descripcion, Precio, Cantidad, Descuento, Total FROM detalles_ventas WHERE FK_Venta = '$id'";
 			$row1 = $omodelo->_consultar($query1);
@@ -61,12 +56,12 @@
 							}
 						}
 
+						//<td>'.$row1[$i]['Unidad_CFDI'].'</td>
 						$productos .= '<tr>
 							<td>'.$row1[$i]['Clave_ProdServ_CFDI'].'</td>
 							<td>'.$row1[$i]['Identificacion_CFDI'].'</td>
 							<td>'.$row1[$i]['Descripcion'].'</td>
 							<td>'.$row1[$i]['Clave_Unidad_CFDI'].'</td>
-							<td>'.$row1[$i]['Unidad_CFDI'].'</td>
 							<td>'.number_format($row1[$i]['Cantidad'], 2).'</td>
 							<td>$'.number_format($row1[$i]['Precio'], 2).'</td>
 							<td>$'.number_format(($row1[$i]['Cantidad'] * $row1[$i]['Precio']), 2).'</td>
@@ -303,6 +298,7 @@
             'CN01' => 'Nómina'
        	);
 
+       	//<th>Unidad</th>
 		$htmlFactura = '<div style="font-family: arial; font-size: 14px; color: #303030; height: 100%;">
 			<div style="float: left; width: 15%; padding-top: 20px;">
 				<img src="../../vistas/assets/img/favicon/favicon.jpg" style="width: 100%;"/>
@@ -397,7 +393,6 @@
 							<th>No. Identificación</th>
 							<th>Descripción</th>
 							<th>Clave Unidad</th>
-							<th>Unidad</th>
 							<th>Cantidad</th>
 							<th>Valor Unitario</th>
 							<th>Subtotal</th>
@@ -462,16 +457,6 @@
 		//$mpdf->AddPage();
 
 		$mpdf->WriteHTML($htmlFactura);
-		if($enviada == '0' && $correo != ''){
-			$omodelo->_email($correo, 'Factura', 'Envio de facturas automatico', $mpdf->Output('factura.pdf', 'S'), 'pdf');
-			
-			$query = "UPDATE ventas SET Enviada = 1 WHERE ID_Venta = '$id'";
-			$error = $omodelo->_insertar($query);
-
-			if($error == 'si'){
-				echo "Error Enviada: ".mysqli_error($omodelo->link);
-			}
-		}
 		$mpdf->Output();
 
 		//echo $htmlFactura;

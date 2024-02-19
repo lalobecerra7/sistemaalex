@@ -208,7 +208,12 @@ html, body{
     font-size: 12px;
 }
 
-#VentaTablaProductos tbody tr.activa td{
+#TablaProductosAgregadoVenta tbody tr.activa td{
+    background-color: #AED6F1;
+    color:  black;
+}
+
+#TablaPreciosProductosVenta tbody tr.activa td{
     background-color: #AED6F1;
     color:  black;
 }

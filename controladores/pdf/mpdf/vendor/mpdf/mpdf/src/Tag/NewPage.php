@@ -1,8 +1,8 @@
-<?php
-
-namespace Mpdf\Tag;
-
-class NewPage extends FormFeed
-{
-
-}
+<?php
+
+namespace Mpdf\Tag;
+
+class NewPage extends FormFeed
+{
+
+}

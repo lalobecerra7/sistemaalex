@@ -74,8 +74,10 @@ function ajaxMyDatatable(data) {
 					for (var x = 0; x < data.colums.length; x++) {
 						columnas += '<td>'+resA.data[i][data.colums[x]]+'</td>';
 					}
-				 	
-				 	data.table.children('tbody').append('<tr id="'+resA.data[i]['ID']+'">'+columnas+'</tr>');	
+				 	if (resA.data[i]['Clases'] == undefined) {
+						resA.data[i]['Clases'] = "";
+					}
+				 	data.table.children('tbody').append('<tr class="'+resA.data[i]['Clases']+'" id="'+resA.data[i]['ID']+'">'+columnas+'</tr>');	
 				}
 
 				if(data.totals != undefined){
@@ -177,7 +179,7 @@ function ajaxMyDatatable(data) {
 				data.table.children('tfoot').html("");
 				$("#"+data.table.attr('id')+"_Pagination").remove();
 			}
-
+			$(".buscadorMyDataTable").focus();
 			moneda();
 		} catch (error) {
 			console.error("Error MyDataTable: "+error);

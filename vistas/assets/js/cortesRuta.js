@@ -40,6 +40,9 @@ function v_cortesRuta() {
             },
             FechaFinCorte: {
                 required: true
+            },
+            selectSucursal: {
+                required: true
             }
         },
         messages: {
@@ -51,10 +54,13 @@ function v_cortesRuta() {
             },
             FechaFinCorte: {
                 required: "La fecha de fin es requerida."
+            },
+            selectSucursal: {
+                required: "La sucursal es requerida."
             }
         },
         submitHandler: function(form) { 
-            var data = "metodo="+$("#bGuardarCorte").attr('tipo')+"&accion=cortesRuta&tipo=insertar&rutasCorte="+$.trim($("#rutasCorte").val())+"&FechaInicioCorte="+$.trim($("#FechaInicioCorte").val())+"&FechaFinCorte="+$.trim($("#FechaFinCorte").val())+"&selectChofer="+$.trim($("#selectChofer").val())+"&selectVehiculo="+$.trim($("#selectVehiculo").val())+"&id="+$("#bGuardarCorte").attr('attrID')+"&detalleVentas="+JSON.stringify(ventas_cliente);
+            var data = "metodo="+$("#bGuardarCorte").attr('tipo')+"&accion=cortesRuta&tipo=insertar&rutasCorte="+$.trim($("#rutasCorte").val())+"&FechaInicioCorte="+$.trim($("#FechaInicioCorte").val())+"&FechaFinCorte="+$.trim($("#FechaFinCorte").val())+"&selectChofer="+$.trim($("#selectChofer").val())+"&selectVehiculo="+$.trim($("#selectVehiculo").val())+"&selectSucursal="+$.trim($("#selectSucursal").val())+"&id="+$("#bGuardarCorte").attr('attrID')+"&detalleVentas="+JSON.stringify(ventas_cliente);
             
             $.ajax({
                 url: 'index.php',
@@ -111,9 +117,11 @@ function v_cortesRuta() {
         },
         submitHandler: function(form) { 
             var object = $(".codigoProducto").filter(':contains("'+$.trim($("#codigoProducto").val())+'")').parent();
+            var id = $('#bGuardarCorte').attr('attrID');
+           
 
             if(object.length > 0){
-                var data = "metodo=modificar&accion=cortesRuta&tipo=verificar&Presentacion="+$.trim(object[0].getAttribute('presentacion'))+"&Producto="+$.trim(object[0].getAttribute('producto'))+"&IDCorte="+$.trim($('#codigoProducto').attr('attrID'));
+                var data = "metodo=modificar&accion=cortesRuta&tipo=verificar&Presentacion="+$.trim(object[0].getAttribute('presentacion'))+"&Producto="+$.trim(object[0].getAttribute('producto'))+"&IDCorte="+id+"&idCliente="+$.trim($('#codigoProducto').attr('attrID'));
                
                 $.ajax({
                     url: 'index.php',
@@ -126,9 +134,12 @@ function v_cortesRuta() {
                 .done(function(res) {
                     if ($.trim(res) == "Correcto") {
 
-                        var IDCor = $('#codigoProducto').attr('attrID');
+                        var IDCor = id;
+                        var IDCli = $('#codigoProducto').attr('attrID');
+                        
                         $('#codigoProducto').val('');
-                        tablaVerificarCorte(IDCor); 
+                        tablaVerificarCorte(IDCor,IDCli); 
+                        tablaClientesRuta();
 
                         Swal.fire({
                           position: "top-end",
@@ -177,7 +188,7 @@ function tablaCortesRuta() {
             "Fecha_Inicio",
             "Fecha_Fin",
             "Total",
-            "Verificado",
+            "Concentrado",
             "Detalles",
             "Acciones"
         ], 
@@ -193,14 +204,15 @@ function tablaCortesRuta() {
 
 function tablaDetallesClientes(idCliente, ventas_obj){
     if(ventas_obj.length > 0){
-        var data = `metodo=consultar&accion=cortesRuta&tipo=clientesDetalles&idCliente=${idCliente}&FechaInicioCorte=${$("#FechaInicioCorte").val()}&FechaFinCorte=${$("#FechaFinCorte").val()}&ventas=${JSON.stringify(ventas_obj)}`;
+        var data = `metodo=consultar&accion=cortesRuta&tipo=clientesDetalles&idCliente=${idCliente}&FechaInicioCorte=${$("#FechaInicioCorte").val()}&FechaFinCorte=${$("#FechaFinCorte").val()}&selectSucursal=${$("#selectSucursal").val()}&ventas=${JSON.stringify(ventas_obj)}`;
 
         $.ajax({
             url: 'index.php',
             type: 'POST',
             data: data
         }).done(function(res){
-            $('#lista-ventas-cliente').html($.trim(res));
+            console.log(res);
+            $('#lista-ventas-cliente').html(res);
             $("#agregarVentaACorte").attr('clienteId', idCliente);
 
             if($("#cerrarModalCorteRuta").attr('corteFinalizado') == 'si'){
@@ -211,6 +223,7 @@ function tablaDetallesClientes(idCliente, ventas_obj){
                 $("#agregarVentaACorte").removeClass('d-none');
             }
             moneda();
+            tablaClientesRuta();
         }).fail(function(){
             console.log('Error ajax');
         })
@@ -228,9 +241,10 @@ function tablaClientesRuta() {
             "Nombre",
             "Domicilio",
             "Total",
+            "Estado",
             "Acciones"
         ], 
-        "sort": [0, "desc"],
+        "sort": [0, "asc"],
         "url": "index.php", 
         "params":{
             "metodo": "consultar",
@@ -239,7 +253,8 @@ function tablaClientesRuta() {
             "FechaInicioCorte": $("#FechaInicioCorte").val(),
             "FechaFinCorte": $("#FechaFinCorte").val(),
             "accion": "cortesRuta",
-            "ventas": ventas_cliente.length > 0 ? JSON.stringify(ventas_cliente) : null
+            "IDCorteRuta": $("#bGuardarCorte").attr('attrID'),
+            "ventas": JSON.stringify(ventas_cliente)
         }
     });
 }
@@ -295,14 +310,36 @@ function recalcTotalLocal(){
         data: data
     }).done(function(res){
         $("#total_corte_bruto").text($.trim(res));
-        getBalanceData($("#bGuardarCorte").attr('attrID'), $.trim(res), recaud);
+
+        if ($("#bGuardarCorte").attr('attrID') != "n/a") {
+            getBalanceData($("#bGuardarCorte").attr('attrID'), $.trim(res), recaud); 
+        }
+
     }).fail(function(){
         console.log('Error ajax');
     })
 }
 
-function tablaVerificarCorte(idCorte){
-        var data = `metodo=consultar&accion=cortesRuta&tipo=verificarCorte&idCorte=${idCorte}`;
+function tablaConcentrarCorte(idCorte){
+        var data = `metodo=consultar&accion=cortesRuta&tipo=Concentrado&idCorte=${idCorte}`;
+
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            data: data
+        }).done(function(res){
+
+            $('#tbodyConcentrado').html($.trim(res));
+            tablaCortesRuta();
+            
+        }).fail(function(){
+            console.log('Error ajax');
+        })
+}
+
+
+function tablaVerificarCorte(idCorte, idCliente){
+        var data = `metodo=consultar&accion=cortesRuta&tipo=verificarCorte&idCorte=${idCorte}&idCliente=${idCliente}`;
 
         $.ajax({
             url: 'index.php',
@@ -318,7 +355,6 @@ function tablaVerificarCorte(idCorte){
         })
 }
 
-
 jQuery(document).ready(function($) {
 
     $(document).on('click', "#bGuardarCorte", function(){
@@ -330,7 +366,6 @@ jQuery(document).ready(function($) {
         var threeMoreDays = new Date(today);
         threeMoreDays.setDate(today.getDate() + 3);
 
-
         $("#modalCorteRuta").modal('show');
         $("#formCorteDeRuta")[0].reset();
         $("#bGuardarCorte").attr('tipo', 'insertar');
@@ -341,14 +376,16 @@ jQuery(document).ready(function($) {
         $("#rutasCorte").attr('disabled', false);
         $("#FechaInicioCorte").attr('readonly', false);
         $("#FechaFinCorte").attr('readonly', false);
+        $("#selectSucursal").attr('disabled', false);
         $("#bGenerarClientes").removeClass('d-none');
         $("#contenedorBalance").addClass('d-none');
         $("#accionesCorteGeneral").addClass('d-none');
+        $("#bGuardarCorte").attr('attrID', 'n/a');
     });
 
 	$(document).on('click', '#bGenerarClientes', function() {
 
-        var data = `metodo=consultar&accion=cortesRuta&tipo=all_ventas_clientes&Ruta=${$("#rutasCorte").val()}&FechaInicioCorte=${$("#FechaInicioCorte").val()}&FechaFinCorte=${$("#FechaFinCorte").val()}`;
+        var data = `metodo=consultar&accion=cortesRuta&tipo=all_ventas_clientes&Ruta=${$("#rutasCorte").val()}&FechaInicioCorte=${$("#FechaInicioCorte").val()}&FechaFinCorte=${$("#FechaFinCorte").val()}&selectSucursal=${$("#selectSucursal").val()}`;
 
         $.ajax({
             url: 'index.php',
@@ -359,6 +396,7 @@ jQuery(document).ready(function($) {
             var jsonData = JSON.parse(res);
             ventas_cliente = jsonData;
             $("#tablaClientesruta").removeClass('d-none');
+            $("#bGuardarCorte").attr('attrID', 'n/a');
             tablaClientesRuta();
         }).fail(function(){
             console.log('Error ajax');
@@ -405,8 +443,7 @@ jQuery(document).ready(function($) {
         $("#modalAgregarVenta").modal('show');
         var clientId = $(this).attr('clienteId');
         var clientVentas = ventas_cliente.find(obj => obj.cliente === clientId).ventas;
-        
-        var data = `metodo=consultar&accion=cortesRuta&tipo=obtenerExcluidos&id=${$(this).attr('clienteId')}&ventas=${JSON.stringify(clientVentas)}`;
+        var data = `metodo=consultar&accion=cortesRuta&tipo=obtenerExcluidos&id=${$(this).attr('clienteId')}&selectSucursal=${$('#selectSucursal').val()}&ventas=${JSON.stringify(clientVentas)}`;
 
         $.ajax({
             url: 'index.php',
@@ -570,7 +607,7 @@ jQuery(document).ready(function($) {
             confirmButtonText: 'Si, eliminar'
         }).then((result) => {
             if (result.isConfirmed) {
-                var data = "metodo=eliminar&accion=cortesRuta&id="+btn.attr('attrID');
+                var data = "metodo=eliminar&accion=cortesRuta&tipo=cortesRuta&id="+btn.attr('attrID');
 
                 $.ajax({
                     url: 'index.php',
@@ -609,14 +646,10 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('click', '.bVerificarCorteRuta', function() {
-        $("#modalVerificar").modal('show');
-        $("#modalVerificar").on('shown.bs.modal', function(){
-            $("#codigoProducto").focus();
-        });
-
-        $("#codigoProducto").attr('attrID', $(this).attr('attrID'));
+        $("#modalConcentrado").modal('show');
         var corteID = $(this).attr('attrID');
-        tablaVerificarCorte(corteID);
+        
+        tablaConcentrarCorte(corteID);
         $('#bImprimirVerificacion').attr('href', "controladores/pdf/ticketCorteRuta.php?id="+corteID);
     });
 
@@ -643,15 +676,18 @@ jQuery(document).ready(function($) {
             $("#FechaFinCorte").val(resData.Fecha_Fin);
             $("#selectChofer").val(resData.FK_Chofer);
             $("#selectVehiculo").val(resData.FK_Vehiculo);
+            $("#selectSucursal").val(resData.FK_Sucursal);
             ventas_cliente = JSON.parse(resData.Detalles);
             recaud = resData.Recaudado_numero;
+            $("#bVerificarCliente").attr('attrID', idCorte);
 
             $("#tablaClientesruta").removeClass('d-none');
-            tablaClientesRuta();
+           
 
             $("#rutasCorte").attr('disabled', true);
             $("#FechaInicioCorte").attr('readonly', true);
             $("#FechaFinCorte").attr('readonly', true);
+            $("#selectSucursal").attr('disabled', true);
             $("#bGenerarClientes").addClass('d-none');
 
             $("#contenedor_recaudado").html(resData.Recaudado);
@@ -664,7 +700,8 @@ jQuery(document).ready(function($) {
 
             $("#bGuardarCorte").attr('attrID', idCorte);
             $("#bGuardarCorte").attr('tipo', 'modificar');
-            
+            $("#bGuardarCorte").attr('attrVerificar', idCorte);
+            tablaClientesRuta();
 
             if(resData.Estado === 'Finalizado'){
                 $("#gastosFormulario").addClass('d-none');
@@ -1032,6 +1069,21 @@ jQuery(document).ready(function($) {
     $(document).on('click', '.bGenerarPDFCorteRuta', function(){
         var routeId = $(this).attr('attrID');
         window.open('/rios/controladores/pdf/mpdf/corteRuta.php'+'?id='+routeId, '_blank');
+    });
+
+
+    $(document).on('click', '.bVerificarCorteRutaCliente', function() {
+        $("#modalVerificar").modal('show');
+        $("#modalVerificar").on('shown.bs.modal', function(){
+            $("#codigoProducto").focus();
+        });
+
+        $("#codigoProducto").attr('attrID', $(this).attr('attrID'));
+        var corteID = $('#bGuardarCorte').attr('attrID');
+        var clienteID = $(this).attr('attrID');
+        $('#tablaParaVerificar').attr('attrCliente',clienteID);
+        tablaVerificarCorte(corteID, clienteID);
+        $('#bImprimirVerificacion').attr('href', "controladores/pdf/ticketCorteRuta.php?id="+corteID+"&cliente="+clienteID);
     });
 
 	/*$(document).on('click', '.bModificarVehiculo', function() {

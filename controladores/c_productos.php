@@ -885,13 +885,13 @@ class productos {
 				if ($numerofilas > 0) {
 					echo "NoValido";
 				}else{
-					$query = "SELECT Referencia FROM productos WHERE Referencia = '$Referencia'";
-					$row = $omodelo->_consultar($query);
-					$numerofilas = $omodelo->numerofilas;
-					if ($row == "si") {
+					$query2 = "SELECT Referencia FROM productos WHERE Referencia = '$Referencia'";
+					$row2 = $omodelo->_consultar($query2);
+					$numerofilas2 = $omodelo->numerofilas;
+					if ($row2 == "si") {
 						echo "Error: " . mysqli_error($omodelo->link);
 					} else {
-						if ($numerofilas > 0) {
+						if ($numerofilas2 > 0) {
 							echo "NoValido2";
 						}else{
 							echo "Valido";
@@ -902,7 +902,7 @@ class productos {
 		}else if($tipo == "ConsultarContraAdmin"){
 			$contrasena = $omodelo->link->real_escape_string($contrasena);
 			if ($omodelo->permisos() == 'Administrador'){
-				if ($contrasena == "458") {
+				if ($contrasena == "admin1154") {
 					echo "Correcto";
 				}else{
 					echo "Error";

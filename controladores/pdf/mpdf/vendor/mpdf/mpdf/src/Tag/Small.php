@@ -1,9 +1,9 @@
-<?php
-
-namespace Mpdf\Tag;
-
-class Small extends InlineTag
-{
-
-
-}
+<?php
+
+namespace Mpdf\Tag;
+
+class Small extends InlineTag
+{
+
+
+}

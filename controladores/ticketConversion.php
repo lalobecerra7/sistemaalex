@@ -4,8 +4,8 @@
   if (!isset($_SESSION['user_admin']['ID_Usuario'])) {
     header('Location: ../index.php');
   }
-
-$con = mysqli_connect('localhost','root','','wits_sistemaalex');
+$con = mysqli_connect('localhost','wits_userBD','ZfX7y99GSs','wits_sistemaalex');
+//$con = mysqli_connect('localhost','root','','wits_sistemaalex');
 $arreglo = '';
 $arreglo2 = '';
 ?>

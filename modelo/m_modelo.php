@@ -2,12 +2,6 @@
 date_default_timezone_set('America/Mexico_City');
 include "config/conexion.php";
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-
-require 'PHPMailer/vendor/autoload.php';
-
 class m_modelo extends conexion{
 	public $link;
 	public $numerofilas;
@@ -46,54 +40,6 @@ class m_modelo extends conexion{
 		return $resultado;
 
 		$this->link->$con->close();
-	}
-
-	public function _email($destino, $asunto, $mensaje, $adjunto, $tipo)
-	{
-		// Instantiation and passing `true` enables exceptions
-		$mail = new PHPMailer(true);
-
-		try {
-		    //Server settings
-		    $mail->SMTPOptions = array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false, 'allow_self_signed' => true));
-		    //$mail->SMTPDebug = 2;                      // Enable verbose debug output
-		    $mail->isSMTP();                                            // Send using SMTP
-		    $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
-		    $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-		    $mail->Username   = 'cremasi.alex@gmail.com';                     // SMTP username
-		    $mail->Password   = 'eyoubxbbycarxxqf';		// SMTP password
-		    $mail->SMTPSecure = 'tls';                                
-		    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;// Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-		    $mail->Port 	  = 587;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
-
-		    //Recipients
-		    $mail->setFrom('cremasi.alex@gmail.com', utf8_decode('MISCELÁNEA RÍOS'));
-		    $mail->addAddress($destino);     // Add a recipient
-		    $mail->FromName = utf8_decode("MISCELÁNEA RÍOS");
-		    /*$mail->addAddress('ellen@example.com');               // Name is optional
-		    $mail->addReplyTo('info@example.com', 'Information');
-		    $mail->addCC('cc@example.com');
-		    $mail->addBCC('bcc@example.com');*/
-
-		    // Attachments
-		    //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-		    if(isset($adjunto) && $adjunto != '' && $tipo == 'xml'){
-		    	$mail->addStringAttachment($adjunto, "xml.xml");         // Add attachments
-		    }else if(isset($adjunto) && $adjunto != '' && $tipo == 'pdf'){
-		    	$mail->addStringAttachment($adjunto, "factura.pdf");         // Add attachments
-		    }
-
-		    // Content
-		    $mail->isHTML(true);            // Set email format to HTML
-		    $mail->Subject = $asunto;
-		    $mail->Body    = $mensaje;
-		    $mail->AltBody = $mensaje;
-
-		    $mail->send();
-		    //echo 'Message has been sent';
-		} catch (Exception $e) {
-		    //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-		}
 	}
 
 	public function _valorEnLetras($x, $mos) 

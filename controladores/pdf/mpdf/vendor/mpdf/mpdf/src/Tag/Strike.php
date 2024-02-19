@@ -1,9 +1,9 @@
-<?php
-
-namespace Mpdf\Tag;
-
-class Strike extends InlineTag
-{
-
-
-}
+<?php
+
+namespace Mpdf\Tag;
+
+class Strike extends InlineTag
+{
+
+
+}

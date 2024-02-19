@@ -1,7 +1,7 @@
-extends: default
-reviewers:
-    -
-        name: contributors
-        required: 1
-        teams:
-            - http-factory-contributors
+extends: default
+reviewers:
+    -
+        name: contributors
+        required: 1
+        teams:
+            - http-factory-contributors

@@ -24,7 +24,7 @@
 		            <th>Fecha Inicio</th>
 		            <th>Fecha Fin</th>
 		            <th>Total</th>
-		            <th>Verificado</th>
+		            <th>Concentrado</th>
 		            <th>Detalles</th>
 		            <th orden="No">Acciones</th>
 		          </thead>
@@ -92,6 +92,15 @@
 							</div>
 						</div>
 						<div class="col-md-4 col-sm-12 mb-3">
+							<div class="form-floating mb-3">
+								<select class="form-select" name="selectSucursal" id="s">
+									<option value="">- Seleccione una opción -</option>
+										#selectSucursal#
+								</select>
+								<label>Sucursal</label>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-12 mb-3">
 							<button class="btn btn-lg btn-primary" type="button" id="bGenerarClientes" name="bGenerarClientes"><i class="fa-solid fa-search"></i> Generar</button>
 						</div>
 	       	</div>
@@ -107,6 +116,7 @@
 			          	<th>Nombre</th>
 			            <th>Domicilio</th>
 			            <th>Total</th>
+			            <th>Estado</th>
 			            <th orden="No">Acciones</th>
 			          </thead>
 			          <tbody> 
@@ -282,11 +292,11 @@
 </div>
 
 <!--///////////////////////////////////////////////////////-->
-<div class="modal fade" id="modalVerificar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalConcentrado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header bg-inverse bd-inverse-darken">
-				<h5 class="modal-title" style="font-weight: bold;">Verificar corte de ruta</h5>
+				<h5 class="modal-title" style="font-weight: bold;">Concentrado</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
@@ -297,6 +307,43 @@
 							<a class="btn btn-sm btn-info" id="bImprimirVerificacion" target="_blank" rel="noopener noreferrer" style="margin-top:5px;" title="Ticket Corte">Imprimir <i class="fa-solid fa-print"></i></a>
 						</div>
 					</div>
+					<br>
+					<div class="row">
+						<div class="mb-3 col-12">
+							<table class="table text-center">
+							  <thead>
+							    <tr>
+							    	<th>Codigo</th>
+							      <th>Producto</th>
+							      <th>Cantidad</th>
+							      <th>Verificados</th>
+							      <th>Estado</th>
+							    </tr>
+							  </thead>
+							  <tbody id="tbodyConcentrado">
+							    
+							  </tbody>
+							</table>
+						</div>
+					</div>
+			</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
+				</div>
+				
+		</div>
+	</div>
+</div>
+
+<!--///////////////////////////////////////////////////////-->
+<div class="modal fade" id="modalVerificar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header bg-inverse bd-inverse-darken">
+				<h5 class="modal-title" style="font-weight: bold;">Verificar corte de ruta</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
 					<br>
 					<div class="row">
 						<div class="col-12">
@@ -315,7 +362,7 @@
 					<br>
 					<div class="row">
 						<div class="mb-3 col-12">
-							<table class="table text-center">
+							<table class="table text-center" id="tablaParaVerificar">
 							  <thead>
 							    <tr>
 							    	<th>Codigo</th>
