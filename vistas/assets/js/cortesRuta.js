@@ -203,7 +203,7 @@ function tablaCortesRuta() {
 }
 
 function tablaDetallesClientes(idCliente, ventas_obj){
-    if(ventas_obj.length > 0){
+    if(ventas_obj.length > 0 ){
         var data = `metodo=consultar&accion=cortesRuta&tipo=clientesDetalles&idCliente=${idCliente}&FechaInicioCorte=${$("#FechaInicioCorte").val()}&FechaFinCorte=${$("#FechaFinCorte").val()}&selectSucursal=${$("#selectSucursal").val()}&ventas=${JSON.stringify(ventas_obj)}`;
 
         $.ajax({
@@ -211,7 +211,6 @@ function tablaDetallesClientes(idCliente, ventas_obj){
             type: 'POST',
             data: data
         }).done(function(res){
-            console.log(res);
             $('#lista-ventas-cliente').html(res);
             $("#agregarVentaACorte").attr('clienteId', idCliente);
 
@@ -252,6 +251,7 @@ function tablaClientesRuta() {
             "Ruta": $("#rutasCorte").val(),
             "FechaInicioCorte": $("#FechaInicioCorte").val(),
             "FechaFinCorte": $("#FechaFinCorte").val(),
+            "selectSucursal": $("#selectSucursal").val(),
             "accion": "cortesRuta",
             "IDCorteRuta": $("#bGuardarCorte").attr('attrID'),
             "ventas": JSON.stringify(ventas_cliente)
@@ -326,7 +326,10 @@ function tablaConcentrarCorte(idCorte){
         $.ajax({
             url: 'index.php',
             type: 'POST',
-            data: data
+            data: data,
+            beforeSend: function() {
+                $("#carga").show();
+            }
         }).done(function(res){
 
             $('#tbodyConcentrado').html($.trim(res));
@@ -334,6 +337,8 @@ function tablaConcentrarCorte(idCorte){
             
         }).fail(function(){
             console.log('Error ajax');
+        }).always(function(){
+            $("#carga").hide();
         })
 }
 
@@ -344,7 +349,10 @@ function tablaVerificarCorte(idCorte, idCliente){
         $.ajax({
             url: 'index.php',
             type: 'POST',
-            data: data
+            data: data,
+            beforeSend: function() {
+                $("#carga").show();
+            }
         }).done(function(res){
 
             $('#tbodyVerificar').html($.trim(res));
@@ -352,13 +360,24 @@ function tablaVerificarCorte(idCorte, idCliente){
             
         }).fail(function(){
             console.log('Error ajax');
+        }).always(function(){
+            $("#carga").hide();
         })
 }
 
 jQuery(document).ready(function($) {
 
     $(document).on('click', "#bGuardarCorte", function(){
-        $("#formCorteDeRuta").submit();
+
+        if ($("#tablaClientesrutaROW").hasClass("d-none") || $("#tablaClientesRuta tr:eq(1) td:eq(0)").text().trim() === "No existen registros.") {
+             Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Tiene que existir ventas generadas para el corte de ruta.'
+            });
+        }else{
+            $("#formCorteDeRuta").submit();
+        }
     })
 
     $(document).on('click', '#bNuevoCorteRuta', function() {
@@ -369,7 +388,7 @@ jQuery(document).ready(function($) {
         $("#modalCorteRuta").modal('show');
         $("#formCorteDeRuta")[0].reset();
         $("#bGuardarCorte").attr('tipo', 'insertar');
-        $("#tablaClientesruta").addClass('d-none');
+        $("#tablaClientesrutaROW").addClass('d-none');
         ventas_cliente = [];
         $("#FechaInicioCorte").val(today.toISOString().split('T')[0])
         $("#FechaFinCorte").val(threeMoreDays.toISOString().split('T')[0])
@@ -380,34 +399,60 @@ jQuery(document).ready(function($) {
         $("#bGenerarClientes").removeClass('d-none');
         $("#contenedorBalance").addClass('d-none');
         $("#accionesCorteGeneral").addClass('d-none');
+        $("#botonGenerarVista").removeClass('d-none');
         $("#bGuardarCorte").attr('attrID', 'n/a');
     });
 
 	$(document).on('click', '#bGenerarClientes', function() {
+        if ($("#rutasCorte").val() == '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ingrese una ruta para generar corte'
+            });
+        }else if ($("#FechaInicioCorte").val() == '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ingrese una fecha de inicio para generar corte'
+            });
+        }else if ($("#FechaFinCorte").val() == '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ingrese una fecha final para generar corte'
+            });
+        }else if ($("#selectSucursal").val() == '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ingrese una sucursal para generar corte'
+            });
+        }else{
+            var data = `metodo=consultar&accion=cortesRuta&tipo=all_ventas_clientes&Ruta=${$("#rutasCorte").val()}&FechaInicioCorte=${$("#FechaInicioCorte").val()}&FechaFinCorte=${$("#FechaFinCorte").val()}&selectSucursal=${$("#selectSucursal").val()}`;
 
-        var data = `metodo=consultar&accion=cortesRuta&tipo=all_ventas_clientes&Ruta=${$("#rutasCorte").val()}&FechaInicioCorte=${$("#FechaInicioCorte").val()}&FechaFinCorte=${$("#FechaFinCorte").val()}&selectSucursal=${$("#selectSucursal").val()}`;
-
-        $.ajax({
-            url: 'index.php',
-            type: 'POST',
-            data: data
-        }).done(function(res){
-            console.log(res);
-            var jsonData = JSON.parse(res);
-            ventas_cliente = jsonData;
-            $("#tablaClientesruta").removeClass('d-none');
-            $("#bGuardarCorte").attr('attrID', 'n/a');
-            tablaClientesRuta();
-        }).fail(function(){
-            console.log('Error ajax');
-        })
-
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data
+            }).done(function(res){
+                console.log(res);
+                var jsonData = JSON.parse(res);
+                ventas_cliente = jsonData;
+                $("#tablaClientesrutaROW").removeClass('d-none');
+                $("#bGuardarCorte").attr('attrID', 'n/a');
+                tablaClientesRuta();
+            }).fail(function(){
+                console.log('Error ajax');
+            })
+        }
 	});
 
     $(document).on('click', '.bDetallesCorteClientes', function() {
         var clientID = $(this).attr('attrID');
         const ventas_val = ventas_cliente.find(obj => obj.cliente === clientID);
         $("#modalCorteClientes").modal('show');
+         $('#lista-ventas-cliente').html('');
         tablaDetallesClientes(clientID, ventas_val ? ventas_val.ventas : jsonData.ventas);
     });
 
@@ -480,7 +525,7 @@ jQuery(document).ready(function($) {
                 add_venta(btn.attr('ID_Cliente'), btn.attr('ID_Venta'))
 
                 const ventas_val = ventas_cliente.find(obj => obj.cliente === btn.attr('ID_Cliente'));
-                var data = `metodo=consultar&accion=cortesRuta&tipo=obtenerExcluidos&id=${btn.attr('ID_Cliente')}&ventas=${JSON.stringify(ventas_val.ventas)}`;
+                var data = `metodo=consultar&accion=cortesRuta&tipo=obtenerExcluidos&id=${btn.attr('ID_Cliente')}&selectSucursal=${$("#selectSucursal").val()}&ventas=${JSON.stringify(ventas_val.ventas)}`;
                 tablaDetallesClientes(btn.attr('ID_Cliente'), ventas_val.ventas);
                 tablaClientesRuta();
                 recalcTotalLocal();
@@ -681,7 +726,7 @@ jQuery(document).ready(function($) {
             recaud = resData.Recaudado_numero;
             $("#bVerificarCliente").attr('attrID', idCorte);
 
-            $("#tablaClientesruta").removeClass('d-none');
+            $("#tablaClientesrutaROW").removeClass('d-none');
            
 
             $("#rutasCorte").attr('disabled', true);
@@ -696,6 +741,7 @@ jQuery(document).ready(function($) {
 
             $("#contenedorBalance").removeClass('d-none');
             $("#accionesCorteGeneral").removeClass('d-none');
+            $("#botonGenerarVista").addClass('d-none');
             $("#añadirGastoACorte").attr('ID_Ruta', idCorte);
 
             $("#bGuardarCorte").attr('attrID', idCorte);

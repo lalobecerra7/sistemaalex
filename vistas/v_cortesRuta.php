@@ -93,14 +93,16 @@
 						</div>
 						<div class="col-md-4 col-sm-12 mb-3">
 							<div class="form-floating mb-3">
-								<select class="form-select" name="selectSucursal" id="s">
+								<select class="form-select" name="selectSucursal" id="selectSucursal">
 									<option value="">- Seleccione una opción -</option>
 										#selectSucursal#
 								</select>
 								<label>Sucursal</label>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-12 mb-3">
+	       	</div>
+	       	<div class="row">
+	       		<div class="col-md-4 col-sm-12 mb-3">
 							<button class="btn btn-lg btn-primary" type="button" id="bGenerarClientes" name="bGenerarClientes"><i class="fa-solid fa-search"></i> Generar</button>
 						</div>
 	       	</div>
@@ -108,7 +110,7 @@
 	       	<br>
 	       	<hr>
 	       	<br>
-	       	<div class="row mb-3 d-none" id="tablaClientesruta">
+	       	<div class="row mb-3 d-none" id="tablaClientesrutaROW">
 			      <div class="col-12">
 			        <table class="table table table-hover table-bordered text-center myDataTable" id="tablaClientesRuta" width="100%" style="font-size: 12px;">
 			          <thead>

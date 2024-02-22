@@ -20,6 +20,7 @@ class cortesRuta {
 			$FechaInicioCorte = $omodelo->link->real_escape_string($FechaInicioCorte);
 			$FechaFinCorte = $omodelo->link->real_escape_string($FechaFinCorte);
 			$IDCorteRuta = $omodelo->link->real_escape_string($IDCorteRuta);
+			$selectSucursal = $omodelo->link->real_escape_string($selectSucursal);
 			$arreglo = array();
 
 			if ($IDCorteRuta == 'n/a') {
@@ -48,7 +49,7 @@ class cortesRuta {
 
 			//TODO Cmabiar consulta y llenar objeto
 
-			$query = "SELECT c.ID_Cliente, c.Orden_Ruta, CONCAT(c.Nombre, ' ', c.Primer_Apellido, ' ', c.Segundo_Apellido ) AS Nombre_Cliente, Nombre, IFNULL((SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND v.Estatus = 'Completada'), 0) AS Total_Cliente, CONCAT('C. ',c.Calle, ', No. ', c.No_Exterior, (CASE WHEN NULLIF(c.No_Interior, '') IS NOT NULL THEN CONCAT(', Int. ', c.No_Interior, ', ') ELSE ', ' END), c.Colonia, ', ', c.Ciudad, ', ', c.Estado, ', ', c.Pais) AS Domicilio_Cliente, $consulta (SELECT COUNT(*) FROM clientes AS c WHERE c.FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') AND IFNULL((SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND v.Estatus = 'Completada'), 0) > 0 $busqueda) AS Num FROM clientes AS c WHERE c.FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') AND IFNULL((SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND v.Estatus = 'Completada'), 0) > 0 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$query = "SELECT c.ID_Cliente, c.Orden_Ruta, CONCAT(c.Nombre, ' ', c.Primer_Apellido, ' ', c.Segundo_Apellido ) AS Nombre_Cliente, Nombre, IFNULL((SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.FK_Sucursal = '$selectSucursal' AND v.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND v.Estatus = 'Completada'), 0) AS Total_Cliente, CONCAT('C. ',c.Calle, ', No. ', c.No_Exterior, (CASE WHEN NULLIF(c.No_Interior, '') IS NOT NULL THEN CONCAT(', Int. ', c.No_Interior, ', ') ELSE ', ' END), c.Colonia, ', ', c.Ciudad, ', ', c.Estado, ', ', c.Pais) AS Domicilio_Cliente, $consulta (SELECT COUNT(*) FROM clientes AS c WHERE c.FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') AND IFNULL((SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.FK_Sucursal = '$selectSucursal' AND v.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND v.Estatus = 'Completada'), 0) > 0 $busqueda) AS Num FROM clientes AS c WHERE c.FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta') AND IFNULL((SELECT SUM(v.Total) FROM ventas AS v WHERE v.FK_Cliente = c.ID_Cliente AND v.FK_Sucursal = '$selectSucursal'  AND v.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND v.Estatus = 'Completada'), 0) > 0 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -127,7 +128,7 @@ class cortesRuta {
 			$Ruta =  $omodelo->link->real_escape_string($Ruta);
 			$selectSucursal =  $omodelo->link->real_escape_string($selectSucursal);
 
-			$query = "SELECT c.ID_Cliente, (SELECT GROUP_CONCAT(vn.ID_Venta SEPARATOR ',') FROM ventas AS vn WHERE vn.FK_Cliente = c.ID_Cliente AND vn.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND vn.Total > 0 AND vn.FK_Sucursal = '$selectSucursal') AS Cliente_Ventas  FROM clientes AS c WHERE FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta')";
+			$query = "SELECT DISTINCT c.ID_Cliente, (SELECT GROUP_CONCAT(vn.ID_Venta SEPARATOR ',') FROM ventas AS vn WHERE vn.FK_Cliente = c.ID_Cliente AND vn.Fecha_Registro BETWEEN '$FechaInicioCorte' AND '$FechaFinCorte' AND vn.Total > 0 AND vn.FK_Sucursal = '$selectSucursal') AS Cliente_Ventas  FROM clientes AS c JOIN ventas ON FK_Cliente = ID_Cliente WHERE FK_Ruta = (SELECT r.ID_Ruta FROM rutas AS r WHERE r.Nombre = '$Ruta')";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -179,8 +180,6 @@ class cortesRuta {
 			}else{
 				if($numerofilas > 0){
 					for($i=0; $i<$numerofilas; $i++){
-						//TODO: Hacer la concat en un string y hacer una sola consulta con un OR en php
-						//Recibir Objeto AJAX con json_decode
 						$query2 = "SELECT Descripcion, Cantidad, (Total / Cantidad) as Precio, Total, (CASE WHEN FK_Presentacion <> 0 THEN (SELECT Codigo FROM presentaciones WHERE ID_Presentacion = FK_Presentacion) ELSE (SELECT Codigo FROM productos WHERE ID_Producto = FK_Producto) END) AS Codigo FROM detalles_ventas WHERE FK_Venta ='".$row[$i]['ID_Venta']."'";
 						$row2 = $omodelo->_consultar($query2);
 						$numerofilas2 = $omodelo->numerofilas;
@@ -244,14 +243,14 @@ class cortesRuta {
 
 			$id =  $omodelo->link->real_escape_string($id);
 			$selectSucursal =  $omodelo->link->real_escape_string($selectSucursal);
-			$ventas = json_decode($ventas);
+			$ventas = json_decode($ventas, true);
 			
 
 			$busqueda = "";
 			if(isset($buscado)){
 				$buscado = $omodelo->link->real_escape_string($buscado);
 				if(trim($buscado) != ''){
-					$busqueda = "AND v.ID_Venta = $buscado";
+					$busqueda = "AND v.ID_Venta != $buscado";
 				}
 			}
 
@@ -260,14 +259,13 @@ class cortesRuta {
 			if(isset($ventas) && count($ventas) > 0 ){
 				$ventasIDs = implode(', ', $ventas);
 
-				$filtrado = "AND v.FK_Sucursal = ".$selectSucursal." AND v.ID_Venta NOT IN (".$ventasIDs.")";
+				$filtrado = "AND v.ID_Venta NOT IN (".$ventasIDs.")";
 			}
 
 
-			$query = "SELECT ID_Venta, Fecha_Registro, Total FROM ventas AS v WHERE v.FK_Cliente = $id $filtrado $busqueda";
+			$query = "SELECT ID_Venta, Fecha_Registro, Total FROM ventas AS v WHERE v.FK_Cliente = $id AND v.FK_Sucursal = '$selectSucursal' $filtrado $busqueda";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
-
 
 			if($row == 'si'){
 				echo "Error: ".mysqli_error($omodelo->link);
@@ -330,7 +328,6 @@ class cortesRuta {
 								</div>";
 
 						echo $card;
-
 					}
 				}
 			}			
@@ -342,7 +339,7 @@ class cortesRuta {
 			$row = $omodelo->_consultar($query);
 			
 
-			$query2 = "SELECT FK_Cliente, Ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = $idCorte";
+			$query2 = "SELECT DISTINCT FK_Cliente, Ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = $idCorte";
 			$row2 = $omodelo->_consultar($query2);
 			$numerofilas2 = $omodelo->numerofilas;
 
@@ -385,7 +382,7 @@ class cortesRuta {
 		}else if ($tipo == 'Concentrado') {
 			$idCorte =  $omodelo->link->real_escape_string($idCorte);
 
-			$query = "SELECT FK_Producto, FK_Presentacion, IF (FK_Presentacion <> 0, (SELECT Codigo FROM presentaciones WHERE FK_Presentacion = ID_Presentacion), (SELECT Codigo FROM productos WHERE FK_Producto = ID_Producto)) AS Codigo, Descripcion AS Producto,SUM(Cantidad) as Cantidadtol, IFNULL((SELECT Cantidad FROM productos_verificados_corte_ruta WHERE FK_Corte_Ruta = '$idCorte' AND FK_Producto = detalles_ventas.FK_Producto AND FK_Presentacion = detalles_ventas.FK_Presentacion), 0) AS Verificacion, IFNULL((SELECT ID_Categoria FROM categorias WHERE Nombre LIKE '%HELADO%' AND ID_Categoria = (SELECT FK_Categoria FROM productos WHERE FK_Producto = ID_Producto)), '') AS Categoria FROM detalles_ventas WHERE FK_Venta IN (SELECT ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$idCorte') GROUP BY Codigo ORDER BY Categoria DESC, (SELECT Importe FROM productos WHERE ID_Producto = detalles_ventas.FK_Producto )";
+			$query = "SELECT FK_Producto, FK_Presentacion, IF (FK_Presentacion <> 0, (SELECT Codigo FROM presentaciones WHERE FK_Presentacion = ID_Presentacion), (SELECT Codigo FROM productos WHERE FK_Producto = ID_Producto)) AS Codigo, Descripcion AS Producto, SUM(Cantidad) as Cantidadtol, IFNULL((SELECT SUM(Cantidad) FROM productos_verificados_corte_ruta WHERE FK_Corte_Ruta = '$idCorte' AND FK_Producto = detalles_ventas.FK_Producto AND FK_Presentacion = detalles_ventas.FK_Presentacion), 0) AS Verificacion, IFNULL((SELECT ID_Categoria FROM categorias WHERE Nombre LIKE '%HELADO%' AND ID_Categoria = (SELECT FK_Categoria FROM productos WHERE FK_Producto = ID_Producto)), '') AS Categoria FROM detalles_ventas JOIN ventas ON FK_Venta = ID_Venta WHERE FIND_IN_SET(FK_Venta, (SELECT GROUP_CONCAT(Ventas) FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$idCorte')) GROUP BY Codigo ORDER BY Categoria DESC ,(SELECT Importe FROM productos WHERE ID_Producto = detalles_ventas.FK_Producto)";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			$verificacion = 0;
@@ -466,7 +463,7 @@ class cortesRuta {
 			$idCorte =  $omodelo->link->real_escape_string($idCorte);
 			$idCliente =  $omodelo->link->real_escape_string($idCliente);
 
-			$query = "SELECT FK_Producto, FK_Presentacion, IF (FK_Presentacion <> 0, (SELECT Codigo FROM presentaciones WHERE FK_Presentacion = ID_Presentacion), (SELECT Codigo FROM productos WHERE FK_Producto = ID_Producto)) AS Codigo, Descripcion AS Producto, SUM(Cantidad) as Cantidadtol, IFNULL((SELECT Cantidad FROM productos_verificados_corte_ruta WHERE FK_Corte_Ruta = '$idCorte' AND FK_Producto = detalles_ventas.FK_Producto AND FK_Presentacion = detalles_ventas.FK_Presentacion AND FK_Cliente = '$idCliente'), 0) AS Verificacion, IFNULL((SELECT ID_Categoria FROM categorias WHERE Nombre LIKE '%HELADO%' AND ID_Categoria = (SELECT FK_Categoria FROM productos WHERE FK_Producto = ID_Producto)), '') AS Categoria FROM detalles_ventas JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Venta IN (SELECT ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$idCorte') AND ventas.FK_Cliente = '$idCliente' GROUP BY Codigo ORDER BY Categoria DESC ,(SELECT Importe FROM productos WHERE ID_Producto = detalles_ventas.FK_Producto )";
+			$query = "SELECT FK_Producto, FK_Presentacion, IF (FK_Presentacion <> 0, (SELECT Codigo FROM presentaciones WHERE FK_Presentacion = ID_Presentacion), (SELECT Codigo FROM productos WHERE FK_Producto = ID_Producto)) AS Codigo, Descripcion AS Producto, SUM(Cantidad) as Cantidadtol, IFNULL((SELECT Cantidad FROM productos_verificados_corte_ruta WHERE FK_Corte_Ruta = '$idCorte' AND FK_Producto = detalles_ventas.FK_Producto AND FK_Presentacion = detalles_ventas.FK_Presentacion AND FK_Cliente = '$idCliente'), 0) AS Verificacion, IFNULL((SELECT ID_Categoria FROM categorias WHERE Nombre LIKE '%HELADO%' AND ID_Categoria = (SELECT FK_Categoria FROM productos WHERE FK_Producto = ID_Producto)), '') AS Categoria FROM detalles_ventas JOIN ventas ON FK_Venta = ID_Venta WHERE FIND_IN_SET(FK_Venta, (SELECT Ventas FROM detalles_corte_ruta WHERE FK_Cliente = '$idCliente' AND FK_Corte_Ruta = '$idCorte')) GROUP BY Codigo ORDER BY Categoria DESC ,(SELECT Importe FROM productos WHERE ID_Producto = detalles_ventas.FK_Producto )";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 			$verificacion = 0;
@@ -502,7 +499,7 @@ class cortesRuta {
 
 						}
 
-						$query1 = "SELECT FK_Producto, FK_Presentacion, IF (FK_Presentacion <> 0, (SELECT Codigo FROM presentaciones WHERE FK_Presentacion = ID_Presentacion), (SELECT Codigo FROM productos WHERE FK_Producto = ID_Producto)) AS Codigo, Descripcion AS Producto, (SELECT SUM(Cantidad) FROM detalles_ventas WHERE FK_Venta IN (SELECT ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$idCorte')) as Cantidadtol, IFNULL((SELECT Cantidad FROM productos_verificados_corte_ruta WHERE FK_Corte_Ruta = '$idCorte' AND FK_Producto = detalles_ventas.FK_Producto AND FK_Presentacion = detalles_ventas.FK_Presentacion), 0) AS Verificacion FROM detalles_ventas WHERE FK_Venta IN (SELECT ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$idCorte') GROUP BY Codigo ORDER BY (SELECT Importe FROM productos WHERE ID_Producto = detalles_ventas.FK_Producto )";
+						$query1 = "SELECT FK_Producto, FK_Presentacion, IF (FK_Presentacion <> 0, (SELECT Codigo FROM presentaciones WHERE FK_Presentacion = ID_Presentacion), (SELECT Codigo FROM productos WHERE FK_Producto = ID_Producto)) AS Codigo, Descripcion AS Producto, (SELECT SUM(Cantidad) FROM detalles_ventas WHERE FK_Venta IN (SELECT ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$idCorte')) as Cantidadtol, IFNULL((SELECT Cantidad FROM productos_verificados_corte_ruta WHERE FK_Corte_Ruta = '$idCorte' AND FK_Producto = detalles_ventas.FK_Producto AND FK_Presentacion = detalles_ventas.FK_Presentacion), 0) AS Verificacion FROM detalles_ventas JOIN detalles_corte_ruta ON FIND_IN_SET(FK_Venta, Ventas) WHERE FK_Corte_Ruta = '$idCorte' GROUP BY Codigo ORDER BY (SELECT Importe FROM productos WHERE ID_Producto = detalles_ventas.FK_Producto )";
 						$row1 = $omodelo->_consultar($query1);
 						$numerofilas1 = $omodelo->numerofilas;
 
@@ -671,6 +668,26 @@ class cortesRuta {
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
 				$last_corte_ruta = mysqli_insert_id($omodelo->link);
+
+				// for ($i=0; $i < COUNT($detalleVentas); $i++) { 
+				// 	$inserted = '';
+				// 	for ($z=0; $z < COUNT($detalleVentas[$i]['ventas']); $z++) { 
+				// 		if($i === count($detalleVentas[$i]['ventas'])-1){
+				// 			$inserted .= $detalleVentas[$i]['ventas'][$z];
+				// 		}else{
+				// 			$inserted .= $detalleVentas[$i]['ventas'][$z].',';
+				// 		}
+				// 	}
+
+				// 	$sum_inserted = str_replace('"', '', $inserted );
+				// 	$query2 = "INSERT INTO detalles_corte_ruta SET FK_Corte_Ruta = '$last_corte_ruta', FK_Cliente = '$detalle[cliente]', Ventas = '$inserted', Total = (SELECT SUM(Total) FROM ventas WHERE ID_Venta IN ($sum_inserted))";
+				// 	$row2 = $omodelo->_insertar($query2);
+
+				// 	if($row2 == "si"){
+				// 		echo "Error: ".mysqli_error($omodelo->link);
+				// 		return false;
+				// 	}
+				// }
 				
 				foreach ($detalleVentas as $detalle){
 					$inserted = "";
