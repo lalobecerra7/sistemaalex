@@ -37,9 +37,9 @@ class cortesRuta {
 			$busqueda = '';
 			if(trim($buscar) != ''){
 				$separa = explode(' ', trim($buscar));
-				$busqueda = 'WHERE ';
+				$busqueda = 'AND ';
 				for ($i=0; $i < count($separa); $i++) { 
-					$busqueda .= "CONCAT(Nombre) REGEXP '".$separa[$i]."'";
+					$busqueda .= "CONCAT(CONCAT(c.Nombre, ' ', c.Primer_Apellido, ' ', c.Segundo_Apellido ), CONCAT('C. ',c.Calle, ', No. ', c.No_Exterior, (CASE WHEN NULLIF(c.No_Interior, '') IS NOT NULL THEN CONCAT(', Int. ', c.No_Interior, ', ') ELSE ', ' END), c.Colonia, ', ', c.Ciudad, ', ', c.Estado, ', ', c.Pais), c.Orden_Ruta) REGEXP '".$separa[$i]."'";
 					if($i < (count($separa)-1)){
 						$busqueda .= ' AND ';
 					}
@@ -566,9 +566,8 @@ class cortesRuta {
 		    $row = $omodelo->_consultar($query);
 		    $numerofilas = $omodelo->numerofilas;
 
-		    $arrayVer = [];
 		    $clientes = [];
-		    $clientesConDatos = 0; // Variable para contar clientes con datos
+		    $clientesConDatos = 0;
 
 		    if ($row == 'si') {
 		        echo "Error: " . mysqli_error($omodelo->link);
@@ -579,7 +578,7 @@ class cortesRuta {
 		                $ventaId = $row[$i]['ID_Venta'];
 
 		                if (!isset($clientes[$clienteId])) {
-		                    $clientes[$clienteId] = [];
+		                    $clientes[$clienteId] = ['ventas' => [], 'orden' => 0];
 		                }
 
 		                $query2 = "SELECT ID_Detalle_Venta AS ID, Descripcion, Cantidad, FK_Presentacion, FK_Producto, (Total / Cantidad) as Precio, Total, (CASE WHEN FK_Presentacion <> 0 THEN (SELECT Nombre FROM presentaciones WHERE ID_Presentacion = FK_Presentacion) ELSE '' END) AS PresentacionInfo, (CASE WHEN FK_Presentacion <> 0 THEN (SELECT Codigo FROM presentaciones WHERE ID_Presentacion = FK_Presentacion) ELSE (SELECT Codigo FROM productos WHERE ID_Producto = FK_Producto) END) AS Codigo , IFNULL((SELECT SUM(Cantidad) FROM productos_verificados_corte_ruta WHERE FK_Producto = dv.FK_Producto AND FK_Corte_Ruta = '$idCorte' AND FK_Cliente = '$clienteId'), 0) AS Verificacion, IFNULL((SELECT Nombre FROM categorias WHERE ID_Categoria = (SELECT FK_Categoria FROM productos WHERE ID_Producto = FK_Producto)), '') AS Categoria FROM detalles_ventas AS dv WHERE FK_Venta ='".$ventaId."' AND Descripcion LIKE '%CUBETA%'";
@@ -588,15 +587,26 @@ class cortesRuta {
 
 		                if ($numerofilas2 > 0) {
 		                    for ($j = 0; $j < $numerofilas2; $j++) {
-		                        $clientes[$clienteId][] = $row2[$j];
+		                        $clientes[$clienteId]['ventas'][] = $row2[$j];
 		                    }
 		                }
 		            }
 
-		            foreach ($clientes as $clienteId => $ventas) {
-		                // Solo mostrar clientes que tienen datos
+		            foreach ($clientes as $clienteId => $data) {
+		                $queryClienteOrden = "SELECT Orden_Ruta FROM clientes WHERE ID_Cliente = '$clienteId'";
+		                $rowClienteOrden = $omodelo->_consultar($queryClienteOrden);
+		                $clientes[$clienteId]['orden'] = $rowClienteOrden[0]['Orden_Ruta'];
+		            }
+
+		            uasort($clientes, function($a, $b) {
+		                return $a['orden'] - $b['orden'];
+		            });
+
+		            foreach ($clientes as $clienteId => $data) {
+		                $ventas = $data['ventas'];
+
 		                if (!empty($ventas)) {
-		                    $clientesConDatos++; // Incrementar el contador de clientes con datos
+		                    $clientesConDatos++;
 
 		                    // Consulta para obtener los detalles del cliente
 		                    $queryCliente = "SELECT CONCAT(c.Nombre, ' ', c.Primer_Apellido, ' ', c.Segundo_Apellido) AS Nombre_Cliente, CONCAT('C. ', c.Calle, ', No. ', c.No_Exterior, (CASE WHEN NULLIF(c.No_Interior, '') IS NOT NULL THEN CONCAT(', Int. ', c.No_Interior, ', ') ELSE ', ' END), c.Colonia, ', ', c.Ciudad, ', ', c.Estado, ', ', c.Pais) AS Domicilio_Cliente FROM clientes AS c WHERE c.ID_Cliente = '$clienteId'";
@@ -657,10 +667,7 @@ class cortesRuta {
 		                            $todosVerificados = false;
 		                        }
 
-		                        $queryProducto = "SELECT Descripcion, 
-		                                            (SELECT Nombre FROM presentaciones WHERE ID_Presentacion = '$productoId') AS PresentacionInfo, 
-		                                            (SELECT Codigo FROM productos WHERE ID_Producto = '$productoId') AS Codigo 
-		                                            FROM productos WHERE ID_Producto = '$productoId'";
+		                        $queryProducto = "SELECT Descripcion, (SELECT Nombre FROM presentaciones WHERE ID_Presentacion = '$productoId') AS PresentacionInfo, (SELECT Codigo FROM productos WHERE ID_Producto = '$productoId') AS Codigo FROM productos WHERE ID_Producto = '$productoId'";
 		                        $rowProducto = $omodelo->_consultar($queryProducto);
 		                        $descripcion = $rowProducto[0]['Descripcion'];
 		                        $presentacionInfo = $rowProducto[0]['PresentacionInfo'];
@@ -692,7 +699,7 @@ class cortesRuta {
 		                }
 		            }
 
-		            // Mostrar mensaje "Sin datos" si no hay ningún cliente con datos
+		            
 		            if ($clientesConDatos == 0) {
 		                echo "<div class='row border border-secondary rounded px-2 py-3 mb-3'>
 		                        <div class='col'>
@@ -701,7 +708,7 @@ class cortesRuta {
 		                      </div>";
 		            }
 		        } else {
-		            // Mostrar mensaje "Sin datos" si no hay ventas completadas
+		            
 		            echo "<div class='row border border-secondary rounded px-2 py-3 mb-3'>
 		                    <div class='col'>
 		                        <p class='py-0 my-0 col-12 pl-2'><b>Sin datos</b></p>
