@@ -340,7 +340,7 @@
 											}
 										}
 
-										if ($precio3Neto > 0) {
+										if ($Precio3Bruto > 0) {
 											//PRECIO 3
 											$queryP3 = "SELECT ID_Precio FROM precios WHERE FK_Producto = '".$rowPres[0]["FK_Producto"]."' AND FK_Presentacion = '".$rowPres[0]["ID_Presentacion"]."' AND Nombre = 'Precio 3' AND FK_Zona = '$zona'";
 											$rowP3 = $omodelo->_consultar($queryP3);
@@ -350,14 +350,14 @@
 												echo "Error buscar precio 3: ".mysqli_error($omodelo->link);
 											}else{
 												if($numerofilasP3 > 0){ //HACER UPDATE PRECIO 3
-													$queryUP3 = "UPDATE precios SET Precio = '".$precio3Neto."', Porcentaje_Impuesto_Aplicado = '$cantidadImpuesto', Porcentaje_Aumento_Aplicado = '0' WHERE ID_Precio = '".$rowP3[0]["ID_Precio"]."'";
+													$queryUP3 = "UPDATE precios SET Precio = '".$Precio3Bruto."', Porcentaje_Impuesto_Aplicado = '$cantidadImpuesto', Porcentaje_Aumento_Aplicado = '0' WHERE ID_Precio = '".$rowP3[0]["ID_Precio"]."'";
 													$errorUP3 = $omodelo->_insertar($queryUP3);
 
 													if ($errorUP3 == 'si') {
 													    echo "Error update precio3: " . mysqli_error($omodelo->link);
 													}
 												}else{ //INSERTAR NUEVO PRECIO 3
-													$queryIN3 = "INSERT INTO precios SET FK_Producto = '".$rowPres[0]["FK_Producto"]."', FK_Zona = '$zona', FK_Presentacion = '".$rowPres[0]["ID_Presentacion"]."', Nombre = 'Precio 3', Precio = '".$precio3Neto."', Porcentaje_Impuesto_Aplicado = '$cantidadImpuesto', Porcentaje_Aumento_Aplicado = '0'";
+													$queryIN3 = "INSERT INTO precios SET FK_Producto = '".$rowPres[0]["FK_Producto"]."', FK_Zona = '$zona', FK_Presentacion = '".$rowPres[0]["ID_Presentacion"]."', Nombre = 'Precio 3', Precio = '".$Precio3Bruto."', Porcentaje_Impuesto_Aplicado = '$cantidadImpuesto', Porcentaje_Aumento_Aplicado = '0'";
 													$errorIN3 = $omodelo->_insertar($queryIN3);
 
 													if ($errorIN3 == 'si') {

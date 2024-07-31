@@ -15,7 +15,16 @@
     return;
   }
 
-  $queryDetalles = "SELECT FK_Producto, FK_Presentacion, IF (FK_Presentacion <> 0, (SELECT Codigo FROM presentaciones WHERE FK_Presentacion = ID_Presentacion), (SELECT Codigo FROM productos WHERE FK_Producto = ID_Producto)) AS Codigo, Descripcion AS Producto, SUM(Cantidad) as Cantidadtol, IFNULL((SELECT Cantidad FROM productos_verificados_corte_ruta WHERE FK_Corte_Ruta = '$id' AND FK_Producto = detalles_ventas.FK_Producto AND FK_Presentacion = detalles_ventas.FK_Presentacion), 0) AS Verificacion FROM detalles_ventas WHERE FK_Venta IN (SELECT ventas FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$id') GROUP BY Codigo ORDER BY (SELECT Importe FROM productos WHERE ID_Producto = detalles_ventas.FK_Producto )";
+  $queryDetalles = "SELECT FK_Producto, FK_Presentacion, (CASE WHEN FK_Presentacion <> 0 THEN (SELECT Codigo FROM presentaciones WHERE FK_Presentacion = ID_Presentacion) ELSE (SELECT Codigo FROM productos WHERE FK_Producto = ID_Producto) END) AS Codigo, Descripcion AS Producto, (CASE WHEN FK_Presentacion <> 0 THEN (SELECT Nombre FROM presentaciones WHERE FK_Presentacion = ID_Presentacion) ELSE NULL END) AS PresentacionInfo, SUM(Cantidad) AS Cantidadtol, IFNULL((SELECT SUM(Cantidad) FROM productos_verificados_corte_ruta WHERE FK_Corte_Ruta = '$id' AND FK_Producto = detalles_ventas.FK_Producto AND FK_Presentacion = detalles_ventas.FK_Presentacion), 0) AS Verificacion, IFNULL((SELECT Nombre FROM categorias WHERE ID_Categoria = (SELECT FK_Categoria FROM productos WHERE FK_Producto = ID_Producto)), '') AS Categoria FROM detalles_ventas JOIN ventas ON FK_Venta = ID_Venta WHERE FIND_IN_SET(FK_Venta, (SELECT GROUP_CONCAT(Ventas) FROM detalles_corte_ruta WHERE FK_Corte_Ruta = '$id')) GROUP BY Codigo ORDER BY CASE 
+  WHEN UPPER(Categoria) LIKE '%BASE%' THEN 1
+  WHEN UPPER(Categoria) LIKE '%HELADOS%' THEN 2
+  WHEN UPPER(Categoria) LIKE '%REFRIGERADOS%' THEN 3
+  WHEN UPPER(Categoria) LIKE '%CONGELADOS%' THEN 4
+  WHEN UPPER(Producto) LIKE '%BASE%' THEN 5
+  WHEN UPPER(Producto) LIKE '%CUBETA%' THEN 6
+  WHEN UPPER(Producto) LIKE '%GALONES%' THEN 7
+  ELSE 8
+  END , (SELECT Importe FROM productos WHERE ID_Producto = detalles_ventas.FK_Producto)";
   $rowDetalles = $modelo->_consultar($queryDetalles);
 
   if ($rowDetalles == 'si') {
@@ -38,6 +47,8 @@
       </thead>
       <tbody>';
 
+
+      $color = 'style="background-color: #EEE;"';
   foreach ($rowDetalles as $detalle) {
     if ($detalle == null) continue;
       if ($detalle['Cantidadtol'] == $detalle['Verificacion']) {
@@ -45,15 +56,22 @@
       }else{
         $estado = 'Pendiente';
       }
+
+    if($color == 'style="background-color: #FFF;"'){
+      $color = 'style="background-color: #EEE;"';
+    }else{
+      $color = 'style="background-color: #FFF;"';
+    }
+
     $tabla .= '
-      <tr>
-        <td colspan="4">' . $detalle['Producto'] . '</td>
+      <tr '.$color.'>
+        <td colspan="4" style="font-size: 16px;">' . $detalle['Producto'] . ($row[$i]['PresentacionInfo'] != "NULL" ? ' <span style="font-size: 12px;">'.$detalle['PresentacionInfo'].'</span>' : '').'</td>
       </tr>
-      <tr>
-        <td>' . $detalle['Codigo'] . '</td>
-        <td>' . $detalle['Cantidadtol'] . '</td>
-        <td>' . $detalle['Verificacion'] . '</td>
-        <td>' . $estado. '</td>
+      <tr '.$color.'>
+        <td style="font-size: 14px;">' . $detalle['Codigo'] . '</td>
+        <td style="font-size: 14px;">' . $detalle['Cantidadtol'] . '</td>
+        <td style="font-size: 14px;">' . $detalle['Verificacion'] . '</td>
+        <td style="font-size: 14px;">' . $estado. '</td>
       </tr>';
   }
 
@@ -142,6 +160,7 @@
           width: 100%;
           margin: 0.5rem 0;
           font-size: 1rem;
+          border-collapse: collapse;
         }
 
         caption {

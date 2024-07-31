@@ -89,7 +89,10 @@ jQuery(document).ready(function($) {
         cerrarSesion();
     });
 
-    
+    $(document).on('click', '#BotonVerAlertas', function() {
+        ConsultarAlertas();
+    });
+
     $(document).on('click', '#VerContrasenas', function() {
         console.log( $(this).parent().parent().html());
         if($(this).children('i').hasClass('fa-eye')){
@@ -268,6 +271,29 @@ function ConsultarImagen(){
       $(".imagenPerfilChica").attr("src", "vistas/assets/archivos/default.jpg");
     }
     
+  })
+  .fail(function() {
+    console.log("Error ajax");
+  });
+}
+
+function ConsultarAlertas(){
+  var data="metodo=detalles&accion=productos&tipo=ConsultarAlertas";
+  $.ajax({
+    url: 'index.php',
+    type: 'POST',
+    data: data,
+  })
+  .done(function(res) {
+    if ($.trim(res) == 0) {
+        Swal.fire({
+          icon: 'info',
+          title: 'No hay alertas de stock',
+          text: 'Actualmente no hay productos con un inventario bajo'
+        });
+    }else{
+        $("#ModalVerAlertas").modal("show");
+    }
   })
   .fail(function() {
     console.log("Error ajax");

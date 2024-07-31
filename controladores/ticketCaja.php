@@ -146,14 +146,13 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
       $totalIngresosEfectivo +=  $row["Monto_Abrir"];
 
       $queryv = "SELECT ventas.Total, ventas.Total_Importes, ventas.Tipo_Pago, Pago_Efectivo, Pago_Transferencia, Pago_Cheque, Pago_Tarjeta_Credito, Pago_Tarjeta_Debito FROM ventas WHERE (Fecha_Registro >= '".$row["Fecha_Abrir"]."' AND Fecha_Registro <= '".$row["Fecha_Cierre"]."') AND Estatus = 'Completada' AND Contar_Venta = 0 AND FK_Sucursal = '$sucursal'";
+
       if($resv=$con->query($queryv)){
         if ($resv->num_rows > 0) {
           while($rowv = $resv->fetch_assoc()){
             $totalIngresos += $rowv["Total"];
-            //$totalventas += $rowv["Total"];
             $totalventas += $rowv["Total"] + $rowv["Total_Importes"];
             if ($rowv["Tipo_Pago"] == "Efectivo") {
-              //$totalvefectivo += $rowv["Total"];
               $totalIngresosEfectivo +=  $rowv["Total"];
             }else if ($rowv["Tipo_Pago"] == "Deposito") {
               $totalvdeposito += $rowv["Total"];
@@ -169,7 +168,7 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
 
             if ($rowv["Pago_Efectivo"] > 0) {
               $totalvefectivo += $rowv["Pago_Efectivo"];
-              $totalIngresosEfectivo +=  $rowv["Pago_Efectivo"];
+              //$totalIngresosEfectivo +=  $rowv["Pago_Efectivo"];
             }
 
             if ($rowv["Pago_Transferencia"] > 0) {
@@ -493,7 +492,7 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
     <p class='centrado'><b style='font-size: 20px;'>INGRESOS</b></p>
     ";
     echo '<p class="centrado">MONTO DE APERTURA: $'.number_format($arreglo["Monto_Abrir"], 2).'</p>';
-    echo '<p class="centrado">TOTAL DE VENTAS: $'.number_format($arreglo["Total_Ventas"], 2).'</p>';
+    echo '<p class="centrado">TOTAL DE VENTAS (VENTAS EN EFECTIVO + IMPORTES): $'.number_format($arreglo["Total_Ventas"], 2).'</p>';
 
     if ($arreglo["Total_Ventas_Efectivo"]) {
       echo '<p class="">VENTAS EN EFECTIVO: $'.number_format($arreglo["Total_Ventas_Efectivo"], 2).'</p>';
@@ -520,7 +519,7 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
       echo '<p class="">VENTAS EN PAGOS ONLINE: $'.number_format($arreglo["Total_Ventas_PagoOnline"], 2).'</p>';
     }
 
-    //echo '<p class="centrado">TOTAL DE IMPORTES: $'.number_format($arreglo["Total_Importes"], 2).'</p>';
+    echo '<p class="centrado">TOTAL DE IMPORTES: $'.number_format($arreglo["Total_Importes"], 2).'</p>';
     echo "</br>
     <p class='centrado'><b style='font-size: 20px;'>EGRESOS</b></p>
     ";

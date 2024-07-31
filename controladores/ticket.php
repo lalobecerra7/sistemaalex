@@ -8,7 +8,7 @@ include('pdf/phpqrcode/qrlib.php');
 
 date_default_timezone_set('America/Mexico_City');
 $con = mysqli_connect('localhost','wits_userBD','ZfX7y99GSs','wits_sistemaalex');
-//$con = mysqli_connect('localhost','root','','wits_sistemaalex');
+//$con = mysqli_connect('localhost','root','','wits_sistemaalex3');
 $arreglo = '';
 $arregloVenta = '';
 
@@ -330,7 +330,7 @@ $arregloVenta = '';
   <?php 
     $FechaHoy = date('Y-m-d H:i:s');
     
-    $sql = "SELECT ID_Ticket, FK_Sucursal, Imagen, Ruta_Imagen, tickets.Nombre AS MostrarNombre, Domicilio, tickets.Telefono AS MostrarTelefono, tickets.Email AS MostrarEmail, Total_Letras, Incluir_Mensaje, Mensaje, Moneda, Simbolo, Origen, sucursales.Nombre AS NombreSucursal, FK_Encargado, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, sucursales.Email AS CorreoSucursal, sucursales.Telefono AS TelefonoSucursal, Segundo_Telefono, FK_Zona FROM tickets INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE FK_Sucursal = '".$_GET["idSucursal"]."'";
+    $sql = "SELECT NOW() AS FechaHoy, ID_Ticket, FK_Sucursal, Imagen, Ruta_Imagen, tickets.Nombre AS MostrarNombre, Domicilio, tickets.Telefono AS MostrarTelefono, tickets.Email AS MostrarEmail, Total_Letras, Incluir_Mensaje, Mensaje, Moneda, Simbolo, Origen, sucursales.Nombre AS NombreSucursal, FK_Encargado, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, sucursales.Email AS CorreoSucursal, sucursales.Telefono AS TelefonoSucursal, Segundo_Telefono, FK_Zona FROM tickets INNER JOIN sucursales ON FK_Sucursal = ID_Sucursal WHERE FK_Sucursal = '".$_GET["idSucursal"]."'";
     if($res=$con->query($sql)){
       if ($res->num_rows > 0) {
         $row = $res->fetch_assoc();
@@ -363,20 +363,23 @@ $arregloVenta = '';
           'CorreoSucursal' => $row["CorreoSucursal"],
           'Segundo_Telefono' => $row["Segundo_Telefono"],
           'FK_Zona' => $row["FK_Zona"],
-          'Folio' => $folio
+          'Folio' => $folio,
+          'FechaHoy' => $row["FechaHoy"]
         );
       }else{
         echo "No se encontraron resultados";
       }
     }
 
-    $sql2 = "SELECT ID_Venta, FK_Direccion, Estatus, FK_Usuario, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal) AS NombreSucursal, FK_Cliente, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM clientes WHERE ID_Cliente = FK_Cliente) AS NombreCliente, (SELECT Telefono FROM clientes WHERE ID_Cliente = FK_Cliente) AS TelefonoCliente, (SELECT Celular FROM clientes WHERE ID_Cliente = FK_Cliente) AS CelularCliente,  Descuento, Total, Total_Importes, Tipo_Pago, Pago, Cambio, Notas, Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(Calle,' ',No_Exterior) FROM detalles_clientes WHERE ID_Detalle_Cliente = FK_Direccion) AS DireccionCalleCliente, (SELECT Ciudad FROM detalles_clientes WHERE ID_Detalle_Cliente = FK_Direccion) AS DireccionCiudadCliente, (SELECT CONCAT(Latitud,', ',Longitud) FROM detalles_clientes WHERE ID_Detalle_Cliente = FK_Direccion) AS CoordenadasCliente, (SELECT CONCAT(Calle,' ',No_Exterior) FROM clientes WHERE FK_Cliente = ID_Cliente) AS CalleCliente, IFNULL((SELECT Nombre FROM rutas WHERE ID_Ruta = (SELECT FK_Ruta FROM clientes WHERE ID_Cliente = FK_Cliente)), '') AS Ruta, IFNULL((SELECT Orden_Ruta FROM clientes WHERE ID_Cliente = FK_Cliente), '') AS Orden, (SELECT Ciudad FROM clientes WHERE FK_Cliente = ID_Cliente) AS CiudadCliente, Facturada, Version_CFDI, Fecha_Expedicion_CFDI, Sello_CFDI, Forma_Pago_CFDI, No_Certificado_CFDI, Certificado_CFDI, Moneda_CFDI, Tipo_Comprobante_CFDI, Exportacion_CFDI, Metodo_Pago_CFDI, Lugar_Expedicion_CFDI, Confirmacion_CFDI, Emisor_RFC_CFDI, Emisor_Nombre_CFDI, Emisor_Regimen_Fiscal_CFDI, Receptor_RFC_CFDI, Receptor_Nombre_CFDI, Receptor_Domicilio_CFDI, Receptor_Regimen_Fiscal_CFDI, Receptor_Uso_CFDI, UUID_CFDI, Fecha_Timbrado_CFDI, Rfc_ProvCertif_CFDI, Sello_CFD_CFDI, No_Certificado_SAT_CFDI, Sello_SAT_CFDI, Periodicidad_CFDI, Meses_CFDI, Ano_CFDI, Relacion_CFDI, Cadena_CFDI FROM ventas WHERE ID_Venta = '".$_GET["id"]."'";
+
+    $sql2 = "SELECT ID_Venta, FK_Direccion, Estatus, FK_Usuario, (SELECT CONCAT(Nombre,' ',Primer_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario) AS NombreUsuario, FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = FK_Sucursal) AS NombreSucursal, FK_Cliente,  (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM clientes WHERE ID_Cliente = FK_Cliente) AS NombreCliente, (SELECT Telefono FROM clientes WHERE ID_Cliente = FK_Cliente) AS TelefonoCliente, (SELECT Celular FROM clientes WHERE ID_Cliente = FK_Cliente) AS CelularCliente, Descuento, Total, Total_Importes, Tipo_Pago, Pago, Cambio, Notas, Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(Calle,' ',No_Exterior,', Colonia:', Colonia) FROM detalles_clientes WHERE ID_Detalle_Cliente = FK_Direccion) AS DireccionCalleCliente, (SELECT Ciudad FROM detalles_clientes WHERE ID_Detalle_Cliente = FK_Direccion) AS DireccionCiudadCliente, (SELECT CONCAT(Latitud,', ',Longitud) FROM detalles_clientes WHERE ID_Detalle_Cliente = FK_Direccion) AS CoordenadasCliente, (SELECT CONCAT(Calle,' ',No_Exterior,', Colonia:', Colonia) FROM clientes WHERE FK_Cliente = ID_Cliente) AS CalleCliente, IFNULL((SELECT Nombre FROM rutas WHERE ID_Ruta = (SELECT FK_Ruta FROM clientes WHERE ID_Cliente = FK_Cliente)), '') AS Ruta, IFNULL((SELECT Orden_Ruta FROM clientes WHERE ID_Cliente = FK_Cliente), '') AS Orden, (SELECT Ciudad FROM clientes WHERE FK_Cliente = ID_Cliente) AS CiudadCliente, Facturada, Version_CFDI, Fecha_Expedicion_CFDI, Sello_CFDI, Forma_Pago_CFDI, No_Certificado_CFDI, Certificado_CFDI, Moneda_CFDI, Tipo_Comprobante_CFDI, Exportacion_CFDI, Metodo_Pago_CFDI, Lugar_Expedicion_CFDI, Confirmacion_CFDI, Emisor_RFC_CFDI, Emisor_Nombre_CFDI, Emisor_Regimen_Fiscal_CFDI, Receptor_RFC_CFDI, Receptor_Nombre_CFDI, Receptor_Domicilio_CFDI, Receptor_Regimen_Fiscal_CFDI, Receptor_Uso_CFDI, UUID_CFDI, Fecha_Timbrado_CFDI, Rfc_ProvCertif_CFDI, Sello_CFD_CFDI, No_Certificado_SAT_CFDI, Sello_SAT_CFDI, Periodicidad_CFDI, Meses_CFDI, Ano_CFDI, Relacion_CFDI, Cadena_CFDI FROM ventas WHERE ID_Venta = '".$_GET["id"]."'";
 
     if($res=$con->query($sql2)){
       if ($res->num_rows > 0) {
         $row = $res->fetch_assoc();
 
         $folio = str_pad($_GET["id"], 8, "0", STR_PAD_LEFT);
+
         $direccionCliente = '';
         if ($row["FK_Cliente"] == 1) {
           $direccionCliente = '';
@@ -391,7 +394,6 @@ $arregloVenta = '';
         $arregloVenta = $row;
         $arregloVenta['DireccionCliente'] = $direccionCliente;
         $arregloVenta['TotalFinal'] = ($row["Total_Importes"] + $row["Total"]);
-        
       }else{
         echo "No se encontraron resultados";
       }
@@ -409,7 +411,7 @@ $arregloVenta = '';
         <?php echo "<h1>MISCELÁNEA RIOS</h1>"; ?>
         <?php  
           $FechaHoy = date('Y-m-d H:i:s');
-          echo '<p>'.$FechaHoy.'</p>'; 
+          echo '<p>'.$arreglo["FechaHoy"].'</p>'; 
           if ($arreglo["Domicilio"] == 1) {
             if ($arreglo["Calle"] != "") {
               echo $arreglo["Calle"]." ";
@@ -453,12 +455,12 @@ $arregloVenta = '';
         if ($arregloVenta['Estatus'] == "Cancelada") {
           echo '<p class="centrado">MOTIVO: '.$arregloVenta['Notas'].'</p>';
         }
-        echo '<p class="centrado">CLIENTE: '.$arregloVenta['NombreCliente'].'</p>';
+        echo '<p class="centrado">CLIENTE: <b>'.$arregloVenta['NombreCliente'].'</b></p>';
         echo '<p class="centrado">TELÉFONO: '.$arregloVenta['TelefonoCliente'].'</p>';
         echo '<p class="centrado">CELULAR: '.$arregloVenta['CelularCliente'].'</p>';
         echo '<p class="centrado">'.$arregloVenta['DireccionCliente'].'</p>';
         echo '<p class="centrado">ATENDIO: '.$arregloVenta['NombreUsuario'].'</p>';
-
+        
         if($arregloVenta['Ruta'] != "" && $arregloVenta['Ruta'] != 0){
           echo  '<p class="centrado"><b>Ruta: </b>'.$arregloVenta['Ruta'].'</p>';
             
@@ -505,110 +507,208 @@ $arregloVenta = '';
         </thead>
         <tbody> 
           <?php 
-            $mostrar= "";
-            $subtotal = 0;
-            $contador = 0;
-            $sumaTotalImpuestos = 0;
-            $sumaTotalDescuentos = 0;
-            $sql1 = "SELECT productos.FK_Categoria, categorias.Nombre FROM detalles_ventas LEFT JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion LEFT JOIN categorias ON productos.FK_Categoria = ID_Categoria WHERE FK_Venta = '".$arregloVenta['ID_Venta']."' GROUP BY FK_Categoria ORDER BY categorias.Nombre ASC";
-            if($res1=$con->query($sql1)){
-              if ($res1->num_rows > 0) {
-                while($row1 = $res1->fetch_assoc()){
-                    if ($row1["Nombre"] == "") {
-                      $mostrar .= "<tr class='negra'>
-                        <td colspan='6'>SIN FAMILIA</td>
-                      </tr>";
-                    }else{
-                      $mostrar .= "<tr class='negra'>
-                        <td colspan='6'>".$row1["Nombre"]."</td>
-                      </tr>";
-                    }
+            if ($arreglo["NombreSucursal"] == "Bodega") {
+              $mostrar= "";
+              $subtotal = 0;
+              $contador = 0;
+              $sumaTotalImpuestos = 0;
+              $sumaTotalDescuentos = 0;
+              $sql1 = "SELECT productos.FK_Categoria, categorias.Nombre FROM detalles_ventas LEFT JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion LEFT JOIN categorias ON productos.FK_Categoria = ID_Categoria WHERE FK_Venta = '".$arregloVenta['ID_Venta']."' GROUP BY FK_Categoria ORDER BY categorias.Nombre ASC";
+              if($res1=$con->query($sql1)){
+                if ($res1->num_rows > 0) {
+                  while($row1 = $res1->fetch_assoc()){
+                      if ($row1["Nombre"] == "") {
+                        $mostrar .= "<tr class='negra'>
+                          <td colspan='6'>SIN FAMILIA</td>
+                        </tr>";
+                      }else{
+                        $mostrar .= "<tr class='negra'>
+                          <td colspan='6'>".$row1["Nombre"]."</td>
+                        </tr>";
+                      }
 
-                    //CONSULTAR PRODUCTOS POR CATEGORIA
-                    $sql = "SELECT ID_Detalle_Venta, FK_Venta, detalles_ventas.FK_Producto, productos.FK_Categoria AS IDCategoria, categorias.Nombre AS NombreCategoria, productos.Codigo AS CodigoProducto, presentaciones.Codigo AS CodigoPresentacion, FK_Presentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS Abreviatura, detalles_ventas.Descripcion, detalles_ventas.Precio, Cantidad, detalles_ventas.Descuento, Total, Regreso_Inventario FROM detalles_ventas LEFT JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion LEFT JOIN categorias ON productos.FK_Categoria = ID_Categoria WHERE FK_Venta = '".$arregloVenta['ID_Venta']."' AND FK_Categoria = '".$row1["FK_Categoria"]."' ORDER BY IDCategoria";
-                    if($res=$con->query($sql)){
-                      if ($res->num_rows > 0) {
-                        while($row = $res->fetch_assoc()){
-                            $subtotalProducto = 0;
+                      //CONSULTAR PRODUCTOS POR CATEGORIA
+                      $sql = "SELECT ID_Detalle_Venta, FK_Venta, detalles_ventas.FK_Producto, productos.FK_Categoria AS IDCategoria, categorias.Nombre AS NombreCategoria, productos.Codigo AS CodigoProducto, presentaciones.Codigo AS CodigoPresentacion, FK_Presentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS Abreviatura, detalles_ventas.Descripcion, detalles_ventas.Precio, Cantidad, detalles_ventas.Descuento, Total, Regreso_Inventario FROM detalles_ventas LEFT JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion LEFT JOIN categorias ON productos.FK_Categoria = ID_Categoria WHERE FK_Venta = '".$arregloVenta['ID_Venta']."' AND FK_Categoria = '".$row1["FK_Categoria"]."' ORDER BY IDCategoria";
+                      if($res=$con->query($sql)){
+                        if ($res->num_rows > 0) {
+                          while($row = $res->fetch_assoc()){
+                              $subtotalProducto = 0;
 
-                            //CONSULTAR LAS DEVOLUCIONES
-                            $cantidadDevuelto = 0;
-                            $sqldev = "SELECT ID_Detalle_Devolucion, FK_Devolucion, FK_Detalle_Venta, SUM(detalles_devolucion.Cantidad) AS Cantidad, SUM(detalles_devolucion.Total) AS Total FROM detalles_devolucion INNER JOIN detalles_ventas ON FK_Detalle_Venta = ID_Detalle_Venta WHERE detalles_ventas.FK_Venta = '".$arregloVenta['ID_Venta']."' AND FK_Detalle_Venta = '".$row["ID_Detalle_Venta"]."' GROUP BY FK_Detalle_Venta"; 
-                            if($resdev=$con->query($sqldev)){
-                              if ($resdev->num_rows > 0) {
-                                while($rowdev = $resdev->fetch_assoc()){
-                                  $cantidadDevuelto = $rowdev["Cantidad"];
-                                }
-                              }
-                            }
 
-                            $row["Cantidad"] = $row['Cantidad'] - $cantidadDevuelto;
-                            $totalImpuesto = 0;
-                            $mostrarImpuestos = "";
-                            $sql2 = "SELECT ID_Impuesto, FK_Detalle_Venta, Tipo_Impuesto_CFDI, Impuesto_CFDI, Clave_CFDI, Tipo_Factor_CFDI, Tasa_Cuota_CFDI FROM detalles_impuestos_ventas WHERE FK_Detalle_Venta = '".$row["ID_Detalle_Venta"]."'"; 
-                            if($res2=$con->query($sql2)){
-                              if ($res2->num_rows > 0) {
-                                while($row2 = $res2->fetch_assoc()){
-                                  $sumaImpuestos = 0;
-                                  $totalProducto=0; $descuento=0; $totalFinal=0; $totalImpuesto = 0;
-                                  $totalProducto = $row["Precio"]*$row["Cantidad"];
-                                  $descuento = ($row["Descuento"] / 100);
-                                  $totalFinal = $totalProducto - ($totalProducto * $descuento);
-                                  if ($row2["Tipo_Impuesto_CFDI"] == "Trasladado") { //Se suma al total
-                                    $sumaImpuestos += $totalFinal * ($row2["Tasa_Cuota_CFDI"] / 100);
-                                  }else if($row2["Tipo_Impuesto_CFDI"] == "Retenido" && $row2["Tipo_Factor_CFDI"] != "Exento"){ //Se resta al total
-                                    $sumaImpuestos -= $totalFinal * ($row2["Tasa_Cuota_CFDI"] / 100);
-                                  }else if($row2["Tipo_Impuesto_CFDI"] == "Retenido" && $row2["Tipo_Factor_CFDI"] == "Exento"){ ////No se suma ni se resta
-                                    $sumaImpuestos += 0;
+                              //CONSULTAR LAS DEVOLUCIONES
+                              $cantidadDevuelto = 0;
+                              $sqldev = "SELECT ID_Detalle_Devolucion, FK_Devolucion, FK_Detalle_Venta, SUM(detalles_devolucion.Cantidad) AS Cantidad, SUM(detalles_devolucion.Total) AS Total FROM detalles_devolucion INNER JOIN detalles_ventas ON FK_Detalle_Venta = ID_Detalle_Venta WHERE detalles_ventas.FK_Venta = '".$arregloVenta['ID_Venta']."' AND FK_Detalle_Venta = '".$row["ID_Detalle_Venta"]."' GROUP BY FK_Detalle_Venta"; 
+                              if($resdev=$con->query($sqldev)){
+                                if ($resdev->num_rows > 0) {
+                                  while($rowdev = $resdev->fetch_assoc()){
+                                    $cantidadDevuelto = $rowdev["Cantidad"];
                                   }
-                                  $sumaTotalImpuestos += $sumaImpuestos;
-                                  $totalImpuesto = $totalFinal * ($row2["Tasa_Cuota_CFDI"] / 100);
-                                  $mostrarImpuestos .= $row2["Impuesto_CFDI"]."(".$row2["Tasa_Cuota_CFDI"]."%) $".number_format($totalImpuesto, 2)."<br>";
                                 }
                               }
-                            }
 
-                            $nombrePresentacion = "";
-                            $codigoactual = "";
-                            if ($row['Presentacion'] != "") {
-                              $nombrePresentacion = " ".$row['Presentacion']." (".$row['Abreviatura'].")";
-                              $codigoactual = $row['CodigoPresentacion'];
-                            }else{
+                              $row["Cantidad"] = $row['Cantidad'] - $cantidadDevuelto;
+                              $totalImpuesto = 0;
+                              $mostrarImpuestos = "";
+                              $sql2 = "SELECT ID_Impuesto, FK_Detalle_Venta, Tipo_Impuesto_CFDI, Impuesto_CFDI, Clave_CFDI, Tipo_Factor_CFDI, Tasa_Cuota_CFDI FROM detalles_impuestos_ventas WHERE FK_Detalle_Venta = '".$row["ID_Detalle_Venta"]."'"; 
+                              if($res2=$con->query($sql2)){
+                                if ($res2->num_rows > 0) {
+                                  while($row2 = $res2->fetch_assoc()){
+                                    $sumaImpuestos = 0;
+                                    $totalProducto=0; $descuento=0; $totalFinal=0; $totalImpuesto = 0;
+                                    $totalProducto = $row["Precio"]*$row["Cantidad"];
+                                    $descuento = $row["Descuento"];
+                                    $totalFinal = $totalProducto - $descuento;
+                                    if ($row2["Tipo_Impuesto_CFDI"] == "Trasladado") { //Se suma al total
+                                      $sumaImpuestos += $totalFinal * ($row2["Tasa_Cuota_CFDI"] / 100);
+                                    }else if($row2["Tipo_Impuesto_CFDI"] == "Retenido" && $row2["Tipo_Factor_CFDI"] != "Exento"){ //Se resta al total
+                                      $sumaImpuestos -= $totalFinal * ($row2["Tasa_Cuota_CFDI"] / 100);
+                                    }else if($row2["Tipo_Impuesto_CFDI"] == "Retenido" && $row2["Tipo_Factor_CFDI"] == "Exento"){ ////No se suma ni se resta
+                                      $sumaImpuestos += 0;
+                                    }
+                                    $sumaTotalImpuestos += $sumaImpuestos;
+                                    $totalImpuesto = $totalFinal * ($row2["Tasa_Cuota_CFDI"] / 100);
+                                    $mostrarImpuestos .= $row2["Impuesto_CFDI"]."(".$row2["Tasa_Cuota_CFDI"]."%) $".number_format($totalImpuesto, 2)."<br>";
+                                  }
+                                }
+                              }
+
                               $nombrePresentacion = "";
-                              $codigoactual = $row['CodigoProducto'];
-                            }
+                              $codigoactual = "";
+                              if ($row['Presentacion'] != "") {
+                                $nombrePresentacion = " ".$row['Presentacion']." (".$row['Abreviatura'].")";
+                                $codigoactual = $row['CodigoPresentacion'];
+                              }else{
+                                $nombrePresentacion = "";
+                                $codigoactual = $row['CodigoProducto'];
+                              }
 
-                            $subtotalProducto = ($row['Cantidad'] * $row['Precio']);
-                            $row['Total'] = $subtotalProducto + $totalImpuesto - $row['Descuento'];
-                            
-                            if ($row['Cantidad'] > 0) {
-                              $mostrar .= "
-                              <tr>
-                                  <td colspan='5' style='text-align: left;'>".$row["Descripcion"].$nombrePresentacion."</td>      
-                              </tr>
-                              <tr>
-                                  <td class='codigo'>".$codigoactual."</td>
-                                  <td class='cantidad'><b style='font-size: 17px;'>".(round($row['Cantidad']*100)/100)."</b></td> 
-                                  <td class='precio'>$".(round($row['Precio']*100)/100)."</td>
-                                  <td class='impuestos'>".$mostrarImpuestos."</td>
-                                  <td class=''>$".$subtotalProducto."<br>Desc: ".(round($row['Descuento']*100)/100)."$ <br>$".(round($row['Total']*100)/100)."</td>
-                              </tr>";
-                            }
+                              $subtotalProducto = ($row['Cantidad'] * $row['Precio']);
+                              $row['Total'] = $subtotalProducto + $totalImpuesto - $row['Descuento'];
+                              
+                              if ($row['Cantidad'] > 0) {
+                                $mostrar .= "
+                                <tr>
+                                    <td colspan='5' style='text-align: left;'>".$row["Descripcion"].$nombrePresentacion."</td>      
+                                </tr>
+                                <tr>
+                                    <td class='codigo'>".$codigoactual."</td>
+                                    <td class='cantidad'><b style='font-size: 17px;'>".(round($row['Cantidad']*100)/100)."</b></td> 
+                                    <td class='precio'>$".(round($row['Precio']*100)/100)."</td>
+                                    <td class='impuestos'>".$mostrarImpuestos."</td>
+                                    <td class=''>$".$subtotalProducto."<br>Desc: ".(round($row['Descuento']*100)/100)."$ <br>$".(round($row['Total']*100)/100)."</td>
+                                </tr>";
+                              }
 
-                            $subtotal += ($row['Cantidad'] * $row['Precio']);
-                            $sumaTotalDescuentos += $subtotalProducto * ($row['Descuento'] / 100);
-                            $contador++;
+                              $subtotal += ($row['Cantidad'] * $row['Precio']);
+                              $sumaTotalDescuentos += $row['Descuento'];
+                              $contador++;
+                          }
+                        }else{
+                          echo "No se encontraron resultados";
                         }
                       }else{
-                        echo "No se encontraron resultados";
-                      }
-                    }else{
-                      echo "Error: ".mysqli_error($con);
-                    } 
+                        echo "Error: ".mysqli_error($con);
+                      } 
+                  }
                 }
               }
+              echo $mostrar; 
+            }else{
+              //SI ES CUALQUIER OTRA TIENDA QUE NO SEA BODEGA SE ORDENA POR COMO SE AGREGARON LOS PRODUCTOS
+
+              $mostrar= "";
+              $subtotal = 0;
+              $contador = 0;
+              $sumaTotalImpuestos = 0;
+              $sumaTotalDescuentos = 0;
+              
+
+              //CONSULTAR PRODUCTOS POR ORDEN DEL DETALLE DE VENTA
+              $sql = "SELECT ID_Detalle_Venta, FK_Venta, detalles_ventas.FK_Producto, productos.FK_Categoria AS IDCategoria, categorias.Nombre AS NombreCategoria, productos.Codigo AS CodigoProducto, presentaciones.Codigo AS CodigoPresentacion, FK_Presentacion, presentaciones.Nombre AS Presentacion, presentaciones.Abreviatura AS Abreviatura, detalles_ventas.Descripcion, detalles_ventas.Precio, Cantidad, detalles_ventas.Descuento, Total, Regreso_Inventario FROM detalles_ventas LEFT JOIN productos ON FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion LEFT JOIN categorias ON productos.FK_Categoria = ID_Categoria WHERE FK_Venta = '".$arregloVenta['ID_Venta']."' ORDER BY ID_Detalle_Venta ASC";
+              if($res=$con->query($sql)){
+                if ($res->num_rows > 0) {
+                  while($row = $res->fetch_assoc()){
+                      $subtotalProducto = 0;
+
+                      //CONSULTAR LAS DEVOLUCIONES
+                      $cantidadDevuelto = 0;
+                      $sqldev = "SELECT ID_Detalle_Devolucion, FK_Devolucion, FK_Detalle_Venta, SUM(detalles_devolucion.Cantidad) AS Cantidad, SUM(detalles_devolucion.Total) AS Total FROM detalles_devolucion INNER JOIN detalles_ventas ON FK_Detalle_Venta = ID_Detalle_Venta WHERE detalles_ventas.FK_Venta = '".$arregloVenta['ID_Venta']."' AND FK_Detalle_Venta = '".$row["ID_Detalle_Venta"]."' GROUP BY FK_Detalle_Venta"; 
+                      if($resdev=$con->query($sqldev)){
+                        if ($resdev->num_rows > 0) {
+                          while($rowdev = $resdev->fetch_assoc()){
+                            $cantidadDevuelto = $rowdev["Cantidad"];
+                          }
+                        }
+                      }
+
+                      $row["Cantidad"] = $row['Cantidad'] - $cantidadDevuelto;
+                      $totalImpuesto = 0;
+                      $mostrarImpuestos = "";
+                      $sql2 = "SELECT ID_Impuesto, FK_Detalle_Venta, Tipo_Impuesto_CFDI, Impuesto_CFDI, Clave_CFDI, Tipo_Factor_CFDI, Tasa_Cuota_CFDI FROM detalles_impuestos_ventas WHERE FK_Detalle_Venta = '".$row["ID_Detalle_Venta"]."'"; 
+                      if($res2=$con->query($sql2)){
+                        if ($res2->num_rows > 0) {
+                          while($row2 = $res2->fetch_assoc()){
+                            $sumaImpuestos = 0;
+                            $totalProducto=0; $descuento=0; $totalFinal=0; $totalImpuesto = 0;
+                            $totalProducto = $row["Precio"]*$row["Cantidad"];
+                            $descuento = $row["Descuento"];
+                            $totalFinal = $totalProducto - $descuento;
+                            if ($row2["Tipo_Impuesto_CFDI"] == "Trasladado") { //Se suma al total
+                              $sumaImpuestos += $totalFinal * ($row2["Tasa_Cuota_CFDI"] / 100);
+                            }else if($row2["Tipo_Impuesto_CFDI"] == "Retenido" && $row2["Tipo_Factor_CFDI"] != "Exento"){ //Se resta al total
+                              $sumaImpuestos -= $totalFinal * ($row2["Tasa_Cuota_CFDI"] / 100);
+                            }else if($row2["Tipo_Impuesto_CFDI"] == "Retenido" && $row2["Tipo_Factor_CFDI"] == "Exento"){ ////No se suma ni se resta
+                              $sumaImpuestos += 0;
+                            }
+                            $sumaTotalImpuestos += $sumaImpuestos;
+                            $totalImpuesto = $totalFinal * ($row2["Tasa_Cuota_CFDI"] / 100);
+                            $mostrarImpuestos .= $row2["Impuesto_CFDI"]."(".$row2["Tasa_Cuota_CFDI"]."%) $".number_format($totalImpuesto, 2)."<br>";
+                          }
+                        }
+                      }
+
+                      $nombrePresentacion = "";
+                      $codigoactual = "";
+                      if ($row['Presentacion'] != "") {
+                        $nombrePresentacion = " ".$row['Presentacion']." (".$row['Abreviatura'].")";
+                        $codigoactual = $row['CodigoPresentacion'];
+                      }else{
+                        $nombrePresentacion = "";
+                        $codigoactual = $row['CodigoProducto'];
+                      }
+
+                      $subtotalProducto = ($row['Cantidad'] * $row['Precio']);
+                      $row['Total'] = $subtotalProducto + $totalImpuesto - $row['Descuento'];
+                      
+                      if ($row['Cantidad'] > 0) {
+                        $mostrar .= "
+                        <tr>
+                            <td colspan='5' style='text-align: left;'>".$row["Descripcion"].$nombrePresentacion."</td>      
+                        </tr>
+                        <tr>
+                            <td class='codigo'>".$codigoactual."</td>
+                            <td class='cantidad'><b style='font-size: 17px;'>".(round($row['Cantidad']*100)/100)."</b></td> 
+                            <td class='precio'>$".(round($row['Precio']*100)/100)."</td>
+                            <td class='impuestos'>".$mostrarImpuestos."</td>
+                            <td class=''>$".$subtotalProducto."<br>Desc: ".(round($row['Descuento']*100)/100)."$ <br>$".(round($row['Total']*100)/100)."</td>
+                        </tr>";
+                      }
+
+                      $subtotal += ($row['Cantidad'] * $row['Precio']);
+                      $sumaTotalDescuentos += $row['Descuento'];
+                      $contador++;
+                  }
+                }else{
+                  echo "No se encontraron resultados";
+                }
+              }else{
+                echo "Error: ".mysqli_error($con);
+              }
+
+
+              echo $mostrar; 
+
             }
-            echo $mostrar;
            ?>
         </tbody>
       </table>

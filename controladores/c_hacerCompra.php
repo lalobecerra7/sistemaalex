@@ -31,7 +31,7 @@ class hacerCompra {
 			$tipoPagoA = 'Abono';
 		}
 
-		$query = "INSERT INTO compras SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Proveedor= '$idProveedor', Total= '$total', Anticipo= '$ImportePagadoCompra', Estatus= '$estatus', Fecha_Registro = '$fecha', Fecha_Credito = '$fechaCredito', Tipo_Compra = '$tipoCompra', Descuento = '$descuento', FK_Sucursal = '$sucursal'";
+		$query = "INSERT INTO compras SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."', FK_Proveedor= '$idProveedor', Total= '$total', Anticipo= '$ImportePagadoCompra', Estatus= '$estatus', Fecha_Registro = NOW(), Fecha_Credito = '$fechaCredito', Tipo_Compra = '$tipoCompra', Descuento = '$descuento', FK_Sucursal = '$sucursal'";
 		$error = $omodelo->_insertar($query);
 
 		if ($error == "si") {
@@ -64,7 +64,7 @@ class hacerCompra {
 
 			if($ImportePagadoCompra > 0){ 
 				$usuario = $_SESSION['user_admin']['ID_Usuario'];
-				$queryPago = "INSERT INTO pagos SET FK_Compra = '$IDCompra', Monto = '$ImportePagadoCompra', Concepto = '$tipoPagoA', Tipo_Pago = '$tipoPago', Fecha = '$fecha', FK_Usuario = '$usuario', Detalles_Pago = '$detalles'";
+				$queryPago = "INSERT INTO pagos SET FK_Compra = '$IDCompra', Monto = '$ImportePagadoCompra', Concepto = '$tipoPagoA', Tipo_Pago = '$tipoPago', Fecha = NOW(), FK_Usuario = '$usuario', Detalles_Pago = '$detalles'";
 				$errorPago = $omodelo->_insertar($queryPago);
 				if ($errorPago == "si") {
 					echo "Error pagos: ".mysqli_error($omodelo->link);
@@ -530,7 +530,7 @@ class hacerCompra {
 			$sucursal = $omodelo->link->real_escape_string($Sucursal);
 			$datos = json_decode($Productos);
 			
-			$query = "INSERT INTO ordenes_compra SET FK_Proveedor= '$idProveedor', Total= '$total', Estatus= 'Pendiente', Fecha_Registro = '$fecha', Descuento = '$descuento', FK_Sucursal = '$sucursal', FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
+			$query = "INSERT INTO ordenes_compra SET FK_Proveedor= '$idProveedor', Total= '$total', Estatus= 'Pendiente', Fecha_Registro = NOW(), Descuento = '$descuento', FK_Sucursal = '$sucursal', FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
 			$error = $omodelo->_insertar($query);
 
 			if ($error == "si") {
@@ -562,7 +562,7 @@ class hacerCompra {
 			$sucursal = $omodelo->link->real_escape_string($Sucursal);
 			$datos = json_decode($Productos);
 			
-			$query = "UPDATE ordenes_compra SET FK_Proveedor= '$idProveedor', Total= '$total', Estatus= 'Pendiente', Fecha_Registro = '$fecha', Descuento = '$descuento', FK_Sucursal = '$sucursal', FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."' WHERE ID_Orden_Compra = '$id'";
+			$query = "UPDATE ordenes_compra SET FK_Proveedor= '$idProveedor', Total= '$total', Estatus= 'Pendiente', Fecha_Registro = NOW(), Descuento = '$descuento', FK_Sucursal = '$sucursal', FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."' WHERE ID_Orden_Compra = '$id'";
 			$error = $omodelo->_insertar($query);
 
 			if ($error == "si") {

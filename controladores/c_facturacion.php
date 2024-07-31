@@ -137,6 +137,8 @@ class facturacion {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s');
+		$fecha = date('Y-m-d H:i:s', strtotime('-1 hour', strtotime ($fecha))); 
+
 		$rfcFacturacion = trim($omodelo->link->real_escape_string($rfcFacturacion));
 		$nombreFacturacion = trim($omodelo->link->real_escape_string($nombreFacturacion));
 		$regimenFacturacion = $omodelo->link->real_escape_string($regimenFacturacion);
@@ -212,6 +214,8 @@ class facturacion {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s');
+		$fecha = date('Y-m-d H:i:s', strtotime('-1 hour', strtotime ($fecha))); 
+
 		$id = $omodelo->link->real_escape_string($id);
 		$formaPagoCFDI = $omodelo->link->real_escape_string($formaPagoCFDI);
 		$relacionCFDI = $omodelo->link->real_escape_string($relacionCFDI);
@@ -586,6 +590,7 @@ class facturacion {
 		$omodelo = new m_modelo();
 		extract($_POST);
 		$fecha = date('Y-m-d H:i:s');
+		$fecha = date('Y-m-d H:i:s', strtotime('-1 hour', strtotime ($fecha))); 
 
 		$id = $omodelo->link->real_escape_string($id);
 		$motivo = $omodelo->link->real_escape_string($motivo);

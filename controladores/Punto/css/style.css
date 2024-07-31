@@ -1,0 +1,34 @@
+body {
+    background-image: url('ruta/a/tu/imagen/fondo.jpg'); /* Ruta a tu imagen de fondo */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+#formRegistro {
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente para el formulario */
+    border-radius: 10px;
+}
+
+#bBotonRegistar{
+    -moz-user-select: none;
+    text-transform: capitalize;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    line-height: 0;
+    margin-bottom: 0;
+    padding: 30px 44px;
+    border-radius: 5px;
+    min-width: 200px;
+    cursor: pointer;
+    transition: color 0.4s linear;
+    position: relative;
+    z-index: 1;
+    border: 0;
+    overflow: hidden;
+    margin: 0;
+        }

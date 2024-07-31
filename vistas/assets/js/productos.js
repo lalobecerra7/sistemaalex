@@ -31,6 +31,7 @@ function v_productos() {
             }
         },
         submitHandler: function(form) { 
+            console.log("entro");
             const searchRegExp = new RegExp(',', 'g');
             var presentaciones = [];
             if($("#verPresentaciones").children('tr').length > 0){
@@ -42,7 +43,7 @@ function v_productos() {
             var precios = [];
             if($("#verPreciosProd").children('tr').length > 0){
                 $("#verPreciosProd").children('tr').each(function(index, el){
-                    precios.push({'ID_Precio': $.trim($(this).attr('id')),'Zona': $.trim($(this).children('td:eq(0)').attr('attrID')), 'Presentacion': $.trim($(this).children('td:eq(1)').text()), 'Nombre': $.trim($(this).children('td:eq(2)').text()), 'Precio': $.trim($(this).children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')), 'Precio_Mayoreo': $.trim($(this).children('td:eq(4)').text().replace('$', '').replace(searchRegExp, ''))});
+                    precios.push({'ID_Precio': $.trim($(this).attr('id')),'Zona': $.trim($(this).children('td:eq(0)').attr('attrID')), 'Presentacion': $.trim($(this).children('td:eq(1)').text()), 'Nombre': $.trim($(this).children('td:eq(2)').text()), 'Precio': $.trim($(this).children('td:eq(3)').text().replace('$', '').replace(searchRegExp, '')), 'Precio_Mayoreo': 0});
                 });
             }
 
@@ -524,6 +525,86 @@ function v_productos() {
             console.log("Error ajax");
         });
     });
+
+    $('#FormAgregarPrecioNuevoProductos').validate({
+        rules: {
+            ReferenciaPrecioNuevo: {
+                required: true
+            },
+            Precio3PrecioNuevo: {
+                required: true
+            },
+            AumentoPrecioNuevo: {
+                required: true
+            },
+            ZonaPrecioNuevo: {
+                required: true
+            },
+        },
+        messages: {
+            ReferenciaPrecioNuevo: {
+                required: "La referencia es requerida."
+            },
+            Precio3PrecioNuevo: {
+                required: "El precio 3 es requerido."
+            },
+            AumentoPrecioNuevo: {
+                required: "El porcentaje de aumento es requerido."
+            },
+            ZonaPrecioNuevo: {
+                required: "La zona del precio es requerida."
+            },
+        },
+        submitHandler: function(form) { 
+            if ($("#ImpuestosPrecioNuevo").val() == "") {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Nuevo precio agregado correctamente'
+                });
+            }
+            var data = new FormData(document.getElementById('FormAgregarPrecioNuevoProductos'));
+            data.append('metodo', "detalles");
+            data.append('accion', 'productos');
+            data.append('tipo', 'InsertarNuevoPrecio3');
+
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    $("#carga").show();
+                }
+            })
+            .done(function(res) {
+                console.log(res);
+                if ($.trim(res) == "Correcto") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Precios agregados correctamente'
+                    });
+                    $("#FormAgregarPrecioNuevoProductos").trigger("reset");
+                    $("#ModalAgregarPrecio3").modal("hide");
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Error inesperado al agregar el nuevo precio.'
+                    });
+
+                    console.log($.trim(res));
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            })
+            .always(function() {
+                $("#carga").hide();
+            });   
+        }              
+    });
+
 }
 
 function TablaProductos(){
@@ -633,6 +714,7 @@ jQuery(document).ready(function($) {
         $("#bloquearProducto").prop('checked', false);
         $('#verImagenProducto').html('<img src="vistas/assets/archivos/fotosProductos/default.jpg" style="width: 250px; height: 170px; cursor:pointer;border-radius:4px;border:2px solid grey;" class="img-thumbnail"><br>');
         JsBarcode("#CodigoB", "CODIGO");
+        $("#FilaReferenciaProducto").addClass("oculto");
     });
 
     $(document).on('click', '.EliminarProducto', function() {
@@ -681,6 +763,7 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('click', '.ModificarProducto', function() {
+        $("#FilaReferenciaProducto").removeClass("oculto");
         var id = $(this).attr('attrid');
         $("#verPresentaciones").html("");
         $("#verPreciosProd").html("");
@@ -702,7 +785,7 @@ jQuery(document).ready(function($) {
             data: data
         })
         .done(function(res) {
-            //console.log($.trim(res));
+            console.log($.trim(res));
             var datos = JSON.parse($.trim(res));
 
             $("#CodigoBarras").val(datos.Codigo);
@@ -720,7 +803,7 @@ jQuery(document).ready(function($) {
             $("#Area").val(datos.FK_Area);
             $("#DetallesProducto").val(datos.Detalles);
             $("#ImporteProducto").val(datos.Importe);
-            $("#ReferenciaProducto").val(datos.Referencia)
+            $("#ReferenciaProducto").val(datos.Referencia);
             $("#claveProdServ").val(datos.Clave_ProdServ_CFDI);
             $("#claveUnidadProd").val(datos.Clave_Unidad_CFDI);
             $("#unidadProd").val(datos.Nombre_Unidad);
@@ -771,7 +854,7 @@ jQuery(document).ready(function($) {
                         <td attrID="`+precio.FK_Presentacion+`">`+precio.Presentacion+`</td>
                         <td>`+precio.Nombre+`</td>
                         <td><span class="dinero">`+precio.Precio+`</span></td>
-                        <td><span class="dinero">`+precio.Precio_Mayoreo+`</span></td>
+                        <td><span class="">`+precio.Margen+`</span></td>
                         <td><button type="button" class="btn btn-danger btn-sm bQuitarPrecio"><i class="fas fa-trash"></i></button></td>
                     </tr>`);
                 });
@@ -1183,7 +1266,7 @@ jQuery(document).ready(function($) {
             <td attrID="`+$.trim($("#presentacionProdSelect").val())+`">`+$.trim($('#presentacionProdSelect').val())+`</td>
             <td>`+$.trim($("#nombrePrecio").val())+`</td>
             <td><span class="dinero">`+$.trim($("#precioProductoPres").val())+`</span></td>
-            <td><span class="dinero">`+$.trim($("#precioProductoMayoreoPres").val())+`</span></td>
+            <td><span class="">0%</td>
             <td><button type="button" class="btn btn-danger btn-sm bQuitarPrecio"><i class="fas fa-trash"></i></button></td>
         </tr>`);
 
@@ -1242,6 +1325,10 @@ jQuery(document).ready(function($) {
     $(document).on('click', '#bAgergarStock', function() {
         $("#bGuardarStock").trigger('click');
     });
+
+    /*$(document).on('click', '#bAgregarPrecio3', function() {
+        $("#bGuardarPrecio3").trigger('click');
+    });*/
 
     $(document).on('submit', '#formStockProd', function(event) {
         event.preventDefault();

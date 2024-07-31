@@ -11,6 +11,7 @@ class importes {
 		$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
 		$orden =  $omodelo->link->real_escape_string($orden);
 		$arreglo = array();
+		$NumRows = 0;
 
 		$busqueda = '';
 		if(trim($buscar) != ''){
@@ -21,6 +22,18 @@ class importes {
 				if($i < (count($separa)-1)){
 					$busqueda .= ' AND ';
 				}
+			}
+		}
+
+		$queryRows = "SELECT ID_Importe FROM `importes` INNER JOIN ventas ON FK_Venta = ID_Venta INNER JOIN clientes ON FK_Cliente = ID_Cliente $busqueda GROUP BY ID_Cliente";
+		$rowRows = $omodelo->_consultar($queryRows);
+		$numerofilasRows = $omodelo->numerofilas;
+
+		if($rowRows == 'si'){
+			echo "Error: ".mysqli_error($omodelo->link);
+		}else{
+			if($numerofilasRows > 0){
+				$NumRows = $numerofilasRows;
 			}
 		}
 
@@ -142,7 +155,7 @@ class importes {
 				}
 
 				$arreglo['totales'] = array(
-					'NumRows' => $numerofilas, 
+					'NumRows' => $NumRows, 
 					'Datos' => "",
 					'Cliente' => "Totales",
 					'Total' => "<b>$".number_format($SumarVentas, 2)."</b>",
@@ -217,13 +230,13 @@ class importes {
 					$separa = explode(' ', trim($buscar));
 					$busqueda = 'AND ';
 					for ($i=0; $i < count($separa); $i++) { 
-						$busqueda .= "CONCAT(Cantidad, importes.Total, importes.Estatus, productos.Descripcion) REGEXP '".$separa[$i]."'";
+						$busqueda .= "CONCAT(LPAD(FK_Venta, 8, '0'), Cantidad, importes.Total, importes.Estatus, productos.Descripcion) REGEXP '".$separa[$i]."'";
 						if($i < (count($separa)-1)){
 							$busqueda .= ' AND ';
 						}
 					}
 				}
-				$query = "SELECT ID_Importe, importes.Pagados AS ImportesPagados, FK_Venta AS Venta, FK_Cliente, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, importes.Total, importes.Estatus, productos.Descripcion AS Producto FROM importes INNER JOIN productos ON importes.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+				$query = "SELECT LPAD(FK_Venta, 8, '0') AS FolioVenta, ID_Importe, importes.Pagados AS ImportesPagados, FK_Venta AS Venta, FK_Cliente, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, importes.Total, importes.Estatus, productos.Descripcion AS Producto, (SELECT COUNT(*) FROM importes INNER JOIN productos ON importes.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente') AS Num FROM importes INNER JOIN productos ON importes.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			}else{
 				$busqueda = '';
 				if(trim($buscar) != ''){
@@ -236,10 +249,9 @@ class importes {
 						}
 					}
 				}
-				$query = "SELECT ID_Importe, importes.Pagados AS ImportesPagados, FK_Venta AS Venta, FK_Cliente, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, importes.Total, importes.Estatus, productos.Descripcion AS Producto FROM importes INNER JOIN productos ON importes.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente' AND FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+				$query = "SELECT LPAD(FK_Venta, 8, '0') AS FolioVenta, ID_Importe, importes.Pagados AS ImportesPagados, FK_Venta AS Venta, FK_Cliente, importes.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Importe AS ImportePresentacion, productos.Nombre_Unidad AS NombreGenerico, Cantidad, importes.Importe, importes.Total, importes.Estatus, productos.Descripcion AS Producto, (SELECT COUNT(*) FROM importes INNER JOIN productos ON importes.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente') AS Num FROM importes INNER JOIN productos ON importes.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Cliente = '$idcliente' AND FK_Sucursal = '$sucursal' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 			}
 
-			
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -261,7 +273,7 @@ class importes {
 
 						$NombreProducto = $row[$i]['Producto']." (".$nombrePresentacion.")";
 
-						$folio = str_pad($row[$i]['Venta'], 8, "0", STR_PAD_LEFT);
+						$folio = $row[$i]['FolioVenta'];
 						$botonMarcarPagado = "";
 						$restantesPagar = $row[$i]['Cantidad'] - $row[$i]['ImportesPagados'];
 						if ($row[$i]['Estatus'] == "Se debe") {
@@ -289,7 +301,7 @@ class importes {
 					}
 
 					$arreglo['totales'] = array(
-						'NumRows' => $numerofilas, 
+						'NumRows' => $row[0]['Num'], 
 						'Venta' => "",
 						'Producto' => "",
 						'Cantidad' => "",

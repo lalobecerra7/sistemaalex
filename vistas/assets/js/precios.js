@@ -81,6 +81,84 @@ function v_precios() {
         }
   });  
 
+    $('#FormAgregarPrecioNuevo').validate({
+        rules: {
+            ReferenciaPrecioNuevo: {
+                required: true
+            },
+            Precio3PrecioNuevo: {
+                required: true
+            },
+            AumentoPrecioNuevo: {
+                required: true
+            },
+            ZonaPrecioNuevo: {
+                required: true
+            },
+        },
+        messages: {
+            ReferenciaPrecioNuevo: {
+                required: "La referencia es requerida."
+            },
+            Precio3PrecioNuevo: {
+                required: "El precio 3 es requerido."
+            },
+            AumentoPrecioNuevo: {
+                required: "El porcentaje de aumento es requerido."
+            },
+            ZonaPrecioNuevo: {
+                required: "La zona del precio es requerida."
+            },
+        },
+        submitHandler: function(form) { 
+            if ($("#ImpuestosPrecioNuevo").val() == "") {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Nuevo precio agregado correctamente'
+                });
+            }
+            var data = new FormData(document.getElementById('FormAgregarPrecioNuevo'));
+            data.append('metodo', "detalles");
+            data.append('accion', 'precios');
+            data.append('tipo', 'InsertarNuevoPrecio3');
+
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    $("#carga").show();
+                }
+            })
+            .done(function(res) {
+                console.log(res);
+                if ($.trim(res) == "Correcto") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Precios agregados correctamente'
+                    });
+                    $("#FormAgregarPrecioNuevo").trigger("reset");
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Error inesperado al agregar el nuevo precio.'
+                    });
+
+                    console.log($.trim(res));
+                }
+            })
+            .fail(function() {
+                console.log("Error ajax");
+            })
+            .always(function() {
+                $("#carga").hide();
+            });   
+        }              
+    });
+
 
 }
 
@@ -115,7 +193,8 @@ function tablaPrecios() {
 			"Proveedores",
 			"Nombre",
 			"Precio",
-			"Mayoreo"
+            "Margen",
+            "Costo"
         ],
         "sort": [
             0,

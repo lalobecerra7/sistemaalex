@@ -25,6 +25,7 @@
 		            <th>Fecha Fin</th>
 		            <th>Total</th>
 		            <th>Concentrado</th>
+		            <th orden="No">Cubetas</th>
 		            <th>Detalles</th>
 		            <th orden="No">Acciones</th>
 		          </thead>
@@ -128,7 +129,23 @@
 		      	</div>
 		    	</div>
 		</div>
-		<div class="row mx-2 justify-content-between" id="contenedorBalance">
+			<div class="row mx-2 justify-content-between" id="contenedorBalance">
+				<hr>
+			<div class="row mx-2 justify-content-between">
+				<h5><b>Importes</b></h5>
+				<div class="col-md-6 col-sm-12 mb-3">
+					<div class="form-floating mb-3">
+						<input type="number" class="form-control " id="envasesPrestados" name="envasesPrestados" placeholder="Envases prestados">
+						<label>Envases prestados</label>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12 mb-3">
+					<div class="form-floating mb-3">
+						<input type="number" class="form-control " id="envasesRegresados" name="envasesRegresados" placeholder="Envases Regresados">
+						<label>Envases Regresados</label>
+					</div>
+				</div>
+			</div>
 			<div class="col-12 mb-2">
 				<hr>
 			</div>
@@ -337,6 +354,51 @@
 	</div>
 </div>
 
+
+<!--///////////////////////////////////////////////////////-->
+<div class="modal fade" id="modalCubeta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header bg-inverse bd-inverse-darken">
+				<h5 class="modal-title" style="font-weight: bold;">Verificar cubetas del corte</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<br>
+				<div class="row">
+					<div class="col-12">
+						<form id="formVerificarCubeta">
+							<div class="row mb-3 sm-3">
+							  <div class="col-9">
+							  	<input type="text" class="form-control" name="codigoProductoCubeta" id="codigoProductoCubeta" type="text" placeholder="Codigo...">
+							  </div>
+							  <div class="col-3">
+							  	<button type="submit" class="btn btn-outline-dark"><i class="fa-solid fa-magnifying-glass"></i></button>
+							  </div>	
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12">
+						<h5 id="nombreCliente"></h5>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="mb-3 col-12" id="tbodyCubetas">
+
+					</div>
+			 </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <!--///////////////////////////////////////////////////////-->
 <div class="modal fade" id="modalVerificar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered">
@@ -346,45 +408,33 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-					<br>
-					<div class="row">
-						<div class="col-12">
-							<form id="formVerificar">
-								<div class="row mb-3 sm-3">
-								  <div class="col-9">
-								  	<input type="text" class="form-control" name="codigoProducto" id="codigoProducto" type="text" placeholder="Codigo...">
-								  </div>
-								  <div class="col-3">
-								  	<button type="submit" class="btn btn-outline-dark"><i class="fa-solid fa-magnifying-glass"></i></button>
-								  </div>	
-								</div>
-							</form>
-						</div>
+				<br>
+				<div class="row">
+					<div class="col-12">
+						<form id="formVerificar">
+							<div class="row mb-3 sm-3">
+							  <div class="col-9">
+							  	<input type="text" class="form-control" name="codigoProducto" id="codigoProducto" type="text" placeholder="Codigo...">
+							  </div>
+							  <div class="col-3">
+							  	<button type="submit" class="btn btn-outline-dark"><i class="fa-solid fa-magnifying-glass"></i></button>
+							  </div>	
+							</div>
+						</form>
 					</div>
-					<br>
-					<div class="row">
-						<div class="mb-3 col-12">
-							<table class="table text-center" id="tablaParaVerificar">
-							  <thead>
-							    <tr>
-							    	<th>Codigo</th>
-							      <th>Producto</th>
-							      <th>Cantidad</th>
-							      <th>Verificados</th>
-							      <th>Estado</th>
-							    </tr>
-							  </thead>
-							  <tbody id="tbodyVerificar">
-							    
-							  </tbody>
-							</table>
-						</div>
-					</div>
-			</div>
-				<div class="modal-footer">
-					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
 				</div>
-				
+				<br>
+				<div class="row">
+					<div class="mb-3 col-12" id="tbodyVerificar">
+						
+					</div>
+			 </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cerrar</strong></button>
+			</div>
 		</div>
 	</div>
 </div>
+
+

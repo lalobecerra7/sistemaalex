@@ -1055,6 +1055,7 @@
               #menuProd#
 
               <ul class="menu-sub">
+
                 #MenuProductos#
                 
                 #MenuInventario#
@@ -1115,6 +1116,8 @@
               #MenuFacturacion#
 
               #MenuTokens#
+
+              #MenuRecibos#
             </li>
 
             #MenuImpuestos#
@@ -1125,6 +1128,14 @@
               #menuReportes#
 
               <ul class="menu-sub">
+                #ventasxDia#
+
+                #ventasxProducto#
+
+                #ventasxUsuario#
+
+                #ventasxCliente#
+                 
                 #reportesCaja#
 
                 #reportesProductos#
@@ -1136,6 +1147,8 @@
                 #reportesCompras#
                 
                 #reportesFinanzas#
+
+                #reportesInventario#
               </ul>
             </li>
 
@@ -1161,6 +1174,11 @@
                 Usuario actual: <b>#NombreUsuarioNavBar#</b>
               </div>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <div class="navbar-nav flex-row ms-auto">
+                  <div id="BotonVerAlertas" style="cursor: pointer; margin-right: 15px; background-color: #006699; height: 35px; width: 35px; border-radius: 100%; padding-left: 11px; padding-top: 5px;">
+                    #MostrarIcono#
+                  </div>
+                </div>
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
@@ -1215,7 +1233,6 @@
               <div class="row">
                 <div class="col-12">
                   <br>
-                  #alertas#
                 </div>
                 <div class="col-12" id="verVista">
                   #verVista#
@@ -1271,6 +1288,22 @@
               <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
             </div>
           </form>
+        </div>
+      </div>
+    </div> 
+
+    <div class="modal fade" id="ModalVerAlertas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+        <div class="modal-content">
+          <div class="modal-header bg-inverse bd-inverse-darken">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Alertas de stock</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              #alertas#
+            </div>
+          </div>
         </div>
       </div>
     </div> 
@@ -1771,5 +1804,11 @@
     <script type="text/javascript" src="vistas/assets/js/choferes.js"></script>
     <script type="text/javascript" src="vistas/assets/js/cortesRuta.js"></script>
     <script type="text/javascript" src="vistas/assets/js/tokens.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/recibos.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/ventasxdia.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/ventasxproducto.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/ventasxusuario.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/ventasxcliente.js"></script>
+    <script type="text/javascript" src="vistas/assets/js/reporteinventario.js"></script>
   </body>
 </html>

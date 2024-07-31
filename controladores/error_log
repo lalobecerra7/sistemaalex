@@ -1,0 +1,56 @@
+[16-Apr-2024 11:04:48 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown database 'bigtool_punto_venta_' in /home/bigtool/public_html/apps/ventas/controladores/c_controller.php:245
+Stack trace:
+#0 /home/bigtool/public_html/apps/ventas/controladores/c_controller.php(245): mysqli->query('use bigtool_pun...')
+#1 /home/bigtool/public_html/apps/ventas/controladores/c_controller.php(163): controller->remplazar('<!DOCTYPE html>...', 'v_login')
+#2 /home/bigtool/public_html/apps/ventas/index.php(39): controller->_contenido('v_login')
+#3 {main}
+  thrown in /home/bigtool/public_html/apps/ventas/controladores/c_controller.php on line 245
+[16-Apr-2024 11:25:42 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown database 'bt_punto_venta' in /home/bigtool/public_html/apps/ventas/controladores/c_registro.php:16
+Stack trace:
+#0 /home/bigtool/public_html/apps/ventas/controladores/c_registro.php(16): mysqli->query('use bt_punto_ve...')
+#1 /home/bigtool/public_html/apps/ventas/controladores/c_controller.php(177): registro->_insertar()
+#2 /home/bigtool/public_html/apps/ventas/index.php(33): controller->_insertar('registro')
+#3 {main}
+  thrown in /home/bigtool/public_html/apps/ventas/controladores/c_registro.php on line 16
+[16-Apr-2024 11:28:13 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown database 'bt_punto_venta' in /home/bigtool/public_html/apps/ventas/controladores/c_registro.php:16
+Stack trace:
+#0 /home/bigtool/public_html/apps/ventas/controladores/c_registro.php(16): mysqli->query('use bt_punto_ve...')
+#1 /home/bigtool/public_html/apps/ventas/controladores/c_controller.php(177): registro->_insertar()
+#2 /home/bigtool/public_html/apps/ventas/index.php(33): controller->_insertar('registro')
+#3 {main}
+  thrown in /home/bigtool/public_html/apps/ventas/controladores/c_registro.php on line 16
+[16-Apr-2024 11:31:42 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown database 'bt_punto_venta' in /home/bigtool/public_html/apps/ventas/controladores/c_registro.php:16
+Stack trace:
+#0 /home/bigtool/public_html/apps/ventas/controladores/c_registro.php(16): mysqli->query('use bt_punto_ve...')
+#1 /home/bigtool/public_html/apps/ventas/controladores/c_controller.php(177): registro->_insertar()
+#2 /home/bigtool/public_html/apps/ventas/index.php(33): controller->_insertar('registro')
+#3 {main}
+  thrown in /home/bigtool/public_html/apps/ventas/controladores/c_registro.php on line 16
+[16-Apr-2024 11:37:30 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown database 'bt_punto_venta' in /home/bigtool/public_html/apps/ventas/controladores/c_registro.php:16
+Stack trace:
+#0 /home/bigtool/public_html/apps/ventas/controladores/c_registro.php(16): mysqli->query('use bt_punto_ve...')
+#1 /home/bigtool/public_html/apps/ventas/controladores/c_controller.php(177): registro->_insertar()
+#2 /home/bigtool/public_html/apps/ventas/index.php(33): controller->_insertar('registro')
+#3 {main}
+  thrown in /home/bigtool/public_html/apps/ventas/controladores/c_registro.php on line 16
+[16-Apr-2024 11:40:45 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown database 'bt_punto_venta' in /home/bigtool/public_html/apps/ventas/controladores/c_registro.php:16
+Stack trace:
+#0 /home/bigtool/public_html/apps/ventas/controladores/c_registro.php(16): mysqli->query('use bt_punto_ve...')
+#1 /home/bigtool/public_html/apps/ventas/controladores/c_controller.php(177): registro->_insertar()
+#2 /home/bigtool/public_html/apps/ventas/index.php(33): controller->_insertar('registro')
+#3 {main}
+  thrown in /home/bigtool/public_html/apps/ventas/controladores/c_registro.php on line 16
+[16-Apr-2024 11:55:03 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown database 'bt_punto_venta' in /home/bigtool/public_html/apps/ventas/controladores/c_registro.php:16
+Stack trace:
+#0 /home/bigtool/public_html/apps/ventas/controladores/c_registro.php(16): mysqli->query('use bt_punto_ve...')
+#1 /home/bigtool/public_html/apps/ventas/controladores/c_controller.php(177): registro->_insertar()
+#2 /home/bigtool/public_html/apps/ventas/index.php(33): controller->_insertar('registro')
+#3 {main}
+  thrown in /home/bigtool/public_html/apps/ventas/controladores/c_registro.php on line 16
+[16-Apr-2024 11:58:32 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown database 'bt_punto_venta' in /home/bigtool/public_html/apps/ventas/controladores/c_registro.php:16
+Stack trace:
+#0 /home/bigtool/public_html/apps/ventas/controladores/c_registro.php(16): mysqli->query('use bt_punto_ve...')
+#1 /home/bigtool/public_html/apps/ventas/controladores/c_controller.php(177): registro->_insertar()
+#2 /home/bigtool/public_html/apps/ventas/index.php(33): controller->_insertar('registro')
+#3 {main}
+  thrown in /home/bigtool/public_html/apps/ventas/controladores/c_registro.php on line 16

@@ -369,8 +369,8 @@ class ventas {
 								for($x=0; $x<$numerofilas2; $x++){
 									$totalProducto=0; $descuento=0; $totalFinal=0;
 									$totalProducto = $row[$i]["Precio"]*$row[$i]["Cantidad"];
-									$descuento = ($row[$i]["Descuento"] / 100);
-									$totalFinal = $totalProducto - ($totalProducto * $descuento);
+									$descuento = $row[$i]["Descuento"];
+									$totalFinal = $totalProducto - $descuento;
 									if ($row2[$x]["Tipo_Impuesto_CFDI"] == "Trasladado") { //Se suma al total
 										$sumaImpuestos += $totalFinal * ($row2[$x]["Tasa_Cuota_CFDI"] / 100);
 									}else if($row2[$x]["Tipo_Impuesto_CFDI"] == "Retenido" && $row2[$x]["Tipo_Factor_CFDI"] != "Exento"){ //Se resta al total
@@ -395,8 +395,7 @@ class ventas {
 						}
 
 						$subtotal = ($row[$i]["Precio"] * $row[$i]["Cantidad"]) ;
-						$descuento = $subtotal * ($row[$i]["Descuento"] / 100);
-						$subtotal = $subtotal - $descuento;
+						$subtotal = $subtotal - $row[$i]["Descuento"];
 						$tabla .= "
 							<tr>
 								<td >".$row[$i]["Descripcion"].$presentacion."</td>
@@ -655,7 +654,7 @@ class ventas {
 			if($error == 'si'){
 				echo "Error: ".mysqli_error($omodelo->link);
 			}else{
-				$query2 = "INSERT INTO detalles_caja SET FK_Caja = (SELECT ID_Caja FROM cajas WHERE FK_Sucursal = '$sucursal'), Fecha_Abrir = '$fecha', Monto_Abrir = '$MontoAbrir', FK_Usuario_Abrir = '".$_SESSION['user_admin']['ID_Usuario']."'";
+				$query2 = "INSERT INTO detalles_caja SET FK_Caja = (SELECT ID_Caja FROM cajas WHERE FK_Sucursal = '$sucursal'), Fecha_Abrir = NOW(), Monto_Abrir = '$MontoAbrir', FK_Usuario_Abrir = '".$_SESSION['user_admin']['ID_Usuario']."'";
 				$error2 = $omodelo->_insertar($query2);
 				
 				if($error2 == 'si'){

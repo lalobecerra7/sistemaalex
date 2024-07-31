@@ -60,7 +60,7 @@ function v_cortesRuta() {
             }
         },
         submitHandler: function(form) { 
-            var data = "metodo="+$("#bGuardarCorte").attr('tipo')+"&accion=cortesRuta&tipo=insertar&rutasCorte="+$.trim($("#rutasCorte").val())+"&FechaInicioCorte="+$.trim($("#FechaInicioCorte").val())+"&FechaFinCorte="+$.trim($("#FechaFinCorte").val())+"&selectChofer="+$.trim($("#selectChofer").val())+"&selectVehiculo="+$.trim($("#selectVehiculo").val())+"&selectSucursal="+$.trim($("#selectSucursal").val())+"&id="+$("#bGuardarCorte").attr('attrID')+"&detalleVentas="+JSON.stringify(ventas_cliente);
+            var data = "metodo="+$("#bGuardarCorte").attr('tipo')+"&accion=cortesRuta&tipo=insertar&rutasCorte="+$.trim($("#rutasCorte").val())+"&FechaInicioCorte="+$.trim($("#FechaInicioCorte").val())+"&FechaFinCorte="+$.trim($("#FechaFinCorte").val())+"&selectChofer="+$.trim($("#selectChofer").val())+"&selectVehiculo="+$.trim($("#selectVehiculo").val())+"&selectSucursal="+$.trim($("#selectSucursal").val())+"&envasesPrestados="+$.trim($("#envasesPrestados").val())+"&envasesRegresados="+$.trim($("#envasesRegresados").val())+"&id="+$("#bGuardarCorte").attr('attrID')+"&detalleVentas="+JSON.stringify(ventas_cliente);
             
             $.ajax({
                 url: 'index.php',
@@ -116,19 +116,23 @@ function v_cortesRuta() {
             }
         },
         submitHandler: function(form) { 
+            $("#codigoProducto").prop('disabled', true);
+            $("#carga").show();
+
             var object = $(".codigoProducto").filter(':contains("'+$.trim($("#codigoProducto").val())+'")').parent();
+            //console.log(object);
             var id = $('#bGuardarCorte').attr('attrID');
-           
+            
 
             if(object.length > 0){
                 var data = "metodo=modificar&accion=cortesRuta&tipo=verificar&Presentacion="+$.trim(object[0].getAttribute('presentacion'))+"&Producto="+$.trim(object[0].getAttribute('producto'))+"&IDCorte="+id+"&idCliente="+$.trim($('#codigoProducto').attr('attrID'));
-               
+                //console.log(data);
                 $.ajax({
                     url: 'index.php',
                     type: 'POST',
                     data: data,
                     beforeSend: function() {
-                        $("#carga").show();
+                        $("#codigoProducto").val('');
                     }
                 })
                 .done(function(res) {
@@ -136,17 +140,23 @@ function v_cortesRuta() {
 
                         var IDCor = id;
                         var IDCli = $('#codigoProducto').attr('attrID');
-                        
-                        $('#codigoProducto').val('');
+
                         tablaVerificarCorte(IDCor,IDCli); 
-                        tablaClientesRuta();
 
                         Swal.fire({
                           position: "top-end",
                           icon: "success",
                           title: "Producto encontrado",
                           showConfirmButton: false,
-                          timer: 1000
+                          timer: 500
+                        });
+                    }else if($.trim(res) == "Suficiente"){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ya se acompleto la cantidad',
+                            showConfirmButton: false,
+                            timer: 500
                         });
                     }else{
                         Swal.fire({
@@ -162,17 +172,109 @@ function v_cortesRuta() {
                     console.log("Error ajax");
                 })
                 .always(function() {
+                    $("#codigoProducto").prop('disabled', false);
                     $("#carga").hide();
+                    $('#codigoProducto').focus();
                 });  
             }else{
                 $('#codigoProducto').val('');
+                $("#codigoProducto").prop('disabled', false);
+                $('#codigoProducto').focus();
+                $("#carga").hide();
                 
                 Swal.fire({
                     position: "top-end",
                     icon: "warning",
                     title: "Producto no encontrado",
                     showConfirmButton: false,
-                    timer: 1000
+                    timer: 500
+                });
+            }             
+        }
+    }); 
+
+    $('#formVerificarCubeta').validate({
+        rules: {
+            codigoProductoCubeta: {
+                required: true
+            }
+        },
+        messages: {
+            codigoProductoCubeta: {
+                required: "El codigo es requerido"
+            }
+        },
+        submitHandler: function(form) { 
+            $("#codigoProductoCubeta").prop('disabled', true);
+            $("#carga").show();
+
+            var object = $(".codigoProductoCubeta").filter(function() {
+                return $(this).text().trim() === $("#codigoProductoCubeta").val().trim() && $(this).parent().attr('propEstado') === 'true';
+            }).parent();
+            //console.log(object);
+            var id = $("#codigoProductoCubeta").attr('attrCorteRuta');
+            
+
+            if(object.length > 0 && $.trim(object[0].getAttribute('propEstado')) == 'true'){
+                var data = "metodo=modificar&accion=cortesRuta&tipo=verificar&Presentacion="+$.trim(object[0].getAttribute('presentacion'))+"&Producto="+$.trim(object[0].getAttribute('producto'))+"&IDCorte="+id+"&idCliente="+$.trim(object[0].getAttribute('cliente'));
+                //console.log(data);
+                $.ajax({
+                    url: 'index.php',
+                    type: 'POST',
+                    data: data,
+                    beforeSend: function() {
+                        $("#codigoProductoCubeta").val('');
+                    }
+                })
+                .done(function(res) {
+                    if ($.trim(res) == "Correcto") {
+
+                        Swal.fire({
+                          position: "top-end",
+                          icon: "success",
+                          title: "Producto encontrado",
+                          showConfirmButton: false,
+                          timer: 500
+                        });
+                        tablaVerificarCubetas(id);
+                    }else if($.trim(res) == "Suficiente"){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ya se acompleto la cantidad',
+                            showConfirmButton: false,
+                            timer: 500
+                        });
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error inesperado al verificar'
+                        });
+
+                        console.log($.trim(res));
+                    }
+                })
+                .fail(function() {
+                    console.log("Error ajax");
+                })
+                .always(function() {
+                    $("#codigoProductoCubeta").prop('disabled', false);
+                    $("#carga").hide();
+                    $('#codigoProductoCubeta').focus();
+                });  
+            }else{
+                $('#codigoProductoCubeta').val('');
+                $("#codigoProductoCubeta").prop('disabled', false);
+                $('#codigoProductoCubeta').focus();
+                $("#carga").hide();
+                
+                Swal.fire({
+                    position: "top-end",
+                    icon: "warning",
+                    title: "Producto no encontrado",
+                    showConfirmButton: false,
+                    timer: 500
                 });
             }             
         }
@@ -189,6 +291,7 @@ function tablaCortesRuta() {
             "Fecha_Fin",
             "Total",
             "Concentrado",
+            "Cubetas",
             "Detalles",
             "Acciones"
         ], 
@@ -344,28 +447,52 @@ function tablaConcentrarCorte(idCorte){
 
 
 function tablaVerificarCorte(idCorte, idCliente){
-        var data = `metodo=consultar&accion=cortesRuta&tipo=verificarCorte&idCorte=${idCorte}&idCliente=${idCliente}`;
+    var data = `metodo=consultar&accion=cortesRuta&tipo=verificarCorte&idCorte=${idCorte}&idCliente=${idCliente}`;
 
-        $.ajax({
-            url: 'index.php',
-            type: 'POST',
-            data: data,
-            beforeSend: function() {
-                $("#carga").show();
-            }
-        }).done(function(res){
+    $.ajax({
+        url: 'index.php',
+        type: 'POST',
+        data: data,
+        beforeSend: function() {
+            //$("#carga").show();
+        }
+    }).done(function(res){
+        $('#tbodyVerificar').html($.trim(res));
+    }).fail(function(){
+        console.log('Error ajax');
+    }).always(function(){
+        //$("#carga").hide();
+    });
+}
 
-            $('#tbodyVerificar').html($.trim(res));
-            tablaCortesRuta();
-            
-        }).fail(function(){
-            console.log('Error ajax');
-        }).always(function(){
-            $("#carga").hide();
-        })
+function tablaVerificarCubetas(idCorte){
+    var data = `metodo=consultar&accion=cortesRuta&tipo=verificarCubetas&idCorte=${idCorte}`;
+
+    $.ajax({
+        url: 'index.php',
+        type: 'POST',
+        data: data,
+        beforeSend: function() {
+            //$("#carga").show();
+        }
+    }).done(function(res){
+        $('#tbodyCubetas').html($.trim(res));
+    }).fail(function(){
+        console.log('Error ajax');
+    }).always(function(){
+        //$("#carga").hide();
+    });
 }
 
 jQuery(document).ready(function($) {
+    
+    $(document).on('hide.bs.modal', "#modalVerificar", function(){
+        tablaClientesRuta();
+    });
+
+    $(document).on('hide.bs.modal', "#modalCorteRuta", function(){
+        tablaCortesRuta();
+    });
 
     $(document).on('click', "#bGuardarCorte", function(){
 
@@ -388,6 +515,8 @@ jQuery(document).ready(function($) {
         $("#modalCorteRuta").modal('show');
         $("#formCorteDeRuta")[0].reset();
         $("#bGuardarCorte").attr('tipo', 'insertar');
+        $("#envasesPrestados").val('0');
+        $("#envasesRegresados").val('0');
         $("#tablaClientesrutaROW").addClass('d-none');
         ventas_cliente = [];
         $("#FechaInicioCorte").val(today.toISOString().split('T')[0])
@@ -436,7 +565,7 @@ jQuery(document).ready(function($) {
                 type: 'POST',
                 data: data
             }).done(function(res){
-                console.log(res);
+                //console.log(res);
                 var jsonData = JSON.parse(res);
                 ventas_cliente = jsonData;
                 $("#tablaClientesrutaROW").removeClass('d-none');
@@ -722,6 +851,8 @@ jQuery(document).ready(function($) {
             $("#selectChofer").val(resData.FK_Chofer);
             $("#selectVehiculo").val(resData.FK_Vehiculo);
             $("#selectSucursal").val(resData.FK_Sucursal);
+            $("#envasesPrestados").val(resData.Envases_Prestados);
+            $("#envasesRegresados").val(resData.Envases_Recaudados);
             ventas_cliente = JSON.parse(resData.Detalles);
             recaud = resData.Recaudado_numero;
             $("#bVerificarCliente").attr('attrID', idCorte);
@@ -753,6 +884,8 @@ jQuery(document).ready(function($) {
                 $("#gastosFormulario").addClass('d-none');
                 $("#selectChofer").attr('disabled', true);
                 $("#selectVehiculo").attr('disabled', true);
+                $("#envasesPrestados").attr('disabled', true);
+                $("#envasesRegresados").attr('disabled', true);
                 $("#bGuardarCorte").addClass('d-none');
                 $("#reabrirCorteRuta").removeClass('d-none');
                 $("#cerrarCorteRuta").addClass('d-none');
@@ -761,6 +894,8 @@ jQuery(document).ready(function($) {
                 $("#gastosFormulario").removeClass('d-none');
                 $("#selectChofer").attr('disabled', false);
                 $("#selectVehiculo").attr('disabled', false);
+                $("#envasesPrestados").attr('disabled', false);
+                $("#envasesRegresados").attr('disabled', false);
                 $("#bGuardarCorte").removeClass('d-none');
                 $("#reabrirCorteRuta").addClass('d-none');
                 $("#cerrarCorteRuta").removeClass('d-none');
@@ -1119,7 +1254,10 @@ jQuery(document).ready(function($) {
 
 
     $(document).on('click', '.bVerificarCorteRutaCliente', function() {
+        var padre = $(this).parent().parent();
+
         $("#modalVerificar").modal('show');
+        $("#nombreCliente").text('Cliente: '+padre.children('td:eq(1)').text());
         $("#modalVerificar").on('shown.bs.modal', function(){
             $("#codigoProducto").focus();
         });
@@ -1146,4 +1284,17 @@ jQuery(document).ready(function($) {
 	});
 
 	*/
+
+    $(document).on('click', '.bVerificarCubetas', function() {
+        tablaVerificarCubetas($(this).attr('attrID'));
+        $("#modalCubeta").modal('show');
+        $("#codigoProductoCubeta").attr('attrCorteRuta',$(this).attr('attrID'));
+        $("#modalCubeta").on('shown.bs.modal', function(){
+            $("#codigoProductoCubeta").focus();
+        });
+    });
+
+    $(document).on('focusout', '#codigoProductoCubeta', function() {
+        $("#codigoProductoCubeta").focus();
+    });
 });

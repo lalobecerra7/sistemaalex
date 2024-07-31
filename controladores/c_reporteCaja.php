@@ -23,8 +23,20 @@ class reporteCaja {
 				}
 			}
 		}
+
+		$querySucursal = '';
+
+		if ($omodelo->permisos() == 'Administrador') {
+			$querySucursal = '';
+		}else{
+			if ($busqueda == "") {
+				$querySucursal = "WHERE cajas.FK_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."'";
+			}else{
+				$querySucursal = "AND cajas.FK_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."'";
+			}
+		}
 		
-		$query = "SELECT ID_Detalle_Caja, cajas.Nombre AS Caja, FK_Caja, cajas.FK_Sucursal AS IDSucursal, Fecha_Abrir AS Abrir, CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) AS NombreUsuarioAbrir, Monto_Abrir AS MontoAbrir, FK_Usuario_Abrir, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario_Cierre) AS NombreUsuarioCerrar, Fecha_Cierre AS Cerrar, Monto_Cierre AS MontoCerrar, FK_Usuario_Cierre, (SELECT COUNT(*) FROM detalles_caja INNER JOIN usuarios ON FK_Usuario_Abrir = ID_Usuario INNER JOIN cajas ON FK_Caja = ID_Caja $busqueda) AS Num FROM detalles_caja INNER JOIN usuarios ON FK_Usuario_Abrir = ID_Usuario INNER JOIN cajas ON FK_Caja = ID_Caja $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		$query = "SELECT ID_Detalle_Caja, cajas.Nombre AS Caja, FK_Caja, cajas.FK_Sucursal AS IDSucursal, Fecha_Abrir AS Abrir, CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) AS NombreUsuarioAbrir, Monto_Abrir AS MontoAbrir, FK_Usuario_Abrir, (SELECT CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) FROM usuarios WHERE ID_Usuario = FK_Usuario_Cierre) AS NombreUsuarioCerrar, Fecha_Cierre AS Cerrar, Monto_Cierre AS MontoCerrar, FK_Usuario_Cierre, (SELECT COUNT(*) FROM detalles_caja INNER JOIN usuarios ON FK_Usuario_Abrir = ID_Usuario INNER JOIN cajas ON FK_Caja = ID_Caja $busqueda) AS Num FROM detalles_caja INNER JOIN usuarios ON FK_Usuario_Abrir = ID_Usuario INNER JOIN cajas ON FK_Caja = ID_Caja $busqueda $querySucursal ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
 		$row = $omodelo->_consultar($query);
 		$numerofilas = $omodelo->numerofilas;
 
@@ -100,7 +112,7 @@ class reporteCaja {
 								}
 							}
 
-							$querydev = "SELECT Total FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE (devoluciones.Fecha_Registro >= '".$rowdetallecaja[0]["Fecha_Abrir"]."' AND devoluciones.Fecha_Registro <= '".$rowdetallecaja[0]["Fecha_Cierre"]."')";
+							$querydev = "SELECT detalles_devolucion.Total FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion INNER JOIN ventas ON FK_Venta = ID_Venta WHERE (ventas.Fecha_Registro >= '".$rowdetallecaja[0]["Fecha_Abrir"]."' AND ventas.Fecha_Registro <= '".$rowdetallecaja[0]["Fecha_Cierre"]."')";
 							$rowdev = $omodelo->_consultar($querydev);
 							$numerofilasdev = $omodelo->numerofilas;
 							if($rowdev == 'si'){

@@ -45,6 +45,50 @@
 	          	</div>
 			</div>
 			<br>
+			<form id="FormAgregarPrecioNuevo" class="row">
+				<div class="col-md-2">
+					<div class="form-floating flex-grow-1">
+	              		<input type="text" class="form-control" id="ReferenciaPrecioNuevo" name="ReferenciaPrecioNuevo" placeholder="Referencia" required>
+	              		<label>Referencia</label>
+	          		</div>
+	          	</div>
+				<div class="col-md-2">
+					<div class="form-floating flex-grow-1">
+	              		<input type="number" class="form-control" id="Precio3PrecioNuevo" name="Precio3PrecioNuevo" placeholder="Precio 3" required>
+	              		<label>Precio 3 Neto</label>
+	          		</div> 
+				</div>
+				<div class="col-md-2">
+					<div class="form-floating flex-grow-1">
+	              		<select class="form-select" name="ImpuestosPrecioNuevo" id="ImpuestosPrecioNuevo"> 
+	                      	<option value="">-- Sin impuesto --</option>
+	                      	<option value="IVA0">IVA 0%</option>
+	                      	<option value="IVA">IVA 16%</option>
+	                      	<option value="IEPS3">IEPS 3%</option>
+	                      	<option value="IEPS">IEPS 8%</option>
+                    	</select>
+                    	<label>Impuesto</label>
+	          		</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-floating flex-grow-1">
+	              		<input type="number" class="form-control" id="AumentoPrecioNuevo" name="AumentoPrecioNuevo" placeholder="% de aumento" required>
+	              		<label>% de aumento</label>
+	          		</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-floating flex-grow-1">
+	              		<select class="form-select" name="ZonaPrecioNuevo" id="ZonaPrecioNuevo"> 
+	                      	#CargarZonasPrecioNuevo# 
+                    	</select>
+                    	<label>Zonas</label>
+	          		</div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn btn-primary btn-sm" type="submit">Agregar precio <i class="fas fa-plus"></i></button>
+				</div>
+			</form>
+			<br>
 			<div class="row">
 				<div class="col-12 table-responsive">
 					<table class="table table-hover table-bordered table-striped text-center myDataTable" id="tablaPrecios" style="font-size: 12px;" width="100%">
@@ -55,7 +99,8 @@
 								<th>Proveedores</th>
 								<th>Nombre</th>
 								<th style="width: 15%;">Precio</th>
-								<th style="width: 15%;">Mayoreo</th>
+								<th style="width: 15%;">Margen</th>
+								<th style="width: 15%;">Costo General</th>
 							</tr>
 						</thead>
 						<tbody>

@@ -353,6 +353,10 @@
                   <input type="checkbox" class="form-check-input checkPermisos">
                   <label class="form-check-label">Precio personalizado</label>
                 </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Modificar tickets</label>
+                </div>
               </td>
             </tr>
             <tr>
@@ -708,6 +712,39 @@
                 <div class="form-check">
                   <input type="checkbox" class="form-check-input checkPermisos">
                   <label class="form-check-label">Reporte finanzas</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Ventas por día</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Ventas por producto</label>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td vista="v_recibos">Generador de recibos</td>
+              <td>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Ver</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Agregar</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Eliminar</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Modificar</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input checkPermisos">
+                  <label class="form-check-label">Imprimir recibos</label>
                 </div>
               </td>
             </tr>

@@ -9,6 +9,7 @@
 			<br>
 			<div class="row">
 				<div class="col-12 text-end">
+					<button type="button" class="btn btn-primary" id="botonAgregarNuevoPrecio" data-bs-toggle="modal" data-bs-target="#ModalAgregarPrecio3"><i class="fa fa-dollar"></i> Agregar Precio</button>
 					<button type="button" class="btn btn-success" id="botonNuevoProductos" data-bs-toggle="modal" data-bs-target="#ModalProductos"><i class="fa fa-file"></i> Nuevo</button>
 					<a href="javascript:void(0)" class="btn btn-light btn-reload cargarVista" carga="v_productos" titulo="Productos"><i class="fa fa-retweet"></i></a>
 				</div>
@@ -47,6 +48,8 @@
       <form id="formPreciosProd"><button type="submit" id="bGuardarPrecio" hidden></button></form>
       <form id="formProveedoresProd"><button type="submit" id="bGuardarProveedor" hidden></button></form>
       <form id="formStockProd"><button type="submit" id="bGuardarStock" hidden></button></form>
+      <!-- <form id="FormAgregarPrecioNuevo"><button type="submit" id="bGuardarPrecio3" hidden></button></form> -->
+
       <form id="FormProductos">
 	      <div class="modal-body">
 	       	<div class="row">
@@ -104,19 +107,19 @@
 					<div class="row">
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		           	<input type="number" class="form-control" step="any" min='0' max='10000' id="PrecioProducto" name="PrecioProducto" placeholder="Ingresa el precio del producto">
+		           	<input type="number" class="form-control" step="any" min='0' max='70000' id="PrecioProducto" name="PrecioProducto" placeholder="Ingresa el precio del producto">
 		            <label for="PrecioProducto">Precio</label>
 		          </div>
 		        </div>
 	       		<div class="col-md-4 col-sm-12 mb-3">
 				   		<div class="form-floating">
-		           	<input type="number" class="form-control" step="any" min='0' max='10000' id="CostoProducto" name="CostoProducto" placeholder="Ingresa el costo del producto">
+		           	<input type="number" class="form-control" step="any" min='0' max='70000' id="CostoProducto" name="CostoProducto" placeholder="Ingresa el costo del producto">
 		            <label for="CostoProducto">Costo</label>
 		          </div>
 		        </div>
 		        <div class="col-md-4 col-sm-12 mb-3">
 		        	<div class="form-floating">
-		            <input type="number" class="form-control" step="any" min='0' max='10000' id="PrecioMayoreo" name="PrecioMayoreo" placeholder="Ingresa el precio de mayoreo del producto">
+		            <input type="number" class="form-control" step="any" min='0' max='70000' id="PrecioMayoreo" name="PrecioMayoreo" placeholder="Ingresa el precio de mayoreo del producto">
 		            <label for="PrecioMayoreo">Precio de mayoreo</label>
 		          </div>
 		        </div>
@@ -286,6 +289,51 @@
 		      	</div>
 		      </div>
 		      <hr>
+		      <!-- <br>
+					<div class="row" id="FilaReferenciaProducto">
+							<div class="col-md-2">
+								<div class="form-floating flex-grow-1">
+		              		<input type="text" form="FormAgregarPrecioNuevo" class="form-control" id="ReferenciaPrecioNuevo" name="ReferenciaPrecioNuevo" placeholder="Referencia" required>
+		              		<label>Referencia</label>
+		          		</div>
+		          	</div>
+							<div class="col-md-2">
+								<div class="form-floating flex-grow-1">
+	              		<input type="number" form="FormAgregarPrecioNuevo" class="form-control" id="Precio3PrecioNuevo" name="Precio3PrecioNuevo" placeholder="Precio 3" required>
+	              		<label>Precio 3 Neto</label>
+	          		</div> 
+							</div>
+							<div class="col-md-2">
+								<div class="form-floating flex-grow-1">
+	              		<select class="form-select" form="FormAgregarPrecioNuevo" name="ImpuestosPrecioNuevo" id="ImpuestosPrecioNuevo"> 
+	                      	<option value="">-- Sin impuesto --</option>
+	                      	<option value="IVA0">IVA 0%</option>
+	                      	<option value="IVA">IVA 16%</option>
+	                      	<option value="IEPS3">IEPS 3%</option>
+	                      	<option value="IEPS">IEPS 8%</option>
+                    	</select>
+                    	<label>Impuesto</label>
+	          		</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-floating flex-grow-1">
+	              		<input type="number" form="FormAgregarPrecioNuevo" class="form-control" id="AumentoPrecioNuevo" name="AumentoPrecioNuevo" placeholder="% de aumento" required>
+	              		<label>% de aumento</label>
+	          		</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-floating flex-grow-1">
+	              		<select class="form-select" form="FormAgregarPrecioNuevo" name="ZonaPrecioNuevo" id="ZonaPrecioNuevo"> 
+	                      	#CargarZonasPrecioNuevo# 
+                  	</select>
+                  	<label>Zonas</label>
+	          		</div>
+							</div>
+							<div class="col-md-2">
+								<button class="btn btn-primary btn-sm" type="button" id="bAgregarPrecio3">Agregar precio <i class="fas fa-plus"></i></button>
+							</div>
+					</div> -->
+					<br>
 		      <div class="row mb-3">
 		       	<div class="col-md-6 col-sm-12 text-start">
 		       		<b class="mb-3">Precios del producto</b>
@@ -299,7 +347,7 @@
 				          <th style="width: 30%;">Presentación</th>
 				          <th style="width: 30%;">Nombre</th>
 				        	<th style="width: 20%;">Precio</th>
-				        	<th style="width: 20%;">Mayoreo</th>
+				        	<th style="width: 20%;">Margen</th>
 				        	<th style="width: 10%;">Acciones</th>
 				        </thead>
 				        <tbody id="verPreciosProd">
@@ -333,7 +381,7 @@
 		                  <input type="number" form="formPreciosProd" class="form-control" id="precioProductoPres" name="precioProductoPres" step="any" min="0" placeholder="$0.00" required>
 		                </td>
 		                <td>
-		                  <input type="number" form="formPreciosProd" class="form-control" id="precioProductoMayoreoPres" name="precioProductoMayoreoPres" step="any" value="0" min="0" placeholder="$0.00" required>
+		                  <input type="number" class="form-control" id="margenPrecioProducto" readonly>
 		                </td>
 		                <td>
 		                	<button type="button" class="btn btn-sm btn-success" id="bAgergarPrecio" attrid nombre><i class="fas fa-plus"></i></button>
@@ -421,6 +469,68 @@
 					<button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
 	      </div>
   		</form>
+    </div>
+  </div>
+</div> 
+
+<!--/////////////////////////Modal///////////////////////////////////-->
+<div class="modal fade" id="ModalAgregarPrecio3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+    <div class="modal-content">
+      <div class="modal-header bg-inverse bd-inverse-darken">
+        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Aumentar existencias</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      	<form id="FormAgregarPrecioNuevoProductos">
+					<div class="col-md-12">
+						<div class="form-floating flex-grow-1">
+            		<input type="text" class="form-control" id="ReferenciaPrecioNuevoProducto" name="ReferenciaPrecioNuevoProducto" placeholder="Referencia" required>
+            		<label>Referencia</label>
+        		</div>
+        	</div>
+        	<br>
+					<div class="col-md-12">
+						<div class="form-floating flex-grow-1">
+            		<input type="number" class="form-control" id="Precio3PrecioNuevoProducto" name="Precio3PrecioNuevoProducto" placeholder="Precio 3" required>
+            		<label>Precio 3 Neto</label>
+        		</div> 
+					</div>
+					<br>
+					<div class="col-md-12">
+						<div class="form-floating flex-grow-1">
+            		<select class="form-select" name="ImpuestosPrecioNuevoProducto" id="ImpuestosPrecioNuevoProducto"> 
+                    	<option value="">-- Sin impuesto --</option>
+                    	<option value="IVA0">IVA 0%</option>
+                    	<option value="IVA">IVA 16%</option>
+                    	<option value="IEPS3">IEPS 3%</option>
+                    	<option value="IEPS">IEPS 8%</option>
+                	</select>
+                	<label>Impuesto</label>
+        		</div>
+					</div>
+					<br>
+					<div class="col-md-12">
+						<div class="form-floating flex-grow-1">
+            		<input type="number" class="form-control" id="AumentoPrecioNuevoProducto" name="AumentoPrecioNuevoProducto" placeholder="% de aumento" required>
+            		<label>% de aumento</label>
+        		</div>
+					</div>
+					<br>
+					<div class="col-md-12">
+						<div class="form-floating flex-grow-1">
+            		<select class="form-select" name="ZonaPrecioNuevoProducto" id="ZonaPrecioNuevoProducto"> 
+                    	#CargarZonasPrecioNuevo# 
+                	</select>
+                	<label>Zonas</label>
+        		</div>
+					</div>
+					<br>
+					<div class="col-md-12">
+						<button class="btn btn-primary btn-sm" type="submit">Agregar precio <i class="fas fa-plus"></i></button>
+					</div>
+				</form>
+      </div>
     </div>
   </div>
 </div> 

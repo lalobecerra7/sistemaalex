@@ -1,0 +1,9 @@
+BEGIN
+	IF( SELECT ID_Productos_Verificados FROM productos_verificados_corte_ruta WHERE FK_Corte_Ruta = id_corte AND FK_Producto = id_producto AND FK_Presentacion = id_presentacion AND FK_Cliente = id_cliente)
+    THEN 
+    	UPDATE productos_verificados_corte_ruta SET Cantidad = (Cantidad + 1) WHERE FK_Corte_Ruta = id_corte AND FK_Producto = id_producto AND FK_Presentacion = id_presentacion AND FK_Cliente = id_cliente AND Cantidad < (SELECT SUM(Cantidad) FROM detalles_ventas JOIN ventas ON FK_Venta = ID_Venta WHERE FK_Producto = id_producto AND FK_Presentacion = id_presentacion AND FIND_IN_SET(FK_Venta, (SELECT GROUP_CONCAT(Ventas) FROM detalles_corte_ruta WHERE FK_Corte_Ruta = id_corte)));
+    ELSE
+        INSERT INTO productos_verificados_corte_ruta (FK_Corte_Ruta, FK_Cliente, FK_Producto, FK_Presentacion, Cantidad)
+        VALUES (id_corte, id_cliente, id_producto, id_presentacion, 1);
+    END IF;
+END

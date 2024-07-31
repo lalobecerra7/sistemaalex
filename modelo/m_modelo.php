@@ -277,6 +277,28 @@ class m_modelo extends conexion{
 			echo "Error Movimientos: ".mysqli_error($this->link);
 		}
 	}
+
+	public function round2deci($number){
+		if(strpos($number, '.') !== false) {
+		  $explode = explode(".", $number);
+	        /// 51.13 == 51.ab
+			$a = substr($explode[1], 0, 1);
+			$b =  substr($explode[1], 1, 2);
+		        // fix for 51.91
+			if($a == 9){
+				$explode[0]++;
+				$a = 0;
+				$b = 0;
+
+			}
+			if($b > 0){
+				$a++;
+			}
+			return $explode[0].".".$a."0";
+		} else {
+		  	return $number;
+		}
+	}
 }
 
 ?>

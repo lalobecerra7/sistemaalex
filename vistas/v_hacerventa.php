@@ -32,22 +32,28 @@
             </div>
             <br>
             <form id="FormAgregarProductoVenta" class="row">
-                <div class="col-md-4 col-sm-12 mb-3">
+                <div class="col-md-3 col-sm-12 mb-3">
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1"><i class="fas fa-barcode"></i></span>
                         <input type="text" class="form-control" id="CodigoProductoVenta" name="CodigoProductoVenta" autocomplete="off" placeholder="Código del producto" required autofocus onblur="{e => {if (e.relatedTarget === null) { e.target.focus();}}}">
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-6 d-grid mb-3">
-                    <button type="submit" style="height: 40px;" class="btn btn-outline-danger" id="AgregarProductoVenta">Agregar producto <i class="fas fa-check"></i></button>
+                <div class="col-md-2 col-sm-6 d-grid mb-3">
+                    <button type="submit" style="height: 40px;" class="btn btn-outline-danger" id="AgregarProductoVenta">Agregar <i class="fas fa-check"></i></button>
                 </div>
-                <div class="col-md-3 col-sm-6 d-grid mb-3">
+                <div class="col-md-2 col-sm-6 d-grid mb-3">
                     <button type="button" style="height: 40px;" class="btn btn-outline-secondary" id="CargarProductosModalVentas">
                         <i class="fas fa-search"></i> Buscar (F2)
                     </button>
                 </div>
                 <div class="col-md-2 d-grid ">
                     #BotonCorteCaja#
+                </div>
+                <div class="col-md-2 col-sm-6 d-grid mb-3">
+                    #BotonModificarVentas#
+                </div>
+                <div class="col-md-1 col-sm-6 d-grid mb-3">
+                    <a href="javascript:void(0)" title="Actualizar pagina" class="BotonActualizarHacerVenta btn btn-light btn-reload" onclick="$('#cargarHacerVenta').trigger('click')"><i class="IconoSeleccionarVenta fa fa-retweet"></i></a>
                 </div>
             </form>
             <div class="row">
@@ -234,6 +240,37 @@
 </div>
 
 <!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalVerVentasModificar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ventas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaCargarVentas" width="100%" style="font-size: 12px;">
+                        <thead>
+                            <th style="width: 20%;" orden="No">Datos</th>
+                            <th style="width: 25%;" orden="No">Cliente</th>
+                            <th style="width: 25%;">Total</th>
+                            <th style="width: 15%;" orden="No">Detalles</th>
+                            <th style="width: 15%;" orden="No">Acciones</th>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
 <div class="modal fade" id="ModalVerProductosReportePedido" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -270,6 +307,54 @@
                             </tr>
                         </thead>
                         <tbody id="tbodyVerProductosPedido">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalVerProductosReporteVentas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Productos <span id="FolioCargarVentasProductos"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Producto
+                                </th>
+                                <th>
+                                    Precio
+                                </th>
+                                <th>
+                                    Cantidad
+                                </th>
+                                <th>
+                                    Descuento
+                                </th>
+                                <th>
+                                    Subtotal
+                                </th>
+                                <th>
+                                    Impuestos
+                                </th>
+                                <th>
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyVerProductosVentas">
                         </tbody>
                     </table>
                 </div>

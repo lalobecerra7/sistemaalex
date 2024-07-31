@@ -1,5 +1,7 @@
 <?php
-date_default_timezone_set('America/Mexico_City');
+//date_default_timezone_set('America/Mexico_City');
+date_default_timezone_set('America/Chihuahua');
+
 include 'modelo/m_modelo.php';
 include "controladores/c_login.php";
 include "controladores/c_sucursales.php";
@@ -7,7 +9,7 @@ include "controladores/c_clientes.php";
 include "controladores/c_proveedores.php";
 include "controladores/c_areas.php";
 include "controladores/c_hacerventa.php";
-include "controladores/c_hacerventacaja.php";
+// include "controladores/c_hacerventacaja.php";
 include "controladores/c_categorias.php";
 include "controladores/c_usuarios.php";
 include "controladores/c_productos.php";
@@ -32,6 +34,12 @@ include "controladores/c_vehiculos.php";
 include "controladores/c_choferes.php";
 include "controladores/c_cortesRuta.php";
 include "controladores/c_tokens.php";
+include "controladores/c_ventasxdia.php";
+include "controladores/c_ventasxproducto.php";
+include "controladores/c_ventasxusuario.php";
+include "controladores/c_ventasxcliente.php";
+include "controladores/c_recibos.php";
+include "controladores/c_reporteinventario.php";
 
 class controller {
 
@@ -61,7 +69,7 @@ class controller {
 			$alertas = '';
 			//QUERY ORIGINAL, MANDARLO A JUANCHO PARA QUE LO CHEQUE MAÑANA, SE AGREGO EL SUM
 			//SELECT ID_Stock, stock_productos.FK_Producto, Descripcion, Nombre_Unidad, FK_Presentacion, FK_Sucursal, Minimo, Maximo, Nombre, IFNULL((SELECT Cantidad FROM inventario WHERE FK_Producto = stock_productos.FK_Producto AND FK_Presentacion = FK_Presentacion AND FK_Sucursal = FK_Sucursal), 0) AS Cantidad FROM stock_productos INNER JOIN productos ON stock_productos.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion";
-			$query = "SELECT ID_Stock, stock_productos.FK_Producto, Descripcion, Nombre_Unidad, FK_Presentacion, FK_Sucursal, Minimo, Maximo, Nombre, IFNULL((SELECT Cantidad FROM inventario WHERE FK_Producto = stock_productos.FK_Producto AND FK_Presentacion = stock_productos.FK_Presentacion AND FK_Sucursal = stock_productos.FK_Sucursal), 0) AS Cantidad FROM stock_productos INNER JOIN productos ON stock_productos.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion";
+			$query = "SELECT ID_Stock, stock_productos.FK_Producto, Descripcion, Nombre_Unidad, FK_Presentacion, FK_Sucursal, Minimo, Maximo, Nombre, IFNULL((SELECT Cantidad FROM inventario WHERE FK_Producto = stock_productos.FK_Producto AND FK_Presentacion = stock_productos.FK_Presentacion AND FK_Sucursal = stock_productos.FK_Sucursal), 0) AS Cantidad FROM stock_productos INNER JOIN productos ON stock_productos.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."'";
 			$row = $omodelo->_consultar($query);
 			$numerofilas = $omodelo->numerofilas;
 
@@ -69,6 +77,8 @@ class controller {
 				echo "Error: " . mysqli_error($omodelo->link);
 			}else{
 				if ($numerofilas > 0) {
+					$icono ='<i class="fa-solid fa-bell fa-beat iconoConAlertas" style="--fa-beat-scale: 2.0; color: white;"></i>';
+					$pagina = str_replace('#MostrarIcono#', $icono, $pagina);
 					for ($i = 0; $i < $numerofilas; $i++) {
 						$presentacion = 'Sin presentación';
 						if($row[$i]['FK_Presentacion'] == 0){
@@ -89,8 +99,11 @@ class controller {
 							  <strong>Se alcanzó el stock mínimo de '.$row[$i]['Descripcion'].' '.$presentacion.'</strong>, la cantidad actual es '.$row[$i]['Cantidad'].', el mínimo es '.$row[$i]['Minimo'].'.
 							  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 							</div>';
-						}	
+						}
 					}
+				}else{
+					$icono ='<i class="fas fa-bell iconoSinAlertas" style="color: white;"></i>';
+					$pagina = str_replace('#MostrarIcono#', $icono, $pagina);
 				}
 			}
 
@@ -343,8 +356,30 @@ class controller {
     }
     $pagina = str_replace('#menuProd#', $botonProd, $pagina);
 
+    $botonRecibos = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_recibos'][1] == '1') {
+			$botonRecibos = ' <ul class="menu-sub">
+                <li class="menu-item cargarVista" carga="v_recibos" titulo="Recibos" id="cargarRecibos">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Recibos">Recibos</div>
+                  </a>
+                </li>
+              </ul>';
+		}
+		$pagina = str_replace('#MenuRecibos#', $botonRecibos, $pagina);
+
+		$reportesInventario = '';
+		if ($omodelo->permisos() == 'Administrador') {
+			$reportesInventario = '<li class="menu-item cargarVista" carga="v_reporteinventario" titulo="Reporte de inventario" id="cargarReporteVentasxCliente">
+                  <a href="javascript:void(0)" class="menu-link">
+                    <div data-i18n="Reporte de inventario">Reporte de inventario</div>
+                  </a>
+                </li>';
+		}
+		$pagina = str_replace('#reportesInventario#', $reportesInventario, $pagina);
+
 		$botonConfi = '';
-		if($botonFacturacion != '' || $botonTicket != ''){
+		if($botonFacturacion != '' || $botonTicket != '' || $botonRecibos != ''){
 			  $botonConfi = '<a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon fas fa-cogs"></i>
             <div data-i18n="Layouts">Configuración</div>
@@ -412,8 +447,48 @@ class controller {
 		}
 		$pagina = str_replace('#reportesFinanzas#', $botonReporteFinanzas, $pagina);
 
+		$botonReporteVentasxDia = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][7] == '1') {
+			$botonReporteVentasxDia = '<li class="menu-item cargarVista" carga="v_ventasxdia" titulo="Ventas por día" id="cargarReporteVentasxDia">
+                  <a href="javascript:void(0)" class="menu-link">
+                    <div data-i18n="Ventas por día">Ventas por día</div>
+                  </a>
+                </li>';
+		}
+		$pagina = str_replace('#ventasxDia#', $botonReporteVentasxDia, $pagina);
+
+		$botonReporteVentasxProducto = '';
+		if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_reportes'][8] == '1') {
+			$botonReporteVentasxProducto = '<li class="menu-item cargarVista" carga="v_ventasxproducto" titulo="Ventas por producto" id="cargarReporteVentasxProducto">
+                  <a href="javascript:void(0)" class="menu-link">
+                    <div data-i18n="Ventas por producto">Ventas por producto</div>
+                  </a>
+                </li>';
+		}
+		$pagina = str_replace('#ventasxProducto#', $botonReporteVentasxProducto, $pagina);
+
+		$botonReporteVentasxUsuario = '';
+		if ($omodelo->permisos() == 'Administrador') {
+			$botonReporteVentasxUsuario = '<li class="menu-item cargarVista" carga="v_ventasxusuario" titulo="Ventas por Usuario" id="cargarReporteVentasxUsuario">
+                  <a href="javascript:void(0)" class="menu-link">
+                    <div data-i18n="Ventas por Usuario">Ventas por Usuario</div>
+                  </a>
+                </li>';
+		}
+		$pagina = str_replace('#ventasxUsuario#', $botonReporteVentasxUsuario, $pagina);
+
+		$botonReporteVentasxCliente = '';
+		if ($omodelo->permisos() == 'Administrador') {
+			$botonReporteVentasxCliente = '<li class="menu-item cargarVista" carga="v_ventasxcliente" titulo="Ventas por Cliente" id="cargarReporteVentasxCliente">
+                  <a href="javascript:void(0)" class="menu-link">
+                    <div data-i18n="Ventas por Cliente">Ventas por Cliente</div>
+                  </a>
+                </li>';
+		}
+		$pagina = str_replace('#ventasxCliente#', $botonReporteVentasxCliente, $pagina);
+
 		$botonReportes = '';
-		if($botonReporteCaja != '' || $botonReporteProductos != '' || $botonReporteClientes != '' || $botonReporteVentas != '' || $botonReporteCompras != '' || $botonReporteFinanzas != ''){
+		if($botonReporteCaja != '' || $botonReporteProductos != '' || $botonReporteClientes != '' || $botonReporteVentas != '' || $botonReporteCompras != '' || $botonReporteFinanzas != '' || $botonReporteVentasxDia != '' || $botonReporteVentasxProducto != '' || $botonReporteVentasxUsuario != '' || $botonReporteVentasxCliente != ''){
     		$botonReportes = '<a href="javascript:void(0);" class="menu-link menu-toggle">
                   <i class="menu-icon fas fa-chart-line"></i>
                   <div data-i18n="Layouts">Reportes</div>
@@ -434,6 +509,18 @@ class controller {
               </ul>';
 		}
 		$pagina = str_replace('#MenuTokens#', $botonTokens, $pagina);
+
+		$botonRecibos = '';
+		if ($omodelo->permisos() == 'Administrador') {
+			$botonRecibos = ' <ul class="menu-sub">
+                <li class="menu-item cargarVista" carga="v_recibos" titulo="Recibos" id="cargarRecibos">
+                  <a href="javascript:void(0)"  class="menu-link">
+                    <div data-i18n="Recibos">Recibos</div>
+                  </a>
+                </li>
+              </ul>';
+		}
+		$pagina = str_replace('#MenuRecibos#', $botonRecibos, $pagina);
 
     $venta = '';
     /*if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][2] == '1') {
@@ -564,6 +651,7 @@ class controller {
 			}
 
 			$pagina = str_replace('#zonas#', $opciones, $pagina);
+			$pagina = str_replace('#CargarZonasPrecioNuevo#', $opciones, $pagina);
 
 			$query = "SELECT ID_Proveedor, Nombre, Empresa FROM proveedores WHERE ID_Proveedor != '1'";
 			$row = $omodelo->_consultar($query);
@@ -754,6 +842,7 @@ class controller {
 			}
 			
 		}else if($nombre == "v_compras"){
+			// print_r($omodelo->permisos());
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_compras'][2] == '0') {
 				echo '<script>$(".botonNuevaCompra").remove();</script>';
 			}
@@ -765,6 +854,10 @@ class controller {
 		}else if($nombre == "v_cajas"){
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_cajas'][2] == '0') {
 				echo '<script>$("#botonNuevaCaja").remove();</script>';
+			}
+		}else if($nombre == "v_recibos"){
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_recibos'][2] == '0') {
+				echo '<script>$("#botonNuevoRecibo").remove();</script>';
 			}
 		}else if($nombre == "v_impuestos"){
 			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_impuestos'][2] == '0') {
@@ -929,7 +1022,12 @@ class controller {
 
 	    $pagina = str_replace('#BotonCorteCaja#', $botonCorteCaja, $pagina);
    
-
+	    $BotonModificarVentas = '';
+	    if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][11] == '1') {
+	    	$BotonModificarVentas = '<button type="button" style="height: 40px;" attrid class="btn btn-outline-secondary" id="CargarModalModificarVentas">Ventas</button>';
+	    }
+   
+	    $pagina = str_replace('#BotonModificarVentas#', $BotonModificarVentas, $pagina);
 
 		}else if($nombre == "v_facturacion"){
 				$query = "SELECT RFC, Nombre, Regimen FROM general WHERE ID_General = '1'";
@@ -947,38 +1045,23 @@ class controller {
 				}		
 		}else if($nombre == "v_precios"){
 				$query = "SELECT ID_Zona, Nombre, Descripcion FROM zonas";
-				$row = $omodelo->_consultar($query);
-				$numerofilas = $omodelo->numerofilas;
-				
-				$zonas = '';	
-				if ($row == "si") {
-						echo "Error: " . mysqli_error($omodelo->link);
-				}else{
-						if($numerofilas > 0){ 
-								for ($i=0; $i < $numerofilas; $i++) { 
-										$zonas .= '<option value="'.$row[$i]['ID_Zona'].'">'.$row[$i]['Nombre'].'</option>';
-								}
-						}
-				}			
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			
+			$zonas = '';	
+			if ($row == "si") {
+					echo "Error: " . mysqli_error($omodelo->link);
+			}else{
+					if($numerofilas > 0){ 
+							for ($i=0; $i < $numerofilas; $i++) { 
+									$zonas .= '<option value="'.$row[$i]['ID_Zona'].'">'.$row[$i]['Nombre'].'</option>';
+							}
+					}
+			}			
 
-				$pagina = str_replace('#zonas#', $zonas, $pagina);
-
-				$query = "SELECT ID_Zona, Nombre, Descripcion FROM zonas";
-				$row = $omodelo->_consultar($query);
-				$numerofilas = $omodelo->numerofilas;
-				
-				$zonas = '';	
-				if ($row == "si") {
-						echo "Error: " . mysqli_error($omodelo->link);
-				}else{
-						if($numerofilas > 0){ 
-								for ($i=0; $i < $numerofilas; $i++) { 
-										$zonas .= '<option value="'.$row[$i]['ID_Zona'].'">'.$row[$i]['Nombre'].'</option>';
-								}
-						}
-				}			
-
-				$pagina = str_replace('#CargarZonasPrecio#', $zonas, $pagina);
+			$pagina = str_replace('#zonas#', $zonas, $pagina);
+			$pagina = str_replace('#CargarZonasPrecio#', $zonas, $pagina);
+			$pagina = str_replace('#CargarZonasPrecioNuevo#', $zonas, $pagina);
 		}else if($nombre == "v_choferes"){
 			$query = "SELECT ID_Vehiculo, Modelo, Marca, Descripcion FROM vehiculos";
 			$row = $omodelo->_consultar($query);
@@ -1077,6 +1160,121 @@ class controller {
 			}
 
 			$pagina = str_replace('#botonSubirArchivo#', $botonSubirFile, $pagina);
+		}else if($nombre == "v_ventasxdia"){
+
+			$tipo = '';
+			if($_SESSION['user_admin']['Tipo_Usuario'] == 'Normal'){
+					$tipo = "WHERE ID_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."'";
+			}
+			
+			$query = "SELECT ID_Sucursal, sucursales.Nombre AS Nombre FROM sucursales INNER JOIN cajas ON FK_Sucursal = ID_Sucursal $tipo ORDER BY (ID_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."') DESC";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Sucursal'] . '" >' . $row[$i]['Nombre']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#SucursalesVentasXDia#', $opciones, $pagina);
+		}else if($nombre == "v_ventasxproducto"){
+
+			$tipo = '';
+			if($_SESSION['user_admin']['Tipo_Usuario'] == 'Normal'){
+					$tipo = "WHERE ID_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."'";
+			}
+			
+			$query = "SELECT ID_Sucursal, sucursales.Nombre AS Nombre FROM sucursales INNER JOIN cajas ON FK_Sucursal = ID_Sucursal $tipo ORDER BY (ID_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."') DESC";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Sucursal'] . '" >' . $row[$i]['Nombre']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#SucursalesVentasXProducto#', $opciones, $pagina);
+		}else if($nombre == "v_ventasxusuario"){
+
+			$tipo = '';
+			if($_SESSION['user_admin']['Tipo_Usuario'] == 'Normal'){
+					$tipo = "WHERE ID_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."'";
+			}
+			
+			$query = "SELECT ID_Sucursal, sucursales.Nombre AS Nombre FROM sucursales INNER JOIN cajas ON FK_Sucursal = ID_Sucursal $tipo ORDER BY (ID_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."') DESC";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Sucursal'] . '" >' . $row[$i]['Nombre']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#SucursalesVentasXUsuario#', $opciones, $pagina);
+		}else if($nombre == "v_ventasxcliente"){
+
+			$tipo = '';
+			if($_SESSION['user_admin']['Tipo_Usuario'] == 'Normal'){
+					$tipo = "WHERE ID_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."'";
+			}
+			
+			$query = "SELECT ID_Sucursal, sucursales.Nombre AS Nombre FROM sucursales INNER JOIN cajas ON FK_Sucursal = ID_Sucursal $tipo ORDER BY (ID_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."') DESC";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Sucursal'] . '" >' . $row[$i]['Nombre']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#SucursalesVentasXCliente#', $opciones, $pagina);
+		}else if($nombre == "v_reporteinventario"){
+
+			/*$tipo = '';
+			if($_SESSION['user_admin']['Tipo_Usuario'] == 'Normal'){
+					$tipo = "WHERE ID_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."'";
+			}*/
+			
+			$query = "SELECT ID_Proveedor, IF(Empresa = '', Nombre, Empresa) AS Empresa FROM proveedores";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+			$opciones = "";
+
+			if ($row == "si") {
+				echo "Error: " . mysqli_error($omodelo->link);
+			} else {
+				if ($numerofilas > 0) {
+					for ($i = 0; $i < $numerofilas; $i++) {
+						$opciones .= '<option value="' . $row[$i]['ID_Proveedor'] . '" >' . $row[$i]['Empresa']. '</option>';
+					}
+				}
+			}
+
+			$pagina = str_replace('#ProveedoresReporteInventario#', $opciones, $pagina);
 		}
 		
 		return $pagina;
