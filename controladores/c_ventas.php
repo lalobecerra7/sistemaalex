@@ -1,0 +1,1126 @@
+<?php
+class ventas {
+
+	public function _consultar(){
+		$omodelo = new m_modelo();
+		extract($_POST);
+
+		$buscar =  $omodelo->link->real_escape_string($buscar);
+		$limit =  $omodelo->link->real_escape_string($limit);
+		$pagina =  $omodelo->link->real_escape_string($pagina);
+		$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+		$orden =  $omodelo->link->real_escape_string($orden);
+		$arreglo = array();
+		// $sucursal = $_SESSION['user_admin']['FK_Sucursal'];
+		$fechaInicio = $omodelo->link->real_escape_string($fechaInicio);
+		$fechaFin = $omodelo->link->real_escape_string($fechaFin);
+		// $sucursal = $omodelo->link->real_escape_string($sucursal);
+        $cliente = $omodelo->link->real_escape_string($cliente);
+        $qSucursales = "";
+        $qCliente = "";
+
+        // Traer las sucursales seleccionadas del filtro sucursales.
+        $cadenaSucursales = "";
+		$sucursales = json_decode($SucursalesSelect, true);
+		foreach ($sucursales as $sucursal) {
+            if ($sucursal["ID"] == "todas") {
+                $cadenaSucursales = "";
+            } else {
+                $cadenaSucursales .= $sucursal["ID"].",";
+            }
+		}
+		$string = rtrim($cadenaSucursales, ",");
+		if ($string != "") {
+			$qSucursales = "WHERE sucursales.ID_Sucursal IN(".$string.") AND";
+		} else {
+            $qSucursales = "WHERE";
+        }
+
+        // Si la opcion de clientes es 'todos los clientes'.
+        if ($cliente == 'todos') {
+            $qCliente = "";
+        } else {
+            $qCliente = "ventas.FK_Cliente = '".$cliente."' AND";
+        }
+
+		if ($omodelo->permisos() == 'Administrador'){
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(DATE_FORMAT(ventas.Fecha_Registro, '%d-%m-%Y %r'), LPAD(ID_Venta, 8, '0'), (SELECT Nombre FROM sucursales WHERE ID_Sucursal = ventas.FK_Sucursal), clientes.Primer_Apellido, clientes.Segundo_Apellido, clientes.Nombre, ventas.Descuento, Total, Tipo_Pago, Notas, clientes.Correo, Total_Importes) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+			
+			$query = "SELECT ID_Venta, Mensaje_Cancelada, Facturada, Contar_Venta, ventas.FK_Usuario, ventas.FK_Direccion, ventas.FK_Sucursal, sucursales.Nombre AS NombreSucursal, FK_Caja, FK_Cliente, ventas.Descuento, Total, Total_Importes, Tipo_Pago, Pago_Efectivo, Pago_Transferencia, Pago_Cheque, Pago_Tarjeta_Credito, Pago_Tarjeta_Debito, Estatus, Pago, Cambio, Notas, ventas.Fecha_Registro AS Datos, DATE_FORMAT(ventas.Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS NombreCliente,  clientes.Primer_Apellido AS PrimerApellidoCliente, clientes.Segundo_Apellido AS SegundoApellidoCliente,  clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM ventas INNER JOIN clientes ON ventas.FK_Cliente = clientes.ID_Cliente INNER JOIN sucursales ON ventas.FK_Sucursal = sucursales.ID_Sucursal ".$qSucursales." $qCliente (DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') >= '$fechaInicio' AND DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') <= '$fechaFin') $busqueda) AS Num FROM ventas INNER JOIN clientes ON ventas.FK_Cliente = clientes.ID_Cliente INNER JOIN sucursales ON ventas.FK_Sucursal = sucursales.ID_Sucursal ".$qSucursales." $qCliente (DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') >= '$fechaInicio' AND DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') <= '$fechaFin') $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		}else{
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(DATE_FORMAT(ventas.Fecha_Registro, '%d-%m-%Y %r'), LPAD(ID_Venta, 8, '0'), (SELECT Nombre FROM sucursales WHERE ID_Sucursal = ventas.FK_Sucursal), clientes.Nombre, clientes.Primer_Apellido, clientes.Segundo_Apellido, ventas.Descuento, Total, Tipo_Pago, Notas, clientes.Correo, Total_Importes) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+			
+			$query = "SELECT ID_Venta, Mensaje_Cancelada, Facturada, Contar_Venta, ventas.FK_Usuario, ventas.FK_Direccion, ventas.FK_Sucursal, (SELECT Nombre FROM sucursales WHERE ID_Sucursal = ventas.FK_Sucursal) AS NombreSucursal, FK_Caja, FK_Cliente, ventas.Descuento, Total, Total_Importes, Tipo_Pago, Pago_Efectivo, Pago_Transferencia, Pago_Cheque, Pago_Tarjeta_Credito, Pago_Tarjeta_Debito, Estatus, Pago, Cambio, Notas, ventas.Fecha_Registro AS Datos, DATE_FORMAT(ventas.Fecha_Registro, '%d-%m-%Y %r') AS Fecha_Registro, Fecha_Cancelacion, Regreso_Inventario, (SELECT CONCAT(usuarios.Nombre,' ',usuarios.Primer_Apellido,' ',usuarios.Segundo_Apellido) FROM usuarios WHERE ID_Usuario = ventas.FK_Usuario) AS NombreUsuario, clientes.Nombre AS NombreCliente, clientes.Primer_Apellido AS PrimerApellidoCliente, clientes.Segundo_Apellido AS SegundoApellidoCliente, clientes.Telefono AS Telefono, clientes.Correo AS CorreoCliente, clientes.RFC AS RFCCliente, (SELECT COUNT(*) FROM ventas INNER JOIN clientes ON ventas.FK_Cliente = clientes.ID_Cliente INNER JOIN sucursales ON ventas.FK_Sucursal = sucursales.ID_Sucursal WHERE sucursales.ID_Sucursal IN(".$_SESSION['user_admin']['FK_Sucursal'].") AND $qCliente (DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') >= '$fechaInicio' AND DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') <= '$fechaFin') $busqueda) AS Num FROM ventas INNER JOIN clientes ON ventas.FK_Cliente = clientes.ID_Cliente INNER JOIN sucursales ON ventas.FK_Sucursal = sucursales.ID_Sucursal WHERE sucursales.ID_Sucursal IN(".$_SESSION['user_admin']['FK_Sucursal'].") AND $qCliente (DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') >= '$fechaInicio' AND DATE_FORMAT(ventas.Fecha_Registro, '%Y-%m-%d') <= '$fechaFin') $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+		}
+		// echo $query;
+		$row = $omodelo->_consultar($query);
+		$numerofilas = $omodelo->numerofilas;
+
+		if($row == 'si'){
+			echo "Error: ".mysqli_error($omodelo->link);
+		}else{
+			if($numerofilas > 0){
+				$SumarVentas = 0;
+				for($i=0; $i<$numerofilas; $i++){
+					$tipoUsuario = "";$usuario="";$estatus="";$motivocancelada="";$botonCancelar="";$fechacancelada="";$botonTicket="";
+					$folio = str_pad($row[$i]['ID_Venta'], 8, "0", STR_PAD_LEFT);
+					$botonEliminar = "";
+					$botondeCancelar = "";
+					$botonEliminar = '<button title="Eliminar venta" class="btn btn-danger btn-sm" id="EliminarVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'"><i class="fas fa-trash"></i></button>';
+
+					$claseFactutada = 'CancelarVenta';
+					if($row[$i]['Facturada'] == '1'){
+						$claseFactutada = 'CancelarFactura';
+					}
+
+					$botondeCancelar = '<button title="Cancelar venta" class="btn btn-warning btn-sm '.$claseFactutada.'" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'" sucursal="'.$row[$i]['FK_Sucursal'].'"><i class="fas fa-circle-xmark"></i></button>';
+
+					if($row[$i]['Facturada'] == '2'){ //No se puede cancelar mientras el timbrado no este confirmado
+						$botondeCancelar = '';
+					}
+
+					$botonTicket = '<button title="Imprimir ticket" class="btn btn-success btn-sm" id="ImprimirTicketVentaSinCaja" attrid="'.$row[$i]['ID_Venta'].'" sucursal="'.$row[$i]['FK_Sucursal'].'" folio="'.$folio.'"><i class="fas fa-print"></i></button>';
+
+					$botonDevolucion = '<button title="Realizar devolución" class="btn btn-secondary btn-sm" id="DevolverVenta" data-bs-target="#ModalDevolucionVenta" data-bs-toggle="modal" attrid="'.$row[$i]['ID_Venta'].'" sucursal="'.$row[$i]['FK_Sucursal'].'" folio="'.$folio.'"><i class="fas fa-arrow-left"></i></button>';
+
+					if($row[$i]['Facturada'] == '0'){//agregar permisos
+						$botonFacturar = '<button class="btn btn-info btn-sm bFacturar" attrID="'.$row[$i]['ID_Venta'].'" title="Facturar"><i class="fas fa-file-lines"></i></button>';
+					}else if($row[$i]['Facturada'] == '2'){ //Timbrado sin confirmar
+						$botonFacturar = '<button class="btn btn-warning btn-sm bRevisarTimbrado" attrID="'.$row[$i]['ID_Venta'].'" title="Timbrado sin confirmar"><i class="fas fa-triangle-exclamation"></i></button>';
+					}else{
+						$botonFacturar = '<button class="btn btn-info btn-sm bImprimirFacPDF" attrID="'.$row[$i]['ID_Venta'].'" title="Factura PDF"><i class="fas fa-file-pdf"></i></button> <button class="btn btn-info btn-sm bImprimirFacXml" attrID="'.$row[$i]['ID_Venta'].'" title="XML"><i class="fas fa-file-excel"></i></button>';
+					}
+
+					$TotalDevolucion = 0;
+					$query2 = "SELECT SUM(Total) AS TotalDevolucion FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE FK_Venta = '".$row[$i]['ID_Venta']."'";
+					$row2 = $omodelo->_consultar($query2);
+					$numerofilas2 = $omodelo->numerofilas;
+
+					if($row2 == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilas2 > 0){
+							$TotalDevolucion = $row2[0]["TotalDevolucion"];
+						}
+					}
+					$totalVenta = $row[$i]['Total_Importes'] + $row[$i]['Total'];
+					$MostrarDevolucion = "";
+					$totalFinal = 0;
+					if ($TotalDevolucion > 0) {
+						$totalFinal = $row[$i]['Total'] - $TotalDevolucion;
+						$MostrarDevolucion = "<br>Devuelto: <b>$".number_format($TotalDevolucion, 2)."</b><br>
+						Total final: <b>$".number_format($totalFinal, 2)."</b>";
+
+						if($row[$i]['Contar_Venta'] == '0' && $row[$i]['Estatus'] != "Cancelada"){
+							$SumarVentas += $totalFinal;
+						}
+					}else{
+						if($row[$i]['Contar_Venta'] == '0' && $row[$i]['Estatus'] != "Cancelada"){
+							$SumarVentas += $row[$i]['Total'];
+						}
+					}
+
+					if ($row[$i]['Estatus'] == "Cancelada") {
+						$botondeCancelar = '';
+						$botonDevolucion = '';
+						$estatus='<span class="badge rounded-pill bg-danger">Cancelada</span>';
+						$motivocancelada = "Motivo de cancelación: ".$row[$i]['Notas'];
+						$fechacancelada = '<br>Fecha de cancelación: <b>'.$row[$i]['Fecha_Cancelacion']."</b><br>";
+					}else if ($row[$i]['Estatus'] == "Devuelta") {
+						$botonDevolucion = '';
+						$estatus='<span class="badge rounded-pill bg-warning">Devuelta</span>';
+					}else if($row[$i]['Estatus'] == "Completada"){
+						$estatus='<span class="badge rounded-pill bg-success">Completada</span>';
+					}
+
+					$botonPermisosCancelar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][3] == '1') {
+						if($row[$i]['Contar_Venta'] == '0'){
+							$botonPermisosCancelar = $botondeCancelar;
+						}
+					}
+
+					$botonPermisosEliminar = "";
+					if ($row[$i]['Facturada'] == '0' && ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][4] == '1')) {
+						$botonPermisosEliminar = $botonEliminar;
+					}
+
+					$botonPermisosFacturar = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][5] == '1') {
+						$botonPermisosFacturar = $botonFacturar;
+					}
+
+					$botonPermisosDevoluciones = "";
+					if ($row[$i]['Facturada'] == '0' && ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][6] == '1')) {
+						if($row[$i]['Contar_Venta'] == '0'){ //Si cuenta en el balance
+							$botonPermisosDevoluciones = $botonDevolucion;
+						}
+					}
+
+					$botonPermisosTicket = "";
+					if ($omodelo->permisos() == 'Administrador' || @$omodelo->permisos()['v_ventas'][7] == '1') {
+						$botonPermisosTicket = $botonTicket;
+					}
+
+					$facturada = 'No';
+					if($row[$i]['Facturada'] == '1'){
+						$facturada = 'Si';
+					}else if($row[$i]['Facturada'] == '2'){
+						$facturada = '<span class="badge bg-warning text-dark">En proceso / revisar</span>';
+					}
+
+					$direccionCliente = "";
+					if ($row[$i]['FK_Direccion'] != "0") {
+						$query2 = "SELECT Calle, No_Exterior, No_Interior, Colonia, Codigo_Postal, Ciudad, Estado, Pais FROM detalles_clientes WHERE FK_Cliente = '".$row[$i]['FK_Cliente']."' AND ID_Detalle_Cliente = '".$row[$i]['FK_Direccion']."'";
+					}else{
+						$query2 = "SELECT Calle, No_Exterior, No_Interior, Colonia, Codigo_Postal, Ciudad, Estado, Pais FROM clientes WHERE ID_Cliente = '".$row[$i]['FK_Cliente']."'";
+					}
+					$row2 = $omodelo->_consultar($query2);
+					$numerofilas2 = $omodelo->numerofilas;
+
+					if($row2 == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilas2 > 0){
+
+							if ($row2[0]["Calle"] != "") {
+								$direccionCliente.="Calle: ".$row2[0]["Calle"]."<br>";
+
+								if ($row2[0]["No_Exterior"] != "") {
+									$direccionCliente.="No. Exterior: ".$row2[0]["No_Exterior"]."<br>";
+								}
+
+								if ($row2[0]["No_Interior"] != "") {
+									$direccionCliente.="No. Interior: ".$row2[0]["No_Interior"]."<br>";
+								}
+
+								if ($row2[0]["Colonia"] != "") {
+									$direccionCliente.="Colonia: ".$row2[0]["Colonia"]."<br>";
+								}
+
+								if ($row2[0]["Ciudad"] != "") {
+									$direccionCliente.="Ciudad: ".$row2[0]["Ciudad"]."<br>";
+								}
+
+								if ($row2[0]["Codigo_Postal"] != "") {
+									$direccionCliente.="Codigo postal: ".$row2[0]["Codigo_Postal"]."<br>";
+								}
+
+								if ($row2[0]["Estado"] != "") {
+									$direccionCliente.="Estado: ".$row2[0]["Estado"]."<br>";
+								}
+
+								if ($row2[0]["Pais"] != "") {
+									$direccionCliente.="Pais: ".$row2[0]["Pais"]."<br>";
+								}
+							}else{
+								$direccionCliente = "Sin dirección registrada";
+							}
+
+						}else{
+							$direccionCliente = "Sin dirección registrada";
+						}
+					}
+
+					$contarVenta = '';
+					if($row[$i]['Contar_Venta'] == '1'){
+						$contarVenta = '<br><b>Esta venta no afectó al balance de caja ni al inventario.</b>';
+					}
+
+					$TipoDePago = '';
+
+					if ($row[$i]["Pago_Efectivo"] > 0) {
+						$TipoDePago .= 'Efectivo: <b>$'.number_format($row[$i]["Pago_Efectivo"], 2).'</b><br>';
+					}
+
+					if ($row[$i]["Pago_Transferencia"] > 0) {
+						$TipoDePago .= 'Transferencia: <b>$'.number_format($row[$i]["Pago_Transferencia"], 2).'</b><br>';
+					}
+					if ($row[$i]["Pago_Cheque"] > 0) {
+						$TipoDePago .= 'Cheque: <b>$'.number_format($row[$i]["Pago_Cheque"], 2).'</b><br>';
+					}
+					if ($row[$i]["Pago_Tarjeta_Credito"] > 0) {
+						$TipoDePago .= 'Tarjeta de crédito: <b>$'.number_format($row[$i]["Pago_Tarjeta_Credito"], 2).'</b><br>';
+					}
+					if ($row[$i]["Pago_Tarjeta_Debito"] > 0) {
+						$TipoDePago .= 'Tarjeta de debito: <b>$'.number_format($row[$i]["Pago_Tarjeta_Debito"], 2).'</b><br>';
+					}
+
+					if ($TipoDePago == "") {
+						$TipoDePago = $row[$i]["Tipo_Pago"];
+					}
+
+					//BOTON PARA REASIGNAR CLIENTE
+					if ($row[$i]['Facturada'] == '0') {
+						$botonReasignar = '<button title="Reasignar cliente" class="btn btn-success btn-sm" id="ReasignarClienteVenta" attrid="'.$row[$i]['ID_Venta'].'" sucursal="'.$row[$i]['FK_Sucursal'].'" folio="'.$folio.'"><i class="fas fa-user"></i></button>';
+					}else{
+						$botonReasignar = '';
+					}
+
+					$arreglo['data'][$i] = array(
+						'ID' => $row[$i]['ID_Venta'],
+						'Datos' => "Fecha: <b>".$row[$i]['Fecha_Registro']."<br></b>Folio: <b>".$folio."</b><br>Usuario: <b>".$row[$i]['NombreUsuario']."</b><br>Sucursal: <b>".$row[$i]["NombreSucursal"]."</b>",
+						'Cliente' => 'Nombre: <b>'.$row[$i]['NombreCliente'].' '.$row[$i]['PrimerApellidoCliente'].' '.$row[$i]['SegundoApellidoCliente'].'</b><br>Teléfono: <b>'.$row[$i]['Telefono'].'</b><br>Correo electrónico: <b>'.$row[$i]['CorreoCliente'].'</b><br>RFC: <b>'.$row[$i]['RFCCliente']."</b><br> Dirección: <br><b>".$direccionCliente."</b>",
+						'Total' => "
+						Pago: <b>$".number_format(($row[$i]['Pago']), 2)."</b><br>
+						Subtotal: <b>$".number_format(($row[$i]['Total'] + $row[$i]['Descuento']), 2)."</b><br>
+						Descuento: <b>$".number_format($row[$i]['Descuento'], 2)."</b><br>
+						Total de venta: <b>$".number_format($row[$i]['Total'], 2)."</b><br>
+						Cambio: <b>$".number_format(($row[$i]['Cambio']), 2)."</b>".$MostrarDevolucion."<br>
+						<hr>
+						Total de importes: <b>$".number_format($row[$i]['Total_Importes'], 2)."</b>",
+						'Facturada' => $facturada.'<br>'.$row[$i]['Mensaje_Cancelada'],
+						'Detalles' => $estatus."<br>".$motivocancelada.$fechacancelada.'<button class="btn btn-link btn-sm" id="VerProductosVenta" attrid="'.$row[$i]['ID_Venta'].'" folio="'.$folio.'">Ver productos</button><br>Tipo de pago: <b>'.$TipoDePago."</b>".$contarVenta,
+						'Acciones' => $botonPermisosEliminar.' '.$botonPermisosCancelar .' '.$botonPermisosTicket.' '.$botonPermisosFacturar.' '.$botonPermisosDevoluciones.' '.$botonReasignar,
+					);
+				}
+
+				$arreglo['totales'] = array(
+					'NumRows' => $row[0]['Num'], 
+					'Datos' => "",
+					'Cliente' => "Totales",
+					'Total' => "<b>$".number_format($SumarVentas, 2)."</b>",
+					'Detalles' =>"",
+					'Acciones' => "");	
+	
+			}
+		}
+
+		echo json_encode($arreglo);
+	}
+	
+	public function _modificar(){
+		$omodelo = new m_modelo();
+		extract($_POST); 
+		$fecha = date('Y-m-d H:i:s'); 
+		$IDVenta = $omodelo->link->real_escape_string($IDVenta);
+		$IDSucursal = $omodelo->link->real_escape_string($IDSucursal);
+		$Regresar = $omodelo->link->real_escape_string($Regresar);
+		$Motivo = $omodelo->link->real_escape_string($Motivo);
+		$queryRegresar = ', Regreso_Inventario = "0"';
+		if ($Regresar == "Si") {
+			$queryRegresar = ', Regreso_Inventario = "1"';
+			$query = "SELECT ID_Detalle_Venta, FK_Producto, FK_Presentacion, Cantidad, FK_Lote FROM detalles_ventas WHERE FK_Venta = '$IDVenta'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+
+						$query1 = "UPDATE inventario SET Cantidad = (Cantidad + '".$row[$i]["Cantidad"]."') WHERE FK_Producto = '".$row[$i]["FK_Producto"]."' AND FK_Presentacion = '".$row[$i]["FK_Presentacion"]."' AND FK_Sucursal = '".$IDSucursal."'";
+						$error1 = $omodelo->_insertar($query1);
+						if ($error1 == "si") {
+							echo "Error 2: ".mysqli_error($omodelo->link);
+						}else{
+							$query2 = "UPDATE detalles_ventas SET Regreso_Inventario = '1' WHERE ID_Detalle_Venta = '".$row[$i]["ID_Detalle_Venta"]."'";
+							$error2 = $omodelo->_insertar($query2);
+							if ($error2 == "si") {
+								echo "Error 3: ".mysqli_error($omodelo->link);
+							}
+						}
+
+						$query3 = "UPDATE lotes SET Cantidad = (Cantidad + '".$row[$i]["Cantidad"]."') WHERE ID_Lote = '".$row[$i]["FK_Lote"]."' AND FK_Producto = '".$row[$i]["FK_Producto"]."' AND FK_Presentacion = '".$row[$i]["FK_Presentacion"]."' AND FK_Sucursal = '".$IDSucursal."'";
+						$error3 = $omodelo->_insertar($query3);
+						if ($error3 == "si") {
+							echo "Error 4: ".mysqli_error($omodelo->link);
+						}
+					}
+				}
+			}
+		}
+
+		$query = "UPDATE ventas SET Total_Importes = 0, Notas = '$Motivo', Estatus = 'Cancelada',  Fecha_Cancelacion = '$fecha' $queryRegresar WHERE ID_Venta = '$IDVenta'";
+		$error = $omodelo->_insertar($query);
+		if ($error == "si") {
+			echo "Error 5: ".mysqli_error($omodelo->link);
+		}else{
+			$query2 = "DELETE FROM importes WHERE FK_Venta = '$IDVenta'";
+			$error2 = $omodelo->_insertar($query2);
+			if ($error2 == "si") {
+				echo "Error 6: ".mysqli_error($omodelo->link);
+			}
+			echo "Correcto";
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+		}	
+	}
+
+	public function _eliminar(){
+		$omodelo = new m_modelo();
+		extract($_POST);
+		
+		$IDVenta = $omodelo->link->real_escape_string($IDVenta);
+
+		$query = "DELETE FROM ventas WHERE ID_Venta = '$IDVenta'";
+		$error = $omodelo->_insertar($query);
+
+		if ($error == "si") {
+			echo "Error 1: ".mysqli_error($omodelo->link);
+		}else{
+			echo "Correcto";
+			$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+		}	
+	}
+
+	public function _detalles(){
+		$omodelo = new m_modelo();
+		extract($_POST);
+		$fecha = date('Y-m-d H:i:s'); 
+		
+		if($tipo == 'productos'){
+			$IDVenta = $omodelo->link->real_escape_string($IDVenta);
+			$tabla = "";
+			$query = "SELECT ID_Detalle_Venta, FK_Venta, detalles_ventas.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, Descripcion, Precio, Cantidad, detalles_ventas.Descuento AS Descuento, Total, Regreso_Inventario, Clave_Unidad_CFDI, Unidad_CFDI, Objeto_Impuesto_CFDI FROM detalles_ventas LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '$IDVenta'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						$sumaImpuestos=0; $subtotal = 0;
+
+						$query2 = "SELECT ID_Impuesto, FK_Detalle_Venta, Tipo_Impuesto_CFDI, Impuesto_CFDI, Clave_CFDI, Tipo_Factor_CFDI, Tasa_Cuota_CFDI FROM detalles_impuestos_ventas WHERE FK_Detalle_Venta = '".$row[$i]["ID_Detalle_Venta"]."'";
+						$row2 = $omodelo->_consultar($query2);
+						$numerofilas2 = $omodelo->numerofilas;
+
+						if($row2 == 'si'){
+							echo "Error: ".mysqli_error($omodelo->link);
+						}else{
+							if($numerofilas2 > 0){
+								for($x=0; $x<$numerofilas2; $x++){
+									$totalProducto=0; $descuento=0; $totalFinal=0;
+									$totalProducto = $row[$i]["Precio"]*$row[$i]["Cantidad"];
+									$descuento = $row[$i]["Descuento"];
+									$totalFinal = $totalProducto - $descuento;
+									if ($row2[$x]["Tipo_Impuesto_CFDI"] == "Trasladado") { //Se suma al total
+										$sumaImpuestos += $totalFinal * ($row2[$x]["Tasa_Cuota_CFDI"] / 100);
+									}else if($row2[$x]["Tipo_Impuesto_CFDI"] == "Retenido" && $row2[$x]["Tipo_Factor_CFDI"] != "Exento"){ //Se resta al total
+										$sumaImpuestos -= $totalFinal * ($row2[$x]["Tasa_Cuota_CFDI"] / 100);
+									}else if($row2[$x]["Tipo_Impuesto_CFDI"] == "Retenido" && $row2[$x]["Tipo_Factor_CFDI"] == "Exento"){ ////No se suma ni se resta
+										$sumaImpuestos += 0;
+									}
+								}
+							}
+						}
+
+
+						$presentacion = "";
+						$nombrepresentacion = "";
+						if ($row[$i]["NombrePresentacion"] != "") {
+							$presentacion = "<br>".$row[$i]["NombrePresentacion"];
+							$nombrepresentacion = " / ".$row[$i]["NombrePresentacion"];
+							if ($row[$i]["AbreviaturaPresentacion"] != "") {
+								$presentacion .= " (".$row[$i]["AbreviaturaPresentacion"].")";
+								$nombrepresentacion .= " (".$row[$i]["AbreviaturaPresentacion"].")";
+							} 
+						}
+
+						$subtotal = ($row[$i]["Precio"] * $row[$i]["Cantidad"]) ;
+						$subtotal = $subtotal - $row[$i]["Descuento"];
+						$tabla .= "
+							<tr>
+								<td >".$row[$i]["Descripcion"].$presentacion."</td>
+								<td style='vertical-align: middle;'>$".number_format($row[$i]["Precio"], 2)."</td>
+								<td style='vertical-align: middle;'>".number_format($row[$i]["Cantidad"], 2)."</td>
+								<td style='vertical-align: middle;'>$".number_format($row[$i]["Descuento"], 2)."</td>
+								<td style='vertical-align: middle;'>$".number_format($subtotal, 2)."</td>
+								<td><button class='btn btn-primary btn-sm verImpuestosProducto' nombre='".$row[$i]["Descripcion"].$nombrepresentacion."' attrid='".$row[$i]["ID_Detalle_Venta"]."'>$".number_format($sumaImpuestos, 2)."</button></td>
+								<td>$".number_format($row[$i]["Total"], 2)."</td>
+							</tr>
+						";
+					}
+				}
+			}
+
+			//CONSULTAR LOS PRODUCTOS QUE SE REGISTRARON COMO PROMOCION
+			$query = "SELECT ID_Detalles_Ventas_Promociones, FK_Venta, detalles_ventas_promociones.FK_Producto, FK_Presentacion, presentaciones.Nombre AS NombrePresentacion, presentaciones.Abreviatura AS AbreviaturaPresentacion, Descripcion, Precio, Cantidad, detalles_ventas_promociones.Descuento AS Descuento, Total FROM detalles_ventas_promociones LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '$IDVenta'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+						$sumaImpuestos=0; $subtotal = 0;
+
+						$presentacion = "";
+						$nombrepresentacion = "";
+						if ($row[$i]["NombrePresentacion"] != "") {
+							$presentacion = "<br>".$row[$i]["NombrePresentacion"];
+							$nombrepresentacion = " / ".$row[$i]["NombrePresentacion"];
+							if ($row[$i]["AbreviaturaPresentacion"] != "") {
+								$presentacion .= " (".$row[$i]["AbreviaturaPresentacion"].")";
+								$nombrepresentacion .= " (".$row[$i]["AbreviaturaPresentacion"].")";
+							} 
+						}
+
+						$subtotal = ($row[$i]["Precio"] * $row[$i]["Cantidad"]) ;
+						$subtotal = $subtotal - $row[$i]["Descuento"];
+						$tabla .= "
+							<tr>
+								<td >".$row[$i]["Descripcion"].$presentacion."</td>
+								<td style='vertical-align: middle;'>$".number_format($row[$i]["Precio"], 2)."</td>
+								<td style='vertical-align: middle;'>".number_format($row[$i]["Cantidad"], 2)."</td>
+								<td style='vertical-align: middle;'>$".number_format($row[$i]["Descuento"], 2)."</td>
+								<td style='vertical-align: middle;'>$".number_format($subtotal, 2)."</td>
+								<td><button class='btn btn-primary btn-sm verImpuestosProducto' nombre='".$row[$i]["Descripcion"].$nombrepresentacion."' attrid='".$row[$i]["ID_Detalles_Ventas_Promociones"]."'>$0</button></td>
+								<td>$".number_format($row[$i]["Total"], 2)."<br><b>PRODUCTO DE PROMOCIÓN</b></td>
+							</tr>
+						";
+					}
+				}
+			}
+
+			echo $tabla;
+		}else if($tipo == "impuestos"){
+			$query = "SELECT ID_Impuesto, FK_Detalle_Venta, Tipo_Impuesto_CFDI, Impuesto_CFDI, Clave_CFDI, Tipo_Factor_CFDI, Tasa_Cuota_CFDI FROM detalles_impuestos_ventas WHERE FK_Detalle_Venta = '".$IDDetalle."'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas2 = $omodelo->numerofilas;
+			$tabla ="";
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas2 > 0){
+					for ($i=0; $i < $numerofilas2; $i++) { 
+						$tabla .= "
+							<tr>
+								<td >".$row[$i]["Impuesto_CFDI"]."</td>
+								<td >".$row[$i]["Clave_CFDI"]."</td>
+								<td >".$row[$i]["Tasa_Cuota_CFDI"]."</td>
+								<td >".$row[$i]["Tipo_Factor_CFDI"]."</td>
+								<td >".$row[$i]["Tipo_Impuesto_CFDI"]."</td>
+							</tr>
+						";
+					}
+				}else{
+					$tabla = "
+						<tr>
+							<td style='vertical-align: middle;' colspan='6'>No hay impuestos registrados</td>
+						</tr>
+					";
+				}
+				echo $tabla;
+			}
+		}else if($tipo == "ConsultarProductosVentaDevolucion"){
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(presentaciones.Nombre, presentaciones.Abreviatura, Descripcion, Precio, Cantidad, detalles_ventas.Descuento, Total) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+
+			///////////////////////////////////////////////////////////////////////////////////
+
+			$query = "SELECT ID_Detalle_Venta, detalles_ventas.FK_Producto AS IDProducto, FK_Presentacion, Nombre, Abreviatura, Nombre_Unidad, Abreviatura_Unidad, detalles_ventas.Descripcion AS Producto, detalles_ventas.Precio AS Precio, Cantidad, detalles_ventas.Descuento AS Descuento, Total, (SELECT COUNT(*) FROM detalles_ventas INNER JOIN productos ON detalles_ventas.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '$idventa' $busqueda) AS Num FROM detalles_ventas INNER JOIN productos ON detalles_ventas.FK_Producto = ID_Producto LEFT JOIN presentaciones ON FK_Presentacion = ID_Presentacion WHERE FK_Venta = '$idventa' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+
+						$nombrePresentacion = "<br>Sin presentación";
+						$nombreabreviatura = "";
+						if ($row[$i]['FK_Presentacion'] != '0') {
+							if ($row[$i]['Abreviatura'] != "") {
+								$nombreabreviatura = "(".$row[$i]['Abreviatura'].")";
+							}
+							$nombrePresentacion = "<br>".$row[$i]['Nombre'].$nombreabreviatura;
+						}else{
+							if ($row[$i]['Nombre_Unidad'] != "") {
+								if ($row[$i]['Abreviatura_Unidad'] != "") {
+									$nombreabreviatura = "(".$row[$i]['Abreviatura_Unidad'].")";
+								}
+								$nombrePresentacion = "<br>".$row[$i]['Nombre_Unidad'].$nombreabreviatura;
+							}
+						}
+
+						$query2 = "SELECT ID_Detalle_Devolucion, FK_Devolucion, FK_Detalle_Venta, SUM(detalles_devolucion.Cantidad) AS Cantidad, SUM(detalles_devolucion.Total) AS Total FROM detalles_devolucion INNER JOIN detalles_ventas ON FK_Detalle_Venta = ID_Detalle_Venta WHERE detalles_ventas.FK_Venta = '$idventa' AND FK_Detalle_Venta = '".$row[$i]['ID_Detalle_Venta']."' GROUP BY FK_Detalle_Venta";
+						$row2 = $omodelo->_consultar($query2);
+						$numerofilas2 = $omodelo->numerofilas;
+						$cantidadDevuelto = 0;
+						$total = 0; $totalVenta = 0;
+						$cantidadActual = $row[$i]['Cantidad'];
+						if($row2 == 'si'){
+							echo "Error 2: ".mysqli_error($omodelo->link);
+						}else{
+							if($numerofilas2 > 0){
+								$cantidadActual = $row[$i]['Cantidad'] - (double)$row2[0]["Cantidad"];
+								$cantidadDevuelto = (double)$row2[0]["Cantidad"];
+								$total = $row2[0]["Total"];
+							}
+						}
+
+						$campoDevolver = "";
+						if ($cantidadActual > 0) {
+							$campoDevolver = '<input class="form-control devolverProducto" type="number" attrid="'.$row[$i]['ID_Detalle_Venta'].'" value="0" min="0" max="'.$cantidadActual.'">';
+						}	
+
+						$totalVenta = $row[$i]['Total'] - $total;
+						$precio = 0;
+						if ($totalVenta <= 0 && $cantidadDevuelto > 0) {
+							$precio = $total / $cantidadDevuelto;
+						}else{
+							$precio = ($totalVenta / $cantidadActual);
+						}
+
+						$arreglo['data'][] = array(
+							'ID' => $row[$i]['ID_Detalle_Venta'],
+							'Producto' => $row[$i]['Producto']." ".$nombrePresentacion,
+							'Cantidad' => $cantidadActual,
+							'Precio' => '<b class="dinero">'.$precio.'</b>',
+							'TotalVenta' => '<b class="dinero">'.$totalVenta.'</b>',
+							'Devuelto' => $cantidadDevuelto,
+							'Total' => '<b class="dinero">'.$total.'</b>',
+							'Devolver' => $campoDevolver,
+						);
+						
+					}	
+				}
+			}
+			//$numerofilasTotal = $numerofilas + $numerofilas2;
+			$arreglo['totales'] = array('NumRows' => $row[0]["Num"]);
+			echo json_encode($arreglo);
+		}else if($tipo == "GuardarDevolucionProductos"){
+			$idventa =  $omodelo->link->real_escape_string($idventa);
+			$folio = str_pad($idventa, 8, "0", STR_PAD_LEFT);
+			$sucursal =  $omodelo->link->real_escape_string($sucursal);
+			$acciones =  $omodelo->link->real_escape_string($acciones);
+			$fecha = date('Y-m-d H:i:s'); 
+
+			$query = "INSERT INTO devoluciones SET FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."' , FK_Venta = '$idventa', Toda = '0', Fecha_Registro = NOW()";
+			$error = $omodelo->_insertar($query);
+			if ($error == "si") {
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				$idDevolucion = mysqli_insert_id($omodelo->link);
+
+				$productos = json_decode($producto, true);
+				foreach ($productos as $fila) {
+					$individual = 0;
+					$total = 0;
+					$query2 = "SELECT ID_Detalle_Venta, FK_Venta, FK_Producto, FK_Presentacion, Descripcion, Precio, Cantidad, Descuento, Total FROM detalles_ventas WHERE ID_Detalle_Venta = '$fila[0]'";
+					$row2 = $omodelo->_consultar($query2);
+					$numerofilas2 = $omodelo->numerofilas;
+					if($row2 == 'si'){
+						echo "Error 2: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilas2 > 0){
+							$individual = $row2[0]["Total"] / $row2[0]["Cantidad"];
+							$total = $fila[1] * $individual;
+							$query3 = "INSERT INTO detalles_devolucion SET FK_Devolucion = '$idDevolucion', FK_Detalle_Venta = '".$row2[0]["ID_Detalle_Venta"]."', Cantidad = '$fila[1]', Total = '$total', Destino = '$acciones'";
+							$error3 = $omodelo->_insertar($query3);
+							if ($error3 == "si") {
+								echo "Error 3: ".mysqli_error($omodelo->link);
+							}
+						}
+					}
+
+					if ($acciones == "Inventario") {
+						$query4 = "UPDATE inventario SET Cantidad = (Cantidad + $fila[1]) WHERE FK_Producto = '".$row2[0]["FK_Producto"]."' AND FK_Presentacion = '".$row2[0]["FK_Presentacion"]."' AND FK_Sucursal = '$sucursal'";
+							$error4 = $omodelo->_insertar($query4);
+						if ($error4 == "si") {
+							echo "Error inventario: ".mysqli_error($omodelo->link);
+						}	
+					}else if($acciones == "Merma"){
+						$query4 = "INSERT INTO merma SET FK_Producto = '".$row2[0]["FK_Producto"]."', FK_Presentacion = '".$row2[0]["FK_Presentacion"]."', Costo = '0', FK_Sucursal = '$sucursal', Cantidad = '$fila[1]', Fecha_Merma = '$fecha', Fecha_Registro = '$fecha', Motivo = 'Devolución de la venta $folio', Foto = '', FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."'";
+							$error4 = $omodelo->_insertar($query4);
+						if ($error4 == "si") {
+							echo "Error inventario: ".mysqli_error($omodelo->link);
+						}
+					}
+
+				}
+
+				echo "Correcto";
+			}
+		}else if($tipo == "ComprobarDevolucionProducto"){
+			$idventa =  $omodelo->link->real_escape_string($idventa);
+
+			//COMPROBAR SI ESTA TOTALMENTE DEVUELTA
+			$cantidadventa = 0; $cantidaddevolucion = 0;
+			$queryCanVen = "SELECT SUM(Cantidad) AS CantidadVenta FROM detalles_ventas WHERE FK_Venta = '".$idventa."'";
+			$rowCanVen = $omodelo->_consultar($queryCanVen);
+			$numerofilasCanVen = $omodelo->numerofilas;
+			if($rowCanVen == 'si'){
+				echo "Error 3: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilasCanVen > 0){
+					$cantidadventa = $rowCanVen[0]["CantidadVenta"];
+				}
+			}
+				
+			$queryCanDev = "SELECT SUM(Cantidad) AS CantidadDevolucion FROM detalles_devolucion INNER JOIN devoluciones ON FK_Devolucion = ID_Devolucion WHERE FK_Venta = '$idventa'";
+			$rowCanDev = $omodelo->_consultar($queryCanDev);
+			$numerofilasCanDev = $omodelo->numerofilas;
+			if($rowCanDev == 'si'){
+				echo "Error 4: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilasCanDev > 0){
+					$cantidaddevolucion = $rowCanDev[0]["CantidadDevolucion"];
+				}
+			}
+
+			if ($cantidadventa > 0 && $cantidaddevolucion > 0) {
+				if ($cantidadventa == $cantidaddevolucion) {
+					$queryVenta = "UPDATE ventas SET Estatus = 'Devuelta' WHERE ID_Venta = '$idventa'";
+					$errorVenta = $omodelo->_insertar($queryVenta);
+					if ($errorVenta == "si") {
+						echo "Error Venta Toda: ".mysqli_error($omodelo->link);
+					}else{
+						echo "Correcto";
+					}
+				}
+			}else{
+				echo "No";
+			}
+		}else if($tipo == "ConsultarCaja"){
+			$query = "SELECT Estado, FK_Usuario FROM cajas WHERE FK_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."' LIMIT 1";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					if ($row[0]["Estado"] == 1) {
+						echo 'Abierta~'.$_SESSION['user_admin']['Tipo_Usuario'];
+					}else{
+						echo 'Cerrada';
+					}
+				}
+			}
+		}else if($tipo == "AbrirCaja"){
+			$sucursal = $omodelo->link->real_escape_string($sucursal);
+			$MontoAbrir = $omodelo->link->real_escape_string($MontoAbrir);
+
+			$query = "UPDATE cajas SET Estado = 1, FK_Usuario = '".$_SESSION['user_admin']['ID_Usuario']."' WHERE FK_Sucursal = '$sucursal'";
+			$error = $omodelo->_insertar($query);
+
+			if($error == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				$query2 = "INSERT INTO detalles_caja SET FK_Caja = (SELECT ID_Caja FROM cajas WHERE FK_Sucursal = '$sucursal'), Fecha_Abrir = NOW(), Monto_Abrir = '$MontoAbrir', FK_Usuario_Abrir = '".$_SESSION['user_admin']['ID_Usuario']."'";
+				$error2 = $omodelo->_insertar($query2);
+				
+				if($error2 == 'si'){
+					echo "Error 2: ".mysqli_error($omodelo->link);
+				}else{
+					echo "Correcto";
+				}
+			}
+		}else if($tipo == "verCajas"){
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+				$busqueda = 'AND ';
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(cajas.Nombre, cajas.Estado, sucursales.Nombre, usuarios.Nombre) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+
+			$query = "SELECT ID_Caja, cajas.FK_Sucursal AS FK_Sucursal, sucursales.Nombre AS NombreSucursal, cajas.Nombre AS Nombre, Detalles, cajas.Estado, FK_Usuario, usuarios.Nombre AS UsuarioActual, (SELECT COUNT(*) FROM cajas INNER JOIN sucursales ON cajas.FK_Sucursal = ID_Sucursal LEFT JOIN usuarios ON FK_Usuario = ID_Usuario WHERE cajas.Estado = 1 $busqueda) AS Num FROM cajas INNER JOIN sucursales ON cajas.FK_Sucursal = ID_Sucursal LEFT JOIN usuarios ON FK_Usuario = ID_Usuario WHERE cajas.Estado = 1 $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+					for($i=0; $i<$numerofilas; $i++){
+
+						$estatus = "";
+						if ($row[$i]['Estado'] == "0") {
+							$estatus = '<span class="badge rounded-pill bg-danger">Caja cerrada</span>';
+						}else if($row[$i]['Estado'] == "1"){
+							$estatus = '<span class="badge rounded-pill bg-success">Caja abierta</span>';
+						}
+
+						$detalles = "No hay datos ingresados";
+						if ($row[$i]['Detalles'] != "") {
+							$detalles = $row[$i]['Detalles'];
+						}
+
+						$usuario = "No se está utilizando la caja actualmente";
+						if ($row[$i]['UsuarioActual'] != "") {
+							$usuario = 'Abrió Caja: '.$row[$i]['UsuarioActual'];
+						}
+						
+						$arreglo['data'][$i] = array(
+							'ID' => $row[$i]['ID_Caja'],
+							'Nombre' => $row[$i]['Nombre'],
+							'Sucursal' => $row[$i]['NombreSucursal'],
+							'Estatus' => $estatus,
+							'Usuario' => $usuario,
+							'Acciones' => '<button type="button" class="btn btn-info btn-sm bUsarCaja" attrID="'.$row[$i]['FK_Sucursal'].'">Usar <i class="fas fa-check"></i></button>'
+						);
+					}
+
+					$arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+				}
+			}
+
+			echo json_encode($arreglo);
+		}else if($tipo == "ConsultaReasignar"){
+			$IDVenta =  $omodelo->link->real_escape_string($IDVenta);
+			$query = "SELECT ID_Cliente, CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) AS NombreCliente FROM ventas INNER JOIN clientes ON FK_Cliente = ID_Cliente WHERE ID_Venta = '".$IDVenta."'";
+			$row = $omodelo->_consultar($query);
+			$numerofilas = $omodelo->numerofilas;
+
+			if($row == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				if($numerofilas > 0){
+
+					$listaOpciones = '';
+					//CONSULTAR TODOS LOS CLIENTES EXCEPTO EL ACTUAL
+					$query2 = "SELECT ID_Cliente, CONCAT(Nombre,' ',Primer_Apellido,' ',Segundo_Apellido) AS NombreCliente FROM clientes WHERE ID_Cliente != '".$row[0]["ID_Cliente"]."'";
+					$row2 = $omodelo->_consultar($query2);
+					$numerofilas2 = $omodelo->numerofilas;
+
+					if($row2 == 'si'){
+						echo "Error: ".mysqli_error($omodelo->link);
+					}else{
+						if($numerofilas2 > 0){
+							for ($i=0; $i < $numerofilas2; $i++) { 
+								$listaOpciones .= '<option value="' . $row2[$i]['ID_Cliente'] . '" >' . $row2[$i]['NombreCliente']. '</option>';
+							}
+						}
+					}
+
+					echo $row[0]["NombreCliente"]."~".$row[0]["ID_Cliente"]."~".$listaOpciones;
+				}
+			}
+		}else if($tipo == "LiberarTimbrado"){
+			// Regresa a 0 una venta que se quedo en 2 (timbrado sin confirmar) para poder facturarla otra vez
+			if ($omodelo->permisos() != 'Administrador' && @$omodelo->permisos()['v_ventas'][5] != '1') {
+				echo "Sin permiso";
+				return;
+			}
+
+			$IDVenta = $omodelo->link->real_escape_string($IDVenta);
+
+			$query = "UPDATE ventas SET Facturada = '0' WHERE ID_Venta = '$IDVenta' AND Facturada = '2'";
+			$resultado = mysqli_query($omodelo->link, $query);
+
+			if($resultado === false){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else if(mysqli_affected_rows($omodelo->link) == 1){
+				echo "Correcto";
+				$omodelo->movimiento($query, $_SESSION['user_admin']['ID_Usuario']);
+			}else{
+				echo "No";
+			}
+		}else if($tipo == "ReasignarCliente"){
+			$IDCliente = $omodelo->link->real_escape_string($IDCliente);
+			$IDVenta = $omodelo->link->real_escape_string($IDVenta);
+
+			$query = "UPDATE ventas SET FK_Cliente = '$IDCliente' WHERE ID_Venta = '$IDVenta'";
+			$error = $omodelo->_insertar($query);
+
+			if($error == 'si'){
+				echo "Error: ".mysqli_error($omodelo->link);
+			}else{
+				echo "Correcto";
+			}
+		} else if ($tipo == 'ConsultarSucursalesMVentas') {
+			$buscar =  $omodelo->link->real_escape_string($buscar);
+			$limit =  $omodelo->link->real_escape_string($limit);
+			$pagina =  $omodelo->link->real_escape_string($pagina);
+			$ordenColumna =  $omodelo->link->real_escape_string($ordenColumna);
+			$orden =  $omodelo->link->real_escape_string($orden);
+			$arreglo = array();
+            $sucursalesSeleccionadas = json_decode($SucursalesCheckeadas, true);
+
+            // Filtro de la barra de busqueda de la tabla sucursales en el modal que es invocado por el boton de filtrar sucursales.
+			$busqueda = '';
+			if(trim($buscar) != ''){
+				$separa = explode(' ', trim($buscar));
+                if ($omodelo->permisos() == 'Administrador') {
+                    $busqueda = 'WHERE ';
+                } else {
+                    $busqueda = 'AND ';
+                }
+				for ($i=0; $i < count($separa); $i++) { 
+					$busqueda .= "CONCAT(ID_Sucursal, sucursales.Nombre, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Telefono, Email, FK_Encargado, usuarios.Nombre,  usuarios.Primer_Apellido, usuarios.Segundo_Apellido, zonas.Nombre) REGEXP '".$separa[$i]."'";
+					if($i < (count($separa)-1)){
+						$busqueda .= ' AND ';
+					}
+				}
+			}
+			
+            if ($omodelo->permisos() == 'Administrador') {
+                $query = "SELECT ID_Sucursal, '' AS Seleccionar, sucursales.Nombre, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Telefono, Segundo_Telefono, Email, FK_Encargado, usuarios.Nombre AS NombreEncargado, usuarios.Primer_Apellido AS PrimerApellido, usuarios.Segundo_Apellido AS SegundoApellido, FK_Zona, zonas.Nombre AS NombreZona, Latitud, Longitud, (SELECT COUNT(*) FROM sucursales LEFT JOIN usuarios ON ID_Usuario = FK_Encargado LEFT JOIN zonas ON FK_Zona = ID_Zona $busqueda) AS Num FROM sucursales LEFT JOIN usuarios ON ID_Usuario = FK_Encargado LEFT JOIN zonas ON FK_Zona = ID_Zona $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+                $row = $omodelo->_consultar($query);
+                $numerofilas = $omodelo->numerofilas;
+
+                if($row == 'si'){
+                    echo "Error: ".mysqli_error($omodelo->link);
+                }else{
+                    if($numerofilas > 0){
+                        
+                        $checkboxSucursalesTodas = '<input type="checkbox" class="CheckInputSucursal" nombre="Todas" attrid="todas">';
+
+                        for($i=0; $i<$numerofilas; $i++){
+                            $direccion = "";
+                            $telefono = "";
+                            $email = "";
+                            $gerente = "";
+                            $checkboxSucursal = '<input type="checkbox" class="CheckInputSucursal" nombre="'.$row[$i]['Nombre'].'" attrid="'.$row[$i]['ID_Sucursal'].'">';
+
+                            if ($row[$i]['NombreZona'] != "") {
+                                $direccion .= "Zona: <b>".$row[$i]['NombreZona'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Calle'] != "") {
+                                $direccion .= "Calle: <b>".$row[$i]['Calle'].'</b><br>';
+                            }
+
+                            if ($row[$i]['No_Exterior'] != "") {
+                                $direccion .= "No. Exterior: <b>".$row[$i]['No_Exterior'].'</b><br>';
+                            }
+
+                            if ($row[$i]['No_Interior'] != "") {
+                                $direccion .= "No. Interior: <b>".$row[$i]['No_Interior'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Colonia'] != "") {
+                                $direccion .= "Colonia: <b>".$row[$i]['Colonia'].'</b><br>';
+                            }
+
+                            if ($row[$i]['CP'] != "") {
+                                $direccion .= "Codigo postal: <b>".$row[$i]['CP'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Ciudad'] != "") {
+                                $direccion .= "Ciudad: <b>".$row[$i]['Ciudad'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Estado'] != "") {
+                                $direccion .= "Estado: <b>".$row[$i]['Estado'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Pais'] != "") {
+                                $direccion .= "País: <b>".$row[$i]['Pais'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Telefono'] != "") {
+                                $telefono .= "Primer teléfono: <b>".$row[$i]['Telefono'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Segundo_Telefono'] != "") {
+                                $telefono .= "Segundo teléfono: <b>".$row[$i]['Segundo_Telefono'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Latitud'] != '' && $row[$i]['Longitud'] != '') {
+                                $telefono .= 'Ubicación: <b>'.$row[$i]['Latitud'].', '.$row[$i]['Longitud'].'</b>';
+                            }
+                            
+                            if ($telefono == "") {
+                                $telefono = "No hay telefono registrado";
+                            }
+                            
+                            if ($row[$i]['Email'] != "") {
+                                $email = $row[$i]['Email'];
+                            }else{	
+                                $email = "No hay un correo registrado";
+                            }
+
+                            if ($row[$i]['FK_Encargado'] != "") {
+                                $gerente = $row[$i]['NombreEncargado'].' '.$row[$i]['PrimerApellido'].' '.$row[$i]['SegundoApellido'];
+                            }else{	
+                                $gerente = "No hay datos registrados";
+                            }
+
+                            foreach ($sucursalesSeleccionadas as $sucursalSeleccionada) {
+                                if ($row[$i]['ID_Sucursal'] == $sucursalSeleccionada["ID"]) {
+                                    $checkboxSucursal = '<input type="checkbox" class="CheckInputSucursal" nombre="'.$row[$i]['Nombre'].'" attrid="'.$row[$i]['ID_Sucursal'].'" checked>';
+                                }
+                            }
+
+                            $arreglo['data'][$i] = array(
+                                'ID' => $row[$i]['ID_Sucursal'],
+                                'Seleccionar' => $checkboxSucursal,
+                                'Sucursal' => $row[$i]['Nombre'],
+                                'Direccion' => $direccion
+                            );
+                            
+                        }
+
+                        foreach ($sucursalesSeleccionadas as $sucursalSeleccionadaOptTodas) {
+                            if ($sucursalSeleccionadaOptTodas["ID"] == 'todas') {
+                                $checkboxSucursalesTodas = '<input type="checkbox" class="CheckInputSucursal" nombre="Todas" attrid="todas" checked>';
+                            } else {
+                                $checkboxSucursalesTodas = '<input type="checkbox" class="CheckInputSucursal" nombre="Todas" attrid="todas">';
+                            }
+                        }
+
+                        $sucursalesTodas = array(
+                            'ID' => 'Todas',
+                            'Seleccionar' => $checkboxSucursalesTodas,
+                            'Sucursal' => '<b>TODAS</b>',
+                            'Direccion' => '<b>Todas las sucursales</b>',
+                        );
+
+                        array_unshift($arreglo['data'], $sucursalesTodas);
+                        $arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+                    }
+                }
+            } else {
+                $query = "SELECT ID_Sucursal, '' AS Seleccionar, sucursales.Nombre, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Telefono, Segundo_Telefono, Email, FK_Encargado, usuarios.Nombre AS NombreEncargado, usuarios.Primer_Apellido AS PrimerApellido, usuarios.Segundo_Apellido AS SegundoApellido, FK_Zona, zonas.Nombre AS NombreZona, Latitud, Longitud, (SELECT COUNT(*) FROM sucursales LEFT JOIN usuarios ON ID_Usuario = FK_Encargado LEFT JOIN zonas ON FK_Zona = ID_Zona WHERE sucursales.ID_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."' $busqueda) AS Num FROM sucursales LEFT JOIN usuarios ON ID_Usuario = FK_Encargado LEFT JOIN zonas ON FK_Zona = ID_Zona WHERE sucursales.ID_Sucursal = '".$_SESSION['user_admin']['FK_Sucursal']."' $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+                $row = $omodelo->_consultar($query);
+                $numerofilas = $omodelo->numerofilas;
+
+                if($row == 'si'){
+                    echo "Error: ".mysqli_error($omodelo->link);
+                }else{
+                    if($numerofilas > 0){
+
+                        for($i=0; $i<$numerofilas; $i++){
+                            $direccion = "";
+                            $telefono = "";
+                            $email = "";
+                            $gerente = "";
+                            $checkboxSucursal = '<input type="checkbox" class="CheckInputSucursal" nombre="'.$row[$i]['Nombre'].'" attrid="'.$row[$i]['ID_Sucursal'].'" checked>';
+
+                            if ($row[$i]['NombreZona'] != "") {
+                                $direccion .= "Zona: <b>".$row[$i]['NombreZona'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Calle'] != "") {
+                                $direccion .= "Calle: <b>".$row[$i]['Calle'].'</b><br>';
+                            }
+
+                            if ($row[$i]['No_Exterior'] != "") {
+                                $direccion .= "No. Exterior: <b>".$row[$i]['No_Exterior'].'</b><br>';
+                            }
+
+                            if ($row[$i]['No_Interior'] != "") {
+                                $direccion .= "No. Interior: <b>".$row[$i]['No_Interior'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Colonia'] != "") {
+                                $direccion .= "Colonia: <b>".$row[$i]['Colonia'].'</b><br>';
+                            }
+
+                            if ($row[$i]['CP'] != "") {
+                                $direccion .= "Codigo postal: <b>".$row[$i]['CP'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Ciudad'] != "") {
+                                $direccion .= "Ciudad: <b>".$row[$i]['Ciudad'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Estado'] != "") {
+                                $direccion .= "Estado: <b>".$row[$i]['Estado'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Pais'] != "") {
+                                $direccion .= "País: <b>".$row[$i]['Pais'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Telefono'] != "") {
+                                $telefono .= "Primer teléfono: <b>".$row[$i]['Telefono'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Segundo_Telefono'] != "") {
+                                $telefono .= "Segundo teléfono: <b>".$row[$i]['Segundo_Telefono'].'</b><br>';
+                            }
+
+                            if ($row[$i]['Latitud'] != '' && $row[$i]['Longitud'] != '') {
+                                $telefono .= 'Ubicación: <b>'.$row[$i]['Latitud'].', '.$row[$i]['Longitud'].'</b>';
+                            }
+                            
+                            if ($telefono == "") {
+                                $telefono = "No hay telefono registrado";
+                            }
+                            
+                            if ($row[$i]['Email'] != "") {
+                                $email = $row[$i]['Email'];
+                            }else{	
+                                $email = "No hay un correo registrado";
+                            }
+
+                            if ($row[$i]['FK_Encargado'] != "") {
+                                $gerente = $row[$i]['NombreEncargado'].' '.$row[$i]['PrimerApellido'].' '.$row[$i]['SegundoApellido'];
+                            }else{	
+                                $gerente = "No hay datos registrados";
+                            }
+
+                            foreach ($sucursalesSeleccionadas as $sucursalSeleccionada) {
+                                if ($row[$i]['ID_Sucursal'] == $sucursalSeleccionada["ID"]) {
+                                    $checkboxSucursal = '<input type="checkbox" class="CheckInputSucursal" nombre="'.$row[$i]['Nombre'].'" attrid="'.$row[$i]['ID_Sucursal'].'" checked>';
+                                }
+                            }
+
+                            $arreglo['data'][$i] = array(
+                                'ID' => $row[$i]['ID_Sucursal'],
+                                'Seleccionar' => $checkboxSucursal,
+                                'Sucursal' => $row[$i]['Nombre'],
+                                'Direccion' => $direccion
+                            );
+                            
+                        }
+
+                        // array_unshift($arreglo['data'], $sucursalesTodas);
+                        $arreglo['totales'] = array('NumRows' => $row[0]['Num']);	
+                    }
+                }
+            }
+			// $query = "SELECT ID_Sucursal, '' AS Seleccionar, sucursales.Nombre, Calle, No_Exterior, No_Interior, Colonia, CP, Ciudad, Estado, Pais, Telefono, Segundo_Telefono, Email, FK_Encargado, usuarios.Nombre AS NombreEncargado, usuarios.Primer_Apellido AS PrimerApellido, usuarios.Segundo_Apellido AS SegundoApellido, FK_Zona, zonas.Nombre AS NombreZona, Latitud, Longitud, (SELECT COUNT(*) FROM sucursales LEFT JOIN usuarios ON ID_Usuario = FK_Encargado LEFT JOIN zonas ON FK_Zona = ID_Zona $busqueda) AS Num FROM sucursales LEFT JOIN usuarios ON ID_Usuario = FK_Encargado LEFT JOIN zonas ON FK_Zona = ID_Zona $busqueda ORDER BY $ordenColumna $orden LIMIT $limit OFFSET ".(($pagina * $limit) - $limit);
+            // echo $query;
+			
+			echo json_encode($arreglo);
+		}
+	}
+}
+?>

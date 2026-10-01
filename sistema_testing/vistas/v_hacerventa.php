@@ -1,0 +1,619 @@
+<div id="content" class="card">
+	<div class="card-body">
+        <div class="section">
+
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    #MostrarSucursal#
+                </div>
+                <div class="col-md-3 d-grid ">
+                    <button type="button" class="btn btn-outline-primary" style="padding: 0px;" id="CargarClientesModalVentas" attrid="">
+                        <i class="fas fa-user"></i> Seleccionar cliente
+                    </button>
+                </div>
+                <div class="col-md-2 BotonLimpiarCliente oculto d-grid ">
+                    <button type="button" class="btn btn-outline-primary" style="padding: 0px;" id="CargarClientesModalDirecciones" attrid="">
+                        <i class="fas fa-map-marker"></i> Dirección
+                    </button>
+                </div>
+                <div class="col-md-1 BotonLimpiarCliente oculto">
+                    <button type="button" class="btn btn-outline-danger btn-sm" id="LimpiarClienteSeleccionado" attrid="">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="col-md-3 text-end BotonSeleccionarPedido d-grid ">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="CargaPedidosModalVentas" folio="" attrid="">
+                        <i class="fas fa-arrow-down"></i> Seleccionar pedido
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm mt-1 oculto" id="bQuitarLimpiarPedido">
+                        <i class="fas fa-trash"></i> Quitar pedido
+                    </button>
+                </div>
+            </div>
+            <br>
+            <form id="FormAgregarProductoVenta" class="row">
+                <div class="col-md-3 col-sm-12 mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-barcode"></i></span>
+                        <input type="text" class="form-control" id="CodigoProductoVenta" name="CodigoProductoVenta" autocomplete="off" placeholder="Código del producto" required autofocus onblur="{e => {if (e.relatedTarget === null) { e.target.focus();}}}">
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-6 d-grid mb-3">
+                    <button type="submit" style="height: 40px;" class="btn btn-outline-danger" id="AgregarProductoVenta">Agregar <i class="fas fa-check"></i></button>
+                </div>
+                <div class="col-md-2 col-sm-6 d-grid mb-3">
+                    <button type="button" style="height: 40px;" class="btn btn-outline-secondary" id="CargarProductosModalVentas">
+                        <i class="fas fa-search"></i> Buscar (F2)
+                    </button>
+                </div>
+                <div class="col-md-2 d-grid ">
+                    #BotonCorteCaja#
+                </div>
+                <div class="col-md-2 col-sm-6 d-grid mb-3">
+                    #BotonModificarVentas#
+                </div>
+                <div class="col-md-1 col-sm-6 d-grid mb-3">
+                    <a href="javascript:void(0)" title="Actualizar pagina" class="BotonActualizarHacerVenta btn btn-light btn-reload" onclick="$('#cargarHacerVenta').trigger('click')"><i class="IconoSeleccionarVenta fa fa-retweet"></i></a>
+                </div>
+            </form>
+            <div class="row">
+                <div class="table-responsive" style="">
+                    <table class="table table table-hover table-bordered text-center" id="TablaProductosAgregadoVenta" width="100%" style="font-size: 12px; vertical-align: middle;">
+                        <thead>
+                            <th style="width: 10%;">Codigo</th>
+                            <th style="width: 20%;">Descripción</th>
+                            <th style="width: 10%;">Precio</th>
+                            <th style="width: 10%;">Cantidad</th>
+                            <th style="width: 15%;">Impuestos</th>
+                            <th style="width: 15%;">Descuento</th>
+                            <th style="width: 15%;">Total</th>
+                            <th style="width: 5%;"></th>
+                        </thead>
+                        <tbody id="tbodyTablaProductosAgregados">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="totalesFixed mt-4">
+                <div class="row">
+                    <div class="col-md-12 text-start">
+                        <span id="cantidadProductosSpanVenta">0</span> productos en la venta actual
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3 text-center">
+                        <h5 style="font-weight: bold;">Subtotal (Sin impuestos)</h5>
+                        <h4 style="font-weight: bold;" class="dinero" id="MostrarSubtotalVenta">0.00</h4>
+                               <!--  <br>
+                                <h5 style="font-weight: bold;">Subtotal (Importes)</h5>
+                                <h4 style="font-weight: bold;" class="dinero" id="MostrarSubtotalImportes">0.00</h4> -->
+                    </div>
+                    <div class="col-md-9 text-center">
+                        <div class="row" style="vertical-align: middle;">
+                            <div class="col-md-3 d-grid">
+                                <button class="btn btn-outline-primary" id="GuardarPedido" total="" style="font-size: 15px; height: 40px; font-size: 13px;"><b>Guardar pedido</b></button>
+                            </div>
+                            <div class="col-md-3 d-grid">
+                                <button class="btn btn-outline-primary" id="CobrarFacturar" total="" style="font-size: 15px; height: 40px; font-size: 13px;"><b>Cobrar y facturar</b></button>
+                            </div>
+                            <div class="col-md-3 d-grid">
+                                <button class="btn btn-outline-primary" id="RealizarVenta" total="" style="font-size: 15px; height: 40px; font-size: 13px;"><b>Finalizar venta (F8)</b></button>
+                            </div>
+                            <div class="col-md-3">
+                                <h5 style="font-weight: bold;">Total</h5>
+                                <h4 style="font-weight: bold;" id="TotalVentaFinal" class="dinero">0.00</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalPreciosProductoVenta" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Precios</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row table-responsive">
+                    <div class="col-12" id="divTablaProductos">
+                        <table class="table text-center myDataTable" id="TablaPreciosProductosVenta" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Precio</th>
+                                    <th>Precio Bruto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table> 
+                    </div>
+                </div>    
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn BotonDatosPrecio" producto="" presentacion=""  data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+            </div>
+        </div>    
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalPresentacionesProducto" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Presentaciones</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 table-responsive" id="divTablaProductos">
+                        <table class="table table-responsive table-striped text-center myDataTable" id="TablaPresentacionesProducto" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Abreviatura</th>
+                                    <th>Existencia</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table> 
+                    </div>
+                </div>    
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+            </div>
+        </div>    
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalVerProductosVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Productos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive" id="DivTablaVerProductos">
+                    <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="VentaTablaProductos" width="100%" style="font-size: 12px;">
+                        <thead>
+                            <th style="width: 20%;">Descripcion</th>
+                            <th style="width: 20%;">Presentación</th>
+                            <th style="width: 20%;" orden="No">Nombre del precio</th>
+                            <th style="width: 20%;">Precio Neto</th>
+                            <th style="width: 20%;">Precio Bruto</th>
+                            <th style="width: 20%;">Existencia</th>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalVerPedidosVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Pedidos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaCargarPedidos" width="100%" style="font-size: 12px;">
+                        <thead>
+                            <th style="width: 20%;" orden="No">Datos</th>
+                            <th style="width: 25%;" orden="No">Cliente</th>
+                            <th style="width: 25%;">Total</th>
+                            <th style="width: 15%;" orden="No">Detalles</th>
+                            <th style="width: 15%;" orden="No">Acciones</th>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalVerVentasModificar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ventas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="date" class="form-control" id="FechaInicioModificarVentas" name="FechaInicioModificarVentas" placeholder="Fecha Inicio">
+                            <label>Desde</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="date" class="form-control" id="FechaFinalModificarVentas" name="FechaFinalModificarVentas" placeholder="Fecha Final">
+                            <label>Hasta</label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="table-responsive">
+                    <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaCargarVentas" width="100%" style="font-size: 12px;">
+                        <thead>
+                            <th style="width: 20%;" orden="No">Datos</th>
+                            <th style="width: 25%;" orden="No">Cliente</th>
+                            <th style="width: 25%;">Total</th>
+                            <th style="width: 15%;" orden="No">Detalles</th>
+                            <th style="width: 15%;" orden="No">Acciones</th>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalVerProductosReportePedido" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Productos <span id="FolioPedidoProductos"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Producto
+                                </th>
+                                <th>
+                                    Precio
+                                </th>
+                                <th>
+                                    Cantidad
+                                </th>
+                                <th>
+                                    Descuento
+                                </th>
+                                <th>
+                                    Subtotal
+                                </th>
+                                <th>
+                                    Impuestos
+                                </th>
+                                <th>
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyVerProductosPedido">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalVerProductosReporteVentas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Productos <span id="FolioCargarVentasProductos"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Producto
+                                </th>
+                                <th>
+                                    Precio
+                                </th>
+                                <th>
+                                    Cantidad
+                                </th>
+                                <th>
+                                    Descuento
+                                </th>
+                                <th>
+                                    Subtotal
+                                </th>
+                                <th>
+                                    Impuestos
+                                </th>
+                                <th>
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyVerProductosVentas">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalVerImpuestosProductoPedido" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Impuestos <span id="NombreProductoImpuestoPedido"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Impuesto
+                                </th>
+                                <th>
+                                    Clave
+                                </th>
+                                <th>
+                                    Tasa
+                                </th>
+                                <th>
+                                    Tipo de factor
+                                </th>
+                                <th>
+                                    Tipo de impuesto
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyVerImpuestosProducto">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalVerClientesVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Clientes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaClienteVenta" width="100%" style="font-size: 12px;">
+                        <thead>
+                            <th style="width: 20%;">Nombre</th>
+                            <th style="width: 20%;" orden="no">Dirección</th>
+                            <th style="width: 20%;" orden="no">RFC</th>
+                            <th style="width: 20%;" orden="no">Contacto</th>
+                            <th style="width: 20%;" orden="no">Facturar</th>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalVerDireccionesCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Direcciones</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table table-hover table-striped table-bordered text-center myDataTable" id="TablaDireccionesClientes" width="100%" style="font-size: 12px;">
+                        <thead>
+                            <th style="width: 20%;">Domicilio</th>
+                            <th style="width: 20%;">Colonia</th>
+                            <th style="width: 20%;">Ubicación</th>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalPermisoAdministrador" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+        <div class="modal-content">
+            <div class="modal-header bg-inverse bd-inverse-darken">
+                <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Solicita los datos a un administrador para poder continuar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="FormAdmin">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <div class="form-floating">
+                                <input type="email" class="form-control" id="correoAdmin" name="correoAdmin" placeholder="Ingresa el correo del administrador">
+                                <label for="correoAdmin">Correo electrónico</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <div class="form-floating">
+                                <input type="password" class="form-control" id="contraAdmin" name="contraAdmin" placeholder="Ingresa la contraseña del administrador">
+                                <label for="contraAdmin">Contraseña</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+                    <button type="submit" class="btn btn-primary" id="ValidarAdministrador" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalRealizarVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+        <div class="modal-content">
+            <div class="modal-header bg-inverse bd-inverse-darken">
+                <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Finalizar venta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="FormRealizarVenta">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="number" disabled class="form-control" min='0.1' step="any" id="ImportePagadoVenta" name="ImportePagadoVenta" placeholder="Ingresa el importe a pagar">
+                            <label for="ImportePagadoVenta">Importe pagado</label>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="number" step="any" class="form-control" id="PagoEfectivo" name="PagoEfectivo" placeholder="Monto pagado en efectivo">
+                            <label for="PagoEfectivo">Pago en efectivo</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="number" step="any" class="form-control" id="PagoTransferencia" name="PagoTransferencia" placeholder="Monto pagado en transferencia">
+                            <label for="PagoTransferencia">Pago en transferencia</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="number" step="any" class="form-control" id="PagoCheque" name="PagoCheque" placeholder="Monto pagado en cheque">
+                            <label for="PagoCheque">Pago en cheque</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="number" step="any" class="form-control" id="PagoTCredito" name="PagoTCredito" placeholder="Monto pagado en tarjeta de crédito">
+                            <label for="PagoTCredito">Pago en tarjeta de crédito</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="number" step="any" class="form-control" id="PagoTDebito" name="PagoTDebito" placeholder="Monto pagado en tarjeta de debito">
+                            <label for="PagoTDebito">Pago en tarjeta de debito</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <h5>Cambio</h5>
+                        <h5 class="dinero" id="verCambio">$0.00</h5>
+                    </div>
+                    #BotonAfectarBalance#
+                </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+               <button type="submit" class="btn btn-primary" id="GuardarVenta" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div> 
+
+
+<!--/////////////////////////////////////////////////////////////-->
+<div class="modal fade" id="ModalDescuentoProducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="z-index: 9999 !important;">
+        <div class="modal-content">
+            <div class="modal-header bg-inverse bd-inverse-darken">
+                <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Aplicar descuento al producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="FormDescuentoProducto" class="row">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="TokenDescuento" name="TokenDescuento" placeholder="Código de descuento" autofocus>
+                            <label for="TokenDescuento">Token de descuento</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="divErrorToken" style="display: none;">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="alert alert-danger" role="alert">
+                            Este token no está disponible, intenta con otro.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn" data-bs-dismiss="modal"><i class="fa fa-times-circle"></i> <strong>Cancelar</strong></button>
+               <button type="submit" class="btn btn-primary" id="GuardarDescuentoProducto" attrid=""><i class="fa fa-check-circle"></i> <strong>Aceptar</strong></button>
+           </div>
+            </form>
+        </div>
+    </div>
+</div> 
