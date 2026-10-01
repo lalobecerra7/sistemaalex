@@ -290,7 +290,10 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
               $rowdev = $resdev->fetch_assoc();
               $totaldevoluciones = $rowdev["TotalDevoluciones"] ?? 0;
               $totalEgresos += $totaldevoluciones; // Suma al total general (sin duplicar)
-              $totalEgresosEfectivo += $rowdev["DevolucionesEfectivo"] ?? 0; // Solo suma devoluciones en efectivo
+              // CORRECCIÓN: antes solo restaba las devoluciones de ventas con Tipo_Pago = 'Efectivo';
+              // las de ventas "Mixto" o con tarjeta no bajaban el efectivo y el ticket no cuadraba
+              // con la pantalla de cierre. El dinero de la devolución sale de la caja, así que se resta todo.
+              $totalEgresosEfectivo += $totaldevoluciones;
           }
       }
       //DEPOSITOS
@@ -536,6 +539,10 @@ $totalIngresos = 0; $totalEgresos = 0; $totalventas = 0; $totalimportes = 0;   $
     ";
     echo '<p class="centrado">MONTO DE APERTURA: $'.number_format($arreglo["Monto_Abrir"], 2).'</p>';
     echo '<p class="centrado">TOTAL DE VENTAS (VENTAS EN EFECTIVO + IMPORTES): $'.number_format($arreglo["Total_Ventas"], 2).'</p>';
+    if ($arreglo["Total_Devoluciones"] > 0) {
+      echo '<p class="centrado">DEVOLUCIONES: -$'.number_format($arreglo["Total_Devoluciones"], 2).'</p>';
+      echo '<p class="centrado"><b>VENTAS NETAS: $'.number_format($arreglo["Total_Ventas"] - $arreglo["Total_Devoluciones"], 2).'</b></p>';
+    }
 
     if ($arreglo["Total_Ventas_Efectivo"]) {
       echo '<p class="">VENTAS EN EFECTIVO: $'.number_format($arreglo["Total_Ventas_Efectivo"], 2).'</p>';

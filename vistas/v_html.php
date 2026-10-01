@@ -27,6 +27,10 @@
     <link href="vistas/assets/plugins/fontawesome/css/all.css" rel="stylesheet">
     <link href="vistas/assets/plugins/sweetalert/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="vistas/assets/vendor/js/helpers.js"></script>
+    <script>
+      // Aplica el estado guardado del menú lateral antes de pintar la página (evita parpadeo)
+      try { if (localStorage.getItem('menuLateralOculto') === '1') { document.documentElement.classList.add('menu-oculto'); } } catch (e) {}
+    </script>
     <link rel="stylesheet" href="vistas/assets/plugins/myDataTable/css/myDataTable.css">
     <link rel="stylesheet" href="vistas/assets/plugins/select2/select2.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
@@ -1242,6 +1246,12 @@
             class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
             id="layout-navbar"
           >
+            <!-- Botón para ocultar / mostrar el menú lateral (escritorio) -->
+            <div class="navbar-nav align-items-center me-3 d-none d-xl-flex">
+              <a class="nav-item nav-link px-0" href="javascript:void(0)" id="bToggleMenuLateral" title="Ocultar / mostrar menú">
+                <i class="bx bx-menu bx-sm"></i>
+              </a>
+            </div>
             <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
               <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
                 <i class="bx bx-menu bx-sm"></i>
@@ -1838,6 +1848,15 @@
     <script src="vistas/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="vistas/assets/vendor/js/menu.js"></script>
     <script src="vistas/assets/js/main.js"></script>
+    <script>
+      // Ocultar / mostrar menú lateral en escritorio
+      $(document).on('click', '#bToggleMenuLateral', function () {
+        var oculto = document.documentElement.classList.toggle('menu-oculto');
+        try { localStorage.setItem('menuLateralOculto', oculto ? '1' : '0'); } catch (e) {}
+        // Recalcula anchos de tablas, gráficas, etc. cuando termina la animación
+        setTimeout(function () { $(window).trigger('resize'); }, 300);
+      });
+    </script>
     <script type="text/javascript" src="vistas/assets/plugins/jquery-validation/jquery.validate.js"></script>
     <script type="text/javascript" src="vistas/assets/plugins/jquery-validation/additional-methods.js" ></script>
     <script src="vistas/assets/plugins/jquery-validation/jquery-validation.init.js" type="text/javascript"></script>

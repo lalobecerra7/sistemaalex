@@ -805,3 +805,20 @@ footer .breadcrumb .breadcrumb-item a:hover{
 .modal-xxl {
 	max-width: 90%;
 }
+
+/* ── Ocultar / mostrar menú lateral (escritorio) ───────────────────────── */
+@media (min-width: 1200px) {
+  .layout-menu-fixed .layout-menu {
+    transition: transform 0.25s ease;
+  }
+  .layout-menu-fixed .layout-page {
+    transition: padding-left 0.25s ease;
+  }
+  html.menu-oculto.layout-menu-fixed .layout-menu {
+    transform: translateX(-100%);
+    box-shadow: none;
+  }
+  html.menu-oculto.layout-menu-fixed .layout-page {
+    padding-left: 0 !important;
+  }
+}

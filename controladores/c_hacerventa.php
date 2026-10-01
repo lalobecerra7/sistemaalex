@@ -2329,7 +2329,11 @@ class hacerventa {
 					} else {
 						$totaldevoluciones = $rowdev[0]["TotalDevoluciones"] ?? 0;
 						$totalEgresos += $totaldevoluciones; // Se suma una sola vez
-						$totalEgresosEfectivo += $rowdev[0]["DevolucionesEfectivo"] ?? 0;
+						// CORRECCIÓN: antes se usaba DevolucionesEfectivo, que compara Tipo_Pago = 'Pago_Efectivo'.
+						// Ese valor no existe (se guarda Efectivo / Transferencia / Mixto...), así que siempre daba 0.
+						// La devolución se le entrega al cliente de la caja, por eso sale del efectivo
+						// (igual que lo calcula la pantalla de cierre en hacerventa.js).
+						$totalEgresosEfectivo += $totaldevoluciones;
 					}
 
 					//Gastos
