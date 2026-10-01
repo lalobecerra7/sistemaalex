@@ -822,3 +822,8 @@ footer .breadcrumb .breadcrumb-item a:hover{
     padding-left: 0 !important;
   }
 }
+
+/* Icono del botón: « cuando el menú está visible, ☰ cuando está oculto */
+#bToggleMenuLateral .icono-mostrar-menu { display: none; }
+html.menu-oculto #bToggleMenuLateral .icono-ocultar-menu { display: none; }
+html.menu-oculto #bToggleMenuLateral .icono-mostrar-menu { display: inline-block; }

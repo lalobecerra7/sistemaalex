@@ -1248,8 +1248,9 @@
           >
             <!-- Botón para ocultar / mostrar el menú lateral (escritorio) -->
             <div class="navbar-nav align-items-center me-3 d-none d-xl-flex">
-              <a class="nav-item nav-link px-0" href="javascript:void(0)" id="bToggleMenuLateral" title="Ocultar / mostrar menú">
-                <i class="bx bx-menu bx-sm"></i>
+              <a class="nav-item nav-link px-0" href="javascript:void(0)" id="bToggleMenuLateral" title="Ocultar menú">
+                <i class="bx bx-chevrons-left bx-sm icono-ocultar-menu"></i>
+                <i class="bx bx-menu bx-sm icono-mostrar-menu"></i>
               </a>
             </div>
             <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
@@ -1850,9 +1851,13 @@
     <script src="vistas/assets/js/main.js"></script>
     <script>
       // Ocultar / mostrar menú lateral en escritorio
+      $(function () {
+        if (document.documentElement.classList.contains('menu-oculto')) { $('#bToggleMenuLateral').attr('title', 'Mostrar menú'); }
+      });
       $(document).on('click', '#bToggleMenuLateral', function () {
         var oculto = document.documentElement.classList.toggle('menu-oculto');
         try { localStorage.setItem('menuLateralOculto', oculto ? '1' : '0'); } catch (e) {}
+        $(this).attr('title', oculto ? 'Mostrar menú' : 'Ocultar menú');
         // Recalcula anchos de tablas, gráficas, etc. cuando termina la animación
         setTimeout(function () { $(window).trigger('resize'); }, 300);
       });
